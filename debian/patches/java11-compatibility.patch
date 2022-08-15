@@ -1,0 +1,198 @@
+Description: Fix the compatibility with Java 11:
+ - No longer use the @Generated annotation which was removed
+ - Add JAXB and JAF to the classpath
+Author: Emmanuel Bourg <ebourg@apache.org>
+Forwarded: http://bugzilla.scilab.org/show_bug.cgi?id=15328
+
+--- scilab.orig/scilab/modules/graphic_objects/src/java/org/scilab/modules/graphic_objects/xmlloader/CSSParser.java
++++ scilab/scilab/modules/graphic_objects/src/java/org/scilab/modules/graphic_objects/xmlloader/CSSParser.java
+@@ -14,7 +14,6 @@
+ import java.util.HashMap;
+ import java.util.Map;
+ 
+-@javax.annotation.Generated("JFlex")
+ @SuppressWarnings("fallthrough")
+ 
+ /**
+--- scilab.orig/scilab/modules/helptools/src/java/jflex/c.jflex
++++ scilab/scilab/modules/helptools/src/java/jflex/c.jflex
+@@ -6,7 +6,6 @@
+ import java.io.StringReader;
+ import java.io.IOException;
+ 
+-@javax.annotation.Generated("JFlex")
+ %%
+ 
+ %public
+--- scilab.orig/scilab/modules/helptools/src/java/jflex/function.jflex
++++ scilab/scilab/modules/helptools/src/java/jflex/function.jflex
+@@ -5,7 +5,6 @@
+ import java.io.IOException;
+ import java.io.StringReader;
+ 
+-@javax.annotation.Generated("JFlex")
+ %%
+ 
+ %public
+--- scilab.orig/scilab/modules/helptools/src/java/jflex/java.jflex
++++ scilab/scilab/modules/helptools/src/java/jflex/java.jflex
+@@ -8,7 +8,6 @@
+ 
+ import org.scilab.modules.helptools.c.AbstractCCodeHandler;
+ 
+-@javax.annotation.Generated("JFlex"))
+ %%
+ 
+ %public
+--- scilab.orig/scilab/modules/helptools/src/java/jflex/scilab.jflex
++++ scilab/scilab/modules/helptools/src/java/jflex/scilab.jflex
+@@ -15,7 +15,6 @@
+ import java.io.StringReader;
+ import java.io.IOException;
+ 
+-@javax.annotation.Generated("JFlex")
+ %%
+ 
+ %public
+--- scilab.orig/scilab/modules/helptools/src/java/jflex/xml.jflex
++++ scilab/scilab/modules/helptools/src/java/jflex/xml.jflex
+@@ -6,7 +6,6 @@
+ import java.io.StringReader;
+ import java.io.IOException;
+ 
+-@javax.annotation.Generated("JFlex")
+ %%
+ 
+ %public
+--- scilab.orig/scilab/modules/helptools/src/java/org/scilab/modules/helptools/SynopsisLexer.java
++++ scilab/scilab/modules/helptools/src/java/org/scilab/modules/helptools/SynopsisLexer.java
+@@ -9,8 +9,6 @@
+ import java.io.IOException;
+ import java.io.StringReader;
+ 
+-@javax.annotation.Generated("JFlex")
+-
+ // See https://github.com/jflex-de/jflex/issues/222
+ @SuppressWarnings("FallThrough")
+ public final class SynopsisLexer {
+--- scilab.orig/scilab/modules/helptools/src/java/org/scilab/modules/helptools/XML/XMLLexer.java
++++ scilab/scilab/modules/helptools/src/java/org/scilab/modules/helptools/XML/XMLLexer.java
+@@ -10,7 +10,6 @@
+ import java.io.StringReader;
+ import java.io.IOException;
+ 
+-@javax.annotation.Generated("JFlex")
+ 
+ // See https://github.com/jflex-de/jflex/issues/222
+ @SuppressWarnings("FallThrough")
+--- scilab.orig/scilab/modules/helptools/src/java/org/scilab/modules/helptools/scilab/ScilabLexer.java
++++ scilab/scilab/modules/helptools/src/java/org/scilab/modules/helptools/scilab/ScilabLexer.java
+@@ -19,7 +19,6 @@
+ import java.io.StringReader;
+ import java.io.IOException;
+ 
+-@javax.annotation.Generated("JFlex")
+ 
+ // See https://github.com/jflex-de/jflex/issues/222
+ @SuppressWarnings("FallThrough")
+--- scilab.orig/scilab/modules/scinotes/src/java/jflex/function.jflex
++++ scilab/scilab/modules/scinotes/src/java/jflex/function.jflex
+@@ -8,7 +8,6 @@
+ import javax.swing.text.BadLocationException;
+ import javax.swing.text.Element;
+ 
+-@javax.annotation.Generated("JFlex")
+ %%
+ 
+ %public
+--- scilab.orig/scilab/modules/scinotes/src/java/jflex/indentation.jflex
++++ scilab/scilab/modules/scinotes/src/java/jflex/indentation.jflex
+@@ -6,7 +6,6 @@
+ import javax.swing.text.Element;
+ import javax.swing.text.BadLocationException;
+ 
+-@javax.annotation.Generated("JFlex")
+ %% 
+ 
+ %public
+--- scilab.orig/scilab/modules/scinotes/src/java/jflex/matchingblock.jflex
++++ scilab/scilab/modules/scinotes/src/java/jflex/matchingblock.jflex
+@@ -5,7 +5,6 @@
+ import java.io.IOException;
+ import javax.swing.text.Element;
+ 
+-@javax.annotation.Generated("JFlex")
+ %%
+ 
+ %public
+--- scilab.orig/scilab/modules/scinotes/src/java/jflex/scilab.jflex
++++ scilab/scilab/modules/scinotes/src/java/jflex/scilab.jflex
+@@ -12,7 +12,6 @@
+ import javax.swing.text.Element;
+ import org.scilab.modules.commons.ScilabCommonsUtils;
+ 
+-@javax.annotation.Generated("JFlex")
+ 
+ %%
+ 
+--- scilab.orig/scilab/modules/scinotes/src/java/org/scilab/modules/scinotes/IndentScanner.java
++++ scilab/scilab/modules/scinotes/src/java/org/scilab/modules/scinotes/IndentScanner.java
+@@ -10,7 +10,6 @@
+ import javax.swing.text.Element;
+ import javax.swing.text.BadLocationException;
+ 
+-@javax.annotation.Generated("JFlex")
+ 
+ // See https://github.com/jflex-de/jflex/issues/222
+ @SuppressWarnings("FallThrough")
+--- scilab.orig/scilab/modules/scinotes/src/java/org/scilab/modules/scinotes/MatchingBlockScanner.java
++++ scilab/scilab/modules/scinotes/src/java/org/scilab/modules/scinotes/MatchingBlockScanner.java
+@@ -9,7 +9,6 @@
+ import java.io.IOException;
+ import javax.swing.text.Element;
+ 
+-@javax.annotation.Generated("JFlex")
+ 
+ // See https://github.com/jflex-de/jflex/issues/222
+ @SuppressWarnings("FallThrough")
+--- scilab.orig/scilab/modules/scinotes/src/java/org/scilab/modules/scinotes/ScilabLexer.java
++++ scilab/scilab/modules/scinotes/src/java/org/scilab/modules/scinotes/ScilabLexer.java
+@@ -16,7 +16,6 @@
+ import javax.swing.text.Element;
+ import org.scilab.modules.commons.ScilabCommonsUtils;
+ 
+-@javax.annotation.Generated("JFlex")
+ 
+ 
+ // See https://github.com/jflex-de/jflex/issues/222
+--- scilab.orig/scilab/modules/helptools/src/java/org/scilab/modules/helptools/c/CLexer.java
++++ scilab/scilab/modules/helptools/src/java/org/scilab/modules/helptools/c/CLexer.java
+@@ -10,7 +10,6 @@
+ import java.io.StringReader;
+ import java.io.IOException;
+ 
+-@javax.annotation.Generated("JFlex")
+ 
+ // See https://github.com/jflex-de/jflex/issues/222
+ @SuppressWarnings("FallThrough")
+--- scilab.orig/scilab/modules/scinotes/src/java/org/scilab/modules/scinotes/FunctionScanner.java
++++ scilab/scilab/modules/scinotes/src/java/org/scilab/modules/scinotes/FunctionScanner.java
+@@ -12,7 +12,6 @@
+ import javax.swing.text.BadLocationException;
+ import javax.swing.text.Element;
+ 
+-@javax.annotation.Generated("JFlex")
+ 
+ // See https://github.com/jflex-de/jflex/issues/222
+ @SuppressWarnings("FallThrough")
+--- scilab.orig/scilab/build.incl.xml
++++ scilab/scilab/build.incl.xml
+@@ -56,6 +56,8 @@
+         <pathelement location="${library.graphic_export.dir}/${library.graphic_export.name}"/>
+         <pathelement location="${library.core.dir}/${library.core.name}"/>
+         <pathelement location="${library.preferences.dir}/${library.preferences.name}"/>
++        <pathelement location="/usr/share/java/javax.activation.jar"/>
++        <pathelement location="/usr/share/java/jaxb-api.jar"/>
+         <!-- Not use at build time but used for unitary tests -->
+         <pathelement location="${library.javasci.dir}/${library.javasci.name}"/>
+         <pathelement location="${library.javasci.dir}/${library.javasci-v1.name}"/>

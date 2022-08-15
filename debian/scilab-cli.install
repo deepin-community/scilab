@@ -1,0 +1,7 @@
+debian/bash_completion.d/scilab usr/share/bash-completion/completions
+debian/tmp/usr/bin/scilab-cli
+usr/share/applications/scilab-cli.desktop
+usr/share/mime/packages/scilab.xml
+usr/share/appdata/scilab.appdata.xml usr/share/metainfo/scilab.appdata.xml
+usr/share/icons/hicolor/*
+

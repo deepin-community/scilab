@@ -1,0 +1,105 @@
+Description: the current way to set the classpath doesn't work with recent java versions
+Author: Julien Puydt
+Forwarded: http://bugzilla.scilab.org/show_bug.cgi?id=15687
+
+--- scilab.orig/scilab/bin/scilab
++++ scilab/scilab/bin/scilab
+@@ -678,6 +678,48 @@
+     detect_java_vm
+ fi
+ 
++# Try to set the classpath as the classpath loader doesn't work anymore
++# bad way to detect if we're during the compilation
++SYSJARS=/usr/share/java/flexdock.jar
++SYSJARS=$SYSJARS:/usr/share/java/skinlf.jar
++SYSJARS=$SYSJARS:/usr/share/java/looks.jar
++SYSJARS=$SYSJARS:/usr/share/java/commons-logging.jar
++SYSJARS=$SYSJARS:/usr/share/java/jhall.jar
++SYSJARS=$SYSJARS:/usr/share/java/lucene-core-4.10.4.jar
++SYSJARS=$SYSJARS:/usr/share/java/lucene-analyzers-common-4.10.4.jar
++SYSJARS=$SYSJARS:/usr/share/java/lucene-queryparser-4.10.4.jar
++SYSJARS=$SYSJARS:/usr/share/maven-repo/org/freehep/freehep-util/debian/freehep-util-debian.jar
++SYSJARS=$SYSJARS:/usr/share/maven-repo/org/freehep/freehep-io/debian/freehep-io-debian.jar
++SYSJARS=$SYSJARS:/usr/share/maven-repo/org/freehep/freehep-graphicsio/debian/freehep-graphicsio-debian.jar
++SYSJARS=$SYSJARS:/usr/share/java/freehep-graphicsio-emf.jar
++SYSJARS=$SYSJARS:/usr/share/java/freehep-graphics2d.jar
++SYSJARS=$SYSJARS:/usr/share/java/jrosetta-API.jar
++SYSJARS=$SYSJARS:/usr/share/java/jrosetta-engine.jar
++SYSJARS=$SYSJARS:/usr/share/java/jgraphx.jar
++SYSJARS=$SYSJARS:/usr/share/java/jogl2.jar
++SYSJARS=$SYSJARS:/usr/share/java/gluegen2-rt.jar
++SYSJARS=$SYSJARS:/usr/share/java/jeuclid-core.jar
++SYSJARS=$SYSJARS:/usr/share/java/jlatexmath-fop.jar
++SYSJARS=$SYSJARS:/usr/share/java/fop.jar
++SYSJARS=$SYSJARS:/usr/share/java/saxon.jar
++SYSJARS=$SYSJARS:/usr/share/java/batik.jar
++SYSJARS=$SYSJARS:/usr/share/java/xml-apis-ext.jar
++SYSJARS=$SYSJARS:/usr/share/java/commons-io.jar
++SYSJARS=$SYSJARS:/usr/share/java/xmlgraphics-commons.jar
++SYSJARS=$SYSJARS:/usr/share/java/avalon-framework.jar
++SYSJARS=$SYSJARS:/usr/share/java/jlatexmath.jar
++SYSJARS=$SYSJARS:/usr/share/java/ecj.jar
++SYSJARS=$SYSJARS:/usr/share/java/javax.activation.jar
++SYSJARS=$SYSJARS:/usr/share/java/jaxb-runtime.jar
++if test -r "./etc/classpath.xml"; then
++    SCIJARS=`find modules -name "*.jar" -type f | tr "\n" ":"`
++else
++    SCIJARS=`find /usr/share/scilab/modules -name "*.jar" -type f | tr "\n" ":"`
++fi
++_JAVA_OPTIONS=-Djava.class.path=$SYSJARS:$SCIJARS${_JAVA_OPTIONS+ $_JAVA_OPTIONS}
++
++export _JAVA_OPTIONS
++
+ if test $IS_SCILAB_BINARY -eq 1; then
+ 
+     if test ! -d "$SCIBINARYBASE/thirdparty/tcl8.5"; then
+--- scilab.orig/scilab/modules/jvm/src/java/org/scilab/modules/jvm/ClassPath.java
++++ scilab/scilab/modules/jvm/src/java/org/scilab/modules/jvm/ClassPath.java
+@@ -62,7 +62,7 @@
+      */
+     public static void addURL(final URL u, int i) {
+ 
+-        final URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
++        /*final URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+         Class sysclass = URLClassLoader.class;
+ 
+         try {
+@@ -70,10 +70,10 @@
+             final Method method = sysclass.getDeclaredMethod("addURL", parameters);
+             method.setAccessible(true);
+             switch (i) {
+-                case 0: /* Load now */
++                case 0: /* Load now
+                     method.invoke(sysloader , new Object[] { u });
+                     break;
+-                case 1: /* Load later (background) */
++                case 1: /* Load later (background)
+                     queued.add(u);
+                     break;
+             }
+@@ -84,7 +84,7 @@
+             System.err.println("Error: Illegal access: " + e.getLocalizedMessage());
+         } catch (InvocationTargetException e) {
+             System.err.println("Error: Could not invocate target: " + e.getLocalizedMessage());
+-        }
++        } */
+ 
+     }
+     /*-----------------------------------------------------------------------*/
+@@ -94,13 +94,14 @@
+      */
+     public static String[] getClassPath() {
+ 
+-        URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
++	return new String[0];
++        /* URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+         URL[] path = sysloader.getURLs();
+         String[] paths = new String[path.length];
+         for (int i = 0; i < path.length; i++) {
+             paths[i] = path[i].getFile();
+         }
+-        return paths;
++        return paths;*/
+     }
+ 
+ 

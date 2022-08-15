@@ -1,0 +1,7 @@
+version=4
+opts="\
+repacksuffix=+dfsg2,\
+dversionmangle=s/\+dfsg.*$//,\
+compression=xz,\
+" \
+https://github.com/scilab/scilab/tags .*/([\d\.]+)\.tar\.gz

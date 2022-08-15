@@ -1,0 +1,176 @@
+Description: more recent libxml2 doesn't ship xml2-config anymore
+Author: Julien Puydt
+Forwarded: http://bugzilla.scilab.org/show_bug.cgi?id=16352
+
+--- scilab.orig/scilab/configure.ac
++++ scilab/scilab/configure.ac
+@@ -1530,7 +1530,9 @@
+ ## Test for libxml
+ #######################
+ 
+-AC_LIBXML2()
++PKG_CHECK_MODULES([XML], [libxml-2.0])
++AC_SUBST(XML_CFLAGS)
++AC_SUBST(XML_LIBS)
+ 
+ #######################
+ ## Test for gettext
+@@ -2398,9 +2400,8 @@
+ 
+ echo ""
+ echo "XML configuration:"
+-echo "  XML_FLAGS .......... = $XML_FLAGS"
++echo "  XML_CFLAGS .......... = $XML_CFLAGS"
+ echo "  XML_LIBS ........... = $XML_LIBS"
+-echo "  XML_VERSION ........ = $XML_VERSION"
+ 
+ echo ""
+ echo "HDF5 configuration:"
+--- scilab.orig/scilab/modules/completion/Makefile.am
++++ scilab/scilab/modules/completion/Makefile.am
+@@ -77,7 +77,7 @@
+     -I$(top_srcdir)/modules/dynamic_link/includes \
+     -I$(top_srcdir)/modules/external_objects/includes \
+     $(JAVA_JNI_INCLUDE) \
+-    $(XML_FLAGS) \
++    $(XML_CFLAGS) \
+     $(AM_CPPFLAGS)
+ 
+ # Name of the future library (.la will be replace by .so, .a, etc regarding
+--- scilab.orig/scilab/modules/core/Makefile.am
++++ scilab/scilab/modules/core/Makefile.am
+@@ -188,7 +188,7 @@
+     -I$(top_srcdir)/modules/fftw/includes/ \
+     -I$(top_srcdir)/modules/ui_data/includes/ \
+     $(HDF5_CFLAGS) \
+-    $(XML_FLAGS) \
++    $(XML_CFLAGS) \
+     $(AM_CPPFLAGS)
+ 
+ # Used by sci_getdebuginfo:
+--- scilab.orig/scilab/modules/coverage/Makefile.am
++++ scilab/scilab/modules/coverage/Makefile.am
+@@ -67,7 +67,7 @@
+     -I$(top_srcdir)/modules/string/includes/ \
+     -I$(top_srcdir)/modules/dynamic_link/includes \
+     -I$(top_srcdir)/modules/threads/includes/ \
+-    $(XML_FLAGS) \
++    $(XML_CFLAGS) \
+     $(COVERAGE_FLAGS) \
+     $(AM_CPPFLAGS)
+ 
+--- scilab.orig/scilab/modules/fileio/Makefile.am
++++ scilab/scilab/modules/fileio/Makefile.am
+@@ -134,7 +134,7 @@
+ 	-I$(top_srcdir)/modules/dynamic_link/includes \
+ 	-I$(top_srcdir)/modules/preferences/includes \
+ 	$(HDF5_CFLAGS) \
+-	$(XML_FLAGS) \
++	$(XML_CFLAGS) \
+ 	$(CURL_CFLAGS) \
+ 	$(AM_CPPFLAGS)
+ 
+--- scilab.orig/scilab/modules/functions_manager/Makefile.am
++++ scilab/scilab/modules/functions_manager/Makefile.am
+@@ -46,7 +46,7 @@
+ 	-I$(top_srcdir)/modules/string/includes/ \
+ 	-I$(top_srcdir)/modules/threads/includes/ \
+ 	$(AM_CPPFLAGS) \
+-	$(XML_FLAGS)
++	$(XML_CFLAGS)
+ 
+ libscifunctions_manager_la_includedir=$(pkgincludedir)
+ 
+--- scilab.orig/scilab/modules/io/Makefile.am
++++ scilab/scilab/modules/io/Makefile.am
+@@ -61,7 +61,7 @@
+     -I$(top_srcdir)/modules/console/includes \
+     -I$(top_srcdir)/modules/hdf5/includes \
+     -I$(top_srcdir)/modules/tclsci/includes \
+-    $(XML_FLAGS) \
++    $(XML_CFLAGS) \
+     $(AM_CPPFLAGS)
+ 
+ if MAINTAINER_MODE
+--- scilab.orig/scilab/modules/jvm/Makefile.am
++++ scilab/scilab/modules/jvm/Makefile.am
+@@ -51,7 +51,7 @@
+     -I$(top_srcdir)/modules/fileio/includes/ \
+     -I$(top_srcdir)/modules/dynamic_link/includes \
+     -I$(top_srcdir)/modules/preferences/includes/ \
+-    $(XML_FLAGS) \
++    $(XML_CFLAGS) \
+     $(AM_CPPFLAGS)
+ 
+ pkglib_LTLIBRARIES = libscijvm-disable.la
+--- scilab.orig/scilab/modules/preferences/Makefile.am
++++ scilab/scilab/modules/preferences/Makefile.am
+@@ -64,7 +64,7 @@
+     -I$(srcdir)/includes/ \
+     -I$(srcdir)/src/c/ \
+     -I$(srcdir)/src/jni/ \
+-    $(XML_FLAGS) \
++    $(XML_CFLAGS) \
+     -I$(top_srcdir)/modules/ast/includes/ast/ \
+     -I$(top_srcdir)/modules/ast/includes/analysis/ \
+     -I$(top_srcdir)/modules/ast/includes/exps/ \
+--- scilab.orig/scilab/modules/scicos/Makefile.am
++++ scilab/scilab/modules/scicos/Makefile.am
+@@ -155,13 +155,13 @@
+ 			-I$(top_srcdir)/modules/threads/includes/ \
+ 			-I$(top_srcdir)/modules/console/includes/ \
+ 			-I$(top_srcdir)/modules/differential_equations/includes/ \
+-			$(XML_FLAGS) \
++			$(XML_CFLAGS) \
+ 			$(AM_CPPFLAGS)
+ else
+ libsciscicos_algo_la_CPPFLAGS= -I$(top_srcdir)/modules/output_stream/includes/ \
+ 			-I$(top_srcdir)/modules/api_scilab/includes/ \
+ 			-I$(top_srcdir)/modules/scicos/includes/ \
+-			$(XML_FLAGS) \
++			$(XML_CFLAGS) \
+ 			$(AM_CPPFLAGS)
+ endif
+ libsciscicos_cli_la_CPPFLAGS = $(libsciscicos_algo_la_CPPFLAGS)
+--- scilab.orig/scilab/modules/slint/Makefile.am
++++ scilab/scilab/modules/slint/Makefile.am
+@@ -126,7 +126,7 @@
+     -I$(top_srcdir)/modules/string/includes/ \
+     -I$(top_srcdir)/modules/dynamic_link/includes \
+     -I$(top_srcdir)/modules/threads/includes/ \
+-    $(XML_FLAGS) \
++    $(XML_CFLAGS) \
+     $(PCRE_CFLAGS) \
+     $(SLINT_FLAGS) \
+     $(AM_CPPFLAGS)
+--- scilab.orig/scilab/modules/xcos/Makefile.am
++++ scilab/scilab/modules/xcos/Makefile.am
+@@ -120,7 +120,7 @@
+     -I$(top_srcdir)/modules/localization/includes/ \
+     -I$(top_srcdir)/modules/fileio/includes/ \
+     -I$(top_srcdir)/modules/api_scilab/includes/ \
+-    $(XML_FLAGS) \
++    $(XML_CFLAGS) \
+     $(JAVA_JNI_INCLUDE) \
+     $(AM_CPPFLAGS)
+ 
+@@ -136,7 +136,7 @@
+     -I$(top_srcdir)/modules/ast/includes/types/ \
+     -I$(top_srcdir)/modules/localization/includes/ \
+     -I$(top_srcdir)/modules/output_stream/includes \
+-    $(XML_FLAGS) \
++    $(XML_CFLAGS) \
+     $(AM_CPPFLAGS)
+ 
+ XCOS_DISABLE_C_SOURCES = src/noxcos/noxcos.c
+--- scilab.orig/scilab/modules/xml/Makefile.am
++++ scilab/scilab/modules/xml/Makefile.am
+@@ -110,7 +110,7 @@
+     -I$(top_srcdir)/modules/fileio/includes/ \
+     -I$(top_srcdir)/modules/string/includes/ \
+     -I$(top_srcdir)/modules/dynamic_link/includes \
+-    $(XML_FLAGS) \
++    $(XML_CFLAGS) \
+     $(AM_CPPFLAGS)
+ 
+ pkglib_LTLIBRARIES = libscixml.la

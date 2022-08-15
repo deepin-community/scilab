@@ -1,0 +1,162 @@
+#!/usr/bin/make -f
+
+include /usr/share/dpkg/architecture.mk
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+export CCACHE_DIR := $(CURDIR)/debian/ccache
+
+CONFIGURE_ARGS += --prefix=/usr \
+	--with-fftw \
+	--with-umfpack --enable-build-localization \
+	--with-install-help-xml --enable-build-help \
+	--with-tcl-library=/usr/lib/$(DEB_HOST_MULTIARCH) \
+	--enable-mpi --disable-static-system-lib
+
+ifneq ($(wildcard /usr/lib/$(DEB_HOST_MULTIARCH)/hdf5/serial/libhdf5.so),)
+  CONFIGURE_ARGS += --with-hdf5-include=/usr/include/hdf5/serial \
+	        --with-hdf5-library=/usr/lib/$(DEB_HOST_MULTIARCH)/hdf5/serial
+endif
+
+# requires ocamlopt
+ifneq (,$(filter $(DEB_HOST_ARCH),arm64 armel ppc64el mips mipsel s390x sparc))
+  CONFIGURE_ARGS += --without-modelica
+endif
+
+ifneq (,$(findstring $(DEB_HOST_ARCH),amd64))
+	DOC=1
+else
+	DOC=0
+endif
+
+%:
+	dh $@ --sourcedirectory=scilab
+
+# Do not run libtoolize because it can mess up with Scilab library
+override_dh_autoreconf:
+	cd scilab && autoreconf
+
+override_dh_auto_configure:
+	cd scilab && ./configure $(CONFIGURE_ARGS)
+
+override_dh_auto_build:
+ifeq ($(DOC), 1)
+	cd scilab && make all doc
+else
+	cd scilab && make all
+endif
+
+# doesn't work
+override_dh_auto_test:
+
+override_dh_installchangelogs:
+	dh_installchangelogs scilab/CHANGES.md
+
+override_dh_auto_install:
+	make -C scilab install install-data install-html \
+		prefix=$(CURDIR)/debian/tmp/usr \
+		bindir=$(CURDIR)/debian/tmp/usr/bin \
+		datadir=$(CURDIR)/debian/tmp/usr/share/ \
+		sharedir=$(CURDIR)/debian/tmp/usr/share/ \
+		docdir=$(CURDIR)/debian/tmp/usr/share/doc/
+
+# Remove empty directories but not files (#907607: scilab-cli doesn't start)
+	find debian/tmp/usr/share/scilab -type d -empty -delete
+# Remove la files
+	find debian/tmp/usr/lib/ -name '*.la' -delete
+# Remove deps files
+	rm -rf `find debian/tmp -type d -name .deps`
+# Remove extra license files to make lintian happier
+# See debian/copyright for them
+	find debian/tmp/usr/share/scilab -type f -name "*license.txt" -delete
+# Remove all readme files and the changelog (it is in /usr/share/doc/scilab/)
+	find debian/tmp/usr/share/scilab -type f -iname "readme*" -delete
+	find debian/tmp/usr/share/scilab -type f -name CHANGES.md -delete
+# Remove COPYING file
+	rm debian/tmp/usr/share/scilab/COPYING
+# Remove Visual project files
+	find debian/tmp/usr/share/scilab -name "*.sln" -delete
+# Remove a font file which is already shipped in another package
+	find debian/tmp/usr/share/scilab -name "*.ttf" -delete
+# Remove dll files
+	find debian/tmp -name "*.dll" -delete
+	find debian/tmp -name "*.dll *" -delete
+# Remove strange debug files
+	find debian/tmp -name .build-id -type d -exec rm -r {} \;
+# Remove git files
+	find debian/tmp -name .gitignore -delete
+
+# Remove dead code
+	rm -rf debian/tmp/usr/share/scilab/modules/helptools/bin debian/tmp/usr/share/scilab/modules/tclsci/demos/tk/timer debian/tmp/usr/share/scilab/modules/intersci/examples/sedprov debian/tmp/usr/share/scilab/modules/macros
+
+	mkdir -p $(CURDIR)/debian/scilab-cli/usr/share/icons/
+	cp -R debian/tmp/usr/share/icons/hicolor/ $(CURDIR)/debian/scilab-cli/usr/share/icons/
+
+# Management of the tests, help and demos
+	for dir in debian/tmp/usr/share/scilab/modules/*; do \
+		moduleName=`echo $$dir|sed -e "s|.*/\(.*\)|\1|"`; \
+		target=$(CURDIR)/debian/scilab-doc/usr/share/scilab/modules/$$moduleName; \
+		target_test=$(CURDIR)/debian/scilab-test/usr/share/scilab/modules/$$moduleName; \
+		# Move tests in the right package; \
+		if test -d $$dir/tests; then \
+			mkdir -p $$target_test; \
+			mv $$dir/tests $$target_test; \
+		fi; \
+		# Move the help in the right package; \
+		if test -d $$dir/help/en_US; then \
+			mkdir -p $$target/help; \
+			mv $$dir/help/en_US $$target/help; \
+		fi; \
+		if test -d $$dir/demos; then \
+			mv $$dir/demos $$target; \
+		fi; \
+		if test -d $$dir/help/fr_FR; then \
+			mkdir -p $(CURDIR)/debian/scilab-doc-fr/usr/share/scilab/modules/$$moduleName/help; \
+			mv $$dir/help/fr_FR $(CURDIR)/debian/scilab-doc-fr/usr/share/scilab/modules/$$moduleName/help/; \
+		fi; \
+		if test -d $$dir/help/pt_BR; then \
+			mkdir -p $(CURDIR)/debian/scilab-doc-pt-br/usr/share/scilab/modules/$$moduleName/help; \
+			mv $$dir/help/pt_BR $(CURDIR)/debian/scilab-doc-pt-br/usr/share/scilab/modules/$$moduleName/help/; \
+		fi; \
+		if test -d $$dir/help/ja_JP; then \
+			mkdir -p $(CURDIR)/debian/scilab-doc-ja/usr/share/scilab/modules/$$moduleName/help; \
+			mv $$dir/help/ja_JP $(CURDIR)/debian/scilab-doc-ja/usr/share/scilab/modules/$$moduleName/help/; \
+		fi; \
+	done
+	# Remove empty directories
+	find debian/tmp/usr/share/scilab -type d -empty -delete
+
+ifeq ($(DOC), 1)
+	mkdir $(CURDIR)/debian/scilab-doc/usr/share/scilab/modules/helptools/jar/
+	EN_US_DOC=$(CURDIR)/debian/tmp/usr/share/scilab/modules/helptools/jar/scilab_en_US_help.jar; \
+	mv $$EN_US_DOC $(CURDIR)/debian/scilab-doc/usr/share/scilab/modules/helptools/jar/
+
+	mkdir $(CURDIR)/debian/scilab-doc-fr/usr/share/scilab/modules/helptools/jar/
+	FR_FR_DOC=$(CURDIR)/debian/tmp/usr/share/scilab/modules/helptools/jar/scilab_fr_FR_help.jar; \
+	mv $$FR_FR_DOC $(CURDIR)/debian/scilab-doc-fr/usr/share/scilab/modules/helptools/jar/
+
+	mkdir $(CURDIR)/debian/scilab-doc-pt-br/usr/share/scilab/modules/helptools/jar/
+	PT_BR_DOC=$(CURDIR)/debian/tmp/usr/share/scilab/modules/helptools/jar/scilab_pt_BR_help.jar; \
+	mv $$PT_BR_DOC $(CURDIR)/debian/scilab-doc-pt-br/usr/share/scilab/modules/helptools/jar/
+
+	mkdir -p $(CURDIR)/debian/scilab-doc-ja/usr/share/scilab/modules/helptools/jar/
+	JA_DOC=$(CURDIR)/debian/tmp/usr/share/scilab/modules/helptools/jar/scilab_ja_JP_help.jar; \
+	mv $$JA_DOC $(CURDIR)/debian/scilab-doc-ja/usr/share/scilab/modules/helptools/jar/
+endif
+
+	mkdir -p $(CURDIR)/debian/scilab-minimal-bin/usr/bin
+	mv $(CURDIR)/debian/tmp/usr/bin/scilab-cli-bin $(CURDIR)/debian/scilab-minimal-bin/usr/bin/
+
+# Move binaries
+	mkdir -p $(CURDIR)/debian/scilab-full-bin/usr/bin
+	mv $(CURDIR)/debian/tmp/usr/bin/scilab-bin $(CURDIR)/debian/scilab-full-bin/usr/bin/
+	if test -s $(CURDIR)/debian/tmp/usr/bin/modelicac; then \
+		chrpath -d $(CURDIR)/debian/tmp/usr/bin/modelicac $(CURDIR)/debian/tmp/usr/bin/XML2Modelica $(CURDIR)/debian/tmp/usr/bin/modelicat; \
+		mv $(CURDIR)/debian/tmp/usr/bin/modelicac $(CURDIR)/debian/tmp/usr/bin/XML2Modelica $(CURDIR)/debian/tmp/usr/bin/modelicat $(CURDIR)/debian/scilab-full-bin/usr/bin/; \
+	fi
+# Move the javasci2 lib
+	mkdir -p $(CURDIR)/debian/scilab-full-bin/usr/share/java/
+	mkdir -p $(CURDIR)/debian/scilab-full-bin/usr/lib/jni/
+	cp debian/tmp/usr/share/scilab/modules/javasci/jar/org.scilab.modules.javasci.jar $(CURDIR)/debian/scilab-full-bin/usr/share/java/
+	mv debian/tmp/usr/lib/scilab/libjavasci2.so*  $(CURDIR)/debian/scilab-full-bin/usr/lib/jni/
+
+override_dh_dwz:

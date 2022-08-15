@@ -1,0 +1,16 @@
+Description: get around the complex and failing detection
+Author: Julien Puydt
+Forwarded: Debian-specific
+
+--- scilab.orig/scilab/bin/scilab
++++ scilab/scilab/bin/scilab
+@@ -847,8 +847,7 @@
+     esac
+ }
+ 
+-# . is used by the dynamic link. The build lib are copied into the PWD
+-SCILIB=$SCI/bin:$SCI/lib/scilab/:$SCI/lib64/scilab/:.
++SCILIB=/usr/lib/scilab
+ if test -d "$SCI/lib/thirdparty"; then
+     SCILIB=$SCI/lib/thirdparty:$SCILIB;
+ fi

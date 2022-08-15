@@ -1,0 +1,4 @@
+# the actual binary which should not be called directly
+scilab-full-bin: binary-without-manpage usr/bin/scilab-bin
+# Don't really care about this warning
+scilab-full-bin: classpath-contains-relative-path usr/share/java/org.scilab.modules.javasci.jar: ../../jvm/jar/org.scilab.modules.jvm.jar

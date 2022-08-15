@@ -1,0 +1,186 @@
+Description: fix compilation issue with new libicu (Closes: #962555)
+Author: Boyuan Yang?
+Forwarded: comes from ubuntu
+
+--- scilab-6.1.0+dfsg1.orig/scilab/modules/functions_manager/src/cpp/dynamic_modules.cpp
++++ scilab-6.1.0+dfsg1/scilab/modules/functions_manager/src/cpp/dynamic_modules.cpp
+@@ -18,14 +18,14 @@
+ #include "configvariable.hxx"
+ 
+ 
++#include <libxml/xpath.h>
++#include <libxml/xmlreader.h>
+ extern "C"
+ {
+ #include "loadOnUseClassPath.h"
+ #include "Scierror.h"
+ 
+     //XML API
+-#include <libxml/xpath.h>
+-#include <libxml/xmlreader.h>
+ #include "sci_malloc.h"
+ #include "configvariable_interface.h"
+ }
+--- scilab-6.1.0+dfsg1.orig/scilab/modules/io/src/cpp/loadlib.cpp
++++ scilab-6.1.0+dfsg1/scilab/modules/io/src/cpp/loadlib.cpp
+@@ -17,6 +17,8 @@
+ #include "context.hxx"
+ #include "loadlib.hxx"
+ #include "macrofile.hxx"
++#include <libxml/xpath.h>
++#include <libxml/xmlreader.h>
+ extern "C"
+ {
+ #include "FileExist.h"
+@@ -26,8 +28,6 @@ extern "C"
+ #include "fullpath.h"
+ #include "PATH_MAX.h"
+ #include "pathconvert.h"
+-#include <libxml/xpath.h>
+-#include <libxml/xmlreader.h>
+ }
+ 
+ #define DEFAULT_ENCODING "UTF-8"
+--- scilab-6.1.0+dfsg1.orig/scilab/modules/scicos/includes/XMIResource.hxx
++++ scilab-6.1.0+dfsg1/scilab/modules/scicos/includes/XMIResource.hxx
+@@ -22,10 +22,8 @@
+ #include <string>
+ #include <vector>
+ 
+-extern "C" {
+ #include <libxml/xmlwriter.h>
+ #include <libxml/xmlreader.h>
+-}
+ 
+ namespace org_scilab_modules_scicos
+ {
+--- scilab-6.1.0+dfsg1.orig/scilab/modules/scicos/src/cpp/XMIResource.cpp
++++ scilab-6.1.0+dfsg1/scilab/modules/scicos/src/cpp/XMIResource.cpp
+@@ -12,9 +12,7 @@
+ 
+ #include "XMIResource.hxx"
+ 
+-extern "C" {
+ #include <libxml/xmlversion.h>
+-}
+ 
+ namespace org_scilab_modules_scicos
+ {
+--- scilab-6.1.0+dfsg1.orig/scilab/modules/scicos/src/cpp/XMIResource_load.cpp
++++ scilab-6.1.0+dfsg1/scilab/modules/scicos/src/cpp/XMIResource_load.cpp
+@@ -21,13 +21,12 @@
+ #include <cstdlib> // for atoi and atof
+ #include <cstring> // for strcmp and strchr
+ 
+-extern "C"
+-{
+ #include <libxml/tree.h>
+ #include <libxml/parser.h>
+ #include <libxml/xmlerror.h>
+ #include <libxml/xmlreader.h>
+-
++extern "C"
++{
+ #include "sci_types.h"
+ #include "sciprint.h"
+ }
+--- scilab-6.1.0+dfsg1.orig/scilab/modules/scicos/src/cpp/XMIResource_save.cpp
++++ scilab-6.1.0+dfsg1/scilab/modules/scicos/src/cpp/XMIResource_save.cpp
+@@ -19,10 +19,9 @@
+ #include <vector>
+ #include <cmath> // for trunc
+ 
++#include <libxml/xmlwriter.h>
+ extern "C" {
+ #include "sci_types.h"
+-
+-#include <libxml/xmlwriter.h>
+ }
+ 
+ namespace org_scilab_modules_scicos
+--- scilab-6.1.0+dfsg1.orig/scilab/modules/xml/sci_gateway/cpp/sci_htmlWrite.cpp
++++ scilab-6.1.0+dfsg1/scilab/modules/xml/sci_gateway/cpp/sci_htmlWrite.cpp
+@@ -17,6 +17,7 @@
+ #include "XMLDocument.hxx"
+ #include "XMLElement.hxx"
+ 
++#include "libxml/tree.h"
+ extern "C"
+ {
+ #include <string.h>
+@@ -24,7 +25,6 @@ extern "C"
+ #include "Scierror.h"
+ #include "api_scilab.h"
+ #include "xml_mlist.h"
+-#include "libxml/tree.h"
+ #include "expandPathVariable.h"
+ #include "sci_malloc.h"
+ #include "localization.h"
+--- scilab-6.1.0+dfsg1.orig/scilab/modules/xml/sci_gateway/cpp/sci_xmlAppend.cpp
++++ scilab-6.1.0+dfsg1/scilab/modules/xml/sci_gateway/cpp/sci_xmlAppend.cpp
+@@ -17,13 +17,13 @@
+ #include "XMLDocument.hxx"
+ #include "XMLElement.hxx"
+ 
++#include "libxml/tree.h"
+ extern "C"
+ {
+ #include "gw_xml.h"
+ #include "Scierror.h"
+ #include "api_scilab.h"
+ #include "xml_mlist.h"
+-#include "libxml/tree.h"
+ #include "localization.h"
+ }
+ 
+--- scilab-6.1.0+dfsg1.orig/scilab/modules/xml/sci_gateway/cpp/sci_xmlElement.cpp
++++ scilab-6.1.0+dfsg1/scilab/modules/xml/sci_gateway/cpp/sci_xmlElement.cpp
+@@ -17,13 +17,13 @@
+ #include "XMLDocument.hxx"
+ #include "XMLElement.hxx"
+ 
++#include "libxml/tree.h"
+ extern "C"
+ {
+ #include "gw_xml.h"
+ #include "Scierror.h"
+ #include "api_scilab.h"
+ #include "xml_mlist.h"
+-#include "libxml/tree.h"
+ #include "localization.h"
+ }
+ 
+--- scilab-6.1.0+dfsg1.orig/scilab/modules/xml/sci_gateway/cpp/sci_xmlWrite.cpp
++++ scilab-6.1.0+dfsg1/scilab/modules/xml/sci_gateway/cpp/sci_xmlWrite.cpp
+@@ -17,6 +17,7 @@
+ #include "XMLDocument.hxx"
+ #include "XMLElement.hxx"
+ 
++#include "libxml/tree.h"
+ extern "C"
+ {
+ #include <string.h>
+@@ -24,7 +25,6 @@ extern "C"
+ #include "Scierror.h"
+ #include "api_scilab.h"
+ #include "xml_mlist.h"
+-#include "libxml/tree.h"
+ #include "expandPathVariable.h"
+ #include "sci_malloc.h"
+ #include "localization.h"
+--- scilab-6.1.0+dfsg1.orig/scilab/modules/xml/src/cpp/XMLDocument.hxx
++++ scilab-6.1.0+dfsg1/scilab/modules/xml/src/cpp/XMLDocument.hxx
+@@ -23,13 +23,10 @@
+ 
+ #include "dynlib_xml_scilab.h"
+ 
+-extern "C"
+-{
+ #include "xml.h"
+ #ifndef XML_XPATH_CHECKNS
+ #define XML_XPATH_CHECKNS
+ #endif
+-}
+ 
+ #include "XMLObject.hxx"
+ 

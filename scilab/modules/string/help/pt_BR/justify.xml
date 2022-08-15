@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Copyright (C) INRIA -
+ *
+ * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ *
+ * This file is hereby licensed under the terms of the GNU GPL v2.0,
+ * pursuant to article 5.3.4 of the CeCILL v.2.1.
+ * This file was originally licensed under the terms of the CeCILL v2.1,
+ * and continues to be available under such terms.
+ * For more information, see the COPYING file which you should have received
+ * along with this program.
+ *
+ -->
+<refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg" xmlns:ns5="http://www.w3.org/1999/xhtml"
+          xmlns:db="http://docbook.org/ns/docbook" xmlns:scilab="http://www.scilab.org"
+          xml:id="justify" xml:lang="pt">
+    <refnamediv>
+        <refname>justify</refname>
+        <refpurpose>Alinha o texto nas colunas à esquerda, centro ou direita</refpurpose>
+    </refnamediv>
+    <refsynopsisdiv>
+        <title>Seqüência de Chamamento</title>
+        <synopsis>Tj = justify(T, position)</synopsis>
+    </refsynopsisdiv>
+    <refsection>
+        <title>Parâmetros</title>
+        <variablelist>
+            <varlistentry>
+                <term>T</term>
+                <listitem>
+                    <para>matriz de strings</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Tj</term>
+                <listitem>
+                    <para>matriz de strings. O resultado justificado</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>position</term>
+                <listitem>
+                    <para>Possíveis valores :
+                        <table cellspacing="0" cellpadding="0">
+                          <tr><td><term>'l' ou 'left'</term></td><td>: justificação esquerda</td></tr>
+                          <tr><td><term>'c' ou 'center'</term></td><td>: justificação centrada</td></tr>
+                          <tr><td><term>'r' ou 'right'</term></td><td>: justificação direita</td></tr>
+                        </table>
+                    </para>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </refsection>
+    <refsection>
+        <title>Descrição</title>
+        <para>
+            <literal>justify</literal> justifica a coluna de uma matriz de
+            strings de acordo com o <varname>position</varname>.
+        </para>
+    </refsection>
+    <refsection>
+        <title>Exemplos</title>
+        <programlisting role="example"><![CDATA[
+t=['1234','x','adfdfgdfghfgj'
+   '1','354556','dgf'
+   'sdfgd','','sdfsf'];
+
+justify(t,'l')
+justify(t,'c')
+justify(t,'r')
+ ]]></programlisting>
+    </refsection>
+    <refsection role="see also">
+        <title>Ver Também</title>
+        <simplelist type="inline">
+            <member>
+                <link linkend="length">length</link>
+            </member>
+            <member>
+                <link linkend="part">part</link>
+            </member>
+        </simplelist>
+    </refsection>
+</refentry>

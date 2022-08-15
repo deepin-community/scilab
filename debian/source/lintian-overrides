@@ -1,0 +1,4 @@
+# In fact the same file lists only one license in metadata_license, but two in project_license
+scilab source: inconsistent-appstream-metadata-license debian/copyright scilab/desktop/scilab.appdata.xml (cc0-1.0 != gpl-2+)
+# http://bugzilla.scilab.org/show_bug.cgi?id=16743
+scilab source: maintainer-manual-page debian/*.1

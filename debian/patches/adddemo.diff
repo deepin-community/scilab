@@ -1,0 +1,15 @@
+Description: provide a more helpful message to point to the doc package
+Author: Sylvestre Ledru
+Forwarded: Debian-specific
+
+--- a/scilab/modules/demo_tools/macros/add_demo.sci
++++ b/scilab/modules/demo_tools/macros/add_demo.sci
+@@ -38,7 +38,7 @@
+     path = pathconvert(path, %f, %t);
+ 
+     if ~isfile(path) then
+-        error(msprintf(gettext("%s: The file %s does not exist.\n"), "add_demo", path));
++        error(msprintf(gettext("Demos are not available. Please install the package scilab-doc\n")));
+     end
+ 
+     if isdir(path) then

@@ -1,0 +1,26 @@
+Description: find the font in another package instead of shipping a copy
+Author: Julien Puydt
+Forwarded: Debian-specific
+
+--- scilab.orig/scilab/modules/graphics/tests/unit_tests/xlfont.dia.ref
++++ scilab/scilab/modules/graphics/tests/unit_tests/xlfont.dia.ref
+@@ -32,7 +32,7 @@
+ "תוכנית"];
+ fontpath = SCI + "/modules/graphics/tests/unit_tests";
+ fontname = "DejaVuSansMono.ttf";
+-fontfull = fontpath + filesep() + fontname;
++fontfull = "/usr/share/fonts/truetype/dejavu/" + fontname;
+ for i = 1 : size(tab_ref,'*')
+   pathtemp = TMPDIR + filesep() + 'dir_' + tab_ref(i);
+   fonttemp = pathtemp + filesep() + fontname;
+--- scilab.orig/scilab/modules/graphics/tests/unit_tests/xlfont.tst
++++ scilab/scilab/modules/graphics/tests/unit_tests/xlfont.tst
+@@ -47,7 +47,7 @@
+ 
+ fontpath = SCI + "/modules/graphics/tests/unit_tests";
+ fontname = "DejaVuSansMono.ttf";
+-fontfull = fontpath + filesep() + fontname;
++fontfull = "/usr/share/fonts/truetype/dejavu/" + fontname;
+ 
+ for i = 1 : size(tab_ref,'*')
+   pathtemp = TMPDIR + filesep() + 'dir_' + tab_ref(i);

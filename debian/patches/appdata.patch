@@ -1,0 +1,15 @@
+Description: point to the right desktop file
+Author: Julien Puydt
+Forwarded: https://bugzilla.scilab.org/show_bug.cgi?id=16413
+
+--- scilab.orig/scilab/desktop/scilab.appdata.xml
++++ scilab/scilab/desktop/scilab.appdata.xml
+@@ -1,7 +1,7 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <!-- Copyright 2013 Clement DAVID <clement.david@scilab-enterprises.com> -->
+ <component type="desktop-application">
+-    <id>org.scilab.www</id>
++    <id>scilab-cli.desktop</id>
+     <name>Scilab</name>
+     <metadata_license>CC0-1.0</metadata_license>
+     <project_license>CECILL-2.1 or GPL-2.0+</project_license>

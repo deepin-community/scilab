@@ -1,0 +1,5 @@
+* See what to do with localization files
+* Use atlas by default instead of blas
+* Create a package for the pt_BR help
+* create a dedicated package for xcos ?
+* split scilab-data between scilab-minimal-data & scilab-full-data

@@ -1,0 +1,17 @@
+Description: force java detection in the main script
+Author: Julien Puydt
+Forwarded: not needed
+
+--- scilab.orig/scilab/bin/scilab
++++ scilab/scilab/bin/scilab
+@@ -455,6 +455,10 @@
+ # uname -s Power Macintosh
+ # uname -m Darwin
+ 
++if test -z "$JAVA_HOME" ; then
++  JAVA_HOME=/usr/lib/jvm/default-java
++fi
++
+ # If the user has the variable JAVA_HOME in the ENV
+         if test -n "$JAVA_HOME" ; then
+                 if test $SCIVERBOSE -ne 0; then

@@ -1,0 +1,130 @@
+.TH "scilab-cli" "1" "November 2017"
+.SH NAME
+scilab, scilab-cli and scilab-adv-cli \- Scilab shell
+.SH SYNOPSIS
+.B scilab\fR <arguments>
+.PP
+.SH OPTIONS
+A complete list of options is included below.
+.SS General options
+.TP
+.B \-args\fR <rest>
+Accept all extra arguments and make them available through sciargs
+.TP
+.B \-display\fR <display> (or \fB\-d\fR <display>)
+Use the given server display (under Xwindow systems)
+.TP
+.B \-e\fR <instruction>
+Execute the scilab instruction given in argument
+(\fB\-e\fR and \fB\-f\fR arguments are mutually exclusive.)
+.TP
+.B \-f\fR <file>
+Execute the scilab script given in argument
+(\fB\-e\fR and \fB\-f\fR arguments are mutually exclusive.)
+.TP
+.B \-quit
+Force scilab exit after execution of script from \fB\-e\fR or \fB\-f\fR argument
+(this flag is ignored if it is not used with \fB\-e\fR or \fB\-f\fR argument)
+.TP
+.B \-l\fR <lang>
+change the language of scilab (default : en_US)
+.TP
+.B \-nocolor
+Remove the color in the cli and adv-cli modes
+.TP
+.B \-nw
+Enable console mode
+.TP
+.B \-nwni\fR (or \fB-nogui\fR)
+Enable terminal mode
+.SS "Developer Trace arguments"
+.TP
+.B \--parse-trace
+Display bison state machine evolution
+.TP
+.B \--AST-trace
+Display ASCII-art AST to be human readable
+.TP
+.B \--pretty-print
+Display pretty-printed code, standard Scilab syntax.
+.SS "Developer Timer arguments"
+.TP
+.B \--AST-timed
+Time each AST node
+.TP
+.B \--timed
+Time global execution
+.SS "Developer Debug arguments"
+.TP
+.B \--context-dump
+Display context status
+.TP
+.B \--exec-verbose
+Display command before running it.
+.TP
+.B \-nb
+Do not display Scilab loading on start
+.TP
+.B \-noatomsautoload
+Do not load ATOMS installed module
+.TP
+.B \--no-exec
+Only do Lexing/parsing do not execute instructions
+.TP
+.B \-nouserstartup
+Do not execute the user startup files SCIHOME/.scilab or SCIHOME/scilab.ini
+.TP
+.B \-ns
+Don't execute etc/scilab.start
+(will disable many features - only use if you know what you are doing)
+.TP
+.B \--timeout\fR <delay>
+Kill the Scilab process after the given delay
+.SS "Developer arguments"
+.TP
+.B \-debug
+Start Scilab under gdb
+(define the variable SCILAB_GDB_OPT to add custom arguments to gdb)
+.TP
+.B \-debug-kdbg
+Start Scilab under kdbg
+.TP
+.B \-profiling
+Start Scilab under valgrind
+(define the variable SCILAB_VALGRIND_OPT to add custom arguments to
+valgrind and override the existing valgrind arguments)
+.TP
+.B \-profiling-visu
+Start Scilab under callgrind
+(define the variable SCILAB_VALGRIND_OPT to add custom arguments to
+callgrind and override the existing callgrind arguments)
+.TP
+.B \-disable-exception-catching
+Disable Scilab exception catching system.
+.TP
+.B \--parse-file\fR <file>
+Only parse the given file argument without execution and exit
+.TP
+.B \--parse-trace
+Display bison state machine evolution
+.TP
+.B \--pretty-print
+Display pretty-printed code using standard Scilab syntax
+.SH ENVIRONMENT VARIABLES
+.TP
+SCIVERBOSE
+Provides debugging information of the startup
+.TP
+JAVA_HOME
+Declares which Java Virtual Machine to use
+.TP
+SCI_DISABLE_TK
+Disables Tk (but not Tcl) features
+.TP
+SCI_JAVA_ENABLE_HEADLESS
+Runs Java Headless VM
+.TP
+SCI_DISABLE_EXCEPTION_CATCHING
+Disable the catch by Scilab of exception (segfault, ...)
+.SH AUTHOR
+This manual page was written by Julien Puydt for Debian

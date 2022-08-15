@@ -1,0 +1,298 @@
+Source: scilab
+Section: math
+Priority: optional
+Maintainer: Deepin Developer <deepin-dev@deepin.org>
+Uploaders: Deepin Packages Builder <packages@deepin.org>
+Build-Depends: debhelper-compat (= 13), gfortran, time,
+ default-jdk, chrpath, ocaml-nox (>= 3.11.2-3), libnum-ocaml-dev, fakeroot,
+ tcl-dev, tk-dev, libxml2-dev, libpcre3-dev, libcurl4-openssl-dev,
+ gettext, libreadline-dev, pkg-config, procps, dpkg-dev (>= 1.16.0),
+# numerical libraries
+ libblas-dev | librefblas3-dev | libatlas-base-dev, liblapack-dev,
+ libarpack2-dev (>= 3.0), libeigen3-dev,
+# Java deps
+ default-jre-headless, libflexdock-java (>= 1.2.3), libjogl2-java (>= 2.3.2),
+ libgl1-mesa-dev, libjrosetta-java (>= 1.0.1), ant, libjgoodies-looks-java,
+ libskinlf-java, liblucene4.10-java, libactivation-java, libjaxb-java,
+# graphic
+ libfreehep-graphics2d-java, libfreehep-graphicsio-java, libfreehep-graphicsio-emf-java,
+ libfreehep-util-java,
+# Documentation
+ libjeuclid-core-java (>= 3.1.3), libbatik-java (>= 1.7), fop (>= 0.95),
+ javahelp2, libsaxon-java, libavalon-framework-java, docbook-xsl,
+ libxml-commons-external-java,
+# Optional Scilab features
+ libfftw3-dev, libsuitesparse-dev (>= 3.4.0),
+ libmatio-dev (>= 1.5.18),
+# latex rendering
+ libjlatexmath-java (>= 1.0.2),  libjlatexmath-fop-java (>= 1.0.2),
+# Xcos
+ libjgraphx-java (>= 1.8.0.0), libhdf5-dev (>= 1.8.8),
+# MPI
+ mpi-default-dev,
+# Java binding
+ libecj-java,
+# Unitary testing
+ ant-optional, junit4, libcobertura-java
+Standards-Version: 4.6.0
+Rules-Requires-Root: no
+Homepage: https://www.scilab.org
+#Vcs-Git
+#Vcs-Browser
+
+Package: scilab-cli
+Architecture: all
+Depends: scilab-minimal-bin (>= ${source:Version}),
+ scilab-data (= ${binary:Version}), ${misc:Depends},
+ scilab-include (>= ${source:Version})
+# scilab-include is installed by default since it is widely used by many
+# toolboxes
+Recommends: scilab-sivp (>= 0.5.2)
+Suggests: gfortran, gcc, scilab-swt, scilab-scimax, scilab-plotlib, scilab-ann
+# For the dynamic link
+Description: Scientific software package - Command Line Interpreter
+ Scilab is a matrix-based scientific software package.
+ Scilab contains hundreds of built-in mathematical functions, rich
+ data structures (including polynomials, rationals, linear systems, lists,
+ etc...) and comes with a number of specific toolboxes for
+ control, signal processing, ...
+ .
+ This package provides Scilab as Command Line Interpreter (CLI). This package
+ provides Scilab as a computing engine or script interpreter.
+ Please install the package "scilab" to have all features.
+
+Package: scilab
+Architecture: all
+Depends: scilab-cli (>= ${source:Version}), ${misc:Depends}, scilab-full-bin
+Recommends: scilab-doc (= ${binary:Version}),
+Suggests: scilab-doc-fr (= ${binary:Version}),
+ scilab-doc-pt-br (= ${binary:Version}),
+ scilab-doc-ja (= ${binary:Version})
+Description: Scientific software package for numerical computations
+ Scilab is a matrix-based scientific software package.
+ Scilab contains hundreds of built-in mathematical functions, rich
+ data structures (including polynomials, rationals, linear systems, lists,
+ etc...) and comes with a number of specific toolboxes for control, signal
+ processing, ...
+ .
+ This package also provides Xcos, a graphical editor to design hybrid
+ dynamical systems models. Models can be designed, loaded, saved, compiled and
+ simulated.
+ Stable and efficient solution for industrial and academics needs, Xcos
+ provides functionalities for modeling of mechanical systems (automotive,
+ aeronautics...), hydraulic circuits (dam, pipe modeling...), control systems,
+ etc. Modelica capabilities are also provided.
+ .
+ For a minimum version of scilab, install package "scilab-cli".
+
+Package: scilab-data
+Architecture: all
+Multi-Arch: foreign
+Depends: ${misc:Depends}
+Description: Scientific software package for numerical computations (data files)
+ Scilab is a matrix-based scientific software package.
+ Scilab contains hundreds of built-in mathematical functions, rich
+ data structures (including polynomials, rationals, linear systems, lists,
+ etc...) and comes with a number of specific toolboxes for
+ control, signal processing, ...
+ .
+ This package also provides Xcos, a graphical editor to design hybrid
+ dynamical systems models. Models can be designed, loaded, saved, compiled and
+ simulated.
+ Stable and efficient solution for industrial and academics needs, Xcos
+ provides functionalities for modeling of mechanical systems (automotive,
+ aeronautics...), hydraulic circuits (dam, pipe modeling...), control systems,
+ etc. Modelica capabilities are also provided.
+ .
+ This package contains the data files for Scilab.
+
+
+Package: scilab-include
+# any because of the bug #550243
+Architecture: amd64 armhf i386 powerpc s390x arm64 ppc64el
+Depends: ${misc:Depends}
+Description: Scientific software package for numerical computations (include files)
+ Scilab is a matrix-based scientific software package.
+ Scilab contains hundreds of built-in mathematical functions, rich
+ data structures (including polynomials, rationals, linear systems, lists,
+ etc...) and comes with a number of specific toolboxes for
+ control, signal processing, ...
+ .
+ This package also provides Xcos, a graphical editor to design hybrid
+ dynamical systems models. Models can be designed, loaded, saved, compiled and
+ simulated.
+ Stable and efficient solution for industrial and academics needs, Xcos
+ provides functionalities for modeling of mechanical systems (automotive,
+ aeronautics...), hydraulic circuits (dam, pipe modeling...), control systems,
+ etc. Modelica capabilities are also provided.
+ .
+ This package contains the include files for Scilab (used in the dynamic link).
+
+
+Package: scilab-minimal-bin
+Architecture: amd64 armhf i386 powerpc s390x arm64 ppc64el
+Depends: ${shlibs:Depends}, scilab-data (= ${source:Version}),
+ ${misc:Depends}, default-jre-headless
+Replaces: scilab-bin, scilab-full-bin (<< 5.4.1-3)
+Breaks: scilab-full-bin (<< 5.4.1-3)
+Description: Scientific software package for numerical computations (minimal binary files)
+ Scilab is a matrix-based scientific software package.
+ Scilab contains hundreds of built-in mathematical functions, rich
+ data structures (including polynomials, rationals, linear systems, lists,
+ etc...) and comes with a number of specific toolboxes for
+ control, signal processing, ...
+ .
+ This package also provides Xcos, a graphical editor to design hybrid
+ dynamical systems models. Models can be designed, loaded, saved, compiled and
+ simulated.
+ Stable and efficient solution for industrial and academics needs, Xcos
+ provides functionalities for modeling of mechanical systems (automotive,
+ aeronautics...), hydraulic circuits (dam, pipe modeling...), control systems,
+ etc. Modelica capabilities are also provided.
+ .
+ This package contains the architecture specific binary files.
+ All mandatory libraries for scilab-cli are shipped in this package.
+ Please install the package "scilab" to have all features.
+
+Package: scilab-full-bin
+Architecture: amd64 armhf i386 powerpc s390x arm64 ppc64el
+Depends: ${shlibs:Depends}, scilab-minimal-bin (= ${binary:Version}),
+ libflexdock-java (>= 1.2.3), libjogl2-java (>= 2.3.2), libjrosetta-java (>= 1.0.1),
+ libjlatexmath-java (>= 1.0.2), libjlatexmath-fop-java (>= 1.0.2),
+ libjeuclid-core-java, libbatik-java (>= 1.7), default-jre, bwidget,
+ fop (>= 0.95), libsaxon-java, libavalon-framework-java, docbook-xsl,
+ javahelp2, libjgraphx-java (>= 1.8.0.0), libjgoodies-looks-java,
+ libskinlf-java, ${misc:Depends}, libecj-java, libfreehep-graphics2d-java,
+ libfreehep-graphicsio-emf-java, liblucene4.10-java, libactivation-java,
+ libjaxb-java
+Replaces: scilab (<< 5.0), scilab-bin, scilab-minimal-bin (<< 5.4.1-3), libscilab2-java (<< 5.4.1-4)
+Breaks: scilab-minimal-bin (<< 5.4.1-3), libscilab2-java (<< 5.4.1-4)
+Description: Scientific software package for numerical computations (all binary files)
+ Scilab is a matrix-based scientific software package.
+ Scilab contains hundreds of built-in mathematical functions, rich
+ data structures (including polynomials, rationals, linear systems, lists,
+ etc...) and comes with a number of specific toolboxes for
+ control, signal processing ...
+ .
+ This package also provides Xcos, a graphical editor to design hybrid
+ dynamical systems models. Models can be designed, loaded, saved, compiled and
+ simulated.
+ .
+ Stable and efficient solution for industrial and academics needs, Xcos
+ provides functionalities for modeling of mechanical systems (automotive,
+ aeronautics...), hydraulic circuits (dam, pipe modeling...), control systems,
+ etc. Modelica capabilities are also provided.
+ .
+ This package contains the architecture specific binary files.
+
+Package: scilab-doc
+Section: doc
+Depends: ${misc:Depends}
+Architecture: all
+Multi-Arch: foreign
+Description: Scientific software package (English documentations)
+ Scilab is a matrix-based scientific software package.
+ Scilab contains hundreds of built-in mathematical functions, rich
+ data structures (including polynomials, rationals, linear systems, lists,
+ etc...) and comes with a number of specific toolboxes for
+ control, signal processing, ...
+ .
+ This package also provides Xcos, a graphical editor to design hybrid
+ dynamical systems models. Models can be designed, loaded, saved, compiled and
+ simulated.
+ Stable and efficient solution for industrial and academics needs, Xcos
+ provides functionalities for modeling of mechanical systems (automotive,
+ aeronautics...), hydraulic circuits (dam, pipe modeling...), control systems,
+ etc. Modelica capabilities are also provided.
+ .
+ This package contains demos, examples and help pages.
+
+Package: scilab-doc-fr
+Section: doc
+Architecture: all
+Multi-Arch: foreign
+Depends: scilab-doc, ${misc:Depends}
+Description: Scientific software package (French documentation)
+ Scilab is a matrix-based scientific software package.
+ Scilab contains hundreds of built-in mathematical functions, rich
+ data structures (including polynomials, rationals, linear systems, lists,
+ etc...) and comes with a number of specific toolboxes for
+ control, signal processing, ...
+ .
+ This package also provides Xcos, a graphical editor to design hybrid
+ dynamical systems models. Models can be designed, loaded, saved, compiled and
+ simulated.
+ Stable and efficient solution for industrial and academics needs, Xcos
+ provides functionalities for modeling of mechanical systems (automotive,
+ aeronautics...), hydraulic circuits (dam, pipe modeling...), control systems,
+ etc. Modelica capabilities are also provided.
+ .
+ This package contains help pages in French.
+
+Package: scilab-doc-pt-br
+Section: doc
+Architecture: all
+Multi-Arch: foreign
+Depends: scilab-doc, ${misc:Depends}
+Description: Scientific software package (Brazilian Portuguese documentation)
+ Scilab is a matrix-based scientific software package.
+ Scilab contains hundreds of built-in mathematical functions, rich
+ data structures (including polynomials, rationals, linear systems, lists,
+ etc...) and comes with a number of specific toolboxes for
+ control, signal processing, ...
+ .
+ This package also provides Xcos, a graphical editor to design hybrid
+ dynamical systems models. Models can be designed, loaded, saved, compiled and
+ simulated.
+ Stable and efficient solution for industrial and academics needs, Xcos
+ provides functionalities for modeling of mechanical systems (automotive,
+ aeronautics...), hydraulic circuits (dam, pipe modeling...), control systems,
+ etc. Modelica capabilities are also provided.
+ .
+ This package contains help pages in Brazilian Portuguese documentation.
+
+Package: scilab-doc-ja
+Section: doc
+Architecture: all
+Multi-Arch: foreign
+Depends: scilab-doc, ${misc:Depends}
+Description: Scientific software package (Japanese documentation)
+ Scilab is a matrix-based scientific software package.
+ Scilab contains hundreds of built-in mathematical functions, rich
+ data structures (including polynomials, rationals, linear systems, lists,
+ etc...) and comes with a number of specific toolboxes for
+ control, signal processing, ...
+ .
+ This package also provides Xcos, a graphical editor to design hybrid
+ dynamical systems models. Models can be designed, loaded, saved, compiled and
+ simulated.
+ Stable and efficient solution for industrial and academics needs, Xcos
+ provides functionalities for modeling of mechanical systems (automotive,
+ aeronautics...), hydraulic circuits (dam, pipe modeling...), control systems,
+ etc. Modelica capabilities are also provided.
+ .
+ This package contains help pages in Japanese documentation.
+
+
+Package: scilab-test
+Architecture: all
+Depends: ${misc:Depends}, scilab, fonts-dejavu-core
+Description: Scientific software package for numerical computations (test files)
+ Scilab is a matrix-based scientific software package.
+ Scilab contains hundreds of built-in mathematical functions, rich
+ data structures (including polynomials, rationals, linear systems, lists,
+ etc...) and comes with a number of specific toolboxes for
+ control, signal processing, ...
+ .
+ This package also provides Xcos, a graphical editor to design hybrid
+ dynamical systems models. Models can be designed, loaded, saved, compiled and
+ simulated.
+ Stable and efficient solution for industrial and academics needs, Xcos
+ provides functionalities for modeling of mechanical systems (automotive,
+ aeronautics...), hydraulic circuits (dam, pipe modeling...), control systems,
+ etc. Modelica capabilities are also provided.
+ .
+ This package contains the test files (unitary, non regression,
+ performance ...) for Scilab.
+ .
+ See Scilab function 'test_run' for usage.

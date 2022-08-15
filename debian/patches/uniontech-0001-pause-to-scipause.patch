@@ -1,0 +1,47 @@
+Author: Wang Jinlong <wangjinlong@uniontech.com>
+Date: Fri, 08 Jul 2022 15:34:34 +0800
+Subject: Pause to Scipause
+Upstream:
+ 
+diff -Naur scilab-orig/scilab/modules/core/includes/pause.h scilab-modify/scilab/modules/core/includes/pause.h
+--- scilab-orig/scilab/modules/core/includes/pause.h	2022-07-08 15:17:06.138537490 +0800
++++ scilab-modify/scilab/modules/core/includes/pause.h	2022-07-08 15:24:33.673076167 +0800
+@@ -15,6 +15,6 @@
+ #define __PAUSE_H__
+ 
+ #include "dynlib_core.h"
+-CORE_IMPEXP void pause(void);
++CORE_IMPEXP void scipause(void);
+ 
+ #endif /* !__PAUSE_H__ */
+diff -Naur scilab-orig/scilab/modules/core/sci_gateway/cpp/sci_pause.cpp scilab-modify/scilab/modules/core/sci_gateway/cpp/sci_pause.cpp
+--- scilab-orig/scilab/modules/core/sci_gateway/cpp/sci_pause.cpp	2022-07-08 15:17:06.150537447 +0800
++++ scilab-modify/scilab/modules/core/sci_gateway/cpp/sci_pause.cpp	2022-07-08 15:25:24.392923465 +0800
+@@ -47,7 +47,7 @@
+     ConfigVariable::macroFirstLine_begin(2);
+ 
+     // do pause
+-    pause();
++    scipause();
+ 
+     return types::Function::OK;
+ }
+diff -Naur scilab-orig/scilab/modules/core/src/cpp/pause.cpp scilab-modify/scilab/modules/core/src/cpp/pause.cpp
+--- scilab-orig/scilab/modules/core/src/cpp/pause.cpp	2022-07-08 15:17:06.162537405 +0800
++++ scilab-modify/scilab/modules/core/src/cpp/pause.cpp	2022-07-08 15:32:22.467116436 +0800
+@@ -19,7 +19,7 @@
+ #include "pause.h"
+ }
+ 
+-void pause(void)
++void scipause(void)
+ {
+     ConfigVariable::IncreasePauseLevel();
+ 
+@@ -43,4 +43,4 @@
+ 
+     //return from console so change mode to initial
+     ConfigVariable::setPromptMode(iOldMode);
+-}
+\ 文件尾没有换行符
++}

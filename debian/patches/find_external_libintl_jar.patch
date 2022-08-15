@@ -1,0 +1,36 @@
+Description: use libintl.jar from the system instead of a shipped binary
+Author: Julien Puydt
+Forwarded: Debian-specific
+
+--- scilab.orig/scilab/modules/external_objects_java/Makefile.am
++++ scilab/scilab/modules/external_objects_java/Makefile.am
+@@ -155,7 +155,7 @@
+ #### external_objects_java : test files ####
+ libsciexternal_objects_java_la_testsdir = $(mydatadir)/tests/
+ libsciexternal_objects_java_la_tests_DATA = \
+-tests/libintl.jar
++/usr/share/java/libintl.jar
+ 
+ if NEED_JAVA
+ USEANT=1
+--- scilab.orig/scilab/modules/external_objects_java/tests/unit_tests/jimport.dia.ref
++++ scilab/scilab/modules/external_objects_java/tests/unit_tests/jimport.dia.ref
+@@ -4,6 +4,6 @@
+ //
+ //  This file is distributed under the same license as the Scilab package.
+ // =============================================================================
+-javaclasspath(SCI + "/modules/external_objects_java/tests/libintl.jar");
++javaclasspath("/usr/share/java/libintl.jar");
+ jimport("gnu.gettext.GettextResource");
+ assert_checkequal(jgetclassname(GettextResource),"gnu.gettext.GettextResource");
+--- scilab.orig/scilab/modules/external_objects_java/tests/unit_tests/jimport.tst
++++ scilab/scilab/modules/external_objects_java/tests/unit_tests/jimport.tst
+@@ -5,7 +5,7 @@
+ //  This file is distributed under the same license as the Scilab package.
+ // =============================================================================
+ 
+-javaclasspath(SCI + "/modules/external_objects_java/tests/libintl.jar");
++javaclasspath("/usr/share/java/libintl.jar");
+ jimport("gnu.gettext.GettextResource");
+ assert_checkequal(jgetclassname(GettextResource),"gnu.gettext.GettextResource");
+ 

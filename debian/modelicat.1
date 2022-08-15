@@ -1,0 +1,26 @@
+.TH "modelicat" "1" "November 2017"
+.SH NAME
+modelicat - translator for Xcos from Modelica 2.x to flat Modelica
+.SH SYNOPSIS
+\fBmodelicat\fR [\fB-lib\fR <filename>] [\fB-o\fR <filename>] [\fB-fundir\fR <dirname>] \fB-command\fR "command"
+.SH OPTIONS
+.TP
+.B \-fundir\fR <dirname>
+Directory containing the Modelica functions
+.TP
+.B \-lib\fR <filename>
+Declare the file as containing a Modelica library of classes
+.TP
+.B \-o\fR <filename>
+Specify target filename (default is `<instance name>.mo`)
+.TP
+.B \-command\fR "command"
+Define the component to be created as a regular Modelica component declaration
+.TP
+.B \-xml
+Generate an XML version of the model instead of flat Modelica code
+.TP
+.B \-with-init
+Generate an XML version of the initialization problem in a file named <filename>_init.xml
+.SH AUTHOR
+Manpage written by Julien Puydt for Debian
