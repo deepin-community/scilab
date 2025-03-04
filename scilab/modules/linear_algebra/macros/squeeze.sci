@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2002-2007 - INRIA - Eric Dubois
 // Copyright (C) 2007 - INRIA - Jean-Baptiste Silvy
 // Copyright (C) 2011 - INRIA - Serge Steer (extension to Structs, Cells,

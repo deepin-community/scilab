@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009 - DIGITEO - Antoine ELIAS
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -38,10 +38,7 @@ extern "C" {
 #define SCI_UINT32	14
 #define SCI_UINT64	18
 
-#include "version.h"
-#if SCI_VERSION_MAJOR > 5
 #define __SCILAB_INT64__
-#endif
 
 /********************************/
 /*   integer matrix functions   */

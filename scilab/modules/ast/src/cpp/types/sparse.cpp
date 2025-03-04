@@ -1,5 +1,5 @@
 /*
-*  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+*  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 *  Copyright (C) 2010 - DIGITEO - Bernard HUGUENEY
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -158,22 +158,22 @@ template<typename T> std::wstring toString(T const& m, int precision)
     getIntFormat(m.rows(), &iWidthRows);
     getIntFormat(m.cols(), &iWidthCols);
 
-    ostr << L"(";
-    addIntValue<unsigned long long>(&ostr, m.rows(), iWidthRows);
-    ostr << ",";
-    addIntValue<unsigned long long>(&ostr, m.cols(), iWidthCols);
-    ostr << L")";
-
+    // ostr << L"(";
+    // addIntValue<unsigned long long>(&ostr, m.rows(), iWidthRows);
+    // ostr << ",";
+    // addIntValue<unsigned long long>(&ostr, m.cols(), iWidthCols);
+    // ostr << L")";
+    //
     Printer p(precision);
-    if (m.rows()*m.cols() ==0)
-    {
-        ostr << (p.emptyName<typename Eigen::internal::traits<T>::Scalar>());
-    }
-    else if (!m.nonZeros())
-    {
-        ostr << (p.allZeroName<typename Eigen::internal::traits<T>::Scalar>());
-    }
-    ostr << " " << p.typeName<typename Eigen::internal::traits<T>::Scalar>() << L" matrix\n\n";
+    // if (m.rows()*m.cols() ==0)
+    // {
+    //     ostr << (p.emptyName<typename Eigen::internal::traits<T>::Scalar>());
+    // }
+    // else if (!m.nonZeros())
+    // {
+    //     ostr << (p.allZeroName<typename Eigen::internal::traits<T>::Scalar>());
+    // }
+    // ostr << " " << p.typeName<typename Eigen::internal::traits<T>::Scalar>() << L" matrix\n\n";
 
     auto * pIColPos      = m.innerIndexPtr();
     auto * pINbItemByRow = m.outerIndexPtr();
@@ -2687,7 +2687,7 @@ int* Sparse::getOuterPtr(int* count)
 
 namespace
 {
-template<typename S> struct GetReal : std::unary_function<typename S::InnerIterator, double>
+template<typename S> struct GetReal
 {
     double operator()(typename S::InnerIterator it) const
     {
@@ -2695,28 +2695,27 @@ template<typename S> struct GetReal : std::unary_function<typename S::InnerItera
     }
 };
 template<> struct GetReal< Eigen::SparseMatrix<std::complex<double >, Eigen::RowMajor > >
-    : std::unary_function<Sparse::CplxSparse_t::InnerIterator, double>
 {
     double operator()(Sparse::CplxSparse_t::InnerIterator it) const
     {
         return it.value().real();
     }
 };
-template<typename S> struct GetImag : std::unary_function<typename S::InnerIterator, double>
+template<typename S> struct GetImag
 {
     double operator()(typename S::InnerIterator it) const
     {
         return it.value().imag();
     }
 };
-template<typename S> struct GetRow : std::unary_function<typename S::InnerIterator, int>
+template<typename S> struct GetRow
 {
     int operator()(typename S::InnerIterator it) const
     {
         return static_cast<int>(it.row() + 1);
     }
 };
-template<typename S> struct GetCol : std::unary_function<typename S::InnerIterator, int>
+template<typename S> struct GetCol
 {
     int operator()(typename S::InnerIterator it) const
     {

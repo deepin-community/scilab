@@ -1,5 +1,5 @@
 
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2000 - INRIA - Carlos Klimann
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -38,11 +38,15 @@ function [s]=wcenter(x,orient)
     //deviation of the i row of x.
     //
     //
+
+    arguments
+        x
+        orient (1, 1) {mustBeA(orient, ["double", "string"]), mustBeMember(orient, {1, 2, "r", "c", "*"})} = "*"
+    end
+
     if x==[] then s=%nan, return, end
-    [lhs,rhs]=argn(0)
-    if (rhs<1)|(rhs>2) then error(msprintf(gettext("%s: Wrong number of input arguments: %d to %d expected.\n"),"wcenter",1,2)), end
     [m n]=size(x);
-    if rhs==1
+    if orient == "*" then
         xbar=(sum(x)/(m*n))
         s=x-(ones(m,n)*xbar)
         sigma=sqrt(sum(s .^ 2)/(m*n-1))
@@ -57,6 +61,5 @@ function [s]=wcenter(x,orient)
         s=x-(ones(m,1)*xbar)
         sigma=sqrt(sum((s.^2),"r")/(m-1))
         s=s./(ones(m,1)*sigma)
-    else error(msprintf(gettext("%s: Wrong value for input argument #%d: ''%s'', ''%s'', %d or %d expected.\n"),"wcenter",2,"r","c", 1, 2)),
     end
 endfunction

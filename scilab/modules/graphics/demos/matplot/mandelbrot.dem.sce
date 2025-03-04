@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2012 - Samuel GOUGEON
 //
 // This file is released under the 3-clause BSD license. See COPYING-BSD.
@@ -65,7 +65,7 @@ function demo_mandelbrot()
     M = getMandelbrotPart(xmin, xmax, ymin, ymax, nbPix, nColors, maxIters);
 
     // Scaling false colors
-    icol  = [color("black")  addcolor(rainbowcolormap(nColors))];
+    icol  = [color("black")  addcolor(rainbow(nColors))];
     Mmin = min(M);
     M = M - Mmin + 1;
     M(find(M==%inf | M>nColors))=0;

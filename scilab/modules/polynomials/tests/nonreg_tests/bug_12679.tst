@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010 - DIGITEO - Allan CORNET
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -10,8 +10,8 @@
 // <-- CLI SHELL MODE -->
 // <-- NO CHECK REF -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=12679
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/12679
 //
 // <-- Short Description -->
 // Checks on gcd() and lcm() arguments
@@ -23,7 +23,7 @@
 s = poly(0, "s");
 p = [s, s*(s+1)^2, 2*s^2+s^3];
 [pgcd, u] = gcd(p);
-assert_checkequal(p*u, [0 0 s]);
+assert_checkequal(clean(p*u), [0 0 s]);
 // Complex polynomials should yield an error
 
 // Normal behavior, with integers

@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2012-2012 - Scilab Enterprises - bruno.jofret@scilab-enterprises.com
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,8 +9,8 @@
 //
 // <-- Non-regression test for bug 11450 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=11450
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/11450
 //
 // <-- Short Description -->
 // When having logarithmic autoticks, ticks are not well sorted

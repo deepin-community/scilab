@@ -1,7 +1,7 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2016 - Scilab Enterprises - Pierre-Aimé AGNEL
-// Copyright (C) 2017 - Samuel GOUGEON
+// Copyright (C) 2017, 2022 - Samuel GOUGEON
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
@@ -80,3 +80,11 @@ res = makecell([2 2 3], %pi, %t, ..
                         "hello", %s);
 assert_checkequal(y, res);
 
+// A few transtyping for heterogeneous inputs
+// ------------------------------------------
+assert_checkequal(cat(3,[1 2 3],[%t %f %t]), cat(3,[1 2 3],[1 0 1]));
+assert_checkequal(cat(3,[1 2 3], int8([4 5 6])), cat(3,[1 2 3],[4 5 6]));
+assert_checkequal(cat(3,[1 2 3], [%s %s %s]), cat(3,[1 2 3]+0*%s,[%s %s %s]));
+assert_checkequal(cat(3, int8([1 2 3]), [%f %t %t]), cat(3,int8([1 2 3]),int8([0 1 1])));
+assert_checkequal(cat(3,[%t %f %t], [%s %s %s]), cat(3,[1 0 1]+0*%s,[%s %s %s]));
+assert_checkequal(cat(4,[%i 1],int8([7,8])), cat(4,[%i 1],[7 8]));

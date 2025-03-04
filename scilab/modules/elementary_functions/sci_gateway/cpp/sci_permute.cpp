@@ -1,6 +1,6 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
- *  Copyright (C) 2018- Stéphane MOTTELET
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
+ *  Copyright (C) 2018- UTC - Stéphane MOTTELET
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
  * For more information, see the COPYING file which you should have received
@@ -165,7 +165,8 @@ types::Function::ReturnValue sci_permute(types::typed_list& in, int _iRetCount, 
     int* piNewDimsArray = NULL;
     std::vector<int> dimsVect;
 
-    if ((iNewDims >= iDims) & pDims->isDouble() & !pDims->getAs<types::Double>()->isComplex())
+
+    if ((iNewDims >= iDims) && pDims->isDouble() && !pDims->getAs<types::Double>()->isComplex())
     {
         // Check if 2nd argument is a permutation of [1..iNewDims]
         types::Double* pDbl = pDims->getAs<types::Double>();

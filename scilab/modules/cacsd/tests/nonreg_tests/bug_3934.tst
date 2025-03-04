@@ -1,6 +1,6 @@
 //<-- CLI SHELL MODE -->
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009 - DIGITEO - Vincent COUVERT
 // Copyright (C) 2009 - 2011 - DIGITEO - Michael Baudin
 //
@@ -9,8 +9,8 @@
 
 // <-- Non-regression test for bug 3934 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=3439
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/3439
 //
 // <-- Short Description -->
 //   Online Help of ricc() function crashes Scilab

@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 // Copyright (C) DIGITEO - 2011 - Allan CORNET
 //
@@ -16,9 +16,8 @@ function x= fix(x)
     //y=sign(x1).*floor(abs(x1))
     //x(:)=y;
 
-    rhs = argn(2);
-    if rhs <> 1 then
-        error(msprintf(gettext("%s: Wrong number of input argument(s): %d expected.\n"),"fix", 1));
+    arguments
+        x {mustBeA(x, ["double", "sparse", "int"])}
     end
 
     x = int(x);

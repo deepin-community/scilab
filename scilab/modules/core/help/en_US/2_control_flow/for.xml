@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) - INRIA
- * Copyright (C) 2018 - Samuel GOUGEON
- *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ * Copyright (C) 2018 - 2023 - Samuel GOUGEON
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
  * pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -22,26 +21,38 @@
         <refname>for</refname>
         <refpurpose>keyword entering a non-conditional loop</refpurpose>
     </refnamediv>
+    <refsynopsisdiv>
+        <title>Syntax</title>
+        <synopsis>
+            for variable = expression, instruction ; .. ; instruction; end
+
+            for variable = expression
+                instruction
+                ..
+                instruction
+            end
+
+            for variable = expression do
+                instruction,
+                ..
+                instruction
+            end
+        </synopsis>
+    </refsynopsisdiv>
     <refsection>
         <title>Description</title>
         <para>
-            Used to define loops. Its syntax is:
-            <literal> for variable=expression ,instruction, .. ,instruction,end</literal>
-        </para>
-        <para>
-            <literal> for variable=expression do instruction,   ,instruction,end</literal>
-        </para>
-        <para>
-            If <literal>expression</literal> is a matrix or a row vector, <literal>variable</literal>
-            takes as values the values of each column of the matrix.
+            If <literal>expression</literal> is an array (homogeneous or not), <literal>variable</literal>
+            is set to each of its columns (for a hypermatrix, as
+            <literal>matrix(expression, size(expression,1), -1))</literal>), one by one.
         </para>
         <para>
             A particular case uses the <link linkend="colon">colon</link> operator to create regularly
             spaced row vectors, and is similar to traditional for loop forms:
-            <literal>for variable=n1:step:n2, ...,end</literal>
+            <literal>for variable = n1:step:n2, ...,end</literal>
         </para>
         <para>
-            If <literal>expression</literal> is a list <literal>variable</literal> takes as values the
+            If <literal>expression</literal> is a list, <literal>variable</literal> takes as values the
             successive entries of the list.
         </para>
         <para>
@@ -65,44 +76,33 @@
             </listitem>
         </itemizedlist>
         <para>
-            For example, use:
+            For example, preferably use:
         </para>
-        <screen><![CDATA[
+        <programlisting><![CDATA[
 for i = 1:5
     disp(i);
 end
-]]></screen>
-        rather than
-        <screen><![CDATA[
+]]></programlisting>
+        <para>rather than:</para>
+        <programlisting><![CDATA[
 for i = 1:5, disp(i); end
-]]></screen>
-        <warning>
-            The number of characters used to define the body of any loop or conditional instruction
-            (if while for or select/case) must be limited to 16 kB.
-        </warning>
+]]></programlisting>
     </refsection>
+
     <refsection>
         <title>Examples</title>
-        <para>Common loops:</para>
+        <para>Trivial iterations (over columns of a row vector):</para>
         <programlisting role="example"><![CDATA[
-n=5;
-for i = 1:n
-    for j = 1:n
-        a(i,j) = 1/(i+j-1);
-    end;
+for i = [2 4 5]
+    factorial(i)
 end
-for j = 2:n-1
-    a(j,j) = j;
-end;
-a
- ]]></programlisting>
-        <para>"Decreasing" loop:</para>
-        <programlisting role="example"><![CDATA[
+
+// By decreasing values:
 for j = 4:-1:1
     j
 end
  ]]></programlisting>
-        <para>Loop implicitly on the columns of a row vector or of a matrix:</para>
+        <para>Iterate on the columns of a matrix:</para>
         <programlisting role="example"><![CDATA[
 M = [1 2 ; 3 4 ; 5 6]'
 for  c = M, c, end
@@ -126,11 +126,28 @@ for  c = M, c, end
    5.
    6.
 ]]></screen>
+        <para>Iterate on the columns of a cell array:</para>
         <programlisting role="example"><![CDATA[
-for v = a, write(%io(2),v), end
-for j = 1:n, v = a(:,j), write(%io(2),v), end
+C = {%pi, "This is πι" ; %z^2, %t}
+for  c = C, c, end
  ]]></programlisting>
-        <para>Loop on entries of a list:</para>
+    <screen><![CDATA[
+--> C = {%pi, "This is πι" ; %z^2, %t}
+ C  =
+  [1x1 constant  ]  [1x1 string ]
+  [1x1 polynomial]  [1x1 boolean]
+
+
+--> for  c = C, c, end
+ c  =
+  [1x1 constant  ]
+  [1x1 polynomial]
+
+ c  =
+  [1x1 string ]
+  [1x1 boolean]
+]]></screen>
+        <para>Loop on the elements of a list:</para>
         <programlisting role="example"><![CDATA[
 for l = list([1 2;3 4], (1+%z)^3, 'example', [%F %T]); l, end
  ]]></programlisting>
@@ -150,6 +167,22 @@ for l = list([1 2;3 4], (1+%z)^3, 'example', [%F %T]); l, end
  l  =
   F T
 ]]></screen>
+        <para>Common and nested loops:</para>
+        <programlisting role="example"><![CDATA[
+n=5;
+for i = 1:n
+    for j = 1:n
+        a(i,j) = 1/(i+j-1);
+    end;
+end
+for j = 2:n-1
+    a(j,j) = j;
+end;
+a
+
+for v = a, write(%io(2),v), end
+for j = 1:n, v = a(:,j), write(%io(2),v), end
+     ]]></programlisting>
     </refsection>
     <refsection role="see also">
         <title>See also</title>
@@ -171,9 +204,23 @@ for l = list([1 2;3 4], (1+%z)^3, 'example', [%F %T]); l, end
             <revision>
                 <revnumber>6.0.0</revnumber>
                 <revdescription>
-                  The for <literal>expression</literal> can now be a vector of graphic handles.
-                  <literal>for</literal> is now protected:
-                  Assignments like <literal>for=1</literal> are no longer possible.
+                    <itemizedlist>
+                        <listitem>
+                            The for <literal>expression</literal> can now be a vector of graphic handles.
+                            <literal>for</literal> is now protected:
+                            Assignments like <literal>for=1</literal> are no longer possible.
+                        </listitem>
+                        <listitem>
+                            The number of characters used to define the body of any conditional instruction (<literal>if</literal>, <literal>while</literal>, <literal>for</literal>, or <literal>select/case</literal>) is no more limited to 16k.
+                        </listitem>
+                    </itemizedlist>
+                </revdescription>
+            </revision>
+            <revision>
+                <revnumber>2023.0.0</revnumber>
+                <revdescription>
+                    The <literal>expression</literal> can be a hypermatrix. It is then processed
+                    by column as <literal>matrix(expression, size(expression,1), -1)</literal>.
                 </revdescription>
             </revision>
         </revhistory>

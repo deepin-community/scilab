@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2004-2006 - INRIA - Fabrice Leray
  * Copyright (C) 2006 - INRIA - Allan Cornet
  * Copyright (C) 2006 - INRIA - Jean-Baptiste Silvy
@@ -55,7 +55,7 @@ void* get_tight_limits_property(void* _pvCtx, int iObjUID)
         if (piTightLimits == NULL)
         {
             Scierror(999, _("'%s' property does not exist for this handle.\n"), "tight_limits");
-            return -1;
+            return NULL;
         }
 
         if (iTightLimits)

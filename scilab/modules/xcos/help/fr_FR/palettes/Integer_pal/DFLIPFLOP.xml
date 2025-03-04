@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2011 - Bernard DUJARDIN <bernard.dujardin@contrib.scilab.org>
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
  * Copyright (C) 2018 - Samuel GOUGEON
@@ -41,7 +41,7 @@
             <listitem>
                 <xref linkend="Defaultproperties_DFLIPFLOP">Propriétés par défaut</xref>
             </listitem>
-            <!--      TODO wait for the bug 8900 resolution http://bugzilla.scilab.org/show_bug.cgi?id=8900
+            <!--      TODO wait for the bug 8900 resolution https://gitlab.com/scilab/scilab/-/issues/8900
   <listitem>
     <xref linkend="Example_DFLIPFLOP">Exemple</xref>
   </listitem>
@@ -233,7 +233,7 @@
         </itemizedlist>
         <para/>
     </refsection>
-    <!--  TODO wait for the bug 8900 resolution http://bugzilla.scilab.org/show_bug.cgi?id=8900
+    <!--  TODO wait for the bug 8900 resolution https://gitlab.com/scilab/scilab/-/issues/8900
 <refsection id="Example_DFLIPFLOP">
     <title>Exemple</title>
     <para>

@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2006-2008 - INRIA - Sylvestre Koumar <sylvestre.koumar@inria.fr>
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,8 +9,8 @@
 
 // <-- Non-regression test for bug 3390 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=3390
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/3390
 //
 // <-- Short Description -->
 //    Scilab 5

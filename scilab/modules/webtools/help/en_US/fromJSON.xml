@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2017 - ESI-Group
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
@@ -99,6 +99,12 @@ fromJSON("{test:[a, b], values:[1, 2]")
                 <revnumber>6.1</revnumber>
                 <revremark>
                     Function introduced.
+                </revremark>
+            </revision>
+            <revision>
+                <revnumber>2023.0.0</revnumber>
+                <revremark>
+                    Handling of tabs (ascii(9)) changed.
                 </revremark>
             </revision>
         </revhistory>

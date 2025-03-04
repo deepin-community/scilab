@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2006 - INRIA - Fabrice Leray
  * Copyright (C) 2006 - INRIA - Jean-Baptiste Silvy
  * Copyright (C) 2007-2008 - INRIA - Vincent Couvert
@@ -52,6 +52,9 @@ int sci_xgetmouse(char *fname, void *pvApiCtx)
 
     int pixelCoords[2];
     double userCoords2D[2] = {0.0, 0.0};
+
+    int iFigureId = 0;
+    int *piFigureId = &iFigureId;
 
     int selPosition = 0;
 
@@ -122,6 +125,7 @@ int sci_xgetmouse(char *fname, void *pvApiCtx)
     mouseButtonNumber = getJxgetmouseMouseButtonNumber();
     pixelCoords[0] = (int) getJxgetmouseXCoordinate();
     pixelCoords[1] = (int) getJxgetmouseYCoordinate();
+    windowsID = getJxgetmouseWindowsID();
 
     sciErr = allocMatrixOfDouble(pvApiCtx, nbInputArgument(pvApiCtx) + 1, m1, n1, &l1);
     if (sciErr.iErr)
@@ -165,7 +169,8 @@ int sci_xgetmouse(char *fname, void *pvApiCtx)
                 return 1;
             }
 
-            l2[0] = windowsID; /* this is the window number */
+            getGraphicObjectProperty(windowsID, __GO_ID__, jni_int, (void**)&piFigureId);
+            l2[0] = (double)iFigureId; /* this is the window number */
             AssignOutputVariable(pvApiCtx, 2) = nbInputArgument(pvApiCtx) + 2;
             ReturnArguments(pvApiCtx);
             return 0;

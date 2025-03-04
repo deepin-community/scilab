@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2015 - Scilab Enterprises - Calixte DENIZET
  *  Copyright (C) 2012 - 2016 - Scilab Enterprises
  *  Copyright (C) 2017 - 2020 - Samuel GOUGEON
@@ -14,6 +14,9 @@
  */
 
 #include "checkers/DeprecatedChecker.hxx"
+#include "callexp.hxx"
+#include "simplevar.hxx"
+#include "doubleexp.hxx"
 
 namespace slint
 {
@@ -92,15 +95,60 @@ std::unordered_map<std::wstring, std::wstring> DeprecatedChecker::initDep()
     // TODO: get this list from a conf file
     std::unordered_map<std::wstring, std::wstring> map;
 
-    // Scilab 6.1.0 => 6.1.x
+    // Scilab 2024.1.0 => 2026.0.0
+    map.emplace(L"dassl", L"dae");
+    map.emplace(L"dasrt", L"dae");
+    map.emplace(L"daskr", L"dae");
+    map.emplace(L"autumncolormap", L"autumn");
+    map.emplace(L"bonecolormap", L"bone"); 
+    map.emplace(L"coolcolormap", L"cool"); 
+    map.emplace(L"coppercolormap", L"copper"); 
+    map.emplace(L"graycolormap", L"gray");
+    map.emplace(L"hotcolormap", L"hot");
+    map.emplace(L"hsvcolormap", L"hsv"); 
+    map.emplace(L"jetcolormap", L"jet");
+    map.emplace(L"oceancolormap", L"ocean");
+    map.emplace(L"parulacolormap", L"parula");
+    map.emplace(L"pinkcolormap", L"pink");
+    map.emplace(L"rainbowcolormap", L"rainbow");
+    map.emplace(L"springcolormap", L"spring");
+    map.emplace(L"summercolormap", L"summer");
+    map.emplace(L"whitecolormap", L"white");
+    map.emplace(L"wintercolormap", L"winter");
+
+    // Scilab 2024.0.0 => 2025.0.0
+
+    // Scilab 2023.1.0 => 2025.0.0
+    map.emplace(L"getURL", L"http_get");
+    map.emplace(L"splitURL", L"url_split");
+    map.emplace(L"sound", L"playsnd");
+
+    // Scilab 2023.0.0 => 2024.0.0
+    map.emplace(L"xget", L"");
+    map.emplace(L"xset", L"");
+    //map.emplace(L"svd(X,0)", L"svd(X,\"e\")"); // will never be detected as is
+    map.emplace(L"plotframe", L"plot2d");
+
+    // Scilab 6.1.x => 2023.0.0
     map.emplace(L"fplot2d", L"plot");
     map.emplace(L"xdel", L"close");
     map.emplace(L"xname", L"gcf().figure_name");
-
-    // Scilab 6.0.x => 6.1.0
+    map.emplace(L"soundsec", L"0 : 1/freq : t*(1-%eps)");
+    map.emplace(L"importgui", L"uiSpreadsheet");
+    map.emplace(L"closeEditvar", L"close editvar");
+    
+    // Scilab 6.1.0 => 6.1.x
+    map.emplace(L"scatter3", L"scatter3d");
+    map.emplace(L"get_figure_handle", L"findobj(\'figure_id\',n)");
+    map.emplace(L"noisegen", L"grand");
     map.emplace(L"%sn", L"ellipj");
     map.emplace(L"champ1", L"champ.colored");
-    map.emplace(L"closeEditvar", L"close editvar");
+    map.emplace(L"saveafterncommands", L"");
+    map.emplace(L"setPreferencesValue", L"xmlSetValues");
+    map.emplace(L"sysdiag", L"blockdiag");
+    map.emplace(L"ric_desc", L"riccati");
+    
+    // Scilab 6.0.x => 6.1.0
     map.emplace(L"dirname", L"fileparts");
     map.emplace(L"_d", L"_");
     map.emplace(L"dgettext", L"gettext");
@@ -108,20 +156,13 @@ std::unordered_map<std::wstring, std::wstring> DeprecatedChecker::initDep()
     map.emplace(L"denom", L".den");
     map.emplace(L"eval", L"evstr");
     map.emplace(L"frexp", L"log2");
-    map.emplace(L"get_figure_handle", L"findobj(\'figure_id\',n)");
     map.emplace(L"getPreferencesValue", L"xmlGetValues");
     map.emplace(L"hypermat", L"zeros|matrix");
     map.emplace(L"lstsize", L"size");
     map.emplace(L"nanmin", L"min");
     map.emplace(L"nanmax", L"max");
-    map.emplace(L"noisegen", L"grand");
     map.emplace(L"numer", L".num");
-    map.emplace(L"ric_desc", L"riccati");
-    map.emplace(L"saveafterncommands", L"");
-    map.emplace(L"scatter3", L"scatter3d");
-    map.emplace(L"setPreferencesValue", L"xmlSetValues");
     map.emplace(L"square", L"replot");
-    map.emplace(L"sysdiag", L"blockdiag");
     map.emplace(L"with_tk", L"with_module('tclsci')");
     map.emplace(L"xgetech", L"gca");
     map.emplace(L"xinfo", L"gcf().info_message");
@@ -153,15 +194,16 @@ std::unordered_map<std::wstring, std::wstring> DeprecatedChecker::initDep()
     map.emplace(L"derivative", L"numderivative");
     map.emplace(L"mvvacov", L"cov");
 
-    map.emplace(L"perl", L"");
-    map.emplace(L"lex_sort", L"gsort");
-    map.emplace(L"strcmpi", L"strcmp");
-    map.emplace(L"jconvMatrixMethod", L"jautoTranspose");
-    map.emplace(L"havewindow", L"getscilabmode");
-    map.emplace(L"xpause", L"sleep");
     map.emplace(L"curblockc", L"curblock");
     map.emplace(L"extract_help_examples", L"");
+    map.emplace(L"havewindow", L"getscilabmode");
+    map.emplace(L"isequalbitwise", L"[ans,msg]=assert_checkequal(a,b)");
+    map.emplace(L"jconvMatrixMethod", L"jautoTranspose");
+    map.emplace(L"lex_sort", L"gsort");
     map.emplace(L"mtlb_mode", L"oldEmptyBehaviour");
+    map.emplace(L"perl", L"");
+    map.emplace(L"strcmpi", L"strcmp");
+    map.emplace(L"xpause", L"sleep");
 
     map.emplace(L"addf", L"");
     map.emplace(L"subf", L"");
@@ -247,6 +289,7 @@ std::unordered_map<std::wstring, std::wstring> DeprecatedChecker::initDep()
     map.emplace(L"with_texmacs", L"");
     map.emplace(L"xbasr", L"");
     map.emplace(L"xselect", L"show_window");
+    map.emplace(L"mpopup", L"uicontextmenu");
 
     // Scilab 5.3.3 => 5.4.0
     map.emplace(L"MSDOS", L"getos");

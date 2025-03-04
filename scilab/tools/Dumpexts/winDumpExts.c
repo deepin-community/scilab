@@ -409,7 +409,7 @@ void DumpFile(LPSTR filename, FILE *fout, int full)
 
     if (hFile == INVALID_HANDLE_VALUE)
     {
-        fprintf(stderr, "Couldn't open file with CreateFile()\n");
+        fprintf(stderr, "Couldn't open %s file with CreateFile()\n", filename);
         return;
     }
 
@@ -417,7 +417,7 @@ void DumpFile(LPSTR filename, FILE *fout, int full)
     if (hFileMapping == 0)
     {
         CloseHandle(hFile);
-        fprintf(stderr, "Couldn't open file mapping with CreateFileMapping()\n");
+        fprintf(stderr, "Couldn't open %s file mapping with CreateFileMapping()\n", filename);
         return;
     }
 
@@ -426,14 +426,14 @@ void DumpFile(LPSTR filename, FILE *fout, int full)
     {
         CloseHandle(hFileMapping);
         CloseHandle(hFile);
-        fprintf(stderr, "Couldn't map view of file with MapViewOfFile()\n");
+        fprintf(stderr, "Couldn't map view of file %s with MapViewOfFile()\n", filename);
         return;
     }
 
     dosHeader = (PIMAGE_DOS_HEADER)lpFileBase;
     if (dosHeader->e_magic == IMAGE_DOS_SIGNATURE)
     {
-        fprintf(stderr, "File is an executable.  I don't dump those.\n");
+        fprintf(stderr, "File %s is an executable.  I don't dump those.\n", filename);
         return;
     }
     /* Does it look like a i386 COFF OBJ file??? */
@@ -456,7 +456,7 @@ void DumpFile(LPSTR filename, FILE *fout, int full)
     }
     else
     {
-        printf("unrecognized file format\n");
+        fprintf(stderr, "unrecognized file %s format\n", filename);
     }
     UnmapViewOfFile(lpFileBase);
     CloseHandle(hFileMapping);
@@ -518,7 +518,7 @@ Usage:
         fout = fopen(outfile, "w+");
         if (fout == NULL)
         {
-            fprintf(stderr, "Unable to open \'%s\' for writing:\n", argv[arg]);
+            fprintf(stderr, "Unable to open \'%s\' for writing:\n", outfile);
             perror("");
             exit(1);
         }

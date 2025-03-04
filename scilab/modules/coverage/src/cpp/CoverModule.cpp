@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2015 - Scilab Enterprises - Calixte DENIZET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -24,11 +24,10 @@
 
 #include "CovHTMLCodePrinter.hxx"
 #include "CoverModule.hxx"
-#include "allexp.hxx"
-#include "alltypes.hxx"
-#include "allvar.hxx"
 #include "cover_tools.hxx"
 #include "coverage_instance.hxx"
+#include "parser.hxx"
+#include "macrofile.hxx"
 
 extern "C"
 {
@@ -39,6 +38,7 @@ extern "C"
 #include "freeArrayOfString.h"
 #include "isdir.h"
 #include "os_string.h"
+#include "sciprint.h"
 #include "sci_malloc.h"
 }
 
@@ -143,38 +143,13 @@ const std::vector<std::pair<std::wstring, std::wstring>> CoverModule::getModule(
     const std::wstring _path = std::wstring(L"SCI") + DIR_SEPARATORW + L"modules" + DIR_SEPARATORW;
     const std::wstring path(expandPathVariable(_path));
 
-    if (moduleNames.size() == 1 && moduleNames.back() == L"all")
+    // a list of Scilab libraries
+    std::vector<std::pair<std::wstring, std::wstring>> paths;
+    for (const auto& name : moduleNames)
     {
-        // "all" keyword, parse all the Scilab library files
-        int size = -1;
-        wchar_t** files = findfilesW(path.c_str(), DEFAULT_FILESPEC, &size, FALSE);
-        if (size > 0 && files)
-        {
-            std::vector<std::pair<std::wstring, std::wstring>> paths;
-            for (int i = 0; i < size; ++i)
-            {
-                const std::wstring modulePath = path + files[i];
-                if (isdirW(modulePath.c_str()))
-                {
-                    paths.emplace_back(modulePath, files[i]);
-                }
-            }
-            freeArrayOfWideString(files, size);
-            return paths;
-        }
-
-        return {};
+        paths.emplace_back(path + name, name);
     }
-    else
-    {
-        // a list of Scilab libraries
-        std::vector<std::pair<std::wstring, std::wstring>> paths;
-        for (const auto& name : moduleNames)
-        {
-            paths.emplace_back(path + name, name);
-        }
-        return paths;
-    }
+    return paths;
 }
 
 void CoverModule::getMacros(const std::vector<std::pair<std::wstring, std::wstring>>& paths_mods)
@@ -797,8 +772,8 @@ const std::wstring CoverModule::getName(const std::wstring& path)
 
 void CoverModule::writeMacroHTMLReport(types::Macro* macro, std::map<MacroLoc, CoverResult>& results, const std::wstring& outputDir)
 {
-    std::list<symbol::Variable*>* in = macro->getInputs();
-    std::list<symbol::Variable*>* out = macro->getOutputs();
+    std::vector<symbol::Variable*>* in = macro->getInputs();
+    std::vector<symbol::Variable*>* out = macro->getOutputs();
     ast::SeqExp& body = *macro->getBody()->clone();
 
     ast::exps_t& _in = *new ast::exps_t();

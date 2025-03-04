@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 // Copyright (C) DIGITEO - 2011 - Allan CORNET
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -13,20 +13,15 @@
 
 function [f, e] = log2(x)
     // x may be positive, negative, or complex
-    [lhs, rhs] = argn(0)
-    if rhs <> 1 then
-        msg = gettext("%s: Wrong number of input argument(s): %d expected.\n")
-        error(msprintf(msg, "log2", 1))
+    arguments
+        x {mustBeA(x, "double")}
     end
-    if argn(1) == 1 then
+
+    if nargout == 1 then
         f = log(x) / log(2)
     else
-        if type(x)<>1
-            msg = gettext("%s: Argument #%d: Decimal numbers expected.\n")
-            error(msprintf(msg, "log2", 1))
-        end
         if ~isreal(x,0)
-            msg = gettext("%s: Argument #%d: Complex numbers not supported.\n")
+            msg = gettext("%s: Wrong value for input argument #%d: Real numbers expected.\n")
             error(msprintf(msg, "log2", 1))
         else
             x = real(x)

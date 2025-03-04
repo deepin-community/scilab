@@ -1,5 +1,5 @@
 #! /bin/sh
-##  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+##  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 ##  Copyright (C) 2010-2010 - DIGITEO - Bruno JOFRET
 ##  Copyright (C) 2013 - Scilab Enterprises - Calixte DENIZET
 ##
@@ -73,14 +73,14 @@ generateCFile()
 generateHeader()
 {
     echo "/*" > $OutFile
-    echo " *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab" >> $OutFile
+    echo " *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab" >> $OutFile
     echo " *  Copyright (C) 2010-2012 - DIGITEO - Bruno JOFRET" >> $OutFile
     echo " *  Copyright (C) 2012-2014 - Scilab-Enterprises - Bruno JOFRET" >> $OutFile
     echo " *" >> $OutFile
     echo " *  This source file is licensed as described in the file COPYING, which" >> $OutFile
     echo " *  you should have received as part of this distribution.  The terms" >> $OutFile
     echo " *  are also available at" >> $OutFile
-    echo " *  http://www.cecill.info/licences/Licence_CeCILL_V2.1-en.txt" >> $OutFile
+    echo " *  https://www.cecill.info/licences/Licence_CeCILL_V2.1-en.txt" >> $OutFile
     echo " *" >> $OutFile
     echo " */" >> $OutFile
 

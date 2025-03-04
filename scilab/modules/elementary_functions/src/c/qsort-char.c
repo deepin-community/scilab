@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) ???? - ENPC - Jean-Philippe CHANCELIER
  * Copyright (C) 2006 - INRIA - Serge STEER
  * Copyright (C) 2006 - INRIA - Allan CORNET

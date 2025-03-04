@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Charlotte HECQUET
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
 // Copyright (C) 2021 - Samuel GOUGEON - Le Mans Université
@@ -30,8 +30,8 @@ function [res1, res2] = %sp_det(A)
     umf_ludel(hand);
     warning(wstatus)
 
-    dU = clean(diag(U), 0, %eps);
-    r = clean(r, 0, %eps);
+    dU = clean(diag(U));
+    r = clean(r);
     if isreal(A) then
         p = r .* dU;
         tmp = sum(log10(full(abs(p))))

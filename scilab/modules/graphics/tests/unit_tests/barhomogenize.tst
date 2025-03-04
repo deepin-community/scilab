@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Charlotte HECQUET
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -66,7 +66,11 @@ assert_checkequal(a3.y_ticks.labels, ["0";"2";"4";"6";"8";"10";"12"]);
 assert_checkequal(a3.z_ticks.labels, []);
 assert_checkequal(a3.sub_ticks, [0,1]);
 assert_checktrue(abs(a3.data_bounds - [0.55,0;3.45,11]) < 0.05);
+assert_checkequal(a3.margins([2 4]), [0.125,0.125]);
+fontsize = a3.title.font_size;
+a3.title.font_size = 1 // Default font size for title before Scilab 6.1.1
 assert_checkequal(a3.margins(2:$), [0.125,0.125,0.125]);
+a3.title.font_size = fontsize;
 assert_checktrue(abs(a3.axes_bounds - [0,0,0.3333333333,0.5]) < 0.0005);
 
 // Check Second

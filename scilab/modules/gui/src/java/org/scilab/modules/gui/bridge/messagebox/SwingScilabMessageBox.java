@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA - Vincent Couvert
  * Copyright (C) 2010 - DIGITEO - Vincent Couvert
  * Copyright (C) 2013 - Scilab Enterprises - Clement DAVID
@@ -700,7 +700,19 @@ public class SwingScilabMessageBox extends JDialog implements SimpleMessageBox, 
             setContentPane(new JOptionPane(message, messageType, JOptionPane.CANCEL_OPTION, messageIcon, buttons));
         }
         pack();
-        super.setModal(modal); /* Must call the JDialog class setModal */
+
+        /* Set modality */
+        if (modal) {
+            setModalityType(ModalityType.APPLICATION_MODAL);
+        } else {
+            if (scilabDialogType != X_MESSAGE_TYPE) {
+                // If the dialog is not modal and Scilab waits for an answer, have to wait...
+                // Scilab windows stay reactive but execution is blocked
+                setModalityType(ModalityType.DOCUMENT_MODAL);
+            } else {
+                setModalityType(ModalityType.MODELESS);
+            }
+        }
 
         if (parentWindow == null) {
             if (ScilabConsole.isExistingConsole()) {
@@ -719,17 +731,6 @@ public class SwingScilabMessageBox extends JDialog implements SimpleMessageBox, 
 
         setVisible(true);
         doLayout();
-
-        // If the dialog is not modal and Scilab waits for an answer, have to wait...
-        if (!modal && scilabDialogType != X_MESSAGE_TYPE) {
-            synchronized (btnOK) {
-                try {
-                    btnOK.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 
     /**
@@ -785,10 +786,7 @@ public class SwingScilabMessageBox extends JDialog implements SimpleMessageBox, 
                 }
             }
         }
-        // Notify btnOK for not modal Dialogs
-        synchronized (btnOK) {
-            btnOK.notify();
-        }
+
         // Destroy the Dialog
         dispose();
     }
@@ -907,10 +905,6 @@ public class SwingScilabMessageBox extends JDialog implements SimpleMessageBox, 
             public void mouseClicked(MouseEvent arg0) {
                 if (arg0.getClickCount() == 2) {
                     selectedItem = listBox.getSelectedIndex() + 1;
-                    // Notify btnOK for not modal Dialogs
-                    synchronized (btnOK) {
-                        btnOK.notify();
-                    }
                     dispose();
                 }
             }

@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009 - DIGITEO - Pierre MARECHAL <pierre.marechal@scilab.org>
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -158,7 +158,7 @@ function atomsShow(package)
         // Other
         //
 
-        if isempty(value) then
+        if isempty(value) && isfield(details, fields_map(i,1)) then
             value = details(fields_map(i,1));
         end
 

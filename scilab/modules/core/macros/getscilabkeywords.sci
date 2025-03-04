@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2005 - INRIA - Allan CORNET
 // Copyright (C) 2009 - DIGITEO - Allan CORNET
 // Based on E.Segre dynamickeywords.sce

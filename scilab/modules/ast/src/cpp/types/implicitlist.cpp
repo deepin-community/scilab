@@ -1,5 +1,5 @@
 /*
-*  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+*  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 *  Copyright (C) 2008-2008 - DIGITEO - Antoine ELIAS
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -576,11 +576,17 @@ void ImplicitList::extractFullMatrix(Double *_p)
 {
     double dblStart = m_poStart->getAs<Double>()->get(0);
     double dblStep  = m_poStep->getAs<Double>()->get(0);
+    double dblEnd   = m_poEnd->getAs<Double>()->get(0);
 
     double* p = _p->get();
     for (int i = 0 ; i < m_iSize ; i++)
     {
         p[i] = dblStart + i * dblStep;
+    }
+
+    if (m_iSize > 0)
+    {
+        p[m_iSize - 1] = dblStep > 0 ? std::min(dblEnd, p[m_iSize - 1]) : std::max(dblEnd, p[m_iSize - 1]);
     }
 }
 

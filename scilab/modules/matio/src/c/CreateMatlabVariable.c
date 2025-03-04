@@ -1,9 +1,9 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA - Vincent COUVERT
  * Copyright (C) 2010 - DIGITEO - Yann COLLETTE
- *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ * Copyright (C) 2023 - 3DS - Vincent COUVERT
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
  * pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -38,8 +38,10 @@ int CreateMatlabVariable(void *pvApiCtx, int iVar, matvar_t *matVariable, int * 
             CreateSparseVariable(pvApiCtx, iVar, matVariable, parent, item_position);
             break;
         case MAT_C_DOUBLE: /* 6 */
-        case MAT_C_SINGLE: /* 7 */
             CreateDoubleVariable(pvApiCtx, iVar, matVariable, parent, item_position);
+            break;
+        case MAT_C_SINGLE: /* 7 */
+            CreateFloatVariable(pvApiCtx, iVar, matVariable, parent, item_position);
             break;
         case MAT_C_INT8: /* 8 */
             CreateIntegerVariable(pvApiCtx, iVar, SCI_INT8, matVariable, parent, item_position);
@@ -47,7 +49,7 @@ int CreateMatlabVariable(void *pvApiCtx, int iVar, matvar_t *matVariable, int * 
         case MAT_C_UINT8: /* 9 */
             if (matVariable->isLogical != 0)
             {
-                CreateBooleanVariable(pvApiCtx, iVar, matVariable, parent, item_position);
+                CreateBooleanVariable(pvApiCtx, iVar, MAT_C_UINT8, matVariable, parent, item_position);
             }
             else
             {
@@ -58,13 +60,27 @@ int CreateMatlabVariable(void *pvApiCtx, int iVar, matvar_t *matVariable, int * 
             CreateIntegerVariable(pvApiCtx, iVar, SCI_INT16, matVariable, parent, item_position);
             break;
         case MAT_C_UINT16: /* 11 */
-            CreateIntegerVariable(pvApiCtx, iVar, SCI_UINT16, matVariable, parent, item_position);
+            if (matVariable->isLogical != 0)
+            {
+                CreateBooleanVariable(pvApiCtx, iVar, MAT_C_UINT16, matVariable, parent, item_position);
+            }
+            else
+            {
+                CreateIntegerVariable(pvApiCtx, iVar, SCI_UINT16, matVariable, parent, item_position);
+            }
             break;
         case MAT_C_INT32: /* 12 */
             CreateIntegerVariable(pvApiCtx, iVar, SCI_INT32, matVariable, parent, item_position);
             break;
         case MAT_C_UINT32: /* 13 */
-            CreateIntegerVariable(pvApiCtx, iVar, SCI_UINT32, matVariable, parent, item_position);
+            if (matVariable->isLogical != 0)
+            {
+                CreateBooleanVariable(pvApiCtx, iVar, MAT_C_UINT32, matVariable, parent, item_position);
+            }
+            else
+            {
+                CreateIntegerVariable(pvApiCtx, iVar, SCI_UINT32, matVariable, parent, item_position);
+            }
             break;
 #ifdef __SCILAB_INT64__
         case MAT_C_INT64: /* 14 */

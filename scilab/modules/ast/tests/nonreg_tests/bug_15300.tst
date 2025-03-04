@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2017 - ESI - Delamarre Cedric
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,11 +9,12 @@
 //
 // <-- Non-regression test for bug 15300 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/15300
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/15300
 //
 // <-- Short Description -->
 // Crash when the function name is forgotten!
+// Test updated after issue #14372 fix
 
-errmsg = gettext(_("Can not assign multiple value in a single variable"));
-assert_checkerror("A=(1,1)", errmsg);
+A=(1,1);
+assert_checkequal(A, 1);

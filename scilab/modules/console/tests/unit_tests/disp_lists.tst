@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ????-2008 - INRIA
 // Copyright (C) 2020 - Samuel GOUGEON
 //
@@ -37,19 +37,19 @@ L = list([%t %f %f]',                ..
          {%pi, "abcd" ;
           list(,)(1),(%i-%s)^3},    ..
           {},           ..
-          list(["Hello" "Allo" "Hé"], uint64(12345678)^(1:3), ,grand(2,4,"uin",0,10)), ..
+          list(["Hello" "Allo" "Hé"], uint64(1234567)^(1:3), ,grand(2,4,"uin",0,10)), ..
           list(), ..
          films);
 %l_p(L)
 
 
 // Tlist overloaded display
-TL = tlist("x",1,2)
+TL = tlist(["x" "field1", "field2"], 1, 2)
 deff("%x_p(x)","disp(''Mydisplay'',x(2),x(3))")
 TL
 list(TL)
 list(list(TL))
-TL = tlist("x",1:$,2)
+TL = tlist(["x" "field1", "field2"], 1:$, 2)
 list(TL)
 list(list(TL))
 TL(2) = TL

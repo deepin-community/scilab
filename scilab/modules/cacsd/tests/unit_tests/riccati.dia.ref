@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2007-2008 - INRIA
 // Copyright (C) 2020 - Samuel GOUGEON
 //
@@ -59,7 +59,7 @@ G      = G1/G2*G1';
 X = riccati(F,G,C,'d','schur');
 C_disc = F'*X*F-(F'*X*G1/(G2+G1'*X*G1))*(G1'*X*F)-X;
 assert_checktrue(norm(C_disc+C,1) < 10000*%eps)
- ans  =
+ ans = 
   T
 [X1, X2, residual] = riccati(F,G,C,'d','schur');
 assert_checkequal(X, X1/X2);

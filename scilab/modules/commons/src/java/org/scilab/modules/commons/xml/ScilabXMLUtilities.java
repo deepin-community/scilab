@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2010 - Calixte DENIZET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -99,6 +99,9 @@ public class ScilabXMLUtilities {
             }
 
             if (transformer != null) {
+                // Needed since Java 9, see:
+                // https://www.oracle.com/java/technologies/javase/9-notes.html#JDK-8087303
+                // https://bugs.openjdk.org/browse/JDK-8262285
                 removeEmptyLines(doc.getDocumentElement());
 
                 FileOutputStream fos = null;

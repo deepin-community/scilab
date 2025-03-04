@@ -6,10 +6,13 @@
     </refnamediv>
     <refsynopsisdiv>
         <title>Syntax</title>
-        <synopsis>exec(path [,mode])
+        <synopsis>
+            exec(path [,mode])
             exec(fun [,mode])
             ierr = exec(path, 'errcatch' [,mode])
             ierr = exec(fun, 'errcatch' [,mode])
+            [ierr, errormsg] = exec(..., 'errcatch' [,mode])
+            [ierr, errormsg, callstack] = exec(..., 'errcatch' [,mode])
         </synopsis>
     </refsynopsisdiv>
     <refsection>
@@ -37,6 +40,22 @@
                 <term>ierr</term>
                 <listitem>
                     <para>an integer, 0 or error number.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>errormsg</term>
+                <listitem>
+                    <para>
+                        error message in case of error and with <literal>'errcatch'</literal> flag.
+                    </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>callstack</term>
+                <listitem>
+                    <para>
+                        callstack in case of error and with <literal>'errcatch'</literal> flag.
+                    </para>
                 </listitem>
             </varlistentry>
         </variablelist>
@@ -134,7 +153,8 @@
     </refsection>
     <refsection>
         <title>Examples</title>
-        <programlisting role="example"><![CDATA[
+        <programlisting role="example">
+    <![CDATA[
 // create a script file
 mputl('a=1;b=2',TMPDIR+'/myscript')
 
@@ -157,6 +177,10 @@ exec(foo)
 // a and y are created in the current environment
 whos -name "a "
 whos -name "y "
+
+//errormsg
+mputl('acosd(''d'');', TMPDIR+'/myscript')
+[_ b] = exec(TMPDIR+'/myscript', 'errcatch')
 ]]></programlisting>
     </refsection>
     <refsection role="see also">

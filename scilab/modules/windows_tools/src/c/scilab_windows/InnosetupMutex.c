@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) INRIA - 2008 - Allan CORNET
 * Copyright (C) DIGITEO - 2012 - Allan CORNET
 *
@@ -18,7 +18,7 @@
 #include <windows.h>
 #include "InnosetupMutex.h"
 #include "BOOL.h"
-#include "version.h"
+#include "getversion.h"
 /*--------------------------------------------------------------------------*/
 static HANDLE hMutexScilabID;
 /*--------------------------------------------------------------------------*/
@@ -26,7 +26,9 @@ void createInnosetupMutex(void)
 {
     /* http://www.vincenzo.net/isxkb/index.php?title=Application_considerations */
     /* creates a named mutex used by Innosetup */
-    hMutexScilabID = CreateMutex (NULL, FALSE, SCI_VERSION_STRING );
+    char *scilabVersionString = getScilabVersionAsString();
+    hMutexScilabID = CreateMutex(NULL, FALSE, scilabVersionString);
+    free(scilabVersionString);
 }
 /*--------------------------------------------------------------------------*/
 void closeInnosetupMutex(void)
@@ -37,7 +39,9 @@ void closeInnosetupMutex(void)
 /*--------------------------------------------------------------------------*/
 BOOL haveInnosetupMutex(void)
 {
-    HANDLE hMutex = OpenMutex(MUTEX_ALL_ACCESS, FALSE, SCI_VERSION_STRING);
+    char *scilabVersionString = getScilabVersionAsString();
+    HANDLE hMutex = OpenMutex(MUTEX_ALL_ACCESS, FALSE, scilabVersionString);
+    free(scilabVersionString);
     if (hMutex)
     {
         CloseHandle(hMutex);

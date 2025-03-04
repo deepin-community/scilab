@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2016-2016 - Scilab Enterprises - Clement DAVID
  * Copyright (C) 2017 - ESI Group - Clement DAVID
  *
@@ -450,6 +450,10 @@ int XMIResource::loadBase64(xmlTextReaderPtr reader, enum object_properties_t pr
     for (int rc = xmlTextReaderMoveToFirstAttribute(reader); rc > 0; rc = xmlTextReaderMoveToNextAttribute(reader))
     {
         auto found = std::find(constXcosNames.begin(), constXcosNames.end(), xmlTextReaderConstName(reader));
+        if (found == constXcosNames.end())
+        {
+            continue;
+        }
         enum xcosNames current = static_cast<enum xcosNames>(std::distance(constXcosNames.begin(), found));
 
         switch (current)
@@ -482,6 +486,10 @@ int XMIResource::loadDatatype(xmlTextReaderPtr reader, const model::BaseObject& 
     for (int rc = xmlTextReaderMoveToFirstAttribute(reader); rc > 0; rc = xmlTextReaderMoveToNextAttribute(reader))
     {
         auto found = std::find(constXcosNames.begin(), constXcosNames.end(), xmlTextReaderConstName(reader));
+        if (found == constXcosNames.end())
+        {
+            continue;
+        }
         enum xcosNames current = static_cast<enum xcosNames>(std::distance(constXcosNames.begin(), found));
         switch (current)
         {
@@ -516,6 +524,10 @@ int XMIResource::loadPoint(xmlTextReaderPtr reader, const model::BaseObject& o)
     for (int rc = xmlTextReaderMoveToFirstAttribute(reader); rc > 0; rc = xmlTextReaderMoveToNextAttribute(reader))
     {
         auto found = std::find(constXcosNames.begin(), constXcosNames.end(), xmlTextReaderConstName(reader));
+        if (found == constXcosNames.end())
+        {
+            continue;
+        }
         enum xcosNames current = static_cast<enum xcosNames>(std::distance(constXcosNames.begin(), found));
         switch (current)
         {
@@ -548,6 +560,10 @@ int XMIResource::loadGeometry(xmlTextReaderPtr reader, const model::BaseObject& 
     for (int rc = xmlTextReaderMoveToFirstAttribute(reader); rc > 0; rc = xmlTextReaderMoveToNextAttribute(reader))
     {
         auto found = std::find(constXcosNames.begin(), constXcosNames.end(), xmlTextReaderConstName(reader));
+        if (found == constXcosNames.end())
+        {
+            continue;
+        }
         enum xcosNames current = static_cast<enum xcosNames>(std::distance(constXcosNames.begin(), found));
         switch (current)
         {
@@ -584,6 +600,10 @@ int XMIResource::loadAbstractBaseObject(xmlTextReaderPtr reader, const model::Ba
     for (int rc = xmlTextReaderMoveToFirstAttribute(reader); rc > 0; rc = xmlTextReaderMoveToNextAttribute(reader))
     {
         auto found = std::find(constXcosNames.begin(), constXcosNames.end(), xmlTextReaderConstName(reader));
+        if (found == constXcosNames.end())
+        {
+            continue;
+        }
         enum xcosNames current = static_cast<enum xcosNames>(std::distance(constXcosNames.begin(), found));
         switch (current)
         {
@@ -627,6 +647,10 @@ int XMIResource::loadDiagram(xmlTextReaderPtr reader, const model::BaseObject& o
     for (int rc = xmlTextReaderMoveToFirstAttribute(reader); rc > 0; rc = xmlTextReaderMoveToNextAttribute(reader))
     {
         auto found = std::find(constXcosNames.begin(), constXcosNames.end(), xmlTextReaderConstName(reader));
+        if (found == constXcosNames.end())
+        {
+            continue;
+        }
         enum xcosNames current = static_cast<enum xcosNames>(std::distance(constXcosNames.begin(), found));
         switch (current)
         {
@@ -664,6 +688,10 @@ int XMIResource::loadSimulationConfig(xmlTextReaderPtr reader, const model::Base
     for (int rc = xmlTextReaderMoveToFirstAttribute(reader); rc > 0; rc = xmlTextReaderMoveToNextAttribute(reader))
     {
         auto found = std::find(constXcosNames.begin(), constXcosNames.end(), xmlTextReaderConstName(reader));
+        if (found == constXcosNames.end())
+        {
+            continue;
+        }
         enum xcosNames current = static_cast<enum xcosNames>(std::distance(constXcosNames.begin(), found));
         switch (current)
         {
@@ -721,6 +749,10 @@ int XMIResource::loadBlock(xmlTextReaderPtr reader, const model::BaseObject& o)
     for (int rc = xmlTextReaderMoveToFirstAttribute(reader); rc > 0; rc = xmlTextReaderMoveToNextAttribute(reader))
     {
         auto found = std::find(constXcosNames.begin(), constXcosNames.end(), xmlTextReaderConstName(reader));
+        if (found == constXcosNames.end())
+        {
+            continue;
+        }
         enum xcosNames current = static_cast<enum xcosNames>(std::distance(constXcosNames.begin(), found));
         switch (current)
         {
@@ -789,6 +821,10 @@ int XMIResource::loadPort(xmlTextReaderPtr reader, const model::BaseObject& o)
     for (int rc = xmlTextReaderMoveToFirstAttribute(reader); rc > 0; rc = xmlTextReaderMoveToNextAttribute(reader))
     {
         auto found = std::find(constXcosNames.begin(), constXcosNames.end(), xmlTextReaderConstName(reader));
+        if (found == constXcosNames.end())
+        {
+            continue;
+        }
         enum xcosNames current = static_cast<enum xcosNames>(std::distance(constXcosNames.begin(), found));
         switch (current)
         {
@@ -878,6 +914,10 @@ int XMIResource::loadLink(xmlTextReaderPtr reader, const model::BaseObject& o)
     for (int rc = xmlTextReaderMoveToFirstAttribute(reader); rc > 0; rc = xmlTextReaderMoveToNextAttribute(reader))
     {
         auto found = std::find(constXcosNames.begin(), constXcosNames.end(), xmlTextReaderConstName(reader));
+        if (found == constXcosNames.end())
+        {
+            continue;
+        }
         enum xcosNames current = static_cast<enum xcosNames>(std::distance(constXcosNames.begin(), found));
         switch (current)
         {
@@ -951,6 +991,10 @@ int XMIResource::loadAnnotation(xmlTextReaderPtr reader, const model::BaseObject
     for (int rc = xmlTextReaderMoveToFirstAttribute(reader); rc > 0; rc = xmlTextReaderMoveToNextAttribute(reader))
     {
         auto found = std::find(constXcosNames.begin(), constXcosNames.end(), xmlTextReaderConstName(reader));
+        if (found == constXcosNames.end())
+        {
+            continue;
+        }
         enum xcosNames current = static_cast<enum xcosNames>(std::distance(constXcosNames.begin(), found));
         switch (current)
         {
@@ -1049,6 +1093,11 @@ int XMIResource::processElement(xmlTextReaderPtr reader)
     // lookup for known node names
     // thanks to the string intern-ing, the pointer comparison could be used
     auto found = std::find(constXcosNames.begin(), constXcosNames.end(), name);
+    if (found == constXcosNames.end())
+    {
+        sciprint("Unknown \"%s\" element name at line %d\n", name, xmlTextReaderGetParserLineNumber(reader) - 1);
+        return -1;
+    }
     enum xcosNames current = static_cast<enum xcosNames>(std::distance(constXcosNames.begin(), found));
     switch (current)
     {
@@ -1075,6 +1124,10 @@ int XMIResource::processElement(xmlTextReaderPtr reader)
                 }
 
                 auto foundName = std::find(constXcosNames.begin(), constXcosNames.end(), xmlTextReaderConstLocalName(reader));
+                if (foundName == constXcosNames.end())
+                {
+                    continue;
+                }
                 enum xcosNames currentName = static_cast<enum xcosNames>(std::distance(constXcosNames.begin(), foundName));
                 if (currentName != e_type)
                 {
@@ -1095,6 +1148,10 @@ int XMIResource::processElement(xmlTextReaderPtr reader)
                 const xmlChar* interned = xmlTextReaderConstString(reader, valueWithoutPrefix);
 
                 auto found = std::find(constXcosNames.begin(), constXcosNames.end(), interned);
+                if (foundName == constXcosNames.end())
+                {
+                    continue;
+                }
                 enum xcosNames current = static_cast<enum xcosNames>(std::distance(constXcosNames.begin(), found));
                 switch (current)
                 {

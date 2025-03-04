@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009 - DIGITEO - Clement DAVID
  * Copyright (C) 2011-2015 - Scilab Enterprises - Clement DAVID
  *
@@ -26,7 +26,6 @@ import javax.swing.JButton;
 import org.scilab.modules.commons.CommonFileUtils;
 import org.scilab.modules.graph.ScilabGraph;
 import org.scilab.modules.graph.actions.base.DefaultAction;
-import org.scilab.modules.gui.bridge.filechooser.SwingScilabFileChooser;
 import org.scilab.modules.gui.menuitem.MenuItem;
 import org.scilab.modules.xcos.actions.OpenAction;
 import org.scilab.modules.xcos.palette.PaletteManager;
@@ -35,6 +34,8 @@ import org.scilab.modules.xcos.palette.model.Custom;
 import org.scilab.modules.xcos.palette.model.PaletteNode;
 import org.scilab.modules.xcos.palette.model.VariablePath;
 import org.scilab.modules.xcos.utils.XcosMessages;
+import org.scilab.modules.xcos.configuration.ConfigurationManager;
+import org.scilab.modules.gui.filechooser.FileChooser;
 
 /**
  * Load a diagram on the palette.
@@ -92,19 +93,21 @@ public final class LoadAsPalAction extends DefaultAction {
      */
     @Override
     public void actionPerformed(final ActionEvent e) {
-        final SwingScilabFileChooser fc = OpenAction.createFileChooser();
-
+        String[] selection;
+        final FileChooser fc = OpenAction.createFileChooser();                
         /* Configure the file chooser */
         OpenAction.configureFileFilters(fc);
-        fc.setCurrentDirectory(new File(CommonFileUtils.getCWD()));
+
+        ConfigurationManager.configureCurrentDirectory(fc);
 
         fc.displayAndWait();
+        selection = fc.getSelection();
 
-        if ((fc.getSelection() == null) || (fc.getSelection().length == 0) || fc.getSelection()[0].equals("")) {
+        if ((selection == null) || (selection.length == 0) || selection[0].equals("")) {
             return;
         }
 
-        final String file = fc.getSelection()[0];
+        final String file = selection[0];
         final Custom c = new Custom();
         c.setName(file);
         c.setEnable(true);

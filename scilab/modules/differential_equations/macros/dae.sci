@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Paul Bignier
 // Copyright (C) 2008 - INRIA - Sabine GAUZERE
 //
@@ -26,24 +26,24 @@ function [varargout] = dae(varargin)
             %DAEOPTIONS = list ([], 0, [], [], [], 0, [], 0, [], 0, [], [], [], 1);
         end
     end
-    if type(varargin(1)) == 1 then //standard case (dassl)
+    if type(varargin(1)) == 1 then //standard case (%_dassl)
 
         if rhs == 4 then //call without optional arguments
-            [x0, t0, t, res] = varargin(:)
+            [x0, t0, t, %res] = varargin(:)
             if lhs == 2 then
-                [y, hd] = dassl(x0, t0, t, res, %DAEOPTIONS);
+                [y, hd] = %_dassl(x0, t0, t, %res, %DAEOPTIONS);
             elseif lhs == 1 then
-                [y] = dassl(x0, t0, t, res, %DAEOPTIONS);
+                [y] = %_dassl(x0, t0, t, %res, %DAEOPTIONS);
             else
                 error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 1, 2));
             end
 
         elseif rhs == 8 then // call with all the optional arguments
-            [x0, t0, t, rtol, atol, res, jac, hd] = varargin(:)
+            [x0, t0, t, rtol, atol, %res, jac, hd] = varargin(:)
             if lhs == 2 then
-                [y, hd] = dassl(x0,t0, t, atol, rtol, res, jac, %DAEOPTIONS, hd);
+                [y, hd] = %_dassl(x0,t0, t, atol, rtol, %res, jac, %DAEOPTIONS, hd);
             elseif lhs == 1 then
-                [y] = dassl(x0, t0, t, atol, rtol, res, jac, %DAEOPTIONS, hd);
+                [y] = %_dassl(x0, t0, t, atol, rtol, %res, jac, %DAEOPTIONS, hd);
             else
                 error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 1, 2));
             end
@@ -51,11 +51,11 @@ function [varargout] = dae(varargin)
         elseif rhs == 5 then
 
             if type(varargin(4)) == 1 then
-                [x0, t0, t, atol, res] = varargin(:)
+                [x0, t0, t, atol, %res] = varargin(:)
                 if lhs == 2 then
-                    [y, hd] = dassl(x0, t0, t, atol, res, %DAEOPTIONS);
+                    [y, hd] = %_dassl(x0, t0, t, atol, %res, %DAEOPTIONS);
                 elseif lhs == 1 then
-                    [y] = dassl(x0, t0, t, atol, res, %DAEOPTIONS);
+                    [y] = %_dassl(x0, t0, t, atol, %res, %DAEOPTIONS);
                 else
                     error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 1, 2));
                 end
@@ -63,21 +63,21 @@ function [varargout] = dae(varargin)
             else
 
                 if type(varargin(5)) == 1 then
-                    [x0, t0, t, res, hd] = varargin(:)
+                    [x0, t0, t, %res, hd] = varargin(:)
                     if lhs == 2 then
-                        [y, hd] = dassl(x0, t0, t, res, %DAEOPTIONS, hd);
+                        [y, hd] = %_dassl(x0, t0, t, %res, %DAEOPTIONS, hd);
                     elseif lhs == 1 then
-                        [y] = dassl(x0, t0, t, res, %DAEOPTIONS, hd);
+                        [y] = %_dassl(x0, t0, t, %res, %DAEOPTIONS, hd);
                     else
                         error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 1, 2));
                     end
 
                 else
-                    [x0, t0, t, res, jac] = varargin(:)
+                    [x0, t0, t, %res, jac] = varargin(:)
                     if lhs == 2 then
-                        [y, hd] = dassl(x0, t0, t, res, jac, %DAEOPTIONS);
+                        [y, hd] = %_dassl(x0, t0, t, %res, jac, %DAEOPTIONS);
                     elseif lhs == 1 then
-                        [y] = dassl(x0, t0, t, res, jac, %DAEOPTIONS);
+                        [y] = %_dassl(x0, t0, t, %res, jac, %DAEOPTIONS);
                     else
                         error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 1, 2));
                     end
@@ -91,11 +91,11 @@ function [varargout] = dae(varargin)
             if type(varargin(4)) == 1 then
 
                 if type(varargin(5)) == 1 then
-                    [x0, t0, t, rtol, atol, res] = varargin(:)
+                    [x0, t0, t, rtol, atol, %res] = varargin(:)
                     if lhs == 2 then
-                        [y, hd] = dassl(x0, t0, t, atol, rtol, res, %DAEOPTIONS);
+                        [y, hd] = %_dassl(x0, t0, t, atol, rtol, %res, %DAEOPTIONS);
                     elseif lhs == 1 then
-                        [y] = dassl(x0, t0, t, atol, rtol, res, %DAEOPTIONS);
+                        [y] = %_dassl(x0, t0, t, atol, rtol, %res, %DAEOPTIONS);
                     else
                         error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 1, 2));
                     end
@@ -103,21 +103,21 @@ function [varargout] = dae(varargin)
                 else
 
                     if type(varargin(6)) == 1 then
-                        [x0, t0, t, atol, res, hd] = varargin(:)
+                        [x0, t0, t, atol, %res, hd] = varargin(:)
                         if lhs == 2 then
-                            [y, hd] = dassl(x0, t0, t, atol, res, %DAEOPTIONS, hd);
+                            [y, hd] = %_dassl(x0, t0, t, atol, %res, %DAEOPTIONS, hd);
                         elseif lhs == 1 then
-                            [y] = dassl(x0, t0, t, atol, res, %DAEOPTIONS, hd);
+                            [y] = %_dassl(x0, t0, t, atol, %res, %DAEOPTIONS, hd);
                         else
                             error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 1, 2));
                         end
 
                     else
-                        [x0, t0, t, atol, res, jac] = varargin(:)
+                        [x0, t0, t, atol, %res, jac] = varargin(:)
                         if lhs == 2 then
-                            [y, hd] = dassl(x0, t0, t, atol, res, jac, %DAEOPTIONS);
+                            [y, hd] = %_dassl(x0, t0, t, atol, %res, jac, %DAEOPTIONS);
                         elseif lhs == 1 then
-                            [y] = dassl(x0, t0, t, atol, res, jac, %DAEOPTIONS);
+                            [y] = %_dassl(x0, t0, t, atol, %res, jac, %DAEOPTIONS);
                         else
                             error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 1, 2));
                         end
@@ -126,11 +126,11 @@ function [varargout] = dae(varargin)
                 end
 
             else
-                [x0, t0, t, res, jac, hd] = varargin(:)
+                [x0, t0, t, %res, jac, hd] = varargin(:)
                 if lhs == 2 then
-                    [y, hd] = dassl(x0, t0, t, res, jac, %DAEOPTIONS, hd);
+                    [y, hd] = %_dassl(x0, t0, t, %res, jac, %DAEOPTIONS, hd);
                 elseif lhs == 1 then
-                    [y] = dassl(x0, t0, t, res, jac, %DAEOPTIONS, hd);
+                    [y] = %_dassl(x0, t0, t, %res, jac, %DAEOPTIONS, hd);
                 else
                     error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 1, 2));
                 end
@@ -142,21 +142,21 @@ function [varargout] = dae(varargin)
             if type(varargin(5)) == 1 then
 
                 if type(varargin(7)) == 1 then
-                    [x0, t0, t, rtol, atol, res, hd] = varargin(:)
+                    [x0, t0, t, rtol, atol, %res, hd] = varargin(:)
                     if lhs == 2 then
-                        [y, hd] = dassl(x0, t0, t, atol, rtol, res, %DAEOPTIONS, hd);
+                        [y, hd] = %_dassl(x0, t0, t, atol, rtol, %res, %DAEOPTIONS, hd);
                     elseif lhs == 1 then
-                        [y] = dassl(x0, t0, t, atol, rtol, res, %DAEOPTIONS, hd);
+                        [y] = %_dassl(x0, t0, t, atol, rtol, %res, %DAEOPTIONS, hd);
                     else
                         error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 1, 2));
                     end
 
                 else
-                    [x0, t0, t, rtol, atol, res, jac] = varargin(:)
+                    [x0, t0, t, rtol, atol, %res, jac] = varargin(:)
                     if lhs == 2 then
-                        [y, hd] = dassl(x0, t0, t, atol, rtol, res, jac, %DAEOPTIONS);
+                        [y, hd] = %_dassl(x0, t0, t, atol, rtol, %res, jac, %DAEOPTIONS);
                     elseif lhs == 1 then
-                        [y] = dassl(x0, t0, t, atol, rtol, res, jac, %DAEOPTIONS);
+                        [y] = %_dassl(x0, t0, t, atol, rtol, %res, jac, %DAEOPTIONS);
                     else
                         error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 1, 2));
                     end
@@ -164,11 +164,11 @@ function [varargout] = dae(varargin)
                 end
 
             else
-                [x0, t0, t, atol, res, jac, hd] = varargin(:)
+                [x0, t0, t, atol, %res, jac, hd] = varargin(:)
                 if lhs == 2 then
-                    [y, hd] = dassl(x0, t0, t, atol, res, jac, %DAEOPTIONS, hd);
+                    [y, hd] = %_dassl(x0, t0, t, atol, %res, jac, %DAEOPTIONS, hd);
                 elseif lhs == 1 then
-                    [y] = dassl(x0, t0, t, atol, res, jac, %DAEOPTIONS, hd);
+                    [y] = %_dassl(x0, t0, t, atol, %res, jac, %DAEOPTIONS, hd);
                 else
                     error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 1, 2));
                 end
@@ -190,25 +190,25 @@ function [varargout] = dae(varargin)
             error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 1, 2));
         end
 
-    elseif varargin(1) == "root" then // Case root (dasrt)
+    elseif varargin(1) == "root" then // Case root (%_dasrt)
         [lhs, rhs] = argn();
 
         if rhs == 7 then // Call without optional arguments
-            [typ, x0, t0, t, res, ng, surface] = varargin(:)
+            [typ, x0, t0, t, %res, ng, surface] = varargin(:)
             if lhs == 2 then
-                [y, nn] = dasrt(x0, t0, t, res, ng, surface, %DAEOPTIONS);
+                [y, nn] = %_dasrt(x0, t0, t, %res, ng, surface, %DAEOPTIONS);
             elseif lhs == 3 then
-                [y, nn, hd] = dasrt(x0, t0, t, res, ng, surface, %DAEOPTIONS);
+                [y, nn, hd] = %_dasrt(x0, t0, t, %res, ng, surface, %DAEOPTIONS);
             else
                 error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
             end
 
         elseif rhs == 11 then // Call with all the optional arguments
-            [typ, x0, t0, t, rtol, atol, res, jac, ng, surface, hd] = varargin(:)
+            [typ, x0, t0, t, rtol, atol, %res, jac, ng, surface, hd] = varargin(:)
             if lhs == 2 then
-                [y, nn] = dasrt(x0,t0,t,atol,rtol,res,jac,ng,surface,%DAEOPTIONS,hd);
+                [y, nn] = %_dasrt(x0,t0,t,atol,rtol,%res,jac,ng,surface,%DAEOPTIONS,hd);
             elseif lhs == 3 then
-                [y, nn, hd] = dasrt(x0, t0, t, atol, rtol, res, jac, ng, surface, %DAEOPTIONS, hd);
+                [y, nn, hd] = %_dasrt(x0, t0, t, atol, rtol, %res, jac, ng, surface, %DAEOPTIONS, hd);
             else
                 error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
             end
@@ -216,11 +216,11 @@ function [varargout] = dae(varargin)
         elseif rhs == 8 then
 
             if type(varargin(5)) == 1 then
-                [typ, x0, t0, t, atol, res, ng, surface] = varargin(:)
+                [typ, x0, t0, t, atol, %res, ng, surface] = varargin(:)
                 if lhs == 2 then
-                    [y, nn] = dasrt(x0, t0, t, atol, res, ng, surface,%DAEOPTIONS);
+                    [y, nn] = %_dasrt(x0, t0, t, atol, %res, ng, surface,%DAEOPTIONS);
                 elseif lhs == 3 then
-                    [y, nn, hd] = dasrt(x0, t0, t, atol, res, ng, surface, %DAEOPTIONS);
+                    [y, nn, hd] = %_dasrt(x0, t0, t, atol, %res, ng, surface, %DAEOPTIONS);
                 else
                     error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
                 end
@@ -228,21 +228,21 @@ function [varargout] = dae(varargin)
             else
 
                 if type(varargin(8)) == 1 then
-                    [typ, x0, t0, t, res, ng, surface, hd] = varargin(:)
+                    [typ, x0, t0, t, %res, ng, surface, hd] = varargin(:)
                     if lhs == 2 then
-                        [y, nn] = dasrt(x0, t0, t, res, ng, surface, %DAEOPTIONS, hd);
+                        [y, nn] = %_dasrt(x0, t0, t, %res, ng, surface, %DAEOPTIONS, hd);
                     elseif lhs == 3 then
-                        [y, nn, hd] = dasrt(x0, t0, t, res, ng, surface, %DAEOPTIONS, hd);
+                        [y, nn, hd] = %_dasrt(x0, t0, t, %res, ng, surface, %DAEOPTIONS, hd);
                     else
                         error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
                     end
 
                 else
-                    [typ, x0, t0, t, res, jac, ng, surface] = varargin(:)
+                    [typ, x0, t0, t, %res, jac, ng, surface] = varargin(:)
                     if lhs == 2 then
-                        [y, nn] = dasrt(x0, t0, t, res, jac, ng, surface, %DAEOPTIONS);
+                        [y, nn] = %_dasrt(x0, t0, t, %res, jac, ng, surface, %DAEOPTIONS);
                     elseif lhs == 3 then
-                        [y, nn, hd] = dasrt(x0, t0, t, res, jac, ng, surface, %DAEOPTIONS);
+                        [y, nn, hd] = %_dasrt(x0, t0, t, %res, jac, ng, surface, %DAEOPTIONS);
                     else
                         error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
                     end
@@ -256,11 +256,11 @@ function [varargout] = dae(varargin)
             if type(varargin(5)) == 1 then
 
                 if type(varargin(6)) == 1 then
-                    [typ, x0, t0, t, rtol, atol, res, ng, surface] = varargin(:)
+                    [typ, x0, t0, t, rtol, atol, %res, ng, surface] = varargin(:)
                     if lhs == 2 then
-                        [y, nn] = dasrt(x0, t0, t, atol, rtol, res, ng, surface, %DAEOPTIONS);
+                        [y, nn] = %_dasrt(x0, t0, t, atol, rtol, %res, ng, surface, %DAEOPTIONS);
                     elseif lhs == 3 then
-                        [y, nn, hd] = dasrt(x0, t0, t, atol, rtol, res, ng, surface, %DAEOPTIONS);
+                        [y, nn, hd] = %_dasrt(x0, t0, t, atol, rtol, %res, ng, surface, %DAEOPTIONS);
                     else
                         error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
                     end
@@ -268,21 +268,21 @@ function [varargout] = dae(varargin)
                 else
 
                     if type(varargin(9)) == 1 then
-                        [typ, x0, t0, t, atol, res, ng, surface, hd] = varargin(:)
+                        [typ, x0, t0, t, atol, %res, ng, surface, hd] = varargin(:)
                         if lhs == 2 then
-                            [y, nn] = dasrt(x0, t0, t, atol, res, ng, surface, %DAEOPTIONS, hd);
+                            [y, nn] = %_dasrt(x0, t0, t, atol, %res, ng, surface, %DAEOPTIONS, hd);
                         elseif lhs == 3 then
-                            [y, nn, hd] = dasrt(x0, t0, t, atol, res, ng, surface, %DAEOPTIONS, hd);
+                            [y, nn, hd] = %_dasrt(x0, t0, t, atol, %res, ng, surface, %DAEOPTIONS, hd);
                         else
                             error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
                         end
 
                     else
-                        [typ, x0, t0, t, atol, res, jac, ng, surface] = varargin(:)
+                        [typ, x0, t0, t, atol, %res, jac, ng, surface] = varargin(:)
                         if lhs == 2 then
-                            [y, nn] = dasrt(x0, t0, t, atol, res, jac, ng, surface, %DAEOPTIONS);
+                            [y, nn] = %_dasrt(x0, t0, t, atol, %res, jac, ng, surface, %DAEOPTIONS);
                         elseif lhs == 3 then
-                            [y, nn, hd] = dasrt(x0, t0, t, atol, res, jac, ng, surface, %DAEOPTIONS);
+                            [y, nn, hd] = %_dasrt(x0, t0, t, atol, %res, jac, ng, surface, %DAEOPTIONS);
                         else
                             error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
                         end
@@ -291,11 +291,11 @@ function [varargout] = dae(varargin)
                 end
 
             else
-                [typ, x0, t0, t, res, jac, ng, surface, hd] = varargin(:)
+                [typ, x0, t0, t, %res, jac, ng, surface, hd] = varargin(:)
                 if lhs == 2 then
-                    [y, nn] = dasrt(x0, t0, t, res, jac, ng, surface, %DAEOPTIONS, hd);
+                    [y, nn] = %_dasrt(x0, t0, t, %res, jac, ng, surface, %DAEOPTIONS, hd);
                 elseif lhs == 3 then
-                    [y, nn, hd] = dasrt(x0, t0, t, res, jac, ng, surface, %DAEOPTIONS, hd);
+                    [y, nn, hd] = %_dasrt(x0, t0, t, %res, jac, ng, surface, %DAEOPTIONS, hd);
                 else
                     error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
                 end
@@ -308,32 +308,32 @@ function [varargout] = dae(varargin)
                 if type(varargin(6)) == 1 then
 
                     if type(varargin(10)) == 1 then
-                        [typ, x0, t0, t, rtol, atol, res, ng, surface, hd] = varargin(:)
+                        [typ, x0, t0, t, rtol, atol, %res, ng, surface, hd] = varargin(:)
                         if lhs == 2 then
-                            [y, nn] = dasrt(x0, t0, t, atol, rtol, res, ng, surface, %DAEOPTIONS, hd);
+                            [y, nn] = %_dasrt(x0, t0, t, atol, rtol, %res, ng, surface, %DAEOPTIONS, hd);
                         elseif lhs == 3 then
-                            [y, nn, hd] = dasrt(x0, t0, t, atol, rtol, res, ng, surface, %DAEOPTIONS, hd);
+                            [y, nn, hd] = %_dasrt(x0, t0, t, atol, rtol, %res, ng, surface, %DAEOPTIONS, hd);
                         else
                             error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
                         end
 
                     else
-                        [typ, x0, t0, t, rtol, atol, res, jac, ng, surface] = varargin(:)
+                        [typ, x0, t0, t, rtol, atol, %res, jac, ng, surface] = varargin(:)
                         if lhs == 2 then
-                            [y, nn] = dasrt(x0, t0, t, atol, rtol, res, jac, ng, surface, %DAEOPTIONS);
+                            [y, nn] = %_dasrt(x0, t0, t, atol, rtol, %res, jac, ng, surface, %DAEOPTIONS);
                         elseif lhs == 3 then
-                            [y, nn, hd] = dasrt(x0, t0, t, atol, rtol, res, jac, ng, surface, %DAEOPTIONS);
+                            [y, nn, hd] = %_dasrt(x0, t0, t, atol, rtol, %res, jac, ng, surface, %DAEOPTIONS);
                         else
                             error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
                         end
                     end
 
                 else
-                    [typ, x0, t0, t, atol, res, jac, ng, surface, hd] = varargin(:)
+                    [typ, x0, t0, t, atol, %res, jac, ng, surface, hd] = varargin(:)
                     if lhs == 2 then
-                        [y, nn] = dasrt(x0, t0, t, atol, res, jac, ng, surface, %DAEOPTIONS, hd);
+                        [y, nn] = %_dasrt(x0, t0, t, atol, %res, jac, ng, surface, %DAEOPTIONS, hd);
                     elseif lhs == 3 then
-                        [y, nn, hd] = dasrt(x0, t0, t, atol, res, jac, ng, surface, %DAEOPTIONS, hd);
+                        [y, nn, hd] = %_dasrt(x0, t0, t, atol, %res, jac, ng, surface, %DAEOPTIONS, hd);
                     else
                         error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
                     end
@@ -341,11 +341,11 @@ function [varargout] = dae(varargin)
                 end
 
             else
-                [typ, x0, t0, t, res, jac, ng, surface, hd] = varargin(:)
+                [typ, x0, t0, t, %res, jac, ng, surface, hd] = varargin(:)
                 if lhs == 2 then
-                    [y, nn] = dasrt(x0, t0, t, res, jac, ng, surface, %DAEOPTIONS, hd);
+                    [y, nn] = %_dasrt(x0, t0, t, %res, jac, ng, surface, %DAEOPTIONS, hd);
                 elseif lhs == 3 then
-                    [y, nn, hd] = dasrt(x0, t0, t, res, jac, ng, surface, %DAEOPTIONS, hd);
+                    [y, nn, hd] = %_dasrt(x0, t0, t, %res, jac, ng, surface, %DAEOPTIONS, hd);
                 else
                     error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
                 end
@@ -366,25 +366,25 @@ function [varargout] = dae(varargin)
             error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
         end
 
-    elseif varargin(1) == "root2" then // Case root2 (daskr)
+    elseif varargin(1) == "root2" then // Case root2 (%_daskr)
         [lhs, rhs] = argn();
 
         if rhs == 7 then // Call without optional arguments
-            [typ, x0, t0, t, res, ng, surface] = varargin(:)
+            [typ, x0, t0, t, %res, ng, surface] = varargin(:)
             if lhs == 2 then
-                [y, nn] = daskr(x0, t0, t, res, ng, surface, %DAEOPTIONS);
+                [y, nn] = %_daskr(x0, t0, t, %res, ng, surface, %DAEOPTIONS);
             elseif lhs == 3 then
-                [y, nn, hd] = daskr(x0, t0, t, res, ng, surface, %DAEOPTIONS);
+                [y, nn, hd] = %_daskr(x0, t0, t, %res, ng, surface, %DAEOPTIONS);
             else
                 error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
             end
 
         elseif rhs == 13 then // Call with all the optional arguments
-            [typ, x0, t0, t, rtol, atol, res, jac, ng, surface, psol, pjac, hd] = varargin(:)
+            [typ, x0, t0, t, rtol, atol, %res, jac, ng, surface, psol, pjac, hd] = varargin(:)
             if lhs == 2 then
-                [y, nn] = daskr(x0,t0,t,atol,rtol,res,jac,ng,surface,%DAEOPTIONS, psol, pjac, hd);
+                [y, nn] = %_daskr(x0,t0,t,atol,rtol,%res,jac,ng,surface,%DAEOPTIONS, psol, pjac, hd);
             elseif lhs == 3 then
-                [y, nn, hd] = daskr(x0, t0, t, atol, rtol, res, jac, ng, surface, %DAEOPTIONS, psol, pjac, hd);
+                [y, nn, hd] = %_daskr(x0, t0, t, atol, rtol, %res, jac, ng, surface, %DAEOPTIONS, psol, pjac, hd);
             else
                 error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
             end
@@ -392,11 +392,11 @@ function [varargout] = dae(varargin)
         elseif rhs == 8 then
 
             if type(varargin(5)) == 1 then
-                [typ, x0, t0, t, atol, res, ng, surface] = varargin(:)
+                [typ, x0, t0, t, atol, %res, ng, surface] = varargin(:)
                 if lhs == 2 then
-                    [y, nn] = daskr(x0, t0, t, atol, res, ng, surface,%DAEOPTIONS);
+                    [y, nn] = %_daskr(x0, t0, t, atol, %res, ng, surface,%DAEOPTIONS);
                 elseif lhs == 3 then
-                    [y, nn, hd] = daskr(x0, t0, t, atol, res, ng, surface, %DAEOPTIONS);
+                    [y, nn, hd] = %_daskr(x0, t0, t, atol, %res, ng, surface, %DAEOPTIONS);
                 else
                     error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
                 end
@@ -404,21 +404,21 @@ function [varargout] = dae(varargin)
             else
 
                 if type(varargin(8)) == 1 then
-                    [typ, x0, t0, t, res, ng, surface, hd] = varargin(:)
+                    [typ, x0, t0, t, %res, ng, surface, hd] = varargin(:)
                     if lhs == 2 then
-                        [y, nn] = daskr(x0, t0, t, res, ng, surface, %DAEOPTIONS, hd);
+                        [y, nn] = %_daskr(x0, t0, t, %res, ng, surface, %DAEOPTIONS, hd);
                     elseif lhs == 3 then
-                        [y, nn, hd] = daskr(x0, t0, t, res, ng, surface, %DAEOPTIONS, hd);
+                        [y, nn, hd] = %_daskr(x0, t0, t, %res, ng, surface, %DAEOPTIONS, hd);
                     else
                         error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
                     end
 
                 else
-                    [typ, x0, t0, t, res, jac, ng, surface] = varargin(:)
+                    [typ, x0, t0, t, %res, jac, ng, surface] = varargin(:)
                     if lhs == 2 then
-                        [y, nn] = daskr(x0, t0, t, res, jac, ng, surface, %DAEOPTIONS);
+                        [y, nn] = %_daskr(x0, t0, t, %res, jac, ng, surface, %DAEOPTIONS);
                     elseif lhs == 3 then
-                        [y, nn, hd] = daskr(x0, t0, t, res, jac, ng, surface, %DAEOPTIONS);
+                        [y, nn, hd] = %_daskr(x0, t0, t, %res, jac, ng, surface, %DAEOPTIONS);
                     else
                         error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
                     end
@@ -432,11 +432,11 @@ function [varargout] = dae(varargin)
             if type(varargin(5)) == 1 then
 
                 if type(varargin(6)) == 1 then
-                    [typ, x0, t0, t, rtol, atol, res, ng, surface] = varargin(:)
+                    [typ, x0, t0, t, rtol, atol, %res, ng, surface] = varargin(:)
                     if lhs == 2 then
-                        [y, nn] = daskr(x0, t0, t, atol, rtol, res, ng, surface, %DAEOPTIONS);
+                        [y, nn] = %_daskr(x0, t0, t, atol, rtol, %res, ng, surface, %DAEOPTIONS);
                     elseif lhs == 3 then
-                        [y, nn, hd] = daskr(x0, t0, t, atol, rtol, res, ng, surface, %DAEOPTIONS);
+                        [y, nn, hd] = %_daskr(x0, t0, t, atol, rtol, %res, ng, surface, %DAEOPTIONS);
                     else
                         error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
                     end
@@ -444,21 +444,21 @@ function [varargout] = dae(varargin)
                 else
 
                     if type(varargin(9)) == 1 then
-                        [typ, x0, t0, t, atol, res, ng, surface, hd] = varargin(:)
+                        [typ, x0, t0, t, atol, %res, ng, surface, hd] = varargin(:)
                         if lhs == 2 then
-                            [y, nn] = daskr(x0, t0, t, atol, res, ng, surface, %DAEOPTIONS, hd);
+                            [y, nn] = %_daskr(x0, t0, t, atol, %res, ng, surface, %DAEOPTIONS, hd);
                         elseif lhs == 3 then
-                            [y, nn, hd] = daskr(x0, t0, t, atol, res, ng, surface, %DAEOPTIONS, hd);
+                            [y, nn, hd] = %_daskr(x0, t0, t, atol, %res, ng, surface, %DAEOPTIONS, hd);
                         else
                             error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
                         end
 
                     else
-                        [typ, x0, t0, t, atol, res, jac, ng, surface] = varargin(:)
+                        [typ, x0, t0, t, atol, %res, jac, ng, surface] = varargin(:)
                         if lhs == 2 then
-                            [y, nn] = daskr(x0, t0, t, atol, res, jac, ng, surface, %DAEOPTIONS);
+                            [y, nn] = %_daskr(x0, t0, t, atol, %res, jac, ng, surface, %DAEOPTIONS);
                         elseif lhs == 3 then
-                            [y, nn, hd] = daskr(x0, t0, t, atol, res, jac, ng, surface, %DAEOPTIONS);
+                            [y, nn, hd] = %_daskr(x0, t0, t, atol, %res, jac, ng, surface, %DAEOPTIONS);
                         else
                             error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
                         end
@@ -468,20 +468,20 @@ function [varargout] = dae(varargin)
 
             else
                 if type(varargin(9)) == 1 then
-                    [typ, x0, t0, t, res, jac, ng, surface, hd] = varargin(:)
+                    [typ, x0, t0, t, %res, jac, ng, surface, hd] = varargin(:)
                     if lhs == 2 then
-                        [y, nn] = daskr(x0, t0, t, res, jac, ng, surface, %DAEOPTIONS, hd);
+                        [y, nn] = %_daskr(x0, t0, t, %res, jac, ng, surface, %DAEOPTIONS, hd);
                     elseif lhs == 3 then
-                        [y, nn, hd] = daskr(x0, t0, t, res, jac, ng, surface, %DAEOPTIONS, hd);
+                        [y, nn, hd] = %_daskr(x0, t0, t, %res, jac, ng, surface, %DAEOPTIONS, hd);
                     else
                         error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
                     end
                 else
-                    [typ, x0, t0, t, res, ng, surface, psol, pjac] = varargin(:)
+                    [typ, x0, t0, t, %res, ng, surface, psol, pjac] = varargin(:)
                     if lhs == 2 then
-                        [y, nn] = daskr(x0, t0, t, res, ng, surface, %DAEOPTIONS, psol, pjac);
+                        [y, nn] = %_daskr(x0, t0, t, %res, ng, surface, %DAEOPTIONS, psol, pjac);
                     elseif lhs == 3 then
-                        [y, nn, hd] = daskr(x0, t0, t, res, ng, surface, %DAEOPTIONS, psol, pjac);
+                        [y, nn, hd] = %_daskr(x0, t0, t, %res, ng, surface, %DAEOPTIONS, psol, pjac);
                     else
                         error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
                     end
@@ -496,21 +496,21 @@ function [varargout] = dae(varargin)
                 if type(varargin(6)) == 1 then
 
                     if type(varargin(10)) == 1 then
-                        [typ, x0, t0, t, rtol, atol, res, ng, surface, hd] = varargin(:)
+                        [typ, x0, t0, t, rtol, atol, %res, ng, surface, hd] = varargin(:)
                         if lhs == 2 then
-                            [y, nn] = daskr(x0, t0, t, atol, rtol, res, ng, surface, %DAEOPTIONS, hd);
+                            [y, nn] = %_daskr(x0, t0, t, atol, rtol, %res, ng, surface, %DAEOPTIONS, hd);
                         elseif lhs == 3 then
-                            [y, nn, hd] = daskr(x0, t0, t, atol, rtol, res, ng, surface, %DAEOPTIONS, hd);
+                            [y, nn, hd] = %_daskr(x0, t0, t, atol, rtol, %res, ng, surface, %DAEOPTIONS, hd);
                         else
                             error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
                         end
 
                     else
-                        [typ, x0, t0, t, rtol, atol, res, jac, ng, surface] = varargin(:)
+                        [typ, x0, t0, t, rtol, atol, %res, jac, ng, surface] = varargin(:)
                         if lhs == 2 then
-                            [y, nn] = daskr(x0, t0, t, atol, rtol, res, jac, ng, surface, %DAEOPTIONS);
+                            [y, nn] = %_daskr(x0, t0, t, atol, rtol, %res, jac, ng, surface, %DAEOPTIONS);
                         elseif lhs == 3 then
-                            [y, nn, hd] = daskr(x0, t0, t, atol, rtol, res, jac, ng, surface, %DAEOPTIONS);
+                            [y, nn, hd] = %_daskr(x0, t0, t, atol, rtol, %res, jac, ng, surface, %DAEOPTIONS);
                         else
                             error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
                         end
@@ -518,20 +518,20 @@ function [varargout] = dae(varargin)
 
                 else
                     if type(varargin(10)) == 1 then
-                        [typ, x0, t0, t, atol, res, jac, ng, surface, hd] = varargin(:)
+                        [typ, x0, t0, t, atol, %res, jac, ng, surface, hd] = varargin(:)
                         if lhs == 2 then
-                            [y, nn] = daskr(x0, t0, t, atol, res, jac, ng, surface, %DAEOPTIONS, hd);
+                            [y, nn] = %_daskr(x0, t0, t, atol, %res, jac, ng, surface, %DAEOPTIONS, hd);
                         elseif lhs == 3 then
-                            [y, nn, hd] = daskr(x0, t0, t, atol, res, jac, ng, surface, %DAEOPTIONS, hd);
+                            [y, nn, hd] = %_daskr(x0, t0, t, atol, %res, jac, ng, surface, %DAEOPTIONS, hd);
                         else
                             error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
                         end
                     else
-                        [typ, x0, t0, t, atol, res, ng, surface, psol, pjac] = varargin(:)
+                        [typ, x0, t0, t, atol, %res, ng, surface, psol, pjac] = varargin(:)
                         if lhs == 2 then
-                            [y, nn] = daskr(x0, t0, t, atol, res, ng, surface, %DAEOPTIONS, psol, pjac);
+                            [y, nn] = %_daskr(x0, t0, t, atol, %res, ng, surface, %DAEOPTIONS, psol, pjac);
                         elseif lhs == 3 then
-                            [y, nn, hd] = daskr(x0, t0, t, atol, res, ng, surface, %DAEOPTIONS, psol, pjac);
+                            [y, nn, hd] = %_daskr(x0, t0, t, atol, %res, ng, surface, %DAEOPTIONS, psol, pjac);
                         else
                             error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
                         end
@@ -541,20 +541,20 @@ function [varargout] = dae(varargin)
 
             else
                 if type(varargin(10)) == 1 then
-                    [typ, x0, t0, t, res, ng, surface, psol, pjac, hd] = varargin(:)
+                    [typ, x0, t0, t, %res, ng, surface, psol, pjac, hd] = varargin(:)
                     if lhs == 2 then
-                        [y, nn] = daskr(x0, t0, t, res, ng, surface, %DAEOPTIONS, psol, pjac, hd);
+                        [y, nn] = %_daskr(x0, t0, t, %res, ng, surface, %DAEOPTIONS, psol, pjac, hd);
                     elseif lhs == 3 then
-                        [y, nn, hd] = daskr(x0, t0, t, res, ng, surface, %DAEOPTIONS, psol, pjac, hd);
+                        [y, nn, hd] = %_daskr(x0, t0, t, %res, ng, surface, %DAEOPTIONS, psol, pjac, hd);
                     else
                         error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
                     end
                 else
-                    [typ, x0, t0, t, res, jac, ng, surface, psol, pjac] = varargin(:)
+                    [typ, x0, t0, t, %res, jac, ng, surface, psol, pjac] = varargin(:)
                     if lhs == 2 then
-                        [y, nn] = daskr(x0, t0, t, res, jac, ng, surface, %DAEOPTIONS, psol, pjac);
+                        [y, nn] = %_daskr(x0, t0, t, %res, jac, ng, surface, %DAEOPTIONS, psol, pjac);
                     elseif lhs == 3 then
-                        [y, nn, hd] = daskr(x0, t0, t, res, jac, ng, surface, %DAEOPTIONS, psol, pjac);
+                        [y, nn, hd] = %_daskr(x0, t0, t, %res, jac, ng, surface, %DAEOPTIONS, psol, pjac);
                     else
                         error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
                     end
@@ -568,21 +568,21 @@ function [varargout] = dae(varargin)
                 if type(varargin(6)) == 1 then
 
                     if type(varargin(11)) == 1 then
-                        [typ, x0, t0, t, rtol, atol, res, jac, ng, surface, hd] = varargin(:)
+                        [typ, x0, t0, t, rtol, atol, %res, jac, ng, surface, hd] = varargin(:)
                         if lhs == 2 then
-                            [y, nn] = daskr(x0, t0, t, atol, rtol, res, jac, ng, surface, %DAEOPTIONS, hd);
+                            [y, nn] = %_daskr(x0, t0, t, atol, rtol, %res, jac, ng, surface, %DAEOPTIONS, hd);
                         elseif lhs == 3 then
-                            [y, nn, hd] = daskr(x0, t0, t, atol, rtol, res, jac, ng, surface, %DAEOPTIONS, hd);
+                            [y, nn, hd] = %_daskr(x0, t0, t, atol, rtol, %res, jac, ng, surface, %DAEOPTIONS, hd);
                         else
                             error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
                         end
 
                     else
-                        [typ, x0, t0, t, rtol, atol, res, ng, surface, psol, pjac] = varargin(:)
+                        [typ, x0, t0, t, rtol, atol, %res, ng, surface, psol, pjac] = varargin(:)
                         if lhs == 2 then
-                            [y, nn] = daskr(x0, t0, t, atol, rtol, res, ng, surface, %DAEOPTIONS, psol, pjac);
+                            [y, nn] = %_daskr(x0, t0, t, atol, rtol, %res, ng, surface, %DAEOPTIONS, psol, pjac);
                         elseif lhs == 3 then
-                            [y, nn, hd] = daskr(x0, t0, t, atol, rtol, res, ng, surface, %DAEOPTIONS, psol, pjac);
+                            [y, nn, hd] = %_daskr(x0, t0, t, atol, rtol, %res, ng, surface, %DAEOPTIONS, psol, pjac);
                         else
                             error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
                         end
@@ -590,20 +590,20 @@ function [varargout] = dae(varargin)
 
                 else
                     if type(varargin(11)) == 1 then
-                        [typ, x0, t0, t, atol, res, ng, surface, psol, pjac, hd] = varargin(:)
+                        [typ, x0, t0, t, atol, %res, ng, surface, psol, pjac, hd] = varargin(:)
                         if lhs == 2 then
-                            [y, nn] = daskr(x0, t0, t, atol, res, ng, surface, %DAEOPTIONS, psol, pjac, hd);
+                            [y, nn] = %_daskr(x0, t0, t, atol, %res, ng, surface, %DAEOPTIONS, psol, pjac, hd);
                         elseif lhs == 3 then
-                            [y, nn, hd] = daskr(x0, t0, t, atol, res, ng, surface, %DAEOPTIONS, psol, pjac, hd);
+                            [y, nn, hd] = %_daskr(x0, t0, t, atol, %res, ng, surface, %DAEOPTIONS, psol, pjac, hd);
                         else
                             error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
                         end
                     else
-                        [typ, x0, t0, t, atol, res, jac, ng, surface, psol, pjac] = varargin(:)
+                        [typ, x0, t0, t, atol, %res, jac, ng, surface, psol, pjac] = varargin(:)
                         if lhs == 2 then
-                            [y, nn] = daskr(x0, t0, t, atol, res, jac, ng, surface, %DAEOPTIONS, psol, pjac);
+                            [y, nn] = %_daskr(x0, t0, t, atol, %res, jac, ng, surface, %DAEOPTIONS, psol, pjac);
                         elseif lhs == 3 then
-                            [y, nn, hd] = daskr(x0, t0, t, atol, res, jac, ng, surface, %DAEOPTIONS, psol, pjac);
+                            [y, nn, hd] = %_daskr(x0, t0, t, atol, %res, jac, ng, surface, %DAEOPTIONS, psol, pjac);
                         else
                             error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
                         end
@@ -611,11 +611,11 @@ function [varargout] = dae(varargin)
                 end
 
             else
-                [typ, x0, t0, t, res, jac, ng, surface, psol, pjac, hd] = varargin(:)
+                [typ, x0, t0, t, %res, jac, ng, surface, psol, pjac, hd] = varargin(:)
                 if lhs == 2 then
-                    [y, nn] = daskr(x0, t0, t, res, jac, ng, surface, %DAEOPTIONS, psol, pjac, hd);
+                    [y, nn] = %_daskr(x0, t0, t, %res, jac, ng, surface, %DAEOPTIONS, psol, pjac, hd);
                 elseif lhs == 3 then
-                    [y, nn, hd] = daskr(x0, t0, t, res, jac, ng, surface, %DAEOPTIONS, psol, pjac, hd);
+                    [y, nn, hd] = %_daskr(x0, t0, t, %res, jac, ng, surface, %DAEOPTIONS, psol, pjac, hd);
                 else
                     error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
                 end
@@ -628,32 +628,32 @@ function [varargout] = dae(varargin)
                 if type(varargin(6)) == 1 then
 
                     if type(varargin(12)) == 1 then
-                        [typ, x0, t0, t, rtol, atol, res, ng, surface, psol, pjac, hd] = varargin(:)
+                        [typ, x0, t0, t, rtol, atol, %res, ng, surface, psol, pjac, hd] = varargin(:)
                         if lhs == 2 then
-                            [y, nn] = daskr(x0, t0, t, atol, rtol, res, ng, surface, %DAEOPTIONS, psol, pjac, hd);
+                            [y, nn] = %_daskr(x0, t0, t, atol, rtol, %res, ng, surface, %DAEOPTIONS, psol, pjac, hd);
                         elseif lhs == 3 then
-                            [y, nn, hd] = daskr(x0, t0, t, atol, rtol, res, ng, surface, %DAEOPTIONS, psol, pjac, hd);
+                            [y, nn, hd] = %_daskr(x0, t0, t, atol, rtol, %res, ng, surface, %DAEOPTIONS, psol, pjac, hd);
                         else
                             error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
                         end
 
                     else
-                        [typ, x0, t0, t, rtol, atol, res, jac, ng, surface, psol, pjac] = varargin(:)
+                        [typ, x0, t0, t, rtol, atol, %res, jac, ng, surface, psol, pjac] = varargin(:)
                         if lhs == 2 then
-                            [y, nn] = daskr(x0, t0, t, atol, rtol, res, jac, ng, surface, %DAEOPTIONS, psol, pjac);
+                            [y, nn] = %_daskr(x0, t0, t, atol, rtol, %res, jac, ng, surface, %DAEOPTIONS, psol, pjac);
                         elseif lhs == 3 then
-                            [y, nn, hd] = daskr(x0, t0, t, atol, rtol, res, jac, ng, surface, %DAEOPTIONS, psol, pjac);
+                            [y, nn, hd] = %_daskr(x0, t0, t, atol, rtol, %res, jac, ng, surface, %DAEOPTIONS, psol, pjac);
                         else
                             error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
                         end
                     end
 
                 else
-                    [typ, x0, t0, t, atol, res, jac, ng, surface, psol, pjac, hd] = varargin(:)
+                    [typ, x0, t0, t, atol, %res, jac, ng, surface, psol, pjac, hd] = varargin(:)
                     if lhs == 2 then
-                        [y, nn] = daskr(x0, t0, t, atol, res, jac, ng, surface, %DAEOPTIONS, psol, pjac, hd);
+                        [y, nn] = %_daskr(x0, t0, t, atol, %res, jac, ng, surface, %DAEOPTIONS, psol, pjac, hd);
                     elseif lhs == 3 then
-                        [y, nn, hd] = daskr(x0, t0, t, atol, res, jac, ng, surface, %DAEOPTIONS, psol, pjac, hd);
+                        [y, nn, hd] = %_daskr(x0, t0, t, atol, %res, jac, ng, surface, %DAEOPTIONS, psol, pjac, hd);
                     else
                         error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
                     end
@@ -662,11 +662,11 @@ function [varargout] = dae(varargin)
 
         elseif rhs == 13 then
 
-            [typ, x0, t0, t, rtol, atol, res, jac, ng, surface, psol, pjac, hd] = varargin(:)
+            [typ, x0, t0, t, rtol, atol, %res, jac, ng, surface, psol, pjac, hd] = varargin(:)
             if lhs == 2 then
-                [y, nn] = daskr(x0, t0, t, atol, rtol, res, jac, ng, surface, %DAEOPTIONS, psol, pjac, hd);
+                [y, nn] = %_daskr(x0, t0, t, atol, rtol, %res, jac, ng, surface, %DAEOPTIONS, psol, pjac, hd);
             elseif lhs == 3 then
-                [y, nn, hd] = daskr(x0, t0, t, atol, rtol, res, jac, ng, surface, %DAEOPTIONS, psol, pjac, hd);
+                [y, nn, hd] = %_daskr(x0, t0, t, atol, rtol, %res, jac, ng, surface, %DAEOPTIONS, psol, pjac, hd);
             else
                 error(sprintf(gettext("%s: Wrong number of output argument(s): %d or %d expected.\n"), "dae", 2, 3));
             end

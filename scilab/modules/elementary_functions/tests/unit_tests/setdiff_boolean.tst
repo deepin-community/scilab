@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2020 - Samuel GOUGEON - Le Mans Université
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -14,7 +14,7 @@
 // Sparse booleans are tested in setdiff_sparse.tst
 //
 // See also:
-//   Bug 16451 : http://bugzilla.scilab.org/16451
+//   Bug 16451 : https://gitlab.com/scilab/scilab/-/issues/16451
 //               setdiff(a, b, "r"|"c") yields an error when a & b are boolean
 // --------------------------------------------------------------------------
 

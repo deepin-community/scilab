@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2011 - INRIA - Vincent COUVERT
  * Copyright (C) 2011 -         Pierre GRADIT
  * Copyright (C) 2012 - Scilab Enterprises - Calixte DENIZET
@@ -38,7 +38,6 @@ import java.util.StringTokenizer;
 
 import javax.swing.JDialog;
 import javax.swing.SwingUtilities;
-import javax.swing.border.Border;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -66,6 +65,7 @@ import org.xml.sax.SAXException;
 import org.scilab.modules.commons.OS;
 import org.scilab.modules.commons.xml.ScilabDocumentBuilderFactory;
 import org.scilab.modules.commons.xml.ScilabTransformerFactory;
+import org.scilab.modules.commons.xml.ScilabXMLUtilities;
 import org.scilab.modules.commons.xml.XConfiguration;
 import org.scilab.modules.gui.console.ScilabConsole;
 import org.scilab.modules.localization.Messages;
@@ -303,8 +303,6 @@ public abstract class XCommonManager {
 
             StringBuilder buffer = new StringBuilder("<?xml version='1.0' encoding='utf-8'?>\n");
             buffer.append("<xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\n");
-            buffer.append("<xsl:param name=\"OS\"/>\n");
-            buffer.append("<xsl:param name=\"SCILAB_LANGUAGE\"/>\n");
             buffer.append("<xsl:import href=\"").append(SCI).append("/modules/preferences/src/xslt/XConfiguration.xsl").append("\"/>\n");
 
             FilenameFilter filter = new FilenameFilter() {
@@ -344,6 +342,8 @@ public abstract class XCommonManager {
                 }
             }
 
+            buffer.append("<xsl:param name=\"OS\"/>\n");
+            buffer.append("<xsl:param name=\"SCILAB_LANGUAGE\"/>\n");
             buffer.append("</xsl:stylesheet>");
 
             XSLCODE = buffer.toString();
@@ -367,12 +367,14 @@ public abstract class XCommonManager {
             if (OS.get() == OS.WINDOWS) {
                 transformer.setParameter("SCILAB_LANGUAGE", WindowsDefaultLanguage.getdefaultlanguage());
             } else {
-                transformer.setParameter("SCILAB_LANGUAGE", "");
+                transformer.setParameter("SCILAB_LANGUAGE", "en_US");
             }
         } catch (TransformerConfigurationException e1) {
             System.err.println(ERROR_READ + address);
+            System.err.println(e1.getLocalizedMessage());
         } catch (TransformerFactoryConfigurationError e1) {
             System.err.println(ERROR_READ + address);
+            System.err.println(e1.getLocalizedMessage());
         }
     }
 
@@ -382,6 +384,7 @@ public abstract class XCommonManager {
      */
     private static DOMResult generateViewDOM() {
         DOMResult result = new DOMResult();
+        
         DOMSource source = new DOMSource(document);
         try {
             transformer.transform(source, result);
@@ -917,6 +920,11 @@ public abstract class XCommonManager {
             System.err.println(ERROR_WRITE + filename);
         }
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+
+        // Needed since Java 9, see:
+        // https://www.oracle.com/java/technologies/javase/9-notes.html#JDK-8087303
+        // https://bugs.openjdk.org/browse/JDK-8262285
+        ScilabXMLUtilities.removeEmptyLines(written);
 
         StreamResult result = new StreamResult(new File(filename));
         DOMSource source = new DOMSource(written);

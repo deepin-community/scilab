@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008-2008 - Digiteo - Jean-Baptiste Silvy
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,8 +9,8 @@
 
 // <-- Non-regression test for bug 4081 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=4081
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/4081
 //
 // <-- Short Description -->
 // Colormap is sometime not updated when using new interpoated colors.
@@ -25,7 +25,7 @@ c=linspace(2,100,4)';
 xpols=[x1 x1+20 x1+10 x1+10];
 ypols=[y1 y1    y1+10 y1-10];
 cols= [c c($:-1:1) c([3 4 1 2]) c]
-f.color_map=jetcolormap(max(cols));
+f.color_map=jet(max(cols));
 xfpolys(xpols,ypols,cols)
 // interpolated colors
 clf()
@@ -39,7 +39,7 @@ x32=x31;y32=y31+30;c32=[30;30;0;0];
 X=[x11 x12 x21 x22 x31 x32];Y=[y11 y12 y21 y22 y31 y32];C=([c11 c12 c21 c22  c31 c32]+1)*5;
 a=gca();
 a.data_bounds=[min(X),min(Y);max(X),max(Y)];
-f=gcf();f.color_map=graycolormap(max(C));
+f=gcf();f.color_map=gray(max(C));
 xfpolys(X,Y,C)
 
-// the rectangles should be gray and not using the jetcolormap
+// the rectangles should be gray and not using the jet colormap

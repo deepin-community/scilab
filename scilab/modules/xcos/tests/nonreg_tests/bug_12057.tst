@@ -1,16 +1,17 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Clément DAVID
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
 
 // <-- XCOS TEST -->
+// <-- NO CHECK REF -->
 //
 // <-- Non-regression test for bug 12057 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=12057
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/12057
 //
 // <-- Short Description -->
 // Scopes with big scope buffer size simulation was much more slower.
@@ -21,13 +22,13 @@
 assert_checktrue(importXcosDiagram(SCI + "/modules/xcos/tests/nonreg_tests/bug_12057_cscope.zcos"));
 timer();
 xcos_simulate(scs_m, 4);
-t = timer();
+t = timer()
 
 assert_checktrue(t < 60);
 
 assert_checktrue(importXcosDiagram(SCI + "/modules/xcos/tests/nonreg_tests/bug_12057_cmscope.zcos"));
 timer();
 xcos_simulate(scs_m, 4);
-t = timer();
+t = timer()
 
 assert_checktrue(t < 60);

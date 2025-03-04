@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2015 - Scilab Enterprises - Antoine ELIAS
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -74,7 +74,7 @@ int API_PROTO(getPolyVarname)(scilabEnv env, scilabVar var, const wchar_t** varn
 #endif
 
     std::wstring v = p->getVariableName();
-    *varname = wcsdup(v.data());
+    *varname = os_wcsdup(v.data());
     return STATUS_OK;
 }
 

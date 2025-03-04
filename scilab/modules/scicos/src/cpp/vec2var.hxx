@@ -1,5 +1,5 @@
 /*
-*  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+*  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 *  Copyright (C) 2015 - Scilab Enterprises - Paul Bignier
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -21,6 +21,6 @@
 #include "types.hxx"
 #include "internal.hxx"
 
-bool vec2var(const std::vector<double> in, types::InternalType* &out);
+bool vec2var(const std::vector<double>& in, types::InternalType* &out);
 
 #endif /* VEC2VAR_HXX_ */

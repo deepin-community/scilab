@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2011 - DIGITEO - Michael Baudin
 // Copyright (C) 2018 - ESI Group - Clement DAVID
 //
@@ -55,9 +55,11 @@ createdir(tbx);
 createdir(tbx + "/tests");
 createdir(tbx + "/tests/unit_tests");
 mputl("// <-- " + "CLI SHELL MODE" + " -->"+ascii(10) ..
++ "// <-- " + "NO ASSERT FAILURE" + " -->"+ascii(10) ..
 + "// " + ascii(32:126) + ascii(10) ..
 + "assert_checktrue(%f),", tbx + "/tests/unit_tests/allasciichars.tst");
 mputl("// <-- " + "CLI SHELL MODE" + " -->"+ascii(10) ..
++ "// <-- " + "NO ASSERT FAILURE" + " -->"+ascii(10) ..
 + "// <? ?> < > & ]]> <![CDATA[ <!-- -->" + ascii(10) ..
 + "assert_checktrue(%f),", tbx + "/tests/unit_tests/xmlspecials.tst");
 test_run(tbx,[],["mode_nwni" "no_check_ref"],targetXML);

@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2012 - Scilab Enterprises - Calixte DENIZET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -62,6 +62,7 @@ void initPrefs()
     scilabPref.startup_dir_default = NULL;
     scilabPref.startup_dir_previous = NULL;
     scilabPref.recursionlimit = NULL;
+    scilabPref.polynomialDisplay = NULL;
 }
 /*--------------------------------------------------------------------------*/
 void reloadScilabPreferences()
@@ -138,6 +139,10 @@ void clearScilabPreferences()
         {
             FREE((void*)scilabPref.recursionlimit);
         }
+        if (scilabPref.polynomialDisplay)
+        {
+            FREE((void*)scilabPref.polynomialDisplay);
+        }
         initPrefs();
     }
     isInit = 0;
@@ -174,6 +179,7 @@ void getPrefs()
         scilabPref.startup_dir_default = os_strdup(getAttribute(doc, xpathCtxt, (char*)STARTUP_DIR_DEFAULT_XPATH));
         scilabPref.startup_dir_previous = os_strdup(getAttribute(doc, xpathCtxt, (char*)STARTUP_DIR_PREVIOUS_XPATH));
         scilabPref.recursionlimit = os_strdup(getAttribute(doc, xpathCtxt, (char*)RECURSIONLIMIT_XPATH));
+        scilabPref.polynomialDisplay = os_strdup(getAttribute(doc, xpathCtxt, (char*)POLYNOMIAL_DISPLAY_XPATH));
 
         xmlXPathFreeContext(xpathCtxt);
         xmlFreeDoc(doc);

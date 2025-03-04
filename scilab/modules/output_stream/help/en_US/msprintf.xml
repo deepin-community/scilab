@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA
  * ...
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -24,7 +24,7 @@
     </refnamediv>
     <refnamediv xml:id="sprintf">
         <refname>sprintf</refname>
-        <refpurpose>converts, formats, and writes data in a string (obsolete)</refpurpose>
+        <refpurpose>converts, formats, and writes data in a string</refpurpose>
     </refnamediv>
     <refsynopsisdiv>
         <title>Syntax</title>
@@ -166,7 +166,7 @@ msprintf("%2$6s is %1$d-year old.\n", ages, names)
                 <link linkend="mprintf">mprintf</link>
             </member>
             <member>
-                <link linkend="percentchars">percentchars</link>
+                <link linkend="percentchars">%chars</link>
             </member>
         </simplelist>
     </refsection>

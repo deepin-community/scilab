@@ -443,10 +443,10 @@ msgstr "Un compilateur Fortran ou C est nécessaire."
 #, c-format
 msgid ""
 "%s: Warning: Scilab has not been able to find where the Scilab sources are. "
-"Please submit a bug report on http://bugzilla.scilab.org/\n"
+"Please submit a bug report on https://gitlab.com/scilab/scilab/-/issues\n"
 msgstr ""
 "%s : Attention : Impossible de trouver les sources de Scilab. Soumettez un "
-"rapport de bug à l'adresse http://bugzilla.scilab.org/\n"
+"rapport de bug à l'adresse https://gitlab.com/scilab/scilab/-/issues\n"
 
 #, c-format
 msgid "%s: Build command: %s\n"

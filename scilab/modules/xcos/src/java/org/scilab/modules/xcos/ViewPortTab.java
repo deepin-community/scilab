@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2010-2011 - DIGITEO - Clement DAVID
  * Copyright (C) 2011-2015 - Scilab Enterprises - Clement DAVID
  *
@@ -16,13 +16,16 @@
 
 package org.scilab.modules.xcos;
 
+import java.net.MalformedURLException;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
+import org.flexdock.docking.activation.ActiveDockableTracker;
 import org.scilab.modules.gui.bridge.tab.SwingScilabDockablePanel;
 import org.scilab.modules.gui.bridge.window.SwingScilabWindow;
-import org.scilab.modules.gui.tab.SimpleTab;
 import org.scilab.modules.gui.tabfactory.ScilabTabFactory;
 import org.scilab.modules.gui.utils.ClosingOperationsManager;
 import org.scilab.modules.gui.utils.WindowsConfigurationManager;
@@ -33,9 +36,8 @@ import org.scilab.modules.xcos.utils.XcosMessages;
 import com.mxgraph.swing.mxGraphOutline;
 
 @SuppressWarnings(value = { "serial" })
-public final class ViewPortTab extends SwingScilabDockablePanel implements SimpleTab {
+public final class ViewPortTab extends SwingScilabDockablePanel {
     public static final String DEFAULT_WIN_UUID = "xcos-viewport-default-window";
-    public static final String DEFAULT_TAB_UUID = "xcos-viewport-default-tab";
 
     private ViewPortTab(XcosDiagram graph, String uuid) {
         super(XcosMessages.VIEWPORT, uuid);
@@ -60,8 +62,6 @@ public final class ViewPortTab extends SwingScilabDockablePanel implements Simpl
 
         @Override
         public void destroy() {
-            graph.setViewPortTab(null);
-
             final XcosTab tab = XcosTab.get(graph);
             tab.setViewportChecked(false);
         }
@@ -78,21 +78,34 @@ public final class ViewPortTab extends SwingScilabDockablePanel implements Simpl
     }
 
     private static class EndedRestoration implements WindowsConfigurationManager.EndedRestoration {
-        private final XcosDiagram graph;
-
         public EndedRestoration(XcosDiagram graph) {
-            this.graph = graph;
         }
 
         @Override
         public void finish() {
-            ConfigurationManager.getInstance().removeFromRecentTabs(graph.getViewPortTab());
         }
     }
 
     /*
      * Static API for Tabs
      */
+
+    /**
+     * Make the tab visible
+     */
+    public static void restore(final XcosDiagram graph) {
+        Optional<String> uuid = resolveTabUUID(graph);
+        graph.setViewPortTab(uuid.orElse(UUID.randomUUID().toString()));
+        ConfigurationManager.getInstance().addToRecentTabs(graph);
+        
+        boolean restored = false;
+        if (uuid.isPresent()) {
+            restored = WindowsConfigurationManager.restoreUUID(graph.getViewPortTab());
+        } 
+        if (!restored) {
+            create(graph);
+        }
+    }
 
     /**
      * Get the viewport for a graph.
@@ -107,40 +120,72 @@ public final class ViewPortTab extends SwingScilabDockablePanel implements Simpl
     }
 
     /**
-     * Restore or create the viewport tab for the graph
+     * Create the viewport tab for the graph
      *
      * @param graph
      *            the graph
      */
-    public static void restore(XcosDiagram graph) {
-        restore(graph, true);
+    private static void create(final XcosDiagram graph) {
+        final ViewPortTab tab = allocate(graph);
+        
+        final SwingScilabWindow win = WindowsConfigurationManager.createWindow(DEFAULT_WIN_UUID, false);
+        win.addTab(tab);
+        win.setVisible(true);
+
+        ActiveDockableTracker.requestDockableActivation(tab);
     }
 
     /**
-     * Restore or create the viewport tab for the graph
-     *
-     * @param graph
-     *            the graph
-     * @param visible
-     *            should the tab should be visible
+     * Resolve the UUID to a pre-existing one
      */
-    public static void restore(final XcosDiagram graph, final boolean visible) {
+    private static Optional<String> resolveTabUUID(XcosDiagram graph) {
         String uuid = graph.getViewPortTab();
-        if (uuid == null) {
-            uuid = UUID.randomUUID().toString();
-        }
+        if (uuid != null)
+            return Optional.of(uuid);
 
-        ViewPortTab tab = new ViewPortTab(graph, uuid);
-        if (visible) {
-            tab.createDefaultWindow().setVisible(true);
-            tab.setCurrent();
+        // check if previous uuid have been stored in settings
+        final String url;
+        if (graph.getSavedFile() != null)
+        {
+            String temp;
+            try {
+                temp = graph.getSavedFile().toURI().toURL().toExternalForm();  
+            } catch (MalformedURLException e) {
+                temp = null;
+            }
+            url = temp;
+        } else {
+            url = null;
         }
-        ScilabTabFactory.getInstance().addToCache(tab);
+        
+        Optional<String> presetID = ConfigurationManager.getInstance().streamTab()
+            .filter(t -> Objects.equals(url, t.getUrl()))
+            .filter(t -> t.getUuid() == graph.getGraphTab())
+            .map(t -> t.getViewport())
+            .findFirst();
+        
+        return presetID;
+    }
+
+    /**
+     * Create a tab from scratch
+     */
+    protected static ViewPortTab allocate(final XcosDiagram graph)
+    {
+        ViewPortTab tab = new ViewPortTab(graph, graph.getViewPortTab());
+        
+        // check xcos tab menu item
+        final XcosTab xcosTab = XcosTab.get(graph);
+        xcosTab.setViewportChecked(true);
 
         ClosingOperationsManager.registerClosingOperation((SwingScilabDockablePanel) tab, new ClosingOperation(graph));
         ClosingOperationsManager.addDependency((SwingScilabDockablePanel) XcosTab.get(graph), (SwingScilabDockablePanel) tab);
 
         WindowsConfigurationManager.registerEndedRestoration((SwingScilabDockablePanel) tab, new EndedRestoration(graph));
+        WindowsConfigurationManager.makeDependency(graph.getGraphTab(), tab.getPersistentId());
+    
+        ScilabTabFactory.getInstance().addToCache(tab);
+        return tab;
     }
 
     /*
@@ -153,19 +198,4 @@ public final class ViewPortTab extends SwingScilabDockablePanel implements Simpl
 
         setContentPane(outline);
     }
-
-    private SwingScilabWindow createDefaultWindow() {
-        final SwingScilabWindow win;
-
-        final SwingScilabWindow configuration = WindowsConfigurationManager.createWindow(DEFAULT_WIN_UUID, false);
-        if (configuration != null) {
-            win = configuration;
-        } else {
-            win = SwingScilabWindow.createWindow(true);
-        }
-
-        win.addTab(this);
-        return win;
-    }
-
 }

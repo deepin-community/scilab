@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010 - DIGITEO - Vincent COUVERT
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -7,8 +7,8 @@
 
 // <-- Non-regression test for bug 1304 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=1304
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/1304
 //
 // <-- Short Description -->
 // macr2tree(expression) doesn't work
@@ -16,6 +16,8 @@
 //
 // TESTS WITH A 'SIMPLE' FUNCTION
 //
+
+// <-- CLI SHELL MODE -->
 
 function bug_1304()
     disp("bug_1304")

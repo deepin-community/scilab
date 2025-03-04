@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2014-2016 - Scilab Enterprises - Clement DAVID
  * Copyright (C) 2017 - ESI Group - Clement DAVID
  *
@@ -73,7 +73,7 @@ public:
      */
     static props_t fields;
 
-    property(const std::wstring& prop, getter_t g, setter_t s) : original_index(fields.size()), name(prop), get(g), set(s) {};
+    property(const std::wstring& prop, getter_t g, setter_t s) : original_index((int) fields.size()), name(prop), get(g), set(s) {};
     property(const property& p) :
         original_index(p.original_index),
         name(p.name),
@@ -194,9 +194,8 @@ public:
         {
             AdapterView update_partial_information;
             Controller controller;
-
-            Controller::cloned_t mapped;
-            BaseObject* clone = controller.cloneBaseObject(mapped, adapter.getAdaptee(), cloneChildren, true);
+            
+            BaseObject* clone = controller.cloneBaseObject(adapter.getAdaptee(), cloneChildren, true);
             m_adaptee = static_cast<Adaptee*>(clone);
         }
     };

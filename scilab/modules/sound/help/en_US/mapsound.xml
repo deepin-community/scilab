@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2020 - Samuel GOUGEON
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
@@ -104,7 +104,7 @@
             <varlistentry>
                 <term>Colormap</term>
                 <listitem>
-                    Identifier of the colormap function to use: autumncolormap, bonecolormap, etc.
+                    Identifier of the colormap function to use: <literal>autumn</literal>, <literal>bone</literal>, etc.
                     The actual colormap is based on and built with it, but is not equal to it.
                     It can be inverted in order to get light colors for low amplitudes,
                     and be extrapolated to white if it does not natively include light colors.
@@ -244,13 +244,13 @@ title "Wobbling: y = sin(2π⋅f(t)⋅t), with f=500→2000→500 Hz" fontsize 3
 playsnd([]), sleep(500), playsnd(s1/2), sleep(1000)
 
 clf
-mapsound(s1,, 2300, , parulacolormap)
+mapsound(s1,, 2300, , parula)
 title Chimes.wav fontsize 3.5
       ]]></programlisting>
         <scilab:image>
             [s1, fs1] = wavread('SCI/modules/sound/demos/chimes.wav');
             clf
-            mapsound(s1,,2300,,parulacolormap)
+            mapsound(s1,,2300,,parula)
             title Chimes.wav fontsize 3.5
         </scilab:image>
 

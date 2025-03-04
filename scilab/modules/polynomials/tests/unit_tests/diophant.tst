@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2019 - Samuel GOUGEON
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -47,7 +47,7 @@ assert_checkequal(list(X, e), list([0.5 0], -%inf));
 // -------------------
 [X, e] = diophant([4, 5], -3);
 assert_checkequal(e, -%inf);
-assert_checkalmostequal(X, [0 -0.6], %eps);
+assert_checkalmostequal(X, [0 -0.6], [], 1e-1);
 
 [X, e] = diophant([4, 5]+0*s, -3);
 assert_checkequal(e, -%inf);

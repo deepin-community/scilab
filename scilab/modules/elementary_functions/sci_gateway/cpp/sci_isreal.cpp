@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2012 - DIGITEO - Cedric DELAMARRE
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -82,7 +82,7 @@ types::Function::ReturnValue sci_isreal(types::typed_list &in, int _iRetCount, t
         double* pInI = pDblIn->getImg();
         for (int i = 0; i < size; i++)
         {
-            if (fabs(pInI[i]) > dEps)
+            if (std::isnan(pInI[i]) || fabs(pInI[i]) > dEps )
             {
                 out.push_back(new types::Bool(false));
                 return types::Function::OK;
@@ -115,7 +115,7 @@ types::Function::ReturnValue sci_isreal(types::typed_list &in, int _iRetCount, t
         for (int i = 0 ; i < nonZeros ; i++)
         {
             std::complex<double> cplxIn = pSparseIn->getImg(pRows[i] - 1, pCols[i] - 1);
-            if (fabs(cplxIn.imag()) > dEps)
+            if (std::isnan(cplxIn.imag()) || fabs(cplxIn.imag()) > dEps)
             {
                 delete[] pRows;
                 out.push_back(new types::Bool(false));
@@ -147,7 +147,7 @@ types::Function::ReturnValue sci_isreal(types::typed_list &in, int _iRetCount, t
             int rank = pPolyIn->get(i)->getRank();
             for (int j = 0; j < rank + 1; j++)
             {
-                if (fabs(pPolyIn->get(i)->getImg()[j]) > dEps)
+                if (std::isnan(pPolyIn->get(i)->getImg()[j]) || fabs(pPolyIn->get(i)->getImg()[j]) > dEps)
                 {
                     out.push_back(new types::Bool(false));
                     return types::Function::OK;

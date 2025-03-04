@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA - S. Steer, F. Delebecque, V. Couvert
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
 // Copyright (C) 2020 - Samuel GOUGEON

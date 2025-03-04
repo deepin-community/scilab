@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 // Copyright (C) DIGITEO - 2011 - Allan CORNET
 //
@@ -18,12 +18,10 @@ function s = squarewave(t, percentPositive)
 
     //squarewave(t,%) generates an unsymmetric  square wave: %, is the
     //percent of the period in which the signal is positive.
-    [lhs,rhs] = argn();
-    if rhs < 1 then
-        error(msprintf(gettext("%s: Wrong number of input argument(s): %d expected.\n"), "squarewave", 1));
+    arguments
+        t
+        percentPositive = 50
     end
-    if rhs < 2 then
-        percentPositive=50;
-    end
+
     s = 2*bool2s(pmodulo(t,2*%pi) < 2*%pi*percentPositive/100)-1;
 endfunction

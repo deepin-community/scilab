@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009 - DIGITEO - Yann COLLETTE <yann.collette@scilab.fr>
 // Copyright (C) 2012 - Scilab Enterprises - Adeline CARNIS
 //
@@ -10,8 +10,8 @@
 
 // <-- Non-regression test for bug 4654 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=4654
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/4654
 //
 // <-- Short Description -->
 // max of an empty sparse matrix makes Scilab hangs

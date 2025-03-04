@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2007-2008 - INRIA - Pierre MARECHAL <pierre.marechal@inria.fr>
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -32,3 +32,19 @@ one_hour_ref = 1/24;
 if  abs( (one_hour - one_hour_ref) / one_hour ) > 1e-8 then pause,end
 
 if floor(datenum(2005,12,28)) <> datenum(2005,12,28) then pause,end
+
+assert_checkequal(datenum(2023, 14, 1), 739283);
+assert_checkequal(datenum(2023, [2; 14], 1), [738918; 739283]);
+assert_checkequal(datenum(2023, [2; 14; -14], 1), [738918; 739283; 738430]);
+
+// Check dims
+assert_checkequal(datenum(2023, 10, 1), 739160);
+assert_checkequal(datenum(2023, 10, [1:2]'), [739160; 739161]);
+assert_checkequal(datenum(2023, 10, [1:2]), [739160 739161]);
+assert_checkequal(datenum(2023, [9 10; 11 12], 1), [739130 739160; 739191 739221]);
+
+msg = msprintf(_("%s: Wrong size for input arguments: Same size expected.\n"),"datenum");
+assert_checkerror("datenum(2023, 10, 6, [1;2], [1;2;3], 0)", msg);
+assert_checkerror("datenum(2023, 10, [6 7 8], [1 2], 0, 0)", msg);
+assert_checkerror("datenum(2023, [10 11], 6, [1;2], 0, 0)", msg);
+assert_checkerror("datenum(2023, [9 10; 11 12], [6 7 8])", msg);

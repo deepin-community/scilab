@@ -1,5 +1,5 @@
 /*
- * Scilab (http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab (https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2006 - INRIA - Allan CORNET
  * Copyright (C) 2008 - INRIA - Vincent COUVERT
  *
@@ -59,7 +59,6 @@ GUI_IMPEXP int sci_datatipcreate(char *fname, void* pvApiCtx);
 GUI_IMPEXP int sci_datatipremove(char *fname, void* pvApiCtx);
 GUI_IMPEXP int sci_plotbrowser(char *fname, void* pvApiCtx);
 GUI_IMPEXP int sci_datatip_manager_mode(char *fname, void* pvApiCtx);
-GUI_IMPEXP int sci_datatip_toggle(char *fname, void* pvApiCtx);
 GUI_IMPEXP int sci_datatipmove(char *fname, void* pvApiCtx);
 GUI_IMPEXP int sci_datatip_set_style(char *fname, void* pvApiCtx);
 GUI_IMPEXP int sci_datatip_set_display(char *fname, void* pvApiCtx);
@@ -68,7 +67,6 @@ GUI_IMPEXP int sci_datatip_set_orient(char *fname, void* pvApiCtx);
 
 // Scilab 6
 GUI_IMPEXP int sci_about(char* fname, void* pvApiCtx);
-GUI_IMPEXP int sci_mpopup(char* fname, void* pvApiCtx);
 GUI_IMPEXP int sci_fire_closing_finished (char* fname, void* pvApiCtx);
 
 GUI_IMPEXP int sci_figure(char *fname, void* pvApiCtx);

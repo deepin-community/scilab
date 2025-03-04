@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Charlotte HECQUET
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -7,8 +7,8 @@
 //
 // <-- Non-regression test for bug 12593 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=12593
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/12593
 //
 // <-- Short Description -->
 // Unrelated error message when running genlib on a sci file containing a scilab function

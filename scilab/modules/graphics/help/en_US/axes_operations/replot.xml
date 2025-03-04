@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) ENPC - Jean-Philippe Chancelier
  * Copyright (C) 2013, 2016 - Samuel GOUGEON
  *
@@ -178,7 +178,7 @@ R = (X-0.5).^2 + (X.'+0.7).^2;
 Z = sinc(R);
 surf(x-0.5,x+0.7,Z)
 f = gcf();
-f.color_map = autumncolormap(100);
+f.color_map = autumn(100);
 ax = gca();
 ax.data_bounds
 sleep(3000)

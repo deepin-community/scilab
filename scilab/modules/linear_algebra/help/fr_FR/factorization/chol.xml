@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -20,7 +20,7 @@
     </refnamediv>
     <refsynopsisdiv>
         <title>Séquence d'appel</title>
-        <synopsis>[R]=chol(X)</synopsis>
+        <synopsis>R = chol(X)</synopsis>
     </refsynopsisdiv>
     <refsection>
         <title>Paramètres</title>
@@ -28,7 +28,7 @@
             <varlistentry>
                 <term>X  </term>
                 <listitem>
-                    <para>matrice réelle ou complexe
+                    <para>matrice positive définie réelle symétrique ou complexe hermitienne.
                     </para>
                 </listitem>
             </varlistentry>
@@ -37,19 +37,28 @@
     <refsection>
         <title>Description</title>
         <para>
-            Si <literal>X</literal> est hermitienne (symétrique dans le cas réel) définie positive, alors <literal>R = chol(X)</literal> renvoie une matrice triangulaire supérieure <literal>R</literal> telle que <literal>R'*R = X</literal>.
+            Si <literal>X</literal> est hermitienne (symétrique dans le cas réel) définie positive,
+            alors <literal>R = chol(X)</literal> renvoie une matrice triangulaire supérieure
+            <literal>R</literal> telle que <literal>R'*R = X</literal>.
         </para>
         <para>
-            <literal>chol(X)</literal> utilise uniquement la partie triangulaire supérieure de <literal>X</literal> dont la
-            partie triangulaire inférieure est supposée être la transposée (transposée conjuguée dans le cas complexe).
+            <literal>chol(X)</literal> utilise uniquement la partie triangulaire supérieure de
+            <literal>X</literal> dont la partie triangulaire inférieure est supposée être la
+            transposée (transposée conjuguée dans le cas complexe).
         </para>
+        <note>
+            <para>
+                La décomposition de Cholesky est basée sur les routines Lapack
+                DPOTRF pour les matrices réelles et  ZPOTRF pour le cas complexe.
+            </para>
+        </note>
     </refsection>
     <refsection>
         <title>Exemples</title>
         <programlisting role="example"><![CDATA[
-W=rand(5,5)+%i*rand(5,5);
-X=W*W';
-R=chol(X);
+W = rand(5,5) + %i*rand(5,5);
+X = W*W';
+R = chol(X)
 norm(R'*R-X)
  ]]></programlisting>
     </refsection>
@@ -72,12 +81,5 @@ norm(R'*R-X)
                 <link linkend="fullrf">fullrf</link>
             </member>
         </simplelist>
-    </refsection>
-    <refsection>
-        <title>Fonctions Utilisées</title>
-        <para>
-            La décomposition de Cholesky est basée sur les routines Lapack
-            DPOTRF pour les matrices réelles et  ZPOTRF pour le cas complexe.
-        </para>
     </refsection>
 </refentry>

@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2004-2006 - INRIA - Fabrice Leray
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
 // Copyright (C) 2018, 2019 - Samuel GOUGEON
@@ -113,8 +113,8 @@ function [fail]=setPlotProperty(PropertyName,PropertyValue,Curves,current_figure
 
             str = convstr(PropertyValue);
             //Marks
-            Table = [ "+" "o" "*" "." "x" "square" "diamond" "^" "v" ">" "<" "pentagram" "none"];
-            MarksStyleVal=[1 9 10 0 2 11 5 6 7 12 13 14 -99];
+            Table = [ "+" "o" "*" "." "x" "square" "diamond" "^" "v" ">" "<" "pentagram" "^." "v." ">." "<." "minus" "|" "none"];
+            MarksStyleVal=[1 9 10 0 2 11 5 6 7 12 13 14 15 16 17 18 19 20 -99];
             //    MarksSizeVal =[4 3 7  1 3  3 4 3 3  3  3  3 -99];
 
             opt1=[];
@@ -171,10 +171,9 @@ function [fail]=setPlotProperty(PropertyName,PropertyValue,Curves,current_figure
         /////////////////////////
 
         markmodeON = find(Curves.mark_mode=="on");
-        tmp = "/^"+PropertyValue+"/"
         if type(PropertyValue)==10 & size(PropertyValue,"*")==1 & ..
-                                        grep(["none" "auto"], tmp, "r") <> []
-            if grep("none", tmp, "r") <> []
+                                     grep(["none" "auto"], "/^"+PropertyValue+"/", "r") <> []
+            if grep("none", "/^"+PropertyValue+"/", "r") <> []
                 if markmodeON <> []
                     Curves(markmodeON).mark_foreground = gca().background;
                 end
@@ -205,9 +204,8 @@ function [fail]=setPlotProperty(PropertyName,PropertyValue,Curves,current_figure
         /////////////////////////
 
         markmodeON = find(Curves.mark_mode=="on");
-        tmp = "/^"+PropertyValue+"/"
         if type(PropertyValue)==10 & size(PropertyValue,"*")==1 & ..
-                                        grep(["none" "auto"], tmp, "r") <> []
+                                     grep(["none" "auto"], "/^"+PropertyValue+"/", "r") <> []
             if markmodeON <> []
                 Curves(markmodeON).mark_background = gca().background;
             end

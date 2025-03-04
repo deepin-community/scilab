@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2007-2008 - INRIA - Sylvestre LEDRU
  * Copyright (C) 2007-2008 - INRIA - Allan CORNET
  * Copyright (C) 2008 - Yung-Jang Lee
@@ -139,11 +139,12 @@ BOOL setlanguage(const wchar_t *lang)
                     fprintf(stderr,
                             "Warning: Localization issue. Failed to change the LC_CTYPE locale category. Does not support the locale '%s' %ls %s.\nDid you install the system locales?\n",
                             pstLang, ret, setlocale(LC_CTYPE, NULL));
-                            newlang = (char*)MALLOC(12);
-#ifdef __APPLE__
-                    sprintf(newlang, "%s.UTF-8", wide_string_to_UTF8(SCILABDEFAULTLANGUAGE));
+                    newlang = (char*)MALLOC(LengthAlphacode);
+                    
+                    char* defaultLang = wide_string_to_UTF8(SCILABDEFAULTLANGUAGE);
+                    snprintf(newlang, LengthAlphacode, "%s.UTF-8", defaultLang);
                     pstRet = setlocale(LC_CTYPE, newlang);
-#endif
+                    FREE(defaultLang);
                 }
 
                 //for gettext
@@ -176,7 +177,7 @@ BOOL setlanguage(const wchar_t *lang)
                 }
 
                 /* change language */
-                if (wcscmp(lang, L"C") == 0 || ret == NULL || wcscmp(ret, L"C") == 0)
+                if (wcscmp(lang, L"C") == 0 || ret == NULL || wcscmp(ret, L"C") == 0 || wcscmp(ret, L"C.UTF-8") == 0)
                 {
                     /* The lang is the default one... ie en_US */
                     wcscpy(CURRENTLANGUAGESTRING, SCILABDEFAULTLANGUAGE);

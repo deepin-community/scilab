@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ???? - INRIA - Scilab
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -11,5 +11,6 @@
 // along with this program.
 
 function r = %b_a_s(b, s)
-    r = [bool2s(b), s]
+    // called when s is complex
+    r = bool2s(b) + s
 endfunction

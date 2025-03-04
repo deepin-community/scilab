@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2000 - INRIA - Carlos Klimann
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -21,9 +21,9 @@
     </refnamediv>
     <refsynopsisdiv>
         <title>Syntax</title>
-        <synopsis>s=quart(x)
-            s=quart(x,'r') or m=quart(x,1)
-            s=quart(x,'c') or m=quart(x,2)
+        <synopsis>
+            s = quart(x)
+            s = quart(x, orientation)
         </synopsis>
     </refsynopsisdiv>
     <refsection>
@@ -35,23 +35,46 @@
                     <para>real or complex vector or matrix</para>
                 </listitem>
             </varlistentry>
+            <varlistentry>
+                <term>orientation</term>
+                <listitem>
+                    <para>
+                        index of the dimension along which the quart is computed. It can be either
+                    </para>
+                    <itemizedlist>
+                        <listitem>
+                            a character <literal>"*"</literal> (default), <literal>"r"</literal> or
+                          <literal>"c"</literal>
+                        </listitem>
+                        <listitem>
+                            a positive integer: 1 or 2. 1 is equivalent to "r" and 2 is equivalent to "c".
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>s</term>
+                <listitem>
+                    <para>real or complex scalar or vector</para>
+                </listitem>
+            </varlistentry>
         </variablelist>
     </refsection>
     <refsection>
         <title>Description</title>
         <para>
-            For a vector  or a matrix x,  [q]=quart(x,y)
+            For a vector  or a matrix x,  q = quart(x) or q = quart(x, "*")
             returns in the vector q the quartiles of x.
 
-            [q]=quart(x,'r')        (or,         equivalently,
-            [q]=quart(x,1)) are the   rowwise percentiles.  It
+            q = quart(x, 'r')        (or,         equivalently,
+            q = quart(x, 1)) are the   rowwise percentiles.  It
             returns in  each  column of    the matrix  q   the
             quartiles  of   data   in the   corresponding column  of
             x.
         </para>
         <para>
-            [q]=quart(x,'c')        (or,         equivalently,
-            [q]=quart(x,2)) are the  columnwise quartiles.  It
+            q = quart(x, 'c')        (or,         equivalently,
+            q = quart(x, 2)) are the  columnwise quartiles.  It
             returns in each row of  the matrix q the quartiles
             of data in the corresponding row of x.
         </para>
@@ -70,8 +93,8 @@ x=[6 7 0 7 10 4 2 2 7 1;
    5 7 6 2 10 8 7 4 0 8;
    10 3 3 4 8 6 9 4 8 3]
 q=quart(x)
-q=quart(x,'r')
-q=quart(x,'c')
+q=quart(x, 'r')
+q=quart(x, 'c')
  ]]></programlisting>
     </refsection>
     <refsection>

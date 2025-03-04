@@ -5,9 +5,6 @@
 // =============================================================================
 // <-- Non-regression test for bug 281 -->
 //
-// <-- URL -->
-//  http://forge.scilab.org/index.php/p/csv-readwrite/issues/281/
-//
 // <-- Short Description -->
 // The substitute option does not work.
 // =============================================================================

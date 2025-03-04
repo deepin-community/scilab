@@ -85,7 +85,7 @@ function [x,y,typ]=MPBLOCK(job,arg1,arg2)
             //         list('str',-1,'str',-1,'str',-1,'str',-1,'str',-1,'str',-1,'str',-1),label(1))
             //warning here lab_1 is a list
             [ok,Tin,Tintype,Tout,Touttype,Tparam,pprop,Tfunam,lab_1]=..
-            getvalue(_("Set Modelica generic block parameters"),..
+            scicos_getvalue(_("Set Modelica generic block parameters"),..
             _(["Input variables:    ";..
             "Input variables types: ";..
             "Output variables:      ";..

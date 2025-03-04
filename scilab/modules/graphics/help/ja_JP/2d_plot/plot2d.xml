@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA
  * Copyright (C) 2009 - DIGITEO - Pierre Lando
  * Copyright (C) 2010 - DIGITEO - Yann Collette
@@ -561,8 +561,8 @@ isoview off
             </member>
             <member>
                 <link linkend="gca">gca</link>
-            <member>
             </member>
+            <member>
                 <link linkend="close">close</link>
             </member>
             <member>

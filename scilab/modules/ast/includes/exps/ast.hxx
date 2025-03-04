@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2007-2008 - DIGITEO - Bruno JOFRET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -21,9 +21,10 @@
 #ifndef AST_AST_HXX
 #define AST_AST_HXX
 
+#include <cstdint>
+
 #include "location.hxx"
 #include "visitor.hxx"
-#include "Decorator.hxx"
 
 namespace ast
 {
@@ -36,7 +37,7 @@ class Ast
 public:
     /** \brief Construct an Ast node.
     ** \param location scanner position informations */
-    Ast (const Location& location) : decorator(), coverId(0), _location (location), m_dblElapsedTime(0)
+    Ast (const Location& location) : coverId(0), _location (location), m_dblElapsedTime(0)
     {
         nodeNumber = globalNodeNumber++;
     }
@@ -100,16 +101,6 @@ public:
         nodeNumber = _nodeNumber;
     }
 
-    const analysis::Decorator & getDecorator() const
-    {
-        return decorator;
-    }
-
-    analysis::Decorator & getDecorator()
-    {
-        return decorator;
-    }
-
     inline void setCoverId(const uint64_t id)
     {
         coverId = id;
@@ -126,7 +117,6 @@ public:
     }
 
 private:
-    analysis::Decorator decorator;
     uint64_t coverId;
     /** \brief Construct an Ast by copy. */
     Ast (const Ast&);

@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2010-2010 - DIGITEO - Antoine ELIAS
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -136,6 +136,11 @@ public :
         visitprivate(e);
     }
 
+    void visit (const ArgumentsExp &e)
+    {
+        visitprivate(e);
+    }
+
     void visit (const IfExp &e)
     {
         visitprivate(e);
@@ -211,33 +216,12 @@ public :
         visitprivate(e);
     }
 
+    void visit (const ArgumentDec &e)
+    {
+        visitprivate(e);
+    }
+
     void visit(const ListExp &e)
-    {
-        visitprivate(e);
-    }
-
-    /* optimized */
-    void visit(const OptimizedExp &e)
-    {
-        visitprivate(e);
-    }
-
-    void visit(const MemfillExp &e)
-    {
-        visitprivate(e);
-    }
-
-    void visit(const DAXPYExp &e)
-    {
-        visitprivate(e);
-    }
-
-    void visit(const IntSelectExp &e)
-    {
-        visitprivate(e);
-    }
-
-    void visit(const StringSelectExp &e)
     {
         visitprivate(e);
     }

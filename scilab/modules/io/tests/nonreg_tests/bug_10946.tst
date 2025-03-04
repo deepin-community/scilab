@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2012 - DIGITEO - Vincent COUVERT
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -12,8 +12,8 @@
 // <-- Short Description -->
 // load function (hdf5 based) cannot load a tlist.
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=10946
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/10946
 //
 
 // Try to load ref file

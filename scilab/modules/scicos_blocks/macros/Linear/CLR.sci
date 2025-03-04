@@ -76,7 +76,7 @@ function [x,y,typ]=CLR(job,arg1,arg2)
                 x.model=model
 
                 // Protecting ^{.} groups for LaTeX after num and den
-                // have been generated: http://bugzilla.scilab.org/14551
+                // have been generated: https://gitlab.com/scilab/scilab/-/issues/14551
                 // and other protections and display improvements:
                 content = exprs;
                 if content~=[]

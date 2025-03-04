@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2011 - Calixte DENIZET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -212,7 +212,7 @@ public class WindowsConfigurationManager implements XConfigurationListener {
             System.err.println("Serious problem to copy and parse the configuration file.");
             System.err.println("Please check if you have the rights to write the file: " + USER_WINDOWS_CONFIG_FILE);
             System.err.println("If the previous file exists, please check if it is a valid XML");
-            System.err.println("and if yes, please report a bug: http://bugzilla.scilab.org");
+            System.err.println("and if yes, please report a bug: https://gitlab.com/scilab/scilab/-/issues");
         } else if (doc != null) {
             // We check that the file contains a NULLUUID (used for the console) and only one
             // No console == no Scilab !
@@ -418,31 +418,35 @@ public class WindowsConfigurationManager implements XConfigurationListener {
         }
         window.setUUID(localUUID);
 
+        boolean positionned = false;
+        GraphicsDevice[] gds = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
         if (containsX) {
-            boolean positionned = false;
             Point p = new Point(((Integer) attrs.get("x")).intValue(), ((Integer) attrs.get("y")).intValue());
 
             // We check that the coordinates are valid
-            GraphicsDevice[] gds = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
-            if (gds != null) {
-                for (GraphicsDevice gd : gds) {
-                    Rectangle r = gd.getDefaultConfiguration().getBounds();
-                    if (r != null) {
-                        if (r.contains(p)) {
-                            positionned = true;
-                            window.setLocation(p.x, p.y);
-                            break;
-                        }
+            for (GraphicsDevice gd : gds) {
+                Rectangle r = gd.getDefaultConfiguration().getBounds();
+                if (r != null) {
+                    if (r.contains(p)) {
+                        positionned = true;
+                        window.setLocation(p.x, p.y);
+                        break;
                     }
                 }
             }
-
-            if (!positionned) {
-                window.setLocation(DEFAULTX, DEFAULTY);
-            }
         }
-
-        window.setSize(((Integer) attrs.get("width")).intValue(), ((Integer) attrs.get("height")).intValue());
+        
+        int width = (Integer) attrs.get("width");
+        int height = (Integer) attrs.get("height");
+        if (!positionned) {
+            Rectangle def = gds[0].getDefaultConfiguration().getBounds();
+            
+            int x = (int) (def.getX() + def.getWidth()/2 - ((double) width)/2);
+            int y = (int) (def.getY() + def.getHeight()/2 - ((double) height)/2);
+            window.setBounds(x, y, width, height);
+        } else {
+            window.setSize(width, height);
+        }
 
         /* remove ICONIFIED at restoration */
         int state = ((Integer)attrs.get("state")).intValue();
@@ -1159,6 +1163,7 @@ public class WindowsConfigurationManager implements XConfigurationListener {
             try {
                 startRestoration(uuid);
             } catch (Exception e) {
+                e.printStackTrace();
                 killScilab();
             }
         } else {
@@ -1169,6 +1174,7 @@ public class WindowsConfigurationManager implements XConfigurationListener {
                     }
                 });
             } catch (Exception e) {
+                e.printStackTrace();
                 killScilab();
             }
         }

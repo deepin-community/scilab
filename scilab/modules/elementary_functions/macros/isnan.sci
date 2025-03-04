@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 // Copyright (C) DIGITEO - 2011 - Allan CORNET
 // Copyright (C) 2016 - Samuel GOUGEON
@@ -13,10 +13,8 @@
 // along with this program.
 
 function r = isnan(x)
-    rhs = argn(2);
-    if rhs <> 1 then
-        msg = gettext("%s: Wrong number of input argument(s): %d expected.\n")
-        error(msprintf(msg, "isnan", 1));
+    arguments
+        x
     end
     if x == [] then
         r = [];

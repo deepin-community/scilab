@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA - vincent COUVERT
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -242,9 +242,7 @@ function  C = instruction2code(I, bprettyprintformat)
                 C = rhs2code(I.expression)
             end
         end
-        if I.endsymbol <> ""
-            C($) = C($) + I.endsymbol + " "
-        end
+        C($) = C($) + I.endsymbol
         return
     end
 

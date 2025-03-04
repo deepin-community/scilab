@@ -1,5 +1,5 @@
 ;
-; Scilab ( http://mwww.scilab.org/ ) - This file is part of Scilab
+; Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 ; Copyright (C) 2012 - DIGITEO - Allan CORNET
 ; Copyright (C) 2015 - Scilab Enterprises - Vincent COUVERT
 ;
@@ -24,6 +24,8 @@
 Source: modules\{#GRAPHIC_OBJECTS}\license.txt; DestDir: {app}\modules\{#GRAPHIC_OBJECTS}; Components: {#COMPN_GRAPHICS}
 ;
 Source: bin\sci{#GRAPHIC_OBJECTS}.dll; DestDir: {app}\bin; Components: {#COMPN_GRAPHICS}
+;
+Source: bin\nosci{#GRAPHIC_OBJECTS}.dll; DestDir: {app}\bin ; Components: ({#COMPN_GRAPHICS})
 ;
 Source: bin\nosci{#GRAPHIC_OBJECTS}.dll; DestDir: {app}\bin; DestName: sci{#GRAPHIC_OBJECTS}.dll; Components: not ({#COMPN_GRAPHICS})
 ;

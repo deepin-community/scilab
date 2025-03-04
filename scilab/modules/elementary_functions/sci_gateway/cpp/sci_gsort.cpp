@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2012 - DIGITEO - Cedric DELAMARRE
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
  * Copyright (C) 2018 - 2020 - Samuel GOUGEON
@@ -63,7 +63,7 @@ types::Function::ReturnValue sci_gsort(types::typed_list &in, int _iRetCount, ty
 
     // Get the sorting method, always as argin#2 for all generic types
     // ----------------------
-    char* msg = _("%s: Argument #%d: Must be in the set {%s} or integer in range [%d, %d].\n");
+    const char* msg = _("%s: Argument #%d: Must be in the set {%s} or integer in range [%d, %d].\n");
     std::string argSetError = "'g','r','c','lc','lr'";
     std::wstring wstrProcess = L"g";
     int iOrientation = 0;

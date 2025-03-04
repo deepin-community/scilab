@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2016 - Scilab Enterprises - Caio SOUZA
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -10,12 +10,13 @@
 
 // <-- Non-regression test for bug 8310 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/8310
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/8310
 //
 // <-- Short Description -->
 // plot3d was drawing weird triangles when ploting non-convex polygons
 
+scf(1);
 clf();
 X = [0 10 10 7  6.5 3.5  3 0 0]';
 Y = [0 0 10 10  2 2  10 10 0]';
@@ -32,9 +33,10 @@ plot3d(X,Y,zeros(X));
 // -------      -------
 
 //---------------------------------------------------------------
+scf(2);
+clf();
 x = [0; 5; 10; 5; 0]
 y = [0; 10; 0; 5; 0];
-scf()
 plot3d(x,y,zeros(x));
 
 //The second plot shoul look line an arrow head, not a triangle.
@@ -63,9 +65,9 @@ dz = dz + c(3);
 //add noise
 dz = dz + 10*(rand(dz) -0.5);
 
-scf()
+scf(3)
 plot3d(dx, dy, dz);
-scf()
+scf(4)
 plot(dx,dy);
 //Third plot viewed from normal should looks like the 2d plot  from dx,dy with noise on z axis.
 

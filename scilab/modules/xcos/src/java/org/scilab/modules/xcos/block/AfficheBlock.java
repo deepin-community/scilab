@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009 - DIGITEO - Bruno JOFRET
  * Copyright (C) 2011-2017 - Scilab Enterprises - Clement DAVID
  *
@@ -251,5 +251,13 @@ public final class AfficheBlock extends BasicBlock {
                 printTimer.start();
             }
         }
+    }
+
+    /**
+     * Terminate the timer to ensure Swing resources are released
+     */
+    public static void forceClose()
+    {
+        printTimer.stop();
     }
 }

@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA - Allan CORNET
 // Copyright (C) DIGITEO - 2010-2011 - Allan CORNET
 //
@@ -14,4 +14,3 @@
 //Load  functions libraries
 // =============================================================================
 load('SCI/modules/dynamic_link/macros/lib');
-

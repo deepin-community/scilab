@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2011 - DIGITEO - Allan CORNET
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -8,8 +8,8 @@
 //
 // <-- Non-regression test for bug 7249 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=7249
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/7249
 //
 // <-- Short Description -->
 // 'string' function did not work with a macro as input argument.
@@ -67,7 +67,7 @@ assert_checkequal(text, [" "; "y = x + 1"; " "]);
 // =============================================================================
 [out, in, text] = string(sinc);
 assert_checkequal(out, "y");
-assert_checkequal(in, ["x", "fl"]);
+assert_checkequal(in, "x");
 assert_checkequal(text <> [], %t);
 // =============================================================================
 function y=foo(x);y=x+1;endfunction

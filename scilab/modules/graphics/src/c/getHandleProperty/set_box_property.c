@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2004-2006 - INRIA - Fabrice Leray
  * Copyright (C) 2006 - INRIA - Allan Cornet
  * Copyright (C) 2006 - INRIA - Jean-Baptiste Silvy
@@ -78,11 +78,6 @@ int set_box_property(void* _pvCtx, int iObjUID, void* _pvData, int valueType, in
         else if (stricmp((char*)_pvData, "back_half") == 0)
         {
             boxType = 3;
-        }
-        else if (stricmp((char*)_pvData, "hidden_axis") == 0)
-        {
-            Sciwarning(_("WARNING !!!\nIn '%s' property: '%s' is deprecated use '%s' instead.\n"), "box", "hidden_axis", "hidden_axes");
-            boxType = 2;
         }
         else
         {

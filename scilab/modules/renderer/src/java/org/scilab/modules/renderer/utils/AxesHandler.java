@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2012 - Pedro Arthur dos S. Souza
  * Copyright (C) 2012 - Caio Lucas dos S. Souza
  *
@@ -17,7 +17,8 @@
 package org.scilab.modules.renderer.utils;
 
 import java.lang.Math;
-
+import java.util.ArrayList;
+import java.util.List;
 import org.scilab.modules.graphic_objects.graphicController.GraphicController;
 import org.scilab.modules.graphic_objects.graphicObject.GraphicObjectProperties;
 import org.scilab.modules.graphic_objects.axes.Axes;
@@ -39,7 +40,7 @@ public class AxesHandler {
 
     public enum axisTo { __X__, __Y__, __Z__, __TITLE__ };
 
-    private static Integer lastAxes;
+    private static Integer[] lastAxes;
 
     private static Integer[] searchAxes(Integer uid) {
         return (new ObjectSearcher()).search(uid, GraphicObjectProperties.__GO_AXES__);
@@ -57,8 +58,9 @@ public class AxesHandler {
     * @param position Vector with mouse position x and y.
     * @return Retrieved axes or null if there isn't an axes.
     */
-    public static Integer clickedAxes(Integer figure, Integer[] position) {
+    public static Integer[] clickedAxes(Integer figure, Integer[] position) {
         Integer[] axes = searchAxes(figure);
+        List<Integer> matchingAxes = new ArrayList<Integer>();
         if (axes == null) {
             return lastAxes;
         }
@@ -66,6 +68,8 @@ public class AxesHandler {
         AxesContainer container = (AxesContainer) GraphicController.getController().getObjectFromId(figure);
         Integer[] figureSize = container.getAxesSize();
 
+        int k=0;
+        
         for (Integer i = 0; i < axes.length; i++) {
             Double[] axesBound = (Double[])GraphicController.getController().getProperty(axes[i], GraphicObjectProperties.__GO_AXES_BOUNDS__);
             Double xi, xf, yi, yf;
@@ -76,14 +80,16 @@ public class AxesHandler {
             yf = (figureSize[1] * (axesBound[1] + axesBound[3]));
 
             if (position[0] > xi && position[0] < xf && position[1] > yi && position[1] < yf) {
-                lastAxes = axes[i];
-                return axes[i];
+                matchingAxes.add(axes[i]);
             }
         }
-        return lastAxes;
+        if (matchingAxes.size() == 0) {
+            return lastAxes;            
+        } else {
+            lastAxes = matchingAxes.toArray(new Integer[matchingAxes.size()]);
+            return lastAxes;
+        }
     }
-
-
 
     /**
      * Change the status from the axes to visible and the axis too
@@ -250,7 +256,7 @@ public class AxesHandler {
     public static void pasteRotationAngles(Integer obj, Integer figure, Integer[] pos) {
 
         Integer axesFrom = (new ObjectSearcher()).searchParent(obj, GraphicObjectProperties.__GO_AXES__);
-        Integer axesTo = AxesHandler.clickedAxes(figure, pos);
+        Integer axesTo = AxesHandler.clickedAxes(figure, pos)[0];
 
         Double[] angles = (Double[])GraphicController.getController().getProperty(axesFrom, GraphicObjectProperties.__GO_ROTATION_ANGLES__);
         GraphicController.getController().setProperty(axesTo, GraphicObjectProperties.__GO_ROTATION_ANGLES__, angles);

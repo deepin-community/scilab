@@ -1,19 +1,27 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2016 - Scilab Enterprises - Pierre-Aimé AGNEL
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
 // <-- NO CHECK ERROR OUTPUT -->
 // <-- ENGLISH IMPOSED -->
+warning('off');
 // Test the compilation of a simple toolbox with tbx_make()
-// Copying the foobox from the test environment
+// Copying the testing toolbox from the test environment
+function reset_test_module(source, destDir)
+    if isdir(destDir)
+        removedir(destDir);
+    end
+    status = copyfile(source, destDir);
+    assert_checkequal(status, 1);
+endfunction
+// Testing default overall compilation (all sections)
+// --------------------------------------------------
+// 1)
+source = SCI + "/modules/modules_manager/tests/tbx/foobox/";
 mytb_dir = TMPDIR + "/foobox";
-if isdir(mytb_dir)
-    removedir(mytb_dir);
-end
-status = copyfile(SCI + "/modules/modules_manager/tests/tbx/foobox/", mytb_dir);
-assert_checkequal(status, 1);
+reset_test_module(source, mytb_dir);
 tbx_make(mytb_dir);
 Building macros...
 -- Creation of [fooboxlib] (Macros) --
@@ -38,13 +46,10 @@ b = foo("testing it works", 42);
 baz("World");
   "Hello World!"
 assert_checktrue(b);
-// testing default compilation
+// 2)
+source = SCI + "/modules/modules_manager/tests/tbx/testbox/";
 mytb_dir = TMPDIR + "/testbox";
-if isdir(mytb_dir)
-    removedir(mytb_dir);
-end
-status = copyfile(SCI + "/modules/modules_manager/tests/tbx/testbox/", mytb_dir);
-assert_checkequal(status, 1);
+reset_test_module(source, mytb_dir);
 tbx_make(mytb_dir);
 Building macros...
 -- Creation of [testboxlib] (Macros) --
@@ -97,6 +102,11 @@ Building the master document:
 Building the manual file [javaHelp] in TMPDIR\testbox\help\en_US.
 Generate image ./csub6_1.png from Scilab code from file csub6.xml
 Generate image ./csub6_en_US_2.png from Scilab code from file csub6.xml
+Building the master document:
+	TMPDIR\testbox\help\fr_FR
+Building the manual file [javaHelp] in TMPDIR\testbox\help\fr_FR.
+Generate image ./csub6_1.png from Scilab code from file csub6.xml
+Generate image ./csub6_fr_FR_2.png from Scilab code from file csub6.xml
 Generating loader.sce...
 Generating unloader.sce...
 Generating cleaner.sce...

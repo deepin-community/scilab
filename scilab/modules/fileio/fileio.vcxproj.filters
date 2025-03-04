@@ -78,9 +78,6 @@
     <ClCompile Include="src\c\getlongpathname.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\c\getrelativefilename.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\c\getshortpathname.c">
       <Filter>Source Files</Filter>
     </ClCompile>

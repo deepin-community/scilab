@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2015 - Scilab Enterprises - Antoine ELIAS
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -507,7 +507,7 @@ static hid_t export_struct(hid_t parent, const std::string& name, types::Struct*
     hid_t dset = openList6(parent, name.data(), type);
     //store struct dimensions
     std::vector<int> dims = {1, data->getDims()};
-    int ret = writeIntegerMatrix6(dset, "__dims__", H5T_NATIVE_INT32, "32", 2, dims.data(), data->getDimsArray(), xfer_plist_id);
+    hid_t ret = writeIntegerMatrix6(dset, "__dims__", H5T_NATIVE_INT32, "32", 2, dims.data(), data->getDimsArray(), xfer_plist_id);
     if (ret < 0)
     {
         return -1;
@@ -603,7 +603,7 @@ static hid_t export_poly(hid_t parent, const std::string& name, types::Polynom* 
     hid_t dset = openList6(parent, name.data(), g_SCILAB_CLASS_POLY);
     //store struct dimensions
     std::vector<int> dims = {1, data->getDims()};
-    int ret = writeIntegerMatrix6(dset, "__dims__", H5T_NATIVE_INT32, "32", 2, dims.data(), data->getDimsArray(), xfer_plist_id);
+    hid_t ret = writeIntegerMatrix6(dset, "__dims__", H5T_NATIVE_INT32, "32", 2, dims.data(), data->getDimsArray(), xfer_plist_id);
     if (ret < 0)
     {
         return -1;
@@ -677,7 +677,7 @@ static hid_t export_sparse(hid_t parent, const std::string& name, types::Sparse*
     hid_t dset = openList6(parent, name.data(), g_SCILAB_CLASS_SPARSE);
     //store sparse dimensions
     std::vector<int> dims = {1, data->getDims()};
-    int ret = writeIntegerMatrix6(dset, "__dims__", H5T_NATIVE_INT32, "32", 2, dims.data(), data->getDimsArray(), xfer_plist_id);
+    hid_t ret = writeIntegerMatrix6(dset, "__dims__", H5T_NATIVE_INT32, "32", 2, dims.data(), data->getDimsArray(), xfer_plist_id);
     if (ret < 0)
     {
         return -1;
@@ -758,7 +758,7 @@ static hid_t export_boolean_sparse(hid_t parent, const std::string& name, types:
     hid_t dset = openList6(parent, name.data(), g_SCILAB_CLASS_BSPARSE);
     //store sparse dimensions
     std::vector<int> dims = {1, data->getDims()};
-    int ret = writeIntegerMatrix6(dset, "__dims__", H5T_NATIVE_INT32, "32", 2, dims.data(), data->getDimsArray(), xfer_plist_id);
+    hid_t ret = writeIntegerMatrix6(dset, "__dims__", H5T_NATIVE_INT32, "32", 2, dims.data(), data->getDimsArray(), xfer_plist_id);
     if (ret < 0)
     {
         return -1;
@@ -805,7 +805,7 @@ static hid_t export_cell(hid_t parent, const std::string& name, types::Cell* dat
     hid_t dset = openList6(parent, name.data(), g_SCILAB_CLASS_CELL);
     //store cell dimensions
     std::vector<int> dims = {1, data->getDims()};
-    int ret = writeIntegerMatrix6(dset, "__dims__", H5T_NATIVE_INT32, "32", 2, dims.data(), data->getDimsArray(), xfer_plist_id);
+    hid_t ret = writeIntegerMatrix6(dset, "__dims__", H5T_NATIVE_INT32, "32", 2, dims.data(), data->getDimsArray(), xfer_plist_id);
     if (ret < 0)
     {
         return -1;
@@ -848,7 +848,7 @@ static hid_t export_handles(hid_t parent, const std::string& name, types::Graphi
     hid_t dset = openList6(parent, name.data(), g_SCILAB_CLASS_HANDLE);
     //store cell dimensions
     std::vector<int> dims = {1, data->getDims()};
-    int ret = writeIntegerMatrix6(dset, "__dims__", H5T_NATIVE_INT32, "32", 2, dims.data(), data->getDimsArray(), xfer_plist_id);
+    hid_t ret = writeIntegerMatrix6(dset, "__dims__", H5T_NATIVE_INT32, "32", 2, dims.data(), data->getDimsArray(), xfer_plist_id);
     if (ret < 0)
     {
         return -1;

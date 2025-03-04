@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009-2011 - DIGITEO - Allan CORNET
 // Copyright (C) 2018 - ESI Group - Clement DAVID
 //

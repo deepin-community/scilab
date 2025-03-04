@@ -1,0 +1,17 @@
+Description: using the jar in libeclipse-jdt-core-java instead of libecj-java
+Author: Pierre Gruet <pgt@debian.org>
+Bug-Debian: https://bugs.debian.org/1027973
+Forwarded: not-needed
+Last-Update: 2023-05-23
+
+--- a/scilab/configure.ac
++++ b/scilab/configure.ac
+@@ -1279,7 +1279,7 @@
+         ASM3=$PACKAGE_JAR_FILE
+         AC_SUBST(ASM3)
+ 
+-        AC_JAVA_CHECK_JAR([ecj],[org.eclipse.jdt.core.compiler.batch.BatchCompiler],[Eclipse Java compiler],"yes")
++        AC_JAVA_CHECK_JAR([eclipse-jdt-core],[org.eclipse.jdt.core.compiler.batch.BatchCompiler],[Eclipse Java compiler],"yes")
+         ECJ=$PACKAGE_JAR_FILE
+         if test -z "$ECJ"; then
+            ECJ='$SCILAB/thirdparty/ecj-3.34.0.jar'

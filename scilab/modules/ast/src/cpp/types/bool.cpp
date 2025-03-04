@@ -1,5 +1,5 @@
 /*
-*  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+*  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 *  Copyright (C) 2008-2008 - DIGITEO - Antoine ELIAS
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -235,7 +235,12 @@ bool Bool::subMatrixToString(std::wostringstream& ostr, int* _piDims, int /*_iDi
                         int iPos = getIndex(_piDims);
                         ostemp << (get(iPos) == 0 ? L" F" : L" T");
                     }
-                    ostemp << std::endl << L" ";
+
+                    ostemp << std::endl;
+                    if (iRows2 != getRows() - 1)
+                    {
+                        ostemp << L" ";
+                    }
                 }
                 iLen = 0;
                 iCurrentLine++;
@@ -279,7 +284,11 @@ bool Bool::subMatrixToString(std::wostringstream& ostr, int* _piDims, int /*_iDi
 
                 ostemp << (get(iPos) == 0 ? L" F" : L" T");
             }
-            ostemp << std::endl << L" ";
+            ostemp << std::endl;
+            if (iRows2 != getRows() - 1)
+            {
+                ostemp << L" ";
+            }
         }
         if (m_iRows2PrintState == 0 && iLastCol != 0)
         {

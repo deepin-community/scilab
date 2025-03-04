@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2006 - INRIA - Allan CORNET
 * Copyright (C) 2009 - DIGITEO - Allan CORNET
 * Copyright (C) 2010 - DIGITEO - Antoine ELIAS
@@ -89,6 +89,12 @@ types::Function::ReturnValue sci_mfprintf(types::typed_list &in, int _iRetCount,
         if (in[i]->isDouble() == false && in[i]->isString() == false)
         {
             std::wstring wstFuncName = L"%" + in[i]->getShortTypeStr() + L"_mfprintf";
+            return Overload::call(wstFuncName, in, _iRetCount, out);
+        }
+
+        if (in[i]->isDouble() && in[i]->getAs<types::Double>()->getDims() > 2)
+        {
+            std::wstring wstFuncName = L"%hm_mfprintf";
             return Overload::call(wstFuncName, in, _iRetCount, out);
         }
     }

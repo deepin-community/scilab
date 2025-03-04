@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008 - INRIA - Serge Steer
 // Copyright (C) 2010-2011 - DIGITEO - Michael Baudin
 // Copyright (C) 2019 - Samuel GOUGEON

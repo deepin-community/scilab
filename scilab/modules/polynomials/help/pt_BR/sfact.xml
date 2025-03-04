@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2006-2008 - INRIA
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -66,7 +66,7 @@ w*(horner(w, 1/%z)).num
 //exemplo matricial
 z = %z;
 F1 = [z-1/2, z+1/2, z^2+2; 1, z, -z; z^3+2*z, z, 1/2-z];
-P = F1*gtild(F1,'d');     // P é simétrica
+P = F1*gtild(F1,'d');
 F = sfact(P)
 roots(det(P))
 roots(det(gtild(F,'d')))  // as raízes estáveis

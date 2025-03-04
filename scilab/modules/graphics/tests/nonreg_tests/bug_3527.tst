@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009-2009 - Digiteo - Allan CORNET
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,8 +9,8 @@
 
 // <-- Non-regression test for bug 3527 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=3527
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/3527
 //
 // <-- Short Description -->
 // Graphic windows created by figure are unable to display plots.

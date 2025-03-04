@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2019 - Samuel GOUGEON
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
@@ -201,7 +201,7 @@
             </para>
         <programlisting role="example"><![CDATA[
 clf reset                           // clears and resets the figure
-gcf().color_map = jetcolormap(100); // sets its color map
+gcf().color_map = jet(100); // sets its color map
 
 // Axes on the left
 // ----------------
@@ -230,7 +230,7 @@ colbar1.title.font_size = 3;        // .. with a bigger font
 sca(ax0); // Reset the focus to ax0 before going on
 
 // Now plot a frame in the empty axes:
-plotframe([0 0 1 1])
+plot2d([], [], 0, "011", " ", [0 0 1 1])
 
 // Then add some other color bars, still for the current axes
 colorbar(-2, 5, [1 70])
@@ -241,7 +241,9 @@ gce().font_color = color("red");
 
 // axes on the right
 // -----------------
-subplot(1,2,2), plotframe([0 0 1 1])
+subplot(1,2,2)
+plot2d([], [], 0, "011", " ", [0 0 1 1])
+
 ax1 = gca();
 // top half of the colormap, with another data scale:
 colorbar(0, 1.5, [$/2+1 $])
@@ -266,7 +268,7 @@ colbar3.y_location = "left";
         </para>
         <scilab:image>
             clf reset                           // clears and resets the figure
-            gcf().color_map = jetcolormap(100); // sets its color map
+            gcf().color_map = jet(100); // sets its color map
 
             // Axes on the left
             // ----------------
@@ -295,7 +297,7 @@ colbar3.y_location = "left";
             sca(ax0); // Reset the focus to ax0 before going on
 
             // Now plot a frame in the empty axes:
-            plotframe([0 0 1 1])
+            plot2d([], [], 0, "011", " ", [0 0 1 1])
 
             // Then add some other color bars, still for the current axes
             colorbar(-2, 5, [1 70])
@@ -306,7 +308,8 @@ colbar3.y_location = "left";
 
             // axes on the right
             // -----------------
-            subplot(1,2,2), plotframe([0 0 1 1])
+            subplot(1,2,2)
+            plot2d([], [], 0, "011", " ", [0 0 1 1])
             ax1 = gca();
             // top half of the colormap, with another data scale:
             colorbar(0, 1.5, [$/2+1 $])
@@ -423,7 +426,7 @@ x = linspace(0,1,81);
 z = cos(2*%pi*x)'*sin(2*%pi*x);
 n = 10;
 clf
-gcf().color_map = jetcolormap(n);
+gcf().color_map = jet(n);
 Sgrayplot(x, x, z);
 contour(x,x,z,[-0.8 -0.6 -0.4 -0.2 0 0.2 0.4 0.6 0.8]);
 gce().children.children(1:2:$-1).foreground=-1; // contours in black
@@ -440,7 +443,7 @@ x = linspace(0,1,81);
 z = cos(2*%pi*x)'*sin(2*%pi*x);
 n = 10;
 clf
-gcf().color_map = jetcolormap(n);
+gcf().color_map = jet(n);
 Sgrayplot(x, x, z);
 contour(x,x,z,[-0.8 -0.6 -0.4 -0.2 0 0.2 0.4 0.6 0.8]);
 gce().children.children(1:2:$-1).foreground=-1; // contours in black
@@ -455,7 +458,7 @@ x = linspace(0,1,81);
 z = cos(2*%pi*x)'*sin(2*%pi*x);
 n = 8;
 clf reset
-gcf().color_map = jetcolormap(20);
+gcf().color_map = jet(20);
 gcf().axes_size = [770 320];
 
 // 3.2) umin=minU and umax=maxU, covered by a subrange of colors
@@ -476,7 +479,7 @@ x = linspace(0,1,81);
 z = cos(2*%pi*x)'*sin(2*%pi*x);
 n = 8;
 clf reset
-gcf().color_map = jetcolormap(20);
+gcf().color_map = jet(20);
 gcf().axes_size = [770 320];
 
 // 3.2) umin=minU and umax=maxU, covered by a subrange of colors
@@ -512,7 +515,7 @@ function [zz, zz1] = plotSphere()
 endfunction
 
 clf reset
-gcf().color_map = jetcolormap(120);  // 120 colors available
+gcf().color_map = jet(120);  // 120 colors available
 gcf().axes_size = [670, 560];
 
 // For these 4 plots of a sphere of radius 0.3,
@@ -553,7 +556,7 @@ function [zz, zz1] = plotSphere()
 endfunction
 
 clf reset
-gcf().color_map = jetcolormap(100);  // 100 colors available
+gcf().color_map = jet(100);  // 100 colors available
 gcf().axes_size = [670, 560];
 
 // For these 4 plots of a sphere of radius 0.3,
@@ -595,7 +598,7 @@ function plotSample()
 endfunction
 
 clf
-gcf().color_map = rainbowcolormap(200);
+gcf().color_map = rainbow(200);
 gcf().axes_size = [800 300];
 
 // 5.1) Bar graduated from minU=-1 to maxU=1 with the full colormap
@@ -620,7 +623,7 @@ function plotSample()
 endfunction
 
 clf
-gcf().color_map = rainbowcolormap(200);
+gcf().color_map = rainbow(200);
 gcf().axes_size = [800 300];
 
 // 5.1) Bar graduated from minU=-1 to maxU=1 with the full colormap

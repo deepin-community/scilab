@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2012-2012 - Scilab Enterprises - Bruno JOFRET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -67,10 +67,10 @@ types::InternalType* GenericDotPower(types::InternalType *_pLeftOperand, types::
 types::InternalType* GenericComparisonEqual(types::InternalType *_pLeftOperand, types::InternalType *_pRightOperand);
 
 // <
-types::InternalType *GenericLess(types::InternalType *_pLeftOperand, types::InternalType *_pRightOperand);
+types::InternalType *GenericLess(types::InternalType *_pLeftOperand, types::InternalType *_pRightOperand, const std::wstring& op = L"<");
 
 // <=
-types::InternalType *GenericLessEqual(types::InternalType *_pLeftOperand, types::InternalType *_pRightOperand);
+types::InternalType *GenericLessEqual(types::InternalType *_pLeftOperand, types::InternalType *_pRightOperand, const std::wstring& op = L"<=");
 
 // >
 types::InternalType *GenericGreater(types::InternalType *_pLeftOperand, types::InternalType *_pRightOperand);

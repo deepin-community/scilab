@@ -45,4 +45,18 @@
 plot(sincd(10,1))
  ]]></programlisting>
     </refsection>
+    <refsection role="see also">
+        <title>See also</title>
+        <simplelist type="inline">
+            <member>
+                <link linkend="sinc">sinc</link>
+            </member>
+            <member>
+                <link linkend="filt_sinc">filt_sinc</link>
+            </member>
+            <member>
+                <link linkend="sin">sin</link>
+            </member>
+        </simplelist>
+    </refsection>
 </refentry>

@@ -125,7 +125,7 @@ msgid ""
 "If you are using a binary version of Scilab, please report a bug http://"
 "bugzilla.scilab.org/.\n"
 msgstr ""
-"如果你使用的是Scilab二进制包，请提交缺陷报告到http://bugzilla.scilab.org/。\n"
+"如果你使用的是Scilab二进制包，请提交缺陷报告到https://gitlab.com/scilab/scilab/-/issues。\n"
 
 #, c-format
 msgid ""

@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C)  2016 - INRIA - Serge Steer
 //
 // This file is licensed under the terms of the GNU GPL v2.0,
@@ -29,7 +29,7 @@ function r=%zpk_a_zpk(a,b)
         end
     else
         if ma<>mb|na<>nb  then
-            error(_("Inconsistent row/column dimensions.\n"))
+            error(msprintf(_("Operator %ls: Wrong dimensions for operation [%ls] %ls [%ls], same dimensions expected.\n"),ma+"x"+na, "+", mb+"x"+nb))
         end
         r=a
         for i=1:mb

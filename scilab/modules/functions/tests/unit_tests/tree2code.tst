@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2018 - Samuel GOUGEON
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -49,3 +49,63 @@ txt = tree2code(macr2tree(test), %t);
 path = "//interface/scinotes/display/body/scinotes-display";
 tmp = evstr(xmlGetValues(path, "indent-size", "SCIHOME/XConfiguration.xml"));
 assert_checkequal(txt(2), blanks(tmp)+"disp(2)");
+
+// Test Matrices with comments
+function test()
+    a = [1 2 3
+    4 5 6
+    // Remark
+    7 8 9
+    10 11 12 ]
+endfunction
+expected = [
+    "function test()"        ; ...
+    "a = [1,2,3;"                   ; ...
+    "     4,5,6;"                   ; ...
+    "     // Remark;"               ; ...
+    "     7,8,9;"                   ; ...
+    "     10,11,12]"                ; ...
+    "endfunction"                   ; ...
+    ""
+];
+assert_checkequal(tree2code(macr2tree(test)), expected);
+
+function test()
+    [1 2 ;
+     3 4]
+endfunction
+expected = [
+    "function test()"         ; ...
+    "[1,2;"                   ; ...
+    "3,4]"                    ; ...
+    "endfunction"             ; ...
+    ""
+];
+assert_checkequal(tree2code(macr2tree(test)), expected);
+
+
+function test()
+    [1 ; 2]
+endfunction
+expected = [
+    "function test()"        ; ...
+    "[1;2]"                  ; ...
+    "endfunction"            ; ...
+    ""
+];
+assert_checkequal(tree2code(macr2tree(test)), expected);
+
+
+function test()
+    [1 ;
+     2]
+endfunction
+expected = [
+    "function test()"        ; ...
+    "[1;"                    ; ...
+    "2]"                     ; ...
+    "endfunction"            ; ...
+    ""
+];
+assert_checkequal(tree2code(macr2tree(test)), expected);
+

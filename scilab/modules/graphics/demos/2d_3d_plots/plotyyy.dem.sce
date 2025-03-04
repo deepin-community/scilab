@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010 Samuel GOUGEON
 // Copyright (C) 2010 - DIGITEO - Allan CORNET
 //
@@ -7,7 +7,7 @@
 function demo_plotyyy()
 
     // DEMO START
-    // A plotyyy() example: //http://bugzilla.scilab.org/show_bug.cgi?id=6070
+    // A plotyyy() example: //https://gitlab.com/scilab/scilab/-/issues/6070
 
     my_handle = scf(100001);
     clf(my_handle);

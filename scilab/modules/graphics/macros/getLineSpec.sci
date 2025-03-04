@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2004-2006 - INRIA - Fabrice Leray
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
 //
@@ -52,13 +52,13 @@ function [Color,Line,LineStyle,Marker,MarkerStyle,MarkerSize,fail]=getLineSpec(s
     opt1=[];
 
     //Marks
-    Table = [ "+" "o" "*" "." "x" "square" "diamond" "^" "v" ">" "<" "pentagram"];
-    MarksStyleVal=[1 9 10 0 2 11 5 6 7 12 13 14];
+    MarkStyleTable = [ "+" "o" "*" "." "x" "square" "diamond" "^" "v" ">" "<" "pentagram" "^." "v." ">." "<." "minus", "|"];
+    MarksStyleVal=[1 9 10 0 2 11 5 6 7 12 13 14 15 16 17 18 19 20];
     //MarksSizeVal =[4 3 7  1 3  3 4 3 3  3  3  3];
     //MarksSizeVal =[6 6 6  6 6  6 6 6 6  6  6  6]; // size is given in points now (25.02.05)
 
     //Colors
-    Table= [Table "red" "green" "blue" "cyan" "magenta" "yellow" "black" "k" "white"]
+    Table= [MarkStyleTable "red" "green" "blue" "cyan" "magenta" "yellow" "black" "k" "white"]
     ColorVal   = ["red" "green" "blue" "cyan" "magenta" "yellow" "black" "black" "white"]
 
     //color management
@@ -74,22 +74,54 @@ function [Color,Line,LineStyle,Marker,MarkerStyle,MarkerSize,fail]=getLineSpec(s
         c1 = part(str,1); // We get the first character
         k=find(part(Table,1)==c1);
 
-        if (k == [] | (size(k,"*") > 1 & c1 <> "b"))
+        if (k == [] | (size(k,"*") > 1 & and(c1 <> ["b", "m", "^", "v", "<", ">"])))
             ResetFigureDDM(current_figure, cur_draw_mode);
             error(msprintf(gettext("%s: Wrong type for input argument.\n"), "getLineSpec"));
         end
 
-        if c1=="b" // special case here : we have to distinguish between black and blue colors
-            c2 = part(str,2);
+        c2 = part(str,2);
+
+        switch c1
+        case "b" // special case here : we have to distinguish between "black" and "blue" colors
             if (c2 == "l")
                 c3 = part(str,3);
                 if (c3 == "a")
-                    k=19; // k is set to black color
+                    k=find(Table == "black"); // k is set to black color
                 else
-                    k=15; // k is set to blue color
+                    k=find(Table == "blue"); // k is set to blue color
                 end
             else
-                k=15; // k is set to blue color
+                k=find(Table == "blue"); // k is set to blue color
+            end
+        case "m" // special case here : we have to distinguish between "minus" style and "magenta" color
+            if c2 == "i" then
+                k = find(Table == "minus")
+            else
+                k = find(Table == "magenta")
+            end
+        case "^" // special case here : we have to distinguish between "^" and "^." signs
+            if c2 == "." then
+                k = find(Table == "^.")
+            else
+                k = find(Table == "^")
+            end
+        case "v" // special case here : we have to distinguish between "v" and "v." signs
+            if c2 == "." then
+                k = find(Table == "v.")
+            else
+                k = find(Table == "v")
+            end
+        case ">" // special case here : we have to distinguish between ">" and ">." signs
+            if c2 == "." then
+                k = find(Table == ">.")
+            else
+                k = find(Table == ">")
+            end
+        case "<" // special case here : we have to distinguish between "<" and "<." signs
+            if c2 == "." then
+                k = find(Table == "<.")
+            else
+                k = find(Table == "<")
             end
         end
 
@@ -113,7 +145,7 @@ function [Color,Line,LineStyle,Marker,MarkerStyle,MarkerSize,fail]=getLineSpec(s
 
     for i=1:size(opt1,"*")
 
-        if (opt1(i) <= 12)
+        if (opt1(i) <= size(MarkStyleTable, "*"))
             Marker = %T;
             MarkerStyle = MarksStyleVal(opt1(i));
             MarkerSize  = 6;
@@ -121,7 +153,7 @@ function [Color,Line,LineStyle,Marker,MarkerStyle,MarkerSize,fail]=getLineSpec(s
             //    disp("MarkerSize =");
             //    disp(MarkerSize);
         else
-            Color = color(ColorVal(opt1(i)-12));
+            Color = color(ColorVal(opt1(i)-size(MarkStyleTable, "*")));
         end
 
     end

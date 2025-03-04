@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA -
  * Copyright (C) DIGITEO - 2009 - Allan CORNET
  *
@@ -104,7 +104,7 @@ src = ['#include <math.h>'
 '  return( sin(x+1));'
 '}'
 ''
-'int sci_fun1(char *fname)'
+'int sci_fun1(char *fname, void* pvApiCtx)'
 '{'
 '  int iType1 = 0;'
 '  SciErr sciErr;'
@@ -196,7 +196,7 @@ clear list_functions;
                 <link linkend="clearfun">clearfun</link>
             </member>
             <member>
-                <link linkend="api_scilab_legacy">api_scilab</link>
+                <link linkend="api_scilab">api_scilab</link>
             </member>
         </simplelist>
     </refsection>

@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
 //
@@ -43,6 +43,7 @@ function []=errbar(x,y,em,ep)
     x1      = matrix(x,1,n1*n2);
     y2      = matrix(y+ep,1,n1*n2);
     xsegs([x1;x1],[y1;y2]);
+    gce().mark_style=19;
     my_axe  = gca();
     my_axe.clip_state = "clipgrf";
 

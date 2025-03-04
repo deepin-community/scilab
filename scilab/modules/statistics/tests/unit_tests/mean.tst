@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2017 - 2020 - Samuel GOUGEON
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -11,6 +11,7 @@
 // <-- NO CHECK REF -->
 // <-- CLI SHELL MODE -->
 
+assert_checkequal(mean([]), %nan);
 assert_checkequal(mean(0), 0);
 assert_checkequal(mean(zeros(3,3)), 0);
 assert_checkequal(mean(zeros(3,3,3)), 0);
@@ -33,6 +34,7 @@ for O = objects
         else
             assert_checktrue(issparse(m));
         end
+
         assert_checkequal(full(m), mean(o, d));
     end
 end

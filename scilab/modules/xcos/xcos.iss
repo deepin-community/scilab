@@ -1,5 +1,5 @@
 ;
-; Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+; Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 
 ; Copyright (C) DIGITEO - 2009-2010 - Allan CORNET
 ;
@@ -22,6 +22,12 @@
 #define XCOS "xcos"
 ;
 Source: bin\sci{#XCOS}.dll; DestDir: {app}\bin; Components: {#COMPN_XCOS}
+;
+Source: thirdparty\jaxb-api-2.3.1.jar;DestDir: {app}\thirdparty; Components: {#COMPN_XCOS}
+Source: thirdparty\jaxb-runtime-2.3.1.jar;DestDir: {app}\thirdparty; Components: {#COMPN_XCOS}
+Source: thirdparty\jaxb-impl-2.3.1.jar;DestDir: {app}\thirdparty; Components: {#COMPN_XCOS}
+Source: thirdparty\activation-1.1.1.jar;DestDir: {app}\thirdparty; Components: {#COMPN_XCOS}
+Source: thirdparty\istack-commons-runtime-4.2.0.jar;DestDir: {app}\thirdparty; Components: {#COMPN_XCOS}
 ;
 Source: modules\{#XCOS}\jar\org.scilab.modules.{#XCOS}.jar; DestDir: {app}\modules\{#XCOS}\jar; Components: {#COMPN_XCOS}
 ;

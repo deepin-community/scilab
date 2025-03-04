@@ -1,4 +1,14 @@
 # the actual binary which should not be called directly
-scilab-full-bin: binary-without-manpage usr/bin/scilab-bin
-# Don't really care about this warning
-scilab-full-bin: classpath-contains-relative-path usr/share/java/org.scilab.modules.javasci.jar: ../../jvm/jar/org.scilab.modules.jvm.jar
+scilab-full-bin: no-manual-page [usr/bin/scilab-bin]
+
+# Overriding dh_makeshlibs with an empty target to avoid this warning causes
+# errors in dh_shlibsdeps.
+package-has-unnecessary-activation-of-ldconfig-trigger
+
+# This is indeed not a canonical name for a jar in /usr/share/java, and also it
+# is not shipped by a lib*-java binary package. Still users have been used to
+# such name for many years, I don't feel like changing the jar name right now.
+bad-jar-name [usr/share/java/org.scilab.modules.javasci.jar]
+
+# False positives, CPPFLAGS are conveniently used to compile every file.
+hardening-no-fortify-functions [usr/lib/*/scilab/*.so*]

@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2010 - 2011 - Calixte DENIZET <calixte@contrib.scilab.org>
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -289,12 +289,15 @@ public class ScilabJavaObject {
      */
     public static final String[] getInfos() {
         try {
-            Class c = Class.forName("sun.misc.Version");
-            Method m = c.getMethod("print", new Class[] { PrintStream.class });
+            Class c = Class.forName("java.lang.VersionProps");
+            Method m = c.getMethod("print", boolean.class);
+            m.setAccessible(true);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             PrintStream out = new PrintStream(baos);
-            m.invoke(null, out);
+            System.setOut(out);
+            m.invoke(null, false);
             out.flush();
+            System.setOut(System.out);
             String[] ret = baos.toString().split("\n");
             out.close();
             baos.close();
@@ -1160,6 +1163,7 @@ public class ScilabJavaObject {
         freePlace = new FreePlace();
         ScilabClassLoader.clazz.clear();
         System.gc();
+        System.runFinalization();
     }
 
     /**

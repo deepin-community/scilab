@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2018, 2019 - Samuel GOUGEON
 //
 // This file is hereby licensed under the terms of the GNU GPL v2.0,
@@ -82,10 +82,10 @@ function colors = iscolor(C, acceptedFormats)
 
         // "#RRGGBB" cases
         if grep(acceptedFormats, "#")~=[]
-            k = grep(C, "/^#[0-9a-f]{6}$/", "r");
+            k = grep(C, "/^#[0-9a-fA-F]{6}$/", "r");
             if k~=[]
                 s = strcat(part(C(k), 2:7));
-                s = matrix(strsplit(s, 2:2:length(s)-1), -1,3);
+                s = matrix(strsplit(s, 2:2:length(s)-1), 3, -1)';
                 colors(k,:) = hex2dec(s)/255;
             end
         end

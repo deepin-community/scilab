@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA
  * ...
  *
@@ -114,6 +114,9 @@ pathconvert("/cygdrive/c/tmp",%f,%f,"w")
         <simplelist type="inline">
             <member>
                 <link linkend="basename">basename</link>
+            </member>
+            <member>
+                <link linkend="fileparts">fileparts</link>
             </member>
             <member>
                 <link linkend="listfiles">listfiles</link>

@@ -116,7 +116,7 @@ string = (([^\'\"\r\n]*)|([\'\"]{2}))+
 qstring = (\"|\'){string}(\"|\')
 transp = ({spec} | ")" | "]" | "}") "'"
 
-indentP = ("function" | "if" | "for" | "while" | "try" | "select" | "switch")
+indentP = ("function" | "if" | "for" | "while" | "try" | "select" | "switch" | "arguments")
 indentPx = {indentP}{spec}+
 xindentP = {spec}{indentP}
 

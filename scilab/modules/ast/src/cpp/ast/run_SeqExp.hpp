@@ -1,5 +1,5 @@
 /*
-*  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+*  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 *  Copyright (C) 2015 - Scilab Enterprises - Antoine ELIAS
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -56,12 +56,15 @@ void RunVisitorT<T>::visitprivate(const SeqExp  &e)
             }
 
             StorePrioritaryCommand("pause");
-            ThreadManagement::WaitForRunMeSignal();
         }
 
         // interrupt me to execute a prioritary command
-        while (StaticRunner_isRunnerAvailable() == 1 && StaticRunner_isInterruptibleCommand() == 1)
+        while (isEmptyCommandQueuePrioritary() == 0 && StaticRunner_isInterruptibleCommand() == 1)
         {
+            // Awake the runner thread to create a runner for the prioritary command
+            ThreadManagement::SendAwakeRunnerSignal();
+            ThreadManagement::WaitForRunMeSignal();
+
             StaticRunner_launch();
         }
 
@@ -86,12 +89,15 @@ void RunVisitorT<T>::visitprivate(const SeqExp  &e)
             }
 
             StorePrioritaryCommand("pause");
-            ThreadManagement::WaitForRunMeSignal();
         }
 
         // interrupt me to execute a prioritary command
-        while (StaticRunner_isRunnerAvailable() == 1 && StaticRunner_isInterruptibleCommand() == 1)
+        while (isEmptyCommandQueuePrioritary() == 0 && StaticRunner_isInterruptibleCommand() == 1)
         {
+            // Awake the runner thread to create a runner for the prioritary command
+            ThreadManagement::SendAwakeRunnerSignal();
+            ThreadManagement::WaitForRunMeSignal();
+
             StaticRunner_launch();
         }
 
@@ -187,11 +193,6 @@ void RunVisitorT<T>::visitprivate(const SeqExp  &e)
                     }
                     catch (const InternalError& ie)
                     {
-                        if (ConfigVariable::getLastErrorFunction() == L"")
-                        {
-                            ConfigVariable::setLastErrorFunction(pCall->getName());
-                            ConfigVariable::setLastErrorLine(e.getLocation().first_line);
-                        }
                         CoverageInstance::stopChrono((void*)&e);
                         throw ie;
                     }
@@ -219,13 +220,9 @@ void RunVisitorT<T>::visitprivate(const SeqExp  &e)
                     if ((*it)->isVerbose() && ConfigVariable::isPrintOutput())
                     {
                         //TODO manage multiple returns
-                        scilabWriteW(L" ans  =\n");
-                        if (ConfigVariable::isPrintCompact() == false)
-                        {
-                            scilabWriteW(L"\n");
-                        }
                         std::wostringstream ostrName;
                         ostrName << L"ans";
+                        scilabWriteW(printVarEqualTypeDimsInfo(pITAns, L"ans").c_str());
                         VariableToString(pITAns, ostrName.str().c_str());
                     }
                 }

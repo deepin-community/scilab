@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2012 - DIGITEO - Cedric DELAMARRE
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -83,14 +83,14 @@ types::Function::ReturnValue sci_atan(types::typed_list &in, int _iRetCount, typ
                 {
                     if (ConfigVariable::getIeee() == 0)
                     {
-                        Scierror(999, _("%s: Wrong value for input argument #%d : Singularity of the function.\n"), "atan", 1);
+                        Scierror(999, _("%s: Wrong value for input argument #%d: Singularity of the function.\n"), "atan", 1);
                         return types::Function::Error;
                     }
                     else if (msg && ConfigVariable::getIeee() == 1)
                     {
                         if (ConfigVariable::getWarningMode())
                         {
-                            sciprint(_("%s: Warning: Wrong value for input argument #%d : Singularity of the function.\n"), "atan", 1);
+                            sciprint(_("%s: Warning: Wrong value for input argument #%d: Singularity of the function.\n"), "atan", 1);
                         }
 
                         msg = false;

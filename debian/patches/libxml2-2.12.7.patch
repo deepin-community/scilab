@@ -1,0 +1,57 @@
+Description: conforming to changes in libxml2/2.12.7
+ Some symbols have changed their location, adding includes to find them.
+ Also xmlSetStructuredErrorFunc in /usr/include/libxml2/libxml/xmlerror.h now
+ expects a second argument with const qualifier: changing
+ XMLDocument::errorXPathFunction accordingly.
+Author: Pierre Gruet <pgt@debian.org>
+Forwarded: https://gitlab.com/scilab/scilab/-/issues/17262
+Last-Update: 2024-06-03
+
+--- a/scilab/modules/preferences/src/c/getScilabPreference.c
++++ b/scilab/modules/preferences/src/c/getScilabPreference.c
+@@ -17,6 +17,7 @@
+ #include <stdlib.h>
+ #include <libxml/xpath.h>
+ #include <libxml/xmlreader.h>
++#include <libxml/xmlsave.h>
+ #include "getScilabPreference.h"
+ #include "GetXmlFileEncoding.h"
+ #include "sci_malloc.h"
+--- a/scilab/modules/xml/src/cpp/XMLDocument.cpp
++++ b/scilab/modules/xml/src/cpp/XMLDocument.cpp
+@@ -20,6 +20,7 @@
+ #include "XMLValidation.hxx"
+ #include "XMLValidationRelaxNG.hxx"
+ #include "VariableScope.hxx"
++#include <libxml/xmlsave.h>
+ 
+ extern "C"
+ {
+@@ -520,7 +521,7 @@
+     errorBuffer.append(str);
+ }
+ 
+-void XMLDocument::errorXPathFunction(void *ctx, xmlError * error)
++void XMLDocument::errorXPathFunction(void *ctx, const xmlError * error)
+ {
+     errorXPathBuffer.append(error->message);
+ }
+--- a/scilab/modules/xml/src/cpp/XMLDocument.hxx
++++ b/scilab/modules/xml/src/cpp/XMLDocument.hxx
+@@ -20,6 +20,7 @@
+ #include <list>
+ #include <cstring>
+ #include <string>
++#include <libxml/xmlerror.h>
+ 
+ #include "dynlib_xml_scilab.h"
+ 
+@@ -172,7 +173,7 @@
+      * Error function used when the XPath query is compiled/
+      * @see http://xmlsoft.org/html/libxml-xmlerror.html#xmlStructuredErrorFunc
+      */
+-    static void errorXPathFunction(void *ctx, xmlError * error);
++    static void errorXPathFunction(void *ctx, const xmlError * error);
+ 
+     /**
+      * Reads and parses a document given in a file.

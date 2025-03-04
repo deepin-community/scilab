@@ -1,5 +1,5 @@
 
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 1999 - INRIA - Carlos Klimann
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -32,18 +32,17 @@ function [q]=iqr(x,orien)
     //Statistics, J.Wiley & Sons, 1990.
     //
     //
-    [lhs,rhs] = argn(0);
-
-    if rhs == 0 then
-        error(msprintf(gettext("%s: Wrong number of input argument: At least %d expected.\n"),"iqr",1));
+    arguments
+        x
+        orien (1, 1) {mustBeA(orien, ["double", "string"]), mustBeMember(orien, {1, 2, "r", "c", "*"})} = "*"
     end
 
-    if rhs == 1 then
-        if x == [] | and(isnan(x)) then
-            q = %nan;
-            return
-        end
+    if x == [] | and(isnan(x)) then
+        q = %nan;
+        return
+    end
 
+    if orien == "*" then
         qq = quart(x)
         q = qq(3) - qq(1);
     else
@@ -58,8 +57,6 @@ function [q]=iqr(x,orien)
                 error(msprintf(_("%s: Wrong dimensions for input argument #%d: A row vector or matrix expected.\n"), "iqr", 1));
             end
             q = qq(:,3) - qq(:, 1);
-        else
-            error(msprintf(_("%s: Wrong value for input argument #%d: ''%s'', %d, ''%s'' or %d expected.\n"), "iqr", 2, "r", 1, "c", 2));
         end
     end
 endfunction

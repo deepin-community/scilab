@@ -24,6 +24,8 @@ cDEC$ ATTRIBUTES DLLIMPORT:: /ls0001/
      3   ialth, ipup, lmax, meo, nqnyh, nslp,
      4   icf, ierpj, iersl, jcur, jstart, kflag, l, meth, miter,
      5   maxord, maxcor, msbp, mxncf, n, nq, nst, nre, nje, nqu
+cDEC$ ATTRIBUTES DLLIMPORT:: /ierode/
+      COMMON /ierode/ierror
 c-----------------------------------------------------------------------
 c%purpose
 c stodi performs one step of the integration of an initial value

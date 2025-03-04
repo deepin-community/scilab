@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
  *  Copyright (C) 2017 - ESI-Group - Cedric DELAMARRE
@@ -16,6 +16,7 @@
 #ifndef __WEBTOOLS_GW_HXX__
 #define __WEBTOOLS_GW_HXX__
 
+#include "sciCurl.hxx"
 #include "cpp_gateway_prototype.hxx"
 #include "function.hxx"
 
@@ -30,8 +31,11 @@ CPP_OPT_GATEWAY_PROTOTYPE_EXPORT(sci_http_put, WEBTOOLS_IMPEXP);
 CPP_OPT_GATEWAY_PROTOTYPE_EXPORT(sci_http_patch, WEBTOOLS_IMPEXP);
 CPP_OPT_GATEWAY_PROTOTYPE_EXPORT(sci_http_delete, WEBTOOLS_IMPEXP);
 CPP_OPT_GATEWAY_PROTOTYPE_EXPORT(sci_http_upload, WEBTOOLS_IMPEXP);
+CPP_GATEWAY_PROTOTYPE_EXPORT(sci_url_encode, WEBTOOLS_IMPEXP);
+CPP_GATEWAY_PROTOTYPE_EXPORT(sci_url_decode, WEBTOOLS_IMPEXP);
 
-types::Function::ReturnValue sci_http_put_post(types::typed_list &in, types::optional_list &opt, int _iRetCount, types::typed_list &out, const char* fname);
-int checkCommonOpt(void* curl, types::optional_list &opt, const char* fname);
+types::Function::ReturnValue sci_http_put_post(types::typed_list& in, types::optional_list& opt, int _iRetCount, types::typed_list& out, const char* fname);
+int checkCommonOpt(SciCurl& curl, types::optional_list& opt, const char* fname);
+int setPreferences(SciCurl& curl, const char* fname);
 
 #endif /* !__WEBTOOLS_GW_HXX__ */

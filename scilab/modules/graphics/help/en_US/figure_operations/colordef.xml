@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA - Serge Steer
  * Copyright (C) 2017 - Samuel GOUGEON
  *
@@ -63,7 +63,7 @@
         <para>
             <table border="1">
                 <tr><td>Property / L&amp;F</td>  <th>'white'</th>      <th>'black'</th>        <th>'none'</th></tr>
-                <tr><td>fig.color_map</td> <td>jetcolormap(64)</td><td>jetcolormap(64)</td><td>hsvcolormap(64)</td></tr>
+                <tr><td>fig.color_map</td> <td>jet(64)</td><td>jet(64)</td><td>hsv(64)</td></tr>
                 <tr><td>fig.background</td><td>light gray</td>   <td>dark gray</td>      <td>dark gray</td></tr>
                 <tr><td>axes.background</td><td>white</td>       <td>black</td>          <td>black</td></tr>
                 <tr><td>axes.foreground</td><td>black</td>       <td>white</td>          <td>white</td></tr>

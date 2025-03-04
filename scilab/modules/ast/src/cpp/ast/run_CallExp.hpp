@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2014 - Scilab Enterprises - Antoine ELIAS
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -165,7 +165,7 @@ void RunVisitorT<T>::visitprivate(const CallExp &e)
         // This extraction must be a recursive extract.
         int iLoopSize = 1;
         types::List* pListArg = NULL;
-        if (pIT->isCallable() == false && in.size() == 1 && in[0]->isList())
+        if (pIT->isCallable() == false && in.size() == 1 && in[0]->isList() && in[0]->isMList() == false && in[0]->isTList() == false)
         {
             pListArg = in[0]->getAs<types::List>();
             iLoopSize = pListArg->getSize();
@@ -245,12 +245,12 @@ void RunVisitorT<T>::visitprivate(const CallExp &e)
                     if (pIT->isCallable())
                     {
                         char* strFName = wide_string_to_UTF8(pIT->getAs<types::Callable>()->getName().c_str());
-                        os_sprintf(szError, _("%s: Wrong number of output argument(s): %d expected.\n"), strFName, out.size());
+                        os_sprintf(szError, _("%s: Wrong number of output argument(s): %d expected.\n"), strFName, (int) out.size());
                         FREE(strFName);
                     }
                     else
                     {
-                        os_sprintf(szError, _("%s: Wrong number of output argument(s): %d expected.\n"), "extract", out.size());
+                        os_sprintf(szError, _("%s: Wrong number of output argument(s): %d expected.\n"), "extract", (int) out.size());
                     }
 
                     wchar_t* wError = to_wide_string(szError);

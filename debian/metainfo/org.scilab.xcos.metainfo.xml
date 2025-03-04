@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>org.scilab.xcos</id>
+  
+  <name>xcos</name>
+  <summary>Block diagram editorand GUI for the hybrid simulator</summary>
+  
+  <metadata_license>CC-BY-4.0</metadata_license>
+  <project_license>GPL-2 or CECILL-2.1</project_license>
+
+  <url type="homepage">https://www.scilab.org/</url>
+  <developer_name>Dassault Systèmes</developer_name>
+  
+  <description>
+    <p>
+        Xcos is a graphical editor for constructing models of hybrid dynamical systems. Models can then be assembled, loaded, saved, compiled, simulated, using GUI of Xcos. Xcos serves as an interface to the various block diagram compilers and the hybrid simulator scicosim.
+    </p>
+  </description>
+  
+  <launchable type="desktop-id">xcos.desktop</launchable>
+
+  <screenshots>
+    <screenshot type="default">
+      <caption>The xcos interface</caption>
+      <image>https://help.scilab.org/docs/2024.0.0/en_US/xcos_gui.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Components to be chosen</caption>
+      <image>https://help.scilab.org/docs/2024.0.0/en_US/xcos_palette_gui.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>List of palettes</caption>
+      <image>https://help.scilab.org/docs/2024.0.0/en_US/xcos_palette_select_gui.png</image>
+    </screenshot>
+  </screenshots>
+
+  <content_rating type="oars-1.0" />
+</component>

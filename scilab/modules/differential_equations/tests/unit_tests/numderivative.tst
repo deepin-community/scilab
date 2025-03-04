@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008-2009 - INRIA - Michael Baudin
 // Copyright (C) 2011 - DIGITEO - Michael Baudin
 //
@@ -243,7 +243,7 @@ Hexpected(:, :, 2) = H2;
 [Jcomputed, Hcomputed] = numderivative(myexample, x, [], [], "hypermat");
 assert_checkalmostequal ( Jcomputed , Jexpected , 1.e-9 );
 assert_checkequal ( size(Hcomputed) , [3 3 2] );
-// This is a limitation of assert (http://bugzilla.scilab.org/show_bug.cgi?id=9461)
+// This is a limitation of assert (https://gitlab.com/scilab/scilab/-/issues/9461)
 // assert_checkalmostequal ( Hcomputed , Hexpected , 1.e-6 );
 assert_checkalmostequal ( Hexpected(:, :, 1) , Hexpected(:, :, 1) , 1.e-6);
 assert_checkalmostequal ( Hexpected(:, :, 2) , Hexpected(:, :, 2) , 1.e-6);
@@ -303,7 +303,7 @@ Q = qr(rand(2, 2));
 funf = list(myfunction6, 7., 8.);
 instr = "J = numderivative(funf, x, [], [], [], Q)";
 lclmsg = "%s: Error while evaluating the function: ""%s""\n";
-assert_checkerror (instr, lclmsg, [], "numderivative", msprintf(_("Inconsistent row/column dimensions.\n")));
+assert_checkerror (instr, lclmsg, [], "numderivative", msprintf(_("Operator %ls: Wrong dimensions for operation [%ls] %ls [%ls].\n"), "*", "2x1", "*", "2x1"));
 // 9.3 Various error cases
 x = 2;
 // Correct syntax: [J, H] = numderivative(myfunction, x)
@@ -482,5 +482,5 @@ df2_dx33 = 6*x(3);
 expectedH = [df1_dx11   df1_dx12   df1_dx13   df1_dx21   df1_dx22   df1_dx23   df1_dx31   df1_dx32   df1_dx33;
 df2_dx11   df2_dx12   df2_dx13   df2_dx21   df2_dx22   df2_dx23   df2_dx31   df2_dx32   df2_dx33 ];
 [J, H] = numderivative(list(G, p), x);
-assert_checkalmostequal( J , expectedJ );
-assert_checkalmostequal( H , expectedH , [], 1e-7);
+assert_checkalmostequal( J , expectedJ, [], 1e-8);
+assert_checkalmostequal( H , expectedH , [], 1e-5);

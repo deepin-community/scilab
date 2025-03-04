@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA
  * ...
  *
@@ -39,7 +39,7 @@
             <varlistentry>
                 <term>w(1:10)</term>
                 <listitem>
-                    <para>Not supported. See the discussion <ulink url="http://bugzilla.scilab.org/2104#c2">there</ulink>.</para>
+                    <para>Solver internal values. Output for technical reasons only. Not supported.</para>
                 </listitem>
             </varlistentry>
             <varlistentry>
@@ -93,7 +93,7 @@
             <varlistentry>
                 <term>iw(1:9)</term>
                 <listitem>
-                    <para>Not supported. See the discussion <ulink url="http://bugzilla.scilab.org/2104#c2">there</ulink>.</para>
+                    <para>Solver internal values. Output for technical reasons only. Not supported.</para>
                 </listitem>
             </varlistentry>
             <varlistentry>

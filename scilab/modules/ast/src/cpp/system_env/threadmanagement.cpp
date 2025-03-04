@@ -1,5 +1,5 @@
 /*
-*  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+*  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2015 - Scilab Enterprises - Cedric DELAMARRE
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -320,6 +320,7 @@ void ThreadManagement::SendAwakeRunnerSignal(void)
 # ifdef __DEBUG_SIGNAL
     std::cout << "SendAwakeRunnerSignal" << std::endl;
 # endif // __DEBUG_SIGNAL
+    ThreadManagement::LockRunner();
     __LockSignal(&m_AwakeRunnerLock);
     m_AwakeRunnerWasSignalled = true;
 #ifdef DEBUG_THREAD
@@ -327,6 +328,7 @@ void ThreadManagement::SendAwakeRunnerSignal(void)
 #endif // DEBUG_THREAD
     __Signal(&m_AwakeRunner);
     __UnLockSignal(&m_AwakeRunnerLock);
+    ThreadManagement::UnlockRunner();
 }
 
 void ThreadManagement::WaitForAwakeRunnerSignal(void)

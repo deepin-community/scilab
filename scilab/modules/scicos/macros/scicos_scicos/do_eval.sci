@@ -68,27 +68,48 @@ function [scs_m,cpr,needcompile,ok]=do_eval(scs_m,cpr,%scicos_context)
     %scicos_prob=%f
 
     //## overload some functions used in GUI
-    deff("[ok,tt]        =  FORTR(funam,tt,i,o)","ok=%t")
-    deff("[ok,tt,cancel] =  CFORTR2(funam,tt,i,o)","ok=%t,cancel=%f")
-    deff("[ok,tt,cancel] =  CC4(funam,tt,i,o)","ok=%t,cancel=%f")
-    deff("[ok,tt]        =  CFORTR(funam,tt,i,o)","ok=%t")
-    deff("[x,y,ok,gc]    =  edit_curv(x,y,job,tit,gc)","ok=%t")
-    deff("[ok,tt,dep_ut] = genfunc1(tt,ni,no,nci,nco,nx,nz,nrp,type_)",..
-    "dep_ut=model.dep_ut;ok=%t")
-    deff("result         = dialog(labels,valueini)","result=valueini")
-    deff("[result,Quit]  = scstxtedit(valueini,v2)","result=valueini,Quit=0")
-    deff("[ok,tt]        = MODCOM(funam,tt,vinp,vout,vparam,vparamv,vpprop)",..
-    "[dirF, nameF, extF] = fileparts(funam);"+..
-    "[modelica_path, modelica_directory] = getModelicaPath();"+..
-    "funam1 = []; "+..
-    "if (extF == """")  then, "+..
-    "    funam1 = modelica_directory + nameF + "".mo""; "+..
-    "elseif fileinfo(funam) == [] then, "+..
-    "    funam1 = funam; "+..
-    "end; "+..
-    "if funam1 <> [] then, "+..
-    "    mputl(tt, funam1); "+..
-    "end");
+    prot = funcprot();
+    funcprot(0);
+    function [ok,tt]        =  FORTR(funam,tt,i,o)
+        ok = %t;
+    endfunction
+    function [ok,tt,cancel] =  CFORTR2(funam,tt,i,o)
+        ok=%t, cancel=%f
+    endfunction
+    function [ok,tt,cancel] =  CC4(funam,tt,i,o)
+        ok=%t,cancel=%f
+    endfunction
+    function [ok,tt]        =  CFORTR(funam,tt,i,o)
+        ok=%t
+    endfunction
+    function [x,y,ok,gc]    =  edit_curv(x,y,job,tit,gc)
+        ok=%t
+    endfunction
+    function [ok,tt,dep_ut] = genfunc1(tt,ni,no,nci,nco,nx,nz,nrp,type_)
+        dep_ut=model.dep_ut;ok=%t
+    endfunction
+    function result         = dialog(labels,valueini)
+        result=valueini
+    endfunction
+    function [result,Quit]  = scstxtedit(valueini,v2)
+        result=valueini,Quit=0
+    endfunction
+    function [ok,tt]        = MODCOM(funam,tt,vinp,vout,vparam,vparamv,vpprop)
+        [dirF, nameF, extF] = fileparts(funam);
+        [modelica_path, modelica_directory] = getModelicaPath();
+        funam1 = [];
+        if (extF == "") then
+            funam1 = modelica_directory + nameF + ".mo";
+        elseif fileinfo(funam) == [] then
+            funam1 = funam;
+        end
+        if funam1 <> [] then
+            mputl(tt, funam1);
+        end
+    endfunction
+    funcprot(prot);
+
+    //loop to evaluate all blocks
     %nx = size(scs_m.objs)
     %x=scs_m.objs;
     funcprot(%mprt)

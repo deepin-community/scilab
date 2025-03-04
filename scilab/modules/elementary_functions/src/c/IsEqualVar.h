@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2007 - INRIA - Serge STEER
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -26,7 +26,6 @@ static int IsEqualPolyMat(double *d1, double *d2);
 static int IsEqualBoolMat(double *d1, double *d2);
 static int IsEqualDoubleSparseMat(double *d1, double *d2);
 static int IsEqualBoolSparseMat(double *d1, double *d2);
-static int IsEqualMatlabSparseMat(double *d1, double *d2);
 static int IsEqualIntegerMat(double *d1, double *d2);
 static int IsEqualStringMat(double *d1, double *d2);
 static int IsEqualLib(double *d1, double *d2);

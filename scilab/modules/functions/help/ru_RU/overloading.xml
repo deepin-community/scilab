@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA
  * Copyright (C) DIGITEO - 2012 - Allan CORNET
  *
@@ -145,16 +145,6 @@
                 <td/>
             </tr>
             <tr>
-                <td>разрежённая матрица Matlab'а</td>
-                <td>
-                    <literal>msp</literal>
-                </td>
-                <td>
-                    <literal>Matlab sparse</literal>
-                </td>
-                <td/>
-            </tr>
-            <tr>
                 <td>матрица целочисленных значений</td>
                 <td>
                     <literal>i</literal>
@@ -239,18 +229,6 @@
                     <literal>mlist type</literal>
                 </td>
                 <td>первая строка первого элемента матричноориентированного списка</td>
-            </tr>
-            <tr>
-                <td>гиперматрица</td>
-                <td>
-                    <literal>hm</literal>
-                </td>
-                <td>
-                    <literal>hypermat</literal>
-                </td>
-                <td>Устарело. Будет удалено из Scilab 6.
-                    Код содержимого гиперматрицы должен быть специализированным.
-                </td>
             </tr>
             <tr>
                 <td>указатель</td>
@@ -651,8 +629,9 @@
             <revision>
                 <revnumber>6.0</revnumber>
                 <revdescription>
-                  <literal>function</literal> replaces <literal>mc</literal> as overloading code
-                  for functions in Scilab language.
+                  <para><literal>function</literal> replaces <literal>mc</literal> as overloading code
+                  for functions in Scilab language.</para>
+                  <para><literal>hm</literal> is no longer used for hypermatrix, as for matrices <literal>s</literal> is used instead.</para>
                 </revdescription>
             </revision>
         </revhistory>

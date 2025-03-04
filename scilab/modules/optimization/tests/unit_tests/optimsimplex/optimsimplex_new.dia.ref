@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008-2009 - INRIA - Michael Baudin
 // Copyright (C) 2011 - DIGITEO - Michael Baudin
 //
@@ -120,7 +120,7 @@ coords = [
 ];
 s1 = optimsimplex_new ( coords , rosenbrock );
 string(s1)
- ans  =
+ ans = [6x1 string]
   "Optim Simplex Object:"
   "====================="
   "nbve: 5"              
@@ -128,7 +128,7 @@ string(s1)
   "x: 5-by-2 matrix"     
   "fv: 5-by-1 matrix"    
 s1
- s1  = 
+ s1 = (TSIMPLEX tlist) with fields:
 Optim Simplex Object:
 =====================
 nbve: 5
@@ -146,7 +146,7 @@ coords = [
 ];
 s1 = optimsimplex_new ( coords );
 s1
- s1  = 
+ s1 = (TSIMPLEX tlist) with fields:
 Optim Simplex Object:
 =====================
 nbve: 5
@@ -163,7 +163,7 @@ coords = [
     2.    2.  
 ];
 s1 = optimsimplex_new ( coords , [] )
- s1  = 
+ s1 = (TSIMPLEX tlist) with fields:
 Optim Simplex Object:
 =====================
 nbve: 5

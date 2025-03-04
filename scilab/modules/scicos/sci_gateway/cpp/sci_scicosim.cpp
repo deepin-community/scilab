@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2014 - Scilab Enterprises - Paul Bignier
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -12,6 +12,7 @@
  * along with this program.
  *
  */
+#include <memory>
 #include <vector>
 #include <string>
 #include <cstdio>
@@ -44,6 +45,7 @@ extern "C"
 #include "charEncoding.h"
 
 #include "localization.h"
+#include "lasterror.h"
 #include "Scierror.h"
 
     COSIM_struct C2F(cosim);
@@ -57,20 +59,6 @@ extern "C"
 #ifdef _MSC_VER
 #define snprintf _snprintf
 #endif
-
-// anonymous namespace for helper functions
-namespace
-{
-void delete_strings(char** l_sim_lab, int len)
-{
-    for (int i = 0; i < len; i++)
-    {
-        FREE(l_sim_lab[i]);
-    }
-    delete[] l_sim_lab;
-}
-
-} // namespace
 
 
 /*--------------------------------------------------------------------------*/
@@ -169,6 +157,29 @@ static const std::string funname = "scicosim";
 types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount, types::typed_list &out)
 {
     /************************************
+    * Helper for owned values
+    ************************************/
+    struct AllocatedInternals : std::vector<types::InternalType*> {
+        ~AllocatedInternals() {
+            for (types::InternalType* ptr : *this)
+            {
+                ptr->killMe();
+            }
+        };
+    };
+    struct UTF8AllocatedStrings : std::vector<char*> {
+        ~UTF8AllocatedStrings() {
+            for (char* ptr : *this)
+            {
+                FREE(ptr);
+            }
+        };
+    };
+    
+    AllocatedInternals allocatedInternals;
+    UTF8AllocatedStrings allocatedStrings;
+    
+    /************************************
     * Variables and constants definition
     ************************************/
     double simpar[7];
@@ -198,12 +209,11 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     }
     types::TList* il_state_input = in[0]->getAs<types::TList>();
     types::TList* il_state = new types::TList();
-
+    allocatedInternals.push_back(il_state);
+    
     if (il_state_input->getSize() < 9)
     {
         Scierror(999, _("%s: Wrong size for input argument #%d : %d elements expected.\n"), funname.data(), 1, 9);
-        il_state->DecreaseRef();
-        il_state->killMe();
         return types::Function::Error;
     }
 
@@ -217,21 +227,17 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_state_input->get(1)->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A matrix expected.\n"), funname.data(), 2, 1);
-        il_state->DecreaseRef();
-        il_state->killMe();
         return types::Function::Error;
     }
     types::Double* il_state_x_input = il_state_input->get(1)->getAs<types::Double>();
     il_state->append(il_state_x_input->clone());
     types::Double* il_state_x = il_state->get(1)->getAs<types::Double>();
     double* l_state_x = il_state_x->get();
-
+    
     /*3 : state.z      */
     if (il_state_input->get(2)->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A matrix expected.\n"), funname.data(), 3, 1);
-        il_state->DecreaseRef();
-        il_state->killMe();
         return types::Function::Error;
     }
     types::Double* il_state_z_input = il_state_input->get(2)->getAs<types::Double>();
@@ -266,8 +272,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_state_input->get(5)->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A matrix expected.\n"), funname.data(), 6, 1);
-        il_state->DecreaseRef();
-        il_state->killMe();
         return types::Function::Error;
     }
     types::Double* il_state_tevts_input = il_state_input->get(5)->getAs<types::Double>();
@@ -280,8 +284,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_state_input->get(6)->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A matrix expected.\n"), funname.data(), 7, 1);
-        il_state->DecreaseRef();
-        il_state->killMe();
         return types::Function::Error;
     }
     types::Double* il_state_evtspt_input = il_state_input->get(6)->getAs<types::Double>();
@@ -295,8 +297,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_state_input->get(7)->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A matrix expected.\n"), funname.data(), 8, 1);
-        il_state->DecreaseRef();
-        il_state->killMe();
         return types::Function::Error;
     }
     types::Double* il_pointi_input = il_state_input->get(7)->getAs<types::Double>();
@@ -309,8 +309,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_state_input->get(8)->isList() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A list expected.\n"), funname.data(), 9, 1);
-        il_state->DecreaseRef();
-        il_state->killMe();
         return types::Function::Error;
     }
     types::List* il_state_outtb_input = il_state_input->get(8)->getAs<types::List>();
@@ -329,19 +327,14 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (in[1]->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for input argument #%d : A matrix expected.\n"), funname.data(), 2);
-        il_state->DecreaseRef();
-        il_state->killMe();
         return types::Function::Error;
     }
     types::Double* il_tcur_input = in[1]->getAs<types::Double>();
     types::Double* il_tcur = il_tcur_input->clone()->getAs<types::Double>();
+    allocatedInternals.push_back(il_tcur);
     if (il_tcur->isScalar() == false)
     {
         Scierror(999, _("%s: Wrong size for input argument #%d : A scalar expected.\n"), funname.data(), 2);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
         return types::Function::Error;
     }
     double* l_tcur = il_tcur->get();
@@ -352,20 +345,12 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (in[2]->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for input argument #%d : A matrix expected.\n"), funname.data(), 3);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
         return types::Function::Error;
     }
     types::Double* il_tf = in[2]->getAs<types::Double>();
     if (il_tf->isScalar() == false)
     {
         Scierror(999, _("%s: Wrong size for input argument #%d : A scalar expected.\n"), funname.data(), 3);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
         return types::Function::Error;
     }
     double* l_tf = il_tf->get();
@@ -376,14 +361,11 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (in[3]->isTList() == false)
     {
         Scierror(999, _("%s: Wrong type for input argument #%d : A tlist expected.\n"), funname.data(), 4);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
         return types::Function::Error;
     }
     types::TList* il_sim_input = in[3]->getAs<types::TList>();
     types::TList* il_sim = new types::TList();
+    allocatedInternals.push_back(il_sim);
 
     // Make a copy of 'il_sim' in a global variabe
     set_il_sim(il_sim_input);
@@ -391,12 +373,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_sim_input->getSize() < 34)
     {
         Scierror(999, _("%s: Wrong size for input argument #%d : %d elements expected.\n"), funname.data(), 4, 34);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
 
@@ -407,12 +383,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_sim_input->get(1)->isList() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A list expected.\n"), funname.data(), 2, 4);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
     types::List* il_sim_fun_input = il_sim_input->get(1)->getAs<types::List>();
@@ -429,12 +399,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_sim_input->get(2)->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A matrix expected.\n"), funname.data(), 3, 4);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
     types::Double* il_sim_xptr_input = il_sim_input->get(2)->getAs<types::Double>();
@@ -448,12 +412,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_sim_input->get(3)->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A matrix expected.\n"), funname.data(), 4, 4);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
     types::Double* il_sim_zptr_input = il_sim_input->get(3)->getAs<types::Double>();
@@ -467,12 +425,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_sim_input->get(4)->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A matrix expected.\n"), funname.data(), 5, 4);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
     types::Double* il_sim_ozptr_input = il_sim_input->get(4)->getAs<types::Double>();
@@ -486,12 +438,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_sim_input->get(5)->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A matrix expected.\n"), funname.data(), 6, 4);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
     types::Double* il_sim_zcptr_input = il_sim_input->get(5)->getAs<types::Double>();
@@ -505,12 +451,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_sim_input->get(6)->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A matrix expected.\n"), funname.data(), 7, 4);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
     types::Double* il_sim_inpptr_input = il_sim_input->get(6)->getAs<types::Double>();
@@ -524,12 +464,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_sim_input->get(7)->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A matrix expected.\n"), funname.data(), 8, 4);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
     types::Double* il_sim_outpptr_input = il_sim_input->get(7)->getAs<types::Double>();
@@ -543,12 +477,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_sim_input->get(8)->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A matrix expected.\n"), funname.data(), 9, 4);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
     types::Double* il_sim_inplnk_input = il_sim_input->get(8)->getAs<types::Double>();
@@ -561,12 +489,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_sim_input->get(9)->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A matrix expected.\n"), funname.data(), 10, 4);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
     types::Double* il_sim_outlnk_input = il_sim_input->get(9)->getAs<types::Double>();
@@ -579,12 +501,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_sim_input->get(10)->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A matrix expected.\n"), funname.data(), 11, 4);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
     types::Double* il_sim_rpar_input = il_sim_input->get(10)->getAs<types::Double>();
@@ -596,12 +512,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_sim_input->get(11)->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A matrix expected.\n"), funname.data(), 12, 4);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
     types::Double* il_sim_rpptr_input = il_sim_input->get(11)->getAs<types::Double>();
@@ -615,12 +525,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_sim_input->get(12)->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A matrix expected.\n"), funname.data(), 13, 4);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
     types::Double* il_sim_ipar_input = il_sim_input->get(12)->getAs<types::Double>();
@@ -633,12 +537,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_sim_input->get(13)->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A matrix expected.\n"), funname.data(), 14, 4);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
     types::Double* il_sim_ipptr_input = il_sim_input->get(13)->getAs<types::Double>();
@@ -652,12 +550,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_sim_input->get(14)->isList() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A list expected.\n"), funname.data(), 15, 4);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
     types::List* il_sim_opar_input = il_sim_input->get(14)->getAs<types::List>();
@@ -674,12 +566,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_sim_input->get(15)->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A matrix expected.\n"), funname.data(), 16, 4);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
     types::Double* il_sim_opptr_input = il_sim_input->get(15)->getAs<types::Double>();
@@ -693,12 +579,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_sim_input->get(16)->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A matrix expected.\n"), funname.data(), 17, 4);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
     types::Double* il_sim_clkptr_input = il_sim_input->get(16)->getAs<types::Double>();
@@ -712,12 +592,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_sim_input->get(17)->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A matrix expected.\n"), funname.data(), 18, 4);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
     types::Double* il_sim_ordptr_input = il_sim_input->get(17)->getAs<types::Double>();
@@ -731,12 +605,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_sim_input->get(18)->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A matrix expected.\n"), funname.data(), 19, 4);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
     types::Double* il_sim_execlk_input = il_sim_input->get(18)->getAs<types::Double>();
@@ -746,12 +614,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_sim_input->get(19)->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A matrix expected.\n"), funname.data(), 20, 4);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
     types::Double* il_sim_ordclk_input = il_sim_input->get(19)->getAs<types::Double>();
@@ -766,12 +628,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_sim_input->get(20)->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A matrix expected.\n"), funname.data(), 21, 4);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
     types::Double* il_sim_cord_input = il_sim_input->get(20)->getAs<types::Double>();
@@ -786,12 +642,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_sim_input->get(21)->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A matrix expected.\n"), funname.data(), 22, 4);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
     types::Double* il_sim_oord_input = il_sim_input->get(21)->getAs<types::Double>();
@@ -806,12 +656,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_sim_input->get(22)->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A matrix expected.\n"), funname.data(), 23, 4);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
     types::Double* il_sim_zord_input = il_sim_input->get(22)->getAs<types::Double>();
@@ -826,12 +670,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_sim_input->get(23)->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A matrix expected.\n"), funname.data(), 24, 4);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
     types::Double* il_sim_critev_input = il_sim_input->get(23)->getAs<types::Double>();
@@ -844,12 +682,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_sim_input->get(24)->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A matrix expected.\n"), funname.data(), 25, 4);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
     types::Double* il_sim_nb_input = il_sim_input->get(24)->getAs<types::Double>();
@@ -860,12 +692,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (static_cast<int>(l_sim_nb[0]) != nblk) // Value of 'nb' must be equal to 'nblk'
     {
         Scierror(42, _("%s : Incompatible sim.nb RHS parameter.\n"), funname.data());
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
 
@@ -873,12 +699,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_sim_input->get(25)->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A matrix expected.\n"), funname.data(), 26, 4);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
     types::Double* il_sim_ztyp_input = il_sim_input->get(25)->getAs<types::Double>();
@@ -891,12 +711,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_sim_input->get(26)->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A matrix expected.\n"), funname.data(), 27, 4);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
     types::Double* il_sim_nblk_input = il_sim_input->get(26)->getAs<types::Double>();
@@ -906,12 +720,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_sim_input->get(27)->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A matrix expected.\n"), funname.data(), 28, 4);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
     types::Double* il_sim_ndcblk_input = il_sim_input->get(27)->getAs<types::Double>();
@@ -921,12 +729,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_sim_input->get(28)->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A matrix expected.\n"), funname.data(), 29, 4);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
     types::Double* il_sim_subscr_input = il_sim_input->get(28)->getAs<types::Double>();
@@ -940,12 +742,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_sim_input->get(29)->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A matrix expected.\n"), funname.data(), 30, 4);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
     types::Double* il_sim_funtyp_input = il_sim_input->get(29)->getAs<types::Double>();
@@ -958,12 +754,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_sim_input->get(30)->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A matrix expected.\n"), funname.data(), 31, 4);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
     types::Double* il_sim_iord_input = il_sim_input->get(30)->getAs<types::Double>();
@@ -978,53 +768,17 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_sim_input->get(31)->isString() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A string matrix expected.\n"), funname.data(), 32, 4);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
     types::String* il_sim_lab_input = il_sim_input->get(31)->getAs<types::String>();
     il_sim->append(il_sim_lab_input->clone());
     types::String* il_sim_lab = il_sim->get(31)->getAs<types::String>();
-    int* il_sim_labptr;
-    try
-    {
-        il_sim_labptr = new int[il_sim_lab->getSize()];
-    }
-    catch (const std::bad_alloc& /*e*/)
-    {
-        Scierror(999, _("%s: Memory allocation error.\n"), funname.data());
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        il_sim->DecreaseRef();
-        il_sim->killMe();
-        return types::Function::Error;
-    }
-    char** l_sim_lab;
-    try
-    {
-        l_sim_lab = new char*[il_sim_lab->getSize()];
-    }
-    catch (const std::bad_alloc& /*e*/)
-    {
-        Scierror(999, _("%s: Memory allocation error.\n"), funname.data());
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        delete[] il_sim_labptr;
-        il_sim->DecreaseRef();
-        il_sim->killMe();
-        return types::Function::Error;
-    }
+    std::vector<int> il_sim_labptr(il_sim_lab->getSize(), 0);
+    std::vector<char*> l_sim_lab(il_sim_lab->getSize(), nullptr);
     for (int i = 0; i < il_sim_lab->getSize(); ++i)
     {
         l_sim_lab[i] = wide_string_to_UTF8(il_sim_lab->get(i));
+        allocatedStrings.push_back(l_sim_lab[i]);
         il_sim_labptr[i] = static_cast<int>(strlen(l_sim_lab[i]));
     }
 
@@ -1032,14 +786,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_sim_input->get(32)->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A matrix expected.\n"), funname.data(), 33, 4);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        delete[] il_sim_labptr;
-        delete_strings(l_sim_lab, il_sim_lab->getSize());
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
     types::Double* il_sim_modptr_input = il_sim_input->get(32)->getAs<types::Double>();
@@ -1052,59 +798,17 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (il_sim_input->get(33)->isString() == false)
     {
         Scierror(999, _("%s: Wrong type for element #%d of argument #%d : A string matrix expected.\n"), funname.data(), 34, 4);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        delete[] il_sim_labptr;
-        delete_strings(l_sim_lab, il_sim_lab->getSize());
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
     types::String* il_sim_uid_input = il_sim_input->get(33)->getAs<types::String>();
     il_sim->append(il_sim_uid_input->clone());
     types::String* il_sim_uid = il_sim->get(33)->getAs<types::String>();
-    int* il_sim_uidptr;
-    try
-    {
-        il_sim_uidptr = new int[il_sim_uid->getSize()];
-    }
-    catch (const std::bad_alloc& /*e*/)
-    {
-        Scierror(999, _("%s: Memory allocation error.\n"), funname.data());
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        delete[] il_sim_labptr;
-        delete_strings(l_sim_lab, il_sim_lab->getSize());
-        il_sim->DecreaseRef();
-        il_sim->killMe();
-        return types::Function::Error;
-    }
-    char** l_sim_uid;
-    try
-    {
-        l_sim_uid = new char*[il_sim_uid->getSize()];
-    }
-    catch (const std::bad_alloc& /*e*/)
-    {
-        Scierror(999, _("%s: Memory allocation error.\n"), funname.data());
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        delete[] il_sim_labptr;
-        delete_strings(l_sim_lab, il_sim_lab->getSize());
-        delete[] il_sim_uidptr;
-        il_sim->DecreaseRef();
-        il_sim->killMe();
-        return types::Function::Error;
-    }
+    std::vector<int> il_sim_uidptr(il_sim_uid->getSize(), 0);
+    std::vector<char*> l_sim_uid(il_sim_uid->getSize(), nullptr);
     for (int i = 0; i < il_sim_uid->getSize(); ++i)
     {
         l_sim_uid[i] = wide_string_to_UTF8(il_sim_uid->get(i));
+        allocatedStrings.push_back(l_sim_uid[i]);
         il_sim_uidptr[i] = static_cast<int>(strlen(l_sim_uid[i]));
     }
 
@@ -1114,32 +818,12 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (in[4]->isString() == false)
     {
         Scierror(999, _("%s: Wrong type for input argument #%d : A matrix expected.\n"), funname.data(), 5);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        delete[] il_sim_labptr;
-        delete_strings(l_sim_lab, il_sim_lab->getSize());
-        delete[] il_sim_uidptr;
-        delete_strings(l_sim_uid, il_sim_uid->getSize());
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
     types::String* il_str = in[4]->getAs<types::String>();
     if (il_str->isScalar() == false)
     {
         Scierror(999, _("%s: Wrong size for input argument #%d : A scalar expected.\n"), funname.data(), 5);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        delete[] il_sim_labptr;
-        delete_strings(l_sim_lab, il_sim_lab->getSize());
-        delete[] il_sim_uidptr;
-        delete_strings(l_sim_uid, il_sim_uid->getSize());
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
 
@@ -1173,16 +857,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     {
         Scierror(44, _("%s: Wrong value for input argument #%d : ""%s"", ""%s"" ""%s"" ""%s"" or ""%s"" expected.\n"), funname.data(), 5,
                  "start", "run", "finish", "linear", "Kinsol");
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        delete[] il_sim_labptr;
-        delete_strings(l_sim_lab, il_sim_lab->getSize());
-        delete[] il_sim_uidptr;
-        delete_strings(l_sim_uid, il_sim_uid->getSize());
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
 
@@ -1192,16 +866,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (in[5]->isDouble() == false)
     {
         Scierror(999, _("%s: Wrong type for input argument #%d : A matrix expected.\n"), funname.data(), 6);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        delete[] il_sim_labptr;
-        delete_strings(l_sim_lab, il_sim_lab->getSize());
-        delete[] il_sim_uidptr;
-        delete_strings(l_sim_uid, il_sim_uid->getSize());
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
     types::Double* il_tol = in[5]->getAs<types::Double>();
@@ -1209,16 +873,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     if (m6 < 4 || m6 > 7) // Check if 'tol' has 4 to 7 elements
     {
         Scierror(999, _("%s: Wrong size for input argument #%d : %d to %d elements expected.\n"), funname.data(), 6, 4, 7);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        delete[] il_sim_labptr;
-        delete_strings(l_sim_lab, il_sim_lab->getSize());
-        delete[] il_sim_uidptr;
-        delete_strings(l_sim_uid, il_sim_uid->getSize());
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
 
@@ -1302,16 +956,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     {
         // Please write an error table here
         Scierror(42, _("%s : error in cross variable size checking : %d\n"), funname.data(), err_check);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        delete[] il_sim_labptr;
-        delete_strings(l_sim_lab, il_sim_lab->getSize());
-        delete[] il_sim_uidptr;
-        delete_strings(l_sim_uid, il_sim_uid->getSize());
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
 
@@ -1319,28 +963,7 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     * Set function table for blocks
     *******************************/
     // Define new variable 'lfunpt'
-    void** lfunpt;
-    try
-    {
-        lfunpt = new void*[nblk];
-    }
-    catch (const std::bad_alloc& /*e*/)
-    {
-        Scierror(999, _("%s: Memory allocation error.\n"), funname.data());
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        delete[] il_sim_labptr;
-        delete_strings(l_sim_lab, il_sim_lab->getSize());
-        delete[] il_sim_uidptr;
-        delete_strings(l_sim_uid, il_sim_uid->getSize());
-        il_sim->DecreaseRef();
-        il_sim->killMe();
-        return types::Function::Error;
-    }
-
-    // For each block
+    std::vector<void*> lfunpt(nblk, nullptr);
     for (int i = 0; i < nblk; ++i) // For each block
     {
         types::InternalType* pIT = il_sim_fun->get(i);
@@ -1361,17 +984,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
             if (funStr->isScalar() == false)
             {
                 Scierror(999, _("%s: Wrong size for element #%d of input argument #%d : A scalar expected.\n"), funname.data(), i + 1, 4);
-                il_state->DecreaseRef();
-                il_state->killMe();
-                il_tcur->DecreaseRef();
-                il_tcur->killMe();
-                delete[] il_sim_labptr;
-                delete_strings(l_sim_lab, il_sim_lab->getSize());
-                delete[] il_sim_uidptr;
-                delete_strings(l_sim_uid, il_sim_uid->getSize());
-                delete[] lfunpt;
-                il_sim->DecreaseRef();
-                il_sim->killMe();
                 return types::Function::Error;
             }
 
@@ -1420,18 +1032,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
                         else
                         {
                             Scierror(888, _("%s : unknown block : %s\n"), funname.data(), c_str);
-                            il_state->DecreaseRef();
-                            il_state->killMe();
-                            il_tcur->DecreaseRef();
-                            il_tcur->killMe();
-                            delete[] il_sim_labptr;
-                            delete_strings(l_sim_lab, il_sim_lab->getSize());
-                            delete[] il_sim_uidptr;
-                            delete_strings(l_sim_uid, il_sim_uid->getSize());
-                            delete[] lfunpt;
-                            FREE(c_str);
-                            il_sim->DecreaseRef();
-                            il_sim->killMe();
                             return types::Function::Error;
                         }
                     }
@@ -1442,17 +1042,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
         else
         {
             Scierror(999, _("%s: Wrong type for element #%d of input argument #%d : string or macro expected.\n"), funname.data(), i + 1, 4);
-            il_state->DecreaseRef();
-            il_state->killMe();
-            il_tcur->DecreaseRef();
-            il_tcur->killMe();
-            delete[] il_sim_labptr;
-            delete_strings(l_sim_lab, il_sim_lab->getSize());
-            delete[] il_sim_uidptr;
-            delete_strings(l_sim_uid, il_sim_uid->getSize());
-            delete[] lfunpt;
-            il_sim->DecreaseRef();
-            il_sim->killMe();
             return types::Function::Error;
         }
     }
@@ -1460,78 +1049,11 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     /**********************
     * Set oz, ozsz, oztyp
     **********************/
-    void** oz = nullptr;
-    int* ozsz = nullptr;
-    int* oztyp = nullptr;
+    std::vector<void*> oz(noz, nullptr);
+    std::vector<int> ozsz(2 * noz, 0);
+    std::vector<int> oztyp(noz, 0);
     if (noz > 0)
     {
-        // Allocation of 'oz'
-        try
-        {
-            oz = new void*[noz];
-        }
-        catch (const std::bad_alloc& /*e*/)
-        {
-            Scierror(999, _("%s: Memory allocation error.\n"), funname.data());
-            il_state->DecreaseRef();
-            il_state->killMe();
-            il_tcur->DecreaseRef();
-            il_tcur->killMe();
-            delete[] il_sim_labptr;
-            delete_strings(l_sim_lab, il_sim_lab->getSize());
-            delete[] il_sim_uidptr;
-            delete_strings(l_sim_uid, il_sim_uid->getSize());
-            delete[] lfunpt;
-            il_sim->DecreaseRef();
-            il_sim->killMe();
-            return types::Function::Error;
-        }
-        // Allocation of 'ozsz'
-        try
-        {
-            ozsz = new int[2 * noz];
-        }
-        catch (const std::bad_alloc& /*e*/)
-        {
-            Scierror(999, _("%s: Memory allocation error.\n"), funname.data());
-            il_state->DecreaseRef();
-            il_state->killMe();
-            il_tcur->DecreaseRef();
-            il_tcur->killMe();
-            delete[] il_sim_labptr;
-            delete_strings(l_sim_lab, il_sim_lab->getSize());
-            delete[] il_sim_uidptr;
-            delete_strings(l_sim_uid, il_sim_uid->getSize());
-            delete[] lfunpt;
-            delete[] oz;
-            il_sim->DecreaseRef();
-            il_sim->killMe();
-            return types::Function::Error;
-        }
-        // Allocation of 'oztyp'
-        try
-        {
-            oztyp = new int[noz];
-        }
-        catch (const std::bad_alloc& /*e*/)
-        {
-            Scierror(999, _("%s: Memory allocation error.\n"), funname.data());
-            il_state->DecreaseRef();
-            il_state->killMe();
-            il_tcur->DecreaseRef();
-            il_tcur->killMe();
-            delete[] il_sim_labptr;
-            delete_strings(l_sim_lab, il_sim_lab->getSize());
-            delete[] il_sim_uidptr;
-            delete_strings(l_sim_uid, il_sim_uid->getSize());
-            delete[] lfunpt;
-            delete[] oz;
-            delete[] ozsz;
-            il_sim->DecreaseRef();
-            il_sim->killMe();
-            return types::Function::Error;
-        }
-
         // Set vectors of 'oz'
         for (int j = 0; j < noz; ++j)
         {
@@ -1612,7 +1134,8 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
                 default :
                 {
                     oztyp[j] = SCSUNKNOW_N;
-                    oz[j] = il_state_oz->get(j);
+                    types::InternalType* pIT = il_state_oz->get(j);
+                    oz[j] = pIT;
                     ozsz[j] = 0; // rows
                     ozsz[j + noz] = 0; // cols
                     break;
@@ -1624,96 +1147,11 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     /****************************
     * Set opar, oparsz, opartyp
     ****************************/
-    struct UTF8AllocatedStrings : std::vector<char*> {
-        ~UTF8AllocatedStrings() {
-            for (char* ptr : *this)
-            {
-                FREE(ptr);
-            }
-        };
-    };
-    void** opar = nullptr;
-    int* oparsz = nullptr;
-    int* opartyp = nullptr;
-    UTF8AllocatedStrings oparStrings;
+    std::vector<void*> opar(nopar, nullptr);
+    std::vector<int> oparsz(2 * nopar, 0);
+    std::vector<int> opartyp(nopar, 0);
     if (nopar > 0)
     {
-        // Allocation of 'opar'
-        try
-        {
-            opar = new void*[nopar];
-        }
-        catch (const std::bad_alloc& /*e*/)
-        {
-            Scierror(999, _("%s: Memory allocation error.\n"), funname.data());
-            il_state->DecreaseRef();
-            il_state->killMe();
-            il_tcur->DecreaseRef();
-            il_tcur->killMe();
-            delete[] il_sim_labptr;
-            delete_strings(l_sim_lab, il_sim_lab->getSize());
-            delete[] il_sim_uidptr;
-            delete_strings(l_sim_uid, il_sim_uid->getSize());
-            delete[] lfunpt;
-            delete[] oz;
-            delete[] ozsz;
-            delete[] oztyp;
-            il_sim->DecreaseRef();
-            il_sim->killMe();
-            return types::Function::Error;
-        }
-        // Allocation of 'oparsz'
-        try
-        {
-            oparsz = new int[2 * nopar];
-        }
-        catch (const std::bad_alloc& /*e*/)
-        {
-            Scierror(999, _("%s: Memory allocation error.\n"), funname.data());
-            il_state->DecreaseRef();
-            il_state->killMe();
-            il_tcur->DecreaseRef();
-            il_tcur->killMe();
-            delete[] il_sim_labptr;
-            delete_strings(l_sim_lab, il_sim_lab->getSize());
-            delete[] il_sim_uidptr;
-            delete_strings(l_sim_uid, il_sim_uid->getSize());
-            delete[] lfunpt;
-            delete[] oz;
-            delete[] ozsz;
-            delete[] oztyp;
-            delete[] opar;
-            il_sim->DecreaseRef();
-            il_sim->killMe();
-            return types::Function::Error;
-        }
-        // Allocation of 'opartyp'
-        try
-        {
-            opartyp = new int[nopar];
-        }
-        catch (const std::bad_alloc& /*e*/)
-        {
-            Scierror(999, _("%s: Memory allocation error.\n"), funname.data());
-            il_state->DecreaseRef();
-            il_state->killMe();
-            il_tcur->DecreaseRef();
-            il_tcur->killMe();
-            delete[] il_sim_labptr;
-            delete_strings(l_sim_lab, il_sim_lab->getSize());
-            delete[] il_sim_uidptr;
-            delete_strings(l_sim_uid, il_sim_uid->getSize());
-            delete[] lfunpt;
-            delete[] oz;
-            delete[] ozsz;
-            delete[] oztyp;
-            delete[] opar;
-            delete[] oparsz;
-            il_sim->DecreaseRef();
-            il_sim->killMe();
-            return types::Function::Error;
-        }
-
         // Set vectors of 'opar'
         for (int j = 0; j < nopar; ++j)
         {
@@ -1740,23 +1178,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
                         catch (const std::bad_alloc& /*e*/)
                         {
                             Scierror(999, _("%s: Memory allocation error.\n"), funname.data());
-                            il_state->DecreaseRef();
-                            il_state->killMe();
-                            il_tcur->DecreaseRef();
-                            il_tcur->killMe();
-                            delete[] il_sim_labptr;
-                            delete_strings(l_sim_lab, il_sim_lab->getSize());
-                            delete[] il_sim_uidptr;
-                            delete_strings(l_sim_uid, il_sim_uid->getSize());
-                            delete[] lfunpt;
-                            delete[] oz;
-                            delete[] ozsz;
-                            delete[] oztyp;
-                            delete[] opar;
-                            delete[] oparsz;
-                            delete[] opartyp;
-                            il_sim->DecreaseRef();
-                            il_sim->killMe();
                             return types::Function::Error;
                         }
                         memcpy(opar[j], oparDouble->get(), oparDouble->getSize() * sizeof(double)); // Real part
@@ -1830,9 +1251,9 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
                     oparsz[j + nopar] = 1;
                     for (int i = 0; i < oparString->getSize(); ++i)
                     {
-                        // convert string as char* buffers, owned by oparStrings
-                        oparStrings.emplace_back(wide_string_to_UTF8(oparString->get(i)));
-                        opar[j] = oparStrings.back();
+                        // convert string as char* buffers, owned by allocatedStrings
+                        allocatedStrings.emplace_back(wide_string_to_UTF8(oparString->get(i)));
+                        opar[j] = allocatedStrings.back();
                     }
                     break;
                 }
@@ -1849,102 +1270,16 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     }
 
     // Declaration of 'outtb_elem'
-    outtb_el* outtb_elem = nullptr;
-    int nelem = 0;
+    std::vector<outtb_el> outtb_elem;
 
     /*******************************
     * Set outtbptr, outtbsz, outtbtyp
     *******************************/
-    void** outtbptr = nullptr;
-    int* outtbsz = nullptr;
-    int* outtbtyp = nullptr;
+    std::vector<void*> outtbptr(nlnk, nullptr);
+    std::vector<int> outtbsz(2 * nlnk, 0);
+    std::vector<int> outtbtyp(nlnk, 0);
     if (nlnk > 0)
     {
-        // Allocation of 'outtbptr'
-        try
-        {
-            outtbptr = new void*[nlnk];
-        }
-        catch (const std::bad_alloc& /*e*/)
-        {
-            Scierror(999, _("%s: Memory allocation error.\n"), funname.data());
-            il_state->DecreaseRef();
-            il_state->killMe();
-            il_tcur->DecreaseRef();
-            il_tcur->killMe();
-            delete[] il_sim_labptr;
-            delete_strings(l_sim_lab, il_sim_lab->getSize());
-            delete[] il_sim_uidptr;
-            delete_strings(l_sim_uid, il_sim_uid->getSize());
-            delete[] lfunpt;
-            delete[] oz;
-            delete[] ozsz;
-            delete[] oztyp;
-            delete[] opar;
-            delete[] oparsz;
-            delete[] opartyp;
-            il_sim->DecreaseRef();
-            il_sim->killMe();
-            return types::Function::Error;
-        }
-        // Allocation of 'outtbptrsz'
-        try
-        {
-            outtbsz = new int[2 * nlnk];
-        }
-        catch (const std::bad_alloc& /*e*/)
-        {
-            Scierror(999, _("%s: Memory allocation error.\n"), funname.data());
-            il_state->DecreaseRef();
-            il_state->killMe();
-            il_tcur->DecreaseRef();
-            il_tcur->killMe();
-            delete[] il_sim_labptr;
-            delete_strings(l_sim_lab, il_sim_lab->getSize());
-            delete[] il_sim_uidptr;
-            delete_strings(l_sim_uid, il_sim_uid->getSize());
-            delete[] lfunpt;
-            delete[] oz;
-            delete[] ozsz;
-            delete[] oztyp;
-            delete[] opar;
-            delete[] oparsz;
-            delete[] opartyp;
-            delete[] outtbptr;
-            il_sim->DecreaseRef();
-            il_sim->killMe();
-            return types::Function::Error;
-        }
-        // Allocation of 'outtbtyp'
-        try
-        {
-            outtbtyp = new int[nlnk];
-        }
-        catch (const std::bad_alloc& /*e*/)
-        {
-            Scierror(999, _("%s: Memory allocation error.\n"), funname.data());
-            il_state->DecreaseRef();
-            il_state->killMe();
-            il_tcur->DecreaseRef();
-            il_tcur->killMe();
-            delete[] il_sim_labptr;
-            delete_strings(l_sim_lab, il_sim_lab->getSize());
-            delete[] il_sim_uidptr;
-            delete_strings(l_sim_uid, il_sim_uid->getSize());
-            delete[] lfunpt;
-            delete[] oz;
-            delete[] ozsz;
-            delete[] oztyp;
-            delete[] opar;
-            delete[] oparsz;
-            delete[] opartyp;
-            delete[] outtbptr;
-            delete[] outtbsz;
-            il_sim->DecreaseRef();
-            il_sim->killMe();
-            return types::Function::Error;
-        }
-
         // Set vectors of 'outtbptr'
         for (int j = 0; j < nlnk; ++j)
         {
@@ -1971,25 +1306,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
                         catch (const std::bad_alloc& /*e*/)
                         {
                             Scierror(999, _("%s: Memory allocation error.\n"), funname.data());
-                            il_state->DecreaseRef();
-                            il_state->killMe();
-                            il_tcur->DecreaseRef();
-                            il_tcur->killMe();
-                            delete[] il_sim_labptr;
-                            delete_strings(l_sim_lab, il_sim_lab->getSize());
-                            delete[] il_sim_uidptr;
-                            delete_strings(l_sim_uid, il_sim_uid->getSize());
-                            delete[] lfunpt;
-                            delete[] oz;
-                            delete[] ozsz;
-                            delete[] oztyp;
-                            delete[] opar;
-                            delete[] oparsz;
-                            delete[] opartyp;
-                            delete[] outtbptr;
-                            delete[] outtbsz;
-                            il_sim->DecreaseRef();
-                            il_sim->killMe();
                             return types::Function::Error;
                         }
                         memcpy(outtbptr[j], outtbDouble->get(), outtbDouble->getSize() * sizeof(double)); // Real part
@@ -2057,60 +1373,13 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
                 default :
                 {
                     Scierror(999, _("%s: Wrong type for element #%d of element #%d of argument #%d : A matrix expected.\n"), funname.data(), j + 1, 9, 1);
-                    il_state->DecreaseRef();
-                    il_state->killMe();
-                    il_tcur->DecreaseRef();
-                    il_tcur->killMe();
-                    delete[] il_sim_labptr;
-                    delete_strings(l_sim_lab, il_sim_lab->getSize());
-                    delete[] il_sim_uidptr;
-                    delete_strings(l_sim_uid, il_sim_uid->getSize());
-                    delete[] lfunpt;
-                    delete[] outtbptr;
-                    delete[] outtbtyp;
-                    delete[] outtbsz;
-                    delete[] opar;
-                    delete[] oparsz;
-                    delete[] opartyp;
-                    delete[] oz;
-                    delete[] ozsz;
-                    delete[] oztyp;
-                    FREE(outtb_elem);
-                    il_sim->DecreaseRef();
-                    il_sim->killMe();
                     return types::Function::Error;
                 }
             }
 
             // Store 'lnk' and 'pos' in 'outtb_elem'
-            int k = nelem;
-            nelem += outtbsz[j] * outtbsz[j + nlnk];
-            if ((outtb_elem = (outtb_el *) REALLOC(outtb_elem, nelem * sizeof(outtb_el))) == nullptr)
-            {
-                Scierror(999, _("%s : No more free memory.\n"), funname.data());
-                il_state->DecreaseRef();
-                il_state->killMe();
-                il_tcur->DecreaseRef();
-                il_tcur->killMe();
-                delete[] il_sim_labptr;
-                delete_strings(l_sim_lab, il_sim_lab->getSize());
-                delete[] il_sim_uidptr;
-                delete_strings(l_sim_uid, il_sim_uid->getSize());
-                delete[] lfunpt;
-                delete[] outtbptr;
-                delete[] outtbtyp;
-                delete[] outtbsz;
-                delete[] opar;
-                delete[] oparsz;
-                delete[] opartyp;
-                delete[] oz;
-                delete[] ozsz;
-                delete[] oztyp;
-                FREE(outtb_elem);
-                il_sim->DecreaseRef();
-                il_sim->killMe();
-                return types::Function::Error;
-            }
+            int k = outtb_elem.size();
+            outtb_elem.resize(outtb_elem.size() + outtbsz[j] * outtbsz[j + nlnk]);
             for (int i = 0; i < outtbsz[j]*outtbsz[j + nlnk]; ++i)
             {
                 outtb_elem[k + i].lnk = j;
@@ -2145,18 +1414,18 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     */
 
     int ierr = 0;
+    int nelem = outtb_elem.size();
     C2F(scicos)(l_state_x, l_sim_xptr, l_state_z,
                 l_state_iz, l_sim_zptr, l_sim_modptr,
-                oz, ozsz, oztyp, l_sim_ozptr,
-                l_sim_lab, il_sim_labptr, l_sim_uid, il_sim_uidptr, l_tcur,
+                oz.data(), ozsz.data(), oztyp.data(), l_sim_ozptr,
+                l_sim_lab.data(), il_sim_labptr.data(), l_sim_uid.data(), il_sim_uidptr.data(), l_tcur,
                 l_tf, l_state_tevts, l_state_evtspt,
-                &m1e5, l_pointi, outtbptr,
-                outtbsz, outtbtyp,
-                outtb_elem, &nelem, &nlnk,
-                lfunpt, l_sim_funtyp, l_sim_inpptr,
+                &m1e5, l_pointi, outtbptr.data(), outtbsz.data(), outtbtyp.data(),
+                outtb_elem.data(), &nelem, &nlnk,
+                lfunpt.data(), l_sim_funtyp, l_sim_inpptr,
                 l_sim_outptr, l_sim_inplnk, l_sim_outlnk,
                 l_sim_rpar, l_sim_rpptr, l_sim_ipar, l_sim_ipptr,
-                opar, oparsz, opartyp, l_sim_opptr,
+                opar.data(), oparsz.data(), opartyp.data(), l_sim_opptr,
                 l_sim_clkptr, l_sim_ordptr, &m_ordptr,
                 l_sim_ordclk, l_sim_cord, &m_cord,
                 l_sim_iord, &m_iord, l_sim_oord,
@@ -2164,21 +1433,6 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
                 l_sim_critev, &nblk, l_sim_ztyp,
                 l_sim_zcptr, l_sim_subscr, &m_subscr,
                 simpar, &flag, &ierr);
-
-    /**********************
-    * Free allocated arrays
-    **********************/
-    delete[] outtbptr;
-    delete[] outtbtyp;
-    delete[] outtbsz;
-    delete[] opar;
-    delete[] oparsz;
-    delete[] opartyp;
-    delete[] oz;
-    delete[] ozsz;
-    delete[] oztyp;
-    delete[] lfunpt;
-    FREE(outtb_elem);
 
     /*************************************
     * Switch to appropriate message error
@@ -2311,21 +1565,23 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
                 break;
         }
 
-        Scierror(888, "%s\n", error);
-        il_state->DecreaseRef();
-        il_state->killMe();
-        il_tcur->DecreaseRef();
-        il_tcur->killMe();
-        delete[] il_sim_labptr;
-        delete_strings(l_sim_lab, il_sim_lab->getSize());
-        delete[] il_sim_uidptr;
-        delete_strings(l_sim_uid, il_sim_uid->getSize());
+        wchar_t* lasterrorW = getLastErrorMessage();
+        char* lasterror = wide_string_to_UTF8(lasterrorW);
+
+        char EOL = '\0';
+        char* uid = &EOL;
+        if (C2F(curblk).kfun > 0)
+        {
+            if (l_sim_uid.size() >= C2F(curblk).kfun)
+                uid = l_sim_uid[C2F(curblk).kfun - 1];
+        }
+
+        Scierror(888, _("at block #%d \"%s\"\n%s\n%s"), C2F(curblk).kfun, uid, error, lasterror);
+        FREE(lasterror);
         if (allocatedError)
         {
             delete[] error;
         }
-        il_sim->DecreaseRef();
-        il_sim->killMe();
         return types::Function::Error;
     }
 
@@ -2336,16 +1592,14 @@ types::Function::ReturnValue sci_scicosim(types::typed_list &in, int _iRetCount,
     il_state_evtspt->convertFromInteger();
     il_pointi->convertFromInteger();
 
+    // state and tcur are in the allocatedInternals owned vector, protect them from being deleted
+    allocatedInternals.erase(std::find(allocatedInternals.begin(), allocatedInternals.end(), il_state));
+    allocatedInternals.erase(std::find(allocatedInternals.begin(), allocatedInternals.end(), il_tcur));
+    
     out.push_back(il_state);
     out.push_back(il_tcur);
 
     // End
-    delete[] il_sim_labptr;
-    delete_strings(l_sim_lab, il_sim_lab->getSize());
-    delete[] il_sim_uidptr;
-    delete_strings(l_sim_uid, il_sim_uid->getSize());
-    il_sim->DecreaseRef();
-    il_sim->killMe();
     return types::Function::OK;
 }
 

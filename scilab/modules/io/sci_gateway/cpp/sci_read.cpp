@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2014 - Scilab Enterprises - Antoine ELIAS
 * Copyright (C) 2015 - Scilab Enterprises - Sylvain GENIN
 *
@@ -32,15 +32,15 @@ extern "C"
     extern int C2F(clunit)(int*, char const*, int*, int);
 
     extern int C2F(readdoublefile)(int* ID, double* dat, int* m, int* n, int* err);
-    extern int C2F(readdoublefileform)(int* ID, char* form, double* dat, int* m, int* n, int* err, int);
+    extern int C2F(readdoublefileform)(int* ID, char* form, double* dat, int* m, int* n, int* err, size_t);
     extern int C2F(readdoublelinefile)(int* ID, double* dat, int* n, int* err);
-    extern int C2F(readdoublelinefileform)(int* ID, char* form, double* dat, int* n, int* err, int);
+    extern int C2F(readdoublelinefileform)(int* ID, char* form, double* dat, int* n, int* err, size_t);
 
-    extern int C2F(readintfileform)(int* ID, char* form, int* dat, int* m, int* n, int* err, int);
-    extern int C2F(readintlinefileform)(int* ID, char* form, int* dat, int* n, int* err, int);
+    extern int C2F(readintfileform)(int* ID, char* form, int* dat, int* m, int* n, int* err, size_t);
+    extern int C2F(readintlinefileform)(int* ID, char* form, int* dat, int* n, int* err, size_t);
 
-    extern int C2F(readstringfile)(int* ID, char* form, char* dat, int* siz, int* err, int);
-    extern int C2F(readstring)(char* form, char* dat, int* siz, int* err, int);
+    extern int C2F(readstringfile)(int* ID, char* form, char* dat, int* siz, int* err, size_t);
+    extern int C2F(readstring)(char* form, char* dat, int* siz, int* err, size_t);
 
 }
 
@@ -81,7 +81,7 @@ types::Function::ReturnValue sci_read(types::typed_list &in, int _iRetCount, typ
 
         int piMode[2] = { -1, 0};
         char* pstFilename = wide_string_to_UTF8(pSPath->get(0));
-        int iErr = C2F(clunit)(&iID, pstFilename, piMode, (int)strlen(pstFilename));
+        int iErr = C2F(clunit)(&iID, pstFilename, piMode, static_cast<int>(strlen(pstFilename)));
 
         if (iErr == 240)
         {
@@ -225,72 +225,65 @@ types::Function::ReturnValue sci_read(types::typed_list &in, int _iRetCount, typ
             {
                 case types::InternalType::ScilabDouble:
                 {
-                    iRows = 1;
-                    types::Double* pD = new types::Double(iRows, iCols, false);
+                    std::vector<std::vector<double>> all;
+                    std::vector<double> line(iCols);
 
                     if (pstFormat == NULL)
                     {
-                        double* pdData = new double[iCols];
                         while (error == 0)
                         {
-                            C2F(readdoublelinefile)(&iID, pdData, &iCols, &error);
+                            C2F(readdoublelinefile)(&iID, line.data(), &iCols, &error);
                             if (error == 0)
                             {
-                                pD->resize(iRows, iCols);
-                                for (int i = 0; i < iCols; ++i)
-                                {
-                                    pD->set((iRows - 1), i, pdData[i]);
-                                }
-                                ++iRows;
+                                all.push_back(line);
                             }
                         }
-                        delete[] pdData;
                     }
                     else
                     {
-                        double* pdData = new double[iCols];
                         while (error == 0)
                         {
-                            C2F(readdoublelinefileform)(&iID, pstFormat, pdData, &iCols, &error, (int)strlen(pstFormat));
+                            C2F(readdoublelinefileform)(&iID, pstFormat, line.data(), &iCols, &error, strlen(pstFormat));
                             if (error == 0)
                             {
-                                pD->resize(iRows, iCols);
-                                for (int i = 0; i < iCols; ++i)
-                                {
-                                    pD->set((iRows - 1), i, pdData[i]);
-                                }
-                                ++iRows;
+                                all.push_back(line);
                             }
                         }
-                        delete[] pdData;
                     }
 
                     if (error != 2)
                     {
+                        iRows = static_cast<int>(all.size());
+                        types::Double* pD = new types::Double(iRows, iCols);
+                        double* p = pD->get();
+
+                        for (int i = 0; i < iRows; ++i)
+                        {
+                            for (int j = 0; j < iCols; ++j)
+                            {
+                                p[j * iRows + i] = all[i][j];
+                            }
+                        }
+
                         out.push_back(pD);
-                    }
-                    else
-                    {
-                        delete pD;
                     }
                 }
                 break;
                 case types::InternalType::ScilabInt32:
                 {
-                    iRows = 1;
-                    types::Int32* pI = new types::Int32(iRows, iCols);
+                    std::vector<std::vector<int>> all;
+                    std::vector<int> line(iCols);
+
                     int* piData = new int[iCols];
                     while (error == 0)
                     {
-                        C2F(readintlinefileform)(&iID, pstFormat, piData, &iCols, &error, (int)strlen(pstFormat));
+                        C2F(readintlinefileform)(&iID, pstFormat, line.data(), &iCols, &error, strlen(pstFormat));
                         if (error == 0)
                         {
-                            pI->resize(iRows, iCols);
                             for (int i = 0; i < iCols; ++i)
                             {
-                                pI->set((iRows - 1), i, piData[i]);
+                                all.push_back(line);
                             }
-                            ++iRows;
                         }
                     }
 
@@ -298,11 +291,19 @@ types::Function::ReturnValue sci_read(types::typed_list &in, int _iRetCount, typ
 
                     if (error != 2)
                     {
+                        iRows = static_cast<int>(all.size());
+                        types::Int32* pI = new types::Int32(iRows, iCols);
+                        int* p = pI->get();
+
+                        for (int i = 0; i < iRows; ++i)
+                        {
+                            for (int j = 0; j < iCols; ++j)
+                            {
+                                p[j * iRows + i] = all[i][j];
+                            }
+                        }
+
                         out.push_back(pI);
-                    }
-                    else
-                    {
-                        delete pI;
                     }
                 }
                 break;
@@ -320,39 +321,37 @@ types::Function::ReturnValue sci_read(types::typed_list &in, int _iRetCount, typ
                     }
                     else
                     {
-                        iRows = 1;
-                        types::String* pS = new types::String(iRows, iCols);
                         char pCt[4096];
-
+                        std::vector<std::string> all;
                         while (error == 0)
                         {
                             int siz = 0;
-                            C2F(readstringfile)(&iID, pstFormat, pCt, &siz, &error, (int)strlen(pstFormat));
+                            C2F(readstringfile)(&iID, pstFormat, pCt, &siz, &error, strlen(pstFormat));
                             pCt[siz] = '\0';
-
                             if (error == 0)
                             {
-                                pS->resize(iRows, iCols);
-                                pS->set((iRows - 1), (iCols - 1), pCt);
-                                ++iRows;
+                                all.push_back(pCt);
                             }
                         }
 
                         if (error != 2)
                         {
+                            iRows = static_cast<int>(all.size());
                             // on empty file, data are not set
-                            if (pS->get(0) == NULL)
+                            if (iRows == 0)
                             {
                                 out.push_back(types::Double::Empty());
                             }
                             else
                             {
+                                types::String* pS = new types::String(iRows, iCols);
+                                for (int i = 0; i < iRows; ++i)
+                                {
+                                    pS->set(i, all[i].data());
+                                }
+                                
                                 out.push_back(pS);
                             }
-                        }
-                        else
-                        {
-                            delete pS;
                         }
                     }
                 }
@@ -386,7 +385,7 @@ types::Function::ReturnValue sci_read(types::typed_list &in, int _iRetCount, typ
                     while (error != 2)
                     {
                         int siz = 0;
-                        C2F(readstring)(pstString, pCt, &siz, &error, (int)strlen(pstString));
+                        C2F(readstring)(pstString, pCt, &siz, &error, strlen(pstString));
                         pCt[siz] = '\0';
 
                         if ((siz == 1) && (pCt[0] == ' '))
@@ -481,7 +480,7 @@ types::Function::ReturnValue sci_read(types::typed_list &in, int _iRetCount, typ
                         for (; bEndWrite == false; iRows++)
                         {
                             int siz = 0;
-                            C2F(readstring)(pstFormat, pCt, &siz, &error, (int)strlen(pstFormat));
+                            C2F(readstring)(pstFormat, pCt, &siz, &error, strlen(pstFormat));
                             pCt[siz] = '\0';
 
                             if ((siz == 1) && (pCt[0] == ' '))
@@ -528,7 +527,7 @@ types::Function::ReturnValue sci_read(types::typed_list &in, int _iRetCount, typ
                     }
                     else
                     {
-                        C2F(readdoublefileform)(&iID, pstFormat, pd, &iRows, &iCols, &error, (int)strlen(pstFormat));
+                        C2F(readdoublefileform)(&iID, pstFormat, pd, &iRows, &iCols, &error, strlen(pstFormat));
                     }
 
                     if (error == 0)
@@ -546,7 +545,7 @@ types::Function::ReturnValue sci_read(types::typed_list &in, int _iRetCount, typ
                     types::Int32* pI = new types::Int32(iRows, iCols);
                     int* pi = pI->get();
 
-                    C2F(readintfileform)(&iID, pstFormat, pi, &iRows, &iCols, &error, (int)strlen(pstFormat));
+                    C2F(readintfileform)(&iID, pstFormat, pi, &iRows, &iCols, &error, strlen(pstFormat));
 
                     if (error == 0)
                     {
@@ -565,7 +564,7 @@ types::Function::ReturnValue sci_read(types::typed_list &in, int _iRetCount, typ
                     for (int i = 0; i < iCols * iRows; ++i)
                     {
                         int siz = 0;
-                        C2F(readstringfile)(&iID, pstFormat, pCt, &siz, &error, (int)strlen(pstFormat));
+                        C2F(readstringfile)(&iID, pstFormat, pCt, &siz, &error, strlen(pstFormat));
                         pCt[siz] = '\0';
                         pS->set(i, pCt);
                     }
@@ -621,7 +620,7 @@ types::Function::ReturnValue sci_read(types::typed_list &in, int _iRetCount, typ
                     for (int i = 0; i < iRows && error == 0; ++i)
                     {
                         int siz = 0;
-                        C2F(readstring)(pstString, pCt, &siz, &error, (int)strlen(pstString));
+                        C2F(readstring)(pstString, pCt, &siz, &error, strlen(pstString));
                         pCt[siz] = '\0';
 
                         char* pch;
@@ -690,7 +689,7 @@ types::Function::ReturnValue sci_read(types::typed_list &in, int _iRetCount, typ
                         for (int i = 0; i < (iRows); i++)
                         {
                             int siz = 0;
-                            C2F(readstring)(pstFormat, pCt, &siz, &error, (int)strlen(pstFormat));
+                            C2F(readstring)(pstFormat, pCt, &siz, &error, strlen(pstFormat));
                             pCt[siz] = '\0';
                             pS->set(i, pCt);
                         }

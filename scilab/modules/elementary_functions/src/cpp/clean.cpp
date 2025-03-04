@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2014 - Scilab Enterprises - Cedric Delamarre
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -31,8 +31,14 @@ void clean(double* pdblReal, double* pdblImg, int iSize, double dEpsA, double dE
             double d = dabss(pdblReal[i])+dabss(pdblImg[i]);
             if (std::isfinite(d))
             {
-               dNorm += d;
+               dNorm = Max(dNorm, d);
             }
+        }
+
+        if(dNorm == 0)
+        {
+            // only no finite or zero values
+            return;
         }
 
         double dEps = Max(dEpsA, dEpsR * dNorm);
@@ -58,9 +64,16 @@ void clean(double* pdblReal, double* pdblImg, int iSize, double dEpsA, double dE
             double d = dabss(pdblReal[i]);
             if (std::isfinite(d))
             {
-               dNorm += d;
+               dNorm = Max(dNorm, d);
             }
         }
+
+        if(dNorm == 0)
+        {
+            // only no finite or zero values
+            return;
+        }
+
         double dEps = Max(dEpsA, dEpsR * dNorm);
         for (int i = 0 ; i < iSize ; i++)
         {

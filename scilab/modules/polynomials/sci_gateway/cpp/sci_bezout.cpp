@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2012 - Scilab Enterprises - Cedric DELAMARRE
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -96,13 +96,19 @@ types::Function::ReturnValue sci_bezout(types::typed_list &in, int _iRetCount, t
     int iMinRank     = std::min(piDegree[0], piDegree[1]) + 1;
     double* pdblWork = new double[10 * iMaxRank + 3 * iMaxRank * iMaxRank];
     double* pdblOut  = new double[2 * (piDegree[0] + piDegree[1] + 2) + iMinRank + 3];
-    int ipb[6];
+    int ipb[6] = {0};
 
     C2F(recbez)(pdblIn[0], piDegree, pdblIn[1], piDegree + 1, pdblOut, ipb, pdblWork, &dblErr);
     delete[] pdblWork;
 
     // create result
+    if (ipb[0] > ipb[1])
+    {
+        Scierror(999, _("%s: An error occurred.\n"), "bezout");
+        return types::Function::Error;
+    }
     int np = ipb[1] - ipb[0];
+
     double* pdblSP = NULL;
     types::SinglePoly* pSP = new types::SinglePoly(&pdblSP, np - 1);
     memcpy(pdblSP, pdblOut + ipb[0] - 1, np * sizeof(double));

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA
  * Copyright (C) 2012 - Scilab Enterprises - Adeline CARNIS
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -305,9 +305,8 @@ H^2_α(z) = J_α(z) - i \cdot Y_α(z)">
    [X,Y] = ndgrid(x,y);
    H = besselh(0,1,X+%i*Y);
    clf();f=gcf();
-   xset("fpf"," ")
-   f.color_map=jetcolormap(16);
-   contour2d(x,y,abs(H),0.2:0.2:3.2,strf="034",rect=[-4,-1.5,3,1.5])
+   f.color_map=jet(16);
+   contour2d(x,y,abs(H),0.2:0.2:3.2,strf="034",rect=[-4,-1.5,3,1.5],fpf=" ")
    legends(string(0.2:0.2:3.2),1:16,"ur")
    xtitle("Level curves of |H1(0,z)|")
  ]]></programlisting>
@@ -316,9 +315,8 @@ H^2_α(z) = J_α(z) - i \cdot Y_α(z)">
             [X,Y] = ndgrid(x,y);
             H = besselh(0,1,X+%i*Y);
             clf();f=gcf();
-            xset("fpf"," ")
-            f.color_map=jetcolormap(16);
-            contour2d(x,y,abs(H),0.2:0.2:3.2,strf="034",rect=[-4,-1.5,3,1.5])
+            f.color_map=jet(16);
+            contour2d(x,y,abs(H),0.2:0.2:3.2,strf="034",rect=[-4,-1.5,3,1.5],fpf=" ")
             legends(string(0.2:0.2:3.2),1:16,"ur")
             xtitle("Level curves of |H1(0,z)|")
         </scilab:image>

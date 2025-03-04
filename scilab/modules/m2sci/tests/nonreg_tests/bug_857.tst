@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ????-2008 - INRIA - Vincent COUVERT <vincent.couvert@inria.fr>
 // Copyright (C) 2005-2008 - INRIA - Pierre MARECHAL <pierre.marechal@inria.fr>
 //
@@ -11,8 +11,8 @@
 
 // <-- Non-regression test for bug 857 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/857
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/857
 //
 // <-- Short Description -->
 //    Imaginary unit i and index loop i in an M-file are both
@@ -80,10 +80,10 @@ SCIFILECONTENTSREF=["";
         "for k = 1:10";
         "  for i = 1:10";
         "    for j = 1:10";
-        "      chgt_rampe(1,k) = matrix(2*i-j+1,1,-1);";
-        "    end;";
-        "  end;";
-        "end;";
+        "      chgt_rampe(1,k) = 2*i-j+1;";
+        "    end";
+        "  end";
+        "end";
         "// Two complex values";
         "icplxnumber2 = 1+3*%i;";
         "jcplxnumber2 = 1+3*%i;";
@@ -98,8 +98,8 @@ SCIFILECONTENTSREF=["";
         "        disp(i)";
         "      else";
         "        disp(""abcd"")";
-        "    end;";
-        "  end;";
-        "end;"];
+        "    end";
+        "  end";
+        "end"];
 
 assert_checkequal(SCIFILECONTENTSREF, SCIFILECONTENTS);

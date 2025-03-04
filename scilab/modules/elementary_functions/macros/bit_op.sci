@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2016 - Samuel GOUGEON
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -16,9 +16,10 @@ function z = bit_op(x, y, fname)
 
     // Check input arguments
     // =====================
-    if ~isdef("fname","l") || ~or(fname==["bitor" "bitxor" "bitand"])
-        msg = gettext("%s: unknown bitwise function ""%s"".\n")
-        error(msprintf(msg, "bit_op", fname))
+    arguments
+        x {mustBeA(x, ["double", "int"]), mustBeInteger, mustBeNonnegative}
+        y {mustBeA(y, ["double", "int"]), mustBeInteger, mustBeNonnegative}
+        fname {mustBeA(fname, "string"), mustBeMember(fname, ["bitor", "bitxor", "bitand"])}
     end
 
     if x==[] | y==[]
@@ -35,14 +36,6 @@ function z = bit_op(x, y, fname)
         elseif size(y,"*")==1
             y = y .* ones(x)
         end
-    end
-
-    msg = gettext("%s: Argument #%d: Integers >=0 expected.\n")
-    if  (type(x)<>1  & type(x)<>8) || or(x<0) || (type(x)==1  & or((x-floor(x))<>0))
-        error(msprintf(msg, fname, 1))
-    end
-    if  (type(y)<>1  & type(y)<>8) || or(y<0) || (type(y)==1  & or((y-floor(y))<>0))
-        error(msprintf(msg, fname, 2))
     end
 
     // Casting

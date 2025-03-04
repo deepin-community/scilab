@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2005-2008 - INRIA - Allan CORNET
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -7,8 +7,8 @@
 // <-- CLI SHELL MODE -->
 // <-- Non-regression test for bug 2107 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=2107
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/2107
 //
 // Creates file
 LINE = "AAAAAAAAAAAAAA	2005/01/06	10:55:50.0000	4	BBBBBBBBBBBBBBBB	2005/01/11 00:00:50.0000	2005/01/02 00:00:00.0000	2005/01/02 20:28:10.0000";

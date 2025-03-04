@@ -1,9 +1,9 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2010 - DIGITEO - Vincent COUVERT
  * Copyright (C) 2010 - DIGITEO - Yann COLLETTE
- *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ * Copyright (C) 2023 - 3DS - Vincent COUVERT
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
  * pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -21,7 +21,7 @@
 #include "Scierror.h"
 #include "sciprint.h"
 
-int CreateBooleanVariable(void *pvApiCtx, int iVar, matvar_t *matVariable, int * parent, int item_position)
+int CreateBooleanVariable(void* pvApiCtx, int iVar, int integerType, matvar_t* matVariable, int* parent, int item_position)
 {
     int nbRow = 0, nbCol = 0;
     int *piDims = NULL;
@@ -45,7 +45,19 @@ int CreateBooleanVariable(void *pvApiCtx, int iVar, matvar_t *matVariable, int *
 
             for (K = 0; K < nbRow * nbCol; K++)
             {
-                intPtr[K] = ((unsigned char*)matVariable->data)[K];
+                switch (integerType)
+                {
+                    case MAT_C_UINT8:
+                        intPtr[K] = ((unsigned char*)matVariable->data)[K];
+                        break;
+                    case MAT_C_UINT16:
+                        intPtr[K] = ((unsigned short*)matVariable->data)[K];
+                        break;
+                    case MAT_C_UINT32:
+                        intPtr[K] = ((unsigned int*)matVariable->data)[K];
+                        break;
+                }
+
             }
 
             if (parent == NULL)

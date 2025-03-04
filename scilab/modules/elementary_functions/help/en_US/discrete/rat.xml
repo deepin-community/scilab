@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -20,8 +20,8 @@
     </refnamediv>
     <refsynopsisdiv>
         <title>Syntax</title>
-        <synopsis>[N,D]=rat(X [,tol])
-            Y=rat(X [,tol])
+        <synopsis>[N, D] = rat(X [,tol])
+            Y = rat(X [,tol])
         </synopsis>
     </refsynopsisdiv>
     <refsection>
@@ -62,12 +62,12 @@
     <refsection>
         <title>Description</title>
         <para>
-            <literal>[N,D] = rat(X,tol)</literal> returns two integer matrices
-            so that <literal>N./D</literal> is close to<literal>X</literal> in the
-            sense that <literal>abs(N./D - X) &lt;= tol*norm(X,1)*abs(X)</literal>.
+            <literal>[N, D] = rat(X, tol)</literal> returns two integer matrices
+            so that <literal>N./D</literal> is close to <literal>X</literal> in the
+            sense that <literal>abs(N./D - X) &lt;= tol * norm(X, 1)</literal>.
         </para>
         <para>
-            <literal>y=rat(x,tol)</literal> return the quotient
+            <literal>y = rat(x, tol)</literal> returns the quotient
             <literal>N./D</literal>
         </para>
         <para>

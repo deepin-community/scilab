@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) XXXX-2008 - INRIA
 // Copyright (C) XXXX-2008 - INRIA - Allan CORNET
 //
@@ -46,7 +46,7 @@ function unix_x(cmd)
         if (stat) then
             messagebox(rep);
         else
-            for i=1:size(rep,"*") do write(%io(2),"   "+rep(i));end
+            for i=1:size(rep,"*") do printf("   ", rep(i));end
             error(msprintf(gettext("%s: error during ""%s"" execution"),"unix_x",cmd));
         end
     else

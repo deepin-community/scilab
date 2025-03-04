@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 // Copyright (C) DIGITEO - 2011 - Allan CORNET
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -18,52 +18,42 @@ function [a, ka] = setdiff(a, b, orien)
     // * 2018 - S. Gougeon : orien="r"|"c" added, including the hypermat case
     // * 2019 - S. Gougeon : complex numbers supported
 
-    [lhs, rhs] = argn();
-    ka = []
-
-    // ========================
-    // CHECKING INPUT ARGUMENTS
-    // ========================
-    if rhs < 2 | rhs > 3 then
-        msg = _("%s: Wrong number of input argument(s): %d or %d expected.\n")
-        error(msprintf(msg, "setdiff", 2, 3))
+    arguments
+        a {mustBeA(a, ["double", "boolean", "sparse", "booleansparse", "int", "string"])}
+        b {mustBeA(b, ["double", "boolean", "sparse", "booleansparse", "int", "string"])}
+        orien {mustBeA(orien, ["double", "string"]), mustBeMember(orien, {1, 2, "r", "c", "*"})}= "*"
     end
+
+    ka = [];
+    if size(a, "*") == 0 then
+        return
+    end
+    
     typa = type(a)
-    if ~or(typa == [1 4 5 6 8 10]) then
-        msg = _("%s: Argument #%d: Unsupported type %s.\n")
-        error(msprintf(msg, "setdiff", 1, typeof(a)))
-    end
 
-    if size(a,"*") <> 0 & size(b,"*") <> 0 & typa==10 & type(b) <> 10 then
-        msg = _("%s: Arguments #%d and #%d: Same types expected.\n")
-        error(msprintf(msg, "setdiff", 1, 2))
+    if typa == 10 & size(b, "*") <> 0 & type(b) <> 10 then
+        msg = _("%s: Wrong type for input argument #%d: Must be same type of #%d.\n")
+        error(msprintf(msg, "setdiff", 2, 1))
     end
     if typa == 8 & type(b) == 8 & inttype(a) <> inttype(b) then
-        msg = _("%s: Arguments #%d and #%d: Same integer types expected.\n")
+        msg = _("%s: Wrong type for input arguments #%d and #%d: Same integer types expected.\n")
         error(msprintf(msg, "setdiff", 1, 2))
     end
     // orien
-    if ~isdef("orien","l") then
+    if orien == "*" then
         orien = 0
-    elseif orien == "r"
+    elseif orien == "r" then
         orien = 1
-    elseif orien == "c"
+    elseif orien == "c" then
         orien = 2
-    elseif orien ~= 1 & orien ~= 2
-        msg = _("%s: Argument #%d: Must be in the set {%s}.\n")
-        error(msprintf(msg, "setdiff", 3, "''r'',''c'',1,2"))
     end
-    // Trivial case, whatever is b
-    if size(a,"*")==0
-        return
-    end
-    //
+
     if orien==1 & size(b,"*")<>0 & size(a,2)~=size(b,2) then
-        msg = _("%s: Arguments #%d and #%d: Same numbers of columns expected.\n")
+        msg = _("%s: Wrong size for input arguments #%d and #%d: Same numbers of columns expected.\n")
         error(msprintf(msg, "setdiff", 1, 2))
     end
     if orien==2 & size(b,"*")<>0 &  size(a,1)~=size(b,1) then
-        msg = _("%s: Arguments #%d and #%d: Same numbers of rows expected.\n")
+        msg = _("%s: Wrong size for input arguments #%d and #%d: Same numbers of rows expected.\n")
         error(msprintf(msg, "setdiff", 1, 2))
     end
 
@@ -82,7 +72,7 @@ function [a, ka] = setdiff(a, b, orien)
         if ndims(b) > 2 then
             b = serialize_hypermat(b, orien)
         end
-        if lhs > 1
+        if nargout > 1
             [a, ka] = unique(a, orien)
         else
             a = unique(a, orien)
@@ -103,7 +93,7 @@ function [a, ka] = setdiff(a, b, orien)
         k = find(and(c(1:$-1,:) == c(2:$,:), "c"))
         if k <> []
             a(kc([k k+1]),:) = []
-            if lhs > 1
+            if nargout > 1
                 ka(kc([k k+1])) = []
             end
         end
@@ -115,7 +105,7 @@ function [a, ka] = setdiff(a, b, orien)
     else
         // by element
         // ==========
-        if lhs > 1
+        if nargout > 1
             [a, ka] = unique(a);
         else
             a = unique(a);
@@ -132,7 +122,7 @@ function [a, ka] = setdiff(a, b, orien)
         e = find(x(2:$)==x(1:$-1));
         if e <> []
             a(k([e e+1])) = []
-            if lhs > 1
+            if nargout > 1
                 ka(k([e e+1])) = []
             end
         end

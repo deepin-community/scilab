@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2014 - Scilab Enterprises - Paul Bignier
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -11,7 +11,7 @@ loadXcosLibs();
 scicos_log("TRACE");
 
 // Creating a Diagram containing a Link connected to a Block
-scs = scicos_diagram( objs=list(BIGSOM_f("define"),scicos_link(from=[1,1,0])) );
+scs = scicos_diagram( objs=list(BIGSOM_f("define"), scicos_link(from=[1,1,0], to=[1,1,1])) );
 
 // Extracting and modifying the Link should not modify the original Diagram
 newLink = scs.objs(2);

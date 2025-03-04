@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Paul Bignier
 // Copyright (C) 09/2013 - A. Khorshidi
 //
@@ -23,7 +23,7 @@ function [] = bode_asymp(sl, w_min, w_max)
     //     s = %s; h = syslin("c", 1/(s+1)); scf(10001); bode(h); bode_asymp(h)
     //     s = %s; h = syslin("c", 1/(s+1)); scf(10002); gainplot(h); bode_asymp(h)
     // Ref:
-    //     http://forge.scilab.org/index.php/p/cpge/source/tree/HEAD/macros/REP_FREQ_pre_simulate.sci
+    //     https://gitlab.com/scilab/forge/cpge/-/tree/master/macros/REP_FREQ_pre_simulate.sci
 
     rhs = argn(2);
 

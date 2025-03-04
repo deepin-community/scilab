@@ -1,11 +1,10 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2015 - Scilab Enterprises - Pierre-Aime Agnel
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
 // <-- CLI SHELL MODE -->
-//
 // <-- ENGLISH IMPOSED -->
 
 // Testing warning modes
@@ -24,11 +23,10 @@ try
 catch
     str = lasterror();
 end
-str //display str
 assert_checktrue(str <> "");
 
 
-//Testing waring on mode
+//Testing warning on mode
 warning("on");
 str = "";
 try
@@ -36,16 +34,14 @@ try
 catch
     str = lasterror();
 end
-str //display str
 assert_checktrue(str == "");
 
-//Testing waring off mode
-warning("on");
+//Testing warning off mode
+warning("off");
 str = "";
 try
     warning("this is a warning");
 catch
     str = lasterror();
 end
-str //display str
 assert_checktrue(str == "");

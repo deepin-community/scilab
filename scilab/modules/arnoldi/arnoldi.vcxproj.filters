@@ -51,9 +51,6 @@
     <ClCompile Include="src\c\eigs_dependencies.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sci_gateway\c\sci_eigs.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes\dynlib_arnoldi.h">
@@ -85,5 +82,6 @@
       <Filter>localization</Filter>
     </None>
     <None Include="locales\arnoldi.pot" />
+    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>

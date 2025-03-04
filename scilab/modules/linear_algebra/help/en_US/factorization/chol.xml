@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -20,7 +20,7 @@
     </refnamediv>
     <refsynopsisdiv>
         <title>Syntax</title>
-        <synopsis>[R]=chol(X)</synopsis>
+        <synopsis>R = chol(X)</synopsis>
     </refsynopsisdiv>
     <refsection>
         <title>Arguments</title>
@@ -28,7 +28,7 @@
             <varlistentry>
                 <term>X</term>
                 <listitem>
-                    <para>a symmetric positive definite real or complex matrix.</para>
+                    <para>a square positive definite real symmetric or complex hermitian matrix.</para>
                 </listitem>
             </varlistentry>
         </variablelist>
@@ -44,20 +44,19 @@
             The lower triangular is assumed to be the (complex conjugate)
             transpose of the upper.
         </para>
-    </refsection>
-    <refsection>
-        <title>References</title>
-        <para>
-            Cholesky decomposition is based on  the Lapack routines
-            DPOTRF for  real matrices and  ZPOTRF for the complex case.
-        </para>
+        <note>
+            <para>
+                The Cholesky decomposition is based on  the Lapack routines
+                DPOTRF for  real matrices and  ZPOTRF for the complex case.
+            </para>
+        </note>
     </refsection>
     <refsection>
         <title>Examples</title>
         <programlisting role="example"><![CDATA[
-W=rand(5,5)+%i*rand(5,5);
-X=W*W';
-R=chol(X);
+W = rand(5,5) + %i*rand(5,5);
+X = W*W';
+R = chol(X)
 norm(R'*R-X)
  ]]></programlisting>
     </refsection>

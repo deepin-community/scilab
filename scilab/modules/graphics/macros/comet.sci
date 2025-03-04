@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2011 - INRIA - Serge Steer <serge.steer@inria.fr>
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
 // Copyright (C) 2018 - Samuel GOUGEON
@@ -129,12 +129,17 @@ function comet(varargin)
     drawlater()
     tail=[];body=[];head=[];
     for l=1:m
-        xpoly([],[]);tail(l)=gce();
+        xpoly([],[]);
+        tail(l)=gce();
         tail(l).foreground=c(l);
-        xpoly([],[]);body(l)=gce();
+
+        xpoly([],[]);
+        body(l)=gce();
         body(l).foreground=c(l);
         body(l).thickness=2;
-        xpoly([],[],"marks");head(l)=gce();
+
+        xpoly([],[],"marks");
+        head(l)=gce();
         head(l).mark_size_unit="point";
         head(l).mark_size=6;
         head(l).mark_style=9;

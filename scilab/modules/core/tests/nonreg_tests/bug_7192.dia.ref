@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2016 - Samuel GOUGEON
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -8,8 +8,8 @@
 //
 // <-- Non-regression test for bug 7192 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/7192
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/7192
 //
 // <-- Short Description -->
 // From S=[], S($+1,:) = some_row inserted it in row#2 after a parasitic row#1

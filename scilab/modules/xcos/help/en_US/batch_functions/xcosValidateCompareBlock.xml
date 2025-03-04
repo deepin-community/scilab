@@ -44,10 +44,10 @@
       loadXcosLibs();
       block1 = CONST_m("define");
       block2 = CONST_m("define");
-      [status, message] = xcosValidateCompareBlock(block1,block2)
+      [status, msg] = xcosValidateCompareBlock(block1,block2)
 
       block2.model.rpar = 42;
-      [status, message] = xcosValidateCompareBlock(block1,block2)
+      [status, msg] = xcosValidateCompareBlock(block1,block2)
       ]]></programlisting>
         </para>
     </refsection>

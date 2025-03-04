@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ????-2008 - INRIA
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -20,26 +20,26 @@ info=list([],0,[],[],[],0,0);
 deff('[r,ires]=dres1(t,y,ydot)','r=[ydot(1)+10*y(1);y(2)+y(1)-1];ires=0')
 deff('pd=djac1(t,y,ydot,cj)','pd=[cj+10,0;1,1]')
 //   scilab function, without jacobian
-yy0=dassl([y0,y0d],t0,t,dres1,info);
+yy0=%_dassl([y0,y0d],t0,t,dres1,info);
 //   scilab functions, with jacobian
-yy1=dassl([y0,y0d],t0,t,dres1,djac1,info);
+yy1=%_dassl([y0,y0d],t0,t,dres1,djac1,info);
 // fortran routine, without jacobian
-yy2=dassl([y0,y0d],t0,t,'dres1',info);   //=yy0
+yy2=%_dassl([y0,y0d],t0,t,'dres1',info);   //=yy0
 assert_checkalmostequal(norm(yy2,1),norm(yy0,1),1E-5);
 // fortran routines, with jacobian
-yy3=dassl([y0,y0d],t0,t,'dres1','djac1',info);  //=yy1
+yy3=%_dassl([y0,y0d],t0,t,'dres1','djac1',info);  //=yy1
 assert_checkalmostequal(norm(yy3,1),norm(yy1,1),1E-5);
-yy3bis=dassl([y0,y0d],t0,t,'dres1',djac1,info); 
+yy3bis=%_dassl([y0,y0d],t0,t,'dres1',djac1,info); 
 // call fortran dres1 and scilab's djac1
-yy3ter=dassl([y0,y0d],t0,t,dres1,'djac1',info);
+yy3ter=%_dassl([y0,y0d],t0,t,dres1,'djac1',info);
 //
 // with specific atol and rtol parameters
 atol=1.d-6;rtol=0;
-yy4=dassl([y0,y0d],t0,t,atol,rtol,dres1,info);
-yy5=dassl([y0,y0d],t0,t,atol,rtol,'dres1',info); //=yy4
+yy4=%_dassl([y0,y0d],t0,t,atol,rtol,dres1,info);
+yy5=%_dassl([y0,y0d],t0,t,atol,rtol,'dres1',info); //=yy4
 assert_checkalmostequal(norm(yy5,1),norm(yy4,1),1E-9);
-yy6=dassl([y0,y0d],t0,t,atol,rtol,dres1,djac1,info); 
-yy7=dassl([y0,y0d],t0,t,atol,rtol,'dres1','djac1',info); //==yy6
+yy6=%_dassl([y0,y0d],t0,t,atol,rtol,dres1,djac1,info); 
+yy7=%_dassl([y0,y0d],t0,t,atol,rtol,'dres1','djac1',info); //==yy6
 assert_checkalmostequal(norm(yy7,1),norm(yy6,1),1E-12);
 //    
 //   Testing E xdot - A x=0
@@ -51,21 +51,23 @@ E=rand(nx,1)*rand(1,nx);A=rand(nx,nx);
 [Si,Pi,Di,o]=penlaur(E,A);pp=Si*E;[q,m]=fullrf(pp);x0=q(:,1);x0d=pinv(E)*A*x0;
 deff('[r,ires]=g(t,x,xdot)','r=E*xdot-A*x;ires=0');
 t=[1,2,3];t0=0;info=list([],0,[],[],[],0,0);
-x=dassl([x0,x0d],t0,t,g,info);x1=x(2:nx+1,:);
+x=%_dassl([x0,x0d],t0,t,g,info);x1=x(2:nx+1,:);
 assert_checkalmostequal(norm(pp*x1,1),norm(x1,1),1.d-5);
 //x(4) goes through 1 at  t=1.5409711;
-t=1.5409711;ww=dassl([x0,x0d],t0,t,g,info);
-assert_checkalmostequal(ww(5),1,0.001);
+// with mkl dll (on windows) and this case, svd returns U and V with different signs.
+// [U,s,V] = svd(A) ==> U*s*V' == A && (-U)*s*(-V)' == A
+t=1.5409711;ww=%_dassl([x0,x0d],t0,t,g,info);
+assert_checkalmostequal(abs(ww(5)), 1, 0.001);
 deff('[rt]=surface(t,y,yd)','rt=y(4)-1');nbsurf=1;
-[yyy,nnn]=dasrt([x0,x0d],t0,t,g,nbsurf,surface,info);
+[yyy,nnn]=%_dasrt([x0,x0d],t0,t,g,nbsurf,surface,info);
 deff('pd=j(t,y,ydot,cj)','pd=cj*E-A');
-x=dassl([x0,x0d],t0,t,g,j,info);x2=x(2:nx+1,1);
+x=%_dassl([x0,x0d],t0,t,g,j,info);x2=x(2:nx+1,1);
 assert_checkalmostequal(norm(x2,1),norm(ww(2:nx+1,1),1),0.0001);
-[yyy1,nnn]=dasrt([x0,x0d],t0,t,g,j,nbsurf,surface,info);
+[yyy1,nnn]=%_dasrt([x0,x0d],t0,t,g,j,nbsurf,surface,info);
 //x0d is not known:
 x0d=ones(x0);info(7)=1;
-x=dassl([x0,x0d],t0,t,g,info);
-xn=dassl([x0,x0d],t0,t,g,j,info);
+x=%_dassl([x0,x0d],t0,t,g,info);
+xn=%_dassl([x0,x0d],t0,t,g,j,info);
 assert_checkalmostequal(norm(x,1),norm(xn,1),0.00001);
 
 
@@ -79,7 +81,7 @@ delta=0*y0;
 y0d=zeros(y0);y0d(1)=-2;y0d(2)=1;y0d(6)=1;
 t0=0;t=[0.01,0.1,1,10,100];
 rtol=0;atol=1.d-6;
-y=dassl([y0,y0d],t0,t,atol,rtol,'dres2',info);
+y=%_dassl([y0,y0d],t0,t,atol,rtol,'dres2',info);
 
 //                 DASRT
 // 
@@ -95,13 +97,13 @@ y=dassl([y0,y0d],t0,t,atol,rtol,'dres2',info);
 y0=1;t=2:6;t0=1;y0d=3;
 info=list([],0,[],[],[],0,0);
 atol=1.d-6;rtol=0;ng=2;
-[yy,nn]=dasrt([y0,y0d],t0,t,atol,rtol,'res1',ng,'gr1',info);
+[yy,nn]=%_dasrt([y0,y0d],t0,t,atol,rtol,'res1',ng,'gr1',info);
 assert_checkalmostequal(nn(1),2.47,0.001);
 y0=yy(2,2);y0d=yy(3,2);t0=nn(1);t=[3,4,5,6];
-[yy,nn]=dasrt([y0,y0d],t0,t,atol,rtol,'res1',ng,'gr1',info);
+[yy,nn]=%_dasrt([y0,y0d],t0,t,atol,rtol,'res1',ng,'gr1',info);
 assert_checkalmostequal(nn(1),2.5,0.001);
 y0=yy(2,1);y0d=yy(3,1);t0=nn(1);t=[3,4,5,6];
-[yy,nn]=dasrt([y0,y0d],t0,t,atol,rtol,'res1',ng,'gr1',info);
+[yy,nn]=%_dasrt([y0,y0d],t0,t,atol,rtol,'res1',ng,'gr1',info);
 assert_checkalmostequal(nn(1),2.53,0.001);
 
 deff('[delta,ires]=res1(t,y,ydot)','ires=0;delta=ydot-((2*log(y)+8)/t-5)*y')
@@ -110,13 +112,13 @@ deff('[rts]=gr1(t,y,yd)','rts=[((2*log(y)+8)/t-5)*y;log(y)-2.2491]')
 y0=1;t=2:6;t0=1;y0d=3;
 info=list([],0,[],[],[],0,0);
 atol=1.d-6;rtol=0;ng=2;
-[yy,nn]=dasrt([y0,y0d],t0,t,atol,rtol,res1,ng,gr1,info);
+[yy,nn]=%_dasrt([y0,y0d],t0,t,atol,rtol,res1,ng,gr1,info);
 assert_checkalmostequal(nn(1),2.47,0.001);
 y0=yy(2,2);y0d=yy(3,2);t0=nn(1);t=[3,4,5,6];
-[yy,nn]=dasrt([y0,y0d],t0,t,atol,rtol,res1,ng,gr1,info);
+[yy,nn]=%_dasrt([y0,y0d],t0,t,atol,rtol,res1,ng,gr1,info);
 assert_checkalmostequal(nn(1),2.5,0.001);
 y0=yy(2,1);y0d=yy(3,1);t0=nn(1);t=[3,4,5,6];
-[yy,nn]=dasrt([y0,y0d],t0,t,atol,rtol,res1,ng,gr1,info);
+[yy,nn]=%_dasrt([y0,y0d],t0,t,atol,rtol,res1,ng,gr1,info);
 assert_checkalmostequal(nn(1),2.53,0.001);
 
 //C
@@ -133,22 +135,22 @@ assert_checkalmostequal(nn(1),2.53,0.001);
 rtol=[1.d-6;1.d-6];atol=[1.d-6;1.d-4];
 t0=0;y0=[2;0];y0d=[0;-2];t=[20:20:200];ng=1;
 info=list([],0,[],[],[],0,0);
-[yy,nn]=dasrt([y0,y0d],t0,t,atol,rtol,'res2','jac2',ng,'gr2',info);
+[yy,nn]=%_dasrt([y0,y0d],t0,t,atol,rtol,'res2','jac2',ng,'gr2',info);
 assert_checkalmostequal(nn(1),81.163512,0.001);
 
 deff('[delta,ires]=res2(t,y,ydot)',...
 'ires=0;y1=y(1),y2=y(2),delta=[ydot-[y2;100*(1-y1*y1)*y2-y1]]')
-[yy,nn]=dasrt([y0,y0d],t0,t,atol,rtol,res2,'jac2',ng,'gr2',info);
+[yy,nn]=%_dasrt([y0,y0d],t0,t,atol,rtol,res2,'jac2',ng,'gr2',info);
 deff('J=jac2(t,y,ydot,c)','y1=y(1);y2=y(2);J=[c,-1;200*y1*y2+1,c-100*(1-y1*y1)]')
-[yy,nn]=dasrt([y0,y0d],t0,t,atol,rtol,res2,jac2,ng,'gr2',info);
+[yy,nn]=%_dasrt([y0,y0d],t0,t,atol,rtol,res2,jac2,ng,'gr2',info);
 deff('s=gr2(t,y,yd)','s=y(1)')
-[yy,nn]=dasrt([y0,y0d],t0,t,atol,rtol,res2,jac2,ng,gr2,info);
+[yy,nn]=%_dasrt([y0,y0d],t0,t,atol,rtol,res2,jac2,ng,gr2,info);
 
 //           Hot Restart
 
-[yy,nn,hotd]=dasrt([y0,y0d],t0,t,atol,rtol,'res2','jac2',ng,'gr2',info);
+[yy,nn,hotd]=%_dasrt([y0,y0d],t0,t,atol,rtol,'res2','jac2',ng,'gr2',info);
 t01=nn(1);t=100:20:200;[pp,qq]=size(yy);y01=yy(2:3,qq);y0d1=yy(3:4,qq);
-[yy,nn,hotd]=dasrt([y01,y0d1],t01,t,atol,rtol,'res2','jac2',ng,'gr2',info,hotd);
+[yy,nn,hotd]=%_dasrt([y01,y0d1],t01,t,atol,rtol,'res2','jac2',ng,'gr2',info,hotd);
 assert_checkalmostequal(nn(1),162.57763,0.004);
 
 //Test of Dynamic link (Require f77!)
@@ -217,9 +219,9 @@ gr22=[...
 //rtol=[1.d-6;1.d-6];atol=[1.d-6;1.d-4];
 //t0=0;y0=[2;0];y0d=[0;-2];t=[20:20:200];ng=1;
 //info=list([],0,[],[],[],0,0);
-//          3 Calling the routines by dasrt
-//[yy,nn]=dasrt([y0,y0d],t0,t,atol,rtol,'res22','jac22',ng,'gr22',info);
+//          3 Calling the routines by %_dasrt
+//[yy,nn]=%_dasrt([y0,y0d],t0,t,atol,rtol,'res22','jac22',ng,'gr22',info);
 // hot restart
-//[yy,nn,hotd]=dasrt([y0,y0d],t0,t,atol,rtol,'res22','jac22',ng,'gr22',info);
+//[yy,nn,hotd]=%_dasrt([y0,y0d],t0,t,atol,rtol,'res22','jac22',ng,'gr22',info);
 //t01=nn(1);t=100:20:200;[pp,qq]=size(yy);y01=yy(2:3,qq);y0d1=yy(3:4,qq);
-//[yy,nn,hotd]=dasrt([y01,y0d1],t01,t,atol,rtol,'res22','jac22',ng,'gr22',info,hotd);
+//[yy,nn,hotd]=%_dasrt([y01,y0d1],t01,t,atol,rtol,'res22','jac22',ng,'gr22',info,hotd);

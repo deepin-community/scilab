@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ????-2008 - INRIA
 // Copyright (C) 2019 - Samuel GOUGEON
 //
@@ -26,7 +26,7 @@ sp = sprand(100,100,0.01);
 m = rand(100,100);
 L1 = list(%z, m , sp, sp<>0, "abc", list(%f,,"defg"));
 L2 = list(sin, 1:$, , list(cosd, , %pi));
-     // include gdf() after fixing http://bugzilla.scilab.org/16103
+     // include gdf() after fixing https://gitlab.com/scilab/scilab/-/issues/16103
 Lres = list(%z, m , sp, sp<>0, "abc", list(%f,,"defg"), ..
             2:$, sind, sin, 1:$, , list(cosd, , %pi), cos);
 assert_checkequal(lstcat(L1, 2:$, sind, L2, cos), Lres);

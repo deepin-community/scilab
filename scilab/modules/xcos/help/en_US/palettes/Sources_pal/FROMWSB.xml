@@ -80,11 +80,10 @@
         <itemizedlist>
             <listitem>
                 <para>
-                    <emphasis role="bold">Variable name:</emphasis> This variable is
-                    defined in Scilab and should be a structure with two fields, i.e., a
-                    "time" field of size (Nx1) and a "values" filed of size (NxM). "time"
-                    is a column vector of size Nx1 and "values" is a matrix of size "N*M".
-                    "time" filed can only be of Real type, whereas the "values" field can
+                    <emphasis role="bold">Variable name</emphasis>. The variable must be a structure
+                    defined in Scilab, with two fields:
+                    <literal>.time</literal> is a column vector of real numbers, of size (Nx1) ;
+                    <literal>.values</literal> is a matrix with N rows, whose type can be
                     be , , , , , , , and .
                 </para>
             </listitem>

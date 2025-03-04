@@ -13,6 +13,7 @@
 // <-- CLI SHELL MODE -->
 // <-- ENGLISH IMPOSED -->
 // <-- NO CHECK REF -->
+// <-- NO ASSERT FAILURE -->
 
 function flag = MY_assert_equal ( computed , expected )
   if computed==expected then
@@ -53,7 +54,7 @@ instr = "assert_checkfalse ( [%f %t] )";
 ierr=execstr(instr,"errcatch");
 MY_assert_equal ( ierr , 10000 );
 errmsg = lasterror();
-msg = gettext ("%s: Assertion failed: Entry %%T found in condition(%d).")
+msg = gettext ("%s: Assertion failed: Entry %%T found in condition(%d).");
 refmsg = msprintf(msg, "assert_checkfalse", 2);
 MY_assert_equal ( errmsg , refmsg );
 //

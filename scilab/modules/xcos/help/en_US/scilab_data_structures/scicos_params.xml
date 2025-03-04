@@ -121,9 +121,22 @@
                 <para>
                     Choice of numerical solver.
                 </para>
+                <variablelist>
+                    <varlistentry><term>0</term>: <link linkend="LSodar">LSodar</link></varlistentry>
+                    <varlistentry><term>1</term>: <link linkend="CVode">Sundials/CVODE - BDF - NEWTON</link></varlistentry>
+                    <varlistentry><term>2</term>: <link linkend="CVode">Sundials/CVODE - BDF - FUNCTIONAL</link></varlistentry>
+                    <varlistentry><term>3</term>: <link linkend="CVode">Sundials/CVODE - ADAMS - NEWTON</link></varlistentry>
+                    <varlistentry><term>4</term>: <link linkend="CVode">Sundials/CVODE - ADAMS - FUNCTIONAL</link></varlistentry>
+                    <varlistentry><term>5</term>: <link linkend="DoPri">DOPRI5 - Dormand-Prince 4(5)</link></varlistentry>
+                    <varlistentry><term>6</term>: <link linkend="RK">RK45 - Runge-Kutta 4(5)</link></varlistentry>
+                    <varlistentry><term>7</term>: <link linkend="ImpRK">Implicit RK45 - Implicit Runge-Kutta 4(5)</link></varlistentry>
+                    <varlistentry><term>8</term>: <link linkend="CRANI">CRANI - Crank-Nicolson 2(3)</link></varlistentry>
+                    <varlistentry><term>100</term>: <link linkend="IDA">Sundials/IDA</link></varlistentry>
+                    <varlistentry><term>101</term>: <link linkend="DDaskr">DDaskr - Newton</link></varlistentry>
+                    <varlistentry><term>102</term>: <link linkend="DDaskr">DDaskr - GMRes</link></varlistentry>
+                </variablelist>
                 <para>
-                    The value <code>0</code> implies an ODE solver and <code>100</code>
-                    implies a DAE solver. See also : <link linkend="Comparisons">Solvers comparisons</link>
+                    See also : <link linkend="Comparisons">Solvers comparisons</link>
                 </para>
             </refsect3>
             <refsect3 id="scicos_diagram_params_tol_hmax">

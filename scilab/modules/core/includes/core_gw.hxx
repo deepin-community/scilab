@@ -1,5 +1,5 @@
 /*
-*  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+*  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 *  Copyright (C) 2008-2008 - DIGITEO - Antoine ELIAS
 *  Copyright (C) 2011-2011 - DIGITEO - Bruno JOFRET
 *
@@ -38,6 +38,7 @@ CPP_GATEWAY_PROTOTYPE(sci_clear);
 CPP_GATEWAY_PROTOTYPE(sci_banner);
 CPP_GATEWAY_PROTOTYPE(sci_quit);
 CPP_GATEWAY_PROTOTYPE(sci_exit);
+CPP_GATEWAY_PROTOTYPE(sci_isatty);
 CPP_GATEWAY_PROTOTYPE(sci_exists);
 CPP_GATEWAY_PROTOTYPE(sci_isdef);
 CPP_GATEWAY_PROTOTYPE(sci_argn);
@@ -89,6 +90,7 @@ CPP_GATEWAY_PROTOTYPE(sci_isfield);
 CPP_GATEWAY_PROTOTYPE(sci_fieldnames);
 CPP_GATEWAY_PROTOTYPE(sci_oldEmptyBehaviour);
 CPP_GATEWAY_PROTOTYPE(sci_checkNamedArguments);
+CPP_GATEWAY_PROTOTYPE(sci_skipArguments);
 
 #ifndef NDEBUG
 CPP_GATEWAY_PROTOTYPE(sci_inspectorGetItemCount);

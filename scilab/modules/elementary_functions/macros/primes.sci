@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA - Farid BELAHCENE
 // Copyright (C) DIGITEO - 2011 - Allan CORNET
 //
@@ -19,17 +19,11 @@ function y = primes(x)
     //  x : a real scalar
     // output :
     // y : a vector of reals (positives)
-
-    [lhs, rhs] = argn(0);
-    if rhs <> 1 then
-        error(msprintf(gettext("%s: Wrong number of input argument(s): %d expected.\n"), "primes", 1));
+    arguments
+        x {mustBeA(x, "double"), mustBeScalarOrEmpty, mustBeReal}
     end
 
-    if type(x) <> 1 then
-        error(msprintf(gettext("%s: Wrong type for input argument #%d: A real expected.\n"),"primes"));
-    elseif prod(size(x,"*")) <> 1 then
-        error(msprintf(gettext("%s: Wrong size for input argument #%d: A real expected.\n"),"primes"));
-    elseif x < 1
+    if x < 1
         y = [];
     else
         y = 1:fix(x);

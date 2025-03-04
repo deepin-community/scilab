@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009 - DIGITEO - Clement DAVID
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -48,6 +48,10 @@ public final class ScilabInterpreterManagement extends InterpreterManagement {
 
     /** This class is a static singleton, thus it must not be instantiated */
     private ScilabInterpreterManagement() {
+    }
+
+    public static void forceClose() {
+        executor.shutdownNow();
     }
 
     /**

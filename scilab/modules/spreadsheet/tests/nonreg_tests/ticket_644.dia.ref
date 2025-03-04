@@ -5,9 +5,6 @@
 // =============================================================================
 // <-- Non-regression test for bug 644 -->
 //
-// <-- URL -->
-//  http://forge.scilab.org/index.php/p/csv-readwrite/issues/644/
-//
 // <-- Short Description -->
 // csvRead did not support empty fields
 // =============================================================================

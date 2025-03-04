@@ -1,5 +1,5 @@
 ;
-; Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+; Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 ; Copyright (C) 2015 - Scilab Enterprises
 ;
 ; Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -19,4 +19,3 @@
 ;-------------------------------------------------------------------------------
 ;
 Source: bin\mkl\libfftw3-3.dll; DestDir: {app}\bin\fftw; Components: {#COMPN_FFTW_MKL_LIBRARY}
-Source: bin\mkl\fftw-readme.txt; DestDir: {app}\bin\fftw; Components: {#COMPN_FFTW_MKL_LIBRARY}

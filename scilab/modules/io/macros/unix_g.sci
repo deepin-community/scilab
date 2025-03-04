@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) XXXX-2008 - INRIA
 // Copyright (C) XXXX-2008 - INRIA - Allan CORNET
 
@@ -60,7 +60,7 @@ function varargout = unix_g(cmd)
             if lhs == 3 then
                 stderr = rep;
             else
-                for i=1:size(rep,"*") do write(%io(2),"   "+rep(i));end
+                for i=1:size(rep,"*") do printf("   %s", rep(i));end
             end
 
             stat = 1;

@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2013 - Pedro Arthur dos S. Souza
  * Copyright (C) 2013 - Caio Lucas dos S. Souza
  *

@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2011 - DIGITEO - Clément DAVID
 // Copyright (C) 2017 - Scilab Enterprises - Clément DAVID
 //
@@ -11,8 +11,8 @@
 //
 // <-- Non-regression test for bug 9810 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=9810
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/9810
 //
 // <-- Short Description -->
 // Matrix inversion error message update

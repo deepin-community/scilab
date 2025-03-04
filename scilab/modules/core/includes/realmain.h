@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2006 - INRIA - Allan CORNET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -18,8 +18,6 @@
 #include <signal.h>
 #include <stdio.h>
 #include <string.h>
-
-#include "version.h"
 
 /**
  * When Scilab is started with arguments ... defines if it is a scilab

@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2010-2011 - DIGITEO - Bruno JOFRET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -80,5 +80,8 @@ CPP_GATEWAY_PROTOTYPE(sci_mscanf);
 CPP_GATEWAY_PROTOTYPE(sci_mfscanf);
 CPP_GATEWAY_PROTOTYPE(sci_msscanf);
 CPP_GATEWAY_PROTOTYPE(sci_getdrives);
+
+CPP_OPT_GATEWAY_PROTOTYPE(sci_compress);
+CPP_OPT_GATEWAY_PROTOTYPE(sci_decompress);
 
 #endif /* !__FILEIO_GW_HXX__ */

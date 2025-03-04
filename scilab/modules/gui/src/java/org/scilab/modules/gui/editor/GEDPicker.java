@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2013 - Pedro Arthur dos S. Souza
  * Copyright (C) 2013 - Caio Lucas dos S. Souza
  *
@@ -62,7 +62,7 @@ public class GEDPicker {
         Integer[] AllObjs;
         boolean curObj = false;
 
-        axesUID = AxesHandler.clickedAxes(figureUID, position);
+        axesUID = AxesHandler.clickedAxes(figureUID, position)[0];
         axes = AxesHandler.getAxesFromUid(axesUID);
 
         if (axes == null) {

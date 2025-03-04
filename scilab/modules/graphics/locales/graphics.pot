@@ -15,7 +15,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Revision-Date: 2021-07-09 17:35+0100\n"
+"Revision-Date: 2023-02-16 15:29+0100\n"
 
 # File: modules/graphics/sci_gateway/c/sci_Legend.c, line: 83
 # File: modules/graphics/sci_gateway/c/sci_Legend.c, line: 221
@@ -1598,6 +1598,7 @@ msgstr ""
 # File: modules/graphics/src/c/getHandleProperty/get_auto_resize_property.c, line: 46
 # File: modules/graphics/src/c/getHandleProperty/get_auto_rotation_property.c, line: 45
 # File: modules/graphics/src/c/getHandleProperty/get_auto_scale_property.c, line: 45
+# File: modules/graphics/src/c/getHandleProperty/get_auto_stretch_property.c, line: 45
 # File: modules/graphics/src/c/getHandleProperty/get_auto_ticks_property.c, line: 56
 # File: modules/graphics/src/c/getHandleProperty/get_axes_bounds_property.c, line: 43
 # File: modules/graphics/src/c/getHandleProperty/get_axes_reverse_property.c, line: 54
@@ -1819,6 +1820,7 @@ msgstr ""
 # File: modules/graphics/src/c/getHandleProperty/set_auto_resize_property.c, line: 56
 # File: modules/graphics/src/c/getHandleProperty/set_auto_rotation_property.c, line: 57
 # File: modules/graphics/src/c/getHandleProperty/set_auto_scale_property.c, line: 56
+# File: modules/graphics/src/c/getHandleProperty/set_auto_stretch_property.c, line: 56
 # File: modules/graphics/src/c/getHandleProperty/set_auto_ticks_property.c, line: 85
 # File: modules/graphics/src/c/getHandleProperty/set_auto_ticks_property.c, line: 100
 # File: modules/graphics/src/c/getHandleProperty/set_auto_ticks_property.c, line: 139
@@ -2037,14 +2039,14 @@ msgid "%s should be a string vector.\n"
 msgstr ""
 
 #
-# File: modules/graphics/src/c/getHandleProperty/GetHashTable.c, line: 307
-# File: modules/graphics/src/c/getHandleProperty/SetHashTable.c, line: 314
+# File: modules/graphics/src/c/getHandleProperty/GetHashTable.c, line: 308
+# File: modules/graphics/src/c/getHandleProperty/SetHashTable.c, line: 315
 #, c-format
 msgid "Unknown property: %s.\n"
 msgstr ""
 
 #
-# File: modules/graphics/src/c/getHandleProperty/SetHashTable.c, line: 318
+# File: modules/graphics/src/c/getHandleProperty/SetHashTable.c, line: 319
 #, c-format
 msgid "Read-only property: %s.\n"
 msgstr ""
@@ -3250,7 +3252,7 @@ msgid "%s: handle no more valid ignored.\n"
 msgstr ""
 
 #
-# File: modules/graphics/macros/%h_save.sci, line: 756
+# File: modules/graphics/macros/%h_save.sci, line: 757
 #, c-format
 msgid "%s : Invalid entity %s\n"
 msgstr ""
@@ -3391,43 +3393,43 @@ msgid ""
 msgstr ""
 
 #
-# File: modules/graphics/macros/autumncolormap.sci, line: 24
-# File: modules/graphics/macros/bonecolormap.sci, line: 25
-# File: modules/graphics/macros/coolcolormap.sci, line: 25
-# File: modules/graphics/macros/coppercolormap.sci, line: 25
-# File: modules/graphics/macros/graycolormap.sci, line: 26
-# File: modules/graphics/macros/hotcolormap.sci, line: 25
-# File: modules/graphics/macros/hsvcolormap.sci, line: 23
-# File: modules/graphics/macros/jetcolormap.sci, line: 29
-# File: modules/graphics/macros/oceancolormap.sci, line: 25
-# File: modules/graphics/macros/parulacolormap.sci, line: 28
-# File: modules/graphics/macros/pinkcolormap.sci, line: 25
-# File: modules/graphics/macros/rainbowcolormap.sci, line: 25
-# File: modules/graphics/macros/springcolormap.sci, line: 25
-# File: modules/graphics/macros/summercolormap.sci, line: 25
-# File: modules/graphics/macros/whitecolormap.sci, line: 25
-# File: modules/graphics/macros/wintercolormap.sci, line: 25
+# File: modules/graphics/macros/autumn.sci, line: 24
+# File: modules/graphics/macros/bone.sci, line: 25
+# File: modules/graphics/macros/cool.sci, line: 25
+# File: modules/graphics/macros/copper.sci, line: 25
+# File: modules/graphics/macros/gray.sci, line: 26
+# File: modules/graphics/macros/hot.sci, line: 25
+# File: modules/graphics/macros/hsv.sci, line: 23
+# File: modules/graphics/macros/jet.sci, line: 29
+# File: modules/graphics/macros/ocean.sci, line: 25
+# File: modules/graphics/macros/parula.sci, line: 28
+# File: modules/graphics/macros/pink.sci, line: 25
+# File: modules/graphics/macros/rainbow.sci, line: 25
+# File: modules/graphics/macros/spring.sci, line: 25
+# File: modules/graphics/macros/summer.sci, line: 25
+# File: modules/graphics/macros/white.sci, line: 25
+# File: modules/graphics/macros/winter.sci, line: 25
 #, c-format
 msgid "%s: Wrong type for input argument #%d: a real scalar expected.\n"
 msgstr ""
 
 #
-# File: modules/graphics/macros/autumncolormap.sci, line: 29
-# File: modules/graphics/macros/bonecolormap.sci, line: 30
-# File: modules/graphics/macros/coolcolormap.sci, line: 30
-# File: modules/graphics/macros/coppercolormap.sci, line: 30
-# File: modules/graphics/macros/graycolormap.sci, line: 31
-# File: modules/graphics/macros/hotcolormap.sci, line: 30
-# File: modules/graphics/macros/hsvcolormap.sci, line: 28
-# File: modules/graphics/macros/jetcolormap.sci, line: 34
-# File: modules/graphics/macros/oceancolormap.sci, line: 30
-# File: modules/graphics/macros/parulacolormap.sci, line: 32
-# File: modules/graphics/macros/pinkcolormap.sci, line: 30
-# File: modules/graphics/macros/rainbowcolormap.sci, line: 30
-# File: modules/graphics/macros/springcolormap.sci, line: 30
-# File: modules/graphics/macros/summercolormap.sci, line: 30
-# File: modules/graphics/macros/whitecolormap.sci, line: 30
-# File: modules/graphics/macros/wintercolormap.sci, line: 30
+# File: modules/graphics/macros/autumn.sci, line: 29
+# File: modules/graphics/macros/bone.sci, line: 30
+# File: modules/graphics/macros/cool.sci, line: 30
+# File: modules/graphics/macros/copper.sci, line: 30
+# File: modules/graphics/macros/gray.sci, line: 31
+# File: modules/graphics/macros/hot.sci, line: 30
+# File: modules/graphics/macros/hsv.sci, line: 28
+# File: modules/graphics/macros/jet.sci, line: 34
+# File: modules/graphics/macros/ocean.sci, line: 30
+# File: modules/graphics/macros/parula.sci, line: 32
+# File: modules/graphics/macros/pink.sci, line: 30
+# File: modules/graphics/macros/rainbow.sci, line: 30
+# File: modules/graphics/macros/spring.sci, line: 30
+# File: modules/graphics/macros/summer.sci, line: 30
+# File: modules/graphics/macros/white.sci, line: 30
+# File: modules/graphics/macros/winter.sci, line: 30
 #, c-format
 msgid "%s: Wrong size for input argument #%d: a real scalar expected.\n"
 msgstr ""
@@ -3842,7 +3844,6 @@ msgstr ""
 # File: modules/graphics/macros/paramfplot2d.sci, line: 40
 # File: modules/graphics/macros/plot3d2.sci, line: 27
 # File: modules/graphics/macros/plot3d3.sci, line: 19
-# File: modules/graphics/macros/plotframe.sci, line: 28
 # File: modules/graphics/macros/title.sci, line: 17
 # File: modules/graphics/macros/xlabel.sci, line: 17
 # File: modules/graphics/macros/xsave.sci, line: 14
@@ -4471,7 +4472,7 @@ msgid "%s: Argument #%d: tight or on or off values expected.\n"
 msgstr ""
 
 #
-# File: modules/graphics/macros/replot.sci, line: 300
+# File: modules/graphics/macros/replot.sci, line: 303
 #, c-format
 msgid "%s: Handle of unsupported type '%s' as Argument #%d\n"
 msgstr ""

@@ -1,5 +1,5 @@
 // ============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2017-2017 - Gsoc 2017 - Siddhartha Gairola
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -27,10 +27,8 @@ mputl(["#include ""mex.h""";
 "        buflen = mxGetN(prhs[0])+1;";
 "        buf = mxCalloc(buflen, sizeof(char));";
 "        status = mxGetString(prhs[0], buf, buflen);";
-"        mxFree(buf);";
-"        mexWarnMsgTxt(""Inside if statement."");}";
+"        mxFree(buf);}";
 "    else {";
-"        mexWarnMsgTxt(""Inside else statement."");";
 "        check = 0;}";
 " mxArray* pOut = mxCreateLogicalScalar(check);";
 " plhs[0] = pOut;";

@@ -1,4 +1,4 @@
-# Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+# Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 # Copyright (C) 2010 - DIGITEO - Allan CORNET
 #
 # Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -14,6 +14,8 @@
 
 #GATEWAY_CPP_SOURCES =
 #sci_gateway/cpp/sci_parallel_run.cpp
+GATEWAY_CPP_SOURCES = \
+src/noparallel/noparallel.c
 
 #PARALLEL_C_SOURCES =
 
@@ -28,7 +30,6 @@ libsciparallel_la_CPPFLAGS= \
     -I$(top_srcdir)/modules/ast/includes/symbol/ \
     -I$(top_srcdir)/modules/ast/includes/system_env/ \
     -I$(top_srcdir)/modules/ast/includes/types/ \
-    -I$(top_srcdir)/modules/ast/includes/analysis/ \
     -I$(top_srcdir)/modules/core/includes \
     -I$(top_srcdir)/modules/api_scilab/includes \
     -I$(top_srcdir)/modules/localization/includes \

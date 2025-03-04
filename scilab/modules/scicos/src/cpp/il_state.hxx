@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2014 - Scilab Enterprises - Paul Bignier
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -27,6 +27,6 @@ types::InternalType* get_il_state(void);
 /**
 * set il_state
 */
-types::InternalType* set_il_state(types::InternalType* _state);
+void set_il_state(types::InternalType* _state);
 
 #endif /* __IL_STATE_HXX__ */

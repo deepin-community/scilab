@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2011 - DIGITEO - Michael Baudin
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -11,7 +11,6 @@
 // along with this program.
 function s=%sp_string(A)
     [ij,v,mn]=spget(A);
-    s = msprintf("(%d,%d) sparse matrix",mn(1),mn(2))
-    s = [s; "("+string(ij(:,1)) + "," + string(ij(:,2))+")    " + string(v)]
+    s = ["("+string(ij(:,1)) + "," + string(ij(:,2))+")    " + string(v)]
 endfunction
 

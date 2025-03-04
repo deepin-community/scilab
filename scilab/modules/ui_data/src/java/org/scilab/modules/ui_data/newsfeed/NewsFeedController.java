@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2015 - Scilab Enterprises
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -23,7 +23,6 @@ import javax.swing.Timer;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.ListIterator;
 
 /**
  * News feed controller
@@ -34,7 +33,7 @@ import java.util.ListIterator;
 public class NewsFeedController implements ActionListener {
 
     private List<News> news;
-    private News currentNews;
+    private News currentNews = new News();
 
     private static final int NO_TIME_INTERVAL = -1;
     private static final int ONE_SECOND = 1000;
@@ -79,7 +78,6 @@ public class NewsFeedController implements ActionListener {
     }
 
     public void start() {
-        currentNews = null;
         newsChangeTimer.start();
         feedUpdateTimer.start();
     }
@@ -87,7 +85,6 @@ public class NewsFeedController implements ActionListener {
     public void stop() {
         newsChangeTimer.stop();
         feedUpdateTimer.stop();
-        currentNews = null;
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -119,20 +116,18 @@ public class NewsFeedController implements ActionListener {
     public void previousNews() {
         // defensive programming
         if (news.isEmpty()) {
+            currentNews = new News();
+            fireNewsFeedEvent(NewsFeedEvent.NEWS_CHANGED);
             return;
         }
 
-        if (currentNews == null) {
-            currentNews = news.get(news.size() - 1);
-        } else {
-            int index = news.indexOf(currentNews);
-            index--;
+        int index = news.indexOf(currentNews);
+        index--;
 
-            if (index >= 0) {
-                currentNews = news.get(index);
-            } else {
-                currentNews = news.get(news.size() - 1);
-            }
+        if (index >= 0) {
+            currentNews = news.get(index);
+        } else {
+            currentNews = news.get(news.size() - 1);
         }
 
         fireNewsFeedEvent(NewsFeedEvent.NEWS_CHANGED);
@@ -141,20 +136,18 @@ public class NewsFeedController implements ActionListener {
     public void nextNews() {
         // defensive programming
         if (news.isEmpty()) {
+            currentNews = new News();
+            fireNewsFeedEvent(NewsFeedEvent.NEWS_CHANGED);
             return;
         }
 
-        if (currentNews == null) {
-            currentNews = news.get(0);
-        } else {
-            int index = news.indexOf(currentNews);
-            index++;
+        int index = news.indexOf(currentNews);
+        index++;
 
-            if (index < news.size()) {
-                currentNews = news.get(index);
-            } else {
-                currentNews = news.get(0);
-            }
+        if (index < news.size()) {
+            currentNews = news.get(index);
+        } else {
+            currentNews = news.get(0);
         }
 
         fireNewsFeedEvent(NewsFeedEvent.NEWS_CHANGED);
@@ -199,7 +192,7 @@ public class NewsFeedController implements ActionListener {
         }
     }
 
-    private void fireNewsFeedEvent(int eventType) {
+    public void fireNewsFeedEvent(int eventType) {
         NewsFeedEvent event = new NewsFeedEvent(this, eventType);
         Iterator<NewsFeedEventListener> iterator = listeners.iterator();
         while (iterator.hasNext()) {

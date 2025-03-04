@@ -1,5 +1,5 @@
 /*
-*  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+*  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 *  Copyright (C) 2012 - Scilab Enterprises - Antoine ELIAS
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -12,8 +12,6 @@
  * along with this program.
 *
 */
-
-#define H5_NO_DEPRECATED_SYMBOLS
 
 #ifndef _MSC_VER
 #include <sys/time.h>
@@ -48,7 +46,7 @@ static herr_t op_func(hid_t loc_id, const char *name, const H5L_info_t *info, vo
 {
     H5O_info_t oinfo;
     herr_t status = 0;
-    int *pDataSetId = (int*)operator_data;
+    hid_t* pDataSetId = (hid_t*)operator_data;
     hid_t obj = H5Oopen(loc_id, name, H5P_DEFAULT);
     if (obj < 0)
     {
@@ -464,7 +462,7 @@ void closeDataSet(hid_t _id)
 hid_t getDataSetId(hid_t _iFile)
 {
     herr_t status = 0;
-    int iDatasetId = 0;
+    hid_t iDatasetId = 0;
     hsize_t idx = 0;
 
     /*
@@ -667,6 +665,11 @@ int freeStringMatrix(hid_t _iDatasetId, char** _pstData)
     }
 
     space = H5Dget_space (_iDatasetId);
+    if (space < 0)
+    {
+        return -1;
+    }
+
     status = H5Dvlen_reclaim (typeId, space, H5P_DEFAULT, _pstData);
     if (status < 0)
     {

@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2016 - Samuel GOUGEON
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -11,8 +11,8 @@
 // No relevant console output to be tested:
 // <-- NO CHECK REF -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/13651
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/13651
 //
 // <-- Short Description -->
 //    copying an axes in a uicontrol frame was not possible

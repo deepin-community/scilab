@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2011 - DIGITEO - Allan CORNET
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -13,8 +13,8 @@
 //
 // <-- Non-regression test for bug 8563 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=8563
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/8563
 //
 // <-- Short Description -->
 //  Scilab under GNU/Linux 64 bit was unable to load files bigger than 2GB.

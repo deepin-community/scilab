@@ -30,7 +30,9 @@ function [model,ok]=build_modelica_block(blklstm,corinvm,cmmat,NiM,NoM,NvM,scs_m
 
 
     //## get the name of the generated main modelica file
-    name=stripblanks(scs_m.props.title(1))+"_im";
+    // per https://specification.modelica.org/master/lexical-structure.html#S3.SS1.p1
+    [?, ?, words] = regexp(scs_m.props.title(1), '/[_a-zA-Z0-9]+/');
+    name=strcat(words, '_')+"_im";
 
     //## generation of the txt for the main modelica file
     //## plus return ipar/rpar for the model of THE modelica block

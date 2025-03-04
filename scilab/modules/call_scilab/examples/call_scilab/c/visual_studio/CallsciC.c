@@ -13,72 +13,62 @@
 /* See SCI/modules/core/includes/call_scilab.h */
 /* See SCI/modules/core/includes/api_scilab.h */
 /*--------------------------------------------------------------------------*/
+void pause()
+{
+    wprintf(L"Press [return] to continue.");
+    int c = getwchar();
+}
+
 static int example1(void)
 {
-    SciErr sciErr;
-
     static double A[] = {1, 2, 3, 4};
-    int mA = 2, nA = 2;
+    int dimsA[] = {2, 2};
 
-    static double b[] = {4, 5};
-    int mb = 2, nb = 1;
+    static double B[] = {4, 5};
+    int dimsB[] = {2, 1};
 
     /* Create Scilab matrices A and b */
-    sciErr = createNamedMatrixOfDouble(NULL, "A", mA, nA, A);
-    if (sciErr.iErr)
+    scilabVar varA = scilab_createDoubleMatrix(NULL, 2, dimsA, 0);
+    if (varA == NULL)
     {
-        printError(&sciErr, 0);
-        return -1;
+        wprintf(L"Error occurred during scilab execution (scilab_createDoubleMatrix)\n");
+        return 1;
     }
 
-    sciErr = createNamedMatrixOfDouble(NULL, "b", mb, nb, b);
-    if (sciErr.iErr)
+    scilab_setDoubleArray(NULL, varA, A);
+    scilab_setVar(L"A", varA);
+
+    scilabVar varB = scilab_createDoubleMatrix(NULL, 2, dimsB, 0);
+    if (varB == NULL)
     {
-        printError(&sciErr, 0);
-        return -1;
+        wprintf(L"Error occurred during scilab execution (scilab_createDoubleMatrix)\n");
+        return 1;
     }
+
+    scilab_setDoubleArray(NULL, varB, B);
+    scilab_setVar(L"B", varB);
 
     SendScilabJob("disp('A=');");
     SendScilabJob("disp(A);");
-    SendScilabJob("disp('b=');");
-    SendScilabJob("disp(b);");
-    SendScilabJob("disp('x=A\\b');");
+    SendScilabJob("disp('B=');");
+    SendScilabJob("disp(B);");
+    SendScilabJob("disp('x=A\\B');");
 
-    if ( SendScilabJob("A,b,x=A\\b;") != 0)
+    if (SendScilabJob("A,B,X=A\\B;") != 0)
     {
-        fprintf(stdout, "Error occurred during scilab execution (SendScilabJob)\n");
+        wprintf(L"Error occurred during scilab execution (SendScilabJob)\n");
     }
     else
     {
-        double *cxtmp = NULL;
-        int m = 0, n = 0;
-        int i = 0;
+        int rowX, colX;
+        double* dataX = NULL;
+        scilabVar varX = scilab_getVar(L"X");
+        scilab_getDim2d(NULL, varX, &rowX, &colX);
+        scilab_getDoubleArray(NULL, varX, &dataX);
 
-        /* Get m and n dimensions of x */
-        sciErr = readNamedMatrixOfDouble(NULL, "x", &m, &n, NULL);
-        if (sciErr.iErr)
+        for (int i = 0; i < rowX * colX; i++)
         {
-            printError(&sciErr, 0);
-            return -1;
-        }
-
-        cxtmp = (double*)malloc((m * n) * sizeof(double));
-        sciErr = readNamedMatrixOfDouble(NULL, "x", &m, &n, cxtmp);
-        if (sciErr.iErr)
-        {
-            printError(&sciErr, 0);
-            return -1;
-        }
-
-        for (i = 0; i < m * n; i++)
-        {
-            fprintf(stdout, "x[%d] = %5.2f\n", i, cxtmp[i]);
-        }
-
-        if (cxtmp)
-        {
-            free(cxtmp);
-            cxtmp = NULL;
+            wprintf(L"x[%d] = %5.2f\n", i, dataX[i]);
         }
     }
     return 0;
@@ -87,50 +77,29 @@ static int example1(void)
 static int example2(void)
 {
     SendScilabJob("plot3d();");
-    printf("\nClose Graphical Windows to close this example.\n");
+    wprintf(L"\nClose Graphical Windows to close this example.\n");
     while (ScilabHaveAGraph());
     return 1;
 }
 /*--------------------------------------------------------------------------*/
 static int example3(void)
 {
-    int code = 0;
+#define JOB_SIZE 6
+    char* JOBS[JOB_SIZE] = {
+        "A=1 ...",
+        "+3;",
+        "B = 8;",
+        "+3;",
+        "disp('C=');",
+        "C=A+B;disp(C);"
+    };
 
-    char **JOBS = NULL;
-    const int SizeJOBS = 6;
-    int i = 0;
-
-    JOBS = (char**)malloc(sizeof(char**) * SizeJOBS);
-
-    for (i = 0; i < SizeJOBS; i++)
-    {
-        JOBS[i] = (char*)malloc(sizeof(char*) * 1024);
-    }
-
-    strcpy(JOBS[0], "A=1 ..");
-    strcpy(JOBS[1], "+3;");
-    strcpy(JOBS[2], "B = 8;");
-    strcpy(JOBS[3], "+3;");
-    strcpy(JOBS[4], "disp('C=');");
-    strcpy(JOBS[5], "C=A+B;disp(C);"); /* C = 12 */
-
-    code = SendScilabJobs(JOBS, SizeJOBS);
-
-    if (code)
+    if (SendScilabJobs(JOBS, JOB_SIZE))
     {
         char lastjob[4096]; // bsiz in scilab 4096 max
         if (GetLastJob(lastjob, 4096))
         {
-            printf("Error %s\n", lastjob);
-        }
-    }
-
-    for (i = 0; i < SizeJOBS; i++)
-    {
-        if (JOBS[i])
-        {
-            free(JOBS[i]);
-            JOBS[i] = NULL;
+            wprintf(L"Error %hs\n", lastjob);
         }
     }
     return 1;
@@ -141,23 +110,22 @@ int main(void)
 {
     if ( StartScilab(NULL, NULL, 0) == FALSE )
     {
-        printf("Error : StartScilab\n");
+        wprintf(L"Error : StartScilab\n");
         return 0;
     }
 
-    printf("\nexample 1\n");
+    wprintf(L"example 1\n");
     example1();
-    system("pause");
-    //printf("\nexample 2\n");
+    pause();
+    wprintf(L"example 2\n");
     example2();
-    system("pause");
-    //printf("\nexample 3\n");
+    wprintf(L"example 3\n");
     example3();
-    system("pause");
+    pause();
 
     if ( TerminateScilab(NULL) == FALSE )
     {
-        printf("Error : TerminateScilab\n");
+        wprintf(L"Error : TerminateScilab\n");
     }
     return 0;
 }

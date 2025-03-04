@@ -1,5 +1,5 @@
 /*
-*  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+*  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 *  Copyright (C) 2008-2008 - DIGITEO - Antoine ELIAS
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -21,6 +21,7 @@
 #include "macrofile.hxx"
 #include "threadId.hxx"
 #include "threadmanagement.hxx"
+
 #include <iomanip>
 #include <list>
 #include <vector>
@@ -1338,8 +1339,7 @@ void ConfigVariable::whereErrorToString(std::wostringstream& ostr)
 
 void ConfigVariable::fillWhereError(int _iErrorLine)
 {
-
-    if (m_WhereError.empty())
+    if (m_WhereError.empty() && m_Where.empty() == false)
     {
         int iTmp = 0;
         if (_iErrorLine != 0)
@@ -1362,6 +1362,10 @@ void ConfigVariable::fillWhereError(int _iErrorLine)
 
             iTmp = where->m_line;
         }
+
+        // fill lasterror function name and line
+        setLastErrorFunction(m_WhereError[0].m_function_name);
+        setLastErrorLine(m_WhereError[0].m_line);
     }
 }
 
@@ -1590,6 +1594,17 @@ int ConfigVariable::setRecursionLimit(int val)
     return old;
 }
 
+int ConfigVariable::m_iPolynomialDisplay = 0;
+
+void ConfigVariable::setPolynomialDisplay(int iVal)
+{
+    m_iPolynomialDisplay = iVal;
+}
+int ConfigVariable::getPolynomialDisplay()
+{
+    return m_iPolynomialDisplay;
+}
+
 int ConfigVariable::getRecursionLevel()
 {
     return recursionLevel;
@@ -1628,4 +1643,16 @@ bool ConfigVariable::getWebMode()
 void ConfigVariable::setWebMode(bool _mode)
 {
     webMode = _mode;
+}
+
+// stdin redirected
+bool ConfigVariable::m_isatty = false;
+bool ConfigVariable::isatty()
+{
+    return m_isatty;
+}
+
+void ConfigVariable::setisatty(bool _isatty)
+{
+    m_isatty = _isatty;
 }

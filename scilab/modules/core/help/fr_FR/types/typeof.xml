@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA
  * Copyright (C) 2015 - 2017 - Samuel GOUGEON
  *
@@ -190,16 +190,6 @@
                     <link linkend="sparse">matrice creuse</link>
                     de nombres décimaux réels ou complexes.
                     <warning>Hypermatrices numériques creuses non supportées.</warning>
-                </td>
-            </tr>
-            <tr>
-                <td style="white-space:nowrap">
-                    <emphasis role="bold">"Matlab sparse"</emphasis>
-                </td>
-                <td>
-                    <varname>object</varname> est une matrice numérique creuse
-                    au format Matlab
-                    (voir <link linkend="mtlb_sparse">mtlb_sparse()</link>).
                 </td>
             </tr>
             <tr>
@@ -534,8 +524,6 @@ typeof(r)
 w = sprand(100,100,0.001)
 typeof(w)     // numérique
 typeof(w==w)  // booléenne
-//x = mtlb_sparse(sprand(10,10,0.1));
-//typeof(x)
 
 // Functions et bibliothèques écrites en Scilab
 // --------------------------------------------
@@ -649,9 +637,6 @@ h5close(a)
             </member>
             <member>
                 <link linkend="issparse">issparse</link>
-            </member>
-            <member>
-                <link linkend="mtlb_sparse">mtlb_sparse</link>
             </member>
             <member>
                 <link linkend="syslin">syslin</link>

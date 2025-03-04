@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA - Djalel Abdemouche
  * Copyright (C) 2009 - DIGITEO - Pierre Lando
  * Copyright (C) 2013, 2018 - Samuel GOUGEON
@@ -437,6 +437,17 @@
                             </listitem>
                         </varlistentry>
                         <varlistentry>
+                            <term>sub_ticks: </term>
+                            <listitem>
+                                <para>
+                                    This field sets the number of tics to draw between two main
+                                    tics. The field value is the vector <literal>[nx,ny]</literal> where
+                                    <literal>nx</literal> is the number of sub tics for the x-axis and
+                                    <literal>ny</literal> respecting to the y-axis.
+                                </para>
+                            </listitem>
+                        </varlistentry>
+                        <varlistentry>
                             <term>box: </term>
                             <listitem>
                                 <para>
@@ -476,17 +487,6 @@
                                     <literal>"on"</literal> the
                                     background is drawn using the color specified by the
                                     <literal>background</literal> property.
-                                </para>
-                            </listitem>
-                        </varlistentry>
-                        <varlistentry>
-                            <term>sub_ticks: </term>
-                            <listitem>
-                                <para>
-                                    This field sets the number of tics to draw between two main
-                                    tics. The field value is the vector <literal>[nx,ny]</literal> where
-                                    <literal>nx</literal> is the number of sub tics for the x-axis and
-                                    <literal>ny</literal> respecting to the y-axis.
                                 </para>
                             </listitem>
                         </varlistentry>
@@ -844,6 +844,17 @@
                                     of added data.
                                     <literal>"off"</literal>: Default or explicitly initialized values
                                     of <literal>.data_bounds</literal> are not modified.
+                                </para>
+                            </listitem>
+                        </varlistentry>
+                        <varlistentry>
+                            <term>auto_stretch: </term>
+                            <listitem>
+                                <para>
+                                    Property disabling axis box filling when 3D properties.
+                                    <literal>"on"</literal>: Default, each new 3D plot maximize the box according to boundaries
+                                    of added data.
+                                    <literal>"off"</literal>: Keep 3D box size from a previous computation.
                                 </para>
                             </listitem>
                         </varlistentry>
@@ -1326,6 +1337,12 @@ gcf().axes_size = [420 320];
                 <revremark>
                     Default .x|y|z_label.font_size=2, instead of 1.
                     Default .title.font_size=3, instead of 1.
+                </revremark>
+            </revision>
+            <revision>
+                <revnumber>2023.0.0</revnumber>
+                <revremark>
+                    <literal>.auto_stretch</literal> property added.
                 </revremark>
             </revision>
         </revhistory>

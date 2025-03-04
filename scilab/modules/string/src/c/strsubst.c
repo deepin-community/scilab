@@ -1,6 +1,6 @@
 
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA - Allan CORNET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -15,16 +15,14 @@
  */
 
 /*--------------------------------------------------------------------------*/
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <wchar.h>
-#include "strsubst.h"
-#include "sci_malloc.h"
-#include "pcre_private.h"
-#include "os_string.h"
 #include "charEncoding.h"
+#include "os_string.h"
 #include "pcre_error.h"
+#include "pcre_private.h"
+#include "sci_malloc.h"
+#include "strsubst.h"
+#include "sciprint.h"
+#include "core_math.h"
 /*--------------------------------------------------------------------------*/
 char **strsubst(const char **strings_input, int strings_dim, const char *string_to_search, const char *replacement_string)
 {
@@ -269,20 +267,58 @@ wchar_t *wcssub_reg(const wchar_t* _pwstInput, const wchar_t* _pwstSearch, const
         return NULL;
     }
 
+    // early return, NULL might be given as unspecified
+    if (_pwstSearch == NULL || _pwstReplace == NULL)
+    {
+        return os_wcsdup(_pwstInput);
+    }
+
+    // early return, empty strings will not be modified
+    if (_pwstSearch[0] == L'\0' || _pwstInput[0] == L'\0')
+    {
+        return os_wcsdup(_pwstInput);
+    }
+
     len = (int)wcslen(_pwstInput);
     arriStart = (int*)MALLOC(sizeof(int) * len);
     arriEnd = (int*)MALLOC(sizeof(int) * len);
 
-    if (_pwstSearch == NULL || _pwstReplace == NULL)
+    //check replacement
+    int* replacement = (int*)MALLOC(sizeof(int) * wcslen(_pwstReplace));
+    int replacement_len = 0;
+    const wchar_t* p = _pwstReplace;
+    while ((p = wcsstr(p, L"$")) != NULL)
     {
-        FREE(arriStart);
-        FREE(arriEnd);
-        return os_wcsdup(_pwstInput);
+        if (*(p + 1) == L'$')
+        {
+            replacement[replacement_len++] = -1;
+            p += 2;
+        }
+        else
+        {
+            const wchar_t* end;
+            wchar_t digit[3] = {(p + 1)[0], (p + 1)[1]};
+            double d = wcstod(digit, &end);
+            if (ISNAN(d) || end == digit)
+            {
+                FREE(arriStart);
+                FREE(arriEnd);
+                FREE(replacement);
+                *_piErr = TOO_BIG_FOR_OFFSET_SIZE;
+                return NULL;
+            }
+
+            end = p + (end - digit) + 1;
+            replacement[replacement_len++] = (int)d;
+            p = end;
+        }
     }
 
+    wchar_t*** captured = (wchar_t***)MALLOC(sizeof(wchar_t**) * len);
+    int* captured_count = (int*)CALLOC(len, sizeof(int));
     do
     {
-        iPcreStatus = wide_pcre_private(_pwstInput + iJump, _pwstSearch, &iStart, &iEnd, NULL, NULL);
+        iPcreStatus = wide_pcre_private(_pwstInput + iJump, _pwstSearch, &iStart, &iEnd, &captured[iOccurs], &captured_count[iOccurs]);
         if (iPcreStatus == PCRE_FINISHED_OK)
         {
             if (iEnd != iStart)
@@ -302,11 +338,14 @@ wchar_t *wcssub_reg(const wchar_t* _pwstInput, const wchar_t* _pwstSearch, const
             pcre_error("strsubst", iPcreStatus);
             FREE(arriStart);
             FREE(arriEnd);
+            FREE(replacement);
+            FREE(captured);
+            FREE(captured_count);
             *_piErr = iPcreStatus;
             return NULL;
         }
     }
-    while (iPcreStatus == PCRE_FINISHED_OK && iStart != iEnd);
+    while (iOccurs < len && iPcreStatus == PCRE_FINISHED_OK && iStart != iEnd);
 
     if (iOccurs)
     {
@@ -342,6 +381,69 @@ wchar_t *wcssub_reg(const wchar_t* _pwstInput, const wchar_t* _pwstSearch, const
         wcscat(result, _pwstReplace);
         //copy part after last occurence
         wcscat(result, _pwstInput + arriEnd[iOccurs - 1]);
+
+        /*group substitution*/
+        wchar_t* p = result;
+        int iDollar = 0;
+        while ((p = wcsstr(p, L"$")) != NULL && iDollar < replacement_len)
+        {
+            BOOL sfree = FALSE;
+            wchar_t* s = NULL;
+            int replace_len = 0;
+            if (replacement[iDollar] > captured_count[0])
+            {
+                FREE(arriStart);
+                FREE(arriEnd);
+                FREE(replacement);
+                FREE(captured);
+                FREE(captured_count);
+                *_piErr = TOO_BIG_FOR_OFFSET_SIZE;
+                return NULL;
+            }
+
+            switch (replacement[iDollar])
+            {
+                case -1: //replace $$ by $
+                    s = L"$";
+                    replace_len = 2;
+                    break;
+                case 0: //replace by whole matching string
+                {
+                    int len = arriEnd[0] - arriStart[0];
+                    s = (wchar_t*)MALLOC(sizeof(wchar_t) * (len + 1));
+                    wcsncpy(s, _pwstInput + arriStart[0], len);
+                    s[len] = L'\0';
+                    sfree = TRUE;
+                    replace_len = 2;
+                    break;
+                }
+                default: //replace by capturing group string
+                    s = captured[0][replacement[iDollar] - 1];
+                    replace_len = replacement[iDollar] <= 9 ? 2 : 3; //$x or $xx
+                    break;
+            }
+
+            if (s != NULL)
+            {
+                int slen = (int)wcslen(s);
+                finalSize = (int)wcslen(result) - replace_len + slen + 1;
+                wchar_t* res = (wchar_t*)MALLOC(sizeof(wchar_t) * finalSize);
+                wcsncpy(res, result, p - result);
+                int offset = (int)(p - result);
+                wcsncpy(res + offset, s, slen);
+                offset += slen;
+                wcscpy(res + offset, p + replace_len);
+                p = res + offset;
+                FREE(result);
+                result = res;
+                if (sfree)
+                {
+                    FREE(s);
+                }
+            }
+
+            iDollar++;
+        }
     }
     else
     {
@@ -351,6 +453,9 @@ wchar_t *wcssub_reg(const wchar_t* _pwstInput, const wchar_t* _pwstSearch, const
 
     FREE(arriStart);
     FREE(arriEnd);
+    FREE(replacement);
+    FREE(captured);
+    FREE(captured_count);
 
     return result;
 }

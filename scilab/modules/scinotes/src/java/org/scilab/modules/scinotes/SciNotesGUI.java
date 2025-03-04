@@ -1,4 +1,4 @@
-/* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+/* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009 - DIGITEO
  * Copyright (C) 2010 - Calixte DENIZET
  *
@@ -334,7 +334,7 @@ public final class SciNotesGUI {
             System.err.println("Warning: problem to create the menu for action: " + className);
             System.err.println("The menu label is: " + Messages.gettext(label));
             System.err.println("English version will be used instead.");
-            System.err.println("Please report a bug at: http://bugzilla.scilab.org");
+            System.err.println("Please report a bug at: https://gitlab.com/scilab/scilab/-/issues");
             try {
                 return method.invoke(null, new Object[] {label, editor, SciNotes.getActionKeys().get(action)});
             } catch (InvocationTargetException ex) {

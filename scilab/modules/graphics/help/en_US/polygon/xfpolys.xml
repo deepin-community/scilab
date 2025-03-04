@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) ENPC - Jean-Philippe Chancelier
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -137,7 +137,7 @@ c=linspace(2,100,4)';
 xpols=[x1 x1+20 x1+10 x1+10];
 ypols=[y1 y1    y1+10 y1-10];
 cols= [c c($:-1:1) c([3 4 1 2]) c]
-f.color_map=jetcolormap(max(cols));
+f.color_map=jet(max(cols));
 xfpolys(xpols,ypols,cols)
  ]]></programlisting>
         <scilab:image>
@@ -151,7 +151,7 @@ xfpolys(xpols,ypols,cols)
             xpols=[x1 x1+20 x1+10 x1+10];
             ypols=[y1 y1    y1+10 y1-10];
             cols= [c c($:-1:1) c([3 4 1 2]) c]
-            f.color_map=jetcolormap(max(cols));
+            f.color_map=jet(max(cols));
             xfpolys(xpols,ypols,cols)
         </scilab:image>
         <programlisting role="example"><![CDATA[
@@ -184,7 +184,7 @@ a=gca();
 isoview();
 a.data_bounds=[min(X),min(Y);max(X),max(Y)];
 f=gcf();
-f.color_map=graycolormap(max(C));
+f.color_map=gray(max(C));
 xfpolys(X,Y,C)
  ]]></programlisting>
         <scilab:image>
@@ -216,7 +216,7 @@ xfpolys(X,Y,C)
             isoview();
             a.data_bounds=[min(X),min(Y);max(X),max(Y)];
             f=gcf();
-            f.color_map=graycolormap(max(C));
+            f.color_map=gray(max(C));
             xfpolys(X,Y,C)
         </scilab:image>
     </refsection>

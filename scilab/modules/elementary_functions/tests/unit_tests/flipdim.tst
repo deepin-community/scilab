@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2012 - Scilab Enterprises - Sylvestre Ledru
 // Copyright (C) 2013, 2014 - Scilab Enterprises - Paul Bignier
 // Copyright (C) 2019 - Samuel GOUGEON

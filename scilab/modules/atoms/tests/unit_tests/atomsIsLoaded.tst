@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009 - DIGITEO - Pierre MARECHAL <pierre.marechal@scilab.org>
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -7,10 +7,10 @@
 
 // <-- ENGLISH IMPOSED -->
 // <-- CLI SHELL MODE -->
-
-
+// <-- NO CHECK REF -->
 
 load("SCI/modules/atoms/macros/atoms_internals/lib");
+exec("SCI/modules/atoms/tests/unit_tests/atomsTestUtils.sce");
 
 // If previous test did not end properly, restore, else backup config file
 atomsRestoreConfig(%T);
@@ -21,13 +21,15 @@ atomsSetConfig("autoloadAddAfterInstall","False");
 atomsSetConfig("Verbose" ,"False");
 
 //force official ATOMS repository
-atomsRepositorySetOfl(mgetl(SCI+"/modules/atoms/tests/unit_tests/repositories.orig"));
+// Load the 1st scenario : See scene12.test.atoms.scilab.org.txt
+// =============================================================================
+atomsLoadTestScene("scene12");
 
 // Install toolbox N°2
 atomsInstall(["toolbox_2V6","2.1"],"user");
 
 // Check installation
-if ~ atomsIsInstalled(["toolbox_1V6","2.0","user"]) then pause, end
+if ~ atomsIsInstalled(["toolbox_1V6","1.0","user"]) then pause, end
 if ~ atomsIsInstalled(["toolbox_2V6","2.1","user"]) then pause, end
 
 atomsLoad(["toolbox_2V6","2.1","user"]);
@@ -37,13 +39,13 @@ if ~ atomsIsLoaded(["toolbox_2V6","2.1"])          then pause, end
 if ~ atomsIsLoaded(["toolbox_2V6","2.1","user"])   then pause, end
 
 if ~ atomsIsLoaded("toolbox_1V6")                  then pause, end
-if ~ atomsIsLoaded(["toolbox_1V6","2.0"])          then pause, end
-if ~ atomsIsLoaded(["toolbox_1V6","2.0","user"])   then pause, end
+if ~ atomsIsLoaded(["toolbox_1V6","1.0"])          then pause, end
+if ~ atomsIsLoaded(["toolbox_1V6","1.0","user"])   then pause, end
 
-if atomsIsLoaded(["toolbox_1V6","2.0","allusers"]) then pause, end
+if atomsIsLoaded(["toolbox_1V6","1.0","allusers"]) then pause, end
 if atomsIsLoaded(["toolbox_2V6","2.1","allusers"]) then pause, end
 
-A = [ "toolbox_1V6" "2.0" "user"     ; ..
+A = [ "toolbox_1V6" "1.0" "user"     ; ..
 "toolbox_2V6" "2.1" "user"     ; ..
 "toolbox_2V6" ""    "user"     ; ..
 "toolbox_2V6" "2.1" ""         ; ..

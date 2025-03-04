@@ -1,4 +1,4 @@
-# Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+# Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 # Copyright (C) 2006 - INRIA - Sylvestre LEDRU
 #
 # This file is distributed under the same license as the Scilab package.
@@ -29,7 +29,8 @@ LINEAR_ALGEBRA_FORTRAN_SOURCES = \
 
 GATEWAY_C_SOURCES = \
     sci_gateway/c/assembleEigenvectors.c \
-    sci_gateway/c/sci_norm.c
+    sci_gateway/c/sci_norm.c \
+    sci_gateway/c/sci_eigs.c
 
 GATEWAY_CPP_SOURCES = \
     sci_gateway/cpp/linear_algebra_gw.cpp \
@@ -58,7 +59,6 @@ libscilinear_algebra_la_CPPFLAGS = \
     -I$(top_srcdir)/modules/ast/includes/symbol/ \
     -I$(top_srcdir)/modules/ast/includes/system_env/ \
     -I$(top_srcdir)/modules/ast/includes/types/ \
-    -I$(top_srcdir)/modules/ast/includes/analysis/ \
     -I$(top_srcdir)/modules/output_stream/includes \
     -I$(top_srcdir)/modules/api_scilab/includes \
     -I$(top_srcdir)/modules/console/includes \
@@ -68,6 +68,7 @@ libscilinear_algebra_la_CPPFLAGS = \
     -I$(top_srcdir)/modules/dynamic_link/includes \
     -I$(top_srcdir)/modules/dynamic_link/includes \
     -I$(top_srcdir)/modules/localization/includes/ \
+    -I$(top_srcdir)/modules/arnoldi/includes/ \
     $(AM_CPPFLAGS)
 
 if MAINTAINER_MODE

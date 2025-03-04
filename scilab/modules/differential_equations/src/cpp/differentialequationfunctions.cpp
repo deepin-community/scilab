@@ -1,6 +1,7 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2011 - DIGITEO - Cedric DELAMARRE
+ *  Copyright (C) 2023 - Dassault Systèmes - Clément DAVID
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
  *
@@ -13,7 +14,7 @@
  *
  */
 /*--------------------------------------------------------------------------*/
-#include <list>
+#include <vector>
 
 #include "string.hxx"
 #include "double.hxx"
@@ -38,7 +39,7 @@ extern "C"
 
 // need the current thread, not the last running thread.
 
-std::list<DifferentialEquationFunctions*> DifferentialEquation::m_DifferentialEquationFunctions;
+std::vector<DifferentialEquationFunctions*> DifferentialEquation::m_DifferentialEquationFunctions;
 
 using namespace types;
 void DifferentialEquation::addDifferentialEquationFunctions(DifferentialEquationFunctions* _deFunction)
@@ -170,9 +171,9 @@ DifferentialEquationFunctions::DifferentialEquationFunctions(const std::wstring&
         m_staticFunctionMap[L"aplusp"]  = (void*) C2F(aplusp); // adda
         m_staticFunctionMap[L"dgbydy"]  = (void*) C2F(dgbydy); // jac
     }
-    else if (callerName == L"dassl" ||
-             callerName == L"dasrt" ||
-             callerName == L"daskr")
+    else if (callerName == L"%_dassl" ||
+             callerName == L"%_dasrt" ||
+             callerName == L"%_daskr")
     {
         //res
         m_staticFunctionMap[L"res1"]    = (void*) C2F(res1);
@@ -186,14 +187,14 @@ DifferentialEquationFunctions::DifferentialEquationFunctions(const std::wstring&
         m_staticFunctionMap[L"djac1"]  = (void*) C2F(djac1);
 
         //g
-        if (callerName == L"dasrt" || callerName == L"daskr")
+        if (callerName == L"%_dasrt" || callerName == L"%_daskr")
         {
             m_staticFunctionMap[L"gr1"]  = (void*) C2F(gr1);
             m_staticFunctionMap[L"gr2"]  = (void*) C2F(gr2);
         }
 
         // pjac, psol
-        if (callerName == L"daskr")
+        if (callerName == L"%_daskr")
         {
             m_staticFunctionMap[L"pjac1"]  = (void*) pjac1;
             m_staticFunctionMap[L"psol1"]  = (void*) psol1;
@@ -1155,17 +1156,61 @@ int DifferentialEquationFunctions::getOdedcFlag()
 {
     return m_odedcFlag;
 }
-
 /*------------------------------- private -------------------------------------------*/
+namespace {
+// helper struct for calling macros
+struct args_t {
+    types::typed_list in;
+    types::typed_list out;
+    types::optional_list opt;
+
+    ~args_t()
+    {
+        for (types::InternalType* o : out)
+        {
+            o->IncreaseRef();
+        }
+
+        for (types::InternalType* i : in)
+        {
+            i->DecreaseRef();
+            i->killMe();
+        }
+        
+        for (const auto& o : opt)
+        {
+            o.second->DecreaseRef();
+            o.second->killMe();
+        }
+
+        for (types::InternalType* o : out)
+        {
+            o->DecreaseRef();
+            o->killMe();
+        }
+    };
+
+    void add_in(types::InternalType* arg)
+    {
+        arg->IncreaseRef();
+        in.push_back(arg);
+    };
+
+    void add_opt(const std::wstring& name, types::InternalType* arg)
+    {
+        arg->IncreaseRef();
+        opt.insert({name, arg});
+    };
+};
+} /* namespace */
+
 void DifferentialEquationFunctions::callOdeMacroF(int* n, double* t, double* y, double* ydot)
 {
     char errorMsg[256];
     int one         = 1;
     int iRetCount   = 1;
 
-    types::typed_list in;
-    types::typed_list out;
-    types::optional_list opt;
+    args_t args;
 
     types::Double* pDblY    = NULL;
     types::Double* pDblYC   = NULL;
@@ -1174,66 +1219,42 @@ void DifferentialEquationFunctions::callOdeMacroF(int* n, double* t, double* y, 
 
     // create input args
     types::Double* pDblT = new types::Double(*t);
-    pDblT->IncreaseRef();
+    args.add_in(pDblT);
 
     if (m_odedcYDSize) // odedc
     {
         pDblYC = new types::Double(*n, 1);
         pDblYC->set(y);
-        pDblYC->IncreaseRef();
+        args.add_in(pDblYC);
         pDblYD = new types::Double(m_odedcYDSize, 1);
         pDblYD->set(y + *n);
-        pDblYD->IncreaseRef();
+        args.add_in(pDblYD);
         pDblFlag = new types::Double(m_odedcFlag);
-        pDblFlag->IncreaseRef();
+        args.add_in(pDblFlag);
     }
     else // ode
     {
         pDblY = new types::Double(m_odeYRows, m_odeYCols);
         pDblY->set(y);
-        pDblY->IncreaseRef();
-    }
-
-    // push_back
-    in.push_back(pDblT);
-    if (m_odedcYDSize) // odedc
-    {
-        in.push_back(pDblYC);
-        in.push_back(pDblYD);
-        in.push_back(pDblFlag);
-    }
-    else
-    {
-        in.push_back(pDblY);
+        args.add_in(pDblY);
     }
 
     for (int i = 0; i < (int)m_FArgs.size(); i++)
     {
-        m_FArgs[i]->IncreaseRef();
-        in.push_back(m_FArgs[i]);
+        args.add_in(m_FArgs[i]);
     }
 
     try
     {
         // new std::wstring(L"") is delete in destructor of ast::CommentExp
-        m_pCallFFunction->invoke(in, opt, iRetCount, out, ast::CommentExp(Location(), new std::wstring(L"")));
+        m_pCallFFunction->invoke(args.in, args.opt, iRetCount, args.out, ast::CommentExp(Location(), new std::wstring(L"")));
     }
     catch (const ast::InternalError& ie)
     {
-        for (int i = 0; i < (int)m_FArgs.size(); i++)
-        {
-            m_FArgs[i]->DecreaseRef();
-        }
-
         throw ie;
     }
 
-    for (int i = 0; i < (int)m_FArgs.size(); i++)
-    {
-        m_FArgs[i]->DecreaseRef();
-    }
-
-    if (out.size() != iRetCount)
+    if (args.out.size() != iRetCount)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallFFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong number of output argument(s): %d expected.\n"), pstrName, iRetCount);
@@ -1241,51 +1262,14 @@ void DifferentialEquationFunctions::callOdeMacroF(int* n, double* t, double* y, 
         throw ast::InternalError(errorMsg);
     }
 
-    out[0]->IncreaseRef();
-
-    pDblT->DecreaseRef();
-    if (pDblT->isDeletable())
-    {
-        delete pDblT;
-    }
-
-    if (m_odedcYDSize) // odedc
-    {
-        pDblYC->DecreaseRef();
-        if (pDblYC->isDeletable())
-        {
-            delete pDblYC;
-        }
-        pDblYD->DecreaseRef();
-        if (pDblYD->isDeletable())
-        {
-            delete pDblYD;
-        }
-        pDblFlag->DecreaseRef();
-        if (pDblFlag->isDeletable())
-        {
-            delete pDblFlag;
-        }
-    }
-    else
-    {
-        pDblY->DecreaseRef();
-        if (pDblY->isDeletable())
-        {
-            delete pDblY;
-        }
-    }
-
-    out[0]->DecreaseRef();
-
-    if (out[0]->isDouble() == false)
+    if (args.out[0]->isDouble() == false)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallFFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong type for output argument #%d: Real matrix expected.\n"), pstrName, 1);
         FREE(pstrName);
         throw ast::InternalError(errorMsg);
     }
-    types::Double* pDblOut = out[0]->getAs<types::Double>();
+    types::Double* pDblOut = args.out[0]->getAs<types::Double>();
     if (pDblOut->isComplex())
     {
         char* pstrName = wide_string_to_UTF8(m_pCallFFunction->getName().c_str());
@@ -1302,11 +1286,6 @@ void DifferentialEquationFunctions::callOdeMacroF(int* n, double* t, double* y, 
     {
         C2F(dcopy)(n, pDblOut->get(), &one, ydot, &one);
     }
-
-    if (out[0]->isDeletable())
-    {
-        delete out[0];
-    }
 }
 
 void DifferentialEquationFunctions::callMacroJac(int* n, double* t, double* y, int* ml, int* mu, double* J, int* nrpd)
@@ -1316,61 +1295,31 @@ void DifferentialEquationFunctions::callMacroJac(int* n, double* t, double* y, i
     int one         = 1;
     int iMaxSize    = (*n) * (*nrpd);
 
-    types::typed_list in;
-    types::typed_list out;
-    types::optional_list opt;
+    args_t args;
 
     types::Double* pDblY = new types::Double(m_odeYRows, m_odeYCols);
     pDblY->set(y);
     types::Double* pDblT = new types::Double(*t);
 
-    pDblT->IncreaseRef();
-    pDblY->IncreaseRef();
-
-    in.push_back(pDblT);
-    in.push_back(pDblY);
+    args.add_in(pDblT);
+    args.add_in(pDblY);
 
     for (int i = 0; i < (int)m_JacArgs.size(); i++)
     {
-        m_JacArgs[i]->IncreaseRef();
-        in.push_back(m_JacArgs[i]);
+        args.add_in(m_JacArgs[i]);
     }
 
     try
     {
         // new std::wstring(L"") is delete in destructor of ast::CommentExp
-        m_pCallJacFunction->invoke(in, opt, iRetCount, out, ast::CommentExp(Location(), new std::wstring(L"")));
+        m_pCallJacFunction->invoke(args.in, args.opt, iRetCount, args.out, ast::CommentExp(Location(), new std::wstring(L"")));
     }
     catch (const ast::InternalError& ie)
-    {
-        for (int i = 0; i < (int)m_JacArgs.size(); i++)
-        {
-            m_JacArgs[i]->DecreaseRef();
-        }
-
+    {   
         throw ie;
     }
 
-    for (int i = 0; i < (int)m_JacArgs.size(); i++)
-    {
-        m_JacArgs[i]->DecreaseRef();
-    }
-
-    out[0]->IncreaseRef();
-    pDblT->DecreaseRef();
-    pDblY->DecreaseRef();
-
-    if (pDblT->isDeletable())
-    {
-        delete pDblT;
-    }
-
-    if (pDblY->isDeletable())
-    {
-        delete pDblY;
-    }
-
-    if (out.size() != iRetCount)
+    if (args.out.size() != iRetCount)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallJacFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong number of output argument(s): %d expected.\n"), pstrName, iRetCount);
@@ -1378,8 +1327,7 @@ void DifferentialEquationFunctions::callMacroJac(int* n, double* t, double* y, i
         throw ast::InternalError(errorMsg);
     }
 
-    out[0]->DecreaseRef();
-    if (out[0]->isDouble() == false)
+    if (args.out[0]->isDouble() == false)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallJacFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong type for output argument #%d: Real matrix expected.\n"), pstrName, 1);
@@ -1388,7 +1336,7 @@ void DifferentialEquationFunctions::callMacroJac(int* n, double* t, double* y, i
     }
 
 
-    types::Double* pDblOut = out[0]->getAs<types::Double>();
+    types::Double* pDblOut = args.out[0]->getAs<types::Double>();
     int iSizeOut = pDblOut->getSize();
 
     if (iSizeOut > iMaxSize)
@@ -1408,47 +1356,31 @@ void DifferentialEquationFunctions::callMacroG(int* n, double* t, double* y, int
     int iRetCount   = 1;
     int one         = 1;
 
-    types::typed_list in;
-    types::typed_list out;
-    types::optional_list opt;
+    args_t args;
 
     types::Double* pDblY = new types::Double(m_odeYRows, m_odeYCols);
     pDblY->set(y);
     types::Double* pDblT = new types::Double(*t);
 
-    pDblT->IncreaseRef();
-    pDblY->IncreaseRef();
-
-    in.push_back(pDblT);
-    in.push_back(pDblY);
+    args.add_in(pDblT);
+    args.add_in(pDblY);
 
     for (int i = 0; i < (int)m_odeGArgs.size(); i++)
     {
-        m_odeGArgs[i]->IncreaseRef();
-        in.push_back(m_odeGArgs[i]);
+        args.add_in(m_odeGArgs[i]);
     }
 
     try
     {
         // new std::wstring(L"") is delete in destructor of ast::CommentExp
-        m_pCallGFunction->invoke(in, opt, iRetCount, out, ast::CommentExp(Location(), new std::wstring(L"")));
+        m_pCallGFunction->invoke(args.in, args.opt, iRetCount, args.out, ast::CommentExp(Location(), new std::wstring(L"")));
     }
     catch (const ast::InternalError& ie)
     {
-        for (int i = 0; i < (int)m_odeGArgs.size(); i++)
-        {
-            m_odeGArgs[i]->DecreaseRef();
-        }
-
         throw ie;
     }
 
-    for (int i = 0; i < (int)m_odeGArgs.size(); i++)
-    {
-        m_odeGArgs[i]->DecreaseRef();
-    }
-
-    if (out.size() != iRetCount)
+    if (args.out.size() != iRetCount)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallGFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong number of output argument(s): %d expected.\n"), pstrName, iRetCount);
@@ -1456,23 +1388,7 @@ void DifferentialEquationFunctions::callMacroG(int* n, double* t, double* y, int
         throw ast::InternalError(errorMsg);
     }
 
-    out[0]->IncreaseRef();
-
-    pDblT->DecreaseRef();
-    pDblY->DecreaseRef();
-
-    if (pDblT->isDeletable())
-    {
-        delete pDblT;
-    }
-
-    if (pDblY->isDeletable())
-    {
-        delete pDblY;
-    }
-
-    out[0]->DecreaseRef();
-    if (out[0]->isDouble() == false)
+    if (args.out[0]->isDouble() == false)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallGFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong type for output argument #%d: Real matrix expected.\n"), pstrName, 1);
@@ -1480,11 +1396,7 @@ void DifferentialEquationFunctions::callMacroG(int* n, double* t, double* y, int
         throw ast::InternalError(errorMsg);
     }
 
-    C2F(dcopy)(ng, out[0]->getAs<types::Double>()->get(), &one, gout, &one);
-    if (out[0]->isDeletable())
-    {
-        delete out[0];
-    }
+    C2F(dcopy)(ng, args.out[0]->getAs<types::Double>()->get(), &one, gout, &one);
 }
 
 double DifferentialEquationFunctions::callIntgMacroF(double* t)
@@ -1493,44 +1405,28 @@ double DifferentialEquationFunctions::callIntgMacroF(double* t)
     int one         = 1;
     int iRetCount   = 1;
 
-    types::typed_list in;
-    types::typed_list out;
-    types::optional_list opt;
-
+    args_t args;
+    
     // create input args
     types::Double* pDblT = new types::Double(*t);
-    pDblT->IncreaseRef();
-
-    // push_back
-    in.push_back(pDblT);
+    args.add_in(pDblT);
 
     for (int i = 0; i < (int)m_FArgs.size(); i++)
     {
-        m_FArgs[i]->IncreaseRef();
-        in.push_back(m_FArgs[i]);
+        args.add_in(m_FArgs[i]);
     }
 
     try
     {
         // new std::wstring(L"") is delete in destructor of ast::CommentExp
-        m_pCallFFunction->invoke(in, opt, iRetCount, out, ast::CommentExp(Location(), new std::wstring(L"")));
+        m_pCallFFunction->invoke(args.in, args.opt, iRetCount, args.out, ast::CommentExp(Location(), new std::wstring(L"")));
     }
     catch (const ast::InternalError& ie)
     {
-        for (int i = 0; i < (int)m_FArgs.size(); i++)
-        {
-            m_FArgs[i]->DecreaseRef();
-        }
-
         throw ie;
     }
 
-    for (int i = 0; i < (int)m_FArgs.size(); i++)
-    {
-        m_FArgs[i]->DecreaseRef();
-    }
-
-    if (out.size() != iRetCount)
+    if (args.out.size() != iRetCount)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallFFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong number of output argument(s): %d expected.\n"), pstrName, iRetCount);
@@ -1538,16 +1434,7 @@ double DifferentialEquationFunctions::callIntgMacroF(double* t)
         throw ast::InternalError(errorMsg);
     }
 
-    out[0]->IncreaseRef();
-
-    pDblT->DecreaseRef();
-    if (pDblT->isDeletable())
-    {
-        delete pDblT;
-    }
-
-    out[0]->DecreaseRef();
-    if (out[0]->isDouble() == false)
+    if (args.out[0]->isDouble() == false)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallFFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong type for output argument #%d: Real matrix expected.\n"), pstrName, 1);
@@ -1556,7 +1443,7 @@ double DifferentialEquationFunctions::callIntgMacroF(double* t)
 
     }
 
-    types::Double* pDblOut = out[0]->getAs<types::Double>();
+    types::Double* pDblOut = args.out[0]->getAs<types::Double>();
     if (pDblOut->getSize() != 1)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallFFunction->getName().c_str());
@@ -1565,13 +1452,7 @@ double DifferentialEquationFunctions::callIntgMacroF(double* t)
         throw ast::InternalError(errorMsg);
     }
 
-    double res = pDblOut->get(0);
-    if (out[0]->isDeletable())
-    {
-        delete out[0];
-    }
-
-    return res;
+    return pDblOut->get(0);
 }
 
 double DifferentialEquationFunctions::callInt2dMacroF(double* x, double* y)
@@ -1580,47 +1461,30 @@ double DifferentialEquationFunctions::callInt2dMacroF(double* x, double* y)
     int one         = 1;
     int iRetCount   = 1;
 
-    types::typed_list in;
-    types::typed_list out;
-    types::optional_list opt;
-
+    args_t args;
     // create input args
     types::Double* pDblX = new types::Double(*x);
-    pDblX->IncreaseRef();
     types::Double* pDblY = new types::Double(*y);
-    pDblY->IncreaseRef();
-
-    // push_back
-    in.push_back(pDblX);
-    in.push_back(pDblY);
+    
+    args.add_in(pDblX);
+    args.add_in(pDblY);
 
     for (int i = 0; i < (int)m_FArgs.size(); i++)
     {
-        m_FArgs[i]->IncreaseRef();
-        in.push_back(m_FArgs[i]);
+        args.add_in(m_FArgs[i]);
     }
 
     try
     {
         // new std::wstring(L"") is delete in destructor of ast::CommentExp
-        m_pCallFFunction->invoke(in, opt, iRetCount, out, ast::CommentExp(Location(), new std::wstring(L"")));
+        m_pCallFFunction->invoke(args.in, args.opt, iRetCount, args.out, ast::CommentExp(Location(), new std::wstring(L"")));
     }
     catch (const ast::InternalError& ie)
     {
-        for (int i = 0; i < (int)m_FArgs.size(); i++)
-        {
-            m_FArgs[i]->DecreaseRef();
-        }
-
         throw ie;
     }
 
-    for (int i = 0; i < (int)m_FArgs.size(); i++)
-    {
-        m_FArgs[i]->DecreaseRef();
-    }
-
-    if (out.size() != iRetCount)
+    if (args.out.size() != iRetCount)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallFFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong number of output argument(s): %d expected.\n"), pstrName, iRetCount);
@@ -1628,22 +1492,7 @@ double DifferentialEquationFunctions::callInt2dMacroF(double* x, double* y)
         throw ast::InternalError(errorMsg);
     }
 
-    out[0]->IncreaseRef();
-
-    pDblX->DecreaseRef();
-    if (pDblX->isDeletable())
-    {
-        delete pDblX;
-    }
-
-    pDblY->DecreaseRef();
-    if (pDblY->isDeletable())
-    {
-        delete pDblY;
-    }
-
-    out[0]->DecreaseRef();
-    if (out[0]->isDouble() == false)
+    if (args.out[0]->isDouble() == false)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallFFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong type for output argument #%d: Real matrix expected.\n"), pstrName, 1);
@@ -1651,7 +1500,7 @@ double DifferentialEquationFunctions::callInt2dMacroF(double* x, double* y)
         throw ast::InternalError(errorMsg);
     }
 
-    types::Double* pDblOut = out[0]->getAs<types::Double>();
+    types::Double* pDblOut = args.out[0]->getAs<types::Double>();
     if (pDblOut->getSize() != 1)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallFFunction->getName().c_str());
@@ -1660,13 +1509,7 @@ double DifferentialEquationFunctions::callInt2dMacroF(double* x, double* y)
         throw ast::InternalError(errorMsg);
     }
 
-    double res = pDblOut->get(0);
-    if (out[0]->isDeletable())
-    {
-        delete out[0];
-    }
-
-    return res;
+    return pDblOut->get(0);
 }
 
 void DifferentialEquationFunctions::callInt3dMacroF(double* xyz, int* numfun, double* funvls)
@@ -1675,48 +1518,32 @@ void DifferentialEquationFunctions::callInt3dMacroF(double* xyz, int* numfun, do
     int one         = 1;
     int iRetCount   = 1;
 
-    types::typed_list in;
-    types::typed_list out;
-    types::optional_list opt;
-
+    args_t args;
+    
     // create input args
     types::Double* pDblXYZ = new types::Double(3, 1);
     pDblXYZ->set(xyz);
-    pDblXYZ->IncreaseRef();
     types::Double* pDblNumfun = new types::Double(*numfun);
-    pDblNumfun->IncreaseRef();
-
-    // push_back
-    in.push_back(pDblXYZ);
-    in.push_back(pDblNumfun);
+    
+    args.add_in(pDblXYZ);
+    args.add_in(pDblNumfun);
 
     for (int i = 0; i < (int)m_FArgs.size(); i++)
     {
-        m_FArgs[i]->IncreaseRef();
-        in.push_back(m_FArgs[i]);
+        args.add_in(m_FArgs[i]);
     }
 
     try
     {
         // new std::wstring(L"") is delete in destructor of ast::CommentExp
-        m_pCallFFunction->invoke(in, opt, iRetCount, out, ast::CommentExp(Location(), new std::wstring(L"")));
+        m_pCallFFunction->invoke(args.in, args.opt, iRetCount, args.out, ast::CommentExp(Location(), new std::wstring(L"")));
     }
     catch (const ast::InternalError& ie)
     {
-        for (int i = 0; i < (int)m_FArgs.size(); i++)
-        {
-            m_FArgs[i]->DecreaseRef();
-        }
-
         throw ie;
     }
 
-    for (int i = 0; i < (int)m_FArgs.size(); i++)
-    {
-        m_FArgs[i]->DecreaseRef();
-    }
-
-    if (out.size() != iRetCount)
+    if (args.out.size() != iRetCount)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallFFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong number of output argument(s): %d expected.\n"), pstrName, iRetCount);
@@ -1724,22 +1551,7 @@ void DifferentialEquationFunctions::callInt3dMacroF(double* xyz, int* numfun, do
         throw ast::InternalError(errorMsg);
     }
 
-    out[0]->IncreaseRef();
-
-    pDblXYZ->DecreaseRef();
-    if (pDblXYZ->isDeletable())
-    {
-        delete pDblXYZ;
-    }
-
-    pDblNumfun->DecreaseRef();
-    if (pDblNumfun->isDeletable())
-    {
-        delete pDblNumfun;
-    }
-
-    out[0]->DecreaseRef();
-    if (out[0]->isDouble() == false)
+    if (args.out[0]->isDouble() == false)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallFFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong type for output argument #%d: Real matrix expected.\n"), pstrName, 1);
@@ -1747,7 +1559,7 @@ void DifferentialEquationFunctions::callInt3dMacroF(double* xyz, int* numfun, do
         throw ast::InternalError(errorMsg);
     }
 
-    types::Double* pDblOut = out[0]->getAs<types::Double>();
+    types::Double* pDblOut = args.out[0]->getAs<types::Double>();
     if (pDblOut->getSize() != *numfun)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallFFunction->getName().c_str());
@@ -1757,10 +1569,6 @@ void DifferentialEquationFunctions::callInt3dMacroF(double* xyz, int* numfun, do
     }
 
     C2F(dcopy)(numfun, pDblOut->get(), &one, funvls, &one);
-    if (out[0]->isDeletable())
-    {
-        delete out[0];
-    }
 }
 
 void DifferentialEquationFunctions::callFevalMacroF(int* nn, double* x1, double* x2, double* xres, int* itype)
@@ -1769,9 +1577,7 @@ void DifferentialEquationFunctions::callFevalMacroF(int* nn, double* x1, double*
     int one         = 1;
     int iRetCount   = 1;
 
-    types::typed_list in;
-    types::typed_list out;
-    types::optional_list opt;
+    args_t args;
 
     types::Double* pDblX = NULL;
     types::Double* pDblY = NULL;
@@ -1779,42 +1585,29 @@ void DifferentialEquationFunctions::callFevalMacroF(int* nn, double* x1, double*
     // create input args
 
     pDblX = new types::Double(*x1);
-    pDblX->IncreaseRef();
-    in.push_back(pDblX);
+    args.add_in(pDblX);
 
     if (*nn == 2)
     {
         pDblY = new types::Double(*x2);
-        pDblY->IncreaseRef();
-        in.push_back(pDblY);
+        args.add_in(pDblY);
     }
 
     for (int i = 0; i < (int)m_FArgs.size(); i++)
     {
-        m_FArgs[i]->IncreaseRef();
-        in.push_back(m_FArgs[i]);
+        args.add_in(m_FArgs[i]);
     }
     try
     {
         // new std::wstring(L"") is delete in destructor of ast::CommentExp
-        m_pCallFFunction->invoke(in, opt, iRetCount, out, ast::CommentExp(Location(), new std::wstring(L"")));
+        m_pCallFFunction->invoke(args.in, args.opt, iRetCount, args.out, ast::CommentExp(Location(), new std::wstring(L"")));
     }
     catch (const ast::InternalError& ie)
     {
-        for (int i = 0; i < (int)m_FArgs.size(); i++)
-        {
-            m_FArgs[i]->DecreaseRef();
-        }
-
         throw ie;
     }
 
-    for (int i = 0; i < (int)m_FArgs.size(); i++)
-    {
-        m_FArgs[i]->DecreaseRef();
-    }
-
-    if (out.size() != iRetCount)
+    if (args.out.size() != iRetCount)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallFFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong number of output argument(s): %d expected.\n"), pstrName, iRetCount);
@@ -1822,25 +1615,7 @@ void DifferentialEquationFunctions::callFevalMacroF(int* nn, double* x1, double*
         throw ast::InternalError(errorMsg);
     }
 
-    out[0]->IncreaseRef();
-
-    pDblX->DecreaseRef();
-    if (pDblX->isDeletable())
-    {
-        delete pDblX;
-    }
-
-    if (*nn == 2)
-    {
-        pDblY->DecreaseRef();
-        if (pDblY->isDeletable())
-        {
-            delete pDblY;
-        }
-    }
-
-    out[0]->DecreaseRef();
-    if (out[0]->isDouble() == false)
+    if (args.out[0]->isDouble() == false)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallFFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong type for output argument #%d: Real matrix expected.\n"), pstrName, 1);
@@ -1849,7 +1624,7 @@ void DifferentialEquationFunctions::callFevalMacroF(int* nn, double* x1, double*
 
     }
 
-    types::Double* pDblOut = out[0]->getAs<types::Double>();
+    types::Double* pDblOut = args.out[0]->getAs<types::Double>();
     if (pDblOut->getSize() != 1)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallFFunction->getName().c_str());
@@ -1869,11 +1644,6 @@ void DifferentialEquationFunctions::callFevalMacroF(int* nn, double* x1, double*
         *itype = 0;
         xres[0] = pDblOut->get(0);
     }
-
-    if (out[0]->isDeletable())
-    {
-        delete out[0];
-    }
 }
 
 void DifferentialEquationFunctions::callBvodeMacroGsub(int* i, double* z, double* g)
@@ -1882,50 +1652,34 @@ void DifferentialEquationFunctions::callBvodeMacroGsub(int* i, double* z, double
     int one         = 1;
     int iRetCount   = 1;
 
-    types::typed_list in;
-    types::typed_list out;
-    types::optional_list opt;
+    args_t args;
 
     types::Double* pDblI = NULL;
     types::Double* pDblZ = NULL;
 
     pDblI = new types::Double(*i);
-    pDblI->IncreaseRef();
-    in.push_back(pDblI);
+    args.add_in(pDblI);
 
     pDblZ = new types::Double(m_bvodeM, 1);
     pDblZ->set(z);
-    pDblZ->IncreaseRef();
-    in.push_back(pDblZ);
-
+    args.add_in(pDblZ);
 
     for (int i = 0; i < (int)m_GsubArgs.size(); i++)
     {
-        m_GsubArgs[i]->IncreaseRef();
-        in.push_back(m_GsubArgs[i]);
+        args.add_in(m_GsubArgs[i]);
     }
 
     try
     {
         // new std::wstring(L"") is delete in destructor of ast::CommentExp
-        m_pCallGsubFunction->invoke(in, opt, iRetCount, out, ast::CommentExp(Location(), new std::wstring(L"")));
+        m_pCallGsubFunction->invoke(args.in, args.opt, iRetCount, args.out, ast::CommentExp(Location(), new std::wstring(L"")));
     }
     catch (const ast::InternalError& ie)
     {
-        for (int i = 0; i < (int)m_GsubArgs.size(); i++)
-        {
-            m_GsubArgs[i]->DecreaseRef();
-        }
-
         throw ie;
     }
 
-    for (int i = 0; i < (int)m_GsubArgs.size(); i++)
-    {
-        m_GsubArgs[i]->DecreaseRef();
-    }
-
-    if (out.size() != iRetCount)
+    if (args.out.size() != iRetCount)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallGsubFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong number of output argument(s): %d expected.\n"), pstrName, iRetCount);
@@ -1933,22 +1687,7 @@ void DifferentialEquationFunctions::callBvodeMacroGsub(int* i, double* z, double
         throw ast::InternalError(errorMsg);
     }
 
-    out[0]->IncreaseRef();
-
-    pDblI->DecreaseRef();
-    if (pDblI->isDeletable())
-    {
-        delete pDblI;
-    }
-
-    pDblZ->DecreaseRef();
-    if (pDblZ->isDeletable())
-    {
-        delete pDblZ;
-    }
-
-    out[0]->DecreaseRef();
-    if (out[0]->isDouble() == false)
+    if (args.out[0]->isDouble() == false)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallGsubFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong type for output argument #%d: Real matrix expected.\n"), pstrName, 1);
@@ -1956,7 +1695,7 @@ void DifferentialEquationFunctions::callBvodeMacroGsub(int* i, double* z, double
         throw ast::InternalError(errorMsg);
     }
 
-    types::Double* pDblOut = out[0]->getAs<types::Double>();
+    types::Double* pDblOut = args.out[0]->getAs<types::Double>();
     if (pDblOut->getSize() != 1)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallGsubFunction->getName().c_str());
@@ -1966,10 +1705,6 @@ void DifferentialEquationFunctions::callBvodeMacroGsub(int* i, double* z, double
     }
 
     *g = pDblOut->get(0);
-    if (out[0]->isDeletable())
-    {
-        delete out[0];
-    }
 }
 
 void DifferentialEquationFunctions::callBvodeMacroDgsub(int* i, double* z, double* g)
@@ -1978,49 +1713,34 @@ void DifferentialEquationFunctions::callBvodeMacroDgsub(int* i, double* z, doubl
     int one         = 1;
     int iRetCount   = 1;
 
-    types::typed_list in;
-    types::typed_list out;
-    types::optional_list opt;
-
+    args_t args;
+    
     types::Double* pDblI = NULL;
     types::Double* pDblZ = NULL;
 
     pDblI = new types::Double(*i);
-    pDblI->IncreaseRef();
-    in.push_back(pDblI);
+    args.add_in(pDblI);
 
     pDblZ = new types::Double(m_bvodeM, 1);
     pDblZ->set(z);
-    pDblZ->IncreaseRef();
-    in.push_back(pDblZ);
+    args.add_in(pDblZ);
 
     for (int i = 0; i < (int)m_DgsubArgs.size(); i++)
     {
-        m_DgsubArgs[i]->IncreaseRef();
-        in.push_back(m_DgsubArgs[i]);
+        args.add_in(m_DgsubArgs[i]);
     }
 
     try
     {
         // new std::wstring(L"") is delete in destructor of ast::CommentExp
-        m_pCallDgsubFunction->invoke(in, opt, iRetCount, out, ast::CommentExp(Location(), new std::wstring(L"")));
+        m_pCallDgsubFunction->invoke(args.in, args.opt, iRetCount, args.out, ast::CommentExp(Location(), new std::wstring(L"")));
     }
     catch (const ast::InternalError& ie)
     {
-        for (int i = 0; i < (int)m_DgsubArgs.size(); i++)
-        {
-            m_DgsubArgs[i]->DecreaseRef();
-        }
-
         throw ie;
     }
 
-    for (int i = 0; i < (int)m_DgsubArgs.size(); i++)
-    {
-        m_DgsubArgs[i]->DecreaseRef();
-    }
-
-    if (out.size() != iRetCount)
+    if (args.out.size() != iRetCount)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallDgsubFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong number of output argument(s): %d expected.\n"), pstrName, iRetCount);
@@ -2028,22 +1748,7 @@ void DifferentialEquationFunctions::callBvodeMacroDgsub(int* i, double* z, doubl
         throw ast::InternalError(errorMsg);
     }
 
-    out[0]->IncreaseRef();
-
-    pDblI->DecreaseRef();
-    if (pDblI->isDeletable())
-    {
-        delete pDblI;
-    }
-
-    pDblZ->DecreaseRef();
-    if (pDblZ->isDeletable())
-    {
-        delete pDblZ;
-    }
-
-    out[0]->DecreaseRef();
-    if (out[0]->isDouble() == false)
+    if (args.out[0]->isDouble() == false)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallDgsubFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong type for output argument #%d: Real matrix expected.\n"), pstrName, 1);
@@ -2051,7 +1756,7 @@ void DifferentialEquationFunctions::callBvodeMacroDgsub(int* i, double* z, doubl
         throw ast::InternalError(errorMsg);
     }
 
-    types::Double* pDblOut = out[0]->getAs<types::Double>();
+    types::Double* pDblOut = args.out[0]->getAs<types::Double>();
     if (pDblOut->getSize() != m_bvodeM)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallDgsubFunction->getName().c_str());
@@ -2061,10 +1766,6 @@ void DifferentialEquationFunctions::callBvodeMacroDgsub(int* i, double* z, doubl
     }
 
     C2F(dcopy)(&m_bvodeM, pDblOut->get(), &one, g, &one);
-    if (out[0]->isDeletable())
-    {
-        delete out[0];
-    }
 }
 
 void DifferentialEquationFunctions::callBvodeMacroFsub(double* x, double* z, double* d)
@@ -2073,49 +1774,34 @@ void DifferentialEquationFunctions::callBvodeMacroFsub(double* x, double* z, dou
     int one         = 1;
     int iRetCount   = 1;
 
-    types::typed_list in;
-    types::typed_list out;
-    types::optional_list opt;
+    args_t args;
 
     types::Double* pDblX = NULL;
     types::Double* pDblZ = NULL;
 
     pDblX = new types::Double(*x);
-    pDblX->IncreaseRef();
-    in.push_back(pDblX);
+    args.add_in(pDblX);
 
     pDblZ = new types::Double(m_bvodeM, 1);
     pDblZ->set(z);
-    pDblZ->IncreaseRef();
-    in.push_back(pDblZ);
+    args.add_in(pDblZ);
 
     for (int i = 0; i < (int)m_FsubArgs.size(); i++)
     {
-        m_FsubArgs[i]->IncreaseRef();
-        in.push_back(m_FsubArgs[i]);
+        args.add_in(m_FsubArgs[i]);
     }
 
     try
     {
         // new std::wstring(L"") is delete in destructor of ast::CommentExp
-        m_pCallFsubFunction->invoke(in, opt, iRetCount, out, ast::CommentExp(Location(), new std::wstring(L"")));
+        m_pCallFsubFunction->invoke(args.in, args.opt, iRetCount, args.out, ast::CommentExp(Location(), new std::wstring(L"")));
     }
     catch (const ast::InternalError& ie)
     {
-        for (int i = 0; i < (int)m_FsubArgs.size(); i++)
-        {
-            m_FsubArgs[i]->DecreaseRef();
-        }
-
         throw ie;
     }
 
-    for (int i = 0; i < (int)m_FsubArgs.size(); i++)
-    {
-        m_FsubArgs[i]->DecreaseRef();
-    }
-
-    if (out.size() != iRetCount)
+    if (args.out.size() != iRetCount)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallFsubFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong number of output argument(s): %d expected.\n"), pstrName, iRetCount);
@@ -2123,22 +1809,7 @@ void DifferentialEquationFunctions::callBvodeMacroFsub(double* x, double* z, dou
         throw ast::InternalError(errorMsg);
     }
 
-    out[0]->IncreaseRef();
-
-    pDblX->DecreaseRef();
-    if (pDblX->isDeletable())
-    {
-        delete pDblX;
-    }
-
-    pDblZ->DecreaseRef();
-    if (pDblZ->isDeletable())
-    {
-        delete pDblZ;
-    }
-
-    out[0]->DecreaseRef();
-    if (out[0]->isDouble() == false)
+    if (args.out[0]->isDouble() == false)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallFsubFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong type for output argument #%d: Real matrix expected.\n"), pstrName, 1);
@@ -2146,7 +1817,7 @@ void DifferentialEquationFunctions::callBvodeMacroFsub(double* x, double* z, dou
         throw ast::InternalError(errorMsg);
     }
 
-    types::Double* pDblOut = out[0]->getAs<types::Double>();
+    types::Double* pDblOut = args.out[0]->getAs<types::Double>();
     if (pDblOut->getSize() != m_bvodeN)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallFsubFunction->getName().c_str());
@@ -2156,10 +1827,6 @@ void DifferentialEquationFunctions::callBvodeMacroFsub(double* x, double* z, dou
     }
 
     C2F(dcopy)(&m_bvodeN, pDblOut->get(), &one, d, &one);
-    if (out[0]->isDeletable())
-    {
-        delete out[0];
-    }
 }
 
 void DifferentialEquationFunctions::callBvodeMacroDfsub(double* x, double* z, double* d)
@@ -2168,49 +1835,34 @@ void DifferentialEquationFunctions::callBvodeMacroDfsub(double* x, double* z, do
     int one         = 1;
     int iRetCount   = 1;
 
-    types::typed_list in;
-    types::typed_list out;
-    types::optional_list opt;
+    args_t args;
 
     types::Double* pDblX = NULL;
     types::Double* pDblZ = NULL;
 
     pDblX = new types::Double(*x);
-    pDblX->IncreaseRef();
-    in.push_back(pDblX);
+    args.add_in(pDblX);
 
     pDblZ = new types::Double(m_bvodeM, 1);
     pDblZ->set(z);
-    pDblZ->IncreaseRef();
-    in.push_back(pDblZ);
+    args.add_in(pDblZ);
 
     for (int i = 0; i < (int)m_DfsubArgs.size(); i++)
     {
-        m_DfsubArgs[i]->IncreaseRef();
-        in.push_back(m_DfsubArgs[i]);
+        args.add_in(m_DfsubArgs[i]);
     }
 
     try
     {
         // new std::wstring(L"") is delete in destructor of ast::CommentExp
-        m_pCallDfsubFunction->invoke(in, opt, iRetCount, out, ast::CommentExp(Location(), new std::wstring(L"")));
+        m_pCallDfsubFunction->invoke(args.in, args.opt, iRetCount, args.out, ast::CommentExp(Location(), new std::wstring(L"")));
     }
     catch (const ast::InternalError& ie)
     {
-        for (int i = 0; i < (int)m_DfsubArgs.size(); i++)
-        {
-            m_DfsubArgs[i]->DecreaseRef();
-        }
-
         throw ie;
     }
 
-    for (int i = 0; i < (int)m_DfsubArgs.size(); i++)
-    {
-        m_DfsubArgs[i]->DecreaseRef();
-    }
-
-    if (out.size() != iRetCount)
+    if (args.out.size() != iRetCount)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallDfsubFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong number of output argument(s): %d expected.\n"), pstrName, iRetCount);
@@ -2218,22 +1870,7 @@ void DifferentialEquationFunctions::callBvodeMacroDfsub(double* x, double* z, do
         throw ast::InternalError(errorMsg);
     }
 
-    out[0]->IncreaseRef();
-
-    pDblX->DecreaseRef();
-    if (pDblX->isDeletable())
-    {
-        delete pDblX;
-    }
-
-    pDblZ->DecreaseRef();
-    if (pDblZ->isDeletable())
-    {
-        delete pDblZ;
-    }
-
-    out[0]->DecreaseRef();
-    if (out[0]->isDouble() == false)
+    if (args.out[0]->isDouble() == false)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallDfsubFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong type for output argument #%d: Real matrix expected.\n"), pstrName, 1);
@@ -2241,7 +1878,7 @@ void DifferentialEquationFunctions::callBvodeMacroDfsub(double* x, double* z, do
         throw ast::InternalError(errorMsg);
     }
 
-    types::Double* pDblOut = out[0]->getAs<types::Double>();
+    types::Double* pDblOut = args.out[0]->getAs<types::Double>();
     int size = m_bvodeN * m_bvodeM;
     if (pDblOut->getSize() != size)
     {
@@ -2252,10 +1889,6 @@ void DifferentialEquationFunctions::callBvodeMacroDfsub(double* x, double* z, do
     }
 
     C2F(dcopy)(&size, pDblOut->get(), &one, d, &one);
-    if (out[0]->isDeletable())
-    {
-        delete out[0];
-    }
 }
 
 void DifferentialEquationFunctions::callBvodeMacroGuess(double* x, double* z, double* d)
@@ -2264,43 +1897,29 @@ void DifferentialEquationFunctions::callBvodeMacroGuess(double* x, double* z, do
     int one         = 1;
     int iRetCount   = 2;
 
-    types::typed_list in;
-    types::typed_list out;
-    types::optional_list opt;
+    args_t args;
 
     types::Double* pDblX = NULL;
 
     pDblX = new types::Double(*x);
-    pDblX->IncreaseRef();
-    in.push_back(pDblX);
+    args.add_in(pDblX);
 
     for (int i = 0; i < (int)m_GuessArgs.size(); i++)
     {
-        m_GuessArgs[i]->IncreaseRef();
-        in.push_back(m_GuessArgs[i]);
+        args.add_in(m_GuessArgs[i]);
     }
 
     try
     {
         // new std::wstring(L"") is delete in destructor of ast::CommentExp
-        m_pCallGuessFunction->invoke(in, opt, iRetCount, out, ast::CommentExp(Location(), new std::wstring(L"")));
+        m_pCallGuessFunction->invoke(args.in, args.opt, iRetCount, args.out, ast::CommentExp(Location(), new std::wstring(L"")));
     }
     catch (const ast::InternalError& ie)
     {
-        for (int i = 0; i < (int)m_GuessArgs.size(); i++)
-        {
-            m_GuessArgs[i]->DecreaseRef();
-        }
-
         throw ie;
     }
 
-    for (int i = 0; i < (int)m_GuessArgs.size(); i++)
-    {
-        m_GuessArgs[i]->DecreaseRef();
-    }
-
-    if (out.size() != iRetCount)
+    if (args.out.size() != iRetCount)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallGuessFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong number of output argument(s): %d expected.\n"), pstrName, iRetCount);
@@ -2308,17 +1927,7 @@ void DifferentialEquationFunctions::callBvodeMacroGuess(double* x, double* z, do
         throw ast::InternalError(errorMsg);
     }
 
-    out[0]->IncreaseRef();
-    out[1]->IncreaseRef();
-
-    pDblX->DecreaseRef();
-    if (pDblX->isDeletable())
-    {
-        delete pDblX;
-    }
-
-    out[0]->DecreaseRef();
-    if (out[0]->isDouble() == false)
+    if (args.out[0]->isDouble() == false)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallGuessFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong type for output argument #%d: Real matrix expected.\n"), pstrName, 1);
@@ -2326,8 +1935,7 @@ void DifferentialEquationFunctions::callBvodeMacroGuess(double* x, double* z, do
         throw ast::InternalError(errorMsg);
     }
 
-    out[1]->DecreaseRef();
-    if (out[1]->isDouble() == false)
+    if (args.out[1]->isDouble() == false)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallGuessFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong type for output argument #%d: Real matrix expected.\n"), pstrName, 2);
@@ -2335,7 +1943,7 @@ void DifferentialEquationFunctions::callBvodeMacroGuess(double* x, double* z, do
         throw ast::InternalError(errorMsg);
     }
 
-    types::Double* pDblOutZ = out[0]->getAs<types::Double>();
+    types::Double* pDblOutZ = args.out[0]->getAs<types::Double>();
     if (pDblOutZ->getSize() != m_bvodeM)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallGuessFunction->getName().c_str());
@@ -2344,7 +1952,7 @@ void DifferentialEquationFunctions::callBvodeMacroGuess(double* x, double* z, do
         throw ast::InternalError(errorMsg);
     }
 
-    types::Double* pDblOutD = out[1]->getAs<types::Double>();
+    types::Double* pDblOutD = args.out[1]->getAs<types::Double>();
     if (pDblOutD->getSize() != m_bvodeN)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallGuessFunction->getName().c_str());
@@ -2355,15 +1963,6 @@ void DifferentialEquationFunctions::callBvodeMacroGuess(double* x, double* z, do
 
     C2F(dcopy)(&m_bvodeM, pDblOutZ->get(), &one, z, &one);
     C2F(dcopy)(&m_bvodeN, pDblOutD->get(), &one, d, &one);
-    if (out[0]->isDeletable())
-    {
-        delete out[0];
-    }
-
-    if (out[1]->isDeletable())
-    {
-        delete out[1];
-    }
 }
 
 void DifferentialEquationFunctions::callImplMacroF(int* neq, double* t, double* y, double*s, double* r, int* ires)
@@ -2374,46 +1973,35 @@ void DifferentialEquationFunctions::callImplMacroF(int* neq, double* t, double* 
 
     *ires = 2;
 
-    types::typed_list in;
-    types::typed_list out;
-    types::optional_list opt;
-
+    args_t args;
+    
     types::Double* pDblT = new types::Double(*t);
-    pDblT->IncreaseRef();
-    in.push_back(pDblT);
+    args.add_in(pDblT);
 
     types::Double* pDblY = new types::Double(*neq, 1);
     pDblY->set(y);
-    pDblY->IncreaseRef();
-    in.push_back(pDblY);
+    args.add_in(pDblY);
 
     types::Double* pDblS = new types::Double(*neq, 1);
     pDblS->set(s);
-    pDblS->IncreaseRef();
-    in.push_back(pDblS);
+    args.add_in(pDblS);
 
     for (int i = 0; i < (int)m_FArgs.size(); i++)
     {
-        m_FArgs[i]->IncreaseRef();
-        in.push_back(m_FArgs[i]);
+        args.add_in(m_FArgs[i]);
     }
 
     try
     {
         // new std::wstring(L"") is delete in destructor of ast::CommentExp
-        m_pCallFFunction->invoke(in, opt, iRetCount, out, ast::CommentExp(Location(), new std::wstring(L"")));
+        m_pCallFFunction->invoke(args.in, args.opt, iRetCount, args.out, ast::CommentExp(Location(), new std::wstring(L"")));
     }
     catch (const ast::InternalError& ie)
     {
-        for (int i = 0; i < (int)m_FArgs.size(); i++)
-        {
-            m_FArgs[i]->DecreaseRef();
-        }
-
         throw ie;
     }
 
-    if (out.size() != iRetCount)
+    if (args.out.size() != iRetCount)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallFFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong number of output argument(s): %d expected.\n"), pstrName, iRetCount);
@@ -2421,28 +2009,7 @@ void DifferentialEquationFunctions::callImplMacroF(int* neq, double* t, double* 
         throw ast::InternalError(errorMsg);
     }
 
-    out[0]->IncreaseRef();
-
-    pDblT->DecreaseRef();
-    if (pDblT->isDeletable())
-    {
-        delete pDblT;
-    }
-
-    pDblY->DecreaseRef();
-    if (pDblY->isDeletable())
-    {
-        delete pDblY;
-    }
-
-    pDblS->DecreaseRef();
-    if (pDblS->isDeletable())
-    {
-        delete pDblS;
-    }
-
-    out[0]->DecreaseRef();
-    if (out[0]->isDouble() == false)
+    if (args.out[0]->isDouble() == false)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallFFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong type for output argument #%d: Matrix expected.\n"), pstrName, 1);
@@ -2450,7 +2017,7 @@ void DifferentialEquationFunctions::callImplMacroF(int* neq, double* t, double* 
         throw ast::InternalError(errorMsg);
     }
 
-    types::Double* pDblOutR = out[0]->getAs<types::Double>();
+    types::Double* pDblOutR = args.out[0]->getAs<types::Double>();
     if (pDblOutR->getSize() != *neq)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallFFunction->getName().c_str());
@@ -2461,10 +2028,6 @@ void DifferentialEquationFunctions::callImplMacroF(int* neq, double* t, double* 
 
     C2F(dcopy)(neq, pDblOutR->get(), &one, r, &one);
     *ires = 1;
-    if (out[0]->isDeletable())
-    {
-        delete out[0];
-    }
 }
 
 void DifferentialEquationFunctions::callImplMacroG(int* neq, double* t, double* y, double* ml, double* mu, double* p, int* nrowp)
@@ -2473,51 +2036,35 @@ void DifferentialEquationFunctions::callImplMacroG(int* neq, double* t, double* 
     int one         = 1;
     int iRetCount   = 1;
 
-    types::typed_list in;
-    types::typed_list out;
-    types::optional_list opt;
+    args_t args;
 
     types::Double* pDblT = new types::Double(*t);
-    pDblT->IncreaseRef();
-    in.push_back(pDblT);
+    args.add_in(pDblT);
 
     types::Double* pDblY = new types::Double(*neq, 1);
     pDblY->set(y);
-    pDblY->IncreaseRef();
-    in.push_back(pDblY);
+    args.add_in(pDblY);
 
     types::Double* pDblP = new types::Double(*nrowp, *neq);
     pDblP->set(p);
-    pDblP->IncreaseRef();
-    in.push_back(pDblP);
+    args.add_in(pDblP);
 
     for (int i = 0; i < (int)m_odeGArgs.size(); i++)
     {
-        m_odeGArgs[i]->IncreaseRef();
-        in.push_back(m_odeGArgs[i]);
+        args.add_in(m_odeGArgs[i]);
     }
 
     try
     {
         // new std::wstring(L"") is delete in destructor of ast::CommentExp
-        m_pCallGFunction->invoke(in, opt, iRetCount, out, ast::CommentExp(Location(), new std::wstring(L"")));
+        m_pCallGFunction->invoke(args.in, args.opt, iRetCount, args.out, ast::CommentExp(Location(), new std::wstring(L"")));
     }
     catch (const ast::InternalError& ie)
     {
-        for (int i = 0; i < (int)m_odeGArgs.size(); i++)
-        {
-            m_odeGArgs[i]->DecreaseRef();
-        }
-
         throw ie;
     }
 
-    for (int i = 0; i < (int)m_odeGArgs.size(); i++)
-    {
-        m_odeGArgs[i]->DecreaseRef();
-    }
-
-    if (out.size() != iRetCount)
+    if (args.out.size() != iRetCount)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallGFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong number of output argument(s): %d expected.\n"), pstrName, iRetCount);
@@ -2525,22 +2072,7 @@ void DifferentialEquationFunctions::callImplMacroG(int* neq, double* t, double* 
         throw ast::InternalError(errorMsg);
     }
 
-    out[0]->IncreaseRef();
-
-    pDblT->DecreaseRef();
-    if (pDblT->isDeletable())
-    {
-        delete pDblT;
-    }
-
-    pDblY->DecreaseRef();
-    if (pDblY->isDeletable())
-    {
-        delete pDblY;
-    }
-
-    out[0]->DecreaseRef();
-    if (out[0]->isDouble() == false)
+    if (args.out[0]->isDouble() == false)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallGFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong type for output argument #%d: Real matrix expected.\n"), pstrName, 1);
@@ -2548,7 +2080,7 @@ void DifferentialEquationFunctions::callImplMacroG(int* neq, double* t, double* 
         throw ast::InternalError(errorMsg);
     }
 
-    types::Double* pDblOutP = out[0]->getAs<types::Double>();
+    types::Double* pDblOutP = args.out[0]->getAs<types::Double>();
     if (pDblOutP->getCols() != *neq || pDblOutP->getRows() != *nrowp)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallGFunction->getName().c_str());
@@ -2559,10 +2091,6 @@ void DifferentialEquationFunctions::callImplMacroG(int* neq, double* t, double* 
 
     int size = *neq **nrowp;
     C2F(dcopy)(&size, pDblOutP->get(), &one, p, &one);
-    if (out[0]->isDeletable())
-    {
-        delete out[0];
-    }
 }
 
 void DifferentialEquationFunctions::callImplMacroJac(int* neq, double* t, double* y, double* s, double* ml, double* mu, double* p, int* nrowp)
@@ -2571,51 +2099,35 @@ void DifferentialEquationFunctions::callImplMacroJac(int* neq, double* t, double
     int one         = 1;
     int iRetCount   = 1;
 
-    types::typed_list in;
-    types::typed_list out;
-    types::optional_list opt;
+    args_t args;
 
     types::Double* pDblT = new types::Double(*t);
-    pDblT->IncreaseRef();
-    in.push_back(pDblT);
+    args.add_in(pDblT);
 
     types::Double* pDblY = new types::Double(*neq, 1);
     pDblY->set(y);
-    pDblY->IncreaseRef();
-    in.push_back(pDblY);
+    args.add_in(pDblY);
 
     types::Double* pDblS = new types::Double(*neq, 1);
     pDblS->set(s);
-    pDblS->IncreaseRef();
-    in.push_back(pDblS);
+    args.add_in(pDblS);
 
     for (int i = 0; i < (int)m_JacArgs.size(); i++)
     {
-        m_JacArgs[i]->IncreaseRef();
-        in.push_back(m_JacArgs[i]);
+        args.add_in(m_JacArgs[i]);
     }
 
     try
     {
         // new std::wstring(L"") is delete in destructor of ast::CommentExp
-        m_pCallJacFunction->invoke(in, opt, iRetCount, out, ast::CommentExp(Location(), new std::wstring(L"")));
+        m_pCallJacFunction->invoke(args.in, args.opt, iRetCount, args.out, ast::CommentExp(Location(), new std::wstring(L"")));
     }
     catch (const ast::InternalError& ie)
     {
-        for (int i = 0; i < (int)m_JacArgs.size(); i++)
-        {
-            m_JacArgs[i]->DecreaseRef();
-        }
-
         throw ie;
     }
 
-    for (int i = 0; i < (int)m_JacArgs.size(); i++)
-    {
-        m_JacArgs[i]->DecreaseRef();
-    }
-
-    if (out.size() != iRetCount)
+    if (args.out.size() != iRetCount)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallJacFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong number of output argument(s): %d expected.\n"), pstrName, iRetCount);
@@ -2623,28 +2135,7 @@ void DifferentialEquationFunctions::callImplMacroJac(int* neq, double* t, double
         throw ast::InternalError(errorMsg);
     }
 
-    out[0]->IncreaseRef();
-
-    pDblT->DecreaseRef();
-    if (pDblT->isDeletable())
-    {
-        delete pDblT;
-    }
-
-    pDblY->DecreaseRef();
-    if (pDblY->isDeletable())
-    {
-        delete pDblY;
-    }
-
-    pDblS->DecreaseRef();
-    if (pDblS->isDeletable())
-    {
-        delete pDblS;
-    }
-
-    out[0]->DecreaseRef();
-    if (out[0]->isDouble() == false)
+    if (args.out[0]->isDouble() == false)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallJacFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong type for output argument #%d: Real matrix expected.\n"), pstrName, 1);
@@ -2652,7 +2143,7 @@ void DifferentialEquationFunctions::callImplMacroJac(int* neq, double* t, double
         throw ast::InternalError(errorMsg);
     }
 
-    types::Double* pDblOutP = out[0]->getAs<types::Double>();
+    types::Double* pDblOutP = args.out[0]->getAs<types::Double>();
     if (pDblOutP->getCols() != *neq || pDblOutP->getRows() != *nrowp)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallJacFunction->getName().c_str());
@@ -2663,10 +2154,6 @@ void DifferentialEquationFunctions::callImplMacroJac(int* neq, double* t, double
 
     int size = *neq **nrowp;
     C2F(dcopy)(&size, pDblOutP->get(), &one, p, &one);
-    if (out[0]->isDeletable())
-    {
-        delete out[0];
-    }
 }
 
 void DifferentialEquationFunctions::callDasslMacroF(double* t, double* y, double* ydot, double* delta, int* ires, double* rpar, int* ipar)
@@ -2675,51 +2162,35 @@ void DifferentialEquationFunctions::callDasslMacroF(double* t, double* y, double
     int one         = 1;
     int iRetCount   = 2;
 
-    types::typed_list in;
-    types::typed_list out;
-    types::optional_list opt;
+    args_t args;
 
     types::Double* pDblT = new types::Double(*t);
-    pDblT->IncreaseRef();
-    in.push_back(pDblT);
+    args.add_in(pDblT);
 
     types::Double* pDblY = new types::Double(m_odeYRows, 1);
     pDblY->set(y);
-    pDblY->IncreaseRef();
-    in.push_back(pDblY);
+    args.add_in(pDblY);
 
     types::Double* pDblYdot = new types::Double(m_odeYRows, 1);
     pDblYdot->set(ydot);
-    pDblYdot->IncreaseRef();
-    in.push_back(pDblYdot);
+    args.add_in(pDblYdot);
 
     for (int i = 0; i < (int)m_FArgs.size(); i++)
     {
-        m_FArgs[i]->IncreaseRef();
-        in.push_back(m_FArgs[i]);
+        args.add_in(m_FArgs[i]);
     }
 
     try
     {
         // new std::wstring(L"") is delete in destructor of ast::CommentExp
-        m_pCallFFunction->invoke(in, opt, iRetCount, out, ast::CommentExp(Location(), new std::wstring(L"")));
+        m_pCallFFunction->invoke(args.in, args.opt, iRetCount, args.out, ast::CommentExp(Location(), new std::wstring(L"")));
     }
     catch (const ast::InternalError& ie)
     {
-        for (int i = 0; i < (int)m_FArgs.size(); i++)
-        {
-            m_FArgs[i]->DecreaseRef();
-        }
-
         throw ie;
     }
 
-    for (int i = 0; i < (int)m_FArgs.size(); i++)
-    {
-        m_FArgs[i]->DecreaseRef();
-    }
-
-    if (out.size() != iRetCount)
+    if (args.out.size() != iRetCount)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallFFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong number of output argument(s): %d expected.\n"), pstrName, iRetCount);
@@ -2727,29 +2198,7 @@ void DifferentialEquationFunctions::callDasslMacroF(double* t, double* y, double
         throw ast::InternalError(errorMsg);
     }
 
-    out[0]->IncreaseRef();
-    out[1]->IncreaseRef();
-
-    pDblT->DecreaseRef();
-    if (pDblT->isDeletable())
-    {
-        delete pDblT;
-    }
-
-    pDblY->DecreaseRef();
-    if (pDblY->isDeletable())
-    {
-        delete pDblY;
-    }
-
-    pDblYdot->DecreaseRef();
-    if (pDblYdot->isDeletable())
-    {
-        delete pDblYdot;
-    }
-
-    out[0]->DecreaseRef();
-    if (out[0]->isDouble() == false)
+    if (args.out[0]->isDouble() == false)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallFFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong type for output argument #%d: Real matrix expected.\n"), pstrName, 1);
@@ -2757,8 +2206,7 @@ void DifferentialEquationFunctions::callDasslMacroF(double* t, double* y, double
         throw ast::InternalError(errorMsg);
     }
 
-    out[1]->DecreaseRef();
-    if (out[1]->isDouble() == false)
+    if (args.out[1]->isDouble() == false)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallFFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong type for output argument #%d: Real matrix expected.\n"), pstrName, 2);
@@ -2766,7 +2214,7 @@ void DifferentialEquationFunctions::callDasslMacroF(double* t, double* y, double
         throw ast::InternalError(errorMsg);
     }
 
-    types::Double* pDblOutDelta = out[0]->getAs<types::Double>();
+    types::Double* pDblOutDelta = args.out[0]->getAs<types::Double>();
     if (pDblOutDelta->getSize() != m_odeYRows)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallFFunction->getName().c_str());
@@ -2775,7 +2223,7 @@ void DifferentialEquationFunctions::callDasslMacroF(double* t, double* y, double
         throw ast::InternalError(errorMsg);
     }
 
-    types::Double* pDblOutIres = out[1]->getAs<types::Double>();
+    types::Double* pDblOutIres = args.out[1]->getAs<types::Double>();
     if (pDblOutIres->getSize() != 1)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallFFunction->getName().c_str());
@@ -2786,16 +2234,6 @@ void DifferentialEquationFunctions::callDasslMacroF(double* t, double* y, double
 
     C2F(dcopy)(&m_odeYRows, pDblOutDelta->get(), &one, delta, &one);
     *ires = (int)pDblOutIres->get(0);
-
-    if (out[0]->isDeletable())
-    {
-        delete out[0];
-    }
-
-    if (out[1]->isDeletable())
-    {
-        delete out[1];
-    }
 }
 
 void DifferentialEquationFunctions::callDasslMacroJac(double* t, double* y, double* ydot, double* pd, double* cj, double* rpar, int* ipar)
@@ -2804,90 +2242,46 @@ void DifferentialEquationFunctions::callDasslMacroJac(double* t, double* y, doub
     int one         = 1;
     int iRetCount   = 1;
 
-    types::typed_list in;
-    types::typed_list out;
-    types::optional_list opt;
+    args_t args;
 
     types::Double* pDblT = new types::Double(*t);
-    pDblT->IncreaseRef();
-    in.push_back(pDblT);
+    args.add_in(pDblT);
 
     types::Double* pDblY = new types::Double(m_odeYRows, 1);
     pDblY->set(y);
-    pDblY->IncreaseRef();
-    in.push_back(pDblY);
+    args.add_in(pDblY);
 
     types::Double* pDblYdot = new types::Double(m_odeYRows, 1);
     pDblYdot->set(ydot);
-    pDblYdot->IncreaseRef();
-    in.push_back(pDblYdot);
+    args.add_in(pDblYdot);
 
     types::Double* pDblCj = new types::Double(*cj);
-    pDblCj->IncreaseRef();
-    in.push_back(pDblCj);
+    args.add_in(pDblCj);
 
     for (int i = 0; i < (int)m_JacArgs.size(); i++)
     {
-        m_JacArgs[i]->IncreaseRef();
-        in.push_back(m_JacArgs[i]);
+        args.add_in(m_JacArgs[i]);
     }
 
     try
     {
         // new std::wstring(L"") is delete in destructor of ast::CommentExp
-        m_pCallJacFunction->invoke(in, opt, iRetCount, out, ast::CommentExp(Location(), new std::wstring(L"")));
+        m_pCallJacFunction->invoke(args.in, args.opt, iRetCount, args.out, ast::CommentExp(Location(), new std::wstring(L"")));
     }
     catch (const ast::InternalError& ie)
     {
-        for (int i = 0; i < (int)m_JacArgs.size(); i++)
-        {
-            m_JacArgs[i]->DecreaseRef();
-        }
-
         throw ie;
     }
 
-    for (int i = 0; i < (int)m_JacArgs.size(); i++)
-    {
-        m_JacArgs[i]->DecreaseRef();
-    }
-
-    if (out.size() != iRetCount)
+    if (args.out.size() != iRetCount)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallJacFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong number of output argument(s): %d expected.\n"), pstrName, iRetCount);
         FREE(pstrName);
         throw ast::InternalError(errorMsg);
     }
-
-    out[0]->IncreaseRef();
-
-    pDblT->DecreaseRef();
-    if (pDblT->isDeletable())
-    {
-        delete pDblT;
-    }
-
-    pDblY->DecreaseRef();
-    if (pDblY->isDeletable())
-    {
-        delete pDblY;
-    }
-
-    pDblYdot->DecreaseRef();
-    if (pDblYdot->isDeletable())
-    {
-        delete pDblYdot;
-    }
-
-    pDblCj->DecreaseRef();
-    if (pDblCj->isDeletable())
-    {
-        delete pDblCj;
-    }
-
-    out[0]->DecreaseRef();
-    if (out[0]->isDouble() == false)
+    
+    if (args.out[0]->isDouble() == false)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallJacFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong type for output argument #%d: Real matrix expected.\n"), pstrName, 1);
@@ -2895,7 +2289,7 @@ void DifferentialEquationFunctions::callDasslMacroJac(double* t, double* y, doub
         throw ast::InternalError(errorMsg);
     }
 
-    types::Double* pDblOutPd = out[0]->getAs<types::Double>();
+    types::Double* pDblOutPd = args.out[0]->getAs<types::Double>();
     if ( (pDblOutPd->getCols() != m_odeYRows) ||
             (!m_bandedJac && pDblOutPd->getRows() != m_odeYRows) ||
             (m_bandedJac && pDblOutPd->getRows() != (2 * m_ml + m_mu + 1)))
@@ -2908,10 +2302,6 @@ void DifferentialEquationFunctions::callDasslMacroJac(double* t, double* y, doub
 
     int size = pDblOutPd->getSize();
     C2F(dcopy)(&size, pDblOutPd->get(), &one, pd, &one);
-    if (out[0]->isDeletable())
-    {
-        delete out[0];
-    }
 }
 
 void DifferentialEquationFunctions::callDasrtMacroG(int* ny, double* t, double* y, int* ng, double* gout, double* rpar, int* ipar)
@@ -2920,46 +2310,31 @@ void DifferentialEquationFunctions::callDasrtMacroG(int* ny, double* t, double* 
     int one         = 1;
     int iRetCount   = 1;
 
-    types::typed_list in;
-    types::typed_list out;
-    types::optional_list opt;
+    args_t args;
 
     types::Double* pDblT = new types::Double(*t);
-    pDblT->IncreaseRef();
-    in.push_back(pDblT);
+    args.add_in(pDblT);
 
     types::Double* pDblY = new types::Double(*ny, 1);
     pDblY->set(y);
-    pDblY->IncreaseRef();
-    in.push_back(pDblY);
+    args.add_in(pDblY);
 
     for (int i = 0; i < (int)m_odeGArgs.size(); i++)
     {
-        m_odeGArgs[i]->IncreaseRef();
-        in.push_back(m_odeGArgs[i]);
+        args.add_in(m_odeGArgs[i]);
     }
 
     try
     {
         // new std::wstring(L"") is delete in destructor of ast::CommentExp
-        m_pCallGFunction->invoke(in, opt, iRetCount, out, ast::CommentExp(Location(), new std::wstring(L"")));
+        m_pCallGFunction->invoke(args.in, args.opt, iRetCount, args.out, ast::CommentExp(Location(), new std::wstring(L"")));
     }
     catch (const ast::InternalError& ie)
     {
-        for (int i = 0; i < (int)m_odeGArgs.size(); i++)
-        {
-            m_odeGArgs[i]->DecreaseRef();
-        }
-
         throw ie;
     }
 
-    for (int i = 0; i < (int)m_odeGArgs.size(); i++)
-    {
-        m_odeGArgs[i]->DecreaseRef();
-    }
-
-    if (out.size() != iRetCount)
+    if (args.out.size() != iRetCount)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallGFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong number of output argument(s): %d expected.\n"), pstrName, iRetCount);
@@ -2967,22 +2342,7 @@ void DifferentialEquationFunctions::callDasrtMacroG(int* ny, double* t, double* 
         throw ast::InternalError(errorMsg);
     }
 
-    out[0]->IncreaseRef();
-
-    pDblT->DecreaseRef();
-    if (pDblT->isDeletable())
-    {
-        delete pDblT;
-    }
-
-    pDblY->DecreaseRef();
-    if (pDblY->isDeletable())
-    {
-        delete pDblY;
-    }
-
-    out[0]->DecreaseRef();
-    if (out[0]->isDouble() == false)
+    if (args.out[0]->isDouble() == false)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallGFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong type for output argument #%d: Real matrix expected.\n"), pstrName, 1);
@@ -2990,7 +2350,7 @@ void DifferentialEquationFunctions::callDasrtMacroG(int* ny, double* t, double* 
         throw ast::InternalError(errorMsg);
     }
 
-    types::Double* pDblOutGout = out[0]->getAs<types::Double>();
+    types::Double* pDblOutGout = args.out[0]->getAs<types::Double>();
     if (pDblOutGout->getSize() != *ng)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallGFunction->getName().c_str());
@@ -3000,10 +2360,6 @@ void DifferentialEquationFunctions::callDasrtMacroG(int* ny, double* t, double* 
     }
 
     C2F(dcopy)(ng, pDblOutGout->get(), &one, gout, &one);
-    if (out[0]->isDeletable())
-    {
-        delete out[0];
-    }
 }
 
 void DifferentialEquationFunctions::callDaskrMacroPjac(double* res, int* ires, int* neq, double* t, double* y, double* ydot,
@@ -3015,73 +2371,52 @@ void DifferentialEquationFunctions::callDaskrMacroPjac(double* res, int* ires, i
     int one         = 1;
     int iRetCount   = 3;
 
-    types::typed_list in;
-    types::typed_list out;
-    types::optional_list opt;
-
+    args_t args;
+    
     types::Double* pDblNeq = new types::Double((double)(*neq));
-    pDblNeq->IncreaseRef();
-    in.push_back(pDblNeq);
+    args.add_in(pDblNeq);
 
     types::Double* pDblT = new types::Double(*t);
-    pDblT->IncreaseRef();
-    in.push_back(pDblT);
+    args.add_in(pDblT);
 
     types::Double* pDblY = new types::Double(m_odeYRows, 1);
     pDblY->set(y);
-    pDblY->IncreaseRef();
-    in.push_back(pDblY);
+    args.add_in(pDblY);
 
     types::Double* pDblYdot = new types::Double(m_odeYRows, 1);
     pDblYdot->set(ydot);
-    pDblYdot->IncreaseRef();
-    in.push_back(pDblYdot);
+    args.add_in(pDblYdot);
 
     types::Double* pDblH = new types::Double(*h);
-    pDblH->IncreaseRef();
-    in.push_back(pDblH);
+    args.add_in(pDblH);
 
     types::Double* pDblCj = new types::Double(*cj);
-    pDblCj->IncreaseRef();
-    in.push_back(pDblCj);
+    args.add_in(pDblCj);
 
     types::Double* pDblRewt = new types::Double(m_odeYRows, 1);
     pDblRewt->set(rewt);
-    pDblRewt->IncreaseRef();
-    in.push_back(pDblRewt);
+    args.add_in(pDblRewt);
 
     types::Double* pDblSavr = new types::Double(m_odeYRows, 1);
     pDblSavr->set(savr);
-    pDblSavr->IncreaseRef();
-    in.push_back(pDblSavr);
+    args.add_in(pDblSavr);
 
     for (int i = 0; i < (int)m_pJacArgs.size(); i++)
     {
-        m_pJacArgs[i]->IncreaseRef();
-        in.push_back(m_pJacArgs[i]);
+        args.add_in(m_pJacArgs[i]);
     }
 
     try
     {
         // new std::wstring(L"") is delete in destructor of ast::CommentExp
-        m_pCallPjacFunction->invoke(in, opt, iRetCount, out, ast::CommentExp(Location(), new std::wstring(L"")));
+        m_pCallPjacFunction->invoke(args.in, args.opt, iRetCount, args.out, ast::CommentExp(Location(), new std::wstring(L"")));
     }
     catch (const ast::InternalError& ie)
     {
-        for (int i = 0; i < (int)m_pJacArgs.size(); i++)
-        {
-            m_pJacArgs[i]->DecreaseRef();
-        }
-
         throw ie;
     }
 
-    for (int i = 0; i < (int)m_pJacArgs.size(); i++)
-    {
-        m_pJacArgs[i]->DecreaseRef();
-    }
-
-    if (out.size() != iRetCount)
+    if (args.out.size() != iRetCount)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallPjacFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong number of output argument(s): %d expected.\n"), pstrName, iRetCount);
@@ -3089,60 +2424,8 @@ void DifferentialEquationFunctions::callDaskrMacroPjac(double* res, int* ires, i
         throw ast::InternalError(errorMsg);
     }
 
-    out[0]->IncreaseRef();
-    out[1]->IncreaseRef();
-    out[2]->IncreaseRef();
-
-    pDblNeq->DecreaseRef();
-    if (pDblNeq->isDeletable())
-    {
-        delete pDblNeq;
-    }
-
-    pDblT->DecreaseRef();
-    if (pDblT->isDeletable())
-    {
-        delete pDblT;
-    }
-
-    pDblY->DecreaseRef();
-    if (pDblY->isDeletable())
-    {
-        delete pDblY;
-    }
-
-    pDblYdot->DecreaseRef();
-    if (pDblYdot->isDeletable())
-    {
-        delete pDblYdot;
-    }
-
-    pDblH->DecreaseRef();
-    if (pDblH->isDeletable())
-    {
-        delete pDblH;
-    }
-
-    pDblCj->DecreaseRef();
-    if (pDblCj->isDeletable())
-    {
-        delete pDblCj;
-    }
-
-    pDblRewt->DecreaseRef();
-    if (pDblRewt->isDeletable())
-    {
-        delete pDblRewt;
-    }
-
-    pDblSavr->DecreaseRef();
-    if (pDblSavr->isDeletable())
-    {
-        delete pDblSavr;
-    }
-
     // check type of output arguments
-    if (out[0]->isDouble() == false)
+    if (args.out[0]->isDouble() == false)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallPjacFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong type for output argument #%d: Real matrix expected.\n"), pstrName, 1);
@@ -3150,7 +2433,7 @@ void DifferentialEquationFunctions::callDaskrMacroPjac(double* res, int* ires, i
         throw ast::InternalError(errorMsg);
     }
 
-    if (out[1]->isDouble() == false)
+    if (args.out[1]->isDouble() == false)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallPjacFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong type for output argument #%d: Real matrix expected.\n"), pstrName, 2);
@@ -3158,7 +2441,7 @@ void DifferentialEquationFunctions::callDaskrMacroPjac(double* res, int* ires, i
         throw ast::InternalError(errorMsg);
     }
 
-    if (out[2]->isDouble() == false)
+    if (args.out[2]->isDouble() == false)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallPjacFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong type for output argument #%d: Real matrix expected.\n"), pstrName, 3);
@@ -3167,9 +2450,9 @@ void DifferentialEquationFunctions::callDaskrMacroPjac(double* res, int* ires, i
     }
 
     //  return [R, iR, ier]
-    types::Double* pDblOutWp  = out[0]->getAs<types::Double>();
-    types::Double* pDblOutIwp = out[1]->getAs<types::Double>();
-    types::Double* pDblOutIer = out[2]->getAs<types::Double>();
+    types::Double* pDblOutWp  = args.out[0]->getAs<types::Double>();
+    types::Double* pDblOutIwp = args.out[1]->getAs<types::Double>();
+    types::Double* pDblOutIer = args.out[2]->getAs<types::Double>();
 
     // check size of output argument
     if (pDblOutWp->getSize() != *neq **neq)
@@ -3207,25 +2490,6 @@ void DifferentialEquationFunctions::callDaskrMacroPjac(double* res, int* ires, i
     }
 
     *ier = (int)(pDblOutIer->get(0));
-
-    // delete output macro result
-    out[0]->DecreaseRef();
-    if (out[0]->isDeletable())
-    {
-        delete out[0];
-    }
-
-    out[1]->DecreaseRef();
-    if (out[1]->isDeletable())
-    {
-        delete out[1];
-    }
-
-    out[2]->DecreaseRef();
-    if (out[2]->isDeletable())
-    {
-        delete out[2];
-    }
 }
 
 void DifferentialEquationFunctions::callDaskrMacroPsol(int* neq, double* t, double* y, double* ydot, double* savr, double* wk,
@@ -3237,15 +2501,12 @@ void DifferentialEquationFunctions::callDaskrMacroPsol(int* neq, double* t, doub
     int one         = 1;
     int iRetCount   = 2;
 
-    types::typed_list in;
-    types::typed_list out;
-    types::optional_list opt;
-
+    args_t args;
+    
     // input arguments psol(R, iR, b)
     types::Double* pDblR = new types::Double(*neq **neq, 1);
     pDblR->set(wp);
-    pDblR->IncreaseRef();
-    in.push_back(pDblR);
+    args.add_in(pDblR);
 
     types::Double* pDblIR = new types::Double(*neq **neq, 2);
     double* pdblIR = pDblIR->get();
@@ -3253,43 +2514,30 @@ void DifferentialEquationFunctions::callDaskrMacroPsol(int* neq, double* t, doub
     {
         pdblIR[i] = (double)iwp[i];
     }
-    pDblIR->IncreaseRef();
-    in.push_back(pDblIR);
+    args.add_in(pDblIR);
 
     types::Double* pDblB = new types::Double(*neq, 1);
     pDblB->set(b);
-    pDblB->IncreaseRef();
-    in.push_back(pDblB);
+    args.add_in(pDblB);
 
     // optional arguments
     for (int i = 0; i < (int)m_pSolArgs.size(); i++)
     {
-        m_pSolArgs[i]->IncreaseRef();
-        in.push_back(m_pSolArgs[i]);
+        args.add_in(m_pSolArgs[i]);
     }
 
     try
     {
         // new std::wstring(L"") is delete in destructor of ast::CommentExp
-        m_pCallPsolFunction->invoke(in, opt, iRetCount, out, ast::CommentExp(Location(), new std::wstring(L"")));
+        m_pCallPsolFunction->invoke(args.in, args.opt, iRetCount, args.out, ast::CommentExp(Location(), new std::wstring(L"")));
     }
     catch (const ast::InternalError& ie)
     {
-        for (int i = 0; i < (int)m_pSolArgs.size(); i++)
-        {
-            m_pSolArgs[i]->DecreaseRef();
-        }
-
         throw ie;
     }
 
-    for (int i = 0; i < (int)m_pSolArgs.size(); i++)
-    {
-        m_pSolArgs[i]->DecreaseRef();
-    }
-
     // get output
-    if (out.size() != iRetCount)
+    if (args.out.size() != iRetCount)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallPsolFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong number of output argument(s): %d expected.\n"), pstrName, iRetCount);
@@ -3297,30 +2545,8 @@ void DifferentialEquationFunctions::callDaskrMacroPsol(int* neq, double* t, doub
         throw ast::InternalError(errorMsg);
     }
 
-    out[0]->IncreaseRef();
-    out[1]->IncreaseRef();
-
-    // free input arguments
-    pDblR->DecreaseRef();
-    if (pDblR->isDeletable())
-    {
-        delete pDblR;
-    }
-
-    pDblIR->DecreaseRef();
-    if (pDblIR->isDeletable())
-    {
-        delete pDblIR;
-    }
-
-    pDblB->DecreaseRef();
-    if (pDblB->isDeletable())
-    {
-        delete pDblB;
-    }
-
     // check output result
-    if (out[0]->isDouble() == false)
+    if (args.out[0]->isDouble() == false)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallPsolFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong type for output argument #%d: Real matrix expected.\n"), pstrName, 1);
@@ -3328,7 +2554,7 @@ void DifferentialEquationFunctions::callDaskrMacroPsol(int* neq, double* t, doub
         throw ast::InternalError(errorMsg);
     }
 
-    if (out[1]->isDouble() == false)
+    if (args.out[1]->isDouble() == false)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallPsolFunction->getName().c_str());
         sprintf(errorMsg, _("%s: Wrong type for output argument #%d: Real matrix expected.\n"), pstrName, 2);
@@ -3337,7 +2563,7 @@ void DifferentialEquationFunctions::callDaskrMacroPsol(int* neq, double* t, doub
     }
 
     // return arguments [b, ier] = psol()
-    types::Double* pDblOutB  = out[0]->getAs<types::Double>();
+    types::Double* pDblOutB  = args.out[0]->getAs<types::Double>();
     if (pDblOutB->getSize() != *neq) // size of b is neq
     {
         char* pstrName = wide_string_to_UTF8(m_pCallPsolFunction->getName().c_str());
@@ -3347,7 +2573,7 @@ void DifferentialEquationFunctions::callDaskrMacroPsol(int* neq, double* t, doub
     }
 
     // get scalar ier
-    types::Double* pDblOutIer = out[1]->getAs<types::Double>();
+    types::Double* pDblOutIer = args.out[1]->getAs<types::Double>();
     if (pDblOutIer->isScalar() == false)
     {
         char* pstrName = wide_string_to_UTF8(m_pCallPsolFunction->getName().c_str());
@@ -3359,17 +2585,4 @@ void DifferentialEquationFunctions::callDaskrMacroPsol(int* neq, double* t, doub
     // copy output macro results in output variables
     C2F(dcopy)(neq, pDblOutB->get(), &one, b, &one);
     *ier = (int)(pDblOutIer->get(0));
-
-    // free output arguments
-    out[0]->DecreaseRef();
-    if (out[0]->isDeletable())
-    {
-        delete out[0];
-    }
-
-    out[1]->DecreaseRef();
-    if (out[1]->isDeletable())
-    {
-        delete out[1];
-    }
 }

@@ -1,5 +1,5 @@
 //======================================================================================== 
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2007-2008 - INRIA
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -346,3 +346,9 @@ assert_checkequal( strsubst(str,'/ดุกก/','ç','r'),'มกระçระ
 
 assert_checkequal( strsubst(str,'/ดุก_ก/','ç','r') , str );
 //======================================================================================== 
+
+//captured group remplacement
+assert_checkequal(strsubst("Hello 2024 World", "/([a-zA-Z]*)[\s0-9]+([a-zA-Z]*)/", "$1 $2", "r"), "Hello World");
+assert_checkequal(strsubst("Hello 2024 World", "/([a-zA-Z]*)[\s0-9]+([a-zA-Z]*)/", "$0 => $1 $2", "r"), "Hello 2024 World => Hello World");
+assert_checkequal(strsubst("Hello 2024 World", "/([a-zA-Z]*)[\s0-9]+([a-zA-Z]*)/", "$2: $1 $1", "r"), "World: Hello Hello");
+assert_checkequal(strsubst("Hello 2024 World", "/(\s[0-9]+\s)/", " ", "r"), "Hello World");

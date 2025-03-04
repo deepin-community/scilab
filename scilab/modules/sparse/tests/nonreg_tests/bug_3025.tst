@@ -1,16 +1,17 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2007-2008 - INRIA - Serge STEER <serge.steer@inria.fr>
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
 
 // <-- CLI SHELL MODE -->
+//<-- ENGLISH IMPOSED -->
 
 // <-- Non-regression test for bug 2277 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=2277
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/2277
 //
 // <-- Short Description -->
 //lusolve produces erroneous results with Scilab5 (it was ok on Scilab4)

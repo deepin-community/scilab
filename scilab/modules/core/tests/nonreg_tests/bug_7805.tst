@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010 - INRIA - Serge Steer
 // Copyright (C) 2010 - DIGITEO - Allan CORNET
 //
@@ -12,8 +12,8 @@
 //
 // <-- INTERACTIVE TEST -->
 
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=7805
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/7805
 //
 // <-- Short Description -->
 // clear called inside an exec while in pause may have unexpected results

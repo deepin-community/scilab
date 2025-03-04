@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2017 - ESI-Group - Antoine ELIAS
 *
 *
@@ -80,6 +80,13 @@ int sci_fromJSON(scilabEnv env, int nin, scilabVar *in, int nopt, scilabOpt opt,
         }
 
         std::ifstream infile(_filename);
+        if (infile.fail())
+        {
+            Scierror(999, _("%s: Cannot open file %s.\n"), name.data(), _filename);
+            FREE(_filename);
+            return STATUS_ERROR;
+        }
+
         FREE(_filename);
 
         json.reserve(infile.tellg());

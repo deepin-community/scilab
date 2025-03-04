@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -17,28 +17,10 @@ function y = logspace(d1, d2, n)
     // If d2=%pi, then the points are between 10^d1 and pi.
     // logspace(d1, d2, n) generates n values.
 
-    rhs = argn(2);
-    if rhs < 2 then
-        error(msprintf(gettext("%s: Wrong number of input argument(s): %d expected.\n"),"logspace", 2));
-    end
-    if size(d1,2)<>1 then
-        error(msprintf(gettext("%s: Wrong size for input argument #%d: A column vector expected.\n"),"logspace",1));
-    end
-
-    if ~and(size(d1) == size(d2)) then
-        error(msprintf(gettext("%s: Incompatible input arguments #%d and #%d: Same sizes expected.\n"),"logspace",1,2));
-    end
-
-    if rhs == 2 then
-        n = 50;
-    else
-        if type(n)<>1|size(n,"*")<>1 then
-            error(msprintf(gettext("%s: Wrong type for input argument #%d: An integer value expected.\n"),"logspace",3));
-        end
-        if int(n) <> n then
-            msg = gettext("%s: Argument #%d: An integer value expected.\n")
-            error(msprintf(msg, "logspace",3))
-        end
+    arguments
+        d1 (:, 1)
+        d2 {mustBeEqualDims(d2, d1)}
+        n (1,1) {mustBeA(n, "double"), mustBeInteger} = 50
     end
 
     if d2==%pi then

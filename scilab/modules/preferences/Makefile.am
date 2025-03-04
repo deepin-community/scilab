@@ -1,5 +1,5 @@
 #
-# Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+# Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 # Copyright (C) 2011 - DIGITEO
 #
 # Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -66,7 +66,6 @@ libscipreferences_la_CPPFLAGS = \
     -I$(srcdir)/src/jni/ \
     $(XML_FLAGS) \
     -I$(top_srcdir)/modules/ast/includes/ast/ \
-    -I$(top_srcdir)/modules/ast/includes/analysis/ \
     -I$(top_srcdir)/modules/ast/includes/exps/ \
     -I$(top_srcdir)/modules/ast/includes/operations/ \
     -I$(top_srcdir)/modules/ast/includes/parse/ \
@@ -94,7 +93,6 @@ libscipreferences_cli_la_CPPFLAGS = \
     -I$(top_srcdir)/modules/ast/includes/symbol/ \
     -I$(top_srcdir)/modules/ast/includes/system_env/ \
     -I$(top_srcdir)/modules/ast/includes/types/ \
-    -I$(top_srcdir)/modules/ast/includes/analysis/ \
     -I$(top_srcdir)/modules/localization/includes/ \
     -I$(top_srcdir)/modules/output_stream/includes \
 	-I$(top_srcdir)/modules/string/includes/ \

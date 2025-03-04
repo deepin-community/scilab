@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2004 - INRIA - Serge Steer
 // Copyright (C) 2004-2006 - INRIA - Fabrice Leray
 // Copyright (C) 2006 - INRIA - Jean-Baptiste Silvy
@@ -229,6 +229,7 @@ function save_graphichandle(h,fd)
         mput(h.axes_bounds,"dl",fd); // axes_bounds
         mput(bool2s(h.auto_clear=="on"),characterFormat,fd) // auto_clear
         mput(bool2s(h.auto_scale=="on"),characterFormat,fd) // auto_scale
+        mput(bool2s(h.auto_stretch=="on"),characterFormat,fd) // auto_stretch
         mput(h.hidden_axis_color,"il",fd); // hidden_axis_color
         mput(length(h.arc_drawing_method),characterFormat,fd); // arc_drawing_method
         mput(ascii(h.arc_drawing_method),characterFormat,fd);

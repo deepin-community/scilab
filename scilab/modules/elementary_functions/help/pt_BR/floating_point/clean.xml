@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2006-2008 - INRIA
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
  * Copyright (C) 2018 - Samuel GOUGEON
@@ -57,7 +57,7 @@
     <refsection>
         <title>Descrição</title>
         <para>Esta função ajusta para zero todos os coeficientes
-            com valores absolutos&lt; <literal>epsa</literal> e valores relativos&lt;
+            com valores absolutos&lt;=<literal>epsa</literal> e valores relativos&lt;=
             <literal>epsr</literal> (relativo em relação ao max(A), ignorando %inf e %nan valores
             de <varname>A</varname>) em um polinômio (possivelmente uma matriz de polinômios ou
             matriz de razões de polinômios).

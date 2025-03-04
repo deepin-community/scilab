@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2000 - INRIA - Carlos Klimann
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -20,9 +20,9 @@
     </refnamediv>
     <refsynopsisdiv>
         <title>Syntax</title>
-        <synopsis>m=nanmean(val,fre)
-            m=nanmean(val,fre,'r') (or m=nanmean(val,fre,1))
-            m=nanmean(val,fre,'c') (or m=nanmean(val,fre,2))
+        <synopsis>
+            m = nanmean(val, fre)
+            m = nanmean(val, fre, orientation)
         </synopsis>
     </refsynopsisdiv>
     <refsection>
@@ -40,6 +40,29 @@
                     <para>integer vector  or matrix with same dimensions  than
                         val
                     </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>orientation</term>
+                <listitem>
+                    <para>
+                        index of the dimension along which the nanmeanf is computed. It can be either
+                    </para>
+                    <itemizedlist>
+                        <listitem>
+                            a character <literal>"*"</literal> (default), <literal>"r"</literal> or
+                          <literal>"c"</literal>
+                        </listitem>
+                        <listitem>
+                            a positive integer: 1 or 2. 1 is equivalent to "r" and 2 is equivalent to "c".
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>m</term>
+                <listitem>
+                    <para>real or complex scalar or vector</para>
                 </listitem>
             </varlistentry>
         </variablelist>

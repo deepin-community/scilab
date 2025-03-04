@@ -8,4 +8,7 @@ EXPORTS
 freeArrayOfString
 MyHeapAlloc
 MyHeapFree
-
+getScilabVersionMajor
+getScilabVersionMinor
+getScilabVersionMaintenance
+getScilabVersionAsString

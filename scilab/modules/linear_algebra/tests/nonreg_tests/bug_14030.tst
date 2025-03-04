@@ -1,16 +1,17 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2015 - Scilab Enterprises - Adeline CARNIS
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
 
 // <-- CLI SHELL MODE -->
+// <-- NO CHECK REF -->
 
 // <-- Non-regression test for bug 14030 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=14030
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/14030
 //
 // <-- Short Description -->
 //    Linear Algebra demo crashed due to calling of schur and fft functions.
@@ -21,7 +22,7 @@ H=[1.    1.    1.    0.;
 1.    0.    1.    1.;
 0.    1.    2.   -1];
 
-ww=spec(H)
+ww=spec(H);
 
 function [flg]=sel(x,y)
     flg=%f

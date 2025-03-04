@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2000 - INRIA - Carlos Klimann
 // Copyright (C) 2013 - Samuel GOUGEON
 //
@@ -74,7 +74,7 @@ function [s, m] = variance(x, orien, m)
     transposed = %f // to refer and process as in "r", we priorly transpose any "c" request
     if orien=="r" | orien==1 | orien=="c" | orien==2 | orien=="*"
         if orien=="c" | orien==2 then
-            x = x.'
+            x = x.';
             transposed = %t
             orien = "r"
         end

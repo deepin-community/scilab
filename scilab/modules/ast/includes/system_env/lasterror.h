@@ -1,5 +1,5 @@
 /*
-*  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+*  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 *  Copyright (C) 2010 - DIGITEO - Antoine ELIAS
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -22,15 +22,11 @@
 
 EXTERN_AST int getLastErrorNumber(void);
 EXTERN_AST wchar_t* getLastErrorMessage(void);
-EXTERN_AST int getLastErrorLine(void);
-EXTERN_AST wchar_t* getLastErrorFunction(void);
 
 EXTERN_AST void setLastErrorNumber(int _iError);
 EXTERN_AST void setLastErrorMessage(const wchar_t* _pwstError);
-EXTERN_AST void setLastErrorLine(int _iLine);
-EXTERN_AST void setLastErrorFunction(const wchar_t* _pwstFunction);
 
-EXTERN_AST void setLastError(int _iError, const wchar_t* _pwstError, int _iLine, const wchar_t* _pwstFunction);
+EXTERN_AST void setLastError(int _iError, const wchar_t* _pwstError);
 
 EXTERN_AST void SetError();
 EXTERN_AST int isError();

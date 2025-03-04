@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2019-2019 - ESI Group - Cedric Delamarre
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
@@ -15,6 +15,6 @@
 #define __PAUSE_H__
 
 #include "dynlib_core.h"
-CORE_IMPEXP void pause(void);
+CORE_IMPEXP void pause_interpreter(void);
 
 #endif /* !__PAUSE_H__ */

@@ -1,4 +1,4 @@
-# Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+# Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 # Copyright (C) 2008 - INRIA - Vincent COUVERT <vincent.couvert@inria.fr>
 # Copyright (C) 2008 - INRIA - Sylvestre LEDRU <sylvestre.ledru@inria.fr>
 #
@@ -37,6 +37,7 @@ MATIO_CPP_SOURCES = \
     src/cpp/CreateStructVariable.cpp \
 	src/cpp/ConvertSciVarToMatVar.cpp \
     src/cpp/GetIntegerVariable.cpp \
+	src/cpp/GetBooleanVariable.cpp \
     src/cpp/GetCharVariable.cpp \
 	src/cpp/GetDoubleVariable.cpp \
     src/cpp/GetSparseVariable.cpp \
@@ -62,7 +63,6 @@ libscimatio_la_CPPFLAGS = \
     -I$(top_srcdir)/modules/ast/includes/symbol/ \
     -I$(top_srcdir)/modules/ast/includes/system_env/ \
     -I$(top_srcdir)/modules/ast/includes/types/ \
-    -I$(top_srcdir)/modules/ast/includes/analysis/ \
     -I$(top_srcdir)/modules/api_scilab/includes/ \
     -I$(top_srcdir)/modules/localization/includes/ \
     -I$(top_srcdir)/modules/output_stream/includes/ \

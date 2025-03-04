@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010 - DIGITEO - Pierre MARECHAL
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,9 +9,9 @@
 
 // <-- Non-regression test for bug 5629 and 5630 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=5629
-// http://bugzilla.scilab.org/show_bug.cgi?id=5630
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/5629
+// https://gitlab.com/scilab/scilab/-/issues/5630
 //
 // <-- Short Description -->
 // 5629: hdf5_save overwrites an empty directory without warning

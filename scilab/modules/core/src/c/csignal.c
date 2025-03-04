@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA
  * Copyright (C) ENPC
  *
@@ -14,13 +14,16 @@
  *
  */
 #include <stdio.h>
+#include <signal.h>
 #include <string.h>
 #include <wchar.h>
 #include "csignal.h"
 #include "configvariable_interface.h"
 #include "getKey.h"
+
 /* If CTRL-C was pressed. */
-void controlC_handler(int sig)
+static
+void controlC_handler(int sig, siginfo_t *info, void *p)
 {
     setTokenInteruptExecution(DO_NOT_SEND_COMMAND);
     setExecutionBreak();

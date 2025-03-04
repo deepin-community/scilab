@@ -27,7 +27,7 @@ function quitModule()
     // Remove Preferences GUI
     // =============================================================================
     if getscilabmode() == "STD" then
-    removeModulePreferences(root_tlbx);
+        removeModulePreferences(root_tlbx);
     end
 
 endfunction

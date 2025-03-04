@@ -1,15 +1,16 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2011 - DIGITEO - Michael Baudin
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
 // <-- CLI SHELL MODE -->
+// <-- NO CHECK REF -->
 //
 // <-- Non-regression test for bug 8805 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=8805
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/8805
 //
 // <-- Short Description -->
 // The neldermead function, algorithm box, wrongly used 
@@ -46,8 +47,8 @@ function stop = myoutputcmd(state, data)
 endfunction
 
 
-xopt = [1;1]
-fopt = 0
+xopt = [1;1];
+fopt = 0;
 x0 = [-1.2 1.0];
 lower_bounds = [-2 -2];
 upper_bounds = [2. 2.];

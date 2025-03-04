@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2012 - Scilab Enterprises - Antoine ELIAS
  *  Copyright (C) 2012 - Scilab Enterprises - Cedric Delamarre
  *  Copyright (C) 2016 - Scilab Enterprises - Pierre-Aimé AGNEL
@@ -15,21 +15,18 @@
  *
  */
 
-extern "C"
-{
-#include "os_string.h"
-}
-
 #include "types_or.hxx"
 #include "double.hxx"
 #include "int.hxx"
 #include "bool.hxx"
 #include "sparse.hxx"
+#include "operations.hxx"
 
 using namespace types;
 
 //define arrays on operation functions
 static or_function pOrfunction[types::InternalType::IdLast][types::InternalType::IdLast] = {NULL};
+static std::wstring op = L"|";
 
 void fillOrFunction()
 {
@@ -550,21 +547,17 @@ InternalType* or_M_M(T *_pL, U *_pR)
 
     if (iDimsL != iDimsR)
     {
+        // call overload
         return nullptr;
     }
 
-    int* piDimsL = _pL->getDimsArray();
-    int* piDimsR = _pR->getDimsArray();
-
-    for (int i = 0 ; i < iDimsL ; ++i)
+    std::wstring error = checkSameSize(_pL, _pR, op);
+    if (error.empty() == false)
     {
-        if (piDimsL[i] != piDimsR[i])
-        {
-            throw ast::InternalError(_W("Inconsistent row/column dimensions.\n"));
-        }
+        throw ast::InternalError(error);
     }
 
-    O* pOut = new O(iDimsL, piDimsL);
+    O* pOut = new O(iDimsL, _pL->getDimsArray());
 
     bit_or(_pL->get(), (long long)_pL->getSize(), _pR->get(), pOut->get());
     return pOut;
@@ -643,21 +636,17 @@ InternalType* or_int_M_M(T *_pL, U *_pR)
 
     if (iDimsL != iDimsR)
     {
+        // call overload
         return nullptr;
     }
 
-    int* piDimsL = _pL->getDimsArray();
-    int* piDimsR = _pR->getDimsArray();
-
-    for (int i = 0 ; i < iDimsL ; ++i)
+    std::wstring error = checkSameSize(_pL, _pR, op);
+    if (error.empty() == false)
     {
-        if (piDimsL[i] != piDimsR[i])
-        {
-            throw ast::InternalError(_W("Inconsistent row/column dimensions.\n"));
-        }
+        throw ast::InternalError(error);
     }
 
-    O* pOut = new O(iDimsL, piDimsL);
+    O* pOut = new O(iDimsL, _pL->getDimsArray());
 
     int_or(_pL->get(), (long long)_pL->getSize(), _pR->get(), pOut->get());
     return pOut;
@@ -742,9 +731,10 @@ InternalType* or_M_M<SparseBool, SparseBool, SparseBool>(SparseBool* _pL, Sparse
         return pOut;
     }
 
-    if (_pL->getRows() != _pR->getRows() || _pL->getCols() != _pR->getCols())
+    std::wstring error = checkSameSize(_pL, _pR, op);
+    if (error.empty() == false)
     {
-        throw ast::InternalError(_W("Inconsistent row/column dimensions.\n"));
+        throw ast::InternalError(error);
     }
 
     return _pL->newLogicalOr(*_pR);
@@ -755,7 +745,10 @@ InternalType* or_M_M<SparseBool, Bool, SparseBool>(SparseBool* _pL, Bool* _pR)
 {
     SparseBool* pR = new SparseBool(*_pR);
     InternalType* pOut = or_M_M<SparseBool, SparseBool, SparseBool>(_pL, pR);
-    delete pR;
+    if (pOut != pR)
+    {
+        delete pR;
+    }
     return pOut;
 }
 
@@ -764,7 +757,10 @@ InternalType* or_M_M<Bool, SparseBool, SparseBool>(Bool* _pL, SparseBool* _pR)
 {
     SparseBool* pL = new SparseBool(*_pL);
     InternalType* pOut = or_M_M<SparseBool, SparseBool, SparseBool>(pL, _pR);
-    delete pL;
+    if (pOut != pL)
+    {
+        delete pL;
+    }
     return pOut;
 }
 

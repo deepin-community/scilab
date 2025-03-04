@@ -14,12 +14,14 @@
 
 <body>
     <div class="manualnavbar" align="left">
-        <a href="https://www.scilab.org/" class="ulink">Scilab Homepage</a> |
+        <a href="https://www.scilab.org/" class="ulink">Scilab Website</a> |
         <a href="https://help.scilab.org/" class="ulink">Online Help</a> |
-        <a href="https://wiki.scilab.org/" class="ulink">Wiki</a> |
-        <a href="https://bugzilla.scilab.org/" class="ulink">Bug Tracker</a> |
-        <a href="https://forge.scilab.org/" class="ulink">Forge</a> |
-        <a href="https://lists.scilab.org/" class="ulink">Mailing Lists Archives</a> |
+        <a href="https://gitlab.com/scilab/scilab">Contribute to GitLab</a> |
+        <a href="https://gitlab.com/scilab/scilab/-/wikis/home" class="ulink">Wiki</a> |
+        <a href="https://gitlab.com/scilab/scilab/-/issues" class="ulink">Issues</a> |
+        <a href="https://gitlab.com/scilab/forge/" class="ulink">Forge</a> |
+        <a href="https://scilab.discourse.group/" class="ulink">Discourse</a> |
+        <a href="https://www.scilab.org/about/community/mailing-lists" class="ulink">Mailing Lists Archives</a> |
         <a href="https://atoms.scilab.org/" class="ulink">ATOMS</a> |
         <a href="https://fileexchange.scilab.org/" class="ulink">File Exchange</a>
         <hr>
@@ -28,132 +30,89 @@
     <br>
     <br>
     <div class="refsection">
-        <h3 class="title">Welcome to Scilab 6.1</h3>
+        <h2 class="title">Welcome to Scilab 2024.1.0</h2>
         <p class="para">
-            Scilab 6.1 is a major new release of Scilab, the open-source
+            Scilab 2024.1.0 is a new stable release of Scilab, the open-source
             platform for numerical computation.
         </p>
         <p class="para">
-            Here is a tour of the changes between Scilab 6.1.0 &amp; 6.1.1.
+            Here is a tour of the changes since Scilab 2023.1.0.
         </p>
         <p class="para">
-            To have a tour with the help browser, enter <code>--> help 6.1.1</code>
+            To view it in the help browser, enter <code>help("2024.1.0")</code>
             in the console, and browse related pages.
         </p>
-        <h2 class="title">Feature changes and additions</h2>
+        <h3 class="title">Feature changes and additions</h3>
         <ul>
-            <li>The default Java Heap is increased from 256 to 512 MB. Heavier graphics can be rendered.</li>
-            <li>Axes labels and title default font size had been increased for better default rendering.</li>
-            <li><code>gsort</code> is upgraded:
+            <li>New functions:
                 <ul>
-                    <li>It can now sort any sparse 2D matrix, in all <code>g, r, c, lr, lc</code> methods, including
-                        sparse booleans, and in a multi-level mode. It was formerly limited to sparse real or complex
-                        vectors and only to the <code>g</code> mode.</li>
-                    <li>Any hypermatrix can be sorted along a dimension &gt; 2.</li>
+                    <li>Timeseries introduces a large set of functions and features to simplify the management of timed data and data tables in Scilab.</li>
+                    <li><code>cvode()</code>, <code>arkode()</code>, <code>ida()</code> and <code>kinsol()</code> from <a href="https://computing.llnl.gov/projects/sundials">SUNDIALS</a>.</li>
+                    <li><code>compress()</code> and <code>decompress()</code> functions manage compressed archives (ZIP, tar.gz and tar.xz files).</li>
+                    <li><code>angle()</code> computes the argument of complex numbers, in radians.</li>
+                    <li><code>uiimport()</code> GUI facilitating the import data from CSV or TXT file.</li>
+                    <li><code>scilab()</code> runs another Scilab in interactive or batch mode with command line options.</li>
+                    <li><code>colormap()</code> sets and/or gets a figure colormap.</li>
+                    <li><code>bezier()</code> computes the points of a Bezier curve using <code>bernstein()</code> matrix.</li>
+                    <li><code>princomp()</code> now returns the variance percentage and the estimated mean of each variable of input.</li>
+                    <li><a href="https://help.scilab.org/predefined_colormaps">Predefined colormaps</a> function helpers have been added to generate different types of <a href="https://help.scilab.org/colormaps">colormaps</a>.</li>
                 </ul>
             </li>
-            <li><code>unique</code> is enabled for any 2D sparse arrays, in simple, 'c' and 'r' modes.
-                Its 3rd output <code>ku</code> is now implemented.</li>
-            <li><code>%chars</code> constant added, to easily access to some selected sets of Unicode symbols.</li>
-            <li>Lists are displayed more compactly and comprehensively.</li>
-            <li><code>interp1</code> is upgraded:
+            <li>Language changes:
                 <ul>
-                    <li>complex numbers <code>y</code> now supported: the real and imaginary parts are interpolated
-                        separately.</li>
-                    <li>extrapolation option extended: <code>edgevalue</code> mode added for all interpolations;
-                        <code>periodic</code> mode added for linear and spline interpolations. <code>linear</code> mode
-                        added for the spline interpolations.</li>
+                    <li><code>arguments/end</code> keywords added: validate function input arguments in a standard way (using standard error messages) and faster than using Scilab code (<code>type</code>, <code>typeof</code>, ...).
+                    Some helpers have been added for this new block: <code>mustBeSameType</code>, <code>mustBeEqualDimsOrScalar</code>, ...
+                    Some Scilab functions (<code>modulo</code>, <code>pmodulo</code>, ...) and modules (<code>elementary functions</code>, <code>statistics</code>, <code>time</code>, ...) have been updated to use this new block hence enhancing theirs performances.</li>
+                    <li><code>select/case</code> supports multiple cases with <code>cells</code>.</li>
+                    <li>When calling a function or extracting values, it is possible to skip an output argument. If a variable is named <code>_</code> the output value will not be assigned (e.g. <code>[r1, _, r3,...] = func(...)</code>).</li>
                 </ul>
             </li>
-            <li><code>xlfont</code> did not support the documented 4th argument.</li>
-            <li><code>bitcmp</code> is upgraded:
+            <li>Web Tools:
                 <ul>
-                    <li>Entended to 64-bit integers.</li>
-                    <li>Extended to all signed integers.</li>
-                    <li>Decimal positive integers &gt; 2^52 up to 2^1024 = number_properties(&quot;huge&quot;) can now
-                        be processed, with bitnum up to 1024 instead of 52.</li>
-                    <li>bitnum can be an array. It is now optional as well for input decimal integers.</li>
+                <li>Use <code>curl</code> as default in <code>atomsDownload()</code> for all OS to handle local file repositories.</li>
+                <li><code>url_encode()</code> and <code>url_decode()</code> are added.</li>
+                <li>Headers added as optional input and output argument to <code>http_*</code> functions.</li>
+                <li>Cookie management added to webtools module.</li>
                 </ul>
             </li>
-            <li>The <code>Arnoldi</code> module is now internal.</li>
-            <li><code>sgolay</code> and the companion <code>sgolayfilter</code> and <code>sgolaydiff</code> functions
-                have been added to implement Savitsky-Golay filters.</li>
-            <li><code>clock</code> now returns the time zone and the daylight saving time.</li>
-            <li><code>mapsound</code> is completely reforged.</li>
-            <li><code>mprintf</code>, <code>msprintf</code> and <code>mfprintf</code> can now print input booleans, as
-                <code>0</code>|<code>1</code> or as <code>T</code>|<code>F</code>.</li>
-            <li><code>setdiff</code> now supports input booleans and sparse matrices (boolean or numeric).</li>
-            <li><code>intersect</code> is extended to any sparse boolean or numeric arrays, in all simple, 'c' or 'r'
-                modes.</li>
-            <li><code>union</code> supports boolean, sparse boolean, and sparse numerical matrices.</li>
-            <li><code>kron</code> and <code>.*.</code> are extended to boolean arrays.</li>
-            <li><code>gamma</code> is extended to incomplete gamma integrals.</li>
-            <li><code>close</code> is extended to close the help browser, xcos, the variable browser or editor GUIs.
-            </li>
-            <li><code>polyint</code> is introduced to compute polynomial antiderivatives.</li>
-            <li><code>det</code> is now actually extended to sparse matrices.</li>
-            <li><code>deff</code> is upgraded:
+            <li>Graphics:
                 <ul>
-                    <li>The created function may be returned as an output argument.</li>
-                    <li>Providing the function headline and body concatenated in a single input text vector is possible.
-                    </li>
-                    <li>For a simple function, a single string input definition can be provided.</li>
-                    <li>For assignable calls to <code>deff</code>, the <code>@</code> symbol can be used as a function
-                        pseudo-name.</li>
+                <li>New markers types added for graphic objects:
+                <ul>
+                <li>triangles pointing to data: upward, downward, left, right,</li>
+                <li>horizontal line (minus sign) centered on data,</li>
+                <li>vertical line centered on data.</li>
+                </li>
+                <li><code>errbar()</code> function uses horiontal line marks.</li>
+                <li><code>subplot()</code> manages <code>frame</code> uicontrols.</li>
+                </ul>
+            <li>Differential equations:
+                <ul>
+                <li>Several features added to <code>cvode()</code>, <code>arkode()</code>, <code>ida()</code> and <code>kinsol()</code> through optional arguments (<code>cvode()</code> and <code>ida()</code> have specific sensitivity features).</li>
+                <li>Absolute and relative numerical tolerances added to <code>intl()</code> input arguments.</li>
                 </ul>
             </li>
-            <li><code>mopen</code> and <code>mclose</code> now handle multiple files and file descriptors.</li>
-            <li><code>hash</code> function with SHA-1, SHA-2 and SHA-3 Secure Hash Algorithms has been added.</li>
-            <li><code>plot</code> can now plot polynomials and rationals.</li>
-            <li><code>loglog</code>, <code>semilogx</code>, <code>semilogy</code> Matlab-compatible functions added.
-            </li>
-            <li><code>scatter</code> and <code>scatter3d</code> are reforged. New <code>scatter</code> options:
-                <code>&quot;smallOnTop&quot;</code> and <code>&quot;datatips&quot;</code>.</li>
-            <li><code>asciimat</code> now supports input strings of different lengths or including international UTF8
-                extended characters.</li>
-            <li><code>importgui</code> is renamed <code>uiSpreadsheet</code>.</li>
-            <li>polynomials can now use a greek letter as variable.</li>
-            <li><code>int2d</code> can now compute direcly a double integral over a rectangle.</li>
-            <li><code>int3d</code> can now compute direcly a triple integral over a cuboid.</li>
-            <li><code>cutaxes</code> function added.</li>
-            <li>Integers can be concatenated with real or complex numbers (dense encoding only).</li>
-            <li><code>complex</code> is extended to sparse arrays.</li>
-            <li><code>m2sci</code> Matlab-to-Scilab code converter: First upgrade done.</li>
-            <li><code>http_get</code> can be used as an alternative download method for ATOMS.</li>
-            <li><code>browsevar</code>: Clicking on a variable of type graphic, function, library, list, structure, cell, syslin, or any custom tlist or mlist now displays it.</li>
-            <li><code>x_matrix</code> is extended to booleans, encoded integers, and text. Editing real and complex matrices improved.</li>
-            <li>Help browser improved:
-            <ul>
-            <li>New menu &quot;Online&quot; to display the current page online.</li>
-            <li>New menu &quot;Issues&quot; to display known issues about the feature of the current page.</li>
-            <li>On user's Preferences, for Scilab beginners coming from Matlab™/Octave languages, for more than 200 Matlab™ terms, help's query now redirects to the relevant Scilab equivalent feature.</li>
-            <li>And also: The browser's language can be set independently of the session's language ; ATOMS help chapters are now automatically loaded in the browser ; the page left at exit is restored at the next startup. etc.</li>
+            <li>Sparse matrices:
+                <ul>
+                <li><a href="https://github.com/CSCsw/ColPack">ColPack</a> graph coloring algorithms for sparse jacobian computation have been integrated.</li>
+                <li>Sparse matrix concatenation and product operations have been speedup (See <a href="https://gitlab.com/scilab/scilab/-/issues/17183">#17183</a>).</li>
             </ul>
             </li>
+            <li>Other Improvements:
+                <ul>
+                    <li><code>strsubst()</code> manages group in replacement.</li>
+                    <li><code>string()</code> accepts <code>lists</code>, <code>cells</code> and <code>structs</code>.</li>
+                    <li>Type and Dimensions of variables are now displayed in command line output.</li>
+                </ul>
+            </li>
         </ul>
-        <h2 class="title">Help pages</h2>
-        <p class="para">
-            In a continuous effort, more than 100 pages have been improved or even rewritten,
-            or/and better sorted in sections.
-            Clarifying short descriptions,
-            clarifying the set of syntaxes, completing and clarifying the description of arguments,
-            improving cross-referencing through the <i>See also</i> sections, illustrating results
-            of examples by showing the console's output, adding examples, updating the history
-            sections for passed undocumented changes, and of course improving the Description
-            sections, have been done.
-        </p>
-        <p class="para">
-            In parallel, many pages are actively translated in Russian.
-        </p>
 
-        <h2 class="title">Bug fixes</h2>
         <p class="para">
-            In this version, extra effort has been expended on bug fixing and stabilization.
-            Detailed information about those improvements can be found on the <a href="CHANGES.html">CHANGES</a> file.
+            In this version, extra effort has been expanded on fixing issues and stabilization.
+            Detailed information about those improvements can be found in the <a href="CHANGES.html">CHANGES</a> file.
         </p>
     </div>
     <hr>
-    <br>
     <div class="refsection">
         <h3 class="title">Documentation and help</h3>
         <p class="para">If you are new to Scilab, please use
@@ -164,22 +123,22 @@
         <p class="para">The Scilab Team provides also
             some <a href="https://www.scilab.org/tutorials">documentation
                 and tutorials</a>.</p>
-        <br>
     </div>
     <hr>
-    <br>
     <div class="refsection">
         <h3 class="title">Other resources</h3>
-        <p class="para"><a href="https://www.scilab.org/" class="ulink">Scilab Homepage</a> - Consult Scilab official
+        <p class="para"><a href="https://www.scilab.org/" class="ulink">Scilab Website</a> - Consult Scilab official
             website</p>
-        <p class="para"><a href="https://wiki.scilab.org/" class="ulink">Wiki</a> - Consult documentations, tricks, etc.
+        <p class="para"><a href="https://gitlab.com/scilab/scilab/-/wikis/home" class="ulink">Wiki</a> - Consult documentations, tricks, etc.
         </p>
-        <p class="para"><a href="https://bugzilla.scilab.org/" class="ulink">Bug Tracker</a> - Report bugs and wishes
+        <p class="para"><a href="https://gitlab.com/scilab/scilab/-/issues" class="ulink">Issues</a> - Report bugs and wishes
             about Scilab</p>
-        <p class="para"><a href="https://forge.scilab.org/" class="ulink">Forge</a> - Browse and publish Scilab modules
+        <p class="para"><a href="https://gitlab.com/scilab/forge/" class="ulink">Forge</a> - Browse and publish Scilab modules
         </p>
-        <p class="para"><a href="https://www.scilab.org/about/community/mailing-lists" class="ulink">Mailing Lists</a> -
+        <p class="para"><a href="https://scilab.discourse.group/" class="ulink">Discourse</a> -
             Communicate and exchange with the community</p>
+        <p class="para"><a href="https://www.scilab.org/about/community/mailing-lists" class="ulink">Mailing Lists Archives</a> -
+            Consult mailing-lists archives</p>
         <p class="para"><a href="https://atoms.scilab.org/" class="ulink">ATOMS</a> - Browse Scilab packaged modules</p>
         <p class="para"><a href="https://fileexchange.scilab.org/" class="ulink">File Exchange</a> - Exchange your
             scripts, results and files.</p>

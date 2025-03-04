@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2009 - DIGITEO - Bernard HUGUENEY
 * Copyright (C) 2011 - DIGITEO - Cedric DELAMARRE
 *
@@ -27,15 +27,16 @@ extern "C"
 #include "Scierror.h"
 #include "svd.h"
 #include "doublecomplex.h"
+#include "Sciwarning.h"
 }
 /*--------------------------------------------------------------------------*/
 /*
   s=svd(X): [R: min(rows, cols) x 1]
   [U,S,V]=svd(X) [U,S,V]:  [ [C|R: rows x rows], [R: rows x cols ],  [R|C: cols x cols ] ]
-  [U,S,V]=svd(X,0) (obsolete) [U,S,V]=svd(X,"e"): [ [C|R:rows x min(rows,cols)], [R: min(rows,cols) x min(rows,cols)], [C|R:cols x min(rows,cols)] ]
+  [U,S,V]=svd(X,"e"): [ [C|R:rows x min(rows,cols)], [R: min(rows,cols) x min(rows,cols)], [C|R:cols x min(rows,cols)] ]
   [U,S,V,rk]=svd(X [,tol]) : cf. supra, rk[R 1 x 1]
 
-  /!\ Contrary to specifications (@ http://www.scilab.org/product/man/svd.html )
+  /!\ Contrary to specifications (@ https://www.scilab.org/product/man/svd.html )
   , previous version was accepting Lhs==2. Worse : tests were using this undocumented behavior.
   implementation and tests have been fixed according to the specification.
 
@@ -92,14 +93,6 @@ types::Function::ReturnValue sci_svd(types::typed_list &in, int _iRetCount, type
             }
             types::String* pStr = in[1]->getAs<types::String>();
             if ((wcslen(pStr->get(0)) == 1) && (pStr->get(0)[0] == L'e'))
-            {
-                economy = 1;
-            }
-        }
-        if (in[1]->isDouble() == true)
-        {
-            /* no further testing for "old Economy size:  [U,S,V]=svd(A,0) " */
-            if (_iRetCount == 3)
             {
                 economy = 1;
             }

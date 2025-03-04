@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2007 - INRIA - Allan CORNET
 * Copyright (C) 2009-2010 - DIGITEO - Allan CORNET
 *
@@ -34,123 +34,82 @@ static char *lastjob = NULL;
 /*--------------------------------------------------------------------------*/
 /* see call_scilab.h more information */
 /*--------------------------------------------------------------------------*/
-int SendScilabJob(char *job)
+static int ExecuteJob(char* job, char** msg, char** stack, int mode)
 {
     SciErr sciErr;
-    int retCode = -1;
-    char *command = NULL;
-
-#define COMMAND_EXECSTR  "Err_Job = execstr(TMP_EXEC_STRING,\"errcatch\");"
-#define COMMAND_CLEAR "clear TMP_EXEC_STRING;clear Err_Job;"
+#define COMMAND_EXECSTR "[Err_Job, ErrMsg_Job, ErrStack_Job] = execstr(TMP_EXEC_STRING,\"errcatch\");"
+#define COMMAND_CLEAR "clear TMP_EXEC_STRING Err_Job ErrMsg_Job ErrStack_Job;"
 
     if (getCallScilabEngineState() == CALL_SCILAB_ENGINE_STOP)
     {
-        fprintf(stderr, "Error: SendScilabJob call_scilab engine not started.\n");
-        return retCode;
+        fprintf(stderr, mode == 0 ? "SendScilabJob: call_scilab engine is not started.\n" : "ExecScilabCommand: call_scilab engine is not started.\n");
+        fprintf(stderr, "SendScilabJob: call_scilab engine is not started.\n");
+        return -1;
     }
 
-    command = os_strdup(job);
-
-    if (command)
+    if (job == NULL)
     {
-        double Err_Job = 0.;
-        int m = 0, n = 0;
-        ScilabEngineInfo* pSEI = InitScilabEngineInfo();
+        fprintf(stderr, mode == 0 ? "SendScilabJob: 'job' cannot be NULL.\n" : "ExecScilabCommand: 'cmd' cannot be NULL.\n");
+        return -1;
+    }
 
-        SetLastJob(command);
+    double Err_Job = 0.;
+    int m = 0, n = 0;
+    ScilabEngineInfo* pSEI = InitScilabEngineInfo();
 
-        /* Creation of a temp variable in Scilab which contains the command */
-        sciErr = createNamedMatrixOfString(NULL, "TMP_EXEC_STRING", 1, 1, (char const * const*) &command);
-        if (sciErr.iErr)
-        {
-            printError(&sciErr, 0);
-            /* Problem */
-            fprintf(stderr, "Error: SendScilabJob (1) call_scilab failed to create the temporary variable 'TMP_EXEC_STRING'.\n");
-            retCode = -1;
+    SetLastJob(job);
 
-            if (command)
-            {
-                FREE(command);
-                command = NULL;
-            }
-
-            FREE(pSEI);
-            return retCode;
-        }
-
-        /* Run the command within an execstr */
-        pSEI->pstExec = COMMAND_EXECSTR;
-        ExecExternalCommand(pSEI);
-
-        sciErr = getNamedVarDimension(NULL, "Err_Job", &m, &n);
-        if (sciErr.iErr)
-        {
-            printError(&sciErr, 0);
-            fprintf(stderr, "Error: SendScilabJob (2) call_scilab failed to detect the temporary variable 'Err_Job' size.\n");
-            retCode = -2;
-
-            if (command)
-            {
-                FREE(command);
-                command = NULL;
-            }
-
-            FREE(pSEI);
-            return retCode;
-        }
-
-        if ((m != 1) && (n != 1))
-        {
-            fprintf(stderr, "Error: SendScilabJob (3) call_scilab detected a badly formatted 'Err_Job' variable. Size [1,1] expected.\n");
-            retCode = -3;
-
-            if (command)
-            {
-                FREE(command);
-                command = NULL;
-            }
-
-            FREE(pSEI);
-            return retCode;
-        }
-
-        sciErr = readNamedMatrixOfDouble(NULL, "Err_Job", &m, &n, &Err_Job);
-        if (sciErr.iErr)
-        {
-            printError(&sciErr, 0);
-            fprintf(stderr, "Error: SendScilabJob (4) call_scilab failed to read the temporary variable 'Err_Job'.\n");
-            retCode = -4;
-
-            if (command)
-            {
-                FREE(command);
-                command = NULL;
-            }
-
-            FREE(pSEI);
-            return retCode;
-        }
-
-        if (command)
-        {
-            FREE(command);
-            command = NULL;
-        }
-
-        retCode = (int)Err_Job;
-
-        /* clear prev. Err , TMP_EXEC_STRING scilab variables */
-        pSEI->pstExec = COMMAND_CLEAR;
-        ExecExternalCommand(pSEI);
+    /* Creation of a temp variable in Scilab which contains the command */
+    sciErr = createNamedMatrixOfString(NULL, "TMP_EXEC_STRING", 1, 1, (char const* const*)&job);
+    if (sciErr.iErr)
+    {
+        printError(&sciErr, 0);
+        /* Problem */
+        fprintf(stderr, "SendScilabJob: failed to create the temporary variable 'TMP_EXEC_STRING'.\n");
         FREE(pSEI);
-    }
-    else
-    {
-        fprintf(stderr, "Error: SendScilabJob (5) call_scilab failed to create the 'command' variable (MALLOC).\n");
-        retCode = -4;
+        return -1;
     }
 
-    return retCode;
+    /* Run the command within an execstr */
+    pSEI->pstExec = COMMAND_EXECSTR;
+    ExecExternalCommand(pSEI);
+
+    scilab_getDouble(NULL, scilab_getVar(L"Err_Job"), &Err_Job);
+    Err_Job = Err_Job ? 1 : 0;
+    if (mode == 1) //ExecScilabCommand
+    {
+        if (Err_Job)
+        {
+            wchar_t* tmp = NULL;
+            if (msg != NULL)
+            {
+                scilab_getString(NULL, scilab_getVar(L"ErrMsg_Job"), &tmp);
+                *msg = wide_string_to_UTF8(tmp);
+            }
+
+            if (stack)
+            {
+                scilab_getString(NULL, scilab_getVar(L"ErrStack_Job"), &tmp);
+                *stack = wide_string_to_UTF8(tmp);
+            }
+        }
+    }
+
+    /* clear prev. Err , TMP_EXEC_STRING scilab variables */
+    pSEI->pstExec = COMMAND_CLEAR;
+    ExecExternalCommand(pSEI);
+    FREE(pSEI);
+    return (int)Err_Job;
+}
+
+int SendScilabJob(char* job)
+{
+    return ExecuteJob(job, NULL, NULL, 0);
+}
+
+int ExecScilabCommand(char* cmd, char** msg, char** stack)
+{
+    return ExecuteJob(cmd, msg, stack, 1);
 }
 
 /*--------------------------------------------------------------------------*/

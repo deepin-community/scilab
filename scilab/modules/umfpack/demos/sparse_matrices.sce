@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright Bruno Pinçon, ESIAL-IECN, Inria CORIDA project
 //   <bruno.pincon@iecn.u-nancy.fr>
 //

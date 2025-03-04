@@ -1,4 +1,4 @@
-# Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+# Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 # Copyright (C) 2006 - INRIA - Sylvestre LEDRU
 #
 # This file is distributed under the same license as the Scilab package.
@@ -23,6 +23,41 @@ SPARSE_FORTRAN_SOURCES = \
 	src/fortran/blkslv.f \
 	src/fortran/inpnv.f \
 	src/fortran/symfct.f
+
+COLPACK_CPP_SOURCES = \
+    src/ColPack/src/Utilities/CoutLock.cpp \
+    src/ColPack/src/Utilities/DisjointSets.cpp \
+    src/ColPack/src/Utilities/File.cpp \
+    src/ColPack/src/Utilities/MatrixDeallocation.cpp \
+    src/ColPack/src/Utilities/Pause.cpp \
+    src/ColPack/src/Utilities/StringTokenizer.cpp \
+    src/ColPack/src/Utilities/Timer.cpp \
+    src/ColPack/src/Utilities/command_line_parameter_processor.cpp \
+    src/ColPack/src/Utilities/current_time.cpp \
+    src/ColPack/src/Utilities/extra.cpp \
+    src/ColPack/src/Utilities/mmio.cpp \
+    src/ColPack/src/Utilities/stat.cpp \
+    src/ColPack/src/BipartiteGraphBicoloring/BipartiteGraphBicoloring.cpp \
+    src/ColPack/src/BipartiteGraphBicoloring/BipartiteGraphBicoloringInterface.cpp \
+    src/ColPack/src/BipartiteGraphBicoloring/BipartiteGraphCore.cpp \
+    src/ColPack/src/BipartiteGraphBicoloring/BipartiteGraphInputOutput.cpp \
+    src/ColPack/src/BipartiteGraphBicoloring/BipartiteGraphOrdering.cpp \
+    src/ColPack/src/BipartiteGraphBicoloring/BipartiteGraphVertexCover.cpp \
+    src/ColPack/src/BipartiteGraphPartialColoring/BipartiteGraphPartialColoring.cpp \
+    src/ColPack/src/BipartiteGraphPartialColoring/BipartiteGraphPartialColoringInterface.cpp \
+    src/ColPack/src/BipartiteGraphPartialColoring/BipartiteGraphPartialOrdering.cpp \
+    src/ColPack/src/GeneralGraphColoring/GraphColoring.cpp \
+    src/ColPack/src/GeneralGraphColoring/GraphColoringInterface.cpp \
+    src/ColPack/src/GeneralGraphColoring/GraphCore.cpp \
+    src/ColPack/src/GeneralGraphColoring/GraphInputOutput.cpp \
+    src/ColPack/src/GeneralGraphColoring/GraphOrdering.cpp \
+    src/ColPack/src/Recovery/HessianRecovery.cpp \
+    src/ColPack/src/Recovery/JacobianRecovery1D.cpp \
+    src/ColPack/src/Recovery/JacobianRecovery2D.cpp \
+    src/ColPack/src/Recovery/RecoveryCore.cpp \
+    src/cpp/spCompGeneric.cpp \
+    src/cpp/spCompJacobian.cpp \
+    src/cpp/spCompHessian.cpp
 	
 GATEWAY_CPP_SOURCES = \
     sci_gateway/cpp/sparse_gw.cpp \
@@ -46,11 +81,21 @@ GATEWAY_CPP_SOURCES = \
 	sci_gateway/cpp/sci_bfinit.cpp \
 	sci_gateway/cpp/sci_inpnv.cpp \
 	sci_gateway/cpp/sci_blkfc1i.cpp \
-	sci_gateway/cpp/sci_blkslvi.cpp
+	sci_gateway/cpp/sci_blkslvi.cpp \
+    sci_gateway/cpp/sci_percent_spCompGeneric_clear.cpp \
+    sci_gateway/cpp/sci_percent_spCompGeneric_e.cpp \
+    sci_gateway/cpp/sci_spCompHessian.cpp \
+    sci_gateway/cpp/sci_spCompJacobian.cpp
 	
 libscisparse_la_CPPFLAGS = \
     -I$(srcdir)/src/c/ \
     -I$(srcdir)/includes/ \
+    -I$(srcdir)/src/ColPack/include/ \
+    -I$(srcdir)/src/ColPack/src/Utilities/ \
+    -I$(srcdir)/src/ColPack/src/Recovery/ \
+    -I$(srcdir)/src/ColPack/src/GeneralGraphColoring \
+    -I$(srcdir)/src/ColPack/src/BipartiteGraphPartialColoring \
+    -I$(srcdir)/src/ColPack/src/BipartiteGraphBicoloring \
     -I$(top_srcdir)/modules/ast/includes/ast/ \
     -I$(top_srcdir)/modules/ast/includes/exps/ \
     -I$(top_srcdir)/modules/ast/includes/operations/ \
@@ -59,7 +104,6 @@ libscisparse_la_CPPFLAGS = \
     -I$(top_srcdir)/modules/ast/includes/system_env/ \
     -I$(top_srcdir)/modules/ast/includes/types/ \
     -I$(top_srcdir)/modules/console/includes/ \
-    -I$(top_srcdir)/modules/ast/includes/analysis/ \
     -I$(top_srcdir)/modules/threads/includes/ \
     -I$(top_srcdir)/modules/string/includes/ \
     -I$(top_srcdir)/modules/dynamic_link/includes/ \
@@ -89,7 +133,7 @@ src/fortran/ordmmd.lo: src/fortran/ordmmd.f
 	$(LIBTOOL) $(AM_V_lt)  --tag=F77 $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(F77) $(AM_FFLAGS) $(FFLAGS) -O0 -c -o src/fortran/ordmmd.lo src/fortran/ordmmd.f
 endif
 
-libscisparse_algo_la_SOURCES = $(SPARSE_C_SOURCES) $(SPARSE_FORTRAN_SOURCES)
+libscisparse_algo_la_SOURCES = $(SPARSE_C_SOURCES) $(SPARSE_FORTRAN_SOURCES) $(COLPACK_CPP_SOURCES)
 libscisparse_la_SOURCES = $(GATEWAY_CPP_SOURCES)
 libscisparse_algo_la_CPPFLAGS = $(libscisparse_la_CPPFLAGS)
 

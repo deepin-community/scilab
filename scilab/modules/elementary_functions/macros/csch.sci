@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA, Serge Steer
 // Copyright (C) DIGITEO - 2011 - Allan CORNET
 //
@@ -12,13 +12,8 @@
 // along with this program.
 function y = csch(x)
     //Cosecant hyperbolic
-    rhs = argn(2);
-    if rhs <> 1 then
-        error(msprintf(gettext("%s: Wrong number of input argument(s): %d expected.\n"),"csch", 1));
-    end
-    
-    if type(x) <> 1 then
-        error(msprintf(gettext("%s: Wrong type for input argument #%d: Real or complex matrix expected.\n"),"csch", 1));
+    arguments
+        x {mustBeA(x, "double")}
     end
 
     y = ones(x)./sinh(x);

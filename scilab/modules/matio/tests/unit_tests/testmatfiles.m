@@ -1,5 +1,5 @@
 % =============================================================================
-% Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+% Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 % Copyright (C) 2008 - INRIA - Vincent Couvert <vincent.couvert@inria.fr>
 %
 %  This file is distributed under the same license as the Scilab package.
@@ -82,7 +82,17 @@ cplxdoublematrix = [1.23+7.89i 4.56-1.23i 7.89+4.56i;9.87+3.21i 6.54+9.87i 3.21-
 % TESTS FOR SINGLE PRECISION ARRAYS
 %
 
-% TODO
+realsinglescalar = single(realdoublescalar);
+cplxsinglescalar = single(cplxdoublescalar);
+
+realsinglerowvector = single(realdoublerowvector);
+cplxsinglerowvector = single(cplxdoublerowvector);
+
+realsinglecolvector = single(realdoublecolvector);
+cplxsinglecolvector = single(cplxdoublecolvector);
+
+realsinglematrix = single(realdoublematrix);
+cplxsinglematrix = single(cplxdoublematrix);
 
 %
 % TESTS FOR SPARSE MATRICES
@@ -201,20 +211,20 @@ eye100x100 = eye(100,100);
 varNames = who();
 binFormats = {'-v4';'-v6';'-v7'};
 for varIndex=1:length(varNames)
-     for formatIndex=1:length(binFormats)
+    for formatIndex=1:length(binFormats)
         % Integers and NDarrays not saved in -v4 format
-       if formatIndex>1 | ...
-             (formatIndex==1 & isempty(strfind(varNames{varIndex}, 'int')) ...
-              & isempty(strfind(varNames{varIndex}, 'NDarray')) & isempty(strfind(varNames{varIndex}, 'cell')) & isempty(strfind(varNames{varIndex}, 'struct')) & isempty(strfind(varNames{varIndex}, 'sparse')))
-         if exist([pwd filesep varNames{varIndex} binFormats{formatIndex} ...
-                   '.mat']) ~= 2 % If file does not already exist it is created
-           saveCmd = ['save ' pwd filesep varNames{varIndex} binFormats{formatIndex} '.mat ' varNames{varIndex} ' ' binFormats{formatIndex}];
-           eval(saveCmd);
-         else
-           %disp([pwd filesep varNames{varIndex} binFormats{formatIndex} '.mat already exists.'])
-         end
-       end
-     end
+        if formatIndex>1 | ...
+            (formatIndex==1 & isempty(strfind(varNames{varIndex}, 'int')) ...
+            & isempty(strfind(varNames{varIndex}, 'NDarray')) & isempty(strfind(varNames{varIndex}, 'cell')) & isempty(strfind(varNames{varIndex}, 'struct')) & isempty(strfind(varNames{varIndex}, 'sparse')))
+            if exist([pwd filesep varNames{varIndex} binFormats{formatIndex} ...
+                '.mat']) ~= 2 % If file does not already exist it is created
+                saveCmd = ['save ' pwd filesep varNames{varIndex} binFormats{formatIndex} '.mat ' varNames{varIndex} ' ' binFormats{formatIndex}];
+                eval(saveCmd);
+            else
+                %disp([pwd filesep varNames{varIndex} binFormats{formatIndex} '.mat already exists.'])
+            end
+        end
+    end
 end
 
 % TODO: save all variables in a single file ?

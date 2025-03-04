@@ -1,6 +1,6 @@
 //<-- CLI SHELL MODE -->
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ????-2008 - INRIA
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -12,14 +12,14 @@ grand("setgen","clcg4");
 //     Scilab implementation of tstbot.f
 //**********************************************************************
 NB       = 10
- NB  = 
+ NB = 
    10.
 NR       = 1000
- NR  = 
+ NR = 
    1000.
 answer   = ones(NB,NR);
 genlst   = [1,5,10,20,32]
- genlst  = 
+ genlst = [1x5 double]
    1.   5.   10.   20.   32.
 nbad     = 0;
 str      = ["For five virtual generators of the 101"
@@ -74,27 +74,27 @@ for ixgen = 1:5
     mprintf(" Finished testing generator "+string(igen)+"\n");
     mprintf(" Test completed successfully\n");
 end
- igen  = 
+ igen = 
    1.
  Testing generator 1
  Finished testing generator 1
  Test completed successfully
- igen  = 
+ igen = 
    5.
  Testing generator 5
  Finished testing generator 5
  Test completed successfully
- igen  = 
+ igen = 
    10.
  Testing generator 10
  Finished testing generator 10
  Test completed successfully
- igen  = 
+ igen = 
    20.
  Testing generator 20
  Finished testing generator 20
  Test completed successfully
- igen  = 
+ igen = 
    32.
  Testing generator 32
  Finished testing generator 32

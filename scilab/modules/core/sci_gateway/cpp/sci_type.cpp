@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2010-2010 - DIGITEO - Bruno JOFRET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -53,9 +53,6 @@ types::Function::ReturnValue sci_type(types::typed_list &in, int _iRetCount, typ
         case types::InternalType::ScilabSparseBool :
             type = sci_boolean_sparse;
             break;
-        //case types::InternalType::RealMatlabSparse :
-        //    *_piType = sci_matlab_sparse;
-        //    break;
         case types::InternalType::ScilabInt8 :
         case types::InternalType::ScilabUInt8 :
         case types::InternalType::ScilabInt16 :

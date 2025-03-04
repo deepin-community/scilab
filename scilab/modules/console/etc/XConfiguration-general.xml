@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <general title="_(General)">
     <body>
-        <environment fpe="2" printing-format="v" width="10" recursion-limit="1000" container_disp_max_depth="2">
+        <environment fpe="2" printing-format="v" width="10" recursion-limit="1000" container_disp_max_depth="2" polynomial-display="0">
             <fpe code="0" floating-point-exception="_(Produces an error)"/>
             <fpe code="1" floating-point-exception="_(Produces a warning)"/>
             <fpe code="2" floating-point-exception="_(Produces Inf or NaN)"/>
             <printing-format code="v" format="_(Variable format)"/>
             <printing-format code="e" format="_(Scientific format)"/>
+            <polynomial-display code="0" format="_(ASCII)"/>
+            <polynomial-display code="1" format="_(Unicode)"/>
         </environment>
-        <languages lang="en_US">
+        <languages lang=""> <!-- Will use Scilab default language by default -->
             <language code="en_US" desc="_(English)"/>
             <language code="fr_FR" desc="_(French)"/>
             <language code="pt_BR" desc="_(Portugese (Brazil))"/>
@@ -24,7 +26,7 @@
             <language code="ja_JP" desc="_(Japanese)"/>
             <language code="uk_UA" desc="_(Ukrainian)"/>
         </languages>
-        <java-heap-memory heap-size="512"/>
+        <java-heap-memory heap-size="0"/>
         <startup title="_(Start-up directory)" use="current" default="" previous=""/>
     </body>
     <confirmation-dialogs title="_(Confirmation dialogs)">
@@ -261,7 +263,7 @@
     </shortcuts>
     <documentation title="_(Help and demos)">
       <body>
-        <demos demoGUIisDockable="checked"/>
+        <demos demoGUIisDockable="unchecked"/>
         <help redirectMatlab2Scilab="unchecked"/>
       </body>
     </documentation>

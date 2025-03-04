@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2000 - INRIA - Carlos Klimann
  * Copyright (C) 2016 - Samuel GOUGEON
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -22,8 +22,7 @@
         <title>Syntax</title>
         <synopsis>
             hm = harmean(x)
-            hm = harmean(x, 'r'|1 )
-            hm = harmean(x, 'c'|2 )
+            hm = harmean(x, orientation)
         </synopsis>
     </refsynopsisdiv>
     <refsection role="arguments">
@@ -35,6 +34,26 @@
                     <para>vector, matrix, or hypermatrix of real or complex
                     numbers or polynomials. Rationals not supported.
                     </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>orientation</term>
+                <listitem>
+                    <para>
+                    index of the dimension along which the harmean is computed.
+                    It can be either
+                    </para>
+                    <itemizedlist>
+                        <listitem>
+                            a character <literal>"*"</literal> (default), <literal>"r"</literal>,
+                          <literal>"c"</literal> or <literal>"m"</literal>. "m" is equivalent
+                          to <literal>find(size(x)>1,1)</literal>.
+                        </listitem>
+                        <listitem>
+                            a positive integer. 1 is equivalent to "r" and 2 is equivalent to "c".
+                        </listitem>
+                    </itemizedlist>
+                    <para/>
                 </listitem>
             </varlistentry>
             <varlistentry>
@@ -54,6 +73,10 @@
         <para>
             This function  computes the harmonic mean of input values = inverse
             of the average of inversed non-zero values.
+        </para>
+        <para>
+            <literal> hm = harmean(x) </literal> or <literal>hm = harmean(x, '*') </literal> returns 
+            in scalar <literal>hm</literal> the harmonic mean of all the entries.
         </para>
         <para>
             <literal>hm = harmean(x,'r')</literal>   (or,   equivalently,
@@ -87,8 +110,7 @@ harmean(x, 2)
 // Hypermatrix
 x = grand(3,4,2, "uin",-10, 10)
 harmean(x)
-harmean(x, "r") // error: not supported
-harmean(x, 3)   // error: not supported
+// warning: harmean(x, "r") and harmean(x, 3) generate one error: not supported !
 
 harmean([%z 0])
 harmean([%z %z/2])

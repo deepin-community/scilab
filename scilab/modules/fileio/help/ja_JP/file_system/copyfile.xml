@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA - Allan CORNET
  * ...
  *
@@ -112,7 +112,7 @@
 
         <para>
 
-            <code>[status, message] = copyfile(source, destination)</code>は,
+            <code>[status, msg] = copyfile(source, destination)</code>は,
 
             <varname>source</varname> から <varname>destination</varname>にコピーし,
 
@@ -152,7 +152,7 @@
 
             copyfile(SCI+"/etc/scilab.start",TMPDIR+"/scilab.start")
 
-            [status,message] = copyfile(SCI+"/etc/scilab.start",TMPDIR);
+            [status,msg] = copyfile(SCI+"/etc/scilab.start",TMPDIR);
 
         </programlisting>
 

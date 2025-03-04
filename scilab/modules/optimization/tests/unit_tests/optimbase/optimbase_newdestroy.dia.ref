@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008-2009 - INRIA - Michael Baudin
 // Copyright (C) 2011 - DIGITEO - Michael Baudin
 //
@@ -41,7 +41,7 @@ function stop = myoutputcmd ( state , data )
 endfunction
 global _OUTPUCMDFLAG_
 _OUTPUCMDFLAG_ = 0
- _OUTPUCMDFLAG_  = 
+ _OUTPUCMDFLAG_ = 
    0.
 //
 // myoutputcmd2 --
@@ -71,7 +71,7 @@ function stop = myoutputcmd2 ( state , data , myobj )
 endfunction
 global _OUTPUCMDFLAG_
 _OUTPUCMDFLAG_ = 0
- _OUTPUCMDFLAG_  = 
+ _OUTPUCMDFLAG_ = 
    0.
 myobj = tlist(["T_MYSTUFF","myarg"]);
 myobj.myarg = 12;
@@ -277,7 +277,7 @@ opt = optimbase_destroy(opt);
 //
 opt = optimbase_new ();
 string(opt)
- ans  =
+ ans = [26x1 string]
   "Optim Base Object:"                                          
   "=================="                                          
   "Number of variables : 0"                                     
@@ -305,7 +305,7 @@ string(opt)
   "Verbose Log File Startup Up: F"                              
   "Store History : F"                                           
 opt
- opt  = 
+ opt = (TOPTIM tlist) with fields:
 Optim Base Object:
 ==================
 Number of variables : 0

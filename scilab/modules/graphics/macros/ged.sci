@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
 //
@@ -51,7 +51,7 @@ function ged(k,win)
     ged_cur_fig_handle=scf(win);
     show_window(ged_cur_fig_handle);
 
-    // for TCL input args built with string(). See bug http://bugzilla.scilab.org/2479
+    // for TCL input args built with string(). See bug https://gitlab.com/scilab/scilab/-/issues/2479
     initFormat = format()
     format("v",18)  // To be restored with initFormat before leaving
 

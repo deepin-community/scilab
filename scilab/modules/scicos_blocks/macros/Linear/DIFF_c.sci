@@ -1,6 +1,6 @@
 //  Scicos
 //
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA - METALAU Project <scicos@inria.fr>
 // Copyright (C) 2009-2010 - DIGITEO - Clément DAVID
 //

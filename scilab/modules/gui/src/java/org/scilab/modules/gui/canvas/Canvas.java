@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2007 - INRIA - Vincent COUVERT
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -17,7 +17,7 @@ package org.scilab.modules.gui.canvas;
 
 import java.awt.image.BufferedImage;
 
-import javax.media.opengl.GL;
+import com.jogamp.opengl.GL;
 
 import org.scilab.modules.gui.dockable.Dockable;
 

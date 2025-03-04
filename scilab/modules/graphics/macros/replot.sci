@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 // Copyright (C) 2016 - Clément DAVID - Scilab Enterprises
 // Copyright (C) 2013, 2016, 2017 - Samuel GOUGEON
@@ -150,6 +150,9 @@ function replot(varargin)
     // Loop over axes
     // --------------
     for i = 1:na
+        if grep(handl(i).tag, "legend") <> []
+            continue
+        end
         bounds = matrix(rect(i,:)',-1,2)'
         // [ xmin  ymin  zmin
         //   xmax  ymax  zmax ]

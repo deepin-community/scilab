@@ -1,8 +1,8 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2013 - Pedro Arthur dos S. Souza
- *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ * Copyright (C) 2021 - Stéphane MOTTELET
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
  * pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -19,6 +19,8 @@ extern "C"
 {
 #include "api_scilab.h"
 #include "getScilabJavaVM.h"
+#include "getGraphicObjectProperty.h"
+#include "graphicObjectProperties.h"
 #include "localization.h"
 #include "Scierror.h"
 #include "gw_gui.h"
@@ -198,7 +200,7 @@ int sci_datatip_manager_mode(char *fname, void* pvApiCtx)
                     Scierror(999, _("%s: Wrong size for input argument #%d: A boolean expected.\n"), fname, 1);
                     return 1;
                 }
-                iFigureUID = getCurrentFigure();
+                //iFigureUID = getCurrentFigure();
                 enabled = pbValue[0] == 0 ? false : true;
                 break;
             case sci_strings :
@@ -229,12 +231,12 @@ int sci_datatip_manager_mode(char *fname, void* pvApiCtx)
                 }
                 if (strcmp("on", pstData) == 0 || strcmp("T", pstData) == 0 || strcmp("1", pstData) == 0)
                 {
-                    iFigureUID = getCurrentFigure();
+                    //iFigureUID = getCurrentFigure();
                     enabled = true;
                 }
                 else if (strcmp("off", pstData) == 0 || strcmp("F", pstData) == 0 || strcmp("0", pstData) == 0)
                 {
-                    iFigureUID = getCurrentFigure();
+                    //iFigureUID = getCurrentFigure();
                     enabled = false;
                 }
                 else
@@ -259,6 +261,29 @@ int sci_datatip_manager_mode(char *fname, void* pvApiCtx)
     if (iFigureUID)
     {
         DatatipManager::setEnabled(getScilabJavaVM(), iFigureUID, enabled);
+        // enable/disable DatatipManager for eventual children Frame uicontrols
+        int iChildrenCount = 0;
+        int* piChildrenCount = &iChildrenCount;
+        getGraphicObjectProperty(iFigureUID, __GO_CHILDREN_COUNT__, jni_int, (void**)&piChildrenCount);
+        if (iChildrenCount != 0)
+        {
+            int* piChildren = NULL;
+            getGraphicObjectProperty(iFigureUID, __GO_CHILDREN__, jni_int_vector, (void**)&piChildren);
+            for (int i=0; i<iChildrenCount; i++)
+            {
+                int iType=0;
+                int *piType = &iType;
+                getGraphicObjectProperty(piChildren[i], __GO_TYPE__, jni_int, (void**)&piType);
+                if (iType == __GO_UICONTROL__)
+                {
+                    getGraphicObjectProperty(piChildren[i], __GO_STYLE__, jni_int, (void**)&piType);
+                    if (iType == __GO_UI_FRAME__)
+                    {
+                        DatatipManager::setEnabled(getScilabJavaVM(), piChildren[i], enabled);
+                    }
+                }
+            }
+        }
     }
 
     AssignOutputVariable(pvApiCtx, 1) = 0;

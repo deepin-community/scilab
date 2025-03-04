@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2008 - INRIA
 * Copyright (C) 2012 - Scilab Enterprises - Adeline CARNIS
 * ...
@@ -154,10 +154,7 @@ deff("z = g(t,y)", "z = y-[2;2;33]")
                 <link linkend="ode_discrete">ode_discrete</link>
             </member>
             <member>
-                <link linkend="dasrt">dasrt</link>
-            </member>
-            <member>
-                <link linkend="daskr">daskr</link>
+                <link linkend="dae">dae</link>
             </member>
         </simplelist>
     </refsection>

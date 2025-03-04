@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2017 - ESI-Group - Cedric DELAMARRE
 *
 *
@@ -13,12 +13,10 @@
 */
 /*--------------------------------------------------------------------------*/
 
-#include <curl/curl.h>
 #include "webtools_gw.hxx"
 #include "function.hxx"
 #include "string.hxx"
 #include "double.hxx"
-#include "sciCurl.hxx"
 
 extern "C"
 {
@@ -27,13 +25,13 @@ extern "C"
 #include "sciprint.h"
 #include "sci_malloc.h"
 #include "getFullFilename.h"
+#include "charEncoding.h"
 }
+
 /*--------------------------------------------------------------------------*/
 static const char fname[] = "http_get";
 types::Function::ReturnValue sci_http_get(types::typed_list &in, types::optional_list &opt, int _iRetCount, types::typed_list &out)
 {
-    SciCurl* sciCurlObj = SciCurl::getInstance();
-    CURLcode res = CURLE_OK;
     FILE* fd = NULL;
     types::InternalType* pOut = NULL;
 
@@ -43,9 +41,9 @@ types::Function::ReturnValue sci_http_get(types::typed_list &in, types::optional
         return types::Function::Error;
     }
 
-    if (_iRetCount > 2)
+    if (_iRetCount > 3)
     {
-        Scierror(78, _("%s: Wrong number of output argument(s): %d to %d expected.\n"), fname, 1, 2);
+        Scierror(78, _("%s: Wrong number of output argument(s): %d to %d expected.\n"), fname, 1, 3);
         return types::Function::Error;
     }
 
@@ -56,18 +54,23 @@ types::Function::ReturnValue sci_http_get(types::typed_list &in, types::optional
         return types::Function::Error;
     }
 
-    CURL* curl = curl_easy_init();
-    if(curl == nullptr)
+    SciCurl query;
+    if(query.init() == false)
     {
         Scierror(999, _("%s: CURL initialization failed.\n"), fname);
         return types::Function::Error;
     }
 
-    sciCurlObj->setCommonHeaders(curl);
+    if(setPreferences(query, fname))
+    {
+        return types::Function::Error;
+    }
 
     char* pcURL = wide_string_to_UTF8(in[0]->getAs<types::String>()->get(0));
-    curl_easy_setopt(curl, CURLOPT_URL, pcURL);
+    query.setURL(pcURL);
     FREE(pcURL);
+
+    query.setMethod("GET");
 
     if(in.size() == 2)
     {
@@ -81,7 +84,7 @@ types::Function::ReturnValue sci_http_get(types::typed_list &in, types::optional
         wchar_t* pwcFileName = getFullFilenameW(in[1]->getAs<types::String>()->get(0));
         char* pcFileName = wide_string_to_UTF8(pwcFileName);
 
-        fd = fopen(pcFileName, "wb");
+        wcfopen(fd, pcFileName, "wb");
         FREE(pcFileName);
         if(fd == NULL)
         {
@@ -90,34 +93,24 @@ types::Function::ReturnValue sci_http_get(types::typed_list &in, types::optional
             return types::Function::Error;
         }
 
-        sciCurlObj->getResultAsFile(curl, fd);
-
         pOut = new types::String(pwcFileName);
         FREE(pwcFileName);
     }
-    else
-    {
-        sciCurlObj->getResultAsObject(curl);
-    }
 
     // common optional argument
-    if(checkCommonOpt((void*)curl, opt, fname))
+    if(checkCommonOpt(query, opt, fname))
     {
         return types::Function::Error;
     }
 
-    // set proxy information
-    if(sciCurlObj->setProxy(curl))
-    {
-        Scierror(999, _("%s: Wrong proxy information, please check in the 'internet' Scilab preference.\n"), fname);
-        return types::Function::Error;
-    }
+    // configure headers when they have all been added.
+    query.setHTTPHeader();
 
-    res = curl_easy_perform(curl);
-    if(res != CURLE_OK)
+    // send the query
+    query.perform(fd);
+    if(query.hasFailed())
     {
-        Scierror(999, _("%s: CURL execution failed.\n%s\n"), fname, curl_easy_strerror(res));
-        sciCurlObj->clear();
+        Scierror(999, _("%s: CURL execution failed.\n%s\n"), fname, query.getError());
         if(fd)
         {
             fclose(fd);
@@ -128,22 +121,22 @@ types::Function::ReturnValue sci_http_get(types::typed_list &in, types::optional
     if(in.size() == 2)
     {
         fclose(fd);
-        sciCurlObj->clear();
     }
     else
     {
-        pOut = sciCurlObj->getResult();
+        pOut = query.getResult();
     }
 
     out.push_back(pOut);
-
-    if(_iRetCount == 2)
+    if(_iRetCount > 1)
     {
-        long http_code = 0;
-        curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
-        out.push_back(new types::Double((double)http_code));
+        out.push_back(new types::Double((double)query.getResponseCode()));
     }
 
-    curl_easy_cleanup(curl);
+    if(_iRetCount > 2)
+    {
+        out.push_back(query.getHeaders());
+    }
+
     return types::Function::OK;
 }

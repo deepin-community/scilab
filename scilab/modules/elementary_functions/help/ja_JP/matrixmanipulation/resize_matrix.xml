@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA - Jean-Baptiste SILVY
  * Copyright (C) 2013, 2016, 2017 - Samuel GOUGEON
  *
@@ -156,7 +156,7 @@
         <title>例</title>
         <programlisting role="example"><![CDATA[
 // 組込の例, 多項式を含む
-resize_matrix
+//resize_matrix
 
 // 数値行列:
 M = grand(4, 3, "uin", -9, 9)
@@ -190,6 +190,7 @@ resize_matrix(M, 3, 4)
    4.  -1.   6.   0.
 ]]></screen>
         <programlisting role="example"><![CDATA[
+M = grand(4, 3, "uin", -9, 9)
 resize_matrix(M, [3 4 2])
 resize_matrix(M, [3 4 2], "", %i)
 resize_matrix(M, [3 4 2], "string", %i)

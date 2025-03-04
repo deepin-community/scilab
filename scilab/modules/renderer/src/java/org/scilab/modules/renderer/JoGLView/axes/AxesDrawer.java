@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009-2010 - DIGITEO - Pierre Lando
  * Copyright (C) 2013 - Scilab Enterprises - Calixte DENIZET
  *
@@ -644,10 +644,20 @@ public class AxesDrawer {
             } else {
                 minScale = Math.min(tmpX * (w / h), tmpY);
             }
-            isoScale = TransformationFactory.getScaleTransformation(minScale, minScale, tmpZ);
-        } else {
-            isoScale = TransformationFactory.getScaleTransformation(tmpX, tmpY, tmpZ);
+            tmpX = minScale;
+            tmpY = minScale;
         }
+        if (axes.getView() == 1 && !use2dView) {
+            if (axes.getAutoStretch()) {
+                axes.setScale(tmpX,tmpY,tmpZ);                                
+            } else {
+                double scale[] = axes.getScale();
+                tmpX = scale[0];
+                tmpY = scale[1];
+                tmpZ = scale[2];                
+            }
+        }
+        isoScale = TransformationFactory.getScaleTransformation(tmpX, tmpY, tmpZ);
         transformation = transformation.leftTimes(isoScale);
 
         return transformation;

@@ -11,4 +11,5 @@ src/c/helptools.def
 pdf
 web
 etc/SciDocConf.xml
-
+data/configuration/scilab_macros.txt
+data/configuration/scilab_primitives.txt

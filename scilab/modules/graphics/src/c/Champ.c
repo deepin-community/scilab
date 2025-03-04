@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 1998-2001 - ENPC - Jean-Philipp Chancelier
  * Copyright (C) 2004-2006 - INRIA - Fabrice Leray
  * Copyright (C) 2011 - DIGITEO - Manuel Juliachs
@@ -44,7 +44,6 @@
 
 /*-----------------------------------------------------------------
  *  int C2F(champ)(x,y,fx,fy,n1,n2,strflag,brect,arfact,lstr)
- *  int C2F(champ1)(x,y,fx,fy,n1,n2,strflag,brect,arfact,lstr)
  *
  * Used for Drawing 2 dimensional vector fields
  * (fx[i+(*n1)*j], fy[i+(*n1)*j]) is the value of the vector field
@@ -91,7 +90,6 @@ void champg(char *name, int colored, double *x, double *y, double *fx, double *f
     BOOL axes_properties_changed = FALSE;
 
     /* champ with color inherited from subwin */
-    /* or champ1 (normed vector + color) is enabled */
     int typeofchamp = (colored == 0 ? 0 : 1);
 
     /* First create champ object */
@@ -238,12 +236,6 @@ void champg(char *name, int colored, double *x, double *y, double *fx, double *f
 int C2F(champ)(double *x, double *y, double *fx, double *fy, int *n1, int *n2, char *strflag, double *brect, double *arfact, int lstr)
 {
     champg("champ", 0, x, y, fx, fy, n1, n2, strflag, brect, arfact, lstr);
-    return (0);
-}
-
-int C2F(champ1)(double *x, double *y, double *fx, double *fy, int *n1, int *n2, char *strflag, double *brect, double *arfact, int lstr)
-{
-    champg("champ1", 1, x, y, fx, fy, n1, n2, strflag, brect, arfact, lstr);
     return (0);
 }
 /*----------------------------------------------------------------------------------*/

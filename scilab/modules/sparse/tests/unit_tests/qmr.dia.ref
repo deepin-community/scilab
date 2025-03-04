@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2012 Scilab Enterprises  Adeline CARNIS
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -7,15 +7,14 @@
 // <-- CLI SHELL MODE -->
 // unit tests for qmr() function
 // =============================================================================
-warning('off')
 // ----------------
 // If A is a matrix
 // ----------------
 // 1. Interface
 // ============
-assert_checkerror( "qmr()", "%s: Wrong number of input arguments: At least %d expected.\n", 10000, "qmr", 2);
-assert_checkerror( "qmr(1)", "%s: Wrong number of input arguments: At least %d expected.\n", 10000, "qmr", 2);
-assert_checkerror( "qmr([1 2;3 4])", "%s: Wrong number of input arguments: At least %d expected.\n", 10000, "qmr", 2);
+assert_checkerror( "qmr()", "%s: Wrong number of input arguments: %d to %d expected.\n", 10000, "qmr", 2, 7);
+assert_checkerror( "qmr(1)", "%s: Wrong number of input arguments: %d to %d expected.\n", 10000, "qmr", 2, 7);
+assert_checkerror( "qmr([1 2;3 4])", "%s: Wrong number of input arguments: %d to %d expected.\n", 10000, "qmr", 2, 7);
 assert_checkerror( "qmr([1 2;3 4;5 6],[1;1;1])", "%s: Wrong size for input argument #%d: Square matrix expected.\n", 10000, "qmr", 1);
 assert_checkerror( "qmr([1 2;3 4;5 6],[1 1 1])", "%s: Wrong size for input argument #%d: Square matrix expected.\n", 10000, "qmr", 1);
 assert_checkerror( "qmr([1 2;3 4],[1 1])", "%s: Wrong size for input argument #%d: Column vector expected.\n", 10000, "qmr", 2);
@@ -280,22 +279,13 @@ assert_checkalmostequal ( xcomputed , xexpected , %eps);
 assert_checkequal ( flag , 0);
 assert_checkequal ( err , 0);
 assert_checkequal ( iter, 1);
-function y = funcA_notransp(x)
-    Amat = [10,1;1,10];
-    y = Amat*x;
-endfunction
-function y = funcA_transp(x)
+function y = funcA_badproto(x)
     Amat = [10,1;1,10];
     y = Amat'*x;
 endfunction
-assert_checkfalse(execstr("qmr(funcA_notransp, b)"   ,"errcatch") == 0);
-refMsg = msprintf(gettext("%s: Wrong type for input argument #%d: A transpose of the function %s expected.\n"), "qmr", 2, "A");
-assert_checkerror("qmr(funcA_notransp, b)", refMsg);
-[xcomputed, flag, err, iter, res]=qmr(funcA_notransp,funcA_transp,b);
-assert_checkalmostequal ( xcomputed , xexpected , %eps);
-assert_checkequal ( flag , 0);
-assert_checkequal ( err , 0);
-assert_checkequal ( iter, 1);
+assert_checkfalse(execstr("qmr(funcA_badproto, b)"   ,"errcatch") == 0);
+refMsg = msprintf(gettext("%s: Wrong prototype of input argument #%d: A function with %d input arguments expected.\n"), "qmr", 1, 2);
+assert_checkerror("qmr(funcA_badproto, b)", refMsg);
 // 3. Test with 3 input arguments and all output arguments
 // =======================================================
 b = [11;11];
@@ -310,16 +300,6 @@ function y = func_qmr(x,t)
     end
 endfunction
 [xcomputed, flag, err, iter, res]=qmr(func_qmr,b,x0);
-assert_checkalmostequal ( xcomputed , xexpected , %eps);
-function y = funcA_notransp(x)
-    Amat = [10,1;1,10];
-    y = Amat*x;
-endfunction
-function y = funcA_transp(x)
-    Amat = [10,1;1,10];
-    y = Amat'*x;
-endfunction
-[xcomputed, flag, err, iter, res]=qmr(funcA_notransp,funcA_transp,b,x0);
 assert_checkalmostequal ( xcomputed , xexpected , %eps);
 // 4. Test with 4 input arguments and all output arguments
 // =======================================================
@@ -336,16 +316,6 @@ function y = func_qmr(x,t)
     end
 endfunction
 [xcomputed, flag, err, iter, res]=qmr(func_qmr,b,x0,M1);
-assert_checkalmostequal ( xcomputed , xexpected , %eps);
-function y = funcA_notransp(x)
-    Amat = [10,1;1,10];
-    y = Amat*x;
-endfunction
-function y = funcA_transp(x)
-    Amat = [10,1;1,10];
-    y = Amat'*x;
-endfunction
-[xcomputed, flag, err, iter, res]=qmr(funcA_notransp,funcA_transp,b,x0,M1);
 assert_checkalmostequal ( xcomputed , xexpected , %eps);
 // 5 Test with 5 input arguments and all output arguments
 // =======================================================
@@ -364,16 +334,6 @@ function y = func_qmr(x,t)
 endfunction
 [xcomputed, flag, err, iter, res]=qmr(func_qmr,b,x0,M1,M2);
 assert_checkalmostequal ( xcomputed , xexpected , %eps);
-function y = funcA_notransp(x)
-    Amat = [10,1;1,10];
-    y = Amat*x;
-endfunction
-function y = funcA_transp(x)
-    Amat = [10,1;1,10];
-    y = Amat'*x;
-endfunction
-[xcomputed, flag, err, iter, res]=qmr(funcA_notransp,funcA_transp,b,x0,M1,M2);
-assert_checkalmostequal ( xcomputed , xexpected , %eps);
 // 6 Test with 6 input arguments and all output arguments
 // =======================================================
 b = [11;11];
@@ -391,16 +351,6 @@ function y = func_qmr(x,t)
     end
 endfunction
 [xcomputed, flag, err, iter, res]=qmr(func_qmr,b,x0,M1,M2,maxit);
-assert_checkalmostequal ( xcomputed , xexpected , %eps);
-function y = funcA_notransp(x)
-    Amat = [10,1;1,10];
-    y = Amat*x;
-endfunction
-function y = funcA_transp(x)
-    Amat = [10,1;1,10];
-    y = Amat'*x;
-endfunction
-[xcomputed, flag, err, iter, res]=qmr(funcA_notransp,funcA_transp,b,x0,M1,M2,maxit);
 assert_checkalmostequal ( xcomputed , xexpected , %eps);
 // 7 Test with 7 input arguments and all output arguments
 // =======================================================
@@ -421,16 +371,6 @@ function y = func_qmr(x,t)
 endfunction
 [xcomputed, flag, err, iter, res]=qmr(func_qmr,b,x0,M1,M2,maxit,tol);
 assert_checkalmostequal ( xcomputed , xexpected , %eps);
-function y = funcA_notransp(x)
-    Amat = [10,1;1,10];
-    y = Amat*x;
-endfunction
-function y = funcA_transp(x)
-    Amat = [10,1;1,10];
-    y = Amat'*x;
-endfunction
-[xcomputed, flag, err, iter, res]=qmr(funcA_notransp,funcA_transp,b,x0,M1,M2,maxit,tol);
-assert_checkalmostequal ( xcomputed , xexpected , %eps);
 // Test : A is a matrix, M1 is a function, M2 is a matrix (default)
 // ===============================================================
 A = [10 1;1 10];
@@ -447,22 +387,13 @@ function y = funM1(x,t)
 endfunction
 [xcomputed, flag, err, iter, res]=qmr(A,b,x0,funM1);
 assert_checkalmostequal ( xcomputed , xexpected , %eps);
-function y = functionM1(x)
+function y = M1_badproto(x)
     M1 = eye(2,2);
     y = M1*x;
 endfunction
-function y = functionM1t(x)
-    M1 = eye(2,2);
-    y = M1'*x;
-endfunction
-assert_checkfalse(execstr("qmr(A, b, x0, functionM1)"   ,"errcatch") == 0);
-refMsg = msprintf(gettext("%s: Wrong prototype of input argument #%d: If M1 is function, use the header M1(x,t) instead M1(x).\n"), "qmr", 4);
-assert_checkerror("qmr(A, b, x0, functionM1)", refMsg);
-assert_checkfalse(execstr("qmr(A, b, x0, functionM1, 1)"   ,"errcatch") == 0);
-refMsg = msprintf(gettext("%s: Wrong type for input argument #%d: A transpose of the function expected.\n"), "qmr", 5);
-assert_checkerror("qmr(A, b, x0, functionM1, 1)", refMsg);
-[xcomputed, flag, err, iter, res]=qmr(A,b,x0,functionM1,functionM1t);
-assert_checkalmostequal ( xcomputed , xexpected , %eps);
+assert_checkfalse(execstr("qmr(A, b, x0, M1_badproto)"   ,"errcatch") == 0);
+refMsg = msprintf(gettext("%s: Wrong prototype of input argument #%d: A function with %d input arguments expected.\n"), "qmr", 4, 2);
+assert_checkerror("qmr(A, b, x0, M1_badproto)", refMsg);
 // Test : A is a matrix, M1 is a function, M2 is a matrix
 // ======================================================
 A = [10 1;1 10];
@@ -481,16 +412,6 @@ function y = funM1(x,t)
     end
 endfunction
 [xcomputed, flag, err, iter, res]=qmr(A,b,x0,funM1,M2,maxit,tol);
-assert_checkalmostequal ( xcomputed , xexpected , %eps);
-function y = functionM1(x)
-    M1 = eye(2,2);
-    y = M1*x;
-endfunction
-function y = functionM1t(x)
-    M1 = eye(2,2);
-    y = M1'*x;
-endfunction
-[xcomputed, flag, err, iter, res]=qmr(A,b,x0,functionM1,functionM1t,M2,maxit,tol);
 assert_checkalmostequal ( xcomputed , xexpected , %eps);
 // Test : A is a matrix, M1 is a matrix, M2 is a function
 // ======================================================
@@ -511,22 +432,13 @@ function y = funM2(x,t)
 endfunction
 [xcomputed, flag, err, iter, res]=qmr(A,b,x0,M1,funM2,maxit,tol);
 assert_checkalmostequal ( xcomputed , xexpected , %eps);
-function y = functionM2(x)
+function y = M2_badproto(x)
     M2 = eye(2,2);
     y = M2*x;
 endfunction
-function y = functionM2t(x)
-    M2 = eye(2,2);
-    y = M2'*x;
-endfunction
-assert_checkfalse(execstr("qmr(A, b, x0, M1, functionM2)"   ,"errcatch") == 0);
-refMsg = msprintf(gettext("%s: Wrong prototype of input argument #%d: If M2 is function, use the header M2(x,t) instead M2(x).\n"), "qmr", 5);
-assert_checkerror("qmr(A, b, x0, M1, functionM2)", refMsg);
-assert_checkfalse(execstr("qmr(A, b, x0, M2, functionM2, 1)"   ,"errcatch") == 0);
-refMsg = msprintf(gettext("%s: Wrong type for input argument #%d: A transpose of the function expected.\n"), "qmr", 6);
-assert_checkerror("qmr(A, b, x0, M1, functionM2, 1)", refMsg);
-[xcomputed, flag, err, iter, res]=qmr(A,b,x0,M1,functionM2,functionM2t,maxit,tol);
-assert_checkalmostequal ( xcomputed , xexpected , %eps);
+assert_checkfalse(execstr("qmr(A, b, x0, M1, M2_badproto)"   ,"errcatch") == 0);
+refMsg = msprintf(gettext("%s: Wrong prototype of input argument #%d: A function with %d input arguments expected.\n"), "qmr", 5, 2);
+assert_checkerror("qmr(A, b, x0, M1, M2_badproto)", refMsg);
 // Test : A is a matrix, M1 and M2 are functions
 // ==============================================
 A = [10 1;1 10];
@@ -552,24 +464,6 @@ function y = funM2(x,t)
     end
 endfunction
 [xcomputed, flag, err, iter, res]=qmr(A,b,x0,funM1,funM2,maxit,tol);
-assert_checkalmostequal ( xcomputed , xexpected , %eps);
-function y = functionM1(x)
-    M1 = eye(2,2);
-    y = M1*x;
-endfunction
-function y = functionM1t(x)
-    M1 = eye(2,2);
-    y = M1'*x;
-endfunction
-function y = functionM2(x)
-    M2 = eye(2,2);
-    y = M2*x;
-endfunction
-function y = functionM2t(x)
-    M2 = eye(2,2);
-    y = M2'*x;
-endfunction
-[xcomputed, flag, err, iter, res]=qmr(A,b,x0,functionM1,functionM1t,functionM2,functionM2t,maxit,tol);
 assert_checkalmostequal ( xcomputed , xexpected , %eps);
 // Test : A, M1 and M2 are functions
 // ==================================
@@ -603,43 +497,4 @@ function y = funM2(x,t)
 endfunction
 [xcomputed, flag, err, iter, res]=qmr(funA,b,x0,funM1,funM2,maxit,tol);
 xexpected=[1;1];
-assert_checkalmostequal ( xcomputed , xexpected , %eps);
-function y = functionA(x)
-    A = [10 1;1 10];
-    y = A*x;
-endfunction
-function y = functionAt(x)
-    A = [10 1;1 10];
-    y = A'*x;
-endfunction
-function y = functionM1(x)
-    M1 = eye(2,2);
-    y = M1*x;
-endfunction
-function y = functionM1t(x)
-    M1 = eye(2,2);
-    y = M1'*x;
-endfunction
-function y = functionM2(x)
-    M2 = eye(2,2);
-    y = M2*x;
-endfunction
-function y = functionM2t(x)
-    M2 = eye(2,2);
-    y = M2'*x;
-endfunction
-xexpected=[1;1];
-[xcomputed, flag, err, iter, res]=qmr(functionA,functionAt,b,x0,functionM1,functionM1t,functionM2,functionM2t,maxit,tol);
-assert_checkalmostequal ( xcomputed , xexpected , %eps);
-[xcomputed, flag, err, iter, res]=qmr(funA,b,x0,functionM1,functionM1t,functionM2,functionM2t,maxit,tol);
-assert_checkalmostequal ( xcomputed , xexpected , %eps);
-[xcomputed, flag, err, iter, res]=qmr(funA,b,x0,funM1,functionM2,functionM2t,maxit,tol);
-assert_checkalmostequal ( xcomputed , xexpected , %eps);
-[xcomputed, flag, err, iter, res]=qmr(functionA,functionAt,b,x0,funM1,functionM2,functionM2t,maxit,tol);
-assert_checkalmostequal ( xcomputed , xexpected , %eps);
-[xcomputed, flag, err, iter, res]=qmr(functionA,functionAt,b,x0,funM1,funM2,maxit,tol);
-assert_checkalmostequal ( xcomputed , xexpected , %eps);
-[xcomputed, flag, err, iter, res]=qmr(functionA,functionAt,b,x0,functionM1,functionM1t,funM2,maxit,tol);
-assert_checkalmostequal ( xcomputed , xexpected , %eps);
-[xcomputed, flag, err, iter, res]=qmr(funA,b,x0,functionM1,functionM1t,funM2,maxit,tol);
 assert_checkalmostequal ( xcomputed , xexpected , %eps);

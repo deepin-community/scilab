@@ -1,5 +1,5 @@
 // ============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2012 - DIGITEO - Antoine ELIAS
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -24,6 +24,7 @@ PC = [pC,pC;pC,pC];
 //r ^ r
 assert_checkalmostequal(r ^ r, 4);
 //r ^ c
+
 assert_checkalmostequal(r ^ c, 0.3669139494866+%i*1.9660554808225);
 //c ^ r
 assert_checkequal(c ^ r, -3+%i*4);
@@ -50,6 +51,11 @@ assert_checkalmostequal(c ^ R, expm(log(c) * R));
 //c ^ C
 assert_checkalmostequal(c ^ C, expm(log(c) * C));
 
+r1 = [1, -2.32, 1] .^ -1.123;
+assert_checkalmostequal(r1, [1, -0.359991792326739168395+0.1464703519103459083972*%i, 1]);
+msg2 = msprintf(_("%s: Wrong size for input argument #%d: Square matrix expected.\n"), "%s_pow", 1);
+assert_checkerror("r2 = [1, -2.32, 1] ^ -1.123;", msg2);
+
 
 //POLY
 
@@ -73,9 +79,10 @@ assert_checkequal(PR ^ r, [2+8*%s^2+12*%s^3+8*%s^4+24*%s^5+18*%s^6,2+8*%s^2+12*%
 //PC ^ r
 assert_checkequal(PC ^ r, [%i*4+(%i*16)*%s^2+(%i*24)*%s^3+(%i*16)*%s^4+(%i*48)*%s^5+(%i*36)*%s^6,%i*4+(%i*16)*%s^2+(%i*24)*%s^3+(%i*16)*%s^4+(%i*48)*%s^5+(%i*36)*%s^6;%i*4+(%i*16)*%s^2+(%i*24)*%s^3+(%i*16)*%s^4+(%i*48)*%s^5+(%i*36)*%s^6,%i*4+(%i*16)*%s^2+(%i*24)*%s^3+(%i*16)*%s^4+(%i*48)*%s^5+(%i*36)*%s^6]);
 
+
 // Error handling for non-square matrices
 msg1 = msprintf(_("%s: Wrong size for input argument #%d: Square matrix expected.\n"), "%s_pow", 2);
-msg2= msprintf(_("%s: Wrong size for input argument #%d: Square matrix expected.\n"), "%s_pow", 1);
+msg2 = msprintf(_("%s: Wrong size for input argument #%d: Square matrix expected.\n"), "%s_pow", 1);
 
 NonSquare = [1 2; 3 4; 5 6];
 assert_checkerror("2^NonSquare", msg1);

@@ -1,6 +1,6 @@
 //<-- CLI SHELL MODE -->
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010 - DIGITEO - Bruno JOFRET
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -35,67 +35,67 @@ endfunction
 T() | F()
   "Call return [%T] ..."
   "Call return [%F] ..."
- ans  =
+ ans = 
   T
 T() | T()
   "Call return [%T] ..."
   "Call return [%T] ..."
- ans  =
+ ans = 
   T
 F() | T()
   "Call return [%F] ..."
   "Call return [%T] ..."
- ans  =
+ ans = 
   T
 F() | F()
   "Call return [%F] ..."
   "Call return [%F] ..."
- ans  =
+ ans = 
   F
 TT() | TT()
   "Call return [%T %T] ..."
   "Call return [%T %T] ..."
- ans  =
+ ans = [1x2 boolean]
   T T
 TT() | TF()
   "Call return [%T %T] ..."
   "Call return [%T %F] ..."
- ans  =
+ ans = [1x2 boolean]
   T T
 TT() | FF()
   "Call return [%T %T] ..."
   "Call return [%F %F] ..."
- ans  =
+ ans = [1x2 boolean]
   T T
 TF() | TT()
   "Call return [%T %F] ..."
   "Call return [%T %T] ..."
- ans  =
+ ans = [1x2 boolean]
   T T
 TF() | TF()
   "Call return [%T %F] ..."
   "Call return [%T %F] ..."
- ans  =
+ ans = [1x2 boolean]
   T F
 TF() | FF()
   "Call return [%T %F] ..."
   "Call return [%F %F] ..."
- ans  =
+ ans = [1x2 boolean]
   T F
 FF() | TT()
   "Call return [%F %F] ..."
   "Call return [%T %T] ..."
- ans  =
+ ans = [1x2 boolean]
   T T
 FF() | TF()
   "Call return [%F %F] ..."
   "Call return [%T %F] ..."
- ans  =
+ ans = [1x2 boolean]
   T F
 FF() | FF()
   "Call return [%F %F] ..."
   "Call return [%F %F] ..."
- ans  =
+ ans = [1x2 boolean]
   F F
 // Shortcuted.
 if T() | F() then disp("Success"); else disp("Failed"); end
@@ -155,67 +155,67 @@ if FF() | FF() then disp("Failed"); else disp("Success"); end
 T() & F()
   "Call return [%T] ..."
   "Call return [%F] ..."
- ans  =
+ ans = 
   F
 T() & T()
   "Call return [%T] ..."
   "Call return [%T] ..."
- ans  =
+ ans = 
   T
 F() & T()
   "Call return [%F] ..."
   "Call return [%T] ..."
- ans  =
+ ans = 
   F
 F() & F()
   "Call return [%F] ..."
   "Call return [%F] ..."
- ans  =
+ ans = 
   F
 TT() & TT()
   "Call return [%T %T] ..."
   "Call return [%T %T] ..."
- ans  =
+ ans = [1x2 boolean]
   T T
 TT() & TF()
   "Call return [%T %T] ..."
   "Call return [%T %F] ..."
- ans  =
+ ans = [1x2 boolean]
   T F
 TT() & FF()
   "Call return [%T %T] ..."
   "Call return [%F %F] ..."
- ans  =
+ ans = [1x2 boolean]
   F F
 TF() & TT()
   "Call return [%T %F] ..."
   "Call return [%T %T] ..."
- ans  =
+ ans = [1x2 boolean]
   T F
 TF() & TF()
   "Call return [%T %F] ..."
   "Call return [%T %F] ..."
- ans  =
+ ans = [1x2 boolean]
   T F
 TF() & FF()
   "Call return [%T %F] ..."
   "Call return [%F %F] ..."
- ans  =
+ ans = [1x2 boolean]
   F F
 FF() & TT()
   "Call return [%F %F] ..."
   "Call return [%T %T] ..."
- ans  =
+ ans = [1x2 boolean]
   F F
 FF() & TF()
   "Call return [%F %F] ..."
   "Call return [%T %F] ..."
- ans  =
+ ans = [1x2 boolean]
   F F
 FF() & FF()
   "Call return [%F %F] ..."
   "Call return [%F %F] ..."
- ans  =
+ ans = [1x2 boolean]
   F F
 // Shortcuted.
 if F() & T() then disp("Failed"); else disp("Success"); end

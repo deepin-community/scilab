@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2000 - INRIA - Carlos Klimann
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -20,9 +20,9 @@
     </refnamediv>
     <refsynopsisdiv>
         <title>Syntax</title>
-        <synopsis>s=nanstdev(x)
-            s=nanstdev(x,'r') or m=nanstdev(x,1)
-            s=nanstdev(x,'c') or m=nanstdev(x,2)
+        <synopsis>
+            s = nanstdev(x)
+            s = nanstdev(x, orientation)
         </synopsis>
     </refsynopsisdiv>
     <refsection>
@@ -32,6 +32,29 @@
                 <term>x</term>
                 <listitem>
                     <para>real or complex vector or matrix</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>orientation</term>
+                <listitem>
+                    <para>
+                        index of the dimension along which the nanstdev is computed. It can be either
+                    </para>
+                    <itemizedlist>
+                        <listitem>
+                            a character <literal>"*"</literal> (default), <literal>"r"</literal> or
+                          <literal>"c"</literal>
+                        </listitem>
+                        <listitem>
+                            a positive integer: 1 or 2. 1 is equivalent to "r" and 2 is equivalent to "c".
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>m</term>
+                <listitem>
+                    <para>real or complex scalar or vector</para>
                 </listitem>
             </varlistentry>
         </variablelist>
@@ -44,20 +67,21 @@
             NANs).
         </para>
         <para>
-            For a vector or a matrix <literal> x</literal>, <literal> s=nanstdev(x)</literal>
+            For a vector or a matrix <literal> x</literal>, <literal> s = nanstdev(x)</literal> 
+            or <literal> s = nanstdev(x, "*")</literal> 
             returns in the scalar  <literal> s</literal> the  standard deviation
             of all the entries of <literal>x</literal> (ignoring the NANs).
         </para>
         <para>
-            <literal>s=nanstdev(x,'r')</literal>        (or,  equivalently,
-            <literal>  s=nanstdev(x,1) </literal>) is  the rowwise standard deviation.
+            <literal>s = nanstdev(x, 'r')</literal>        (or,  equivalently,
+            <literal>  s = nanstdev(x, 1) </literal>) is  the rowwise standard deviation.
             It returns in each entry of the row  vector <literal> s</literal> the
             standard deviation of each column of <literal> x</literal> (ignoring
             the NANs).
         </para>
         <para>
-            <literal>s=nanstdev(x,'c')</literal>          (or,      equivalently,
-            <literal>s=nanstdev(x,2)</literal>)   is the columnwise      standard
+            <literal>s = nanstdev(x, 'c')</literal>          (or,      equivalently,
+            <literal>s = nanstdev(x, 2)</literal>)   is the columnwise      standard
             deviation. It returns in each entry of the column vector
             <literal>s</literal> the standard  deviation of  each row of  <literal>x</literal>
             (ignoring the NANs).

@@ -5,9 +5,6 @@
 // =============================================================================
 // <-- Non-regression test for bug 275 -->
 //
-// <-- URL -->
-//  http://forge.scilab.org/index.php/p/csv-readwrite/issues/275/
-//
 // <-- Short Description -->
 // The default precision is insufficient.
 // =============================================================================

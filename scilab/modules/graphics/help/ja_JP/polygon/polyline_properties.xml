@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA - Djalel Abdemouche
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -596,8 +596,7 @@ p.line_style=4;
             <revision>
                 <revnumber>5.4.0</revnumber>
                 <revremark>line_style = 0 は廃止予定です.代わりに 1 を使用してください
-                    (両者は等価で,共に実線を意味します). Scilab 5.4.1以降,値0を使用すると
-                    エラーを発生します. New line_style values 9 and 10 added.
+                    (両者は等価で,共に実線を意味します). New line_style values 9 and 10 added.
                 </revremark>
             </revision>
             <revision>
@@ -631,6 +630,12 @@ p.line_style=4;
                             can have its own individual mark colors and size.
                         </listitem>
                     </itemizedlist>
+                </revremark>
+            </revision>
+            <revision>
+                <revnumber>2023.0.0</revnumber>
+                <revremark>
+                  line_style value 0 is no more available.
                 </revremark>
             </revision>
         </revhistory>

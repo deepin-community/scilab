@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2013 - Scilab Enterprises - Paul Bignier : added "roots2" (daskr)
  * Copyright (C) 2008 - INRIA
  * ...
@@ -22,19 +22,19 @@
     </refnamediv>
     <refsynopsisdiv>
         <title>Séquence d'appel</title>
-        <synopsis> y = dae(initial, t0, t, res)
-            [y [,hd]] = dae(initial, t0, t [[,rtol], atol], res [,jac] [,hd])
-            [y, rd] = dae("root", initial, t0, t, res, ng, surface)
-            [y, rd [,hd]] = dae("root", initial, t0, t [[,rtol], atol], res [,jac], ng, surface [,hd])
-            [y, rd] = dae("root2", initial, t0, t, res, ng, surface)
-            [y, rd [,hd]] = dae("root2", initial, t0, t [[,rtol], atol], res [,jac], ng, surface [, psol, pjac] [, hd])
+        <synopsis> y = dae(y0, t0, t, res)
+            [y [,hd]] = dae(y0, t0, t [[,rtol], atol], res [,jac] [,hd])
+            [y, rd] = dae("root", y0, t0, t, res, ng, surface)
+            [y, rd [,hd]] = dae("root", y0, t0, t [[,rtol], atol], res [,jac], ng, surface [,hd])
+            [y, rd] = dae("root2", y0, t0, t, res, ng, surface)
+            [y, rd [,hd]] = dae("root2", y0, t0, t [[,rtol], atol], res [,jac], ng, surface [, psol, pjac] [, hd])
         </synopsis>
     </refsynopsisdiv>
     <refsection>
         <title>Paramètres</title>
         <variablelist>
             <varlistentry>
-                <term>initial</term>
+                <term>y0</term>
                 <listitem>
                     <para>
                         vecteur colonne. Peut valoir <literal>x0</literal> ou
@@ -64,17 +64,6 @@
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term>atol</term>
-                <listitem>
-                    <para>
-                        un scalaire ou vecteur colonne réel de même taille que
-                        <literal>x0</literal>, la tolérance absolue de la solution.
-                        Si <literal>atol</literal> est un vecteur, les tolérances
-                        sont spécifiées pour chaque composante de l'état.
-                    </para>
-                </listitem>
-            </varlistentry>
-            <varlistentry>
                 <term>rtol</term>
                 <listitem>
                     <para>
@@ -86,20 +75,31 @@
                 </listitem>
             </varlistentry>
             <varlistentry>
+                <term>atol</term>
+                <listitem>
+                    <para>
+                        un scalaire ou vecteur colonne réel de même taille que
+                        <literal>x0</literal>, la tolérance absolue de la solution.
+                        Si <literal>atol</literal> est un vecteur, les tolérances
+                        sont spécifiées pour chaque composante de l'état.
+                    </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
                 <term>res</term>
                 <listitem>
                     <para>
                         une fonction <link linkend="external" role="" version="">external</link>, calcule la valeur de
-                        <literal>g(t,y,ydot)</literal>. Peut être
+                        <literal>g(t, y, ydot)</literal>. Peut être
                     </para>
                     <variablelist>
                         <varlistentry>
                             <term>une fonction Scilab</term>
                             <listitem>
                                 <para>Dans ce cas, sa séquence d'appel doit être
-                                    <literal>[r,ires]=res(t,x,xdot)</literal> et
+                                    <literal>[r, ires] = res(t, x, xdot)</literal> et
                                     <literal>res</literal> doit retourner le résidu
-                                    <literal>r=g(t,x,xdot)</literal> et un drapeau d'erreur
+                                    <literal>r = g(t, x, xdot)</literal> et un drapeau d'erreur
                                     <literal>ires</literal>.
                                 </para>
                                 <para>
@@ -109,10 +109,10 @@
                                 </para>
                                 <para>
                                     <literal>ires = -1</literal> si le résidu est
-                                    localement non-défini pour <literal>g(t,x,xdot)</literal>.
+                                    localement non-défini pour <literal>g(t, x, xdot)</literal>.
                                 </para>
                                 <para>
-                                    <literal>ires =-2</literal> si le paramètres ne sont pas admissibles.
+                                    <literal>ires = -2</literal> si le paramètres ne sont pas admissibles.
                                 </para>
                             </listitem>
                         </varlistentry>
@@ -124,17 +124,17 @@
                                     Elle doit se présenter comme suit:
                                 </para>
                                 <screen><![CDATA[
-list(res,p1,p2,...)
+list(res, p1, p2,...)
 ]]></screen>
                                 <para>où la séquence d'appel de la fonction
                                     <literal>res</literal> est
                                 </para>
                                 <screen><![CDATA[
-r=res(t,y,ydot,p1,p2,...)
+r = res(t, y, ydot, p1, p2,...)
 ]]></screen>
                                 <para>
                                     <literal>res</literal> retourne toujours le résidu comme fonction de
-                                    <literal>(t,x,xdot,x1,x2,...)</literal>, et
+                                    <literal>(t, x, xdot, x1, x2, ...)</literal>, et
                                     <literal>p1, p2,...</literal> sont des paramètres de la fonction.
                                 </para>
                             </listitem>
@@ -152,7 +152,7 @@ r=res(t,y,ydot,p1,p2,...)
                                             La séquence d'appel en Fortran doit être
                                         </para>
                                         <para>
-                                            <literal>&lt;r_name&gt;(t,x,xdot,res,ires,rpar,ipar)</literal>
+                                            <literal>&lt;r_name&gt;(t, x, xdot, res, ires, rpar, ipar)</literal>
                                         </para>
                                         <para>
                                             <literal>double precision
@@ -233,9 +233,9 @@ r=res(t,y,ydot,p1,p2,...)
                             <term>une fonction Scilab</term>
                             <listitem>
                                 <para>Sa séquence d'appel doit être
-                                    <literal>r=jac(t,x,xdot,cj)</literal> et la fonction
+                                    <literal>r = jac(t, x, xdot, cj)</literal> et la fonction
                                     <literal>jac</literal> doit retourner
-                                    <literal>r=dg(t,x,xdot)/dy+cj*dg(t,x,xdot)/dxdot</literal>
+                                    <literal>r = dg(t, x, xdot)/dy + cj * dg(t, x, xdot)/dxdot</literal>
                                     où <literal>cj</literal> est un scalaire réel.
                                 </para>
                             </listitem>
@@ -259,7 +259,7 @@ r = jac(t,x,xdot,p1,p2,...)
                                 <para>
                                     <literal>jac</literal> retourne toujours
                                     <literal>dg/dx+cj*dg/dxdot</literal> comme fonction de
-                                    <literal>(t,x,xdot,cj,p1,p2,...)</literal>.
+                                    <literal>(t, x, xdot, cj, p1, p2,...)</literal>.
                                 </para>
                             </listitem>
                         </varlistentry>
@@ -322,7 +322,7 @@ r = jac(t,x,xdot,p1,p2,...)
                             <term>une fonction Scilab</term>
                             <listitem>
                                 <para>Sa séquence d'appel doit être
-                                    <literal>r=surface(t,x)</literal>, cette fonction doit retourner
+                                    <literal>r = surface(t, x)</literal>, cette fonction doit retourner
                                     un vecteur colonne à <literal>ng</literal> éléments.
                                 </para>
                             </listitem>
@@ -336,13 +336,13 @@ r = jac(t,x,xdot,p1,p2,...)
                                     Elle doit se présenter comme suit :
                                 </para>
                                 <screen><![CDATA[
-list(surface,p1,p2,...)
+list(surface, p1, p2,...)
 ]]></screen>
                                 <para>où la qéquence d'appel de la fonction
                                     <literal>surface</literal> est
                                 </para>
                                 <screen><![CDATA[
-r = surface(t,x,p1,p2,...)
+r = surface(t, x, p1, p2,...)
 ]]></screen>
                             </listitem>
                         </varlistentry>
@@ -368,7 +368,7 @@ r = surface(t,x,p1,p2,...)
                                             </literal>
                                         </para>
                                         <para>
-                                            <literal>integer nx, ng,ipar(*)</literal>
+                                            <literal>integer nx, ng, ipar(*)</literal>
                                         </para>
                                     </listitem>
                                     <listitem>
@@ -404,18 +404,18 @@ r = surface(t,x,p1,p2,...)
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term>pjac</term>
+                <term>psol</term>
                 <listitem>
                     <para>
-                        external (fonction, liste or chaîne de caractères). Voir <link linkend="daskr">daskr</link>
+                        external (fonction, liste or chaîne de caractères).
                     </para>
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term>psol</term>
+                <term>pjac</term>
                 <listitem>
                     <para>
-                        external (fonction, liste or chaîne de caractères). Voir <link linkend="daskr">daskr</link>
+                        external (fonction, liste or chaîne de caractères).
                     </para>
                 </listitem>
             </varlistentry>
@@ -449,14 +449,8 @@ r = surface(t,x,p1,p2,...)
     <refsection>
         <title>Description</title>
         <para>
-            La fonction <literal>dae</literal> est une gateway construite sur les solveurs
-            <link linkend="dassl">dassl</link>, <link linkend="dasrt">dasrt</link>
-            et <link linkend="daskr">daskr</link>
-            destinés à l'intégration implicite d'équations différentielles.
-        </para>
-        <para>
-            L'option <literal>"root"</literal> appelle la routine <link linkend="dasrt">dasrt</link>,
-            et <literal>"root2"</literal> appelle <link linkend="dasrt">daskr</link>.
+            La fonction <literal>dae</literal> résout l'équation différentielle algébrique et renvoie l'évolution 
+            de y à des moments donnés
         </para>
         <screen><![CDATA[
 g(t, x, xdot) = 0
@@ -510,7 +504,7 @@ y = dae([x0, xd0], 0, 4d10, chemres); // Sans jacobian
 y = dae([x0, xd0], 0, 4d10, chemres, chemjac); // Avec jacobien
      ]]></programlisting>
         <para>
-            Exemple #2: dasrt ("root")
+            Exemple #2: utilise le solveur dasrt avec "root"
         </para>
         <programlisting role="example"><![CDATA[
 // Exemple avec du code C (compilateur C requis)
@@ -608,7 +602,7 @@ xstring(yy(1, 1)+0.1, yy(2, 1), string(nn(1)));
 cd(previous_dir);
  ]]></scilab:image>
         <para>
-            Exemple #3: daskr ("root2"), avec les routines 'psol' et 'pjac' par défaut
+            Exemple #3: utilise le solveur daskr avec le mot-clé "root2", avec les routines 'psol' et 'pjac' par défaut
         </para>
         <programlisting role="example"><![CDATA[
 // Exemple avec du code C (compilateur C requis)
@@ -712,19 +706,13 @@ cd(previous_dir);
         <title>Voir aussi</title>
         <simplelist type="inline">
             <member>
+                <link linkend="dae_root">dae_root</link>
+            </member>
+            <member>
                 <link linkend="ode">ode</link>
             </member>
             <member>
                 <link linkend="daeoptions">daeoptions</link>
-            </member>
-            <member>
-                <link linkend="dassl">dassl</link>
-            </member>
-            <member>
-                <link linkend="dasrt">dasrt</link>
-            </member>
-            <member>
-                <link linkend="daskr">daskr</link>
             </member>
             <member>
                 <link linkend="impl">impl</link>
@@ -739,5 +727,16 @@ cd(previous_dir);
                 <link linkend="external">external</link>
             </member>
         </simplelist>
+    </refsection>
+    <refsection>
+        <title>History</title>
+        <revhistory>
+            <revision>
+                <revnumber>2024.1.0</revnumber>
+                <revremark>
+                    dassl, dasrt and daskr deviennent des fonctions internes.
+                </revremark>
+            </revision>
+        </revhistory>
     </refsection>
 </refentry>

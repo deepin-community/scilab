@@ -6,7 +6,7 @@
     </refnamediv>
     <refsynopsisdiv>
         <title>Séquence d'appel</title>
-        <synopsis>contourf(x,y,z,nz,[style,strf,leg,rect,nax])</synopsis>
+        <synopsis>contourf(x, y, z, nz, [style, strf, leg, rect, nax, fpf])</synopsis>
     </refsynopsisdiv>
     <refsection role="parameters">
         <title>Paramètres</title>
@@ -82,6 +82,18 @@ plot2d(x(im)',y(jm)',-9,"000")
                     </para>
                 </listitem>
             </varlistentry>
+            <varlistentry>
+                <term>fpf</term>
+                <listitem>
+                    <para>
+                        <varname>fpf</varname> permet de changer le format des nombres affichés sur les 
+                        courbes de niveau, en utilisant la syntaxe du C (par exemple  <code>fpf="%.3f"</code>).
+                        Définir <varname>fpf</varname> à " " implique qu'aucun niveau sera affiché sur les courbes.
+                        Si <varname>fpf</varname> n'est pas défini, le format par défaut est celui utilisé dans 
+                        la fonction <link linkend="contour2d">contour2d</link>.
+                    </para>
+                </listitem>
+            </varlistentry>
         </variablelist>
     </refsection>
     <refsection role="description">
@@ -92,12 +104,6 @@ plot2d(x(im)',y(jm)',-9,"000")
             dessin 2D. Les valeurs de <literal>f(x,y)</literal> sont données par la
             matrice <literal>z</literal> aux points du plan définis dans
             <literal>x</literal> et <literal>y</literal>.
-        </para>
-        <para>Il est possible de changer le format des nombres affichés sur les
-            courbes de niveau en utilisant <literal>xset("fpf",string)</literal> où
-            <literal>string</literal> précise le format comme en langage C (par
-            exemple <literal>string="%.3f"</literal>). Utiliser
-            <literal>string=""</literal> pour revenir au format par défaut.
         </para>
         <para>
             Taper <literal>contourf()</literal> pour voir une démonstration de
@@ -137,11 +143,6 @@ g = [zeros(n,1); (1:n)'/n; ones(m-2*n,1)];
 b = [zeros(2*n,1); (1:m-2*n)'/(m-2*n)];
 h = [r g b];
 gcf().color_map = h;
-xset('fpf',' ');
-clf();
-contourf([],[],z,[-6:-1,-logspace(-5,0,10),logspace(-5,0,10),1:8],0*ones(1,m))
-
-xset('fpf','');
 clf();
 contourf([],[],z,[-6:-1,-logspace(-5,0,10),logspace(-5,0,10),1:8]);
  ]]></programlisting>
@@ -168,7 +169,6 @@ contourf([],[],z,[-6:-1,-logspace(-5,0,10),logspace(-5,0,10),1:8]);
             b = [zeros(2*n,1); (1:m-2*n)'/(m-2*n)];
             h = [r g b];
             gcf().color_map = h;
-            xset('fpf',' ');
             clf();
             contourf([],[],z,[-6:-1,-logspace(-5,0,10),logspace(-5,0,10),1:8],0*ones(1,m))
         </scilab:image>
@@ -184,9 +184,6 @@ contourf([],[],z,[-6:-1,-logspace(-5,0,10),logspace(-5,0,10),1:8]);
             </member>
             <member>
                 <link linkend="plot2d">plot2d</link>
-            </member>
-            <member>
-                <link linkend="xset">xset</link>
             </member>
         </simplelist>
     </refsection>

@@ -1,4 +1,4 @@
-c Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+c Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 c Copyright (C) INRIA
 c Copyright (C) ENPC
 c
@@ -23,7 +23,8 @@ c     &       (stk(li+j*m),j=0,n-1)
       !write (*, '(f)') dat(1)
       !write (*, '(f)') dat(2)
       do 65 i=1,m
-          write(buf,form,err=20) (dat(j*m+i),j=0, n-1)
+          write(buf,form,err=20,IOSTAT=ios) (dat(j*m+i),j=0, n-1)
+          if(ios.lt.0) goto 20
           lb1=lch
  66       lb1=lb1-1
           if(buf(lb1:lb1).eq.' ') goto 66
@@ -50,7 +51,8 @@ c     &       (stk(li+j*m),j=0,n-1)
       !write (*, '(f)') dat(1)
       !write (*, '(f)') dat(2)
       do 67 i=1,m
-          write(buf,form,err=20) (dat(j*m+i),j=0, n-1)
+          write(buf,form,err=20,IOSTAT=ios) (dat(j*m+i),j=0, n-1)
+          if(ios.lt.0) goto 20
           lb1=lch
  68       lb1=lb1-1
           if(buf(lb1:lb1).eq.' ') goto 68
@@ -74,13 +76,28 @@ c     &       (stk(li+j*m),j=0,n-1)
       character dat*(*)
       integer ierr
 
+c     crash in windows debug mode
+c     mimic writestringfile
+c     empty string => display empty line
+      if(len(dat) == 0) then
+        call basout(io, 6, "")
+        return
+      end if
 
-      write(buf,form,err=20) dat
-      lb1=lch
- 69   lb1=lb1-1
-      if(buf(lb1:lb1).eq.' ') goto 69
+      do 99 i=1,len(dat),lch
+        lb1=lch
+        if(len(dat) < (i+lch-1)) then
+          write(buf,form,err=20) dat(i:len(dat))
 
-      call basout(io, 6, buf(1:lb1))
+69        lb1=lb1-1
+          if(buf(lb1:lb1).eq.' ') goto 69
+        else
+          write(buf,form,err=20) dat(i:(i+lch-1))
+        end if
+
+        call basout(io, 6, buf(1:lb1))
+99    continue
+
       return
 
 20    ierr = 2
@@ -91,10 +108,15 @@ c     &       (stk(li+j*m),j=0,n-1)
       subroutine writestringfile(ID, form, dat, ierr)
 
       parameter (lch=4096)
-      character buf*(lch)
       integer ID,ierr
       character form*(*)
       character dat*(*)
+
+c     empty string => write empty line
+      if(len(dat) == 0) then
+        write(ID,form,err=20) ""
+        return
+      end if
 
       do 99 i=1,len(dat),lch
           if(len(dat) < (i+lch-1)) then
@@ -159,7 +181,8 @@ c     &       (stk(li+j*m),j=0,n-1)
       character form*(*)
 
       do 73 i=1,m
-          write(buf,form,err=20) (dat(j*m+i),j=0, n-1)
+          write(buf,form,err=20,IOSTAT=ios) (dat(j*m+i),j=0, n-1)
+          if(ios.lt.0) goto 20
           lb1=lch
  74       lb1=lb1-1
           if(buf(lb1:lb1).eq.' ') goto 74
@@ -210,7 +233,8 @@ c     &       (stk(li+j*m),j=0,n-1)
       character form*(*)
 
       do 79 i=1,m
-          write(buf,form,err=20) (dat(j*m+i),j=0, n-1)
+          write(buf,form,err=20,IOSTAT=ios) (dat(j*m+i),j=0, n-1)
+          if(ios.lt.0) goto 20
           lb1=lch
  80       lb1=lb1-1
           if(buf(lb1:lb1).eq.' ') goto 80

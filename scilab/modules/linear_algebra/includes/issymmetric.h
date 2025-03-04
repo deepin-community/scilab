@@ -1,6 +1,6 @@
 
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2007-2008 - INRIA - Bruno JOFRET <bruno.jofret@inria.fr>
  * Copyright (C) 2011 - DIGITEO - Antoine ELIAS
  *

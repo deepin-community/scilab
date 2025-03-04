@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2008-2008 - DIGITEO - Bruno JOFRET
  *  Copyright (C) 2015 - Scilab Enterprises - Calixte DENIZET
  *
@@ -233,16 +233,7 @@ void PrettyPrintVisitor::print(const TermColor& c, const std::wstring & str, con
     std::wstring expType;
     expType = e.getTypeString();
 
-    if (printDecoration)
-    {
-        std::wostringstream wos;
-        wos << L"Deco(" << e.getDecorator() << L")";
-        print(BOLD, expType, e.getLocation(), c, str, NORMAL, wos.str());
-    }
-    else
-    {
-        print(BOLD, expType, e.getLocation(), c, str, NORMAL, L"");
-    }
+    print(BOLD, expType, e.getLocation(), c, str, NORMAL, L"");
 }
 
 void PrettyPrintVisitor::print(const Exp & e)
@@ -371,23 +362,6 @@ void PrettyPrintVisitor::visit(const SimpleVar & e)
     START_NODE(e);
     std::wstring str;
     str = e.getSymbol().getName();
-    if (printDecoration)
-    {
-        std::wstring ty;
-        analysis::TIType type = e.getDecorator().getResult().getType();
-        if (type.type != analysis::TIType::UNKNOWN)
-        {
-            if (type.isscalar())
-            {
-                ty = L" (" + analysis::TIType::toString(type.type) + L")";
-            }
-            else
-            {
-                ty = L" (" + analysis::TIType::toString(type.type) + L"*)";
-            }
-        }
-        str += ty;
-    }
     print(RED, str, e);
 
     END_NODE();
@@ -483,6 +457,18 @@ void PrettyPrintVisitor::visit(const CallExp & e)
     }
 
     END_NODE();
+}
+
+void PrettyPrintVisitor::visit(const ArgumentsExp & e)
+{
+    START_NODE(e);
+    print(e);
+    for (exps_t::const_iterator it = e.getExps().begin (), itEnd = e.getExps().end(); it != itEnd; ++it)
+    {
+        (*it)->accept(*this);
+    }
+    END_NODE();
+    /* FIXME : Implement PrettyPrintVisitor for ArgumentsExp */
 }
 
 void PrettyPrintVisitor::visit(const IfExp & e)
@@ -663,6 +649,18 @@ void PrettyPrintVisitor::visit(const FunctionDec & e)
     END_NODE();
 }
 
+void PrettyPrintVisitor::visit(const ArgumentDec & e)
+{
+    START_NODE(e);
+    print(e);
+    e.getArgumentName()->accept(*this);
+    e.getArgumentDims()->accept(*this);
+    e.getArgumentType()->accept(*this);
+    e.getArgumentValidators()->accept(*this);
+    e.getArgumentDefaultValue()->accept(*this);
+    END_NODE();
+}
+
 void PrettyPrintVisitor::visit(const ListExp &e)
 {
     START_NODE(e);
@@ -672,47 +670,4 @@ void PrettyPrintVisitor::visit(const ListExp &e)
     e.getEnd().accept(*this);
     END_NODE();
 }
-
-void PrettyPrintVisitor::visit(const OptimizedExp &e)
-{
-    e.getOriginal()->accept(*this);
-}
-
-void PrettyPrintVisitor::visit(const MemfillExp &e)
-{
-    START_NODE(e);
-    print(e);
-    e.getValue().accept(*this);
-
-    exps_t args = e.getArgs();
-    for (auto arg : args)
-    {
-        arg->accept(*this);
-    }
-
-    END_NODE();
-}
-
-void PrettyPrintVisitor::visit(const DAXPYExp &e)
-{
-    START_NODE(e);
-    print(e);
-    e.getA().accept(*this);
-    e.getX().accept(*this);
-    e.getY().accept(*this);
-    END_NODE();
-
-    //e.getOriginal()->accept(*this);
-}
-
-void PrettyPrintVisitor::visit(const IntSelectExp & e)
-{
-    e.getOriginal()->accept(*this);
-}
-
-void PrettyPrintVisitor::visit(const StringSelectExp & e)
-{
-    e.getOriginal()->accept(*this);
-}
-
 }

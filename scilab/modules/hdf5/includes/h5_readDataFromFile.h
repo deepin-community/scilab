@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2012 - Scilab Enterprises - Antoine ELIAS
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -79,8 +79,6 @@ HDF5_SCILAB_IMPEXP int getListItemReferences(hid_t _iDatasetId, hobj_ref_t** _pi
 HDF5_SCILAB_IMPEXP int getListItemDataset(hid_t _iDatasetId, void* _piItemRef, int _iItemPos, hid_t* _piItemDataset);
 
 HDF5_SCILAB_IMPEXP int deleteListItemReferences(hid_t _iDatasetId, void* _piItemRef);
-
-HDF5_SCILAB_IMPEXP  void reset_item_count();
 
 //Scilab 6
 HDF5_SCILAB_IMPEXP int getVariableNames6(hid_t _iFile, char **names);

@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Paul Bignier: removed the instructions that
 //                                                         involved real operations, such as %pi+1,
 //                                                         because they are not handled by isnum anymore
@@ -10,8 +10,8 @@
 // <-- CLI SHELL MODE -->
 // <-- Non-regression test for bug 4401 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=4401
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/4401
 //
 // <-- Short Description -->
 // isnum returns wrong values

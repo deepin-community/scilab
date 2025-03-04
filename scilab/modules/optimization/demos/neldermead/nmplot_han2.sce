@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008-2009 - INRIA - Michael Baudin
 // Copyright (C) 2010 - DIGITEO - Allan CORNET
 // Copyright (C) 2011 - DIGITEO - Michael Baudin
@@ -90,11 +90,10 @@ function demo_nmplot_2()
     nx = 50 ;
     ny = 50;
     scf();
-    xset("fpf"," ")
     drawlater();
     xdata=linspace(xmin,xmax,nx);
     ydata=linspace(ymin,ymax,ny);
-    contour ( xdata , ydata , han2C , [0.1 0.2 0.5 1.0 1.5 1.9] )
+    contour ( xdata , ydata , han2C , [0.1 0.2 0.5 1.0 1.5 1.9] , fpf=" ")
     nmplot_simplexhistory ( nm );
     drawnow();
     demo_viewCode(filename);

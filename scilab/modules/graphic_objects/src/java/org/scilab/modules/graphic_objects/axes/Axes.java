@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2010 - DIGITEO - Manuel JULIACHS
  * Copyright (C) 2010 - DIGITEO - Bruno JOFRET
  * Copyright (C) 2013 - 2015 - Scilab Enterprises - Calixte DENIZET
@@ -21,6 +21,7 @@ import static org.scilab.modules.graphic_objects.graphicObject.GraphicObjectProp
 import static org.scilab.modules.graphic_objects.graphicObject.GraphicObjectProperties.__GO_AUTO_CLEAR__;
 import static org.scilab.modules.graphic_objects.graphicObject.GraphicObjectProperties.__GO_AUTO_MARGINS__;
 import static org.scilab.modules.graphic_objects.graphicObject.GraphicObjectProperties.__GO_AUTO_SCALE__;
+import static org.scilab.modules.graphic_objects.graphicObject.GraphicObjectProperties.__GO_AUTO_STRETCH__;
 import static org.scilab.modules.graphic_objects.graphicObject.GraphicObjectProperties.__GO_AUTO_SUBTICKS__;
 import static org.scilab.modules.graphic_objects.graphicObject.GraphicObjectProperties.__GO_AXES_BOUNDS__;
 import static org.scilab.modules.graphic_objects.graphicObject.GraphicObjectProperties.__GO_BACKGROUND__;
@@ -235,6 +236,16 @@ public class Axes extends GraphicObject {
     /** Default ClippableProperty */
     private ClippableProperty clipProperty;
 
+    //////////////
+    
+    private double[] axesScale={0,0,0};
+    
+    //////////////
+
+
+
+
+    /** TODO: add comment*
 
     /** Constructor */
     public Axes() {
@@ -453,6 +464,8 @@ public class Axes extends GraphicObject {
                 return Box.BoxProperty.ZOOMBOX;
             case __GO_AUTO_SCALE__ :
                 return Box.BoxProperty.AUTOSCALE;
+            case __GO_AUTO_STRETCH__ :
+                return Box.BoxProperty.AUTOSTRETCH;
             case __GO_FIRST_PLOT__ :
                 return Box.BoxProperty.FIRSTPLOT;
             case __GO_MARGINS__ :
@@ -667,6 +680,8 @@ public class Axes extends GraphicObject {
                     return getZoomBox();
                 case AUTOSCALE:
                     return getAutoScale();
+                case AUTOSTRETCH:
+                    return getAutoStretch();
                 case FIRSTPLOT:
                     return getFirstPlot();
             }
@@ -881,6 +896,8 @@ public class Axes extends GraphicObject {
                     return setZoomBox((Double[]) value);
                 case AUTOSCALE:
                     return setAutoScale((Boolean) value);
+                case AUTOSTRETCH:
+                    return setAutoStretch((Boolean) value);
                 case FIRSTPLOT:
                     return setFirstPlot((Boolean) value);
             }
@@ -2510,10 +2527,24 @@ public class Axes extends GraphicObject {
     }
 
     /**
+     * @return the autostretch
+     */
+    public Boolean getAutoStretch() {
+        return box.getAutoStretch();
+    }
+
+    /**
      * @param autoScale the autoscale to set
      */
     public UpdateStatus setAutoScale(Boolean autoScale) {
         return box.setAutoScale(autoScale);
+    }
+
+    /**
+     * @param autoStretch the autostretch to set
+     */
+    public UpdateStatus setAutoStretch(Boolean autoStretch) {
+        return box.setAutoStretch(autoStretch);
     }
 
     /**
@@ -2575,6 +2606,17 @@ public class Axes extends GraphicObject {
      */
     public UpdateStatus setViewAsEnum(ViewType view) {
         return camera.setView(view);
+    }
+
+    public UpdateStatus setScale(double sx, double sy, double sz) {
+        axesScale[0] = sx;
+        axesScale[1] = sy;
+        axesScale[2] = sz;
+        return UpdateStatus.Success;
+    }
+
+    public double[] getScale() {
+        return axesScale;
     }
 
     /**

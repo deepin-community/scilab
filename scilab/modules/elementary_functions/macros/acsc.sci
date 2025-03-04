@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA, Serge Steer
 // Copyright (C) DIGITEO - 2011 - Allan CORNET
 //
@@ -14,13 +14,8 @@
 function y = acsc(x)
     //Inverse secant.
 
-    rhs = argn(2);
-    if rhs <> 1 then
-        error(msprintf(gettext("%s: Wrong number of input argument(s): %d expected.\n"),"acsc", 1));
-    end
-    
-    if and(type(x) <> [1 5]) then
-        error(msprintf(gettext("%s: Wrong type for input argument #%d: Real or complex, sparse or full matrix expected.\n"), "acsc", 1));
+    arguments
+        x {mustBeA(x, ["double", "sparse"])}
     end
 
     y = asin(ones(x)./x);

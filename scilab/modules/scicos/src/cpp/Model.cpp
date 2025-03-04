@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2014-2017 - Scilab Enterprises - Clement DAVID
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -166,6 +166,10 @@ void Model::deleteObject(model::BaseObject* object)
         if (allObjects.erase(object->id()))
         {
             deleteBaseObject(object);
+
+            // reset the lastId for reproducibility
+            if (allObjects.empty())
+                lastId = ScicosID();
         }
         else
         {

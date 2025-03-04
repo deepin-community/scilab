@@ -1,5 +1,5 @@
 /*
-* ( http://www.scilab.org/ ) - This file is part of Scilab
+* ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) DIGITEO - 2009-2010 - Allan CORNET
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises

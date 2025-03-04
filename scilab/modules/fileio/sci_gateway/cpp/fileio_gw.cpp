@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2010-2010 - DIGITEO - Bruno JOFRET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -20,8 +20,7 @@
 #define MODULE_NAME L"fileio"
 
 #ifdef _MSC_VER
-#pragma comment(lib,"../../../../bin/libxml2.lib")
-#pragma comment(lib,"../../../../bin/libcurl.lib")
+#pragma comment(lib,"../../../../bin/archive.lib")
 #endif
 
 extern "C"
@@ -77,7 +76,8 @@ int FileioModule::Load()
     symbol::Context::getInstance()->addFunction(types::Function::createFunction(L"fscanfMat", &sci_fscanfMat, MODULE_NAME));
     symbol::Context::getInstance()->addFunction(types::Function::createFunction(L"getURL", &sci_getURL, MODULE_NAME));
     symbol::Context::getInstance()->addFunction(types::Function::createFunction(L"movefile", &sci_movefile, MODULE_NAME));
-    symbol::Context::getInstance()->addFunction(types::Function::createFunction(L"splitURL", &sci_splitURL, MODULE_NAME));
     symbol::Context::getInstance()->addFunction(types::Function::createFunction(L"tempname", &sci_tempname, MODULE_NAME));
+    symbol::Context::getInstance()->addFunction(types::Function::createFunction(L"decompress", &sci_decompress, MODULE_NAME));
+    symbol::Context::getInstance()->addFunction(types::Function::createFunction(L"compress", &sci_compress, MODULE_NAME));
     return 1;
 }

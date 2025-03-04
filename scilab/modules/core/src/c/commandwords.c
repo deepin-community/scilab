@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2007 - INRIA - Allan CORNET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -18,12 +18,7 @@
 #include "BOOL.h"
 #include "os_string.h"
 
-
-/*--------------------------------------------------------------------------*/
-/* if you update command.f , please update this file too ... */
-/*--------------------------------------------------------------------------*/
-static const int nbrCommands = 29;
-/*--------------------------------------------------------------------------*/
+static const int nbrCommands = 30;
 static char *CommandWords[] =
 {
     "if", "else",
@@ -40,14 +35,30 @@ static char *CommandWords[] =
     "function", "endfunction",
     "clc", "continue",
     "try", "catch",
-    "exit"
+    "exit", "arguments"
 };
+
+static const int nbrMustBe = 30;
+static char* MustBe[] = {
+    "mustBePositive", "mustBeNonpositive", "mustBeNonnegative",
+    "mustBeNegative", "mustBeFinite", "mustBeNonNan",
+    "mustBeNonzero", "mustBeNonsparse", "mustBeReal",
+    "mustBeInteger", "mustBeGreaterThan", "mustBeLessThan",
+    "mustBeGreaterThanOrEqual", "mustBeLessThanOrEqual", "mustBeA",
+    "mustBeNumeric", "mustBeNumericOrLogical", "mustBeNumericOrBoolean",
+    "mustBeNonempty", "mustBeScalarOrEmpty", "mustBeVector",
+    "mustBeMember", "mustBeInRange", "mustBeFile",
+    "mustBeFolder", "mustBeNonzeroLengthText", "mustBeValidVariableName",
+    "mustBeEqualDims", "mustBeSameType", "mustBeSquare"
+};
+
+
 /*--------------------------------------------------------------------------*/
 static void SortStrings(char **Strs, int SizeOfStrs);
 /*--------------------------------------------------------------------------*/
-char **getcommandkeywords(int *sizearray)
+char** getcommandkeywords(int* sizearray)
 {
-    char **keywords = NULL;
+    char** keywords = NULL;
 
     keywords = (char**)MALLOC(sizeof(char*) * nbrCommands);
 
@@ -58,7 +69,7 @@ char **getcommandkeywords(int *sizearray)
         {
             keywords[i] = os_strdup(CommandWords[i]);
         }
-        *sizearray =  nbrCommands;
+        *sizearray = nbrCommands;
 
         SortStrings(keywords, *sizearray);
     }
@@ -70,7 +81,33 @@ char **getcommandkeywords(int *sizearray)
     return keywords;
 }
 /*--------------------------------------------------------------------------*/
-static void SortStrings(char **Strs, int SizeOfStrs)
+char** getmustbekeywords(int* sizearray)
+{
+    char** keywords = NULL;
+
+    keywords = (char**)MALLOC(sizeof(char*) * nbrMustBe);
+
+    if (keywords)
+    {
+        int i = 0;
+        for (i = 0; i < nbrMustBe; i++)
+        {
+            keywords[i] = os_strdup(MustBe[i]);
+        }
+
+        *sizearray = nbrMustBe;
+
+        SortStrings(keywords, *sizearray);
+    }
+    else
+    {
+        *sizearray = 0;
+    }
+
+    return keywords;
+}
+/*--------------------------------------------------------------------------*/
+static void SortStrings(char** Strs, int SizeOfStrs)
 {
     int fin, i;
     for (fin = SizeOfStrs - 1; fin > 0; fin--)

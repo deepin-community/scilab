@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2011 - DIGITEO - Sylvestre Ledru
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
@@ -17,7 +17,10 @@
     </refnamediv>
     <refsynopsisdiv>
         <title>呼び出し手順</title>
-        <synopsis>MPI_Irecv(rank,tag)</synopsis>
+        <synopsis>
+            MPI_Irecv(rank, tag)
+            MPI_Irecv(rank, tag, comm=mpi_comm)
+        </synopsis>
     </refsynopsisdiv>
     <refsection>
         <title>引数</title>
@@ -32,6 +35,15 @@
                 <term>tag</term>
                 <listitem>
                     <para>タグ. TODO</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>comm=mpi_comm</term>
+                <listitem>
+                    <para>If the optional argument "comm" is given,
+                        this function will use the MPI communicator created by <link linkend="MPI_Create_comm">MPI_Create_comm</link>.
+                        If not, the default MPI_COMM_WORLD is used.
+                    </para>
                 </listitem>
             </varlistentry>
         </variablelist>
@@ -59,27 +71,27 @@
     </refsection>
     <refsection>
         <title>例</title>
-        <programlisting role="example"><![CDATA[
-                MPI_Init();
-                rnk =    MPI_Comm_rank();
-                sizeNodes =    MPI_Comm_size();
-                SLV = rnk;
-                Master = ~ SLV;
-                assert_checkequal(MPI_Comm_size(), 2);
-                if Master
-                   for slaveId = 1:sizeNodes-1
-                     value = slaveId*2
-                     MPI_Isend(value, slaveId, 42);
-                   end
-                else
-                    rankSource=0;
-                    tag=0;
-                    MPI_Irecv(rankSource, tag, 42); // MPI_Irecv は値を返しません
-                    value=MPI_Wait(42) // 値はMPI_Waitで取得します
-                    assert_checkequal(value,2);
+        <programlisting role="no-scilab-exec"><![CDATA[
+            MPI_Init();
+            rnk = MPI_Comm_rank();
+            sizeNodes = MPI_Comm_size();
+            SLV = rnk;
+            Master = ~ SLV;
+            assert_checkequal(MPI_Comm_size(), 2);
+            if Master
+                for slaveId = 1:sizeNodes-1
+                    value = slaveId*2
+                    MPI_Isend(value, slaveId, 42);
                 end
-                MPI_Finalize();
-                exit()
+            else
+                rankSource = 0;
+                tag = 0;
+                MPI_Irecv(rankSource, tag, 42); // MPI_Irecv は値を返しません
+                value = MPI_Wait(42) // 値はMPI_Waitで取得します
+                assert_checkequal(value,2);
+            end
+            MPI_Finalize();
+            exit()
            ]]> </programlisting>
     </refsection>
     <refsection role="see also">

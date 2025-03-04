@@ -1,15 +1,16 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2011 - Calixte DENIZET
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
 // <-- CLI SHELL MODE -->
+// <-- NO CHECK REF -->
 //
 // <-- Non-regression test for bug 9264 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/9264
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/9264
 //
 // <-- Short Description -->
 // Big loss of performance on mputl
@@ -25,9 +26,9 @@ if haveacompiler() then
   exec loader.sce;
   
   M = string(rand(200,1000));
-  tic();
+  timer();
   bug9264(M);
-  T = toc();
+  t1 = timer();
   // More than 2 seconds to read a matrix is not normal
-  if T > 2 then pause, end
+  if t1 > 2 then pause, end
 end

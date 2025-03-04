@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010 - INRIA - Serge Steer
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -29,8 +29,12 @@ function x = %hm_and(m,d)
             return
         end
     end
+    N = size(dims,"*");
+    if type(d) <> 1 | ~isreal(d) | length(d) <> 1 | d <> int(d) | d < 1 | d > N
+        msg = _("%s: Argument #%d: Integer in [%d, %d] expected.\n")
+        error(msprintf(msg, "and", 2, 1, N))
+    end
 
-    N=size(dims,"*");
     p1=prod(dims(1:d-1));// step to build one vector on which and is applied
     p2=p1*dims(d);//step for beginning of next vectors
     ind=(0:p1:p2-1)';// selection for building one vector

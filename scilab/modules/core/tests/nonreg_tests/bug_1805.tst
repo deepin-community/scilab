@@ -1,6 +1,6 @@
 //<-- CLI SHELL MODE -->
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2005-2008 - INRIA - Serge Steer
 // Copyright (C) 2019 - Samuel GOUGEON
 //
@@ -12,8 +12,8 @@
 //
 // <-- Non-regression test for bug 1805 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/1805
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/1805
 //
 // <-- Short Description -->
 //    varargout must be a list. It is initialized to list() by default

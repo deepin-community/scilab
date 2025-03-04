@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009 - DIGITEO - Vincent COUVERT
  * Copyright (C) 2011-2015 - Scilab Enterprises - Clement DAVID
  *
@@ -23,11 +23,13 @@ import java.awt.event.KeyEvent;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.scilab.modules.graph.ScilabGraph;
 import org.scilab.modules.graph.actions.base.DefaultAction;
-import org.scilab.modules.gui.bridge.filechooser.SwingScilabFileChooser;
+import org.scilab.modules.gui.filechooser.Juigetfile;
 import org.scilab.modules.gui.filechooser.ScilabFileChooser;
+import org.scilab.modules.gui.filechooser.FileChooser;
 import org.scilab.modules.gui.menuitem.MenuItem;
 import org.scilab.modules.xcos.graph.XcosDiagram;
 import org.scilab.modules.xcos.io.XcosFileType;
@@ -92,28 +94,30 @@ public final class SaveAsAction extends DefaultAction {
         if (graph.saveDiagramAs(null)) {
             graph.setModified(false);
         }
-
     }
 
     /*
      * Helpers functions to share file chooser code
      */
-    public static SwingScilabFileChooser createFileChooser() {
-        final SwingScilabFileChooser fc = ((SwingScilabFileChooser) ScilabFileChooser.createFileChooser().getAsSimpleFileChooser());
+
+    public static FileChooser createFileChooser() {
+        final FileChooser fc = ScilabFileChooser.createFileChooser();
 
         fc.setTitle(XcosMessages.SAVE_AS);
-        fc.setUiDialogType(JFileChooser.SAVE_DIALOG);
+        fc.setUiDialogType(Juigetfile.SAVE_DIALOG);
         fc.setMultipleSelection(false);
         return fc;
     }
 
-    public static void configureFileFilters(final JFileChooser fc) {
+    public static void configureFileFilters(final FileChooser fc) {
         fc.setAcceptAllFileFilterUsed(false);
 
         final FileFilter[] filters = XcosFileType.getSavingFilters();
         for (FileFilter fileFilter : filters) {
-            fc.addChoosableFileFilter(fileFilter);
+            String[] exts = {"*."+((FileNameExtensionFilter)fileFilter).getExtensions()[0]};
+            String[] descr = {((FileNameExtensionFilter)fileFilter).getDescription()};
+            fc.addMask(exts,descr);
         }
-        fc.setFileFilter(filters[0]);
     }
 }
+

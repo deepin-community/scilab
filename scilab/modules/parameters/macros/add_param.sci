@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) DIGITEO - 2008-2010 - Yann COLLETTE
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -11,11 +11,6 @@
 // along with this program.
 
 function plist = add_param(list_name, param_name, param_value)
-
-    if nargout == 2 then
-        warning(sprintf(_("Second output argument of %s is obsolete.\n"), "add_param"))
-        warning(sprintf(_("This argument will be permanently removed in Scilab %s"), "5.5.1"))
-    end
 
     if nargin <> 2 & nargin <> 3 then
         error(sprintf(gettext("%s: Wrong number of input arguments: %d to %d expected.\n"), "add_param", 2, 3));

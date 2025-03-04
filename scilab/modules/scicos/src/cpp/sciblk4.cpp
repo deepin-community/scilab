@@ -107,6 +107,7 @@ static bool sci2var(types::InternalType* p, void* dest, const int desttype, cons
             {
                 return sci2var(p->getAs<types::Double>(), dest, row, col);
             }
+            return false;
         }
         case types::InternalType::ScilabInt8:
         {
@@ -114,6 +115,7 @@ static bool sci2var(types::InternalType* p, void* dest, const int desttype, cons
             {
                 return sci2var(p->getAs<types::Int8>(), dest, row, col);
             }
+            return false;
         }
         case types::InternalType::ScilabInt16:
         {
@@ -121,6 +123,7 @@ static bool sci2var(types::InternalType* p, void* dest, const int desttype, cons
             {
                 return sci2var(p->getAs<types::Int16>(), dest, row, col);
             }
+            return false;
         }
         case types::InternalType::ScilabInt32:
         {
@@ -128,6 +131,7 @@ static bool sci2var(types::InternalType* p, void* dest, const int desttype, cons
             {
                 return sci2var(p->getAs<types::Int32>(), dest, row, col);
             }
+            return false;
         }
         case types::InternalType::ScilabUInt8:
         {
@@ -135,6 +139,7 @@ static bool sci2var(types::InternalType* p, void* dest, const int desttype, cons
             {
                 return sci2var(p->getAs<types::UInt8>(), dest, row, col);
             }
+            return false;
         }
         case types::InternalType::ScilabUInt16:
         {
@@ -142,6 +147,7 @@ static bool sci2var(types::InternalType* p, void* dest, const int desttype, cons
             {
                 return sci2var(p->getAs<types::UInt16>(), dest, row, col);
             }
+            return false;
         }
         case types::InternalType::ScilabUInt32:
         {
@@ -149,6 +155,7 @@ static bool sci2var(types::InternalType* p, void* dest, const int desttype, cons
             {
                 return sci2var(p->getAs<types::UInt32>(), dest, row, col);
             }
+            return false;
         }
         default:
             return false;
@@ -158,7 +165,7 @@ static bool sci2var(types::InternalType* p, void* dest, const int desttype, cons
 }
 
 /*--------------------------------------------------------------------------*/
-static bool getDoubleArray(types::InternalType* p, double* dest)
+static bool getDoubleArray(types::InternalType* p, double* dest, const int destLen)
 {
     if (p == nullptr)
     {
@@ -179,7 +186,7 @@ static bool getDoubleArray(types::InternalType* p, double* dest)
             return false;
         }
 
-        memcpy(dest, d->get(), sizeof(double) * size);
+        memcpy(dest, d->get(), sizeof(double) * std::min(size, destLen));
         return true;
     }
 
@@ -187,7 +194,7 @@ static bool getDoubleArray(types::InternalType* p, double* dest)
 }
 
 /*--------------------------------------------------------------------------*/
-static bool getDoubleArrayAsInt(types::InternalType* p, int* dest)
+static bool getDoubleArrayAsInt(types::InternalType* p, int* dest, const int destLen)
 {
     if (p == nullptr)
     {
@@ -204,7 +211,7 @@ static bool getDoubleArrayAsInt(types::InternalType* p, int* dest)
         }
 
         double* dbl = d->get();
-        for (int i = 0; i < size; ++i)
+        for (int i = 0; i < std::min(size, destLen); ++i)
         {
             dest[i] = static_cast<int>(dbl[i]);
         }
@@ -213,7 +220,18 @@ static bool getDoubleArrayAsInt(types::InternalType* p, int* dest)
 
     return false;
 }
+/*--------------------------------------------------------------------------*/
+// copy p content to dest
+template<typename T>
+static bool copy(T* dest, T* src)
+{   
+    if (dest->getRef() > 1)
+        return false;
 
+    for (int i = 0; i < src->getSize(); ++i)
+        dest->set(i, src->get(i));
+    return true;
+};
 /*--------------------------------------------------------------------------*/
 static bool getOpaquePointer(types::InternalType* p, void** dest)
 {
@@ -222,9 +240,42 @@ static bool getOpaquePointer(types::InternalType* p, void** dest)
         return false;
     }
 
-    *dest = p;
-    return true;
-}
+    types::InternalType* pITDest = *(types::InternalType**) dest;
+    if (p == pITDest)
+    {
+        // no copy needed
+        return true;
+    }
+
+    auto pType = p->getType();
+    auto destType = pITDest->getType();
+    if (pType != destType)
+    {
+        return false;
+    }
+
+    switch(pType)
+    {
+        case types::InternalType::ScilabDouble:
+            return copy<>(pITDest->getAs<types::Double>(), p->getAs<types::Double>());
+        case types::InternalType::ScilabInt8:
+            return copy<>(pITDest->getAs<types::Int8>(), p->getAs<types::Int8>());
+        case types::InternalType::ScilabInt16:
+            return copy<>(pITDest->getAs<types::Int16>(), p->getAs<types::Int16>());
+        case types::InternalType::ScilabInt32:
+            return copy<>(pITDest->getAs<types::Int32>(), p->getAs<types::Int32>());
+        case types::InternalType::ScilabUInt8:
+            return copy<>(pITDest->getAs<types::UInt8>(), p->getAs<types::UInt8>());
+        case types::InternalType::ScilabUInt16:
+            return copy<>(pITDest->getAs<types::UInt16>(), p->getAs<types::UInt16>());
+        case types::InternalType::ScilabUInt32:
+            return copy<>(pITDest->getAs<types::UInt32>(), p->getAs<types::UInt32>());
+        case types::InternalType::ScilabList:
+            return copy<>(pITDest->getAs<types::List>(), p->getAs<types::List>());
+        default:
+            return false;
+    }
+};
 
 /*--------------------------------------------------------------------------*/
 void sciblk4(scicos_block* blk, const int flag)
@@ -251,30 +302,27 @@ void sciblk4(scicos_block* blk, const int flag)
     /*****************************
     * Create Scilab tlist Blocks *
     *****************************/
-    types::InternalType* pIT = nullptr;
-    if (flag == 4) // Initialization
+    types::List* pITin = nullptr;
+    types::List** work = (types::List**) blk->work;
+    if (blk->scsptr == nullptr && *work != nullptr)
     {
-        pIT = createblklist(blk, -1, funtyp[kfun - 1]);
-        if (pIT == nullptr)
+        // re-use the TList allocated on a previous call when not a debug block
+        pITin = *work;
+        pITin->DecreaseRef();
+        pITin = refreshblklist(pITin, blk, -1, funtyp[kfun - 1], flag);
+    }
+    else
+    {
+        // Initialization of a TList from block structure
+        pITin = createblklist(blk, -1, funtyp[kfun - 1]);
+        if (pITin == nullptr)
         {
             set_block_error(-1);
             return;
         }
-        *blk->work = pIT;
-        pIT->IncreaseRef();
     }
-    else if (flag == 5) // Ending
-    {
-        pIT = *(types::InternalType**)blk->work;
-        pIT->DecreaseRef();
-    }
-    else // any other flag might use refreshed values
-    {
-        pIT = *(types::InternalType**)blk->work;
-        pIT = refreshblklist(pIT, blk, -1, funtyp[kfun - 1]);
-	}
-
-    in.push_back(pIT);
+    
+    in.push_back(pITin);
     /* * flag * */
     in.push_back(new types::Double(flag));
 
@@ -316,23 +364,21 @@ void sciblk4(scicos_block* blk, const int flag)
         ConfigVariable::resetWhereError();
 
         ConfigVariable::where_end();
-        ConfigVariable::setLastErrorFunction(pCall->getName());
         ConfigVariable::decreaseRecursion();
 
         set_block_error(-1);
         throw;
     }
 
-    pIT = out[0];
-    if (pIT->isTList() == false)
+    types::InternalType* pITout = out[0];
+    if (pITout->isTList() == false)
     {
         set_block_error(-1);
-        delete pIT;
+        pITout->killMe();
         return;
     }
-
-    types::TList* t = pIT->getAs<types::TList>();
-
+    auto t = pITout->getAs<types::TList>();
+    
     switch (flag)
     {
         /**************************
@@ -343,7 +389,7 @@ void sciblk4(scicos_block* blk, const int flag)
             if (blk->nx != 0)
             {
                 /* 14 - xd */
-                if (getDoubleArray(t->getField(L"xd"), blk->xd) == false)
+                if (getDoubleArray(t->getField(L"xd"), blk->xd, blk->nx) == false)
                 {
                     t->killMe();
                     set_block_error(-1);
@@ -353,7 +399,7 @@ void sciblk4(scicos_block* blk, const int flag)
                 if ((funtyp[kfun - 1] == 10004) || (funtyp[kfun - 1] == 10005))
                 {
                     /* 15 - res */
-                    if (getDoubleArray(t->getField(L"res"), blk->res) == false)
+                    if (getDoubleArray(t->getField(L"res"), blk->res, blk->nx) == false)
                     {
                         t->killMe();
                         set_block_error(-1);
@@ -400,7 +446,7 @@ void sciblk4(scicos_block* blk, const int flag)
             /* 7 - z */
             if (blk->nz != 0)
             {
-                if (getDoubleArray(t->getField(L"z"), blk->z) == false)
+                if (getDoubleArray(t->getField(L"z"), blk->z, blk->nz) == false)
                 {
                     t->killMe();
                     set_block_error(-1);
@@ -422,7 +468,7 @@ void sciblk4(scicos_block* blk, const int flag)
             if (blk->nx != 0)
             {
                 /* 13 - x */
-                if (getDoubleArray(t->getField(L"x"), blk->x) == false)
+                if (getDoubleArray(t->getField(L"x"), blk->x, blk->nx) == false)
                 {
                     t->killMe();
                     set_block_error(-1);
@@ -430,7 +476,7 @@ void sciblk4(scicos_block* blk, const int flag)
                 }
 
                 /* 14 - xd */
-                if (getDoubleArray(t->getField(L"xd"), blk->xd) == false)
+                if (getDoubleArray(t->getField(L"xd"), blk->xd, blk->nx) == false)
                 {
                     t->killMe();
                     set_block_error(-1);
@@ -447,7 +493,7 @@ void sciblk4(scicos_block* blk, const int flag)
         case 3:
         {
             /* 23 - evout */
-            if (getDoubleArray(t->getField(L"evout"), blk->evout) == false)
+            if (getDoubleArray(t->getField(L"evout"), blk->evout, blk->nevout) == false)
             {
                 t->killMe();
                 set_block_error(-1);
@@ -463,7 +509,7 @@ void sciblk4(scicos_block* blk, const int flag)
             /* 7 - z */
             if (blk->nz != 0)
             {
-                if (getDoubleArray(t->getField(L"z"), blk->z) == false)
+                if (getDoubleArray(t->getField(L"z"), blk->z, blk->nz) == false)
                 {
                     t->killMe();
                     set_block_error(-1);
@@ -485,7 +531,7 @@ void sciblk4(scicos_block* blk, const int flag)
             if (blk->nx != 0)
             {
                 /* 13 - x */
-                if (getDoubleArray(t->getField(L"x"), blk->x) == false)
+                if (getDoubleArray(t->getField(L"x"), blk->x, blk->nx) == false)
                 {
                     t->killMe();
                     set_block_error(-1);
@@ -493,7 +539,7 @@ void sciblk4(scicos_block* blk, const int flag)
                 }
 
                 /* 14 - xd */
-                if (getDoubleArray(t->getField(L"xd"), blk->xd) == false)
+                if (getDoubleArray(t->getField(L"xd"), blk->xd, blk->nx) == false)
                 {
                     t->killMe();
                     set_block_error(-1);
@@ -509,7 +555,7 @@ void sciblk4(scicos_block* blk, const int flag)
             /* 7 - z */
             if (blk->nz != 0)
             {
-                if (getDoubleArray(t->getField(L"z"), blk->z) == false)
+                if (getDoubleArray(t->getField(L"z"), blk->z, blk->nz) == false)
                 {
                     t->killMe();
                     set_block_error(-1);
@@ -528,6 +574,31 @@ void sciblk4(scicos_block* blk, const int flag)
                 }
             }
 
+            /* 21 - outptr */
+            if (blk->nout > 0)
+            {
+                types::InternalType* pIT = t->getField(L"outptr");
+                if (pIT && pIT->isList())
+                {
+                    types::List* lout = pIT->getAs<types::List>();
+                    if (blk->nout == lout->getSize())
+                    {
+                        for (int i = 0; i < blk->nout; ++i)
+                        {
+                            //update data
+                            const int row = blk->outsz[i];
+                            const int col = blk->outsz[i + blk->nout];
+                            const int type = blk->outsz[i + blk->nout * 2];
+                            if (sci2var(lout->get(i), blk->outptr[i], type, row, col) == false)
+                            {
+                                t->killMe();
+                                set_block_error(-1);
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
             break;
         }
 
@@ -539,7 +610,7 @@ void sciblk4(scicos_block* blk, const int flag)
             /* 7 - z */
             if (blk->nz != 0)
             {
-                if (getDoubleArray(t->getField(L"z"), blk->z) == false)
+                if (getDoubleArray(t->getField(L"z"), blk->z, blk->nz) == false)
                 {
                     t->killMe();
                     set_block_error(-1);
@@ -561,7 +632,7 @@ void sciblk4(scicos_block* blk, const int flag)
             if (blk->nx != 0)
             {
                 /* 13 - x */
-                if (getDoubleArray(t->getField(L"x"), blk->x) == false)
+                if (getDoubleArray(t->getField(L"x"), blk->x, blk->nx) == false)
                 {
                     t->killMe();
                     set_block_error(-1);
@@ -569,7 +640,7 @@ void sciblk4(scicos_block* blk, const int flag)
                 }
 
                 /* 14 - xd */
-                if (getDoubleArray(t->getField(L"xd"), blk->xd) == false)
+                if (getDoubleArray(t->getField(L"xd"), blk->xd, blk->nx) == false)
                 {
                     t->killMe();
                     set_block_error(-1);
@@ -614,7 +685,7 @@ void sciblk4(scicos_block* blk, const int flag)
             if (blk->nx != 0)
             {
                 /* 40 - xprop */
-                if (getDoubleArrayAsInt(t->getField(L"xprop"), blk->xprop) == false)
+                if (getDoubleArrayAsInt(t->getField(L"xprop"), blk->xprop, blk->nx) == false)
                 {
                     t->killMe();
                     set_block_error(-1);
@@ -630,7 +701,7 @@ void sciblk4(scicos_block* blk, const int flag)
         case 9:
         {
             /* 33 - g */
-            if (getDoubleArray(t->getField(L"g"), blk->g) == false)
+            if (getDoubleArray(t->getField(L"g"), blk->g, blk->ng) == false)
             {
                 t->killMe();
                 set_block_error(-1);
@@ -640,7 +711,7 @@ void sciblk4(scicos_block* blk, const int flag)
             if (get_phase_simulation() == 1)
             {
                 /* 39 - mode */
-                if (getDoubleArrayAsInt(t->getField(L"mode"), blk->mode) == false)
+                if (getDoubleArrayAsInt(t->getField(L"mode"), blk->mode, blk->nmode) == false)
                 {
                     t->killMe();
                     set_block_error(-1);
@@ -657,7 +728,7 @@ void sciblk4(scicos_block* blk, const int flag)
             if ((funtyp[kfun - 1] == 10004) || (funtyp[kfun - 1] == 10005))
             {
                 /* 15 - res */
-                if (getDoubleArray(t->getField(L"res"), blk->res) == false)
+                if (getDoubleArray(t->getField(L"res"), blk->res, blk->nx) == false)
                 {
                     t->killMe();
                     set_block_error(-1);
@@ -668,7 +739,17 @@ void sciblk4(scicos_block* blk, const int flag)
         }
     }
 
+    // store internal TList after the blk struct refresh
+    // Note: on call_debug_scicos, the TList is always constructed/deleted
+    if (blk->scsptr == nullptr && flag != 5)
+    {
+        t->IncreaseRef();
+        *work = t;
+    }
+
     t->killMe();
+    if (t != pITin)
+        pITin->killMe();
     return;
 }
 /*--------------------------------------------------------------------------*/

@@ -1,5 +1,5 @@
 /*
-*  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+*  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 *  Copyright (C) 2015 - Scilab Enterprises - Paul Bignier
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -30,7 +30,7 @@
 #include "list.hxx"
 #include "tlist.hxx"
 #include "mlist.hxx"
-//#include "struct.hxx"
+#include "struct.hxx"
 
 extern "C"
 {
@@ -420,6 +420,7 @@ static bool readElement(const double* const input, const int iType, const int iD
             }
             else
             {
+                // type 17 can be also be used to encode struct
                 pList = new types::MList();
             }
 
@@ -455,7 +456,7 @@ static bool readElement(const double* const input, const int iType, const int iD
                 {
                     elementDims = static_cast<int>(*(input + offset + 1));
                 }
-                types::InternalType* element;
+                types::InternalType* element = nullptr;
                 if (!readElement(input + offset, elementType, elementDims, inputRows - offset, offset, element))
                 {
                     delete pList;
@@ -469,83 +470,58 @@ static bool readElement(const double* const input, const int iType, const int iD
                 }
             }
             offset += offsetSave;
-            res = pList;
+
+            // post-process, change to a more specialized type
+            // re-allocate as a struct if there is a first field named "st"
+            if (iType == sci_mlist && pList->getSize() > 1 && pList->get(0)->isString())
+            {
+                types::String* header = pList->get(0)->getAs<types::String>();
+                if (header->getSize() > 0 && header->getSize() == pList->getSize() && wcscmp(header->get(0), L"st") == 0)
+                {
+                    // look for the "dims" field, decode the struct dims
+                    std::vector<int> dims{1, 1};
+                    types::Int32* pDims = nullptr;
+                    for (int i = 1; i < header->getSize(); ++i)
+                    {
+                        if (wcscmp(header->get(i), L"dims") == 0 && pList->get(i)->isInt())
+                        {
+                            pDims = pList->get(i)->getAs<types::Int32>();
+                            dims.resize(pDims->getSize());
+                            memcpy(dims.data(), pDims->get(), dims.size() * sizeof(int));
+                            break;
+                        }
+                    }
+
+                    // dunno how to decode multi-dimension struct, error out
+                    if (dims.size() != 2 && dims[0] != 1 && dims[1] !=  1)
+                    {
+                        delete pList;
+                        Scierror(999, _("%s: Wrong size for input argument #%d: struct size should be %dx%d.\n"), vec2varName.c_str(), 1, 1, 1);
+                        return false;
+                    }
+
+                    types::Struct* pStruct = new types::Struct((int) dims.size(), dims.data());
+                    for (int i = 1; i < header->getSize(); ++i)
+                    {
+                        types::InternalType* fieldValue = pList->get(i);
+                        if (pDims != fieldValue)
+                        {
+                            pStruct->get(0)->addField(header->get(i));
+                            pStruct->get(0)->set(header->get(i), pList->get(i));
+                        }
+                    }
+
+                    pList->killMe();
+                    pList = nullptr;
+                    res = pStruct;
+                }
+
+            }
+
+            if (pList != nullptr)
+                res = pList;
             break;
         }
-
-        // Structs are not used yet
-        //case types::InternalType::ScilabStruct :
-        //{
-        //    if (inputRows < 2)
-        //    {
-        //        Scierror(999, _("%s: Wrong size for input argument #%d: At least %dx%d expected.\n"), vec2varName.c_str(), 1, offset + 2, 1);
-        //        return false;
-        //    }
-
-        //    if (iDims <= 0)
-        //    {
-        //        res = new types::Struct();
-        //        offset += 2;
-        //        break;
-        //    }
-
-        //    int offsetSave = 0;
-        //    if (offset == 0)
-        //    {
-        //        offset += 2;
-        //    }
-        //    else
-        //    {
-        //        // If reading a sublist, start off with a new offset
-        //        offsetSave = offset;
-        //        offset = 2;
-        //    }
-        //    // Read the header...
-        //    int elementType = static_cast<int>(*(input + offset));
-        //    if (elementType != types::InternalType::ScilabString)
-        //    {
-        //        Scierror(999, _("%s: Wrong value for input argument #%d: %d (String) expected.\n"), vec2varName.c_str(), 1, 11);
-        //        return false;
-        //    }
-        //    int elementDims = static_cast<int>(*(input + offset + 1));
-        //    types::InternalType* element;
-        //    if (!readElement(input + offset, elementType, elementDims, inputRows - offset, offset, element))
-        //    {
-        //        return false;
-        //    }
-
-        //    types::Struct* pStruct = new types::Struct(1, 1);
-        //    types::String* header = element->getAs<types::String>();
-        //    // ... and copy it in 'pStruct'
-        //    for (int i = 0; i < header->getSize(); ++i)
-        //    {
-        //        pStruct->get(0)->addField(header->get(i));
-        //    }
-
-        //    for (int i = 1; i < iDims + 1; ++i)
-        //    {
-        //        if (inputRows < 2 + offset)
-        //        {
-        //            delete pStruct;
-        //            Scierror(999, _("%s: Wrong size for input argument #%d: At least %dx%d expected.\n"), vec2varName.c_str(), 1, offset + 2, 1);
-        //            return false;
-        //        }
-        //        // Extract the fields content infos and recursively call readElement
-        //        elementType = static_cast<int>(*(input + offset));
-        //        elementDims = static_cast<int>(*(input + offset + 1));
-        //        if (!readElement(input + offset, elementType, elementDims, inputRows - offset, offset, element))
-        //        {
-        //            delete pStruct;
-        //            return false;
-        //        }
-        //        pStruct->get(0)->set(header->get(i - 1), element);
-        //    }
-
-        //    header->killMe();
-        //    offset += offsetSave;
-        //    res = pStruct;
-        //    break;
-        //}
 
         default :
             Scierror(999, _("%s: Wrong value for element #%d of input argument #%d: Unknown type.\n"), vec2varName.c_str(), offset + 1, 1);
@@ -555,7 +531,7 @@ static bool readElement(const double* const input, const int iType, const int iD
     return true;
 }
 
-bool vec2var(const std::vector<double> in, types::InternalType* &out)
+bool vec2var(const std::vector<double>& in, types::InternalType* &out)
 {
     const int iType = static_cast<int>(in[0]);
     int iDims;

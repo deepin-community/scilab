@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA -
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -16,7 +16,7 @@
 <refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svg="http://www.w3.org/2000/svg" xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:db="http://docbook.org/ns/docbook" xmlns:scilab="http://www.scilab.org" xml:lang="fr" xml:id="datenum">
     <refnamediv>
         <refname>datenum</refname>
-        <refpurpose>Convertie une date en un nombre</refpurpose>
+        <refpurpose>Convertit une date en un nombre</refpurpose>
     </refnamediv>
     <refsynopsisdiv>
         <title>Séquence d'appel</title>
@@ -96,5 +96,23 @@ datenum(Annees,Mois,Jours,Heures,Minutes,Secondes)
                 <link linkend="calendar">calendar</link>
             </member>
         </simplelist>
+    </refsection>
+    <refsection role="history">
+        <title>Historique</title>
+        <revhistory>
+            <revision>
+                <revnumber>2024.1</revnumber>
+                <revdescription>
+                    <itemizedlist>
+                        <listitem>
+                            Les valeurs hors <literal>1:12</literal> pour <literal>M</literal> (mois) et hors <literal>1:31</literal> pour <literal>D</literal> (jour) sont maintenant gérées.
+                        </listitem>
+                        <listitem>
+                            <literal>datenum()</literal> gère les millisecondes.
+                        </listitem>
+                    </itemizedlist>
+                </revdescription>
+            </revision>
+        </revhistory>
     </refsection>
 </refentry>

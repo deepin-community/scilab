@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2020 - Cedric Delamarre
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -10,8 +10,8 @@
 //
 // <-- Non-regression test for bug 16396 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/16396
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/16396
 //
 // <-- Short Description -->
 // array extraction with : crash the software

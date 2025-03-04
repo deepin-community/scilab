@@ -2,6 +2,7 @@
 # windows directories (binaries)
 #
 LibScilab.def
+archive
 *.vcdef
 f2c
 intl
@@ -11,9 +12,11 @@ pcre
 umfpack
 zlib
 hdf5
-gl2ps
-Eigen
 *.lib
 Eigen
 curl
 mpi
+sioclient
+xlsx
+archive
+CppServer

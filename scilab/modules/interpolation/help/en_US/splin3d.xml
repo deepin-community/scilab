@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) R.F. Boisvert, C. De Boor (código da biblioteca FORTRAN CMLIB)
  * Copyright (C) B. Pincon (interface Scilab)
  *
@@ -147,7 +147,7 @@ end
 clf
 [nb_col, vmin, vmax] = (128, min(VF), max(VF));
 color_example = dsearch(VF,linspace(vmin,vmax,nb_col+1));
-gcf().color_map = jetcolormap(nb_col);
+gcf().color_map = jet(nb_col);
 gca().hiddencolor = gca().background;
 colorbar(vmin,vmax)
 plot3d(XF, YF, list(ZF,color_example), flag=[-1 6 4])
@@ -179,7 +179,7 @@ title("3d spline interpolation of "+func, "fontsize",3)
             nb_col = 128;
             vmin = min(VF); vmax = max(VF);
             color_example = dsearch(VF,linspace(vmin,vmax,nb_col+1));
-            gcf().color_map = jetcolormap(nb_col);
+            gcf().color_map = jet(nb_col);
             clf();
             gca().hiddencolor = gca().background;
             colorbar(vmin,vmax)

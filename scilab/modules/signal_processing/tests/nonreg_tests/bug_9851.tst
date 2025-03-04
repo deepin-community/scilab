@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Charlotte HECQUET
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -10,8 +10,8 @@
 //
 // <-- Non-regression test for bug 9851 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/9851
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/9851
 //
 // <-- Short Description -->
 // Error message occurs because of a cut-off frequency of 0.25Hz with irr

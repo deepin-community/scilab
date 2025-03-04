@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2018 - ESI Group - Paul Bignier
 // Copyright (C) 2018 - ESI Group - Clement DAVID
 //
@@ -11,8 +11,8 @@
 //
 // <-- Non-regression test for bug 15526 -->
 //
-// <-- Bugzilla URL -->
-// https://bugzilla.scilab.org/show_bug.cgi?id=15526
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/15526
 //
 // <-- Short Description -->
 // fscanfMat failed with a large text file

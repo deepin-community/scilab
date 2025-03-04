@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2011-2011 - DIGITEO - Bruno JOFRET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -20,6 +20,7 @@
 #include "string.hxx"
 #include "list.hxx"
 #include "user.hxx"
+#include "overload.hxx"
 
 extern "C"
 {
@@ -39,7 +40,7 @@ types::Function::ReturnValue sci_fieldnames(types::typed_list &in, int _iRetCoun
 
     // FIXME : iso-functionnal to Scilab < 6
     // Works on other types except userType, {m,t}list and struct
-    if (in[0]->isStruct() == false && in[0]->isMList() == false && in[0]->isTList() == false && in[0]->isUserType() == false)
+    if (in[0]->isStruct() == false && in[0]->isMList() == false && in[0]->isTList() == false && in[0]->isUserType() == false && in[0]->isHandle() == false)
     {
         out.push_back(types::Double::Empty());
         return types::Function::OK;
@@ -75,17 +76,39 @@ types::Function::ReturnValue sci_fieldnames(types::typed_list &in, int _iRetCoun
     // TLIST or MLIST
     if (in[0]->isList() == true)
     {
-        // We only need list capabilities to retrieve first argument as List.
-        types::List *pInList = in[0]->getAs<types::List>();
-        pIT = pInList->get(0);
-
-        if (pIT == nullptr || pIT->isString() == false || pIT->getAs<types::String>()->getSize() < 2)
+        types::typed_list out2;
+        types::Function::ReturnValue ret = Overload::generateNameAndCall(L"fieldnames", in, 1, out2, false, false);
+        if (ret == types::Callable::OK)
         {
-            // FIXME : iso-functionnal to Scilab < 6
-            // Works on other types except userType, {m,t}list and struct
-            out.push_back(types::Double::Empty());
+            out.push_back(out2[0]);
             return types::Function::OK;
         }
+        else
+        {
+            // We only need list capabilities to retrieve first argument as List.
+            types::List *pInList = in[0]->getAs<types::List>();
+            pIT = pInList->get(0);
+
+            if (pIT == nullptr || pIT->isString() == false || pIT->getAs<types::String>()->getSize() < 2)
+            {
+                // FIXME : iso-functionnal to Scilab < 6
+                // Works on other types except userType, {m,t}list and struct
+                out.push_back(types::Double::Empty());
+                return types::Function::OK;
+            }            
+        }
+    }
+    
+    // HANDLE
+    if (in[0]->isHandle() == true)
+    {
+        types::typed_list out2;
+        types::Function::ReturnValue ret = Overload::generateNameAndCall(L"fieldnames", in, 1, out2, false, false);
+        if (ret == types::Callable::OK)
+        {
+            out.push_back(out2[0]);
+            return types::Function::OK;
+        }        
     }
 
     // USER-TYPE (typically an Xcos object)

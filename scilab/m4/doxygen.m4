@@ -1,5 +1,5 @@
 dnl
-dnl Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+dnl Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 dnl Copyright (C) Scilab Enterprises - 2012 - Clement David
 dnl 
 dnl Copyright (C) 2012 - 2016 - Scilab Enterprises

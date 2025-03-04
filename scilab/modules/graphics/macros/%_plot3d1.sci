@@ -1,5 +1,5 @@
 //
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009 - DIGITEO - Jean-Baptiste Silvy
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -23,5 +23,5 @@ function [] = %_plot3d1()
     z = sin(x)*cos(x)';
     plot3d1(x, x, z, 70, 70);
     f = gcf();
-    f.color_map = jetcolormap(32);
+    f.color_map = jet(32);
 endfunction

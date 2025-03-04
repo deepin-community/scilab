@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2015 - Scilab Enterprises - Vincent COUVERT
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -10,8 +10,8 @@
 // <-- CLI SHELL MODE -->
 // <-- NO CHECK REF -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/10773
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/10773
 //
 // <-- Short Description -->
 // Wrong line reported in the error message
@@ -31,4 +31,4 @@ execstr("exec(TMPDIR + filesep() + ""bug_10773.sci"",-1)", "errcatch");
 assert_checkequal(a, msprintf(_("%s: Wrong value for input argument #%d: existing file(s) expected.\n"), "ilib_mex_build", 3));
 assert_checkequal(b, 10000);
 assert_checkequal(c, 3);
-assert_checkequal(d, "exec");
+assert_checkequal(d, "bug_10773");

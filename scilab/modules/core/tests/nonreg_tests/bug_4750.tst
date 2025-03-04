@@ -1,6 +1,6 @@
 //<-- CLI SHELL MODE -->
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009 - INRIA - Serge STEER <serge.steer@inria.fr>
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -8,8 +8,8 @@
 
 // <-- Non-regression test for bug 4750 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=4750
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/4750
 //
 // <-- Short Description -->
 //error in catenation of boolean arrays

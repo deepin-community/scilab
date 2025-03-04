@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA, Serge Steer
 // Copyright (C) - 2010 - DIGITEO - Michael Baudin
 // Copyright (C) DIGITEO - 2011 - Allan CORNET
@@ -17,7 +17,7 @@ function z = atand(x,y)
 
     rhs = argn(2);
     if rhs < 1 then
-        error(msprintf(gettext("%s: Wrong number of input argument(s): %d expected.\n"),"atand", 1));
+        error(msprintf(gettext("%s: Wrong number of input argument(s): %d to %d expected.\n"),"atand", 1, 2));
     end
 
     if type(x) <> 1 | ~isreal(x) then

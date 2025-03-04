@@ -1,5 +1,5 @@
 /*
-*  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+*  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 *  Copyright (C) 2008-2008 - DIGITEO - Antoine ELIAS
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -442,7 +442,7 @@ bool FuncManager::LoadModules()
 
 bool FuncManager::EndModules()
 {
-    //excute .start file
+    //excute .quit file
     for (const auto & it : m_ModuleName)
     {
         ExecuteQuitFile(it);

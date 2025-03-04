@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA -
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -18,11 +18,12 @@ function [a,b,sig]=reglin(x,y,dflag)
     // dflag is optional if 1 a display of the result is done
     //!
 
-    [lhs,rhs]=argn(0);
-    if rhs < 2 then
-        error(msprintf(gettext("%s: Wrong number of input arguments: %d to %d expected.\n"),"reglin",2,3))
+    arguments
+        x
+        y
+        dflag = 0
     end
-    if rhs <=2;dflag=0;end
+
     [n1,n2]=size(x)
     [p1,p2]=size(y)
     if n2<>p2 then
@@ -30,6 +31,12 @@ function [a,b,sig]=reglin(x,y,dflag)
     end;
     if or(isnan(x)) | or(isnan(y)) then
         error(msprintf(_("%s: NaNs detected, please use %s() instead.\n"), "reglin", "nanreglin"))
+    end
+    if or(isinf(x)) then
+        error(msprintf(_("%s: Wrong value for input argument #%d: Must not contain Inf.\n"), "reglin", 1));
+    end
+    if or(isinf(y)) then
+        error(msprintf(_("%s: Wrong value for input argument #%d: Must not contain Inf.\n"), "reglin", 2));
     end
 
     xmoy=sum(x,2)/n2

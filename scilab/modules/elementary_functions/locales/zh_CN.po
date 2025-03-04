@@ -55,12 +55,12 @@ msgid "Invalid index.\n"
 msgstr "无效索引。\n"
 
 #, c-format
-msgid "%s: Wrong value for input argument #%d : Singularity of the function.\n"
+msgid "%s: Wrong value for input argument #%d: Singularity of the function.\n"
 msgstr "%s：第%d个输入参数的值错误：函数应该是单调的。\n"
 
 #, c-format
 msgid ""
-"%s: Warning: Wrong value for input argument #%d : Singularity of the "
+"%s: Warning: Wrong value for input argument #%d: Singularity of the "
 "function.\n"
 msgstr "%s：警告：第%d个输入参数的值错误：函数应该是单调的。\n"
 
@@ -216,7 +216,7 @@ msgstr "%s：第%d个输入参数值错误：必须比%d小。\n"
 
 #, c-format
 msgid ""
-"%ls: Warning: Wrong value for input argument #%d : Singularity of the "
+"%ls: Warning: Wrong value for input argument #%d: Singularity of the "
 "function.\n"
 msgstr "%ls：警告：第%d个输入参数的值错误：函数应该是单调的。\n"
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -222,7 +222,7 @@
 rho=1:0.1:4;theta=(0:0.02:1)*2*%pi;
 z=30+round(theta'*(1+rho.^2));
 f=gcf();
-f.color_map= hotcolormap(128);
+f.color_map= hot(128);
 clf();graypolarplot(theta,rho,z)
  ]]></programlisting>
     </refsection>

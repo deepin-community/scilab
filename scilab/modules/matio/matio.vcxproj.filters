@@ -84,6 +84,9 @@
     <ClCompile Include="src\cpp\GetMlistVariable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\cpp\GetBooleanVariable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\c\CreateMatlabVariable.h">

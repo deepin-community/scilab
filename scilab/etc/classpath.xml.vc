@@ -28,7 +28,7 @@ The option is "disableUnderMode" and can be:
 <classpaths>
 
     <!-- Mandatory on startup -->
-    <path value="$SCILAB/thirdparty/flexdock-1.2.4.jar"/>
+    <path value="$SCILAB/thirdparty/flexdock-1.2.5.jar"/>
     <path value="$SCILAB/thirdparty/skinlf.jar"/>
     <path value="$SCILAB/thirdparty/looks-2.1.1.jar"/>
     <path value="$SCILAB/thirdparty/commons-logging.jar"/>
@@ -36,6 +36,9 @@ The option is "disableUnderMode" and can be:
     <path value="$SCILAB/thirdparty/lucene-core-8.4.0.jar"/>
     <path value="$SCILAB/thirdparty/lucene-analyzers-common-8.4.0.jar"/>
     <path value="$SCILAB/thirdparty/lucene-queryparser-8.4.0.jar"/>
+    <path value="$SCILAB/thirdparty/javafx.base.jar"/>
+    <path value="$SCILAB/thirdparty/javafx.graphics.jar"/>
+    <path value="$SCILAB/thirdparty/javafx.swing.jar"/>
 
     <!-- Load when needed -->
 
@@ -73,11 +76,38 @@ The option is "disableUnderMode" and can be:
         <load on="documentationGeneration"/>
     </path>
 
+    <path value="$SCILAB/thirdparty/jaxb-runtime-2.3.1.jar" load="onUse">
+        <load on="Xcos"/>
+        <load on="documentationGeneration"/>
+    </path>
+
+    <path value="$SCILAB/thirdparty/jaxb-impl-2.3.1.jar" load="onUse">
+        <load on="Xcos"/>
+        <load on="documentationGeneration"/>
+    </path>
+
+    <!-- java.lang.NoClassDefFoundError: javax/activation/DataSource -->
+    <path value="$SCILAB/thirdparty/activation-1.1.1.jar" load="onUse">
+        <load on="Xcos"/>
+        <load on="documentationGeneration"/>
+    </path>
+
+    <path value="$SCILAB/thirdparty/istack-commons-runtime-4.2.0.jar" load="onUse">
+        <load on="Xcos"/>
+        <load on="documentationGeneration"/>
+    </path>
+
+    <!-- java.lang.NoClassDefFoundError: jakarta/activation/MimetypesFileTypeMap -->
+    <!-- java.lang.RuntimeException: Provider for jakarta.activation.spi.MimeTypeRegistryProvider cannot be found -->
+    <path value="$SCILAB/thirdparty/jakarta.activation-2.0.1.jar" load="onUse"> 
+        <load on="documentationGeneration"/>
+    </path>
+
     <path value="$SCILAB/modules/scirenderer/jar/scirenderer.jar"/>
 
-    <path value="$SCILAB/thirdparty/jogl2.jar"/>
+    <path value="$SCILAB/thirdparty/jogl-all.jar"/>
 
-    <path value="$SCILAB/thirdparty/gluegen2-rt.jar"/>
+    <path value="$SCILAB/thirdparty/gluegen-rt.jar"/>
 
     <!-- Temp. loaded at startup -->
     <path value="$SCILAB/modules/types/jar/org.scilab.modules.types.jar"/>
@@ -141,7 +171,7 @@ The option is "disableUnderMode" and can be:
         <load on="Xcos"/>
     </path>
 
-    <path value="$SCILAB/thirdparty/ecj.jar" load="onUse">
+    <path value="$SCILAB/thirdparty/ecj-3.34.0.jar" load="onUse">
         <load on="external_objects_java"/>
     </path>
 

@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010 - DIGITEO - Clement DAVID
 // Copyright (C) 2012 - Scilab Enterprises - Clement DAVID
 //
@@ -7,11 +7,12 @@
 // =============================================================================
 
 // <-- XCOS TEST -->
+// <-- NO CHECK REF -->
 //
 // <-- Non-regression test for bug 7639 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=7639
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/7639
 //
 // <-- Short Description -->
 // When I try to generate some code for a superblock containing a scilab
@@ -47,5 +48,5 @@ assert_checkequal(typeof(superblk), "Block");
 
 // call and check for a message error (the out blk will be empty on error)
 blk = xcosCodeGeneration(superblk);
-assert_checkequal(typeof(blk), "Block");
+assert_checkequal(blk, []);
 assert_checktrue(length(msg) <> 0);

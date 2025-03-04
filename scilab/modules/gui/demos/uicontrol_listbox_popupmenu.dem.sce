@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2014 - Scilab Enterprises - Antoine ELIAS
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -13,10 +13,19 @@
 
 function f = demo_list_combo()
     c = get(0);c.usedeprecatedskin = "off";
-    f = figure("dockable", "off" ,"infobar_visible", "off", "toolbar_visible", "off", "menubar_visible", "off", "default_axes", "off", "visible", "off", "layout", "gridbag");
-    set(f, "figure_id", 100001);
-    set(f, "figure_name", gettext("Listboxes and Popupmenus"));
-    set(f, "axes_size", [850 500]);
+    if get("listboxes_and_popupemnus_demo") <> [] then
+        f = get("listboxes_and_popupemnus_demo");
+        delete(f.children);
+    else
+        close(100002)
+        // Create a figure
+        f = figure("dockable", "off" ,"infobar_visible", "off", "toolbar_visible", "off", "menubar_visible", "off", "default_axes", "off", "visible", "off", "layout", "gridbag");
+        set(f, "figure_id", 100002);
+        set(f, "figure_name", gettext("Listboxes and Popupmenus"));
+        set(f, "axes_size", [850 500]);
+        set(f, "tag", "listboxes_and_popupemnus_demo");
+    end
+    
 
     colors4 = [
     "#000000", "Color 01", "#000000", "#FFFFFF";

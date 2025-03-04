@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) Scilab Enterprises - 2013 - Paul Bignier
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -16,10 +16,13 @@
 #ifndef _DDASKR_H
 #define _DDASKR_H
 
-#include "sundials_extension.h"
+#include "sundials/sundials_extension.h"
 #include "sundials/sundials_types.h" // Definition of types 'realtype' and 'booleantype'
 #include "nvector/nvector_serial.h"  // Type 'N_Vector'
-#include "../scicos_sundials/src/ida/ida_impl.h" // Error handling
+
+#define MSG_BAD_KRY_INPUT  "One of the Krylov arguments is illegal (jacobian or psol functions)."
+#define MSG_SINGULAR       "The matrix of partial derivatives is singular."
+#define MSG_BAD_INPUT      "One of the arguments is illegal."
 
 #ifndef max
 #define max(A,B) ((A>B) ? A:B)  // 'max()' function

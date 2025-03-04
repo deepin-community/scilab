@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) INRIA -
+* Copyright (C) 2012 - 2016 - Scilab Enterprises
+* Copyright (C) 2022 - Samuel GOUGEON
 *
- * Copyright (C) 2012 - 2016 - Scilab Enterprises
- *
- * This file is hereby licensed under the terms of the GNU GPL v2.0,
- * pursuant to article 5.3.4 of the CeCILL v.2.1.
- * This file was originally licensed under the terms of the CeCILL v2.1,
- * and continues to be available under such terms.
- * For more information, see the COPYING file which you should have received
- * along with this program.
+* This file is hereby licensed under the terms of the GNU GPL v2.0,
+* pursuant to article 5.3.4 of the CeCILL v.2.1.
+* This file was originally licensed under the terms of the CeCILL v2.1,
+* and continues to be available under such terms.
+* For more information, see the COPYING file which you should have received
+* along with this program.
 *
 -->
 <refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -18,38 +18,31 @@
           xmlns:db="http://docbook.org/ns/docbook" xml:lang="en" xml:id="justify">
     <refnamediv>
         <refname>justify</refname>
-        <refpurpose>aligns strings in columns to the left, center, or right</refpurpose>
+        <refpurpose>
+            Aligns the strings completed with spaces within each column, to the left, center or right
+        </refpurpose>
     </refnamediv>
     <refsynopsisdiv>
         <title>Syntax</title>
-        <synopsis>Tj = justify(S, position)</synopsis>
+        <synopsis>TJ = justify(T, position)</synopsis>
     </refsynopsisdiv>
     <refsection>
         <title>Arguments</title>
         <variablelist>
             <varlistentry>
-                <term>S</term>
+                <term>T, TJ</term>
                 <listitem>
-                    <para>a matrix of character strings.</para>
-                </listitem>
-            </varlistentry>
-            <varlistentry>
-                <term>Sj</term>
-                <listitem>
-                    <para>
-                        a matrix of character strings. The justified result.
-                    </para>
+                    <para>vectors, matrices or hypermatrices of strings, of same sizes.</para>
                 </listitem>
             </varlistentry>
             <varlistentry>
                 <term>position</term>
                 <listitem>
-                    <para>
-                        Possible values:
+                    <para>Optional parameter, with one of the following values:
                         <table cellspacing="0" cellpadding="0">
-                          <tr><td><term>'l' or 'left'</term></td><td>: left justification</td></tr>
-                          <tr><td><term>'c' or 'center'</term></td><td>: centering</td></tr>
-                          <tr><td><term>'r' or 'right'</term></td><td>: right justification</td></tr>
+                          <tr><th>'l' or 'left'</th>  <td>: left justification (default mode)</td></tr>
+                          <tr><th>'c' or 'center'</th><td>: centering</td></tr>
+                          <tr><th>'r' or 'right'</th> <td>: right justification</td></tr>
                         </table>
                     </para>
                 </listitem>
@@ -58,26 +51,61 @@
     </refsection>
     <refsection>
         <title>Description</title>
-        <para>
-            The <function>justify</function> function justifies the column of a
-            matrix of string according to the given <varname>position</varname>.
-        </para>
+            <para>
+                All heading and trailing spaces of <varname>T</varname> elements are removed
+                before processing.
+            </para>
+            <para>
+                In each given column of <varname>TJ</varname>, all strings have the same length.
+                Shorter strings are padded with spaces before, after, or on both sides.
+            </para>
+            <para>
+                The width may differ from a column to other ones. Please see the examples
+            </para>
     </refsection>
     <refsection>
         <title>Examples</title>
         <programlisting role="example"><![CDATA[
-t=['1234','x','adfdfgdfghfgj'
-   '1','354556','dgf'
-   'sdfgd','','sdfsf'];
-
-justify(t,'l')
-justify(t,'c')
-justify(t,'r')
+m = ["a" "bcdef" "ghi" ; "jklm" "" "n" ; "opq" "rs" "tuvwxy"]
+justify(m)
+justify(m, "r")
+justify(m, "c")
     ]]></programlisting>
+    <screen><![CDATA[
+--> m = ["a" "bcdef" "ghi" ; "jklm" "" "n" ; "opq" "rs" "tuvwxy"]
+ m  =
+  "a"     "bcdef"  "ghi"
+  "jklm"  ""       "n"
+  "opq"   "rs"     "tuvwxy"
+
+--> justify(m)
+ ans  =
+  "a   "  "bcdef"  "ghi   "
+  "jklm"  "     "  "n     "
+  "opq "  "rs   "  "tuvwxy"
+
+--> justify(m, "r")
+ ans  =
+  "   a"  "bcdef"  "   ghi"
+  "jklm"  "     "  "     n"
+  " opq"  "   rs"  "tuvwxy"
+
+--> justify(m, "c")
+ ans  =
+  " a  "  "bcdef"  " ghi  "
+  "jklm"  "     "  "  n   "
+  "opq "  " rs  "  "tuvwxy"
+]]></screen>
     </refsection>
     <refsection role="see also">
         <title>See also</title>
         <simplelist type="inline">
+            <member>
+                <link linkend="stripblanks">stripblanks</link>
+            </member>
+            <member>
+                <link linkend="blanks">blanks</link>
+            </member>
             <member>
                 <link linkend="length">length</link>
             </member>
@@ -85,5 +113,17 @@ justify(t,'r')
                 <link linkend="part">part</link>
             </member>
         </simplelist>
+    </refsection>
+    <refsection role="history">
+        <title>History</title>
+        <revhistory>
+            <revision>
+                <revnumber>2023.1</revnumber>
+                <revdescription>
+                    Hypermatrix accepted. The <literal>position</literal> becomes optional,
+                    with default = <literal>"left"</literal>
+                </revdescription>
+            </revision>
+        </revhistory>
     </refsection>
 </refentry>

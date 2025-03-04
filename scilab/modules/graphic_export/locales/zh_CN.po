@@ -123,7 +123,7 @@ msgstr "无法导出文件，内存不够。减少元素个数或图形大小可
 msgid ""
 "Unable to create export file, please fill a bug report at http://bugzilla."
 "scilab.org."
-msgstr "无法导出文件，请提交缺陷报告到http://bugzilla.scilab.org。"
+msgstr "无法导出文件，请提交缺陷报告到https://gitlab.com/scilab/scilab/-/issues。"
 
 msgid ""
 "Unable to create export file, the file cannot be created or is locked by "

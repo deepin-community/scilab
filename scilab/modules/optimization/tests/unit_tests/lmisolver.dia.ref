@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Paul Bignier
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -23,6 +23,8 @@ endfunction
 X = lmisolver(list(zeros(A1)), evalf);
 lmisolver: Construction of canonical representation.
 lmisolver: Basis Construction.
+lufact: Warning: Matrix is singular.
+lufact: Warning: Matrix is singular.
 lmisolver:     FEASIBILITY PHASE.
     primal obj.  dual obj.  dual. gap 
      6.66e-01    -5.03e+02   5.03e+02

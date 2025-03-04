@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) ENPC - Jean-Philippe Chancelier
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -25,7 +25,7 @@
     </refnamediv>
     <refsynopsisdiv>
         <title>Seqüência de Chamamento</title>
-        <synopsis>contourf(x,y,z,nz,[style,strf,leg,rect,nax])</synopsis>
+        <synopsis>contourf(x, y, z, nz, [style, strf, leg, rect, nax, fpf])</synopsis>
     </refsynopsisdiv>
     <refsection role="parameters">
         <title>Parâmetrtos</title>
@@ -95,6 +95,18 @@ plot2d(x(im)',y(jm)',-9,"000")
                     </para>
                 </listitem>
             </varlistentry>
+            <varlistentry>
+                <term>fpf</term>
+                <listitem>
+                    <para>
+                        You can change the format of the floating point number printed on
+                        the levels where <varname>fpf</varname> is the format in C format syntax 
+                        (for example <code>fpf="%.3f"</code>).
+                        Set <varname>fpf</varname> to " " implies that the level are not drawn on the level curves.
+                        If not given, the default format of <link linkend="contour2d">contour2d</link> is used.
+                    </para>
+                </listitem>
+            </varlistentry>
         </variablelist>
     </refsection>
     <refsection role="description">
@@ -105,12 +117,6 @@ plot2d(x(im)',y(jm)',-9,"000")
             de <literal>f(x,y)</literal> são fornecidos pela matriz
             <literal>z</literal> nos pontos de grid definidos por <literal>x</literal>
             e <literal>y</literal>.
-        </para>
-        <para>Você pode mudar o formato dos pontos flutuantes impressos sobre os
-            níveis utilizando <literal>xset("fpf",string)</literal> onde
-            <literal>string</literal> fornece o formato em sintaxe de formato C ( por
-            exemplo <literal>string="%.3f"</literal>). Use
-            <literal>string=""</literal> para voltar ao formato padrão.
         </para>
         <para>
             Entre com o comando <literal>contourf()</literal> para visualizar
@@ -146,11 +152,6 @@ g = [zeros(n,1); (1:n)'/n; ones(m-2*n,1)];
 b = [zeros(2*n,1); (1:m-2*n)'/(m-2*n)];
 h = [r g b];
 gcf().color_map = h;
-xset('fpf',' ');
-clf();
-contourf([],[],z,[-6:-1,-logspace(-5,0,10),logspace(-5,0,10),1:8],0*ones(1,m))
-
-xset('fpf','');
 clf();
 contourf([],[],z,[-6:-1,-logspace(-5,0,10),logspace(-5,0,10),1:8]);
  ]]></programlisting>
@@ -166,9 +167,6 @@ contourf([],[],z,[-6:-1,-logspace(-5,0,10),logspace(-5,0,10),1:8]);
             </member>
             <member>
                 <link linkend="plot2d">plot2d</link>
-            </member>
-            <member>
-                <link linkend="xset">xset</link>
             </member>
         </simplelist>
     </refsection>

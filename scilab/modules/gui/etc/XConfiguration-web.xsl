@@ -143,5 +143,25 @@
         </Title>
     </xsl:template>
     
+    <xsl:template match="cookies">
+        <Title text="_(Cookies settings)">
+            <Grid>
+                <Select gridx="2" gridy="2" listener="ActionListener">
+                <xsl:variable name="mode" select="@mode"/>
+                <actionPerformed choose="mode">
+                    <xsl:call-template name="context"/>
+                </actionPerformed>
+                <xsl:for-each select="mode">
+                    <option value="{@description}" key="{@code}">
+                        <xsl:if test="@code=$mode">
+                            <xsl:attribute name="selected">selected</xsl:attribute>
+                        </xsl:if>
+                    </option>
+                </xsl:for-each>
+            </Select>
+            </Grid>
+        </Title>
+    </xsl:template>
+
     <xsl:template match="previous-proxy"/>
 </xsl:stylesheet>

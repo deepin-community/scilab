@@ -1,0 +1,11 @@
+# These html files are here to describe precisely the contents of the
+# directory they belong to or are loaded into the GUI.
+package-contains-documentation-outside-usr-share-doc [usr/share/scilab/*.html]
+
+# These tex files are here to describe precisely the contents of the
+# directory they belong to.
+package-contains-documentation-outside-usr-share-doc [usr/share/scilab/*.tex]
+
+# These txt files are here to describe precisely the contents of the
+# directory they belong to.
+package-contains-documentation-outside-usr-share-doc [usr/share/scilab/*.txt]

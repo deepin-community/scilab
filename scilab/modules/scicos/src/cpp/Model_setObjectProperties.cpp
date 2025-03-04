@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2014-2016 - Scilab Enterprises - Clement DAVID
  * Copyright (C) 2017 - ESI Group - Clement DAVID
  *
@@ -14,6 +14,7 @@
  *
  */
 
+#include <algorithm>
 #include <string>
 #include <vector>
 #include <cstring> // for memcpy
@@ -767,6 +768,7 @@ update_status_t Model::setObjectProperty(model::BaseObject* object, object_prope
 
                     model::BaseObject* c = getObject(child);
 
+                    // Check hierarchy
                     ScicosID parent = ScicosID();
                     getObjectProperty(c, PARENT_BLOCK, parent);
                     if (parent != baseObject->id())
@@ -781,6 +783,53 @@ update_status_t Model::setObjectProperty(model::BaseObject* object, object_prope
                     if (parentDiagram != parentParentDiagram)
                     {
                         abort();
+                    }
+                    
+                    // Check port connections
+                    if (c->kind() == BLOCK)
+                    {
+                        std::vector<ScicosID> ports;
+                        for (object_properties_t prop : { INPUTS, OUTPUTS, EVENT_INPUTS, EVENT_OUTPUTS } )
+                        {
+                            getObjectProperty(c, prop, ports);
+                            for (ScicosID port : ports)
+                            {
+                                ScicosID signal = ScicosID();
+                                getObjectProperty(port, PORT, CONNECTED_SIGNALS, signal);
+                                if (signal == ScicosID())
+                                    continue;
+
+                                if (std::find(v.begin(), v.end(), signal) == v.end())
+                                    abort();
+                            }
+                        }
+                    }
+
+                    // Check link connection
+                    if (c->kind() == LINK)
+                    {
+                        ScicosID src = ScicosID();
+                        getObjectProperty(c, SOURCE_PORT, src);
+                        ScicosID srcBlock = ScicosID();
+                        getObjectProperty(src, PORT, SOURCE_BLOCK, srcBlock);
+                        ScicosID dest = ScicosID();
+                        getObjectProperty(c, DESTINATION_PORT, dest);
+                        ScicosID destBlock = ScicosID();
+                        getObjectProperty(dest, PORT, SOURCE_BLOCK, destBlock);
+
+                        // a connected port as unset block
+                        if (src != ScicosID() && srcBlock == ScicosID())
+                            abort();
+                        if (dest != ScicosID() && destBlock == ScicosID())
+                            abort();
+
+                        // a connected port should be in the same layer as its link
+                        if (srcBlock != ScicosID())
+                            if (std::find(v.begin(), v.end(), srcBlock) == v.end())
+                                abort();
+                        if (destBlock != ScicosID())
+                            if (std::find(v.begin(), v.end(), destBlock) == v.end())
+                                abort();
                     }
                 }
 #endif /* SANITY_CHECK */
@@ -805,6 +854,7 @@ update_status_t Model::setObjectProperty(model::BaseObject* object, object_prope
 
                     model::BaseObject* c = getObject(child);
 
+                    // Check hierarchy
                     ScicosID parent = ScicosID();
                     getObjectProperty(c, PARENT_BLOCK, parent);
                     if (parent != ScicosID() && parent != baseObject->id())
@@ -816,6 +866,53 @@ update_status_t Model::setObjectProperty(model::BaseObject* object, object_prope
                     if (parent != ScicosID() && parent != baseObject->id())
                     {
                         abort();
+                    }
+                    
+                    // Check port connections
+                    if (c->kind() == BLOCK)
+                    {
+                        std::vector<ScicosID> ports;
+                        for (object_properties_t prop : { INPUTS, OUTPUTS, EVENT_INPUTS, EVENT_OUTPUTS } )
+                        {
+                            getObjectProperty(c, prop, ports);
+                            for (ScicosID port : ports)
+                            {
+                                ScicosID signal = ScicosID();
+                                getObjectProperty(port, PORT, CONNECTED_SIGNALS, signal);
+                                if (signal == ScicosID())
+                                    continue;
+
+                                if (std::find(v.begin(), v.end(), signal) == v.end())
+                                    abort();
+                            }
+                        }
+                    }
+
+                    // Check link connection
+                    if (c->kind() == LINK)
+                    {
+                        ScicosID from = ScicosID();
+                        getObjectProperty(c, SOURCE_PORT, from);
+                        ScicosID fromBlock = ScicosID();
+                        getObjectProperty(from, PORT, SOURCE_BLOCK, fromBlock);
+                        ScicosID to = ScicosID();
+                        getObjectProperty(c, DESTINATION_PORT, to);
+                        ScicosID toBlock = ScicosID();
+                        getObjectProperty(to, PORT, SOURCE_BLOCK, toBlock);
+
+                        // a connected port as unset block
+                        if (from != ScicosID() && fromBlock == ScicosID())
+                            abort();
+                        if (to != ScicosID() && toBlock == ScicosID())
+                            abort();
+
+                        // a connected port should be in the same layer as its link
+                        if (fromBlock != ScicosID())
+                            if (std::find(v.begin(), v.end(), fromBlock) == v.end())
+                                abort();
+                        if (toBlock != ScicosID())
+                            if (std::find(v.begin(), v.end(), toBlock) == v.end())
+                                abort();
                     }
                 }
 #endif /* SANITY_CHECK */

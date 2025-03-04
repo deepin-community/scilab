@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2007 - INRIA - Vincent Couvert
  * Copyright (C) 2007 - INRIA - Bruno JOFRET
  * Copyright (C) 2007 - INRIA - Marouane BEN JELLOUL
@@ -22,6 +22,8 @@ package org.scilab.modules.gui.bridge.window;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Point;
+import java.awt.Desktop;
+import java.awt.Taskbar;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
@@ -29,6 +31,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.WindowEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.rmi.server.UID;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -111,6 +114,15 @@ public abstract class SwingScilabWindow extends JFrame implements SimpleWindow {
         this.setTitle("Scilab");
         setIconImage(new ImageIcon(FindIconHelper.findIcon("scilab", "256x256")).getImage());
 
+        if (MAC_OS_X) {
+            Desktop desktop = Desktop.getDesktop();
+            Taskbar taskbar = Taskbar.getTaskbar();
+            taskbar.setIconImage(new ImageIcon(FindIconHelper.findIcon("scilabMacOS", "256x256")).getImage());
+            desktop.setAboutHandler(e->InterpreterManagement.requestScilabExec("about();"));
+            desktop.setPreferencesHandler(e ->InterpreterManagement.requestScilabExec("preferences();"));
+            desktop.setQuitHandler((e,r)->InterpreterManagement.requestScilabExec("exit();"));
+        }
+
         /* defining the Layout */
         super.setLayout(new java.awt.BorderLayout());
         windowUID = new UID().toString();
@@ -145,11 +157,6 @@ public abstract class SwingScilabWindow extends JFrame implements SimpleWindow {
                 }
             }
         });
-
-        if (MAC_OS_X) {
-            registerForMacOSXEvents();
-        }
-
     }
 
     public void setIsRestoring(boolean b) {
@@ -185,51 +192,6 @@ public abstract class SwingScilabWindow extends JFrame implements SimpleWindow {
     }
 
     /**
-     * This method registers some methods against the specific Mac OS X API
-     * (in order to set the "special" mac os x menus)
-     */
-    private void registerForMacOSXEvents() {
-        try {
-            // Generate and register the OSXAdapter, passing it a hash of all the methods we wish to
-            // use as delegates for various com.apple.eawt.ApplicationListener methods
-            OSXAdapter.setAboutHandler(this, getClass().getMethod("macosxAbout", (Class[]) null));
-            OSXAdapter.setQuitHandler(this, getClass().getMethod("macosxQuit", (Class[]) null));
-            OSXAdapter.setPreferencesHandler(this, getClass().getMethod("macosxPreferences", (Class[]) null));
-            OSXAdapter.setDockIcon(new ImageIcon(FindIconHelper.findIcon("scilabMacOs", "256x256")));
-        } catch (java.lang.NoSuchMethodException e) {
-            System.err.println("OSXAdapter could not find the method: " + e.getLocalizedMessage());
-        }
-    }
-
-    /**
-     * This method is called by the OSXAdapter class when the specific Mac
-     * OS X "About" menu is called. It is the only case where this method
-     * should be used
-     */
-    public void macosxAbout() {
-        InterpreterManagement.requestScilabExec("about();");
-    }
-
-    /**
-     * This method is called by the OSXAdapter class when the specific Mac
-     * OS X "Quit Scilab" menu is called. It is the only case where this method
-     * should be used
-     */
-    public boolean macosxQuit() {
-        InterpreterManagement.requestScilabExec("exit();");
-        return false;
-    }
-
-    /**
-     * This method is called by the OSXAdapter class when the specific Mac
-     * OS X "Preferences" menu is called. It is the only case where this method
-     * should be used
-     */
-    public void macosxPreferences() {
-        InterpreterManagement.requestScilabExec("preferences();");
-    }
-
-    /**
      * @return the UUID associated with this window
      */
     public String getUUID() {
@@ -252,6 +214,19 @@ public abstract class SwingScilabWindow extends JFrame implements SimpleWindow {
             return new SwingScilabDockingWindow();
         }
         return new SwingScilabStaticWindow();
+    }
+
+    /** force closing all Scilab windows not using the ClosingOperationsManager */
+    public static void forceClose()
+    {
+        ArrayList<SwingScilabWindow> allWindows = new ArrayList<>(allScilabWindows.values());
+        for(SwingScilabWindow window : allWindows)
+        {
+            if (window.isVisible())
+            {
+                window.close();
+            }
+        }
     }
 
     /**

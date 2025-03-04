@@ -1,6 +1,6 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
-// Copyright (C) 2018 - Stéphane Mottelet
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
+// Copyright (C) 2018 - UTC - Stéphane MOTTELET
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
@@ -10,8 +10,8 @@
 //
 // <-- Non-regression test for bug 15548 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/15548
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/15548
 //
 // <-- Short Description -->
 // [%t %t]./[%f %f] crashes Scilab

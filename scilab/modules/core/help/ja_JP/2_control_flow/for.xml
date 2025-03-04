@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) - INRIA
- * Copyright (C) 2018 - Samuel GOUGEON
- *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ * Copyright (C) 2018 - 2023 - Samuel GOUGEON
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
  * pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -22,28 +21,38 @@
         <refname>for</refname>
         <refpurpose>ループ用の言語キーワード </refpurpose>
     </refnamediv>
+    <refsynopsisdiv>
+        <title>呼出し手順</title>
+        <synopsis>
+            for element = expression, instruction ; .. ; instruction; end
+
+            for element = expression
+                instruction
+                ..
+                instruction
+            end
+
+            for element = expression do
+                instruction,
+                ..
+                instruction
+            end
+        </synopsis>
+    </refsynopsisdiv>
     <refsection>
         <title>説明</title>
         <para>
-            ループ定義に使用されます.その構文は以下のようになります:
-            <literal> for variable=expression ,instruction, .. ,instruction,end</literal>
-        </para>
-        <para>
-            <literal> for variable=expression do instruction,   ,instruction,end</literal>
-        </para>
-        <para>
-            <literal>expression</literal> が行列または行ベクトルの場合,
-            <literal>variable</literal> の値は行列の各列の値となります.
+            <literal>expression</literal>が配列（同質か否かを問わない）の場合、<literal>element</literal>とする はその各列に設定される（超行列の場合、as <literal>matrix(expression, size(expression,1), -1))</literal>）を1つずつ.
         </para>
         <para>
             具体例として,一定間隔の行ベクトルを作成するために
             <link linkend="colon">コロン</link>演算子を使用し,
             典型的な for ループを作成します :
-            <literal>for variable=n1:step:n2, ...,end</literal>
+            <literal>for element = n1:step:n2, ...,end</literal>
         </para>
         <para>
             <literal>expression</literal> が リストの場合,
-            <literal>variable</literal>はこのリストの連続するエントリを
+            <literal>element</literal>はこのリストの連続するエントリを
             値とします.
         </para>
         <para>
@@ -69,42 +78,35 @@
         <para>
             例えば, 以下のようにします:
         </para>
-        <screen><![CDATA[
+        <programlisting><![CDATA[
 for i = 1:5
     disp(i);
 end
-]]></screen>
-        以下は推奨されません
-        <screen><![CDATA[
+]]></programlisting>
+        <para>以下は推奨されません</para>
+        <programlisting><![CDATA[
 for i = 1:5, disp(i); end
-]]></screen>
+]]></programlisting>
         <warning>
             警告: 条件文(if while for または select/case)の本体を定義するために
             使用できる文字の数は,16k に制限されています.
         </warning>
     </refsection>
+
     <refsection>
         <title>例</title>
-        <para>Common loops:</para>
+        <para>Trivial iterations (over columns of a row vector):</para>
         <programlisting role="example"><![CDATA[
-n=5;
-for i = 1:n
-    for j = 1:n
-        a(i,j) = 1/(i+j-1);
-    end;
+for i = [2 4 5]
+    factorial(i)
 end
-for j = 2:n-1
-    a(j,j) = j;
-end;
-a
- ]]></programlisting>
-        <para>"Decreasing" loop:</para>
-        <programlisting role="example"><![CDATA[
+
+// By decreasing values:
 for j = 4:-1:1
     j
 end
  ]]></programlisting>
-        <para>Loop implicitly on the columns of a row vector or of a matrix:</para>
+        <para>Iterate on the columns of a matrix:</para>
         <programlisting role="example"><![CDATA[
 M = [1 2 ; 3 4 ; 5 6]'
 for  c = M, c, end
@@ -128,11 +130,28 @@ for  c = M, c, end
    5.
    6.
 ]]></screen>
+        <para>Iterate on the columns of a cells array:</para>
         <programlisting role="example"><![CDATA[
-for v = a, write(%io(2),v), end
-for j = 1:n, v = a(:,j), write(%io(2),v), end
+C = {%pi, "This is πι" ; %z^2, %t}
+for  c = C, c, end
  ]]></programlisting>
-        <para>Loop on entries of a list:</para>
+    <screen><![CDATA[
+--> C = {%pi, "This is πι" ; %z^2, %t}
+ C  =
+  [1x1 constant  ]  [1x1 string ]
+  [1x1 polynomial]  [1x1 boolean]
+
+
+--> for  c = C, c, end
+ c  =
+  [1x1 constant  ]
+  [1x1 polynomial]
+
+ c  =
+  [1x1 string ]
+  [1x1 boolean]
+]]></screen>
+        <para>Loop on the elements of a list:</para>
         <programlisting role="example"><![CDATA[
 for l = list([1 2;3 4], (1+%z)^3, 'example', [%F %T]); l, end
  ]]></programlisting>
@@ -152,6 +171,22 @@ for l = list([1 2;3 4], (1+%z)^3, 'example', [%F %T]); l, end
  l  =
   F T
 ]]></screen>
+        <para>Common and nested loops:</para>
+        <programlisting role="example"><![CDATA[
+n=5;
+for i = 1:n
+    for j = 1:n
+        a(i,j) = 1/(i+j-1);
+    end;
+end
+for j = 2:n-1
+    a(j,j) = j;
+end;
+a
+
+for v = a, write(%io(2),v), end
+for j = 1:n, v = a(:,j), write(%io(2),v), end
+ ]]></programlisting>
     </refsection>
     <refsection role="see also">
         <title>参照</title>
@@ -173,9 +208,23 @@ for l = list([1 2;3 4], (1+%z)^3, 'example', [%F %T]); l, end
             <revision>
                 <revnumber>6.0.0</revnumber>
                 <revdescription>
-                    The for <literal>expression</literal> can now be a vector of graphic handles.
-                    <literal>for</literal> is now protected:
-                    Assignments like <literal>for=1</literal> are no longer possible.
+                    <itemizedlist>
+                        <listitem>
+                            The for <literal>expression</literal> can now be a vector of graphic handles.
+                            <literal>for</literal> is now protected:
+                            Assignments like <literal>for=1</literal> are no longer possible.
+                        </listitem>
+                        <listitem>
+                            The number of characters used to define the body of any conditional instruction (<literal>if</literal>, <literal>while</literal>, <literal>for</literal>, or <literal>select/case</literal>) is no more limited to 16k.
+                        </listitem>
+                    </itemizedlist>
+                </revdescription>
+            </revision>
+            <revision>
+                <revnumber>2023.0.0</revnumber>
+                <revdescription>
+                    The <literal>expression</literal> can be a hypermatrix. It is then processed
+                    by column as <literal>matrix(expression, size(expression,1), -1)</literal>.
                 </revdescription>
             </revision>
         </revhistory>

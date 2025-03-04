@@ -1,7 +1,7 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2016 - Scilab Enterprises - Pierre-Aimé AGNEL
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
-// Copyright (C) 2016, 2018, 2019 - Samuel GOUGEON
+// Copyright (C) 2016, 2018, 2019, 2021 - Samuel GOUGEON
 //
 // This file is hereby licensed under the terms of the GNU GPL v2.0,
 // pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -10,14 +10,16 @@
 // For more information, see the COPYING file which you should have received
 // along with this program.
 
-function [] = tbx_make(tbx_path, sections)
+function tbx_make(tbx_path, sections, option)
 
     // Description
     //     Builds a toolbox if it follows the toolbox directories convention
     //
     // Syntax
     //     tbx_make
-    //     tbx_make(tbx_path[, sections])
+    //     tbx_make(tbx_path)
+    //     tbx_make(tbx_path, sections)
+    //     tbx_make(tbx_path[, sections, options)
     //
     // Parameters
     //     tbx_path: a single string; path to the toolbox directory
@@ -26,6 +28,9 @@ function [] = tbx_make(tbx_path, sections)
     //               ["macros", "help", "src", "sci_gateway", "localization"].
     //               If sections argin is not provided or is empty, tbx_make() makes
     //               all existing sections subdirectories among the default set.
+    //      option: if "help" is among queried sections, option can be
+    //               a vector of "la_LA" language names. Then only pages
+    //               of the given languages are built (if they exist).
     //
     // Description
     //     Builds a toolbox by executing the builder script.
@@ -103,11 +108,14 @@ function [] = tbx_make(tbx_path, sections)
         tbx_build_localization(tbx_path);
     end
 
-    if ( or(sections == "help")  )
-        tbx_builder_help(tbx_path);
+    if or(sections == "help")
+        if isdef("option", "l")
+            tbx_builder_help(tbx_path, option);
+        else
+            tbx_builder_help(tbx_path);
+        end
     end
 
     tbx_build_loader(tbx_path);
     tbx_build_cleaner(tbx_path);
-
 endfunction

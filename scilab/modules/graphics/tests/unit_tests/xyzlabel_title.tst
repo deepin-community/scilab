@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2019 - Samuel GOUGEON
 //
 // This file is hereby licensed under the terms of the GNU GPL v2.0,
@@ -15,7 +15,7 @@
 // <-- NO CHECK REF -->
 
 clf reset
-plotframe([0 0 1 1]);
+plot2d([], [], 0, "011", " ", [0 0 1 1]);
 ax = gca();
 t = "Title à";
 funs = list(xlabel, ylabel, zlabel, title);

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA - Serge Steer
  * Copyright (C) ENPC - Jean-Philippe Chancelier
  *
@@ -166,9 +166,6 @@ isoview off
         <title>Voir aussi</title>
         <simplelist type="inline">
             <member>
-                <link linkend="hist3d">hist3d</link>
-            </member>
-            <member>
                 <link linkend="histplot">histplot</link>
             </member>
             <member>
@@ -182,7 +179,7 @@ isoview off
             <revision>
                 <revnumber>6.1.0</revnumber>
                 <revdescription>
-                    Introduction de bar3d(), égal à l'actuel hist3d() à redéfinir.
+                    hist3d() a été renommé en bar3d().
                 </revdescription>
             </revision>
         </revhistory>

@@ -94,9 +94,9 @@ BLOCKS_H = [BLOCKS_H;
 "OpTab tabsim[] = {"];
 
 BLOCKS_H = [BLOCKS_H;
-"{""" + BLOCKS_FORTRAN + """,(ScicosF) C2F(" + BLOCKS_FORTRAN + ")}," ;
-"{""" + BLOCKS_C + """,(ScicosF) " + BLOCKS_C + "}," ;
-"{""" + BLOCKS_CPP + """,(ScicosF) " + BLOCKS_CPP + "}," ;
+"{""" + BLOCKS_FORTRAN + """, C2F(" + BLOCKS_FORTRAN + ")}," ;
+"{""" + BLOCKS_C + """, " + BLOCKS_C + "}," ;
+"{""" + BLOCKS_CPP + """, " + BLOCKS_CPP + "}," ;
 "{(char *) 0, (ScicosF) 0}};" ;
 "#endif /* __SCICOS_BLOCKS_H__ */" ;
 "/****************************************/" ;

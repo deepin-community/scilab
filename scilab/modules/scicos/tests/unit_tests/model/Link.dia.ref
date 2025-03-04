@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2014 - Scilab Enterprises - Paul Bignier
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -16,15 +16,14 @@ Xcos trace:   propertyUpdated( 1 , LINK , DESCRIPTION ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 1 , LINK , THICK ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 1 , LINK , COLOR ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 1 , LINK , KIND ) : NO_CHANGES
- lnk  = 
-Link    :
-          xx: []
-          yy: []
-          id: 
-          thick: 0 0
-          ct: 1 1
-          from: 0 0 0
-          to: 0 0 1
+ lnk = (Link) with fields:
+  xx = []
+  yy = []
+  id = ""
+  thick = [0,0]
+  ct = [1,1]
+  from = [0,0,0]
+  to = [0,0,1]
 assert_checkequal(lnk.xx,    []);
 assert_checkequal(lnk.yy,    []);
 assert_checkequal(lnk.id,    "");

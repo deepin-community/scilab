@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010 - DIGITEO - Allan CORNET
 // Copyright (C) 2014 - Scilab Enterprises - Anais AUBERT
 //
@@ -10,8 +10,8 @@
 //
 // <-- Non-regression test for bug 7231 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=7231
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/7231
 //
 // <-- Short Description -->
 // mtlb_num2str did not manage second input argument

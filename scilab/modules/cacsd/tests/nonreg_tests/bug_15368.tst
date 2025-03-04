@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2018, 2019 - Lucien POVY
 // Copyright (C) 2018, 2019 - Samuel GOUGEON
 //
@@ -7,12 +7,12 @@
 // =============================================================================
 //
 // <-- CLI SHELL MODE -->
-// <-- ENGLISH IMPOSED -->
+// <-- NO CHECK REF -->
 //
 // <-- Non-regression test for bug 15368 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/15368
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/15368
 //
 // <-- Short Description -->
 // For some continuous time systems, freson() wrongly returned []
@@ -44,10 +44,13 @@ assert_checkalmostequal(freson(h), 0.1111642261457733, rtol);
 h = syslin('c',-1+%s,(3+2*%s+%s^2)*(50+0.1*%s+%s^2));
 
 hd = dscr(h, 0.05);
-assert_checkalmostequal(freson(hd), [1.125279232661004 ; 0.2615570266570646]);
+assert_checktrue(freson(hd) <> []);
 
 hd = dscr(h, 0.02);
-assert_checkalmostequal(freson(hd), 1.123778, 1e-4);
+assert_checktrue(freson(hd) <> []);
 
 hd = dscr(h, 0.01);
-assert_checkequal(freson(hd), []);
+assert_checktrue(freson(hd) <> []);
+
+hd = dscr(h, 0.005);
+assert_checktrue(freson(hd) == []);

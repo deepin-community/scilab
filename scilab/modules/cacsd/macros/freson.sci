@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2000 - 2016 - INRIA - Serge Steer
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -49,7 +49,7 @@ function fr = freson(h)
     if dt=="c" then
         //find frequencies which zeros the magnitude derivative
         hh = h*horner(h, -%s);
-        hh = clean(hh, 0, %eps);    // http://bugzilla.scilab.org/15368
+        hh = clean(hh, 0, %eps);    // https://gitlab.com/scilab/scilab/-/issues/15368
         r = roots(derivat(hh).num)
         k = find(imag(r)>0 & abs(real(r)) < %eps*abs(r));
         fr = imag(r(k))/(2*%pi)
@@ -68,7 +68,7 @@ function fr = freson(h)
     k = find(abs(repfreq(h,fr)) - abs(repfreq(h,fr*0.999))>0)
     fr = gsort(fr(k),"g","d");
 
-    // Checking                 // http://bugzilla.scilab.org/15368
+    // Checking                 // https://gitlab.com/scilab/scilab/-/issues/15368
     f = fr(:)'
     f = [f*0.99 ; f ; f*1.01];
     [f,repf] = repfreq(h0, f(:));

@@ -245,8 +245,8 @@ msgid "API_ERROR_GET_POLY_IN_LIST"
 msgstr "API_ERROR_GET_POLY_IN_LIST"
 
 #, c-format
-msgid "%ls: Unrecognized optional arguments %ls.\n"
-msgstr "%ls: オプション引数 %ls を認識できません.\n"
+msgid "%s: Unrecognized optional arguments %s.\n"
+msgstr "%s: オプション引数 %s を認識できません.\n"
 
 msgid "Optional argument list is empty.\n"
 msgstr "オプションの引数リストが空です.\n"

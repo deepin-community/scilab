@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Charlotte HECQUET
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -44,15 +44,16 @@ assert_checkequal(cross(A,B),C);
 // Error messages
 errmsg1=msprintf(_("Wrong number of input arguments.\n"));
 assert_checkerror("cross(A,B,C)", errmsg1);
-errmsg2=msprintf(_("%s: Wrong number of input arguments: %d expected.\n"), "cross",2);
+errmsg2=msprintf(_("%s: Wrong number of input argument(s): %d expected.\n"), "cross",2);
 assert_checkerror("cross(A)", errmsg2);
-errmsg3=msprintf(_("%s: Wrong type for input argument #%d: A real, complex, boolean or polynomial matrix expected.\n"), "cross", 1);
+errargs = sci2exp(["double","boolean","polynomial","sparse","int"]);
+errmsg3=msprintf(_("%s: Wrong type for input argument #%d: Must be in %s.\n"), "cross", 1, errargs);
 assert_checkerror("cross([""s"";""t"";""u""],B)", errmsg3);
-errmsg4=msprintf(_("%s: Wrong type for input argument #%d: A real, complex, boolean or polynomial matrix expected.\n"), "cross", 2);
+errmsg4=msprintf(_("%s: Wrong type for input argument #%d: Must be in %s.\n"), "cross", 2, errargs);
 assert_checkerror("cross(A,[""s"";""t"";""u""])", errmsg4);
 errmsg5=msprintf(_("%s: Wrong size for input argument #%d: A matrix of size 1x3 or 3xN expected.\n"), "cross", 1);
 assert_checkerror("cross([1;2;3;4],[1;2;3;4])", errmsg5);
-errmsg6=msprintf(_("%s: Wrong size for input arguments: Same sizes expected.\n"), "cross");
+errmsg6=msprintf(_("%s: Wrong size for input argument #%d: Must be of the same dimensions of #%d.\n"), "cross", 2, 1);
 assert_checkerror("cross(A,[2;3])",errmsg6);
 A = rand(2,3);
 errmsg = msprintf(_("%s: Wrong size for input argument #%d: A matrix of size 1x3 or 3xN expected.\n"), "cross", 1);

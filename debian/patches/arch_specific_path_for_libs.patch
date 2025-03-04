@@ -1,0 +1,35 @@
+Description: adding the architecture-specific install dir of libraries to the
+ path
+Author: Pierre Gruet <pgt@debian.org>
+Forwarded: not-needed
+Last-Update: 2023-11-19
+
+--- a/scilab/bin/scilab
++++ b/scilab/bin/scilab
+@@ -46,7 +46,7 @@
+ # We initialize _JAVA_OPTIONS so that the right paths are looked into and we
+ # add the needed --add-opens to work with OpenJDK 17.
+ if ! echo "${_JAVA_OPTIONS}" | grep -q "java\.library\.path" ; then
+-    _JAVA_OPTIONS="${_JAVA_OPTIONS} -Djava.library.path=/usr/lib/jni:/usr/lib/scilab --add-opens=java.desktop/sun.awt.X11=ALL-UNNAMED --add-opens=java.desktop/sun.java2d.opengl=ALL-UNNAMED --add-opens=java.desktop/javax.swing.plaf.basic=ALL-UNNAMED"
++    _JAVA_OPTIONS="${_JAVA_OPTIONS} -Djava.library.path=/usr/lib/jni:/usr/lib/$(dpkg-architecture -qDEB_HOST_MULTIARCH)/scilab --add-opens=java.desktop/sun.awt.X11=ALL-UNNAMED --add-opens=java.desktop/sun.java2d.opengl=ALL-UNNAMED --add-opens=java.desktop/javax.swing.plaf.basic=ALL-UNNAMED"
+ fi
+ 
+ if test ! -z "$SCIVERBOSE"; then
+@@ -719,7 +719,7 @@
+         TCL_LIBRARY="$SCIBINARYBASE/thirdparty/tcl8.5"
+         TK_LIBRARY="$SCIBINARYBASE/thirdparty/tk8.5"
+     fi
+-    LD_LIBRARY_PATH=$SCIBINARYBASE/lib/scilab:$SCIBINARYBASE/lib/thirdparty${LD_LIBRARY_PATH+:$LD_LIBRARY_PATH}:$SCIBINARYBASE/lib/thirdparty/redist
++    LD_LIBRARY_PATH=$SCIBINARYBASE/lib/$(dpkg-architecture -qDEB_HOST_MULTIARCH)/scilab:$SCIBINARYBASE/lib/thirdparty${LD_LIBRARY_PATH+:$LD_LIBRARY_PATH}:$SCIBINARYBASE/lib/thirdparty/redist
+     DOCBOOK_ROOT="$SCI/../../thirdparty/docbook"
+     PATH="$PATH:$SCI/modules/scicos/"
+ 
+@@ -833,7 +833,7 @@
+     esac
+ }
+ 
+-SCILIB=/usr/lib/scilab
++SCILIB=/usr/lib/$(dpkg-architecture -qDEB_HOST_MULTIARCH)/scilab
+ if test -d "$SCI/lib/thirdparty"; then
+     SCILIB=$SCI/lib/thirdparty:$SCILIB;
+ fi

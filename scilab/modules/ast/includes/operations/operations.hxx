@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2014 - Scilab Enterprises - Antoine ELIAS
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -18,3 +18,6 @@
 #include "dynlib_ast.h"
 
 EXTERN_AST void initOperationArray();
+EXTERN_AST std::wstring checkSameSize(types::GenericType*, types::GenericType*, std::wstring op);
+EXTERN_AST std::wstring errorSameSize(types::GenericType*, types::GenericType*, std::wstring op);
+EXTERN_AST std::wstring errorMultiplySize(types::GenericType*, types::GenericType*);

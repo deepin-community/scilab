@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2010 - Calixte DENIZET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -15,18 +15,15 @@
 
 package org.scilab.modules.scinotes.utils;
 
+import java.awt.print.PageFormat;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.OutputStream;
-import java.io.StringReader;
-
-import java.awt.print.PageFormat;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.StringReader;
 import java.util.Collections;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -35,19 +32,17 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.fop.apps.FOUserAgent;
+import org.apache.fop.apps.Fop;
+import org.apache.fop.apps.FopFactory;
+import org.apache.fop.apps.MimeConstants;
 import org.scilab.modules.commons.ScilabConstants;
 import org.scilab.modules.commons.xml.ScilabTransformerFactory;
+import org.scilab.modules.gui.messagebox.ScilabModalDialog;
+import org.scilab.modules.helptools.scilab.HTMLWithStyleScilabCodeHandler;
+import org.scilab.modules.scinotes.SciNotes;
 import org.scilab.modules.scinotes.ScilabDocument;
 import org.scilab.modules.scinotes.ScilabEditorPane;
-import org.scilab.modules.scinotes.SciNotes;
-import org.scilab.modules.helptools.scilab.AbstractScilabCodeHandler;
-import org.scilab.modules.gui.messagebox.ScilabModalDialog;
-
-import org.apache.fop.apps.FopFactory;
-import org.apache.fop.apps.Fop;
-import org.apache.fop.apps.FOUserAgent;
-import org.apache.fop.apps.MimeConstants;
-import org.scilab.modules.helptools.scilab.HTMLWithStyleScilabCodeHandler;
 
 /**
  * Code converter Class

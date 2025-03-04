@@ -1,4 +1,4 @@
-# Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+# Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 # Copyright (C) 2006 - INRIA - Sylvestre LEDRU
 #
 # This file is distributed under the same license as the Scilab package.
@@ -23,7 +23,6 @@ FILEIO_C_SOURCES = \
     src/c/cluni0.c \
     src/c/scicurdir.c \
     src/c/fileinfo.c \
-    src/c/getrelativefilename.c \
     src/c/splitpath.c \
     src/c/movefile.c \
     src/c/basename.c \
@@ -45,8 +44,7 @@ GATEWAY_C_SOURCES = \
     sci_gateway/c/sci_copyfile.c \
     sci_gateway/c/sci_tempname.c \
     sci_gateway/c/sci_movefile.c \
-	sci_gateway/c/sci_getURL.c \
-	sci_gateway/c/sci_splitURL.c
+	sci_gateway/c/sci_getURL.c
 
 GATEWAY_CPP_SOURCES = \
 	sci_gateway/cpp/fileio_gw.cpp \
@@ -87,7 +85,10 @@ GATEWAY_CPP_SOURCES = \
 	sci_gateway/cpp/sci_mfscanf.cpp \
 	sci_gateway/cpp/sci_mscanf.cpp \
 	sci_gateway/cpp/sci_msscanf.cpp \
-	sci_gateway/cpp/sci_getdrives.cpp
+	sci_gateway/cpp/sci_getdrives.cpp \
+	sci_gateway/cpp/sci_compress.cpp \
+	sci_gateway/cpp/sci_decompress.cpp \
+	sci_gateway/cpp/archive_utils.cpp
 
 FILEIO_CPP_SOURCES = \
 	src/cpp/expandPathVariable.cpp \
@@ -122,7 +123,6 @@ libscifileio_la_CPPFLAGS = \
     -I$(top_srcdir)/modules/ast/includes/symbol/ \
     -I$(top_srcdir)/modules/ast/includes/system_env/ \
     -I$(top_srcdir)/modules/ast/includes/types/ \
-    -I$(top_srcdir)/modules/ast/includes/analysis/ \
 	-I$(top_srcdir)/modules/api_scilab/includes \
 	-I$(top_srcdir)/modules/output_stream/includes \
 	-I$(top_srcdir)/modules/functions_manager/includes \
@@ -135,9 +135,8 @@ libscifileio_la_CPPFLAGS = \
 	-I$(top_srcdir)/modules/preferences/includes \
 	$(HDF5_CFLAGS) \
 	$(XML_FLAGS) \
-	$(CURL_CFLAGS) \
+	$(LIBARCHIVE_CFLAGS) \
 	$(AM_CPPFLAGS)
-
 
 if MAINTAINER_MODE
 pkglib_LTLIBRARIES = libscifileio.la
@@ -150,8 +149,9 @@ endif
 
 libscifileio_algo_la_SOURCES = $(FILEIO_C_SOURCES) $(FILEIO_CPP_SOURCES) $(FILEIO_FORTRAN_SOURCES)
 libscifileio_la_SOURCES = $(GATEWAY_C_SOURCES) $(GATEWAY_CPP_SOURCES)
+
 libscifileio_algo_la_CPPFLAGS = $(libscifileio_la_CPPFLAGS)
-libscifileio_algo_la_LDFLAGS = $(CURL_LIBS)
+libscifileio_la_LDFLAGS = $(LIBARCHIVE_LIBS)
 
 # For the code check (splint)
 CHECK_SRC= $(FILEIO_C_SOURCES) $(FILEIO_CPP_SOURCES) $(GATEWAY_C_SOURCES) $(GATEWAY_CPP_SOURCES)
@@ -177,8 +177,5 @@ libscifileio_la_etc_DATA = etc/fileio.quit etc/fileio.start
 libscifileio_la_includedir=$(pkgincludedir)
 libscifileio_la_include_HEADERS = includes/getFullFilename.h \
 includes/dynlib_fileio.h
-
-#### fileio : CSV import GUI library
-MACROSDIRSEXT= macros/importgui
 
 include $(top_srcdir)/Makefile.incl.am

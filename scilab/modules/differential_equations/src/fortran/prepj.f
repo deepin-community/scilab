@@ -24,6 +24,8 @@ cDEC$ ATTRIBUTES DLLIMPORT:: /ls0001/
      4   icf, ierpj, iersl, jcur, jstart, kflag, l, meth, miter,
      5   maxord, maxcor, msbp, mxncf, n, nq, nst, nfe, nje, nqu
       save/ls0001/
+cDEC$ ATTRIBUTES DLLIMPORT:: /ierode/
+      COMMON /ierode/ierror
 c-----------------------------------------------------------------------
 c%purpose
 c prepj is called by stode to compute and process the matrix

@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2016 - Samuel GOUGEON
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -11,9 +11,9 @@
 // along with this program.
 
 function z = bitand(x, y)
-    if argn(2) <> 2 then
-        msg = gettext("%s: Wrong number of input argument(s): %d expected.\n")
-        error(msprintf(msg, "bitand", 2))
+    arguments
+        x
+        y
     end
     z = bit_op(x, y, "bitand")
 endfunction

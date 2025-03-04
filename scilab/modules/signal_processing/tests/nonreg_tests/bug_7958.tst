@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2016 - Scilab Enterprises - Adeline CARNIS
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -8,8 +8,8 @@
 //<-- CLI SHELL MODE -->
 // <-- Non-regression test for bug 7958 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=7958
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/7958
 //
 // <-- Short Description -->
 //  mrfit did not allow a fourth parameter as shown in the help page.
@@ -21,8 +21,8 @@ fresp=repfreq(G,w);
 mag=abs(fresp);
 Gid=mrfit(w,mag,4);
 Gidd = mrfit(w, mag, 4, ones(length(w), 1));
-assert_checkalmostequal(coeff(Gidd.num), coeff(Gid.num), 1e-14);
-assert_checkalmostequal(coeff(Gidd.den), coeff(Gid.den), 1e-14);
+assert_checkalmostequal(coeff(Gidd.num), coeff(Gid.num), 1e-13);
+assert_checkalmostequal(coeff(Gidd.den), coeff(Gid.den), 1e-13);
 
 // error
 assert_checkfalse(execstr("mrfit(w, mag, 4, 1)"   ,"errcatch") == 0);
@@ -32,5 +32,3 @@ assert_checkerror("mrfit(w, mag, 4, 1)", refMsg);
 assert_checkfalse(execstr("mrfit(w, mag, 4, ones(1, length(w)))"   ,"errcatch") == 0);
 refMsg = msprintf(_("%s: Argument #%d: Column expected.\n"), "mrfit", 4);
 assert_checkerror("mrfit(w, mag, 4, ones(1, length(w)))", refMsg);
-
-

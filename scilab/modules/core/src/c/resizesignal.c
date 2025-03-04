@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2020 - ESI Group - Cedric Delamarre
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
@@ -11,12 +11,15 @@
  *
  */
 #include <stdio.h>
+#include <signal.h>
+
 #include "resizesignal.h"
 #include "scilines.h"
 #include "configvariable_interface.h"
 
 /* Set the console width read from the term size. */
-void resize_handler(int sig)
+static
+void resize_handler(int sig, siginfo_t *info, void *p)
 {
     // save the number of lines
     int lines = getConsoleLines();

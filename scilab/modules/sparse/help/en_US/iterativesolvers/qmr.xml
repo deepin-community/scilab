@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) XXXX-2008 - INRIA
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -25,7 +25,6 @@
         <title>Syntax</title>
         <synopsis>
             [x, flag, err, iter, res] = qmr(A, b, x0, M1, M2, maxi, tol)
-            [x, flag, err, iter, res] = qmr(A,Ap,b,x0,M1,M1p,M2,M2p,maxi,tol) // deprecated
         </synopsis>
     </refsynopsisdiv>
     <refsection>
@@ -34,45 +33,24 @@
             <varlistentry>
                 <term>A</term>
                 <listitem>
-                    Square dense or sparse matrix of size n-by-n, or function:
-                    <para/>
+                    <para>Square dense or sparse matrix of size n-by-n, or function.</para>
+                    <para>
+                    If A is a function which returns <literal>A*x</literal> or
+                    <literal>A'*x</literal> depending on a option t, it must
+                    have the following header: <literal>function y = A(x, t)</literal>
+                    </para>
                     <itemizedlist>
                         <listitem>
-                            If A is a function which returns <literal>A*x</literal>, it must
-                            have the following header :
-                            <para/>
-                            <literal>function y = A ( x )</literal>
+                            If <literal>t = "notransp"</literal>: the function returns
+                            <literal>A*x</literal>.
                         </listitem>
                         <listitem>
-                            If A is a function which returns <literal>A*x</literal> or
-                            <literal>A'*x</literal> depending on a option t, it must
-                            have the following header :
-                            <para/>
-                            <literal>function y = A(x, t)</literal>
-                            <para/>
-                            <itemizedlist>
-                                <listitem>
-                                    If <literal>t = "notransp"</literal>: the function returns
-                                    <literal>A*x</literal>.
-                                </listitem>
-                                <listitem>
-                                    If <literal>t = "transp"</literal>: the function returns
-                                    <literal>A'*x</literal>.
-                                </listitem>
-                            </itemizedlist>
+                            If <literal>t = "transp"</literal>: the function returns
+                            <literal>A'*x</literal>.
                         </listitem>
                     </itemizedlist>
-                    <para/>
                 </listitem>
-            </varlistentry>
-            <varlistentry>
-                <term>Ap</term>
-                <listitem>
-                    function returning <literal>A'*x</literal>. It must have the following header :
-                    <para/>
-                    <literal>function y = Ap(x)</literal>
-                    <para/>
-                </listitem>
+                <para/>
             </varlistentry>
             <varlistentry>
                 <term>b</term>
@@ -91,54 +69,19 @@
             <varlistentry>
                 <term>M1</term>
                 <listitem>
-                    left preconditioner : matrix or function (In the first case, default: eye(n,n)).
-                    If <literal>M1</literal> is a function, it returns either,
-                    <itemizedlist>
-                        <listitem>
-                            only <literal>M1*x</literal>, or
-                        </listitem>
-                        <listitem>
-                            <literal>M1*x</literal> or <literal>M1'*x</literal>, depending on
-                            <literal>t</literal>.
-                        </listitem>
-                    </itemizedlist>
-                    <para/>
-                </listitem>
-            </varlistentry>
-            <varlistentry>
-                <term>M1p</term>
-                <listitem>
-                    must only be provided when <literal>M1</literal> is a function returning
-                    <literal>M1*x</literal>.
-                    In this case <literal>M1p</literal> is the function which returns
-                    <literal>M1'*x</literal>.
-                    <para/>
+                    <para>
+                    left preconditioner: matrix or function (In the first case, default: eye(n,n)).
+                    If <literal>M1</literal> is a function, it returns: <literal>M1*x</literal> or <literal>M1'*x</literal>, depending on <literal>t</literal>.
+                    </para>
                 </listitem>
             </varlistentry>
             <varlistentry>
                 <term>M2</term>
                 <listitem>
-                    right preconditioner : matrix or function (In the first case, default: eye(n,n)).
-                    If <literal>M2</literal> is a function, it returns either
-                    <itemizedlist>
-                        <listitem>
-                            only <literal>M2*x</literal>, or
-                        </listitem>
-                        <listitem>
-                            <literal>M2*x</literal> or <literal>M2'*x</literal> depending on
-                            an option <literal>t</literal>.
-                        </listitem>
-                    </itemizedlist>
-                    <para/>
-                </listitem>
-            </varlistentry>
-            <varlistentry>
-                <term>M2p</term>
-                <listitem>
-                    must only be provided when <literal>M2</literal> is a function returning
-                    <literal>M2*x</literal>. In this case <literal>M2p</literal> is the
-                    function which returns <literal>M2'*x</literal>
-                    <para/>
+                    <para>
+                    right preconditioner: matrix or function (In the first case, default: eye(n,n)).
+                    If <literal>M2</literal> is a function, it returns: <literal>M2*x</literal> or <literal>M2'*x</literal> depending on <literal>t</literal>.
+                    </para>
                 </listitem>
             </varlistentry>
             <varlistentry>
@@ -261,44 +204,6 @@ b = ones(10,1);
 [x,flag,err,iter,res] = qmr(Atimesx, b, zeros(10,1), eye(10,10), eye(10,10), 10, 1d-12)
      ]]></programlisting>
         <para>
-            OR
-        </para>
-        <programlisting role="example"><![CDATA[
-function y = funA(x)
-    A = [ 94  0   0   0    0   28  0   0   32  0
-          0   59  13  5    0   0   0   10  0   0
-          0   13  72  34   2   0   0   0   0   65
-          0   5   34  114  0   0   0   0   0   55
-          0   0   2   0    70  0   28  32  12  0
-          28  0   0   0    0   87  20  0   33  0
-          0   0   0   0    28  20  71  39  0   0
-          0   10  0   0    32  0   39  46  8   0
-          32  0   0   0    12  33  0   8   82  11
-          0   0   65  55   0   0   0   0   11  100];
-     y = A*x
-endfunction
-
-function y = funAp(x)
-    A = [ 94  0   0   0    0   28  0   0   32  0
-          0   59  13  5    0   0   0   10  0   0
-          0   13  72  34   2   0   0   0   0   65
-          0   5   34  114  0   0   0   0   0   55
-          0   0   2   0    70  0   28  32  12  0
-          28  0   0   0    0   87  20  0   33  0
-          0   0   0   0    28  20  71  39  0   0
-          0   10  0   0    32  0   39  46  8   0
-          32  0   0   0    12  33  0   8   82  11
-          0   0   65  55   0   0   0   0   11  100];
-     y = A'*x
-endfunction
-
-b = ones(10,1);
-
-[x,flag,err,iter,res] = qmr(funA, funAp, b)
-
-[x,flag,err,iter,res] = qmr(funA, funAp, b, zeros(10,1), eye(10,10), eye(10,10), 10, 1d-12)
-     ]]></programlisting>
-        <para>
             If A is a matrix, M1 and M2 are functions:
         </para>
         <programlisting role="example"><![CDATA[
@@ -336,52 +241,10 @@ endfunction
 [x, flag, err, iter, res] = qmr(A, b, zeros(10,1), M1timesx, M2timesx, 10, 1d-12)
      ]]></programlisting>
         <para>
-            OR
-        </para>
-        <programlisting role="example"><![CDATA[
-A = [ 94   0   0   0    0   28  0   0   32  0
-       0   59  13  5    0   0   0   10  0   0
-       0   13  72  34   2   0   0   0   0   65
-       0   5   34  114  0   0   0   0   0   55
-       0   0   2   0    70  0   28  32  12  0
-       28  0   0   0    0   87  20  0   33  0
-       0   0   0   0    28  20  71  39  0   0
-       0   10  0   0    32  0   39  46  8   0
-       32  0   0   0    12  33  0   8   82  11
-       0   0   65  55   0   0   0   0   11  100];
-
-b = ones(10,1);
-
-function y = funM1(x)
-    M1 = eye(10,10);
-    y = M1*x;
-endfunction
-
-function y = funM1p(x)
-    M1 = eye(10,10);
-    y = M1'*x;
-endfunction
-
-function y = funM2(x)
-    M2 = eye(10,10);
-    y = M2*x;
-endfunction
-
-function y = funM2p(x)
-    M2 = eye(10,10);
-    y = M2'*x;
-endfunction
-
-[x,flag,err,iter,res] = qmr(A, b, zeros(10,1), funM1, funM1p, funM2, funM2p, 10, 1d-12)
-     ]]></programlisting>
-        <para>
             If A, M1, M2 are functions:
         </para>
         <programlisting role="example"><![CDATA[
 // See functions defined above in previous examples. Then,
-
-[x,flag,err,iter,res] = qmr(funA, funAp, b, zeros(10,1), funM1, funM1p, funM2, funM2p, 10, 1d-12)
-// or
 [x,flag,err,iter,res] = qmr(Atimesx, b, zeros(10,1), M1timesx, M2timesx, 10, 1d-12)
      ]]></programlisting>
     </refsection>
@@ -403,6 +266,12 @@ endfunction
                 <revnumber>5.4.0</revnumber>
                 <revdescription>
                     Calling qmr(A, Ap) is deprecated. qmr(A) should be used instead.
+                </revdescription>
+            </revision>
+            <revision>
+                <revnumber>2023.0.0</revnumber>
+                <revdescription>
+                    Calling qmr(A, Ap) is removed.
                 </revdescription>
             </revision>
         </revhistory>

@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2012 - Scilab Enterprises - Calixte DENIZET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -106,6 +106,11 @@ void InitializePreferences(int useCWD)
         setRecursionLimit(recursionlimit);
     }
 
+    //polynomial exponent display
+    if (prefs->polynomialDisplay)
+    {
+        setPolynomialDisplay(atoi(prefs->polynomialDisplay));
+    }
 
     clearScilabPreferences();
 }

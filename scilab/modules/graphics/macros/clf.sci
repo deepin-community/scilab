@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
 // Copyright (C) 2017 - 2019 - Samuel GOUGEON
@@ -170,7 +170,7 @@ function clf(varargin)
         "tag"
         ];
         excluded0 = ["children" "figure_id" "dockable" "menubar" "toolbar" "immediate_drawing"]
-        excluded0 = [excluded0 "layout" "layout_options"] // http://bugzilla.scilab.org/14955
+        excluded0 = [excluded0 "layout" "layout_options"] // https://gitlab.com/scilab/scilab/-/issues/14955
         for k = 1: nbHandles
             curFig = h(k);
             if curFig.type == "uicontrol" | or(curFig.tag == protected) then
@@ -182,7 +182,7 @@ function clf(varargin)
 
             // properties to set
             excluded = excluded0
-            if isDocked(curFig)            // http://bugzilla.scilab.org/11476
+            if isDocked(curFig)            // https://gitlab.com/scilab/scilab/-/issues/11476
                 excluded = [excluded "figure_position" "figure_size" "axes_size"]
             end
             defaultProps = setdiff(allprops, excluded);

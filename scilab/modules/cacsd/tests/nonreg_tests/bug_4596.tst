@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009 - INRIA - Serge Steer
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -10,8 +10,8 @@
 //<-- CLI SHELL MODE -->
 //<-- NO CHECK REF -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=4596
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/4596
 //
 // <-- Short Description -->
 //   g_margin fails to return the gain margins in some cases.

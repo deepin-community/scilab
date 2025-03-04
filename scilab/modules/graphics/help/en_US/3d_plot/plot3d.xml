@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) ENPC - Jean-Philippe Chancelier
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -446,7 +446,7 @@ clf();plot3d(xx,yy,zz)
 
         <programlisting role="example"><![CDATA[
 f=gcf();
-f.color_map = hotcolormap(128);
+f.color_map = hot(128);
 r=0.3;orig=[1.5 0 0];
 deff("[x,y,z]=sph(alp,tet)",["x=r*cos(alp).*cos(tet)+orig(1)*ones(tet)";..
      "y=r*cos(alp).*sin(tet)+orig(2)*ones(tet)";..
@@ -459,7 +459,7 @@ clf();plot3d1([xx xx1],[yy yy1],list([zz,zz1],[cc cc1]),theta=70,alpha=80,flag=[
 
         <scilab:image>
             f=gcf();
-            f.color_map = hotcolormap(128);
+            f.color_map = hot(128);
             r=0.3;orig=[1.5 0 0];
             deff("[x,y,z]=sph(alp,tet)",["x=r*cos(alp).*cos(tet)+orig(1)*ones(tet)";..
             "y=r*cos(alp).*sin(tet)+orig(2)*ones(tet)";..
@@ -501,7 +501,7 @@ h.color_mode=-2;  //remove the facets boundary by setting color_mode to white co
 h.color_flag=2; //color according to given colors
 h.color_mode = -1; // put the facets boundary back by setting color_mode to black color
 f=gcf();//get the handle of the parent figure
-f.color_map=hotcolormap(512);
+f.color_map=hot(512);
 c=[1:400,1:400];
 TL.color = [c;c+1;c+2;c+3];
 h.data = TL;
@@ -539,7 +539,7 @@ h.color_flag=3; // interpolated shading mode
             h.color_flag=2; //color according to given colors
             h.color_mode = -1; // put the facets boundary back by setting color_mode to black color
             f=gcf();//get the handle of the parent figure
-            f.color_map=hotcolormap(512);
+            f.color_map=hot(512);
             c=[1:400,1:400];
             TL.color = [c;c+1;c+2;c+3];
             h.data = TL;

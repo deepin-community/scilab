@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2011 - Scilab Enterprises - Calixte DENIZET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -60,21 +60,12 @@ int sci_print(char *fname, void *pvApiCtx)
 
     const std::string str = obj->toString();
 
-    sciprint("%s\n", str.c_str());
+    if (str.size()>0)
+    {
+        sciprint("%s\n", str.c_str());        
+    }
 
     return 0;
-}
-
-/*--------------------------------------------------------------------------*/
-int sci_percent_XMLDoc_p(char *fname, void* pvApiCtx)
-{
-    return sci_print(fname, pvApiCtx);
-}
-
-/*--------------------------------------------------------------------------*/
-int sci_percent_XMLElem_p(char *fname, void* pvApiCtx)
-{
-    return sci_print(fname, pvApiCtx);
 }
 
 /*--------------------------------------------------------------------------*/

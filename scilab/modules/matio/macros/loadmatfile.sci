@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2002-2010 - INRIA - Vincent COUVERT
 // Copyright (C) ???? - INRIA - Serge STEER
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -18,9 +18,9 @@ function outStruct = loadmatfile(varargin)
     // www.mathworks.com/access/helpdesk/help/pdf_doc/matlab/matfile_format.pdf
 
     // 2019 - S. Gougeon:
-    //   * "-octave" format added: http://bugzilla.scilab.org/16242
-    //   * "-toStruct" option added: http://bugzilla.scilab.org/15680
-    //   * Automatic format detection added: http://bugzilla.scilab.org/16271
+    //   * "-octave" format added: https://gitlab.com/scilab/scilab/-/issues/16242
+    //   * "-toStruct" option added: https://gitlab.com/scilab/scilab/-/issues/15680
+    //   * Automatic format detection added: https://gitlab.com/scilab/scilab/-/issues/16271
 
     Names = []      // Names of read variables
     Values = list() // Values of read variables
@@ -66,8 +66,18 @@ function outStruct = loadmatfile(varargin)
         end
     end
 
+    // Test if there are remaining (wrong) options (See issue #16930)
+    for opt=varnames'
+        if part(opt, 1) == "-" then
+            error(msprintf(gettext("%s: Unknown option: ''%s''.\n"), "loadmatfile", opt));
+        end
+    end
+
     // Retrieve the filename
     // ----------------------
+    if varnames == [] then
+        error(msprintf(gettext("%s: No filename provided in input arguments.\n"), "loadmatfile"));
+    end
     fil = pathconvert(varnames(1), %F, %T)
     if ~isfile(fil) then
         if ~isfile(fil + ".mat") then
@@ -167,7 +177,7 @@ function outStruct = loadmatfile(varargin)
         txt(emptyLines) = []; // Remove empty lines
 
         // Values read
-        Values = evstr(txt);
+        Values = list(evstr(txt)); // Values must be a list as declared at line 26
 
         // Output variable name generated from file name
         Names = fileparts(fil, "fname")
@@ -186,6 +196,12 @@ function outStruct = loadmatfile(varargin)
     //-- Error while reading?
     if isempty(Names) then
         error(msprintf(gettext("%s: No variable read in file ''%s''. Check if your file is not corrupted.\n"),"loadmatfile", fil));
+    end
+    //-- Variable not found
+    for vname=varnames'
+        if ~or(vname == Names) then
+            error(msprintf(gettext("%s: Variable ''%s'' was not found in file ''%s''.\n"), "loadmatfile", vname, fil));
+        end
     end
 
     //-- Return variables in the calling context

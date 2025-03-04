@@ -1243,11 +1243,7 @@ function [lnksz,lnktyp,inplnk,outlnk,clkptr,cliptr,inpptr,outptr,xptr,zptr,..
         end
 
         //dstate
-        if (funtyp(i,1)==3 | funtyp(i,1)==5 | funtyp(i,1)==10005) then //sciblocks
-            if ll.dstate==[] then xd0k=[]; else xd0k=var2vec(ll.dstate);end
-        else
-            xd0k=ll.dstate(:)
-        end
+        xd0k=ll.dstate(:)
         xd0=[xd0;xd0k]
         zptr(i+1)=zptr(i)+size(xd0k,"*")
 

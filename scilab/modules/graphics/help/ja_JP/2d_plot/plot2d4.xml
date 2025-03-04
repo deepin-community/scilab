@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) ENPC - Jean-Philippe Chancelier
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -77,8 +77,14 @@ e = gce();
 e.children.polyline_style=4;
  ]]></programlisting>
         <scilab:image>
+            subplot(2,1,1)
             x = [0:0.1:2*%pi]';
-            plot2d4(x, [sin(x) sin(2*x) sin(3*x)])
+            plot2d4(x,[sin(x) sin(2*x) sin(3*x)])
+
+            subplot(2,1,2)
+            plot2d(x,[sin(x) sin(2*x) sin(3*x)])
+            e = gce();
+            e.children.polyline_style=4;
         </scilab:image>
     </refsection>
     <refsection role="see also">

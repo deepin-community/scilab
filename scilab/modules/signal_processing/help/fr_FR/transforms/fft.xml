@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 1997   - INRIA
  * Copyright (C) 2012 - Serge Steer - INRIA
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -296,7 +296,7 @@ plot(f, abs(y(1:n)))
 A = zeros(256,256);
 A(5:24,13:17) = 1;
 X = fftshift(fft(A));
-set(gcf(), "color_map",jetcolormap(128));
+set(gcf(), "color_map",jet(128));
 clf; grayplot(0:255, 0:255, abs(X)')
      ]]></programlisting>
         <para>FFT ND-dimensionnelle ("hyper-FFT")</para>

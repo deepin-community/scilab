@@ -1,6 +1,6 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
-// Copyright (C) 2018 - Stéphane Mottelet
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
+// Copyright (C) 2018 - UTC - Stéphane MOTTELET
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
@@ -11,8 +11,8 @@
 //
 // <-- Non-regression test for bug 15635 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/15635
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/15635
 //
 // <-- Short Description -->
 // delip(1,4) terminates with neither output nor error (regression)

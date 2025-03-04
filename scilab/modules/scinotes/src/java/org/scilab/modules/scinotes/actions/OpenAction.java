@@ -1,9 +1,9 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009 - DIGITEO - Bruno JOFRET
  * Copyright (C) 2010 - Calixte DENIZET
- *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ * Copyright (C) 2021 - 2022 Stéphane MOTTELET
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
  * pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -22,8 +22,9 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.KeyStroke;
 
-import org.scilab.modules.gui.bridge.filechooser.SwingScilabFileChooser;
 import org.scilab.modules.gui.filechooser.Juigetfile;
+import org.scilab.modules.gui.filechooser.FileChooserInfos;
+import org.scilab.modules.gui.filechooser.FileChooser;
 import org.scilab.modules.gui.filechooser.ScilabFileChooser;
 import org.scilab.modules.gui.utils.ConfigManager;
 import org.scilab.modules.scinotes.SciNotes;
@@ -34,6 +35,7 @@ import org.scilab.modules.scinotes.utils.SciNotesMessages;
  * File opening management
  * @author Bruno JOFRET
  * @author Calixte DENIZET
+ * @author Stéphane MOTTELET
  */
 public class OpenAction extends DefaultAction {
 
@@ -76,21 +78,24 @@ public class OpenAction extends DefaultAction {
             path = ConfigManager.getLastOpenedDirectory();
         }
 
-        String[] mask = new String[] {"*.cos*", "*.sci", "*.sce", "*.tst", "*.start", "*.quit", "*.dem", "*.sc*", "all"};
+        String[] mask = new String[] {"*.sci", "*.sce", "*.tst", "*.start", "*.quit", "*.dem","*.sci|*.sce"};
 
-        SwingScilabFileChooser fileChooser = ((SwingScilabFileChooser) ScilabFileChooser.createFileChooser().getAsSimpleFileChooser());
-        fileChooser.setMultiSelectionEnabled(true);
-        fileChooser.setInitialDirectory(path);
-        fileChooser.setAcceptAllFileFilterUsed(true);
-        fileChooser.addMask(mask, null);
-        fileChooser.setUiDialogType(Juigetfile.SAVE_DIALOG);
+        FileChooser sfc = ScilabFileChooser.createFileChooser();
+        sfc.setAcceptAllFileFilterUsed(true);
+        sfc.addMask(mask, null);
+        sfc.setMultipleSelection(true);
+        sfc.setInitialDirectory(path);
+        sfc.setTitle(SciNotesMessages.OPEN);
+        sfc.setUiDialogType(Juigetfile.OPEN_DIALOG);
+        sfc.displayAndWait();
+        sfc.invalidate();
 
-        int retval = fileChooser.showOpenDialog(getEditor());
-        if (retval == JFileChooser.APPROVE_OPTION) {
-            File[] f = fileChooser.getSelectedFiles();
-            for (int i = 0; i < f.length; i++) {
-                ConfigSciNotesManager.saveToRecentOpenedFiles(f[i].getAbsolutePath());
-                getEditor().readFile(f[i]);
+        String[] selection = sfc.getSelection();
+
+        if (selection.length>0 && selection[0] != "") {
+            for (int i = 0; i < selection.length; i++) {
+                ConfigSciNotesManager.saveToRecentOpenedFiles(selection[i]);
+                getEditor().readFile(new File(selection[i]));
             }
             RecentFileAction.updateRecentOpenedFilesMenu(getEditor());
         }

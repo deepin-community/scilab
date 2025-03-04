@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2012 - Scilab Enterprises - Calixte Denizet
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -62,6 +62,8 @@ import org.scilab.forge.scirenderer.implementation.jogl.JoGLCanvasFactory;
 import org.scilab.modules.commons.ScilabCommonsUtils;
 import org.scilab.modules.graphic_export.convertToPPM.PPMEncoder;
 import org.scilab.modules.graphic_objects.figure.Figure;
+import org.scilab.modules.graphic_objects.axes.AxesContainer;
+import org.scilab.modules.graphic_objects.uicontrol.frame.Frame;
 import org.scilab.modules.graphic_objects.graphicController.GraphicController;
 import org.scilab.modules.graphic_objects.graphicObject.GraphicObjectProperties;
 import org.scilab.modules.renderer.JoGLView.DrawerVisitor;
@@ -202,17 +204,17 @@ public class Export {
 
     /**
      * Export in drawing in a Graphics2D
-     * @param uid the figure uid
+     * @param uid the figure/frame uid
      * @param type the export type
      * @param file the file where to export
      * @param params the export paramaters
      */
     public static int exportVectorial(int uid, TYPE type, File file, ExportParams params, boolean headless) throws IOException {
-        Figure figure = (Figure) GraphicController.getController().getObjectFromId(uid);
+        AxesContainer container = (AxesContainer) GraphicController.getController().getObjectFromId(uid);
 
         if (!headless) {
             Exporter exporter = getExporter(type);
-            Integer[] dims = figure.getAxesSize();
+            Integer[] dims = container.getAxesSize();
             int width = dims[0];
             int height = dims[1];
 
@@ -225,7 +227,7 @@ public class Export {
 
             Canvas canvas = G2DCanvasFactory.createCanvas(g2d, width, height);
             DrawerVisitor oldVisitor = DrawerVisitor.getVisitor(uid);
-            DrawerVisitor visitor = new DrawerVisitor(null, canvas, figure) {
+            DrawerVisitor visitor = new DrawerVisitor(null, canvas, container) {
                 @Override
                 public void updateObject(Integer id, int property) {
                     // Don't update during the export
@@ -238,6 +240,16 @@ public class Export {
                         super.visit(figure);
                         if (!figure.getVisible()) {
                             askAcceptVisitor(figure.getChildren());
+                        }
+                    }
+                }
+                @Override
+                public void visit(Frame frame) {
+                    // Fix for bug 13676: allow vectorial export even if the frame is invisible
+                    synchronized (frame) {
+                        super.visit(frame);
+                        if (!frame.getVisible()) {
+                            askAcceptVisitor(frame.getChildren());
                         }
                     }
                 }
@@ -255,7 +267,7 @@ public class Export {
                 return UNKNOWN_ERROR;
             } finally {
                 GraphicController.getController().unregister(visitor);
-                DrawerVisitor.changeVisitor(figure, oldVisitor);
+                DrawerVisitor.changeVisitor(container, oldVisitor);
                 exporter.dispose();
                 exporter = null;
                 visitorsToExp.remove(visitor);
@@ -286,7 +298,7 @@ public class Export {
                         exporter = null;
                         visitorsToExp.remove(visitor);
                     }
-                    DrawerVisitor.changeVisitor(figure, null);
+                    DrawerVisitor.changeVisitor(container, null);
                     GraphicController.getController().unregister(visitor);
                     canvas.destroy();
                 }
@@ -1150,6 +1162,8 @@ public class Export {
                     g2d = g2dCtor.newInstance(out, new Dimension(width, height));
                     g2dClass.getMethod("startExport").invoke(g2d);
                 }
+                // closeStream will close out
+                out = null;
             } catch (IOException e) {
             } catch (IllegalAccessException e) {
             } catch (IllegalArgumentException e) {
@@ -1177,7 +1191,7 @@ public class Export {
             }
             if (buffer != null && file != null) {
                 try ( FileOutputStream fos = new FileOutputStream(file) ) {
-
+                    
                      buffer.writeTo(fos);
                      buffer.close();
                      fos.flush();

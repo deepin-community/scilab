@@ -59,11 +59,7 @@
     <refsection id="Description_ANDBLK">
         <title>Description</title>
         <para>
-            The Bus Creator block combines a set of signals, i.e., a
-            group of signals represented by a single line in a block diagram. It
-            allows you to reduce the number of lines required to route signals
-            from one part of a diagram to another. This makes your diagram easier to
-            understand.
+            The ANDBLK is a logical AND operator applied to signals. It will generate an event if both inputs are synchronuous ; have events at the same time and coming from the same source block.
         </para>
     </refsection>
     <refsection id="Defaultproperties_ANDBLK">

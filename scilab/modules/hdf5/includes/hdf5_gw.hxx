@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2011 - DIGITEO - Antoine ELIAS
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -26,6 +26,7 @@ extern "C"
 CPP_GATEWAY_PROTOTYPE_EXPORT(sci_hdf5_save, HDF5_SCILAB_IMPEXP);
 CPP_GATEWAY_PROTOTYPE_EXPORT(sci_hdf5_load, HDF5_SCILAB_IMPEXP);
 CPP_GATEWAY_PROTOTYPE_EXPORT(sci_hdf5_load_v3, HDF5_SCILAB_IMPEXP);
+CPP_GATEWAY_PROTOTYPE_EXPORT(sci_hdf5_load_v4, HDF5_SCILAB_IMPEXP);
 CPP_GATEWAY_PROTOTYPE_EXPORT(sci_hdf5_listvar, HDF5_SCILAB_IMPEXP);
 CPP_GATEWAY_PROTOTYPE_EXPORT(sci_hdf5_listvar_v3, HDF5_SCILAB_IMPEXP);
 CPP_GATEWAY_PROTOTYPE_EXPORT(sci_hdf5_file_version, HDF5_SCILAB_IMPEXP);

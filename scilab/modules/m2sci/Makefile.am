@@ -1,4 +1,4 @@
-# Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+# Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 # Copyright (C) 2006 - INRIA - Sylvestre Ledru <sylvestre.ledru@inria.fr>
 # 
 # This file is distributed under the same license as the Scilab package.
@@ -8,7 +8,7 @@ modulename=m2sci
 
 #### m2sci : Conf files ####
 libm2sci_la_rootdir = $(mydatadir)
-libm2sci_la_root_DATA =  license.txt 
+libm2sci_la_root_DATA =  license.txt Mtbxfun_db.txt
 
 #### m2sci : Macros ####
 MACROSDIRSEXT =  macros/kernel macros/percent macros/sci_files macros/compat_functions

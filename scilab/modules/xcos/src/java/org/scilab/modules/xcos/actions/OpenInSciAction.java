@@ -1,8 +1,8 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2011 - Scilab Enterprises - Clement DAVID
- *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ * Copyright (C) 2021 - Stéphane MOTTELET
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
  * pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -24,7 +24,7 @@ import javax.swing.JButton;
 import org.scilab.modules.commons.CommonFileUtils;
 import org.scilab.modules.graph.ScilabGraph;
 import org.scilab.modules.graph.actions.base.DefaultAction;
-import org.scilab.modules.gui.bridge.filechooser.SwingScilabFileChooser;
+import org.scilab.modules.gui.filechooser.FileChooser;
 import org.scilab.modules.gui.menuitem.MenuItem;
 import org.scilab.modules.xcos.utils.XcosMessages;
 
@@ -81,12 +81,10 @@ public final class OpenInSciAction extends DefaultAction {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        final SwingScilabFileChooser fc = OpenAction.createFileChooser();
-
+        final FileChooser fc = OpenAction.createFileChooser();
         /* Configure the file chooser */
         OpenAction.configureFileFilters(fc);
-        fc.setCurrentDirectory(new File(CommonFileUtils.getCWD()));
-
+        fc.setInitialDirectory(CommonFileUtils.getCWD());
         try {
             OpenAction.displayAndOpen(fc, getGraph(e).getAsComponent());
         } catch (IOException e1) {

@@ -131,7 +131,7 @@ msgid ""
 "bugzilla.scilab.org/.\n"
 msgstr ""
 "Jeśli używasz binarnej wersji programu Scilab, proszę zgłosić ten błąd na "
-"stronie http://bugzilla.scilab.org/.\n"
+"stronie https://gitlab.com/scilab/scilab/-/issues.\n"
 
 #, c-format
 msgid ""

@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) Scilab Enterprises - 2015 - 2012 - Juergen Koch <juergen.koch@hs-esslingen.de>
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
 // Copyright (C) 2018 - 2020 - Samuel GOUGEON
@@ -126,10 +126,12 @@ function varargout = scatter3d(varargin)
                   "markeredgecolor" "markerforeground" ..
                   "thickness" "linewidth" "datatips"];
     markersT = ["." "+" "x" "o" "o+" "circle plus" "d" "fd" "filled diamond" ..
-    "d+" "diamond plus" "^" "v" ">" "<" "*" "*5" "p" "pentagram" "s" "square"];
+    "d+" "diamond plus" "^" "v" ">" "<" "*" "*5" "p" "pentagram" "s" "square" ...
+     "^." "v." ">." "<." "m" "minus" "|"];
     // Markers Numerical codes styles (available)
     markersN = [ 0   1   2   9   3        3         5   4         4 ..
-      8       8          6   7   12  13  10  14  14      14      11    11];
+      8       8          6   7   12  13  10  14  14      14      11    11 ...
+      15   16   17   18   19   19   20];
 
     // PARSING, CHECKING and INITIALIZING OPTIONS
     // ------------------------------------------
@@ -224,14 +226,14 @@ function varargout = scatter3d(varargin)
                     [cMin, cMax] = (min(v), max(v));
                     cmap = gcf().color_map;
                     numColors = size(cmap,1);
-                    if ((cMax-cMin)/(cMin+cMax) > %eps) then
+                    if ((cMax-cMin)/abs(cMin+cMax) > %eps) then
                         mcolors = round((numColors-1)*(v - cMin)/(cMax - cMin)) + 1;
                     else
                         mcolors = cMin;
                     end
-                   [step, iarg] = (3, iarg+1)
-                   varargin(1) = null()
-                   continue
+                    [step, iarg] = (3, iarg+1)
+                    varargin(1) = null()
+                    continue
                 end
            end
            c = iscolor(v)

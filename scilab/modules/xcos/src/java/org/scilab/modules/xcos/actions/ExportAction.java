@@ -1,10 +1,10 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009 - DIGITEO - Vincent COUVERT
  * Copyright (C) 2010 - DIGITEO - Clement DAVID
  * Copyright (C) 2011-2015 - Scilab Enterprises - Clement DAVID
- *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ * Copyright (C) 2022 - Stéphane MOTTELET
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
  * pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -38,13 +38,10 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
-import javax.swing.filechooser.FileFilter;
 
 import org.scilab.modules.graph.ScilabGraph;
 import org.scilab.modules.graph.actions.base.DefaultAction;
 import org.scilab.modules.graph.utils.ScilabGraphRenderer;
-import org.scilab.modules.gui.bridge.filechooser.FileMask;
-import org.scilab.modules.gui.bridge.filechooser.ImagePreview;
 import org.scilab.modules.gui.menuitem.MenuItem;
 import org.scilab.modules.gui.messagebox.ScilabModalDialog;
 import org.scilab.modules.gui.messagebox.ScilabModalDialog.AnswerOption;
@@ -55,6 +52,10 @@ import org.scilab.modules.xcos.XcosTab;
 import org.scilab.modules.xcos.configuration.ConfigurationManager;
 import org.scilab.modules.xcos.graph.XcosDiagram;
 import org.scilab.modules.xcos.utils.XcosMessages;
+import org.scilab.modules.gui.filechooser.ScilabFileChooser;
+import org.scilab.modules.gui.filechooser.FileChooser;
+import org.scilab.modules.gui.filechooser.Juigetfile;
+
 import org.w3c.dom.Document;
 
 import com.mxgraph.swing.mxGraphComponent;
@@ -124,133 +125,31 @@ public final class ExportAction extends DefaultAction {
         mask.add(VML);
         mask.addAll(imageFormats);
 
-        JFileChooser fc = new JFileChooser();
-        fc.setDialogTitle(XcosMessages.EXPORT);
-        fc.setApproveButtonText(XcosMessages.EXPORT);
-        fc.setAcceptAllFileFilterUsed(true);
-
-        for (String string : mask) {
-            fc.addChoosableFileFilter(new FileMask(string, string.toUpperCase()));
-        }
+        FileChooser fc = ScilabFileChooser.createFileChooser();
+        fc.setTitle(XcosMessages.EXPORT);
+        fc.setUiDialogType(Juigetfile.SAVE_DIALOG);
+        String[] exts = new String[mask.size()];
+        mask.toArray(exts);
+        for (int i=0; i < exts.length; i++) {
+            exts[i] = "*." + exts[i];
+        }        
+        fc.addMask(exts,null);
 
         ConfigurationManager.configureCurrentDirectory(fc);
 
-        JPanel panelPreview = new JPanel();
+        fc.displayAndWait();
 
-        // Title for preview panel
-        TitledBorder titlePreview;
-        titlePreview = BorderFactory.createTitledBorder(Messages.gettext("Preview"));
-        panelPreview.setBorder(titlePreview);
-
-        // add preview image
-        panelPreview.add(new ImagePreview(fc));
-
-        // Main panel contains extensionTable panel & preview panel
-        JPanel accessoryPanel = new JPanel();
-
-        // accessoryPanel.add(scrollPane);
-        accessoryPanel.add(panelPreview);
-        accessoryPanel.setVisible(true);
-        fc.setAccessory(accessoryPanel);
-
-        int selection = fc.showSaveDialog(graph.getAsComponent());
-        if (selection == JFileChooser.APPROVE_OPTION) {
-            File selected = fc.getSelectedFile();
-
-            /* getting the format */
-            String format = getFormat(graph, fc, selected);
-            while (format == null) {
-                selection = fc.showSaveDialog(graph.getAsComponent());
-                if (selection == JFileChooser.APPROVE_OPTION) {
-                    selected = fc.getSelectedFile();
-                    format = getFormat(graph, fc, selected);
-                } else {
-                    return;
-                }
-            }
-
+        String[] selection = fc.getSelection();
+        if (selection.length!=0 && selection[0] != "") {
+            String fileName = selection[0];
+            int index = fileName.lastIndexOf('.');
+            String format = fileName.substring(index+1);
             try {
-                /* Add an extension if no one is set */
-                if (FileMask.getExtension(selected) == null || FileMask.getExtension(selected).isEmpty()) {
-                    selected = new File(selected.getCanonicalPath() + '.' + format);
-                }
-
-                /* Export the file */
-                if (selected.exists()) {
-                    final boolean overwrite = ScilabModalDialog.show(XcosTab.get(graph), XcosMessages.OVERWRITE_EXISTING_FILE, XcosMessages.XCOS,
-                                              IconType.QUESTION_ICON, ButtonType.YES_NO) == AnswerOption.YES_OPTION;
-
-                    if (overwrite) {
-                        export(graph, selected, format);
-                    } else {
-                        return;
-                    }
-                } else {
-                    export(graph, selected, format);
-                }
+                export(graph, new File(fileName), format);                
             } catch (IOException ex) {
                 Logger.getLogger(ExportAction.class.getName()).severe(e.toString());
             }
         }
-    }
-
-    /**
-     * Get the file format
-     *
-     * @param graph
-     *            the current graph
-     * @param fc
-     *            the file chooser
-     * @param selected
-     *            the selected file
-     * @return the format or null
-     */
-    private String getFormat(XcosDiagram graph, JFileChooser fc, final File selected) {
-        final String format;
-        final FileFilter fileFilter = fc.getFileFilter();
-
-        // accept all file filter or any custom file filter (generated
-        // by a <TAB> press)
-        if (!(fileFilter instanceof FileMask)) {
-
-            /*
-             * Get the extension from the file name. Fail safely.
-             */
-            if (FileMask.getExtension(selected) == null || FileMask.getExtension(selected).isEmpty()) {
-                format = null;
-            } else {
-                format = FileMask.getExtension(selected);
-            }
-
-        } else {
-            /*
-             * Get the format from the file mask
-             */
-            format = ((FileMask) fileFilter).getExtensionFromFilter();
-
-        }
-        final boolean validFormat = isValidFormat(format);
-
-        /*
-         * When the format is unspecified, popup an error dialog
-         */
-        if (format == null || !validFormat) {
-            JOptionPane.showMessageDialog(graph.getAsComponent(), Messages.gettext("Please specify a valid file format"), Messages.gettext("Error on export"),
-                                          JOptionPane.ERROR_MESSAGE);
-        }
-
-        if (validFormat) {
-            return format;
-        } else {
-            return null;
-        }
-    }
-
-    private boolean isValidFormat(String format) {
-        Iterator<ImageWriter> it = ImageIO.getImageWritersBySuffix(format);
-        Collection<String> externals = Arrays.asList(SVG, HTML, VML);
-
-        return it.hasNext() || externals.contains(format.toLowerCase());
     }
 
     /**

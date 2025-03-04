@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA
  * Copyright (C) 2015 - 2016 - Samuel GOUGEON
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -189,15 +189,6 @@
                     <link linkend="sparse">esparsa</link> de números
                     reais ou complexos.
                     <warning>Sparse numerical hypermatrices are not supported.</warning>
-                </td>
-            </tr>
-            <tr>
-                <td style="white-space:nowrap">
-                    <emphasis role="bold">"Matlab sparse"</emphasis>
-                </td>
-                <td>
-                    <varname>object</varname> is a Matlab-like-encoded sparse
-                    matrix (see <link linkend="mtlb_sparse">mtlb_sparse()</link>).
                 </td>
             </tr>
             <tr>
@@ -523,8 +514,6 @@ typeof(r)
 w = sprand(100,100,0.001)
 typeof(w)     // sparse
 typeof(w==w)  // boolean sparse
-//x = mtlb_sparse(sprand(10,10,0.1));
-//typeof(x)
 
 // Functions and libraries
 // -----------------------
@@ -637,9 +626,6 @@ h5close(a)
             </member>
             <member>
                 <link linkend="issparse">issparse</link>
-            </member>
-            <member>
-                <link linkend="mtlb_sparse">mtlb_sparse</link>
             </member>
             <member>
                 <link linkend="syslin">syslin</link>

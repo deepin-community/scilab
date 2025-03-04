@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2012 - Pedro Arthur dos S. Souza
  * Copyright (C) 2012 - Caio Lucas dos S. Souza
  *
@@ -53,27 +53,6 @@ int set_tip_orientation_property(void* _pvCtx, int iObj, void* _pvData, int valu
         Scierror(999, _("'%s' property does not exist for this handle.\n"), "orientation");
         return SET_PROPERTY_ERROR;
     }
-}
-
-/**
- * Old z_componet property, warns the user
- */
-int set_tip_z_component_property(void* _pvCtx, int iObj, void* _pvData, int valueType, int nbRow, int nbCol)
-{
-    char * tip_display_components;
-    getGraphicObjectProperty(iObj, __GO_DATATIP_DISPLAY_COMPONENTS__, jni_string, (void **)&tip_display_components);
-
-    //Only warns if the property exists for the object.
-    if (tip_display_components == NULL)
-    {
-        Scierror(999, _("'%s' property does not exist for this handle.\n"), "z_component");
-    }
-    else
-    {
-        Scierror(999, _("'%s' property is obsolete and will be removed, use '%s' instead.\n"), "z_component", "display_components");
-    }
-
-    return NULL;
 }
 
 /**

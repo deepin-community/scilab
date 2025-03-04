@@ -5,9 +5,6 @@
 // =============================================================================
 // <-- Non-regression test for bug 481 -->
 //
-// <-- URL -->
-//  http://forge.scilab.org/index.php/p/csv-readwrite/issues/481/
-//
 // <-- Short Description -->
 // csvRead crashed Scilab, if there were negative values in file.
 // =============================================================================

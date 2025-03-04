@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2012 - DIGITEO - Cedric DELAMARRE
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -70,6 +70,7 @@ types::Function::ReturnValue sci_expm(types::typed_list &in, int _iRetCount, typ
 
     pDblOut = new types::Double(pDblIn->getDims(), pDblIn->getDimsArray(), pDblIn->isComplex());
 
+    pDblIn = pDblIn->clone();
     if (pDblIn->isComplex())
     {
         zexpms2(pDblIn->get(), pDblIn->getImg(), pDblOut->get(), pDblOut->getImg(), pDblIn->getCols());
@@ -78,6 +79,7 @@ types::Function::ReturnValue sci_expm(types::typed_list &in, int _iRetCount, typ
     {
         dexpms2(pDblIn->get(), pDblOut->get(), pDblIn->getCols());
     }
+    pDblIn->killMe();
 
     out.push_back(pDblOut);
     return types::Function::OK;

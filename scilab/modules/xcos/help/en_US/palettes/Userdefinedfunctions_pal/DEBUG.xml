@@ -66,4 +66,18 @@
             </listitem>
         </itemizedlist>
     </refsection>
+    <refsection role="see also">
+        <title>See also</title>
+        <simplelist type="inline">
+            <member>
+                <link linkend="xcos_debug_gui">xcos_debug_gui</link>
+            </member>
+            <member>
+                <link linkend="scicos_debug">scicos_debug</link>
+            </member>
+            <member>
+                <link linkend="scicos_log">scicos_log</link>
+            </member>
+        </simplelist>
+    </refsection>
 </refentry>

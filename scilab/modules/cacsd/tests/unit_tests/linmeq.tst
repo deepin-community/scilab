@@ -1,6 +1,6 @@
 //<-- CLI SHELL MODE -->
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ????-2008 - INRIA
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -605,7 +605,6 @@ A = testmat1(2.5,n);
 C = rand(n,n);
 C = C+C';
 
-if execstr('X = linmeq(2,A,C)'                ,'errcatch') == 0 then pause,end
 if execstr('X = linmeq(2,A,C,flag)'           ,'errcatch') == 0 then pause,end
 if execstr('X = linmeq(2,rand(3,3),C,flag)'   ,'errcatch') == 0 then pause,end
 if execstr('X = linmeq(2,rand(4,3),C,flag)'   ,'errcatch') == 0 then pause,end

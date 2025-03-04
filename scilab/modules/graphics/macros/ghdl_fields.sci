@@ -1,5 +1,5 @@
 
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2005 - INRIA - Serge Steer
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
 //
@@ -32,7 +32,7 @@ function fields=ghdl_fields(h)
         "x_ticks";"y_ticks";"z_ticks";"box";"sub_ticks";
         "font_style";"font_size";"font_color";"isoview";"cube_scaling";
         "view";"rotation_angles";"log_flags";"tight_limits";"data_bounds" ;
-        "zoom_box";"margins";"axes_bounds";"auto_clear";"auto_scale";
+        "zoom_box";"margins";"axes_bounds";"auto_clear";"auto_scale";"auto_stretch";
         "hiddencolor";"line_mode";"line_style";"thickness";"mark_mode";
         "mark_style";"mark_size_unit";"mark_size";"mark_foreground";
         "mark_background";"foreground";"background";"clip_state";"clip_box";

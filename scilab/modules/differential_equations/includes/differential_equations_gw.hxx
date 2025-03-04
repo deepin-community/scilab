@@ -1,8 +1,9 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2011 - DIGITEO - Cedric DELAMARRE
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ * Copyright (C) 2023 - UTC - Stéphane MOTTELET
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
  * pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -57,5 +58,13 @@ CPP_GATEWAY_PROTOTYPE(sci_feval);
 
 // equation 6
 CPP_GATEWAY_PROTOTYPE(sci_bvode);   // Old function name was scibvode
+
+// Sundials
+CPP_OPT_GATEWAY_PROTOTYPE_EXPORT(sci_cvode, DIFFERENTIAL_EQUATIONS_GW_IMPEXP);
+CPP_OPT_GATEWAY_PROTOTYPE_EXPORT(sci_ida, DIFFERENTIAL_EQUATIONS_GW_IMPEXP);
+CPP_OPT_GATEWAY_PROTOTYPE_EXPORT(sci_arkode, DIFFERENTIAL_EQUATIONS_GW_IMPEXP);
+CPP_OPT_GATEWAY_PROTOTYPE_EXPORT(sci_kinsol, DIFFERENTIAL_EQUATIONS_GW_IMPEXP);
+CPP_GATEWAY_PROTOTYPE_EXPORT(sci_percent_odeSolution_clear, DIFFERENTIAL_EQUATIONS_GW_IMPEXP);
+CPP_GATEWAY_PROTOTYPE_EXPORT(sci_percent_odeSolution_e, DIFFERENTIAL_EQUATIONS_GW_IMPEXP);
 
 #endif /* !__DIFFERENTIAL_EQUATIONS_GW_HXX__ */

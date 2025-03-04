@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2018 - ESI Group - Antoine ELIAS
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -11,8 +11,8 @@
 //
 // <-- Non-regression test for bug 15033 -->
 //
-// <-- Bugzilla URL -->
-// https://bugzilla.scilab.org/show_bug.cgi?id=15033
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/15033
 //
 // <-- Short Description -->
 // fileinfo returns wrong size on Windows ( size > 2^31 )

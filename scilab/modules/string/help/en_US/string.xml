@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA -
  * Copyright (C) DIGITEO - 2012 - Allan CORNET
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -36,8 +36,7 @@
                 <term>x</term>
                 <listitem>
                     <para>
-                        a boolean, complex, real, integer, polynomial matrix,
-                        an implicitlist (like 1:$), a library of functions in Scilab language.
+                        Any Scilab variable type.
                     </para>
                 </listitem>
             </varlistentry>
@@ -150,6 +149,12 @@
                 <revnumber>5.4.0</revnumber>
                 <revremark>
                     Input of implicitlist typeof accepted.
+                </revremark>
+            </revision>
+            <revision>
+                <revnumber>2024.0.0</revnumber>
+                <revremark>
+                    list, cell and struct accepted.
                 </revremark>
             </revision>
         </revhistory>

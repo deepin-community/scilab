@@ -1,5 +1,5 @@
 /*
- *  Scilab (http://www.scilab.org/) - This file is part of Scilab
+ *  Scilab (https://www.scilab.org/) - This file is part of Scilab
  *  Copyright (C) 2012-2013 - OCAMLPRO INRIA - Fabrice LE FESSANT
  *  Copyright (C) 2014 - Scilab Enterprises - Antoine ELIAS
  *
@@ -21,7 +21,10 @@
 #include "deserializervisitor.hxx"
 #include "timer.hxx"
 #include "charEncoding.h"
-#include "version.h"
+extern "C"
+{
+#include "getversion.h"
+}
 
 #define FAGMENT_SIZE 65536
 
@@ -50,9 +53,9 @@ private :
 
     void set_version()
     {
-        set_byte(4, (unsigned char)SCI_VERSION_MAJOR);
-        set_byte(5, (unsigned char)SCI_VERSION_MINOR);
-        set_byte(6, (unsigned char)SCI_VERSION_MAINTENANCE);
+        set_byte(4, (unsigned char)getScilabVersionMajor());
+        set_byte(5, (unsigned char)getScilabVersionMinor());
+        set_byte(6, (unsigned char)getScilabVersionMaintenance());
         set_byte(7, (unsigned char)0);
     }
 
@@ -180,7 +183,7 @@ private :
     void add_wstring(const std::wstring &w)
     {
         char *c_str = wide_string_to_UTF8(w.c_str());
-        int size = strlen(c_str);
+        int size = (int)strlen(c_str);
         int final_size = size * sizeof(char);
         add_uint32(final_size);
         need(final_size);
@@ -369,35 +372,42 @@ private :
         add_ast(1, e);
         add_exps(e.getExps());
     }
+
     void visit(const StringExp& e)  /* done */
     {
         add_ast(2, e);
         add_wstring(e.getValue());
     }
+
     void visit(const CommentExp& e)  /* done */
     {
         add_ast(3, e);
         add_wstring(e.getComment());
     }
+
     void visit(const DoubleExp& e)  /* done */
     {
         add_ast(6, e);
         add_double(e.getValue());
     }
+
     void visit(const BoolExp& e)  /* done */
     {
         add_ast(7, e);
         add_bool(e.getValue());
     }
+
     void visit(const NilExp& e)  /* done */
     {
         add_ast(8, e);
     }
+
     void visit(const SimpleVar& e)  /* done */
     {
         add_ast(9, e);
         add_Symbol(e.getSymbol());
     }
+
     void visit(const ColonVar& e)  /* done */
     {
         add_ast(10, e);
@@ -406,17 +416,20 @@ private :
     {
         add_ast(11, e);
     }
+
     void visit(const ArrayListVar& e)  /* done */
     {
         add_ast(12, e);
         add_vars(e);
     }
+
     void visit(const FieldExp& e)  /* done */
     {
         add_ast(13, e);
         add_exp(e.getHead());
         add_exp(e.getTail());
     }
+
     void visit(const IfExp& e)  /* done */
     {
         add_ast(14, e);
@@ -429,6 +442,7 @@ private :
             add_exp(& e.getElse());
         }
     }
+
     void visit(const TryCatchExp& e)  /* done */
     {
         add_ast(15, e);
@@ -437,12 +451,14 @@ private :
         add_exps(e.getTry().getAs<SeqExp>()->getExps());
         add_exps(e.getCatch().getAs<SeqExp>()->getExps());
     }
+
     void visit(const WhileExp& e)  /* done */
     {
         add_ast(16, e);
         add_exp(& e.getTest());
         add_exp(& e.getBody());
     }
+
     void visit(const ForExp& e)   /* done */
     {
         add_ast(17, e);
@@ -450,14 +466,17 @@ private :
         add_varDec(*e.getAs<ForExp>()->getVardec().getAs<VarDec>());
         add_exp(&e.getBody());
     }
+
     void visit(const BreakExp& e)  /* done */
     {
         add_ast(18, e);
     }
+
     void visit(const ContinueExp& e)  /* done */
     {
         add_ast(19, e);
     }
+
     void visit(const ReturnExp& e)  /* done */
     {
         add_ast(20, e);
@@ -468,6 +487,7 @@ private :
             add_exp(& e.getExp());
         }
     }
+
     void visit(const SelectExp& e)
     {
         add_ast(21, e);
@@ -492,37 +512,44 @@ private :
             add_exps(ce->getBody()->getAs<SeqExp>()->getExps());
         }
     }
+
     void visit(const CellExp& e)  /* done */
     {
         add_ast(23, e);
         add_MatrixLines(& e.getLines());
     }
+
     void visit(const ArrayListExp& e)  /* done */
     {
         add_ast(24, e);
         add_exps(e.getExps());
     }
+
     void visit(const AssignListExp& e)  /* done */
     {
         add_ast(25, e);
         add_exps(e.getExps());
     }
+
     void visit(const NotExp& e)  /* done */
     {
         add_ast(26, e);
         add_exp(e.getExp());
     }
+
     void visit(const TransposeExp& e)  /* done */
     {
         add_ast(27, e);
         add_TransposeExp_Kind(e.getConjugate());
         add_exp(e.getExp());
     }
+
     void visit(const VarDec& e)
     {
         add_ast(28, e);
         add_varDec(e);
     }
+
     void visit(const FunctionDec& e)  /* done */
     {
         add_ast(29, e);
@@ -533,19 +560,23 @@ private :
         add_vars(*e.getArgs().getAs<ArrayListVar>());
         add_vars(*e.getReturns().getAs<ArrayListVar>());
     }
-    void visit(const ListExp& e)  /* done */
+    /*
+    void visit(const ListExp& e)
     {
         add_ast(30, e);
         add_exp(e.getStart());
         add_exp(e.getStep());
         add_exp(e.getEnd());
     }
+    */
+
     void visit(const AssignExp& e)
     {
         add_ast(31, e);
         add_exp(e.getLeftExp());
         add_exp(e.getRightExp());
     }
+
     void visit(const OpExp& e)  /* done */
     {
         add_ast(32, e);
@@ -553,6 +584,7 @@ private :
         e.getLeft().getOriginal()->accept(*this);
         e.getRight().getOriginal()->accept(*this);
     }
+
     void visit(const LogicalOpExp& e)  /* done */
     {
         add_ast(33, e);
@@ -560,11 +592,13 @@ private :
         e.getLeft().getOriginal()->accept(*this);
         e.getRight().getOriginal()->accept(*this);
     }
+
     void visit(const MatrixExp& e) /* done */
     {
         add_ast(34, e);
         add_MatrixLines(& e.getLines());
     }
+
     void visit(const CallExp& e)  /* done */
     {
         add_ast(35, e);
@@ -572,10 +606,12 @@ private :
         ast::exps_t args = e.getArgs();
         add_exps(args);
     }
+
     void visit(const MatrixLineExp& e)  /* SHOULD NEVER HAPPEN */
     {
         add_ast(36, e);
     }
+
     void visit(const CellCallExp& e)  /* done */
     {
         add_ast(37, e);
@@ -584,33 +620,28 @@ private :
         add_exps(args);
     }
 
-    /* optimized */
-    void visit(const OptimizedExp& e)
+    void visit(const ArgumentDec& e)
     {
-        e.getOriginal()->accept(*this);
+        add_ast(38, e);
+        add_exps(e.getExps());
     }
 
-    void visit(const MemfillExp& e)
+    void visit(const ArgumentsExp& e)
     {
-        e.getOriginal()->accept(*this);
+        add_ast(39, e);
+        add_exps(e.getExps());
     }
 
-    void visit(const DAXPYExp& e)
+    void visit(const ListExp& e)
     {
-        e.getOriginal()->accept(*this);
+        add_ast(40, e);
+        add_bool(e.hasExplicitStep());
+        add_exp(e.getStart());
+        add_exp(e.getStep());
+        add_exp(e.getEnd());
     }
 
-    void visit(const IntSelectExp& e)
-    {
-        e.getOriginal()->accept(*this);
-    }
-
-    void visit(const StringSelectExp& e)
-    {
-        e.getOriginal()->accept(*this);
-    }
-
-public :
+  public:
     SerializeVisitor(Exp* _ast) : ast(_ast), buf(NULL), buflen(0), bufsize(0), saveNodeNumber(true), saveLocation(true) {}
     ~SerializeVisitor()
     {

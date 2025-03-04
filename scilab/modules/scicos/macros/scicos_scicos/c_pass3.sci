@@ -118,11 +118,7 @@ function [cpr,ok]=c_pass3(scs_m,cpr)
         end
 
         //discrete state
-        if (funtyp(i,1)==3 | funtyp(i,1)==5 | funtyp(i,1)==10005) then //sciblocks
-            if ll.dstate==[] then xd0k=[]; else xd0k=var2vec(ll.dstate);end
-        else
-            xd0k=ll.dstate(:)
-        end
+        xd0k=ll.dstate(:)
         xd0=[xd0;xd0k];
         zptr=[zptr;zptr($)+size(xd0k,"*")]
         //object discrete state
@@ -151,11 +147,7 @@ function [cpr,ok]=c_pass3(scs_m,cpr)
         end
 
         //rpar
-        if (funtyp(i,1)==3 | funtyp(i,1)==5 | funtyp(i,1)==10005) then //sciblocks
-            if ll.rpar==[] then rpark=[]; else rpark=var2vec(ll.rpar);end
-        else
-            rpark=ll.rpar(:)
-        end
+        rpark=ll.rpar(:)
         rpar=[rpar;rpark]
         rpptr=[rpptr;rpptr($)+size(rpark,"*")]
         //ipar

@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2020 - Samuel GOUGEON
 //
 // This file is hereby licensed under the terms of the GNU GPL v2.0,
@@ -71,17 +71,11 @@ function helpbrowser_menus_cb(action, param)
             messagebox(msg, "modal")
             return
         end
-        BugzillaSearch = "http://bugzilla.scilab.org/buglist.cgi" + ..
-          "?product=Scilab software&query_format=advanced" + ..
-          "&short_desc_type=regexp&short_desc=£"+..
-          "&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED" + ..
-          "&order=resolution,bug_id DESC"
+        issuesSearch = "https://gitlab.com/scilab/scilab/-/issues/?in=TITLE&sort=created_date&search=£"
         if ~isdef("param","l") | type(param)<>10 | param(1)<>"unresolved"
-            BugzillaSearch = BugzillaSearch + "&bug_status=RESOLVED"
+            issuesSearch = issuesSearch + "&state=all"
         end
-        prepend = "(^|[^a-zA-Z_])"
-        append = "([^0-9a-zA-Z_%3B]|$)"
-        url = strsubst(BugzillaSearch, "£", prepend+"("+id+")"+append)
+        url = strsubst(issuesSearch, "£", id)
         openURL(url)
     end
 endfunction
@@ -109,4 +103,3 @@ function openURL(url)
         unix(cmd + """" + url + """")
     end
 endfunction
-

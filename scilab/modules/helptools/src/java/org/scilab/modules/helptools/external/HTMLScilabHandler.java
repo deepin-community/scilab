@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2010 - Calixte DENIZET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
+import org.xml.sax.SAXParseException;
 
 import org.scilab.modules.helptools.HTMLDocbookTagConverter;
 
@@ -103,7 +104,15 @@ public class HTMLScilabHandler extends ExternalXMLHandler {
             if (getConverter() instanceof HTMLDocbookTagConverter) {
                 baseImagePath = ((HTMLDocbookTagConverter) getConverter()).getBaseImagePath();
             }
+
             if ((isLocalized != null && isLocalized.booleanValue()) || (existing = getExistingFile(outputDir, fileName)) == null) {
+                if (!language.equals("en_US") && !getConverter().getImageConverter().compareMD5(buffer.toString(), fileName) && (isLocalized == null)) {
+                    if (getConverter().getImageConverter().hasMd5Cache()) { // Scilab help build
+                        getConverter().error(new SAXParseException("Overwrite image " + f.getName() + " from line " + line + ". Check the code or use localized=\"true\" attribute.", null));
+                    } else {
+                        System.err.println("Warning: Overwrite image " + f.getName() + " from line " + line + ". Check the code or use localized=\"true\" attribute.");
+                    }
+                }
                 ret = getConverter().getImageConverter().getImageByCode(currentFileName, buffer.toString(), attributes, "image/scilab", f, baseDir + f.getName(), baseImagePath, line, language, isLocalized);
             } else {
                 ret = getConverter().getImageConverter().getImageByFile(attributes, null, existing.getAbsolutePath(), outputDir, ".", baseImagePath);

@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C)  2016 - INRIA - Serge Steer
 //
 // This file is licensed under the terms of the GNU GPL v2.0,
@@ -36,7 +36,7 @@ function %zpk_p(T)
                 m=[m;mz(ki)]
                 if zi<>[] then
                     N=[N;
-                    msprintf("(%s^2%+g%s%+g)\n",v+emptystr(zi),-2*real(zi),v+emptystr(zi),abs(zi)^2)];
+                    msprintf("(%s^2%+g%s%+g)\n",v+emptystr(zi),-2*real(zi),v+emptystr(zi),abs(zi).^2)];
                 end
                 i=find(m>1)
                 if i<>[] then

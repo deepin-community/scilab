@@ -1,5 +1,5 @@
 // =======================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2016 - Samuel GOUGEON
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,7 +9,7 @@
 // This source file is licensed as described in the file COPYING, which
 // you should have received as part of this distribution.  The terms
 // are also available at
-// http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt
+// https://www.cecill.info/licences/Licence_CeCILL_V2-en.txt
 //
 // No specific expected console output to be checked against:
 // <-- NO CHECK REF -->
@@ -19,6 +19,9 @@
 x = grand(50,40,"uin", 1, 1000);
 y = geomean(x);
 yi = geomean(1 ./ x);
+assert_checkequal(y*yi, 1);
+y = geomean(x, "*");
+yi = geomean(1 ./ x, "*");
 assert_checkequal(y*yi, 1);
 yc = geomean([x, 1../x], "c");
 assert_checkalmostequal(yc, ones(x(:,1)), 10*%eps);
@@ -36,6 +39,7 @@ for v = sv
         r = v;
     end
     assert_checkequal(geomean(xs), r);
+    assert_checkequal(geomean(xs, "*"), r);
     ysc = geomean(xs, "c");
     ysc(20) = r;
     assert_checkalmostequal(geomean(xs, "c"), ysc, 10*%eps);
@@ -49,6 +53,7 @@ sv = [1 2 -2 %i -%i 1.e234];
 for v = sv
     xs = ones(50, 40)*v;
     assert_checkalmostequal(clean(geomean(xs)), v, 1e-11);
+    assert_checkalmostequal(clean(geomean(xs, "*")), v, 1e-11);
     assert_checkalmostequal(clean(geomean(xs, "c")), ones(x(:,1))*v, 1e-11);
     assert_checkalmostequal(clean(geomean(xs, "r")), ones(x(1,:))*v, 1e-11);
 end
@@ -57,6 +62,9 @@ end
 x = grand(30,20,10, "uin", 1, 1000);
 y = geomean(x);
 yi = geomean(1 ./ x);
+assert_checkequal(y*yi, 1);
+y = geomean(x, "*");
+yi = geomean(1 ./ x, "*");
 assert_checkequal(y*yi, 1);
 yc = geomean([x, 1../x], "c");
 assert_checkalmostequal(yc, ones(x(:,1,:)), 10*%eps);

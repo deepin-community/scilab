@@ -5,9 +5,6 @@
 // =============================================================================
 // <-- Non-regression test for bug 352 -->
 //
-// <-- URL -->
-//  http://forge.scilab.org/index.php/p/csv-readwrite/issues/352/
-//
 // <-- Short Description -->
 // The csvTextScan function always returned complex matrices.
 // =============================================================================

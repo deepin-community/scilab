@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010 - DIGITEO - Yann COLLETTE
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -7,8 +7,8 @@
 
 // <-- Non-regression test for bug 7108 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=7108
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/7108
 //
 // <-- Short Description -->
 // it is not possible to set the callback_type via the uicontrol function

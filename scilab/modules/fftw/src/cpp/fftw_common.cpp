@@ -1,5 +1,5 @@
 /*
-*  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+*  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 *  Copyright (C) 2015 - Scilab Enterprises - Antoine ELIAS
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -137,7 +137,7 @@ types::Function::ReturnValue fftw_common(std::wstring& name, types::typed_list &
                     err += "\"" + cname + "1\",";
                     err += "\"" + cname + "2\",";
                     err += "\"" + cname + "4\"";
-                    Scierror(999, _("%s: Wrong value for input argument #%d: Must be in the set {%s}.\n"), cname.data(), in.size(), err.data());
+                    Scierror(999, _("%s: Wrong value for input argument #%d: Must be in the set {%s}.\n"), cname.data(), (int) in.size(), err.data());
                     return types::Function::Error;
                 }
             }
@@ -166,7 +166,7 @@ types::Function::ReturnValue fftw_common(std::wstring& name, types::typed_list &
                     err += "\"" + cname + "1\",";
                     err += "\"" + cname + "3\",";
                     err += "\"" + cname + "4\"";
-                    Scierror(999, _("%s: Wrong value for input argument #%d: Must be in the set {%s}.\n"), cname.data(), in.size(), err.data());
+                    Scierror(999, _("%s: Wrong value for input argument #%d: Must be in the set {%s}.\n"), cname.data(), (int) in.size(), err.data());
                     return types::Function::Error;
                 }
             }

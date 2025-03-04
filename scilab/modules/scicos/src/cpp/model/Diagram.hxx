@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2014-2016 - Scilab Enterprises - Clement DAVID
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -41,11 +41,6 @@ struct SimulationConfig
 
     SimulationConfig() : final_time(30), absolute_tolerance(1e-6), relative_tolerance(1e-6),
         time_tolerance(1e-10), delta_t(100001), realtime_scale(0), solver(1), delta_h(0) {};
-
-    SimulationConfig(const SimulationConfig& p) :  final_time(p.final_time), absolute_tolerance(p.absolute_tolerance),
-        relative_tolerance(p.relative_tolerance), time_tolerance(p.time_tolerance), delta_t(p.delta_t),
-        realtime_scale(p.realtime_scale), solver(p.solver), delta_h(p.delta_h) {};
-
     SimulationConfig(const std::vector<double>& p) : final_time(p[0]), absolute_tolerance(p[1]), relative_tolerance(p[2]),
         time_tolerance(p[3]), delta_t(p[4]), realtime_scale(p[5]), solver(p[6]), delta_h(p[7]) {};
 

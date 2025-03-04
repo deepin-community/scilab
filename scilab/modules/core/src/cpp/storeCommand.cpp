@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2010-2010 - DIGITEO - Bruno JOFRET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -41,10 +41,10 @@ extern "C"
 struct CommandRec
 {
     char*   m_command;              /* command info one string two integers */
-    int     m_isInterruptible;      /* 1 if the command execution can be interrupted */
     int     m_isPrioritary;         /* 1 if the command is prioritary */
+    int     m_isInterruptible;      /* 1 if the command execution can be interrupted */
     command_origin_t     m_iCommandOrigin;       /* Indicate who have stored the command (ie: console, tcl) */
-    CommandRec(char* command, int isInterruptible, int isPrioritary, command_origin_t iCmdOrigin) :
+    CommandRec(char* command, int isPrioritary, int isInterruptible, command_origin_t iCmdOrigin) :
         m_command(command), m_isInterruptible(isInterruptible), m_isPrioritary(isPrioritary), m_iCommandOrigin(iCmdOrigin) {}
 };
 /*--------------------------------------------------------------------------*/
@@ -57,9 +57,6 @@ int StoreCommandWithFlags(const char* command, int iPrioritary, int iInterruptib
     if (iPrioritary)
     {
         commandQueuePrioritary.emplace_back(os_strdup(command), iPrioritary, iInterruptible, iCmdOrigin);
-
-        // Awake Runner to execute this prioritary command
-        ThreadManagement::SendAwakeRunnerSignal();
     }
     else
     {
@@ -98,8 +95,6 @@ int StoreConsoleCommand(const char *command, int iWaitFor)
 
     // Awake Scilab to execute a new command
     ThreadManagement::SendCommandStoredSignal();
-    // Awake Runner to execute this prioritary command
-    ThreadManagement::SendAwakeRunnerSignal();
 
     if (iWaitFor)
     {
@@ -126,8 +121,6 @@ int StoreDebuggerCommand(const char *command, int iWaitFor)
 
     // Awake Scilab to execute a new command
     ThreadManagement::SendCommandStoredSignal();
-    // Awake Runner to execute this prioritary command
-    ThreadManagement::SendAwakeRunnerSignal();
 
     if (iWaitFor)
     {
@@ -154,8 +147,6 @@ int StorePrioritaryCommand(const char *command)
 
     // Awake Scilab to execute a new command
     ThreadManagement::SendCommandStoredSignal();
-    // Awake Runner to execute this prioritary command
-    ThreadManagement::SendAwakeRunnerSignal();
 
     ThreadManagement::UnlockStoreCommand();
 
@@ -165,6 +156,11 @@ int StorePrioritaryCommand(const char *command)
 int isEmptyCommandQueue(void)
 {
     return (commandQueuePrioritary.empty() && commandQueue.empty());
+}
+
+int isEmptyCommandQueuePrioritary(void)
+{
+    return commandQueuePrioritary.empty();
 }
 
 /*

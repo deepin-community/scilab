@@ -26,9 +26,9 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.scilab.forge.scirenderer.shapes.appearance.Color;
 import org.scilab.modules.commons.CommonFileUtils;
+import org.scilab.modules.commons.xml.ScilabXMLUtilities;
 import org.scilab.modules.graphic_objects.axes.Axes;
 import org.scilab.modules.graphic_objects.console.Console;
-import org.scilab.modules.graphic_objects.figure.ColorMap;
 import org.scilab.modules.graphic_objects.figure.Figure;
 import org.scilab.modules.graphic_objects.graphicController.GraphicController;
 import org.scilab.modules.graphic_objects.graphicModel.GraphicModel;
@@ -77,6 +77,12 @@ public class XmlSaver {
             Transformer transformer = transformerFactory.newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+
+            // Needed since Java 9, see:
+            // https://www.oracle.com/java/technologies/javase/9-notes.html#JDK-8087303
+            // https://bugs.openjdk.org/browse/JDK-8262285
+            ScilabXMLUtilities.removeEmptyLines(doc.getDocumentElement());
+            
             doc.getDocumentElement().normalize();
             DOMSource source = new DOMSource(doc);
 

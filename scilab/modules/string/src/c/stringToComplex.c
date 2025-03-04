@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2010-2011 - DIGITEO - Allan CORNET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -205,7 +205,7 @@ doublecomplex stringToComplexWInPlace(wchar_t* start, wchar_t* end,
 
         // remove any space
         wchar_t* withoutLeadingSpaces = start;
-        while (*withoutLeadingSpaces == L' ')
+        while (*withoutLeadingSpaces == L' ' && start != end)
         {
             withoutLeadingSpaces++;
         }

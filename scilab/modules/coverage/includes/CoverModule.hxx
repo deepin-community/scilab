@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2015 - Scilab Enterprises - Calixte DENIZET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -238,6 +238,7 @@ class COVERAGE_IMPEXP CoverModule
         return Location(fl, ll, fc, lc);
     }
 
+    void instrumentMacro(const std::wstring& module, const std::wstring& path, types::Macro* macro);
     void instrumentSingleMacro(const std::wstring& module, const std::wstring& path, types::Macro* macro, bool instrumentInners);
     inline const std::vector<Counter>& getCounters() const
     {
@@ -283,7 +284,6 @@ class COVERAGE_IMPEXP CoverModule
     void getMacros(const std::wstring& path, const std::wstring& module);
     void getMacrosFromDir(const std::wstring& path, const std::wstring& module);
     void getBuiltins(const std::vector<std::pair<std::wstring, std::wstring>>& paths_mods);
-    void instrumentMacro(const std::wstring& module, const std::wstring& path, types::Macro* macro);
 
     void collect(const std::vector<Counter>::const_iterator& first, const std::vector<Counter>::const_iterator& last);
     static bool getStringFromXPath(char* filePath, const char* xpquery, std::unordered_set<std::wstring>& set);

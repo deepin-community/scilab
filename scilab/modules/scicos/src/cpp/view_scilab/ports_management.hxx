@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2014 - Scilab Enterprises - Paul Bignier
  *  Copyright (C) 2014 - Scilab Enterprises - Clement DAVID
  *
@@ -57,13 +57,19 @@ std::string adapterName(const object_properties_t /*port_kind*/)
     switch (p)
     {
         case CONNECTED_SIGNALS:
+            [[fallthrough]];
         case IMPLICIT:
+            [[fallthrough]];
         case LABEL:
+            [[fallthrough]];
         case STYLE:
             return "graphics";
         case DATATYPE_ROWS:
+            [[fallthrough]];
         case DATATYPE_COLS:
+            [[fallthrough]];
         case DATATYPE_TYPE:
+            [[fallthrough]];
         case FIRING:
             return "model";
         default:
@@ -158,6 +164,7 @@ types::InternalType* get_ports_property(const Adaptor& adaptor, const object_pro
     switch (p)
     {
         case STYLE:
+            [[fallthrough]];
         case LABEL:
         {
             if (ids.empty())
@@ -180,10 +187,10 @@ types::InternalType* get_ports_property(const Adaptor& adaptor, const object_pro
                 return new types::Double(1);
             }
             datatypeIndex++;
-        // no break
+            [[fallthrough]];
         case DATATYPE_COLS:
             datatypeIndex++;
-        // no break
+            [[fallthrough]];
         case DATATYPE_ROWS:
         {
             datatypeIndex++;
@@ -259,16 +266,7 @@ types::InternalType* get_ports_property(const Adaptor& adaptor, const object_pro
                 }
                 else
                 {
-                    std::vector<ScicosID>::iterator found = std::find(children.begin(), children.end(), id);
-                    if (found != children.end())
-                    {
-                        v[i] = static_cast<double>(std::distance(children.begin(), found)) + 1;
-                    }
-                    else
-                    {
-                        // connected link not found ; discard it !
-                        v[i] = 0;
-                    }
+                    v[i] = indexOf(id, children) + 1;
                 }
             }
             return o;
@@ -302,6 +300,7 @@ bool set_ports_property(const Adaptor& adaptor, const object_properties_t port_k
         switch (p)
         {
             case STYLE:
+                [[fallthrough]];
             case LABEL:
             {
                 for (std::vector<ScicosID>::iterator it = ids.begin(); it != ids.end(); ++it, ++i)
@@ -383,7 +382,7 @@ bool set_ports_property(const Adaptor& adaptor, const object_properties_t port_k
                 {
                     std::string adapter = adapterName<p>(port_kind);
                     std::string field = adapterFieldName<p>(port_kind);
-                    get_or_allocate_logger()->log(LOG_ERROR, _("Wrong dimension for field %s.%s: %d-by-%d expected.\n"), adapter.data(), field.data(), ids.size(), 1);
+                    get_or_allocate_logger()->log(LOG_ERROR, _("Wrong dimension for field %s.%s: %d-by-%d expected.\n"), adapter.data(), field.data(), (int) ids.size(), 1);
                     return false;
                 }
 
@@ -395,16 +394,17 @@ bool set_ports_property(const Adaptor& adaptor, const object_properties_t port_k
                 }
                 return true;
             case STYLE:
+                [[fallthrough]];
             case LABEL:
                 // Do nothing, because if the sizes match, then there are already zero concerned ports, so no ports to update
                 return true;
 
             case DATATYPE_TYPE:
                 datatypeIndex++;
-            // no break
+                [[fallthrough]];
             case DATATYPE_COLS:
                 datatypeIndex++;
-            // no break
+                [[fallthrough]];
             case DATATYPE_ROWS:
             {
                 datatypeIndex++;
@@ -502,10 +502,10 @@ inline bool updateNewPort(model::Port* oldPortObject, int newPort, Controller& c
     {
         case DATATYPE_TYPE:
             datatypeIndex++;
-        // no break
+            [[fallthrough]];
         case DATATYPE_COLS:
             datatypeIndex++;
-        // no break
+            [[fallthrough]];
         case DATATYPE_ROWS:
         {
             datatypeIndex++;
@@ -515,7 +515,7 @@ inline bool updateNewPort(model::Port* oldPortObject, int newPort, Controller& c
             return controller.setObjectProperty(oldPortObject, DATATYPE, datatype) != FAIL;
         }
         case CONNECTED_SIGNALS:
-            if (0 <= newPort && newPort < children.size())
+            if (0 <= newPort && newPort < (int) children.size())
             {
                 return controller.setObjectProperty(oldPortObject, p,
                                                     children[newPort]) != FAIL;
@@ -546,10 +546,10 @@ inline bool addNewPort(model::Port* newPortObject, int newPort, Controller& cont
     {
         case DATATYPE_TYPE:
             datatypeIndex++;
-        // no break
+            [[fallthrough]];
         case DATATYPE_COLS:
             datatypeIndex++;
-        // no break
+            [[fallthrough]];
         case DATATYPE_ROWS:
         {
             datatypeIndex++;

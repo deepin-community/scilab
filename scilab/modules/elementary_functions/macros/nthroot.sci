@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) Scilab Enterprises - 2012 - Adeline CARNIS
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -12,26 +12,16 @@
 
 function y = nthroot(x,n)
 
-    rhs = argn(2);
-
-    // If the number of input arguments is wrong
-    if rhs <> 2 then
-        error(msprintf(gettext("%s: Wrong number of input argument(s): %d expected.\n"), "nthroot", 2));
-    end
-
-    // If x or n are not real
-    if typeof(x) <> "constant" | ~isreal(x)  then
-        error(msprintf(gettext("%s: Wrong type for input argument #%d: Real scalar or matrix expected.\n"),"nthroot", 1));
-    end
-
-    if typeof(n) <> "constant" | ~isreal(n) then
-        error(msprintf(gettext("%s: Wrong type for input argument #%d: Real scalar or matrix expected.\n"),"nthroot", 2));
+    arguments
+        x {mustBeA(x, "double"), mustBeReal}
+        n {mustBeA(n, "double"), mustBeReal}
     end
 
     // If n is a vector which size is different from x's
     if (size(n,"*")>1 & size(n,"*")<>size(x,"*")) then
         error(msprintf(gettext("%s: Wrong sizes for input argument #%d and #%d: Same sizes expected.\n"),"nthroot", 1, 2));
     end
+    
     if isempty(x)
         y = [];
         return

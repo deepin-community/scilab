@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2010 - Calixte DENIZET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -76,6 +76,14 @@ public interface TemplateFiller {
      * @return the corresponding html
      */
     public String makeTitle(String id);
+
+    /**
+     * Make the origin - the original source of a document
+     * @param current id
+     * @return the corresponding html
+     * @see https://doc.ohreally.nl/metatag-origin
+     */
+    public String makeOrigin(String id);
 
     /**
      * Make the generation date

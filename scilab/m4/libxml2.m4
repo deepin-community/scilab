@@ -1,5 +1,5 @@
 dnl
-dnl Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+dnl Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 dnl Copyright (C) INRIA - 2008 - Sylvestre Ledru
 dnl 
 dnl Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -20,7 +20,7 @@ dnl * what are linking flags
 AC_DEFUN([AC_LIBXML2], [
 
 AC_ARG_WITH(libxml2,
-		AC_HELP_STRING([--with-libxml2=PREFIX],[Set the path to your libxml2 installation]),
+		AS_HELP_STRING([--with-libxml2=PREFIX],[Set the path to your libxml2 installation]),
 		[with_libxml2=$withval],
 		[with_libxml2='yes']
 		)

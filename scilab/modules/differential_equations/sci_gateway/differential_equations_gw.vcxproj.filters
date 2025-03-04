@@ -26,6 +26,9 @@
     <ClInclude Include="..\includes\dynlib_differential_equations_gw.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="cpp\sci_sundialsode.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cpp\sci_bvode.cpp">
@@ -62,6 +65,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cpp\differential_equations_gw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\sci_arkode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\sci_cvode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\sci_ida.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\sci_kinsol.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\sci_percent_odeSolution.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2007 - INRIA - Sylvestre LEDRU
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -14,15 +14,7 @@
  */
 #ifndef __CSIGNAL_H__
 #define __CSIGNAL_H__
-#include <signal.h>
 #include "machine.h"
-
-/**
- * TODO : comment
- * @param sig
- */
-void controlC_handler (int sig);
-
 
 /**
  * Set the CTRL+C behaviour (stop the current execution

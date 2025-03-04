@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2017 - Samuel GOUGEON
 //
 // This file is hereby licensed under the terms of the GNU GPL v2.0,
@@ -10,48 +10,29 @@
 
 function R = circshift(M, sh, d)
 
-    // SPECIAL SIMPLE CASES
-    // --------------------
-    if argn(2) == 0 then
-        R = []
-        return
+    arguments
+        M
+        sh double {mustBeA(sh, ["double", "int"]), mustBeInteger}
+        d double {mustBeA(d, ["double", "int"]), mustBeInteger} = []
     end
 
     Fname = "circshift"
 
-    // M must be sizeable (including for custom types)
-    try
-        s = size(M)
-        n = size(M,"*")
-    catch
-        msg = _("%s: Argument #%d: Wrong type. A sizeable type expected.\n");
-        error(msprintf(msg, Fname, 1));
-    end
-
+    s = size(M)
+    n = size(M, "*")
     if or(n == [0, 1]) then
         R = M
         return
     end
 
-    nd = length(s)    // Number of Dimensions (without using ndims())
+    nd = length(s) ;   // Number of Dimensions (without using ndims())
 
-    // CHECKING INPUT ARGUMENTS. DEFAULTS
-    // ----------------------------------
-    if ~isdef("sh", "l") then
-        msg = _("%s: Wrong number of input arguments: %d to %d expected.\n");
-        error(msprintf(msg, Fname, 2, 3));
-    end
-    if and(type(sh) ~= [1 8]) | ~and(sh == int(sh)) then
-        msg = _("%s: Argument #%d: Integer(s) expected.\n");
-        error(msprintf(msg, Fname, 2));
-    end
     if length(sh) > nd then
         msg = _("%s: Argument #%d: Must be in the interval [%s, %s].\n");
         error(msprintf(msg, Fname, 2, "1", msprintf("%s\n", nd)));
     end
-    sh = double(sh);
-    //
-    if ~isdef("d", "l") then
+
+    if d == [] then
         if length(sh) == 1 then
             d = find(s > 1, 1)
             if d == [] then
@@ -61,11 +42,6 @@ function R = circshift(M, sh, d)
             d = 1:length(sh)
         end
     else
-        if and(type(d) ~= [1 8]) | ~and(d == int(d)) then
-            msg = _("%s: Argument #%d: Integer(s) expected.\n");
-            error(msprintf(msg, Fname, 3));
-        end
-        d = double(d);
         if (length(d) == 1 & (d < 0 | d > nd)) | (length(d) > 1 & or(d < 1 | d > nd)) then
             msg = _("%s: Argument #%d: Must be in the interval [%s, %s].\n");
             error(msprintf(msg, Fname, 3, "1", msprintf("%d\n", nd)));

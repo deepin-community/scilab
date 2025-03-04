@@ -1,5 +1,5 @@
 dnl
-dnl Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+dnl Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 dnl Copyright (C) DIGITEO - 2009 - Bruno JOFRET
 dnl
 dnl Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -21,13 +21,13 @@ AC_DEFUN([AC_HDF5], [
 
 
 AC_ARG_WITH(hdf5_include,
-        AC_HELP_STRING([--with-hdf5-include=DIR],[Set the path to the HDF5 headers]),
+        AS_HELP_STRING([--with-hdf5-include=DIR],[Set the path to the HDF5 headers]),
         [with_hdf5_include=$withval],
         [with_hdf5_include='yes']
         )
 
 AC_ARG_WITH(hdf5_library,
-        AC_HELP_STRING([--with-hdf5-library=DIR],[Set the path to the HDF5 libraries]),
+        AS_HELP_STRING([--with-hdf5-library=DIR],[Set the path to the HDF5 libraries]),
         [with_hdf5_library=$withval],
         [with_hdf5_library='yes']
         )
@@ -43,7 +43,7 @@ if test "x$with_hdf5_include" != "xyes"; then
 else
     HDF5_CFLAGS=""
     if $WITH_DEVTOOLS; then # Scilab thirdparties
-        HDF5_CFLAGS="-I$DEVTOOLS_INCDIR"
+        HDF5_CFLAGS="-I$DEVTOOLS_INCDIR -DH5_NO_DEPRECATED_SYMBOLS"
     else
         if test -d /usr/include/hdf5/serial; then # New Debian packaging layout since hdf5-1.8.13
             AC_CHECK_HEADER([hdf5/serial/hdf5.h],

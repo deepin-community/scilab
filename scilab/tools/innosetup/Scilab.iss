@@ -1,5 +1,5 @@
 ;
-; Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+; Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 ; Copyright (C) DIGITEO - 2010-2012 - Allan CORNET
 ;
 ; Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -29,7 +29,7 @@
 ;#define SCILAB_WITHOUT_JRE
 ;#define SCILAB_F2C
 ;-------------------------------------------------------------------------------
-#define MODULES_LIST_WEB_PAGE 'http://wiki.scilab.org/howto/install/windows'
+#define MODULES_LIST_WEB_PAGE 'https://scilab.gitlab.io/legacy_wiki/howto(2f)install(2f)windows.html'
 ;-------------------------------------------------------------------------------
 [CustomMessages]
 #include BinariesSourcePath + "\tools\innosetup\custommessages.iss"

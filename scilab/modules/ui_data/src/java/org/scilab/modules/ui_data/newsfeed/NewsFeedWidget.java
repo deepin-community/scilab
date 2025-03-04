@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2015-2016 - Scilab Enterprises - Simon Marchetto
  * Copyright (C) 2016 - Scilab Enterprises - Clement David
  *
@@ -159,8 +159,14 @@ public class NewsFeedWidget extends JPanel implements NewsFeedEventListener, Hyp
         display(new AbstractAction(news.getTitle()) {
             @Override
             public void actionPerformed(ActionEvent e) {
+                String link = news.getLink();
+                if (link == null)
+                {
+                    link = "https://www.scilab.org";
+                }
+
                 try {
-                    WebBrowser.openUrl(new URL(news.getLink()), news.getLink());
+                    WebBrowser.openUrl(new URL(link), link);
                 } catch (MalformedURLException ex) {
                     Logger.getLogger(NewsFeedWidget.class.getName()).log(Level.SEVERE, null, ex);
                 }

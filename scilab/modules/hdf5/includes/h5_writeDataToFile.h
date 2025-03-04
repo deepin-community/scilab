@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2012 - Scilab Enterprises - Antoine ELIAS
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -62,16 +62,16 @@ HDF5_SCILAB_IMPEXP hid_t closeList(hid_t _iFile,  void* _pvList, char* _pstListN
 
 /*scilab 6*/
 
-HDF5_SCILAB_IMPEXP int writeDoubleMatrix6(hid_t parent, const char* name, int dims, int* pdims, double* data, hid_t xfer_plist);
-HDF5_SCILAB_IMPEXP int writeDoubleComplexMatrix6(hid_t parent, const char* name, int dims, int* pdims, double* real, double* img, hid_t xfer_plist);
-HDF5_SCILAB_IMPEXP int writeStringMatrix6(hid_t parent, const char* name, int dims, int* pdims, char** data, hid_t xfer_plist);
-HDF5_SCILAB_IMPEXP int writeBooleanMatrix6(hid_t parent, const char* name, int dims, int* pdims, int* data, hid_t xfer_plist);
-HDF5_SCILAB_IMPEXP int writeIntegerMatrix6(hid_t parent, const char* name, hid_t type, const char* prec, int dims, int* pdims, void* data, hid_t xfer_plist);
+HDF5_SCILAB_IMPEXP hid_t writeDoubleMatrix6(hid_t parent, const char* name, int dims, int* pdims, double* data, hid_t xfer_plist);
+HDF5_SCILAB_IMPEXP hid_t writeDoubleComplexMatrix6(hid_t parent, const char* name, int dims, int* pdims, double* real, double* img, hid_t xfer_plist);
+HDF5_SCILAB_IMPEXP hid_t writeStringMatrix6(hid_t parent, const char* name, int dims, int* pdims, char** data, hid_t xfer_plist);
+HDF5_SCILAB_IMPEXP hid_t writeBooleanMatrix6(hid_t parent, const char* name, int dims, int* pdims, int* data, hid_t xfer_plist);
+HDF5_SCILAB_IMPEXP hid_t writeIntegerMatrix6(hid_t parent, const char* name, hid_t type, const char* prec, int dims, int* pdims, void* data, hid_t xfer_plist);
 
 HDF5_SCILAB_IMPEXP hid_t openList6(hid_t parent, const char* name, const char* type);
-HDF5_SCILAB_IMPEXP int closeList6(hid_t lst);
-HDF5_SCILAB_IMPEXP int addItemStruct6(hid_t dataset, hobj_ref_t* refs, int pos, const char* name);
-HDF5_SCILAB_IMPEXP int writeStructField6(hid_t parent, const char* name, int dims, int* pdims, hobj_ref_t* refs, hid_t xfer_plist);
-HDF5_SCILAB_IMPEXP int writeVoid6(hid_t parent, const char* name, hid_t xfer_plist);
-HDF5_SCILAB_IMPEXP int writeUndefined6(hid_t parent, const char* name, hid_t xfer_plist);
+HDF5_SCILAB_IMPEXP hid_t closeList6(hid_t lst);
+HDF5_SCILAB_IMPEXP herr_t addItemStruct6(hid_t dataset, hobj_ref_t* refs, int pos, const char* name);
+HDF5_SCILAB_IMPEXP hid_t writeStructField6(hid_t parent, const char* name, int dims, int* pdims, hobj_ref_t* refs, hid_t xfer_plist);
+HDF5_SCILAB_IMPEXP hid_t writeVoid6(hid_t parent, const char* name, hid_t xfer_plist);
+HDF5_SCILAB_IMPEXP hid_t writeUndefined6(hid_t parent, const char* name, hid_t xfer_plist);
 #endif /* !__H5_WRITEDATATOFILE_H__ */

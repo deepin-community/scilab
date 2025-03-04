@@ -1,5 +1,5 @@
 // ========================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Paul Bignier
 // Copyright (C) 2017 - Samuel GOUGEON
 //
@@ -319,7 +319,7 @@ d = [d ; [-uns uns uns*0]*%inf];
 //   6    7    7    8    8    8   9   9   9   9   0   0   0   0   0
 //  -Inf -Inf -Inf -Inf -Inf Inf Inf Inf Inf Inf Nan Nan Nan Nan Nan
 [h,j,b,i] = histc(d, [1 2 4 7 %nan -%inf] , "discrete");
-bref = [1  2  4  7 -%inf]
+bref = [1  2  4  7 -%inf];
 href = [5  4  2  2  5 ];
 jref = [17 0  5  5 10 ];
 iref = [
@@ -541,10 +541,9 @@ assert_checkfalse(execstr("histc(1,2,3,4)", "errcatch")==0);
 // Too many output arguments
 assert_checkfalse(execstr("[a,b,c,d,e] = histc(rand(1,100))", "errcatch")==0);
 // Wrong Data types
-msg = _("%s: Argument #%d: %s\n");
-msg = msprintf(msg, "histc", 1, "data array missing");
+msg = _("%s: Wrong type for input argument #%d: a double, polynomial or string expected.\n");
+msg = msprintf(msg, "histc", 1);
 assert_checkerror("histc(,,3)", msg);
-msg = _("histc: Data in argument #1: Numbers or polynomials or texts expected.");
 assert_checkerror("histc(rand(1,100)<0.5)", msg);       // boolean
 assert_checkerror("histc(sprand(1,100,0.1)>0.5)", msg); // sparse booleans
 assert_checkerror("histc(list(%pi, 1, %e))", msg);      // list
@@ -552,19 +551,19 @@ assert_checkerror("histc({1, 2, 3, 4})", msg);          // cells
 s(1:3).r = %pi;
 assert_checkerror("histc(s)", msg);                     // structs
 // Number of bins must be integer > 0:
-msg = _("%s: Argument #%d: non-zero decimal integer expected.\n");
-msg = msprintf(msg, "histc", 2);
+msg = _("%s: Wrong value for input argument #%d: Must be in the interval %s.\n");
+msg = msprintf(msg, "histc", 2, "[1, oo)");
 assert_checkerror("histc(rand(1,100), 1.5)", msg);
 assert_checkerror("histc(rand(1,100), 0)", msg);
 assert_checkerror("histc(rand(1,100), %inf)", msg);
 assert_checkerror("histc(rand(1,100), %nan)", msg);
 // Bins width must not be %inf
-msg = _("%s: Argument #%d: decimal number > -Inf expected.\n");
+msg = _("%s: Wrong value for input argument #%d: decimal number > -Inf expected.\n");
 msg = msprintf(msg, "histc", 2);
 assert_checkerror("histc(rand(1,100), -%inf)", msg);
 
 // Mismatching Data and binsEdges types
-msg = _("%s: Arguments #%d and #%d: Same types expected.\n")
+msg = _("%s: Wrong type for input arguments #%d and #%d: Same types expected.\n");
 msg = msprintf(msg, "histc", 1, 2);
 assert_checkerror("histc(t, 1:3)", msg);
 assert_checkerror("histc(rand(1,100), [""a"" ""b"" ""c""])", msg);
@@ -574,15 +573,15 @@ assert_checkerror("histc(t, 1:3, ""discrete"")", msg);
 assert_checkerror("histc(rand(1,100), [""a"" ""b""], ""discrete"")", msg);
 assert_checkerror("histc(int8(rand(1,100)*100), [""a"" ""b""], ""discrete"")", msg);
 // Wrong algo name
-msg = msprintf(_("%s: Argument #%d: wrong value for binning algo"),"histc",2);
+msg = msprintf(_("%s: Wrong value for input argument #%d: Must be in the set %s.\n"),"histc", 2, sci2exp(["sqrt", "sturges", "freediac"]));
 assert_checkerror("histc(rand(1,100), ""foo"")", msg);
 // Unapplicable binning modes:
-msg = msprintf( _("%s: Argument #2: Please provide bins edges or values or leave choosing default bins.\n"), "histc");
+msg = msprintf( _("%s: Wrong value for input argument #%d: Please provide bins edges or values or leave choosing default bins.\n"), "histc", 2);
 assert_checkerror("histc(t, ""sqrt"")", msg);
 assert_checkerror("histc(t, 3)", msg);
 assert_checkerror("histc(t, -3)", msg);
 // Wrong options type
-msg = _("%s: Argument #%d: Text expected.\n");
+msg = _("%s: Wrong type for input argument #%d: a string expected.\n");
 msg = msprintf(msg, "histc", 3);
 assert_checkerror("histc(rand(1,100),,%t)", msg);
 assert_checkerror("histc(rand(1,100),,1)", msg);

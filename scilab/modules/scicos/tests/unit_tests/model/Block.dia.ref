@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2014 - Scilab Enterprises - Paul Bignier
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -61,57 +61,60 @@ Xcos trace:   propertyUpdated( 1 , BLOCK , EQUATIONS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 1 , BLOCK , UID ) : NO_CHANGES
 Xcos trace:   objectUnreferenced( 1 , BLOCK ) : 0
 Xcos debug:   propertyUpdated( 1 , BLOCK , INTERFACE_FUNCTION ) : SUCCESS
- o  = 
-GUI     : BIGSOM_f
-Graphics: 
+ o = (Block) with fields:
 Xcos trace:   objectReferenced( 1 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 1 , BLOCK ) : 0
-          orig = [0,0]
-          sz = [2,3]
-          exprs = "[1;1]"
-          pin = [0;0]
-          pout = 0
-          pein = []
-          peout = []
-          gr_i = []
-          id = ""
-          in_implicit = ["E";"E"]
-          out_implicit = "E"
-          in_style = ["";""]
-          out_style = ""
-          in_label = ["";""]
-          out_label = ""
-          style = ""
-Model   : 
 Xcos trace:   objectReferenced( 1 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 1 , BLOCK ) : 0
-          sum type: 2
-          in = [-1;-1]
-          in2 = [1;1]
-          intyp = [1;1]
-          out = -1
-          out2 = 1
-          outtyp = 1
-          evtin = []
-          evtout = []
-          state = []
-          dstate = []
-          odstate = list()
-          rpar = [1;1]
-          ipar = []
-          opar = list()
-          blocktype = "c"
-          firing = []
-          dep_ut = [%t,%f]
-          label = ""
-          nzcross = 0
-          nmode = 0
-          equations = list()
-          uid = ""
+  graphics: (graphics mlist) with fields:
+      orig = [0,0]
+      sz = [2,3]
+      exprs = "[1;1]"
+      pin = [0;0]
+      pout = 0
+      pein = []
+      peout = []
+      gr_i = []
+      id = ""
+      in_implicit = ["E";"E"]
+      out_implicit = "E"
+      in_style = ["";""]
+      out_style = ""
+      in_label = ["";""]
+      out_label = ""
+      style = ""
+  model: (model mlist) with fields:
+      sim: (2-elements list)
+          (1) = "sum"
+          (2) = 2
+      in = [-1;-1]
+      in2 = [1;1]
+      intyp = [1;1]
+      out = -1
+      out2 = 1
+      outtyp = 1
+      evtin = []
+      evtout = []
+      state = []
+      dstate = []
+      odstate: (empty list)
+      rpar = [1;1]
+      ipar = []
+      opar: (empty list)
+      blocktype = "c"
+      firing = []
+      dep_ut = [%t,%f]
+      label = ""
+      nzcross = 0
+      nmode = 0
+      equations: (empty list)
+      uid = ""
+  gui = "BIGSOM_f"
+  doc: (empty list)
 o.graphics
 Xcos trace:   objectReferenced( 1 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 1 , BLOCK ) : 0
- ans  =
+ ans = (graphics mlist) with fields:
 orig = [0,0]
 sz = [2,3]
 exprs = "[1;1]"
@@ -131,36 +134,37 @@ style = ""
 o.model
 Xcos trace:   objectReferenced( 1 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 1 , BLOCK ) : 0
- ans  =
-sum type: 2
-in = [-1;-1]
-in2 = [1;1]
-intyp = [1;1]
-out = -1
-out2 = 1
-outtyp = 1
-evtin = []
-evtout = []
-state = []
-dstate = []
-odstate = list()
-rpar = [1;1]
-ipar = []
-opar = list()
-blocktype = "c"
-firing = []
-dep_ut = [%t,%f]
-label = ""
-nzcross = 0
-nmode = 0
-equations = list()
-uid = ""
+ ans = (model mlist) with fields:
+  sim: (2-elements list)
+      (1) = "sum"
+      (2) = 2
+  in = [-1;-1]
+  in2 = [1;1]
+  intyp = [1;1]
+  out = -1
+  out2 = 1
+  outtyp = 1
+  evtin = []
+  evtout = []
+  state = []
+  dstate = []
+  odstate: (empty list)
+  rpar = [1;1]
+  ipar = []
+  opar: (empty list)
+  blocktype = "c"
+  firing = []
+  dep_ut = [%t,%f]
+  label = ""
+  nzcross = 0
+  nmode = 0
+  equations: (empty list)
+  uid = ""
 o.gui
- ans  =
+ ans = 
   "BIGSOM_f"
 o.doc
- ans  =
-  empty list()
+ ans = (empty list)
 // Set the block to itself without making any modification
 // (scicos_getvalue returns BIGSOM_f default parameters)
 p = funcprot();
@@ -238,10 +242,10 @@ Xcos debug:   propertyUpdated( 5 , BLOCK , OUTPUTS ) : SUCCESS
 Xcos trace:   propertyUpdated( 5 , BLOCK , EVENT_INPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 5 , BLOCK , EVENT_OUTPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 5 , BLOCK , PARENT_BLOCK ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 5 , BLOCK , CHILDREN ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 6 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 7 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 8 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
-Xcos trace:   propertyUpdated( 5 , BLOCK , CHILDREN ) : NO_CHANGES
 Xcos trace:   objectReferenced( 5 , BLOCK ) : 1
 Xcos trace:   propertyUpdated( 5 , BLOCK , GEOMETRY ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 5 , BLOCK , GEOMETRY ) : NO_CHANGES
@@ -304,57 +308,60 @@ Xcos trace:   propertyUpdated( 1 , BLOCK , EVENT_INPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 1 , BLOCK , EVENT_OUTPUTS ) : NO_CHANGES
 Xcos info:    objectDeleted( 4 , PORT )
 Xcos info:    objectDeleted( 1 , BLOCK )
- o  = 
-GUI     : BIGSOM_f
-Graphics: 
+ o = (Block) with fields:
 Xcos trace:   objectReferenced( 5 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 5 , BLOCK ) : 0
-          orig = [0,0]
-          sz = [2,3]
-          exprs = "[1;1]"
-          pin = [0;0]
-          pout = 0
-          pein = []
-          peout = []
-          gr_i = []
-          id = ""
-          in_implicit = ["E";"E"]
-          out_implicit = "E"
-          in_style = ["";""]
-          out_style = ""
-          in_label = ["";""]
-          out_label = ""
-          style = ""
-Model   : 
 Xcos trace:   objectReferenced( 5 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 5 , BLOCK ) : 0
-          sum type: 2
-          in = [-1;-1]
-          in2 = [1;1]
-          intyp = [1;1]
-          out = -1
-          out2 = 1
-          outtyp = 1
-          evtin = []
-          evtout = []
-          state = []
-          dstate = []
-          odstate = list()
-          rpar = [1;1]
-          ipar = []
-          opar = list()
-          blocktype = "c"
-          firing = []
-          dep_ut = [%t,%f]
-          label = ""
-          nzcross = 0
-          nmode = 0
-          equations = list()
-          uid = ""
+  graphics: (graphics mlist) with fields:
+      orig = [0,0]
+      sz = [2,3]
+      exprs = "[1;1]"
+      pin = [0;0]
+      pout = 0
+      pein = []
+      peout = []
+      gr_i = []
+      id = ""
+      in_implicit = ["E";"E"]
+      out_implicit = "E"
+      in_style = ["";""]
+      out_style = ""
+      in_label = ["";""]
+      out_label = ""
+      style = ""
+  model: (model mlist) with fields:
+      sim: (2-elements list)
+          (1) = "sum"
+          (2) = 2
+      in = [-1;-1]
+      in2 = [1;1]
+      intyp = [1;1]
+      out = -1
+      out2 = 1
+      outtyp = 1
+      evtin = []
+      evtout = []
+      state = []
+      dstate = []
+      odstate: (empty list)
+      rpar = [1;1]
+      ipar = []
+      opar: (empty list)
+      blocktype = "c"
+      firing = []
+      dep_ut = [%t,%f]
+      label = ""
+      nzcross = 0
+      nmode = 0
+      equations: (empty list)
+      uid = ""
+  gui = "BIGSOM_f"
+  doc: (empty list)
 o.graphics
 Xcos trace:   objectReferenced( 5 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 5 , BLOCK ) : 0
- ans  =
+ ans = (graphics mlist) with fields:
 orig = [0,0]
 sz = [2,3]
 exprs = "[1;1]"
@@ -374,30 +381,32 @@ style = ""
 o.model
 Xcos trace:   objectReferenced( 5 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 5 , BLOCK ) : 0
- ans  =
-sum type: 2
-in = [-1;-1]
-in2 = [1;1]
-intyp = [1;1]
-out = -1
-out2 = 1
-outtyp = 1
-evtin = []
-evtout = []
-state = []
-dstate = []
-odstate = list()
-rpar = [1;1]
-ipar = []
-opar = list()
-blocktype = "c"
-firing = []
-dep_ut = [%t,%f]
-label = ""
-nzcross = 0
-nmode = 0
-equations = list()
-uid = ""
+ ans = (model mlist) with fields:
+  sim: (2-elements list)
+      (1) = "sum"
+      (2) = 2
+  in = [-1;-1]
+  in2 = [1;1]
+  intyp = [1;1]
+  out = -1
+  out2 = 1
+  outtyp = 1
+  evtin = []
+  evtout = []
+  state = []
+  dstate = []
+  odstate: (empty list)
+  rpar = [1;1]
+  ipar = []
+  opar: (empty list)
+  blocktype = "c"
+  firing = []
+  dep_ut = [%t,%f]
+  label = ""
+  nzcross = 0
+  nmode = 0
+  equations: (empty list)
+  uid = ""
 // Now use scicos_getvalue to modify the 'exprs' and 'rpar' fields to "[-1;-1]" and '[-1;-1]'
 p = funcprot();
 funcprot(0);
@@ -474,10 +483,10 @@ Xcos debug:   propertyUpdated( 9 , BLOCK , OUTPUTS ) : SUCCESS
 Xcos trace:   propertyUpdated( 9 , BLOCK , EVENT_INPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 9 , BLOCK , EVENT_OUTPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 9 , BLOCK , PARENT_BLOCK ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 9 , BLOCK , CHILDREN ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 10 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 11 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 12 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
-Xcos trace:   propertyUpdated( 9 , BLOCK , CHILDREN ) : NO_CHANGES
 Xcos trace:   objectReferenced( 9 , BLOCK ) : 1
 Xcos trace:   propertyUpdated( 9 , BLOCK , GEOMETRY ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 9 , BLOCK , GEOMETRY ) : NO_CHANGES
@@ -540,57 +549,60 @@ Xcos trace:   propertyUpdated( 5 , BLOCK , EVENT_INPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 5 , BLOCK , EVENT_OUTPUTS ) : NO_CHANGES
 Xcos info:    objectDeleted( 8 , PORT )
 Xcos info:    objectDeleted( 5 , BLOCK )
- o  = 
-GUI     : BIGSOM_f
-Graphics: 
+ o = (Block) with fields:
 Xcos trace:   objectReferenced( 9 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 9 , BLOCK ) : 0
-          orig = [0,0]
-          sz = [2,3]
-          exprs = "[-1;-1]"
-          pin = [0;0]
-          pout = 0
-          pein = []
-          peout = []
-          gr_i = []
-          id = ""
-          in_implicit = ["E";"E"]
-          out_implicit = "E"
-          in_style = ["";""]
-          out_style = ""
-          in_label = ["";""]
-          out_label = ""
-          style = ""
-Model   : 
 Xcos trace:   objectReferenced( 9 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 9 , BLOCK ) : 0
-          sum type: 2
-          in = [-1;-1]
-          in2 = [1;1]
-          intyp = [1;1]
-          out = -1
-          out2 = 1
-          outtyp = 1
-          evtin = []
-          evtout = []
-          state = []
-          dstate = []
-          odstate = list()
-          rpar = [-1;-1]
-          ipar = []
-          opar = list()
-          blocktype = "c"
-          firing = []
-          dep_ut = [%t,%f]
-          label = ""
-          nzcross = 0
-          nmode = 0
-          equations = list()
-          uid = ""
+  graphics: (graphics mlist) with fields:
+      orig = [0,0]
+      sz = [2,3]
+      exprs = "[-1;-1]"
+      pin = [0;0]
+      pout = 0
+      pein = []
+      peout = []
+      gr_i = []
+      id = ""
+      in_implicit = ["E";"E"]
+      out_implicit = "E"
+      in_style = ["";""]
+      out_style = ""
+      in_label = ["";""]
+      out_label = ""
+      style = ""
+  model: (model mlist) with fields:
+      sim: (2-elements list)
+          (1) = "sum"
+          (2) = 2
+      in = [-1;-1]
+      in2 = [1;1]
+      intyp = [1;1]
+      out = -1
+      out2 = 1
+      outtyp = 1
+      evtin = []
+      evtout = []
+      state = []
+      dstate = []
+      odstate: (empty list)
+      rpar = [-1;-1]
+      ipar = []
+      opar: (empty list)
+      blocktype = "c"
+      firing = []
+      dep_ut = [%t,%f]
+      label = ""
+      nzcross = 0
+      nmode = 0
+      equations: (empty list)
+      uid = ""
+  gui = "BIGSOM_f"
+  doc: (empty list)
 o.graphics
 Xcos trace:   objectReferenced( 9 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 9 , BLOCK ) : 0
- ans  =
+ ans = (graphics mlist) with fields:
 orig = [0,0]
 sz = [2,3]
 exprs = "[-1;-1]"
@@ -610,30 +622,32 @@ style = ""
 o.model
 Xcos trace:   objectReferenced( 9 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 9 , BLOCK ) : 0
- ans  =
-sum type: 2
-in = [-1;-1]
-in2 = [1;1]
-intyp = [1;1]
-out = -1
-out2 = 1
-outtyp = 1
-evtin = []
-evtout = []
-state = []
-dstate = []
-odstate = list()
-rpar = [-1;-1]
-ipar = []
-opar = list()
-blocktype = "c"
-firing = []
-dep_ut = [%t,%f]
-label = ""
-nzcross = 0
-nmode = 0
-equations = list()
-uid = ""
+ ans = (model mlist) with fields:
+  sim: (2-elements list)
+      (1) = "sum"
+      (2) = 2
+  in = [-1;-1]
+  in2 = [1;1]
+  intyp = [1;1]
+  out = -1
+  out2 = 1
+  outtyp = 1
+  evtin = []
+  evtout = []
+  state = []
+  dstate = []
+  odstate: (empty list)
+  rpar = [-1;-1]
+  ipar = []
+  opar: (empty list)
+  blocktype = "c"
+  firing = []
+  dep_ut = [%t,%f]
+  label = ""
+  nzcross = 0
+  nmode = 0
+  equations: (empty list)
+  uid = ""
 // Now modify the block's entry port #2 to '1' and add a new one with value '1'
 p = funcprot();
 funcprot(0);
@@ -710,10 +724,10 @@ Xcos debug:   propertyUpdated( 13 , BLOCK , OUTPUTS ) : SUCCESS
 Xcos trace:   propertyUpdated( 13 , BLOCK , EVENT_INPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 13 , BLOCK , EVENT_OUTPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 13 , BLOCK , PARENT_BLOCK ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 13 , BLOCK , CHILDREN ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 14 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 15 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 16 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
-Xcos trace:   propertyUpdated( 13 , BLOCK , CHILDREN ) : NO_CHANGES
 Xcos trace:   objectReferenced( 13 , BLOCK ) : 1
 Xcos trace:   propertyUpdated( 13 , BLOCK , GEOMETRY ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 13 , BLOCK , GEOMETRY ) : NO_CHANGES
@@ -779,57 +793,60 @@ Xcos trace:   propertyUpdated( 9 , BLOCK , EVENT_INPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 9 , BLOCK , EVENT_OUTPUTS ) : NO_CHANGES
 Xcos info:    objectDeleted( 12 , PORT )
 Xcos info:    objectDeleted( 9 , BLOCK )
- o  = 
-GUI     : BIGSOM_f
-Graphics: 
+ o = (Block) with fields:
 Xcos trace:   objectReferenced( 13 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 13 , BLOCK ) : 0
-          orig = [0,0]
-          sz = [2,3]
-          exprs = "[-1;1;1]"
-          pin = [0;0;0]
-          pout = 0
-          pein = []
-          peout = []
-          gr_i = []
-          id = ""
-          in_implicit = ["E";"E";"E"]
-          out_implicit = "E"
-          in_style = ["";"";""]
-          out_style = ""
-          in_label = ["";"";""]
-          out_label = ""
-          style = ""
-Model   : 
 Xcos trace:   objectReferenced( 13 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 13 , BLOCK ) : 0
-          sum type: 2
-          in = [-1;-1;-1]
-          in2 = [1;1;1]
-          intyp = [1;1;1]
-          out = -1
-          out2 = 1
-          outtyp = 1
-          evtin = []
-          evtout = []
-          state = []
-          dstate = []
-          odstate = list()
-          rpar = [-1;1;1]
-          ipar = []
-          opar = list()
-          blocktype = "c"
-          firing = []
-          dep_ut = [%t,%f]
-          label = ""
-          nzcross = 0
-          nmode = 0
-          equations = list()
-          uid = ""
+  graphics: (graphics mlist) with fields:
+      orig = [0,0]
+      sz = [2,3]
+      exprs = "[-1;1;1]"
+      pin = [0;0;0]
+      pout = 0
+      pein = []
+      peout = []
+      gr_i = []
+      id = ""
+      in_implicit = ["E";"E";"E"]
+      out_implicit = "E"
+      in_style = ["";"";""]
+      out_style = ""
+      in_label = ["";"";""]
+      out_label = ""
+      style = ""
+  model: (model mlist) with fields:
+      sim: (2-elements list)
+          (1) = "sum"
+          (2) = 2
+      in = [-1;-1;-1]
+      in2 = [1;1;1]
+      intyp = [1;1;1]
+      out = -1
+      out2 = 1
+      outtyp = 1
+      evtin = []
+      evtout = []
+      state = []
+      dstate = []
+      odstate: (empty list)
+      rpar = [-1;1;1]
+      ipar = []
+      opar: (empty list)
+      blocktype = "c"
+      firing = []
+      dep_ut = [%t,%f]
+      label = ""
+      nzcross = 0
+      nmode = 0
+      equations: (empty list)
+      uid = ""
+  gui = "BIGSOM_f"
+  doc: (empty list)
 o.graphics
 Xcos trace:   objectReferenced( 13 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 13 , BLOCK ) : 0
- ans  =
+ ans = (graphics mlist) with fields:
 orig = [0,0]
 sz = [2,3]
 exprs = "[-1;1;1]"
@@ -849,30 +866,32 @@ style = ""
 o.model
 Xcos trace:   objectReferenced( 13 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 13 , BLOCK ) : 0
- ans  =
-sum type: 2
-in = [-1;-1;-1]
-in2 = [1;1;1]
-intyp = [1;1;1]
-out = -1
-out2 = 1
-outtyp = 1
-evtin = []
-evtout = []
-state = []
-dstate = []
-odstate = list()
-rpar = [-1;1;1]
-ipar = []
-opar = list()
-blocktype = "c"
-firing = []
-dep_ut = [%t,%f]
-label = ""
-nzcross = 0
-nmode = 0
-equations = list()
-uid = ""
+ ans = (model mlist) with fields:
+  sim: (2-elements list)
+      (1) = "sum"
+      (2) = 2
+  in = [-1;-1;-1]
+  in2 = [1;1;1]
+  intyp = [1;1;1]
+  out = -1
+  out2 = 1
+  outtyp = 1
+  evtin = []
+  evtout = []
+  state = []
+  dstate = []
+  odstate: (empty list)
+  rpar = [-1;1;1]
+  ipar = []
+  opar: (empty list)
+  blocktype = "c"
+  firing = []
+  dep_ut = [%t,%f]
+  label = ""
+  nzcross = 0
+  nmode = 0
+  equations: (empty list)
+  uid = ""
 // Now set the parameters to the defaults values (eg. removing ports)
 p = funcprot();
 funcprot(0);
@@ -960,11 +979,11 @@ Xcos debug:   propertyUpdated( 18 , BLOCK , OUTPUTS ) : SUCCESS
 Xcos trace:   propertyUpdated( 18 , BLOCK , EVENT_INPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 18 , BLOCK , EVENT_OUTPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 18 , BLOCK , PARENT_BLOCK ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 18 , BLOCK , CHILDREN ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 19 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 20 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
-Xcos trace:   propertyUpdated( 21 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 22 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
-Xcos trace:   propertyUpdated( 18 , BLOCK , CHILDREN ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 21 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos trace:   objectReferenced( 18 , BLOCK ) : 1
 Xcos trace:   propertyUpdated( 18 , BLOCK , GEOMETRY ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 18 , BLOCK , GEOMETRY ) : NO_CHANGES
@@ -1033,57 +1052,60 @@ Xcos trace:   propertyUpdated( 13 , BLOCK , EVENT_INPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 13 , BLOCK , EVENT_OUTPUTS ) : NO_CHANGES
 Xcos info:    objectDeleted( 16 , PORT )
 Xcos info:    objectDeleted( 13 , BLOCK )
- o  = 
-GUI     : BIGSOM_f
-Graphics: 
+ o = (Block) with fields:
 Xcos trace:   objectReferenced( 18 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 18 , BLOCK ) : 0
-          orig = [0,0]
-          sz = [2,3]
-          exprs = "[1;1]"
-          pin = [0;0]
-          pout = 0
-          pein = []
-          peout = []
-          gr_i = []
-          id = ""
-          in_implicit = ["E";"E"]
-          out_implicit = "E"
-          in_style = ["";""]
-          out_style = ""
-          in_label = ["";""]
-          out_label = ""
-          style = ""
-Model   : 
 Xcos trace:   objectReferenced( 18 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 18 , BLOCK ) : 0
-          sum type: 2
-          in = [-1;-1]
-          in2 = [1;1]
-          intyp = [1;1]
-          out = -1
-          out2 = 1
-          outtyp = 1
-          evtin = []
-          evtout = []
-          state = []
-          dstate = []
-          odstate = list()
-          rpar = [1;1]
-          ipar = []
-          opar = list()
-          blocktype = "c"
-          firing = []
-          dep_ut = [%t,%f]
-          label = ""
-          nzcross = 0
-          nmode = 0
-          equations = list()
-          uid = ""
+  graphics: (graphics mlist) with fields:
+      orig = [0,0]
+      sz = [2,3]
+      exprs = "[1;1]"
+      pin = [0;0]
+      pout = 0
+      pein = []
+      peout = []
+      gr_i = []
+      id = ""
+      in_implicit = ["E";"E"]
+      out_implicit = "E"
+      in_style = ["";""]
+      out_style = ""
+      in_label = ["";""]
+      out_label = ""
+      style = ""
+  model: (model mlist) with fields:
+      sim: (2-elements list)
+          (1) = "sum"
+          (2) = 2
+      in = [-1;-1]
+      in2 = [1;1]
+      intyp = [1;1]
+      out = -1
+      out2 = 1
+      outtyp = 1
+      evtin = []
+      evtout = []
+      state = []
+      dstate = []
+      odstate: (empty list)
+      rpar = [1;1]
+      ipar = []
+      opar: (empty list)
+      blocktype = "c"
+      firing = []
+      dep_ut = [%t,%f]
+      label = ""
+      nzcross = 0
+      nmode = 0
+      equations: (empty list)
+      uid = ""
+  gui = "BIGSOM_f"
+  doc: (empty list)
 o.graphics
 Xcos trace:   objectReferenced( 18 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 18 , BLOCK ) : 0
- ans  =
+ ans = (graphics mlist) with fields:
 orig = [0,0]
 sz = [2,3]
 exprs = "[1;1]"
@@ -1103,30 +1125,32 @@ style = ""
 o.model
 Xcos trace:   objectReferenced( 18 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 18 , BLOCK ) : 0
- ans  =
-sum type: 2
-in = [-1;-1]
-in2 = [1;1]
-intyp = [1;1]
-out = -1
-out2 = 1
-outtyp = 1
-evtin = []
-evtout = []
-state = []
-dstate = []
-odstate = list()
-rpar = [1;1]
-ipar = []
-opar = list()
-blocktype = "c"
-firing = []
-dep_ut = [%t,%f]
-label = ""
-nzcross = 0
-nmode = 0
-equations = list()
-uid = ""
+ ans = (model mlist) with fields:
+  sim: (2-elements list)
+      (1) = "sum"
+      (2) = 2
+  in = [-1;-1]
+  in2 = [1;1]
+  intyp = [1;1]
+  out = -1
+  out2 = 1
+  outtyp = 1
+  evtin = []
+  evtout = []
+  state = []
+  dstate = []
+  odstate: (empty list)
+  rpar = [1;1]
+  ipar = []
+  opar: (empty list)
+  blocktype = "c"
+  firing = []
+  dep_ut = [%t,%f]
+  label = ""
+  nzcross = 0
+  nmode = 0
+  equations: (empty list)
+  uid = ""
 // Test flip, theta and style
 o.graphics.flip = %f;
 Xcos trace:   objectReferenced( 18 , BLOCK ) : 1
@@ -1154,7 +1178,8 @@ Xcos trace:   objectUnreferenced( 18 , BLOCK ) : 0
 o.graphics.style
 Xcos trace:   objectReferenced( 18 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 18 , BLOCK ) : 0
- ans  =
+ ans = 
+  ""
 o.graphics.flip = %t;
 Xcos trace:   objectReferenced( 18 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 18 , BLOCK ) : 0
@@ -1181,7 +1206,8 @@ Xcos trace:   objectUnreferenced( 18 , BLOCK ) : 0
 o.graphics.style
 Xcos trace:   objectReferenced( 18 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 18 , BLOCK ) : 0
- ans  =
+ ans = 
+  ""
 o.graphics.theta = 90;
 Xcos trace:   objectReferenced( 18 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 18 , BLOCK ) : 0
@@ -1208,7 +1234,8 @@ Xcos trace:   objectUnreferenced( 18 , BLOCK ) : 0
 o.graphics.style
 Xcos trace:   objectReferenced( 18 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 18 , BLOCK ) : 0
- ans  =
+ ans = 
+  ""
 o.graphics.theta = 0;
 Xcos trace:   objectReferenced( 18 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 18 , BLOCK ) : 0
@@ -1235,7 +1262,8 @@ Xcos trace:   objectUnreferenced( 18 , BLOCK ) : 0
 o.graphics.style
 Xcos trace:   objectReferenced( 18 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 18 , BLOCK ) : 0
- ans  =
+ ans = 
+  ""
 // Try with another block containing event inputs
 o = CSCOPE("define")
 Xcos info:    objectCreated( 23 , BLOCK )
@@ -1296,57 +1324,60 @@ Xcos trace:   propertyUpdated( 18 , BLOCK , EVENT_INPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 18 , BLOCK , EVENT_OUTPUTS ) : NO_CHANGES
 Xcos info:    objectDeleted( 22 , PORT )
 Xcos info:    objectDeleted( 18 , BLOCK )
- o  = 
-GUI     : CSCOPE
-Graphics: 
+ o = (Block) with fields:
 Xcos trace:   objectReferenced( 23 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 23 , BLOCK ) : 0
-          orig = [0,0]
-          sz = [2,2]
-          exprs = ["1 3 5 7 9 11 13 15";"-1";"[]";"[600;400]";"-15";"15";"30";"20";"0";""]
-          pin = 0
-          pout = []
-          pein = 0
-          peout = []
-          gr_i = []
-          id = ""
-          in_implicit = "E"
-          out_implicit = []
-          in_style = ""
-          out_style = ""
-          in_label = ""
-          out_label = ""
-          style = ""
-Model   : 
 Xcos trace:   objectReferenced( 23 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 23 , BLOCK ) : 0
-          cscope type: 4
-          in = -1
-          in2 = 1
-          intyp = 1
-          out = []
-          out2 = []
-          outtyp = 1
-          evtin = 1
-          evtout = []
-          state = []
-          dstate = []
-          odstate = list()
-          rpar = [0;-15;15;30]
-          ipar = [-1;1;20;1;3;5;7;9;11;13;15;-1;-1;600;400]
-          opar = list()
-          blocktype = "c"
-          firing = []
-          dep_ut = [%t,%f]
-          label = ""
-          nzcross = 0
-          nmode = 0
-          equations = list()
-          uid = ""
+  graphics: (graphics mlist) with fields:
+      orig = [0,0]
+      sz = [2,2]
+      exprs: [10x1 string]
+      pin = 0
+      pout = []
+      pein = 0
+      peout = []
+      gr_i = []
+      id = ""
+      in_implicit = "E"
+      out_implicit = []
+      in_style = ""
+      out_style = ""
+      in_label = ""
+      out_label = ""
+      style = ""
+  model: (model mlist) with fields:
+      sim: (2-elements list)
+          (1) = "cscope"
+          (2) = 4
+      in = -1
+      in2 = 1
+      intyp = 1
+      out = []
+      out2 = []
+      outtyp = 1
+      evtin = 1
+      evtout = []
+      state = []
+      dstate = []
+      odstate: (empty list)
+      rpar = [0;-15;15;30]
+      ipar: [15x1 double]
+      opar: (empty list)
+      blocktype = "c"
+      firing = []
+      dep_ut = [%t,%f]
+      label = ""
+      nzcross = 0
+      nmode = 0
+      equations: (empty list)
+      uid = ""
+  gui = "CSCOPE"
+  doc: (empty list)
 o.graphics
 Xcos trace:   objectReferenced( 23 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 23 , BLOCK ) : 0
- ans  =
+ ans = (graphics mlist) with fields:
 orig = [0,0]
 sz = [2,2]
 exprs = ["1 3 5 7 9 11 13 15";"-1";"[]";"[600;400]";"-15";"15";"30";"20";"0";""]
@@ -1366,36 +1397,37 @@ style = ""
 o.model
 Xcos trace:   objectReferenced( 23 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 23 , BLOCK ) : 0
- ans  =
-cscope type: 4
-in = -1
-in2 = 1
-intyp = 1
-out = []
-out2 = []
-outtyp = 1
-evtin = 1
-evtout = []
-state = []
-dstate = []
-odstate = list()
-rpar = [0;-15;15;30]
-ipar = [-1;1;20;1;3;5;7;9;11;13;15;-1;-1;600;400]
-opar = list()
-blocktype = "c"
-firing = []
-dep_ut = [%t,%f]
-label = ""
-nzcross = 0
-nmode = 0
-equations = list()
-uid = ""
+ ans = (model mlist) with fields:
+  sim: (2-elements list)
+      (1) = "cscope"
+      (2) = 4
+  in = -1
+  in2 = 1
+  intyp = 1
+  out = []
+  out2 = []
+  outtyp = 1
+  evtin = 1
+  evtout = []
+  state = []
+  dstate = []
+  odstate: (empty list)
+  rpar = [0;-15;15;30]
+  ipar: [15x1 double]
+  opar: (empty list)
+  blocktype = "c"
+  firing = []
+  dep_ut = [%t,%f]
+  label = ""
+  nzcross = 0
+  nmode = 0
+  equations: (empty list)
+  uid = ""
 o.gui
- ans  =
+ ans = 
   "CSCOPE"
 o.doc
- ans  =
-  empty list()
+ ans = (empty list)
 // Set the block to itself without making any modification
 // (scicos_getvalue returns CSCOPE_f default parameters)
 p = funcprot();
@@ -1471,9 +1503,9 @@ Xcos trace:   propertyUpdated( 28 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos debug:   propertyUpdated( 26 , BLOCK , EVENT_INPUTS ) : SUCCESS
 Xcos trace:   propertyUpdated( 26 , BLOCK , EVENT_OUTPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 26 , BLOCK , PARENT_BLOCK ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 26 , BLOCK , CHILDREN ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 27 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 28 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
-Xcos trace:   propertyUpdated( 26 , BLOCK , CHILDREN ) : NO_CHANGES
 Xcos trace:   objectReferenced( 26 , BLOCK ) : 1
 Xcos trace:   propertyUpdated( 26 , BLOCK , GEOMETRY ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 26 , BLOCK , GEOMETRY ) : NO_CHANGES
@@ -1520,53 +1552,56 @@ Xcos debug:   propertyUpdated( 23 , BLOCK , EVENT_INPUTS ) : SUCCESS
 Xcos trace:   propertyUpdated( 23 , BLOCK , EVENT_OUTPUTS ) : NO_CHANGES
 Xcos info:    objectDeleted( 25 , PORT )
 Xcos info:    objectDeleted( 23 , BLOCK )
- o  = 
-GUI     : CSCOPE
-Graphics: 
+ o = (Block) with fields:
 Xcos trace:   objectReferenced( 26 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 26 , BLOCK ) : 0
-          orig = [0,0]
-          sz = [2,2]
-          exprs = ["1 3 5 7 9 11 13 15";"-1";"[]";"[600;400]";"-15";"15";"30";"20";"0";""]
-          pin = 0
-          pout = []
-          pein = 0
-          peout = []
-          gr_i = []
-          id = ""
-          in_implicit = "E"
-          out_implicit = []
-          in_style = ""
-          out_style = ""
-          in_label = ""
-          out_label = ""
-          style = "CSCOPE;verticalLabelPosition=bottom;verticalAlign=top;spacing=2;displayedLabel="
-Model   : 
 Xcos trace:   objectReferenced( 26 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 26 , BLOCK ) : 0
-          cscope type: 4
-          in = -1
-          in2 = 1
-          intyp = 1
-          out = []
-          out2 = []
-          outtyp = 1
-          evtin = 1
-          evtout = []
-          state = []
-          dstate = []
-          odstate = list()
-          rpar = [0;-15;15;30]
-          ipar = [-1;1;20;1;3;5;7;9;11;13;15;-1;-1;600;400]
-          opar = list()
-          blocktype = "c"
-          firing = []
-          dep_ut = [%t,%f]
-          label = ""
-          nzcross = 0
-          nmode = 0
-          equations = list()
-          uid = ""
+  graphics: (graphics mlist) with fields:
+      orig = [0,0]
+      sz = [2,2]
+      exprs: [10x1 string]
+      pin = 0
+      pout = []
+      pein = 0
+      peout = []
+      gr_i = []
+      id = ""
+      in_implicit = "E"
+      out_implicit = []
+      in_style = ""
+      out_style = ""
+      in_label = ""
+      out_label = ""
+      style: [1x1 string]
+  model: (model mlist) with fields:
+      sim: (2-elements list)
+          (1) = "cscope"
+          (2) = 4
+      in = -1
+      in2 = 1
+      intyp = 1
+      out = []
+      out2 = []
+      outtyp = 1
+      evtin = 1
+      evtout = []
+      state = []
+      dstate = []
+      odstate: (empty list)
+      rpar = [0;-15;15;30]
+      ipar: [15x1 double]
+      opar: (empty list)
+      blocktype = "c"
+      firing = []
+      dep_ut = [%t,%f]
+      label = ""
+      nzcross = 0
+      nmode = 0
+      equations: (empty list)
+      uid = ""
+  gui = "CSCOPE"
+  doc: (empty list)
 // Test 'opar' and 'odstate'
 o = LOGIC("define")
 Xcos info:    objectCreated( 29 , BLOCK )
@@ -1644,58 +1679,62 @@ Xcos debug:   propertyUpdated( 26 , BLOCK , EVENT_INPUTS ) : SUCCESS
 Xcos trace:   propertyUpdated( 26 , BLOCK , EVENT_OUTPUTS ) : NO_CHANGES
 Xcos info:    objectDeleted( 28 , PORT )
 Xcos info:    objectDeleted( 26 , BLOCK )
- o  = 
-GUI     : LOGIC
-Graphics: 
+ o = (Block) with fields:
 Xcos trace:   objectReferenced( 29 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 29 , BLOCK ) : 0
-          orig = [0,0]
-          sz = [2,2]
-          exprs = ["[0;0;0;1]";"0"]
-          pin = [0;0]
-          pout = 0
-          pein = 0
-          peout = []
-          gr_i = []
-          id = ""
-          in_implicit = ["E";"E"]
-          out_implicit = "E"
-          in_style = ["";""]
-          out_style = ""
-          in_label = ["";""]
-          out_label = ""
-          style = ""
-Model   : 
 Xcos trace:   objectReferenced( 29 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 29 , BLOCK ) : 0
-          logic type: 4
-          in = [1;1]
-          in2 = [1;1]
-          intyp = [5;5]
-          out = 1
-          out2 = 1
-          outtyp = 5
-          evtin = 1
-          evtout = []
-          state = []
-          dstate = []
-          odstate = list()
-          rpar = []
-          ipar = []
-          opar = list(int8([0;0;0;1]))
-          blocktype = "c"
-          firing = []
-          dep_ut = [%t,%f]
-          label = ""
-          nzcross = 0
-          nmode = 0
-          equations = list()
-          uid = ""
+  graphics: (graphics mlist) with fields:
+      orig = [0,0]
+      sz = [2,2]
+      exprs = ["[0;0;0;1]";"0"]
+      pin = [0;0]
+      pout = 0
+      pein = 0
+      peout = []
+      gr_i = []
+      id = ""
+      in_implicit = ["E";"E"]
+      out_implicit = "E"
+      in_style = ["";""]
+      out_style = ""
+      in_label = ["";""]
+      out_label = ""
+      style = ""
+  model: (model mlist) with fields:
+      sim: (2-elements list)
+          (1) = "logic"
+          (2) = 4
+      in = [1;1]
+      in2 = [1;1]
+      intyp = [5;5]
+      out = 1
+      out2 = 1
+      outtyp = 5
+      evtin = 1
+      evtout = []
+      state = []
+      dstate = []
+      odstate: (empty list)
+      rpar = []
+      ipar = []
+      opar: (1-element list)
+          (1) = int8([0;0;0;1])
+      blocktype = "c"
+      firing = []
+      dep_ut = [%t,%f]
+      label = ""
+      nzcross = 0
+      nmode = 0
+      equations: (empty list)
+      uid = ""
+  gui = "LOGIC"
+  doc: (empty list)
 o.model.opar
 Xcos trace:   objectReferenced( 29 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 29 , BLOCK ) : 0
- ans  =
-  (1) : [4x1 int8]
+ ans = (1-element list)
+  (1) = int8([0;0;0;1])
 assert_checkequal(typeof(o.model.opar(1)), "int8");
 Xcos trace:   objectReferenced( 29 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 29 , BLOCK ) : 0
@@ -2227,70 +2266,70 @@ Xcos debug:   propertyUpdated( 29 , BLOCK , EVENT_INPUTS ) : SUCCESS
 Xcos trace:   propertyUpdated( 29 , BLOCK , EVENT_OUTPUTS ) : NO_CHANGES
 Xcos info:    objectDeleted( 33 , PORT )
 Xcos info:    objectDeleted( 29 , BLOCK )
- o  = 
-GUI     : VsourceAC
-Graphics: 
+ o = (Block) with fields:
 Xcos trace:   objectReferenced( 34 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 34 , BLOCK ) : 0
-          orig = [0,0]
-          sz = [2,2]
-          exprs = ["220";"50"]
-          pin = 0
-          pout = 0
-          pein = []
-          peout = []
-          gr_i = []
-          id = ""
-          in_implicit = "I"
-          out_implicit = "I"
-          in_style = ""
-          out_style = ""
-          in_label = ""
-          out_label = ""
-          style = ""
-Model   : 
 Xcos trace:   objectReferenced( 34 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 34 , BLOCK ) : 0
-          VsourceAC type: 0
-          in = 1
-          in2 = 1
-          intyp = 1
-          out = 1
-          out2 = 1
-          outtyp = 1
-          evtin = []
-          evtout = []
-          state = []
-          dstate = []
-          odstate = list()
-          rpar = [220;50]
-          ipar = []
-          opar = list()
-          blocktype = "c"
-          firing = []
-          dep_ut = [%t,%f]
-          label = ""
-          nzcross = 0
-          nmode = 0
-          equations = tlist(["modelica","model","inputs","outputs","parameters"],"VsourceAC","p","n",list(["VA";"f"],list(220,50)))
-          uid = ""
+  graphics: (graphics mlist) with fields:
+      orig = [0,0]
+      sz = [2,2]
+      exprs = ["220";"50"]
+      pin = 0
+      pout = 0
+      pein = []
+      peout = []
+      gr_i = []
+      id = ""
+      in_implicit = "I"
+      out_implicit = "I"
+      in_style = ""
+      out_style = ""
+      in_label = ""
+      out_label = ""
+      style = ""
+  model: (model mlist) with fields:
+      sim = "VsourceAC"
+      in = 1
+      in2 = 1
+      intyp = 1
+      out = 1
+      out2 = 1
+      outtyp = 1
+      evtin = []
+      evtout = []
+      state = []
+      dstate = []
+      odstate: (empty list)
+      rpar = [220;50]
+      ipar = []
+      opar: (empty list)
+      blocktype = "c"
+      firing = []
+      dep_ut = [%t,%f]
+      label = ""
+      nzcross = 0
+      nmode = 0
+      equations: (modelica tlist) with fields:
+          model = "VsourceAC"
+          inputs = "p"
+          outputs = "n"
+          parameters: (2-elements list)
+      uid = ""
+  gui = "VsourceAC"
+  doc: (empty list)
 o.model.equations
 Xcos trace:   objectReferenced( 34 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 34 , BLOCK ) : 0
- ans  =
-       ans(1)
-  "modelica"  "model"  "inputs"  "outputs"  "parameters"
-       ans(2)
-  "VsourceAC"
-       ans(3)
-  "p"
-       ans(4)
-  "n"
-       ans(5)
-  (1) : [2x1 string]
-  (2) : list:
-      (1) = 220
-      (2) = 50
+ ans = (modelica tlist) with fields:
+  model = "VsourceAC"
+  inputs = "p"
+  outputs = "n"
+  parameters: (2-elements list)
+      (1) = ["VA";"f"]
+      (2): (2-elements list)
+          (1) = 220
+          (2) = 50
 listRef = modelica();
 o.model.equations = listRef;
 Xcos trace:   objectReferenced( 34 , BLOCK ) : 1
@@ -2430,57 +2469,73 @@ Xcos trace:   propertyUpdated( 34 , BLOCK , EVENT_INPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 34 , BLOCK , EVENT_OUTPUTS ) : NO_CHANGES
 Xcos info:    objectDeleted( 36 , PORT )
 Xcos info:    objectDeleted( 34 , BLOCK )
- o  = 
-GUI     : MBLOCK
-Graphics: 
+ o = (Block) with fields:
 Xcos trace:   objectReferenced( 37 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 37 , BLOCK ) : 0
-          orig = [0,0]
-          sz = [3,2]
-          exprs = tlist(["MBLOCK","in","intype","out","outtype","param","paramv","pprop","nameF","funtxt"],"""u1""","""I""","[""y1"";""y2""]","[""I"";""E""]","[""R"";""L""]",list("0.1","0.0001"),"[0;0]","generic",[])
-          pin = 0
-          pout = [0;0]
-          pein = []
-          peout = []
-          gr_i = []
-          id = ""
-          in_implicit = "I"
-          out_implicit = ["I";"E"]
-          in_style = ""
-          out_style = ["";""]
-          in_label = ""
-          out_label = ["";""]
-          style = ""
-Model   : 
 Xcos trace:   objectReferenced( 37 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 37 , BLOCK ) : 0
-          generic type: 30004
-          in = 1
-          in2 = 1
-          intyp = 1
-          out = [1;1]
-          out2 = [1;1]
-          outtyp = [1;1]
-          evtin = []
-          evtout = []
-          state = []
-          dstate = []
-          odstate = list()
-          rpar = [0.1;0.0001]
-          ipar = []
-          opar = list()
-          blocktype = "c"
-          firing = []
-          dep_ut = [%f,%t]
-          label = ""
-          nzcross = 0
-          nmode = 0
-          equations = tlist(["modelica","model","inputs","outputs","parameters"],"generic","u1",["y1";"y2"],list(["R";"L"],list(0.1,0.0001)))
-          uid = ""
+  graphics: (graphics mlist) with fields:
+      orig = [0,0]
+      sz = [3,2]
+      exprs: (MBLOCK tlist) with fields:
+          in = """u1"""
+          intype = """I"""
+          out = "[""y1"";""y2""]"
+          outtype = "[""I"";""E""]"
+          param = "[""R"";""L""]"
+          paramv: (2-elements list)
+          pprop = "[0;0]"
+          nameF = "generic"
+          funtxt = []
+      pin = 0
+      pout = [0;0]
+      pein = []
+      peout = []
+      gr_i = []
+      id = ""
+      in_implicit = "I"
+      out_implicit = ["I";"E"]
+      in_style = ""
+      out_style = ["";""]
+      in_label = ""
+      out_label = ["";""]
+      style = ""
+  model: (model mlist) with fields:
+      sim: (2-elements list)
+          (1) = "generic"
+          (2) = 30004
+      in = 1
+      in2 = 1
+      intyp = 1
+      out = [1;1]
+      out2 = [1;1]
+      outtyp = [1;1]
+      evtin = []
+      evtout = []
+      state = []
+      dstate = []
+      odstate: (empty list)
+      rpar = [0.1;0.0001]
+      ipar = []
+      opar: (empty list)
+      blocktype = "c"
+      firing = []
+      dep_ut = [%f,%t]
+      label = ""
+      nzcross = 0
+      nmode = 0
+      equations: (modelica tlist) with fields:
+          model = "generic"
+          inputs = "u1"
+          outputs = ["y1";"y2"]
+          parameters: (2-elements list)
+      uid = ""
+  gui = "MBLOCK"
+  doc: (empty list)
 o.graphics
 Xcos trace:   objectReferenced( 37 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 37 , BLOCK ) : 0
- ans  =
+ ans = (graphics mlist) with fields:
 orig = [0,0]
 sz = [3,2]
 exprs = tlist(["MBLOCK","in","intype","out","outtype","param","paramv","pprop","nameF","funtxt"],"""u1""","""I""","[""y1"";""y2""]","[""I"";""E""]","[""R"";""L""]",list("0.1","0.0001"),"[0;0]","generic",[])
@@ -2500,49 +2555,30 @@ style = ""
 o.graphics.exprs
 Xcos trace:   objectReferenced( 37 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 37 , BLOCK ) : 0
- ans  =
-       ans(1)
-         column 1 to 8
-  "MBLOCK"  "in"  "intype"  "out"  "outtype"  "param"  "paramv"  "pprop"
-         column 9 to 10
-  "nameF"  "funtxt"
-       ans(2)
-  ""u1""
-       ans(3)
-  ""I""
-       ans(4)
-  "["y1";"y2"]"
-       ans(5)
-  "["I";"E"]"
-       ans(6)
-  "["R";"L"]"
-       ans(7)
-  (1) = "0.1"
-  (2) = "0.0001"
-       ans(8)
-  "[0;0]"
-       ans(9)
-  "generic"
-       ans(10)
-    []
+ ans = (MBLOCK tlist) with fields:
+  in = """u1"""
+  intype = """I"""
+  out = "[""y1"";""y2""]"
+  outtype = "[""I"";""E""]"
+  param = "[""R"";""L""]"
+  paramv: (2-elements list)
+      (1) = "0.1"
+      (2) = "0.0001"
+  pprop = "[0;0]"
+  nameF = "generic"
+  funtxt = []
 o.model.equations
 Xcos trace:   objectReferenced( 37 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 37 , BLOCK ) : 0
- ans  =
-       ans(1)
-  "modelica"  "model"  "inputs"  "outputs"  "parameters"
-       ans(2)
-  "generic"
-       ans(3)
-  "u1"
-       ans(4)
-  "y1"
-  "y2"
-       ans(5)
-  (1) : [2x1 string]
-  (2) : list:
-      (1) = 0.1
-      (2) = 0.0001
+ ans = (modelica tlist) with fields:
+  model = "generic"
+  inputs = "u1"
+  outputs = ["y1";"y2"]
+  parameters: (2-elements list)
+      (1) = ["R";"L"]
+      (2): (2-elements list)
+          (1) = 0.1
+          (2) = 0.0001
 // Test 'exprs' with SuperBlock, CBLOCK, scifunc_block_m and default fortran_block
 // SuperBlock with no parameter
 lS = list([],list([],"Configuration des Paramètres du bloc",list([])));
@@ -2927,8 +2963,8 @@ Xcos info:    objectDeleted( 49 , BLOCK )
 o.graphics.exprs
 Xcos trace:   objectReferenced( 52 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 52 , BLOCK ) : 0
- ans  =
-  (1) : [paramspde] tlist with fields:
+ ans = (3-elements list)
+  (1): (paramspde tlist) with fields:
       a = ""
       b = ""
       txt_exp = ""

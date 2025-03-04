@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -32,8 +32,6 @@
         <synopsis>s=svd(X)
 
             [U,S,V]=svd(X)
-
-            [U,S,V]=svd(X,0) (obsolete)
 
             [U,S,V]=svd(X,"e")
 
@@ -137,7 +135,7 @@
 
         <para>
 
-            <literal>[U,S,V] = svd(X,0)</literal> は
+            <literal>[U,S,V] = svd(X,"e")</literal> は
 
             "エコノミーサイズ"分解を出力します.
 
@@ -250,6 +248,21 @@ sqrt(spec(X*X'))
         </para>
 
     </refsection>
-
+    <refsection>
+        <title>History</title>
+        <revhistory>
+            <revision>
+                <revnumber>2023.0.0</revnumber>
+                <revdescription>
+                    <para>svd(X, 0) is obsolete, use svd(X, "e") instead.</para>
+                </revdescription>
+            </revision>
+            <revision>
+                <revnumber>2024.0.0</revnumber>
+                <revdescription>
+                    <para>svd(X, 0) is no more supported, use svd(X, "e") instead.</para>
+                </revdescription>
+            </revision>
+        </revhistory>
+    </refsection>
 </refentry>
-

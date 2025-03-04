@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2007 - INRIA - Bruno Jofret
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -118,7 +118,7 @@ public final class Jxgetmouse {
     /**
      * @return the WindowsID
      */
-    public static Integer getWindowsID() {
+    public static int getWindowsID() {
         return ClickInfos.getInstance().getWindowID();
     }
 

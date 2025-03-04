@@ -1,0 +1,15 @@
+Description: make scilab work with java >= 9
+Author: Emmanuel Bourg & Julien Puydt
+Forwarded: http://bugzilla.scilab.org/show_bug.cgi?id=11182
+
+--- a/scilab/bin/scilab
++++ b/scilab/bin/scilab
+@@ -455,7 +455,7 @@
+ # Browse "default directory" (if it means anything under Unix/Linux) of Java
+ # to find where it could be !
+             if test -z "$JAVA_HOME"; then
+-                JAVA_DEFAULT_DIR="/usr/java/jdk17.*/ /usr/lib/jvm/java-1.17.0-*/ /usr/lib/jvm/java-17-*/ /etc/alternatives/java_sdk /etc/alternatives/jre /usr/java/jdk*/ /usr/lib/jvm/java-*/"
++                JAVA_DEFAULT_DIR="/usr/lib/jvm/default-java java/jdk17.*/ /usr/lib/jvm/java-1.17.0-*/ /usr/lib/jvm/java-17-*/ /etc/alternatives/java_sdk /etc/alternatives/jre /usr/java/jdk*/ /usr/lib/jvm/java-*/"
+                 for DIR in $JAVA_DEFAULT_DIR ; do
+                     if test $SCIVERBOSE -ne 0; then
+                         echo "Trying to find Java in $DIR "

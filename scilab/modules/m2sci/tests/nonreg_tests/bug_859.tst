@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ????-2008 - INRIA - Vincent COUVERT <vincent.couvert@inria.fr>
 // Copyright (C) 2005-2008 - INRIA - Pierre MARECHAL <pierre.marechal@inria.fr>
 //
@@ -13,8 +13,8 @@
 //
 // <-- Non-regression test for bug 859 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/859
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/859
 //
 // <-- Short Description -->
 //    M2SCI convert Matlab expression such as a(n,:)=b(m,:) (with

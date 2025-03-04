@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 1999 - INRIA - Carlos Klimann
 // Copyright (C) 2003 - Jean-Sebastien Giet & Bruno Pincon
 //
@@ -56,22 +56,11 @@ function [m] = tabul(X, order)
     //          used gsort in place of sort : the sort function
     //          sorts strings vector not the usual way !
 
-    rhs = argn(2)
-    if rhs<1 | 2<rhs then
-        error(msprintf(gettext("%s: Wrong number of input arguments: %d to %d expected.\n"),"tabul",1,2)),
-    elseif rhs == 1 then
-        order = "d"
+    arguments
+        X {mustBeA(X, ["double", "string"])}
+        order (1, 1) {mustBeA(order, "string"), mustBeMember(order, ["d", "i"])} = "d"
     end
-    typeX = type(X)
-    if typeX ~= 1 & typeX ~= 10 then
-        error(msprintf(gettext("%s: Wrong type for input argument #%d: Vector, matrix of numbers or strings expected.\n"),"tabul",1))
-    end
-    if type(order) ~= 10 then
-        error(msprintf(gettext("%s: Wrong value for input argument #%d: ''%s'' or ''%s'' expected.\n"),"tabul",2,"i","d"))
-    end
-    if order~="i" &  order~="d" then
-        error(msprintf(gettext("%s: Wrong value for input argument #%d: ''%s'' or ''%s'' expected.\n"),"tabul",2,"i","d"))
-    end
+
     if ( X == [] ) then
         m = %nan
         return
@@ -85,7 +74,7 @@ function [m] = tabul(X, order)
     val = X(ind)
     occ = diff([0 ind])'
 
-    if typeX == 1 then
+    if type(X) == 1 then
         m = [val occ]
     else // X (and so val) is a vector of strings
         m = list(val,occ)

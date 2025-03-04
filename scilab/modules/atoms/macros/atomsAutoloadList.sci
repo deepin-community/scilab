@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009 - DIGITEO - Pierre MARECHAL <pierre.marechal@scilab.org>
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -77,12 +77,14 @@ function varargout = atomsAutoloadList(section)
 
     end
 
-    // Set the result
+    // Set or print the result
     // =========================================================================
     if argn(1) > 0 then
         varargout = list(modules)
-    else
+    elseif modules <> []
         mprintf("%s\n", strcat(justify(modules,"l"), "  ", "c"))
+    else
+        mprintf(_("No module is autoloaded at Scilab startup.\n"))
     end
 
 endfunction

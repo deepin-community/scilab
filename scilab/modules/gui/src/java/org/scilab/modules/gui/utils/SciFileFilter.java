@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2007 - INRIA - Vincent Couvert
  * Copyright (C) 2010 - DIGITEO - Allan CORNET
  *
@@ -35,6 +35,7 @@ public class SciFileFilter extends FileFilter {
     private String mask;
     private String description;
     private int filterIndex;
+    private String[] extensions;
     //private int lastFilterIndex;
 
     /**
@@ -48,42 +49,61 @@ public class SciFileFilter extends FileFilter {
         if (maskdescription == null) {
 
             if (fileMask.equals("*.sci")) {
+                extensions = new String[]{"sci"};
                 description = Messages.gettext("Scilab SCI files") + "(*.sci)";
             } else if (fileMask.equals("*.sce")) {
+                extensions = new String[]{"sce"};
                 description = Messages.gettext("Scilab SCE files") + "(*.sce)";
             } else if (fileMask.equals("*.bin")) {
+                extensions = new String[]{"bin"};
                 description = Messages.gettext("Scilab binary files") + "(*.bin)";
             } else if (fileMask.equals("*.sc*")) {
+                extensions = new String[]{"sci","sce"};
                 description = Messages.gettext("All Scilab files") + "(*.sc*)";
             } else if (fileMask.equals("*.xcos")) {
+                extensions = new String[]{"xcos"};
                 description = Messages.gettext("Xcos files") + "(*.xcos)";
             } else if (fileMask.equals("*.cos*")) {
+                extensions = new String[]{"cosf"};
                 description = Messages.gettext("Scicos files") + "(*.cos*)";
             } else if (fileMask.equals("*.tst")) {
+                extensions = new String[]{"tst"};
                 description = Messages.gettext("Test files") + "(*.tst)";
             } else if (fileMask.equals("*.start")) {
+                extensions = new String[]{"start"};
                 description = Messages.gettext("Scilab Start files") + "(*.start)";
             } else if (fileMask.equals("*.quit")) {
+                extensions = new String[]{"quit"};
                 description = Messages.gettext("Scilab Quit files") + "(*.quit)";
             } else if (fileMask.equals("*.dem")) {
+                extensions = new String[]{"dem"};
                 description = Messages.gettext("Scilab Demo files") + "(*.dem)";
             } else if (fileMask.equals("all")) {
+                extensions = new String[]{"sci","sce","tst","start","quit","dem"};
                 description = Messages.gettext("All Scilab files") + "(*.sci,*.sce,*.tst,*.start,*.quit,*.dem)";
             } else if (fileMask.equals("*.pdf")) {
+                extensions = new String[]{"pdf"};
                 description = Messages.gettext("All PDF files") +  "(*.pdf)";
             } else if (fileMask.equals("*.ps")) {
+                extensions = new String[]{"ps"};
                 description = Messages.gettext("All Postscript files") +  "(*.ps)";
             } else if (fileMask.equals("*.eps")) {
+                extensions = new String[]{"eps"};
                 description = Messages.gettext("All Encapsulated PS files") +  "(*.eps)";
             } else if (fileMask.equals("*.png")) {
+                extensions = new String[]{"png"};
                 description = Messages.gettext("All PNG image files") +  "(*.png)";
             } else if (fileMask.equals("*.rtf")) {
+                extensions = new String[]{"rtf"};
                 description = Messages.gettext("All RTF (Rich Text Format) files") +  "(*.rtf)";
             } else if (fileMask.equals("*.html")) {
+                extensions = new String[]{"html"};
                 description = Messages.gettext("All HTML files") +  "(*.html)";
             } else if (fileMask.equals("*.*")) {
+                extensions = new String[]{""};
                 description = Messages.gettext("All files") +  "(*.*)";
             } else {
+                extensions = new String[]{fileMask.substring(fileMask.lastIndexOf(".") + 1)};
                 description = String.format(Messages.gettext("All %s files"), fileMask);
             }
 
@@ -124,6 +144,10 @@ public class SciFileFilter extends FileFilter {
             return new String("");
         }
         return fileName.substring(dotIndex);
+    }
+
+    public String[] getExtensions() {
+        return extensions;
     }
 
     /**

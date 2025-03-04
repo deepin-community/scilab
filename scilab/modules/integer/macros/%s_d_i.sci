@@ -1,6 +1,6 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA -
-// Copyright (C) 2013 - Samuel GOUGEON : http://bugzilla.scilab.org/13000
+// Copyright (C) 2013 - Samuel GOUGEON : https://gitlab.com/scilab/scilab/-/issues/13000
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
 //

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) - INRIA
- * Copyright (C) 2018 - Samuel GOUGEON
- *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ * Copyright (C) 2018 - 2023 - Samuel GOUGEON
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
  * pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -25,19 +24,18 @@
     <refsynopsisdiv>
         <title>Синтаксис</title>
         <synopsis>
-            for variable=expression
-            instruction;
-            instruction;
-            ...
-            instruction;
+            for variable = expression, instruction ; .. ; instruction; end
+
+            for variable = expression
+                instruction
+                ..
+                instruction
             end
 
-
-            for variable=expression do
-            instruction;
-            instruction;
-            ...
-            instruction;
+            for variable = expression do
+                instruction
+                ..
+                instruction
             end
         </synopsis>
     </refsynopsisdiv>
@@ -83,22 +81,14 @@
     <refsection>
         <title>Описание</title>
         <para>
-            Используется для организации циклов по заданной переменной <literal>variable</literal>.
-            Изменение переменной цикла <literal>variable</literal> описывается выражением <literal>expression</literal>,
-            однако, в качестве <literal>expression</literal> может выступать вектор или матрица. В этом случае переменная
-            <literal>variable</literal> последовательно от итерации к итерации принимает значения элементов
-            вектора/матрицы от первого до последнего, столбец за столбцом.
+            Если <literal>источник</literal> является массивом (однородным или нет), то
+            <literal>элемент</literal> устанавливается в каждый из его столбцов (для гиперматрицы,
+            как <literal>matrix(expression, size(expression,1), -1))</literal>), один за другим.
         </para>
         <para>
             Оператор двоеточие <link linkend="colon">colon</link> используется для создания вектор-столбцов с регулярным
             шагом между элементами и похож на традиционные циклы <literal>for</literal>:
-            <programlisting>
-                for variable=n1:step:n2
-                instruction;
-                ...
-                instruction;
-                end
-            </programlisting>
+            <literal>for variable = n1:step:n2, ..., end</literal>
         </para>
         <para>
             Если <literal>expression</literal> является списком, то <literal>variable</literal>
@@ -127,42 +117,31 @@
         <para>
             Например, используйте:
         </para>
-        <screen><![CDATA[
+        <programlisting><![CDATA[
 for i = 1:5
     disp(i);
 end
-]]></screen>
-        а не
-        <screen><![CDATA[
+]]></programlisting>
+        <para>а не:</para>
+        <programlisting><![CDATA[
 for i = 1:5, disp(i); end
-]]></screen>
-        <warning>
-            Предупреждение: число символов, используемых для определения тела любой инструкции условия
-            (<literal>if while for</literal> или <literal>select/case</literal>) должно быть ограничено
-            16К.
-        </warning>
+]]></programlisting>
     </refsection>
+
     <refsection>
         <title>Примеры</title>
-        <para>"традиционный" для циклов :</para>
+        <para>Тривиальные итерации (над столбцами вектора строк) :</para>
         <programlisting role="example"><![CDATA[
-n=5;
-for i = 1:n
-    for j = 1:n
-        a(i,j) = 1/(i+j-1);
-    end;
+for i = [2 4 5]
+    factorial(i)
 end
-for j = 2:n-1
-    a(j,j) = j;
-end;
-a
- ]]></programlisting>
-        <para>циклы с уменьшающейся переменной цикла :</para>
-        <programlisting role="example"><![CDATA[
+
+// По убыванию стоимости :
 for j = 4:-1:1
     j
 end
  ]]></programlisting>
+
         <para>цикл по столбцам матрицы :</para>
         <programlisting role="example"><![CDATA[
 M = [1 2 ; 3 4 ; 5 6]'
@@ -187,10 +166,29 @@ for  c = M, c, end
    5.
    6.
 ]]></screen>
+
+        <para>Iterate on the columns of a cells array:</para>
         <programlisting role="example"><![CDATA[
-for v = a, write(%io(2),v), end
-for j = 1:n, v = a(:,j), write(%io(2),v), end
+C = {%pi, "This is πι" ; %z^2, %t}
+for  c = C, c, end
  ]]></programlisting>
+    <screen><![CDATA[
+--> C = {%pi, "This is πι" ; %z^2, %t}
+ C  =
+  [1x1 constant  ]  [1x1 string ]
+  [1x1 polynomial]  [1x1 boolean]
+
+
+--> for  c = C, c, end
+ c  =
+  [1x1 constant  ]
+  [1x1 polynomial]
+
+ c  =
+  [1x1 string ]
+  [1x1 boolean]
+]]></screen>
+
         <para>цикл по элементам списка :</para>
         <programlisting role="example"><![CDATA[
 for l = list([1 2;3 4], (1+%z)^3, 'example', [%F %T]); l, end
@@ -211,6 +209,23 @@ for l = list([1 2;3 4], (1+%z)^3, 'example', [%F %T]); l, end
  l  =
   F T
 ]]></screen>
+
+        <para>Общие и вложенные итерированные циклы :</para>
+        <programlisting role="example"><![CDATA[
+n=5;
+for i = 1:n
+    for j = 1:n
+        a(i,j) = 1/(i+j-1);
+    end;
+end
+for j = 2:n-1
+    a(j,j) = j;
+end;
+a
+
+for v = a, write(%io(2),v), end
+for j = 1:n, v = a(:,j), write(%io(2),v), end
+     ]]></programlisting>
     </refsection>
     <refsection role="see also">
         <title>Смотрите также</title>
@@ -235,6 +250,13 @@ for l = list([1 2;3 4], (1+%z)^3, 'example', [%F %T]); l, end
                     Теперь for <literal>expression</literal> может быть вектором указателей на графические окна.
                     <literal>for</literal> is now protected:
                     Assignments like <literal>for=1</literal> are no longer possible.
+                </revdescription>
+            </revision>
+            <revision>
+                <revnumber>2023.0.0</revnumber>
+                <revdescription>
+                    The <literal>expression</literal> can be a hypermatrix. It is then processed
+                    by column as <literal>matrix(expression, size(expression,1), -1)</literal>.
                 </revdescription>
             </revision>
         </revhistory>

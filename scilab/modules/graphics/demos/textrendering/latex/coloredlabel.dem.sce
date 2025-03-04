@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009 - Calixte DENIZET
 //
 // This file is released under the 3-clause BSD license. See COPYING-BSD.

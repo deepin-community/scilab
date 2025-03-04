@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA - F Delebecque
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -164,7 +164,7 @@ lqg2stan(1/(s+2),eye(2,2),eye(2,2))
           <revdescription>
             It is no longer necessary to enter <varname>-P22</varname> to get <varname>P</varname>
             instead of <varname>-P</varname>
-            (bug <ulink url="http://bugzilla.scilab.org/show_bug.cgi?id=13751">13751</ulink> fixed).
+            (bug <ulink url="https://gitlab.com/scilab/scilab/-/issues/13751">13751</ulink> fixed).
           </revdescription>
         </revision>
       </revhistory>

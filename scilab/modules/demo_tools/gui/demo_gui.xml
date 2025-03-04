@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scilabgui usedeprecatedskin="off" version="1.0">
-    <figure axes_size="250,526" default_axes="off" dockable="off" figure_id="100000" figure_name="" figure_size="266,565" icon="applications-system" infobar_visible="off" layout="gridbag" menubar="none" menubar_visible="off" tag="scilab_demo_fig" toolbar="none" toolbar_visible="off" visible="off">
+    <figure axes_size="250,526" default_axes="off" dockable="off" figure_id="100000" figure_name="" figure_size="266,565" icon="" infobar_visible="off" layout="gridbag" menubar="none" menubar_visible="off" tag="scilab_demo_fig" toolbar="none" toolbar_visible="off" visible="off">
         <frame backgroundcolor="1.0,1.0,1.0" gridbagfill="both" gridbaggrid="10,1,1,1" gridbagpreferredsize="0,0" gridbagweight="1.0,1.0" layout="gridbag" tag="frame_10" visible="off">
             <border color="black" fontangle="normal" fontname="" fontsize="12" fontweight="bold" justification="1" style="titled" title="">
                 <title style="empty"/>
@@ -61,7 +61,7 @@
             </border>
             <image backgroundcolor="1.0,1.0,1.0" gridbagfill="both" gridbaggrid="1,5,1,1" gridbagweight="1.0,0.1" horizontalalignment="center" tag="scilab_logo">
                 <string cols="1" property="string" rows="1">
-                    <stringitem value="SCI/modules/demo_tools/images/logo_scilab.png"/>
+                    <stringitem value="SCI/modules/demo_tools/images/scilab-logo.png"/>
                 </string>
             </image>
             <listbox callback="script_path = demo_gui_update();if ~isempty(script_path) then exec(script_path, -1);end;clear script_path;" callback_type="0" fontsize="12.0" gridbagfill="both" gridbaggrid="1,1,1,4" gridbagweight="1.0,1.0" listboxtop="1" tag="listbox_1" value="3.0"/>

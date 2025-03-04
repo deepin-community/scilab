@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA -
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -14,7 +13,6 @@
  * along with this program.
  *
  -->
-
 <refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
           xmlns:svg="http://www.w3.org/2000/svg" xmlns:ns4="http://www.w3.org/1999/xhtml"
           xmlns:db="http://docbook.org/ns/docbook" xmlns:scilab="http://www.scilab.org"
@@ -27,107 +25,61 @@
     </refnamediv>
     <refsynopsisdiv>
         <title>Syntax</title>
-        <synopsis>res = strcspn(string_one, string_two)</synopsis>
+        <synopsis>res = strcspn(Strings, forbiddenChars)</synopsis>
     </refsynopsisdiv>
     <refsection>
-
         <title>引数</title>
-
         <variablelist>
-
             <varlistentry>
-
-                <term>string_one</term>
-
+                <term>Strings</term>
                 <listitem>
-
                     <para>文字列または文字列の行列</para>
-
                 </listitem>
-
             </varlistentry>
-
             <varlistentry>
-
-                <term>string_two</term>
-
+                <term>forbiddenChars</term>
                 <listitem>
-
                     <para>文字列または文字列の行列</para>
-
                 </listitem>
-
             </varlistentry>
-
             <varlistentry>
-
                 <term>res</term>
-
                 <listitem>
-
-                    <para>行列.</para>
-
+                    <para>
+                        Matrix of positive real integers, of the size of <varname>Strings</varname>:
+						lengths of the selected <varname>Strings</varname> heads.
+                    </para>
                 </listitem>
-
             </varlistentry>
-
         </variablelist>
-
     </refsection>
-
     <refsection>
-
         <title>説明</title>
-
         <para>
-
-            <code>res = strcspn(string_one,string_two)</code>は,
-
-            <varname>string_one</varname>の中で
-
-            <varname>string_two</varname>の一部の文字のどれかが最初に現れる位置を
-
-            探し,それが最初に現れるまでの<varname>string_one</varname>の文字数を返します.
-
+            <code>res = strcspn(Strings, forbiddenChars)</code>は,
+            <varname>Strings</varname>の中で
+            <varname>forbiddenChars</varname>の一部の文字のどれかが最初に現れる位置を
+            探し,それが最初に現れるまでの<varname>Strings</varname>の文字数を返します.
         </para>
-
         <para>
-
-            <varname>string_two</varname>の次元が<varname>string_one</varname>と
-
-            同じ,または<varname>string_two</varname>が文字列である必要があります.
-
+            <varname>forbiddenChars</varname>の次元が<varname>Strings</varname>と
+            同じ,または<varname>forbiddenChars</varname>が文字列である必要があります.
         </para>
-
     </refsection>
-
     <refsection>
-
         <title>例</title>
-
         <programlisting role="example"><![CDATA[
-strcspn("fcba73","1234567890")
-strcspn(["fcba73","f7cba73"],"1234567890")
-strcspn(["fcba73","f7cba73"],["312","34567890"])
+strcspn("fcba73", "1234567890")
+strcspn(["fcba73", "f7cba73"], "1234567890")
+strcspn(["fcba73", "f7cba73"], ["312", "34567890"])
  ]]></programlisting>
-
     </refsection>
-
     <refsection role="see also">
-
         <title>参照</title>
-
         <simplelist type="inline">
-
             <member>
-
                 <link linkend="strspn">strspn</link>
-
             </member>
-
         </simplelist>
-
     </refsection>
-
 </refentry>
-

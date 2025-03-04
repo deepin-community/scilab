@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2002-2004 - INRIA - Vincent COUVERT
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -167,7 +167,7 @@ function [tree]=sci_rand(tree)
         else
             tree.name="ones"
         end
-        tree.lhs(1).type=Type(Boolean,Real)
+        tree.lhs(1).type=Type(Boolean,Boolean)
         tree=Operation("==",list(tree,Cste(1)),tree.lhs)
     end
 endfunction

@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2007 - INRIA - Allan CORNET
  * Copyright (C) 2008 - INRIA - Sylvestre LEDRU (Detection of the term size)
  *
@@ -24,11 +24,11 @@
 
 #ifndef _MSC_VER
 
-#  if defined(HAVE_CURSES_H)
-#    include <curses.h>
-#  elif defined(HAVE_NCURSES_H)
-#    include <ncurses.h>
-#  endif
+#if defined(HAVE_CURSES_H)
+#include <curses.h>
+#elif defined(HAVE_NCURSES_H)
+#include <ncurses.h>
+#endif
 
 
 #ifdef HAVE_TERMCAP_H

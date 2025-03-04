@@ -2,7 +2,7 @@
 <!--
 * Copyright (C) 2010-2011 - INRIA - Allan CORNET
 * Copyright (C) 2011 - INRIA - Michael Baudin
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 -->
 <refentry version="5.0-subset Scilab" xml:id="csvTextScan" xml:lang="en"
           xmlns="http://docbook.org/ns/docbook"

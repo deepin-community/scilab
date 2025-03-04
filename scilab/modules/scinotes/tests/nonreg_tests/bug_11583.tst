@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2018 - Samuel GOUGEON
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,8 +9,8 @@
 //
 // <-- Non-regression test for bug 11583 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/11583
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/11583
 //
 // <-- Short Description -->
 // In Scinotes preferences, when the default header is erased, available variables

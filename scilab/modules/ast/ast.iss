@@ -1,5 +1,5 @@
 ;
-; Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+; Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 ; Copyright (C) DIGITEO - 2010 - Pierre MARECHAL
 ; Copyright (C) DIGITEO - 2009-2010 - Allan CORNET
 ;
@@ -29,6 +29,7 @@ Source: modules\{#AST}\includes\*.*; DestDir: {app}\modules\{#AST}\includes; Fla
 ;
 Source: modules\{#AST}\etc\{#AST}.quit; DestDir: {app}\modules\{#AST}\etc; Components: {#COMPN_SCILAB}
 Source: modules\{#AST}\etc\{#AST}.start; DestDir: {app}\modules\{#AST}\etc; Components: {#COMPN_SCILAB}
+Source: modules\{#AST}\macros\lib; DestDir: {app}\modules\{#AST}\macros; Components: {#COMPN_SCILAB}
 ;
 Source: modules\{#AST}\tests\*.*; DestDir: {app}\modules\{#AST}\tests; Flags: recursesubdirs; Components: {#COMPN_SCILAB} and {#COMPN_TESTS}
 ;

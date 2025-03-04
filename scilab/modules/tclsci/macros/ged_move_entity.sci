@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
 // Copyright (C) 2017 - Samuel GOUGEON
@@ -24,7 +24,7 @@ function ged_move_entity()
     //  BUG: When the mouse goes out of the figure where the object has been
     //       picked, on another figure, the object may reappear on the current
     //       figure, far from where the mouse stands.
-    //       See http://bugzilla.scilab.org/13913
+    //       See https://gitlab.com/scilab/scilab/-/issues/13913
 
     f0 = gcf();
     f = f0;

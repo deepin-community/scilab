@@ -1,7 +1,7 @@
 % Test file for COMMENTS
 %{
   Matlab block-comment
-  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
   Copyright (c) 2020 - Samuel GOUGEON
   
 fprintf('%d %s\n', 2, 'percents in strings'); % A difficult case

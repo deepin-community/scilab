@@ -934,7 +934,7 @@ int C2F(getsciblockbylabel)(int*kfun, int label[], int *n)
     }
     nblk = scicos_imp.nblk[0];
 
-    F2C(cvstr)(n, lab, *label, &job, *n);
+    F2C(cvstr)(n, lab, label, &job, *n);
 
     *kfun = 0;
     for (k = 0; k < nblk; k++)

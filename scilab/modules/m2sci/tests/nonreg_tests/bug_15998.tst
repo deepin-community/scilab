@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2019 - Samuel GOUGEON
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -10,8 +10,8 @@
 // <-- NO CHECK REF -->
 // <-- Non-regression test for bug 15998 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/15998
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/15998
 //
 // <-- Short Description -->
 // mfile2sci() and translatepaths() yielded an inconvenient warning when

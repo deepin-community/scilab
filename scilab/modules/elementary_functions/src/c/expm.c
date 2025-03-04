@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2006 - INRIA - Allan CORNET
  * Copyright (C) 2012 - Digiteo - Cedric Delamarre
  *
@@ -17,12 +17,15 @@
 
 #include <stdio.h>
 #include <string.h>
+#include "sci_malloc.h"
 #include "expm.h"
 #include "basic_functions.h"
 #include "elementary_functions.h"
 #include "matrix_left_division.h"
 #include "matrix_multiplication.h"
 #include "matrix_right_division.h"
+
+extern int C2F(dexpm1)(int* ia, int* n, double* a, double* ea, int* iea, double* w, int* iw, int* ierr);
 
 
 /*
@@ -2609,22 +2612,27 @@ if(iComplex2 == 1)
 
 int dexpms2(double *_pdblReal, double *_pdblReturnReal, int _iLeadDim)
 {
-    int iRet = zexpms2(_pdblReal, NULL, _pdblReturnReal, NULL, _iLeadDim);
+    int iRet = 0;
+    int* iwork = (int*)MALLOC(sizeof(int) * (2 * _iLeadDim));
+    double* dwork = (double*)MALLOC(sizeof(double) * (_iLeadDim * (2 * _iLeadDim + 2 * _iLeadDim + 5)));
+    C2F(dexpm1)(&_iLeadDim, &_iLeadDim, _pdblReal, _pdblReturnReal, &_iLeadDim, dwork, iwork, &iRet);
+    FREE(dwork);
+    FREE(iwork);
     return iRet;
 }
 
 int zexpms2(double *_pdblReal, double *_pdblImg, double *_pdblReturnReal, double *_pdblReturnImg, int _iLeadDim)
 {
     double dblRcond = 0;
-    int iRet				= 0;
-    int iIndex1			= 0;
-    int iMax				= 0;
-    int iFlag				= 0;
-    int iLoop1			= 0;
-    int iSquare			= 0;
-    int iOne				= 1;
+    int iRet        = 0;
+    int iIndex1     = 0;
+    int iMax        = 0;
+    int iFlag       = 0;
+    int iLoop1      = 0;
+    int iSquare     = 0;
+    int iOne        = 1;
 
-    int iComplex = 0;
+    int iComplex    = 0;
 
     double dblZero	= 0;
     double dblOne	= 1;

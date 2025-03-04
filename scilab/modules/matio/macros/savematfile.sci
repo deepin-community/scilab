@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2014 - Scilab Enterprises - Paul Bignier: bug #13102 fixed
 // Copyright (C) 2002-2004 - INRIA - Vincent COUVERT
 // Copyright (C) ???? - INRIA - Serge STEER
@@ -15,7 +15,7 @@
 function savematfile(varargin)
     // Save variables in a Matlab binary or ASCII file into Scilab
     // This function has been developed following the 'MAT-File Format' description:
-    // www.mathworks.com/access/helpdesk/help/pdf_doc/matlab/matfile_format.pdf
+    // https://www.mathworks.com/access/helpdesk/help/pdf_doc/matlab/matfile_format.pdf
 
     // INITIALIZATIONS
     // ===============
@@ -177,10 +177,12 @@ function savematfile(varargin)
                 // perform changes on variables
                 execstr("__x__="+mtlb_names(mtlb_k))
 
-                // hypermatrix => we concatenate its pages horizontally:
+                // hypermatrix => Only the first page is saved (only 2-D arrays are supported by this format)
                 __s__ = size(__x__);
                 if length(__s__)>2    
-                    __x__ = matrix(__x__,__s__(1),-1);
+                    //__x__ = matrix(__x__,__s__(1),-1);
+                    //__x__ = __x__(1:prod(__s__(1:2)));
+                    __x__ = __x__(:, :, 1);
                 end
                 //
                 __it__ = 0  // == has imaginary part
@@ -295,8 +297,7 @@ function savematfile(varargin)
         else
             // Filtering supported types
             // Unsupported : handles 9, macros 13, primitives 130, Others 128, 129
-            // Unsupported : booleans 4 : http://bugzilla.scilab.org/15568
-            mtlb_names = checkTypeBeforeMatSave(mtlb_names, [1 5 7 8 10 17], version)
+            mtlb_names = checkTypeBeforeMatSave(mtlb_names, [1 4 5 7 8 10 17], version)
             if mtlb_names==[]
                 msg = gettext("savematfile: No variable to save => No file written.")
                 warning(msg);

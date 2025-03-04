@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 //
 // Copyright (C) 2010 - DIGITEO - Michael Baudin
 // Copyright (C) 2019 - Samuel GOUGEON - Le Mans Université
@@ -87,7 +87,7 @@ assert_checkalmostequal(logb, 5434288.8153344732124, 1e-10);
 
 // Check error cases
 // -----------------
-msg = "nchoosek: Wrong number of input arguments: 2 or 3 expected."
+msg = "nchoosek: Wrong number of input arguments: 2 to 3 expected.";
 assert_checkerror("nchoosek()", msg);
 assert_checkerror("nchoosek([])", msg );
 assert_checkerror("nchoosek(4)", msg );
@@ -97,17 +97,18 @@ assert_checkerror("[logb, b]=nchoosek(4)", msg );
 msg = "nchoosek: Arguments #1 and #2: Incompatible sizes.";
 assert_checkerror("nchoosek(10:12, 2:6)", msg );
 
-msg = "nchoosek: Argument #1: Decimal integer expected.";
+msg = "nchoosek: Wrong value for input argument #1: Integer numbers expected.";
 assert_checkerror("nchoosek( [4.5 1.5], [2 1])", msg);
 assert_checkerror("nchoosek( [4.5 1.5], [2 -1])", msg);
-msg = "nchoosek: Argument #2: Decimal integer expected.";
+msg = "nchoosek: Wrong value for input argument #2: Integer numbers expected.";
 assert_checkerror("nchoosek( [4  3], [2.5 1])", msg );
+msg = "nchoosek: Wrong type for input argument #2: Must be in ""double"".";
 assert_checkerror("nchoosek( [4  3], ""log10"")", msg );
 
-msg = "nchoosek: Argument #1: Non-negative integers expected.";
+msg = "nchoosek: Wrong value for input argument #1: Non negative numbers expected.";
 assert_checkerror("nchoosek( [-4 3], [2  1])", msg);
 assert_checkerror("nchoosek( [-4 3], [2 -1])", msg);
-msg = "nchoosek: Argument #2: Non-negative integers expected.";
+msg = "nchoosek: Wrong value for input argument #2: Non negative numbers expected.";
 assert_checkerror("nchoosek( [4 3], [2 -1])", msg);
 
 assert_checkerror("nchoosek( 17 , 18 )", "nchoosek: n(1) < k(1) is forbidden." );

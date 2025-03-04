@@ -249,7 +249,7 @@ nb_col = 128;
 vmin = min(VF); vmax = max(VF);
 color = dsearch(VF,linspace(vmin,vmax,nb_col+1));
 clf()
-gcf().color_map = jetcolormap(nb_col);
+gcf().color_map = jet(nb_col);
 gca().hiddencolor = gca().background;
 colorbar(vmin,vmax)
 plot3d(XF, YF, list(ZF,color), flag=[-1 6 4])

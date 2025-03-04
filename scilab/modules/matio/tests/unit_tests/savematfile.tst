@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008 - INRIA - Vincent Couvert <vincent.couvert@inria.fr>
 // Copyright (C) 2018, 2019 - Samuel GOUGEON
 //
@@ -61,19 +61,17 @@ spdv = sparse(dv);
 spdm = sparse(dm);
 // v4 save Scilab OK (Octave)  load Scilab crash    sparse([])=>[]  (savematfile)
 // v6,7,7.3: save OK. load OK in both sides.        sparse([])=>[]
-// -v4 load crash: http://bugzilla.scilab.org/15731
+// -v4 load crash: https://gitlab.com/scilab/scilab/-/issues/15731
 
 // Sparse complexes
 // ----------------
 spcs = sparse(cs);
 spcv = sparse(cv);
 spcm = sparse(cm);
-// v4,6,7,7.3: save OK: read from Octave. load crash // http://bugzilla.scilab.org/15731
+// v4,6,7,7.3: save OK: read from Octave. load crash // https://gitlab.com/scilab/scilab/-/issues/15731
 
 // Booleans
 // ========
-// Supported only in version 4
-// Versions 6, 7, 7.3: http://bugzilla.scilab.org/15568 (missing support)
 bs = abs(ds)<25
 bv = abs(dv)<25
 bm = abs(dm)<25
@@ -138,16 +136,15 @@ tv = ["a" "bc" "def" "ghij"];
 tm = ["a" "bc" "def" ; "ghij" "klm" "no"];
 th = cat(3,tv,tv);
 // v4: row, matrix, hypermatrix => column (right-padded with spaces)
-// TODO: Add tests with UTF8 (after fixing http://bugzilla.scilab.org/15570 )
-// Issues for Text columns in v7: http://bugzilla.scilab.org/15569
+// TODO: Add tests with UTF8
+// Issues for Text columns in v7: https://gitlab.com/scilab/scilab/-/issues/15569
 
 // CELLS ARRAYS
 // ============
-// Bug: Booleans not accepted in cells: http://bugzilla.scilab.org/15727
 EmptyC = {};
 ces = {rand(2,3)};
-cev = { "ABC", rand(1,3,2)};
-cem = {1.1, int8(-5); rand(10,10), "abc"};
+cev = { "ABC", rand(1,3,2), bs};
+cem = {1.1, int8(-5), bv; rand(10,10), "abc", bv};
 ceh = cat(3,cev, cev);
 ceNested = {cev, cem};
 ceWithSparse = {1.1, int8(-5); sprand(10,10,0.1), "abc"};
@@ -157,15 +154,15 @@ ceWithSparse = {1.1, int8(-5); sprand(10,10,0.1), "abc"};
 // STRUCTURES
 // ==========
 // v4  not accepted
-// http://bugzilla.scilab.org/15730
 s0 = struct();
 s0f.r = struct();
 ss.r = %pi;             // Scalar structure
 sv(1,2).r = rand(1,3);  // Vector of structures
 sm(2,3).r = %e;         // Matrix of structures
+sm(2,3).bm = bm;        // With booleans
 struc = struct("age",30, "type","software");
-// TODO: add more complex cases after fixing http://bugzilla.scilab.org/15730
-// Case from http://bugzilla.scilab.org/6372 : only with v7.3
+// TODO: add more complex cases
+// Case from https://gitlab.com/scilab/scilab/-/issues/6372 : only with v7.3
 savgg_mes.x_values = struct("quantity", struct("label","Hz"), ..
                            "values", [], ..
                            "start_value", 1, ..
@@ -200,43 +197,30 @@ varnames(grep(varnames,"/^"+["i"]+"$/","r")) = [];
 // Start tests from a given name (to shorten)
 //varnames(strcmp(varnames, "tv")<0) = [];
 
-sleepT = 100; // ms
 File = TMPDIR + "/tmp.mat";
 ver = ["-v4" "-v6" "-v7" "-v7.3"];
 // List of known problems ==> skipped
-pbs = [ "EmptyStr" "-v7"
-        "EmptyStr" "-v7.3"
-        "s0"       "*"        // crash for all versions
+pbs = [ "s0"       "*"        // crash for all versions
         "s0f"      "*"        // crash for all versions
-        "struc"    "-v7.3"
-        "savgg_mes" "-v7.3"
-        "bh"       "-v4"      // Only the first page is saved
-        "bm"       "-v4"      // recovered as 0|1 instead of booleans
-        "bv"       "-v4"      // "
-        "bs"       "-v4"      // "
-        "ceWithSparse" "*"    // loadmatfile bug http://bugzilla.scilab.org/15731
-        "ch"       "-v4"      // Only the first page is saved
-        "dh"       "-v4"      // Only the first page is saved
-        "int64m"   "*"
-        "int64s"   "*"
-        "int64v"   "*"
-        "structS"  "-v7"      // loadmatfile bug http://bugzilla.scilab.org/16256
-        "structS"  "-v7.3"    // "
-        "th"       "-v7.3"
-        "tm"       "-v7.3"
-        "tv"       "-v7.3"
-        "ts"       "-v7.3"
+        "ceWithSparse" "*"    // loadmatfile bug https://gitlab.com/scilab/scilab/-/issues/15731
+        "int64m"   "*"        // No int64 support in Scilab
+        "int64s"   "*"        // No int64 support in Scilab
+        "int64v"   "*"        // No int64 support in Scilab
+        "th"       "-v4"      // Saved _or_ loaded as a column vector instead of row
+        "th"       "-v6"      // GetCharMatVar: 2D array of strings saving is not implemented.
+        "th"       "-v7"      // GetCharMatVar: 2D array of strings saving is not implemented.
+        "th"       "-v7.3"    // GetCharMatVar: 2D array of strings saving is not implemented.
+        "tm"       "-v6"      // GetCharMatVar: 2D array of strings saving is not implemented.
+        "tm"       "-v7"      // GetCharMatVar: 2D array of strings saving is not implemented.
+        "tm"       "-v7.3"    // GetCharMatVar: 2D array of strings saving is not implemented.
+        "tv"       "-v6"      // GetCharMatVar: Row array of strings saving is not implemented.
+        "tv"       "-v7"      // GetCharMatVar: Row array of strings saving is not implemented.
+        "tv"       "-v7.3"    // GetCharMatVar: Row array of strings saving is not implemented.
+        "ts"       "-v7.3"    // Only first char is loaded (ts = "B" after loadmatfile)
+        "spbm"     "*"        // Random issues: wrong number of non-zero values and/or wrong index for non-zeros values.
       ];
 // Cases with exclusive versions to be tested
-only = ["savgg_mes"  "-v7.3"
-        "structRow" "-v7.3"
-        "structCol" "-v7.3"
-        "structMat" "-v7.3"
-        "bs"        "-v4"     // http://bugzilla.scilab.org/15568
-        "bv"        "-v4"     //  "
-        "bm"        "-v4"     //  "
-        "bh"        "-v4"     //  "
-    ];
+only = [];
 
 for n = varnames'
     onlyVersion = only(find(only(:,1)==n),2);
@@ -261,11 +245,7 @@ for n = varnames'
         end
 
         ierr = execstr("savematfile(File, v, n);","errcatch");
-        sleep(sleepT);
         assert_checkequal(ierr,0);
-        if t==4 & v~="-v4"      // Booleans
-            continue
-        end
 
         if t==5                  // Sparse
             execstr("r=isreal("+n+");");
@@ -274,10 +254,9 @@ for n = varnames'
             end
         end
 
-        execstr("ref = "+n+";");
+        execstr("ref = "+n+";"); // Keep initial value to compare to loaded one
         clear(n);
         loadmatfile(File);
-        sleep(sleepT);
         err = execstr("assert_checktrue(isdef(n,""l""));", "errcatch");
         if err
             disp(["-------" n v]);
@@ -285,11 +264,31 @@ for n = varnames'
         end
         
         if t==6        // Sparse boolean
-            execstr("assert_checkequal(bool2s(ref),"+n+");");
-        elseif t==10   // Text
-            execstr("assert_checkequal(justify(ref(:),''l''),"+n+");");
+            execstr("assert_checkequal(nnz("+n+"), nnz(ref));"); // Check non-zeros values to be sure there are no fake values
+            execstr("assert_checkequal("+n+", bool2s(ref));");
+        elseif t==10   // String
+            execstr("assert_checkequal("+n+", justify(ref(:),''l''));");
         else
-            execstr("assert_checkequal(ref,"+n+")");
+            if v=="-v4" then // manage specific case for -v4 format
+                v4ref = ref;
+                v4refsize = size(v4ref);
+                if length(v4refsize) > 2 then  // In -v4 format, only first plan of N-D arrays is saved (only 2-D arrays managed in -v4 format)
+                    v4ref = matrix(v4ref,v4refsize(1),-1);
+                    v4ref = v4ref(1:prod(v4refsize(1:2)));
+                end
+                if t==4 then // Booleans saved as -v4 are saved as double and reloaded as double too (no logical flag in V4 format)
+                    execstr("assert_checkequal("+n+", bool2s(v4ref))");
+                else
+                    execstr("assert_checkequal("+n+", v4ref)");
+                end
+            else
+                if t==4 then
+                    execstr("assert_checkequal(nnz("+n+"), nnz(ref));"); // Check non-zeros values to be sure there are no fake values
+                end
+                execstr("assert_checkequal("+n+", ref)");
+            end
         end
+
+        execstr(n+"=ref;"); // Restore initial value (in case load failed and it was not detected above, which should not happen if this checks are well written)
     end
 end

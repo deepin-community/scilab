@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008-2009 - INRIA - Michael Baudin
 // Copyright (C) 2009-2011 - DIGITEO - Michael Baudin
 //
@@ -89,24 +89,6 @@ function value = neldermead_cget (this,key)
         value = this.mymethod
     case "-greedy" then
         value = this.greedy;
-        //
-        // Obsolete options.
-        //
-    case "-tolvarianceflag" then
-        value = this.tolvarianceflag
-    case "-tolabsolutevariance" then
-        value = this.tolabsolutevariance;
-    case "-tolrelativevariance" then
-        value = this.tolrelativevariance;
-    case "-greedy" then
-        value = this.greedy;
-        //
-        // Obsolete options.
-        //
-    case "-myterminate" then
-        value = this.myterminate
-    case "-myterminateflag" then
-        value = this.myterminateflag
     else
         // Delegate to the optimization object
         value = optimbase_cget ( this.optbase , key );

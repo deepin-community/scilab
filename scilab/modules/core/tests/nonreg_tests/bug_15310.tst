@@ -1,6 +1,6 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
-// Copyright (C) 2018 - Stéphane MOTTELET
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
+// Copyright (C) 2018 - UTC - Stéphane MOTTELET
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
@@ -11,8 +11,8 @@
 //
 // <-- Non-regression test for bug 15310 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=15310
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/15310
 //
 // <-- Short Description -->
 // unlike isdef(varargin(k),"l"), isdef(argin,"l") now always returns %t even for unpassed arguments (REGRESSION)

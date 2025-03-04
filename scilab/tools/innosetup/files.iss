@@ -1,5 +1,5 @@
 ;
-; Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+; Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 ; Copyright (C) DIGITEO - 2010 - Allan CORNET
 ;
 ; Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -22,7 +22,6 @@
 #endif
 #include BinariesSourcePath + "\tools\innosetup\MKL.iss"
 #include BinariesSourcePath + "\tools\innosetup\FFTW_MKL.iss"
-#include BinariesSourcePath + "\tools\innosetup\MKL_commons.iss"
 #include BinariesSourcePath + "\tools\tools.iss"
 #include BinariesSourcePath + "\contrib\toolbox_skeleton.iss"
 #include BinariesSourcePath + "\modules\core\core.iss"

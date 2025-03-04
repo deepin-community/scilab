@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2015 - 2016 - Samuel GOUGEON
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
 //
@@ -9,7 +9,7 @@
 // For more information, see the COPYING file which you should have received
 // along with this program.
 
-// Beware about the bug http://bugzilla.scilab.org/14460
+// Beware about the bug https://gitlab.com/scilab/scilab/-/issues/14460
 
 function r = %sp_sign(m)
     r = m

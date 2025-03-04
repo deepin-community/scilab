@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2014 - Scilab Enterprises - Calixte DENIZET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -46,22 +46,18 @@ bool Callable::invoke(typed_list & in, optional_list & opt, int _iRetCount, type
         catch (ast::InternalError & ie)
         {
             ConfigVariable::where_end();
-            ConfigVariable::setLastErrorFunction(getName());
             ConfigVariable::decreaseRecursion();
             throw ie;
         }
         catch (ast::InternalAbort & ia)
         {
             ConfigVariable::where_end();
-            ConfigVariable::setLastErrorFunction(getName());
             ConfigVariable::decreaseRecursion();
             throw ia;
         }
 
         if (Ret == Callable::Error)
         {
-            ConfigVariable::setLastErrorFunction(getName());
-            ConfigVariable::setLastErrorLine(e.getLocation().first_line);
             throw ast::InternalError(ConfigVariable::getLastErrorMessage(), ConfigVariable::getLastErrorNumber(), e.getLocation());
         }
     }

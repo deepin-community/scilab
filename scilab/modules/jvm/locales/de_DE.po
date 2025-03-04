@@ -132,7 +132,7 @@ msgid ""
 "bugzilla.scilab.org/.\n"
 msgstr ""
 "Wenn Sie eine Binärversion von Scilab verwenden, geben Sie einen "
-"Fehlerbreicht unter http://bugzilla.scilab.org/ ab.\n"
+"Fehlerbreicht unter https://gitlab.com/scilab/scilab/-/issues ab.\n"
 
 #, c-format
 msgid ""

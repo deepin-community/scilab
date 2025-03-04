@@ -13,8 +13,6 @@ Universidade Federal do Espírito Santo, Brazil.
 License:
 CeCILL
 
-    http://www.iecn.u-nancy.fr/~pincon/scilab/scilab.html
-
 
 TAUCS:
 ======

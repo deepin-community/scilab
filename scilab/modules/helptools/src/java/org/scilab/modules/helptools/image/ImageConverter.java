@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2010 - Calixte DENIZET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -30,9 +30,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-import javax.activation.MimetypesFileTypeMap;
+import jakarta.activation.MimetypesFileTypeMap;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
+
+import org.xml.sax.SAXParseException;
 
 import org.scilab.modules.commons.ScilabCommonsUtils;
 import org.scilab.modules.helptools.DocbookTagConverter;
@@ -94,6 +96,14 @@ public final class ImageConverter {
      */
     public void saveMD5s(String dir) {
         writeMD5s(dir, md5s);
+    }
+
+    /**
+     * Test if md5 cache exist (Scilab help build vs toolbox help build)
+     * @return true if md5 cache exist
+     */
+    public boolean hasMd5Cache() {
+        return md5s != null;
     }
 
     /**
@@ -246,7 +256,11 @@ public final class ImageConverter {
             if ((isLocalized != null && isLocalized.booleanValue()) || language.equals("en_US")) {
                 System.err.println("Info: Create image " + imageFile.getName() + " from line " + lineNumber + " in " + current.getName());
             } else if (!language.equals("en_US") && imageFile.exists()) {
-                System.err.println("Warning: Overwrite image " + imageFile.getName() + " from line " + lineNumber + " in " + current.getName() + ". Check the code or use scilab:localized=\"true\" attribute.");
+                if (hasMd5Cache()) { // Scilab help build
+                    conv.error(new SAXParseException("Overwrite image " + imageFile.getName() + " from line " + lineNumber + ". Check the code or use scilab:localized=\"true\" attribute.", null));
+                } else { // Toolbox help build
+                    System.err.println("Warning: Overwrite image " + imageFile.getName() + " from line " + lineNumber + ". Check the code or use scilab:localized=\"true\" attribute.");
+                }
             }
 
             return imgConv.convertToImage(currentFile, code, attrs, imageFile, imageName);

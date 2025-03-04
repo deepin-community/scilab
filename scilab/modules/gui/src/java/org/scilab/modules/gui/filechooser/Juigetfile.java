@@ -1,8 +1,8 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - DIGITEO - Sylvestre KOUMAR
- *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ * Copyright (C) 2021 - 2023 - Stéphane MOTTELET
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
  * pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -19,7 +19,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.SwingUtilities;
 
-import org.scilab.modules.gui.bridge.filechooser.SwingScilabFileChooser;
+import org.scilab.modules.gui.filechooser.ScilabFileChooser;
 import org.scilab.modules.gui.utils.ConfigManager;
 
 
@@ -31,7 +31,7 @@ import org.scilab.modules.gui.utils.ConfigManager;
  */
 public class Juigetfile {
 
-    public static final String[] DEFAULT_MASK = {"*.bin", "*.sce", "*.xcos", "*.sci", "*.sc*"};
+    public static final String[] DEFAULT_MASK = {"*.bin", "*.sce", "*.xcos", "*.sci", "*.sce|*.sci|*.scg"};
     public static final String DEFAULT_INITIAL_DIRECTORY = ConfigManager.getLastOpenedDirectory();
     public static final String DEFAULT_BOX_TITLE_OPEN = "uigetfile";
     public static final String DEFAULT_BOX_TITLE_SAVE = "uiputfile";
@@ -174,19 +174,18 @@ public class Juigetfile {
         try {
             SwingUtilities.invokeAndWait(new Runnable() {
                 public void run() {
-                    SwingScilabFileChooser ssfc = new SwingScilabFileChooser();
-                    ssfc.setAcceptAllFileFilterUsed(true);
-                    ssfc.addMask(Juigetfile.mask, Juigetfile.description);
-                    ssfc.setInitialDirectory(Juigetfile.initialDirectory);
-                    ssfc.setTitle(Juigetfile.boxtTitle);
-                    ssfc.setMultipleSelection(Juigetfile.multipleSelection);
-                    ssfc.setUiDialogType(Juigetfile.dialogType);
-                    ssfc.displayAndWait();
-
+                    ScilabFileChooser sfc = new ScilabFileChooser();
+                    sfc.setAcceptAllFileFilterUsed(true);
+                    sfc.addMask(Juigetfile.mask, Juigetfile.description);
+                    sfc.setInitialDirectory(Juigetfile.initialDirectory);
+                    sfc.setTitle(Juigetfile.boxtTitle);
+                    sfc.setMultipleSelection(Juigetfile.multipleSelection);
+                    sfc.setUiDialogType(Juigetfile.dialogType);
+                    sfc.displayAndWait();
                     //return the filechooser's information
                     //they are stocked into FileChooserInfos
                     FileChooserInfos.getInstance().setMultipleSelection(Juigetfile.multipleSelection);
-                    ssfc.invalidate();
+                    sfc.invalidate();
                 }
             });
         } catch (InterruptedException e) {
@@ -302,17 +301,17 @@ public class Juigetfile {
         try {
             SwingUtilities.invokeAndWait(new Runnable() {
                 public void run() {
-                    SwingScilabFileChooser ssfc = new SwingScilabFileChooser();
-                    ssfc.setDirectorySelectionOnly();
+                    ScilabFileChooser sfc = new ScilabFileChooser();
+                    sfc.setDirectorySelectionOnly();
                     if (Juigetfile.initialDirectory != null) {
                         //System.out.println("initialDir = " + Juigetfile.initialDirectory);
-                        ssfc.setInitialDirectory(Juigetfile.initialDirectory);
+                        sfc.setInitialDirectory(Juigetfile.initialDirectory);
                     }
                     if (Juigetfile.boxtTitle != null) {
-                        ssfc.setTitle(Juigetfile.boxtTitle);
+                        sfc.setTitle(Juigetfile.boxtTitle);
                     }
-                    ssfc.displayAndWait();
-                    ssfc.invalidate();
+                    sfc.displayAndWait();
+                    sfc.invalidate();
                 }
             });
 

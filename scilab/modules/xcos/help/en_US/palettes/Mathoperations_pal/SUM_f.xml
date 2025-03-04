@@ -163,13 +163,13 @@
     </refsection>
     <refsection id="Seealso_SUM_f" role="see also">
         <title>See also</title>
-        <itemizedlist>
-            <listitem>
+        <simplelist type="inline">
+            <member>
                 <link linkend="SUMMATION">SUMMATION</link>
-            </listitem>
-            <listitem>
+            </member>
+            <member>
                 <link linkend="BIGSOM_f">BIGSOM_f</link>
-            </listitem>
-        </itemizedlist>
+            </member>
+        </simplelist>
     </refsection>
 </refentry>

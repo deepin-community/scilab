@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA -
  * Copyright (C) DIGITEO - 2012 - Allan CORNET
  *
@@ -14,7 +14,10 @@
  * along with this program.
  *
  -->
-<refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svg="http://www.w3.org/2000/svg" xmlns:ns3="http://www.w3.org/1999/xhtml" xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:db="http://docbook.org/ns/docbook" xmlns:scilab="http://www.scilab.org" xml:id="call" xml:lang="en">
+<refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg" xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:db="http://docbook.org/ns/docbook"
+          xmlns:scilab="http://www.scilab.org" xml:id="call" xml:lang="en">
     <refnamediv>
         <refname>call</refname>
         <refpurpose>Fortran or C user routines call</refpurpose>
@@ -22,9 +25,9 @@
     <refsynopsisdiv>
         <title>Syntax</title>
         <synopsis>// long form 'out' is present
-            [y1,...,yk] = call("ident",x1,px1,"tx1",...,xn,pxn,"txn","out",[ny1,my1],py1,"ty1",...,[nyl,myl],pyl,"tyl")
+            [y1,...,yk] = call("ident", x1,px1,"tx1", ...,xn,pxn,"txn", "out", [ny1,my1],py1,"ty1", ...,[nyl,myl],pyl,"tyl")
             // short form : no 'out' parameter
-            [y1,....,yk] = call("ident",x1,...,xn)
+            [y1,....,yk] = call("ident", x1, ..., xn)
         </synopsis>
     </refsynopsisdiv>
     <refsection>
@@ -172,63 +175,82 @@
     </refsection>
     <refsection>
         <title>Examples</title>
-        <programlisting role="example">//Example 1 with  a simple C code
-            f1=['#include &lt;math.h&gt;'
-            'void fooc(double c[],double a[],double *b,int *m,int *n)'
-            '{'
-            '   int i;'
-            '   for ( i =0 ; i &lt; (*m)*(*n) ; i++) '
-            '     c[i] = sin(a[i]) + *b; '
-            '}'];
+            <para>Example #1 with a simple code in C language:
+            </para>
+            <programlisting role="example"><![CDATA[
+if haveacompiler() then
+    oldDir = pwd();
+    Dir = fullfile(TMPDIR, "call");
+    mkdir(Dir); cd(Dir)
+    f1 = [
+    '#include <math.h>'
+    'void fooc(double c[],double a[],double *b,int *m,int *n)'
+    '{'
+    '   int i;'
+    '   for ( i =0 ; i < (*m)*(*n) ; i++) '
+    '     c[i] = sin(a[i]) + *b; '
+    '}'];
 
-            mputl(f1,'fooc.c')
+    mputl(f1, "fooc.c");
 
-            //creating the shared library (a gateway, a Makefile and a loader are
-            //generated.
+    // Creating the shared library: Generates a gateway, a Makefile and a loader
+    ilib_for_link('fooc', "fooc.c", [], "c")
 
-            ilib_for_link('fooc','fooc.c',[],"c")
+    // load the shared library
+    exec loader.sce
 
-            // load the shared library
+    // use the new primitive
+    a = [1,2,3;4,5,6];
+    b =  %pi;
+    [m,n] = size(a);
 
-            exec loader.sce
+    // Inputs:
+    // a is in position 2 and double
+    // b                3     double
+    // n                4     integer
+    // m                5     integer
+    // Outputs:
+    // c is in position 1 and double with size [m,n]
+    c = call("fooc",a,2,"d",b,3,"d",m,4,"i",n,5,"i","out",[m,n],1,"d")
 
-            //using the new primitive
-            a=[1,2,3;4,5,6];b= %pi;
-            [m,n]=size(a);
+    cd(oldDir);
+    dir(Dir)
+end
+         ]]></programlisting>
+            <para/>
+            <para>Example 2 with a simple code in Fortran:
+            </para>
+            <programlisting role="example"><![CDATA[
+if haveacompiler() then
+    oldDir = pwd();
+    Dir = fullfile(TMPDIR, "call");
+    mkdir(Dir); cd(Dir)
+    f1 = ['      subroutine foof(c,a,b,n,m)'
+    '      integer n,m'
+    '      double precision a(*),b,c(*)'
+    '      do 10 i=1,m*n '
+    '        c(i) = sin(a(i))+b'
+    '   10 continue'
+    '      end'];
+    mputl(f1,'foof.f')
 
-            // Inputs:
-            // a is in position 2 and double
-            // b                3     double
-            // n                4     integer
-            // m                5     integer
-            // Outputs:
-            // c is in position 1 and double with size [m,n]
-            c=call("fooc",a,2,"d",b,3,"d",m,4,"i",n,5,"i","out",[m,n],1,"d");
+    //creating the shared library (a gateway, a Makefile and a loader are
+    //generated.
 
-            //Example 2 with  a simple Fortran code
-            f1=['      subroutine foof(c,a,b,n,m)'
-            '      integer n,m'
-            '      double precision a(*),b,c(*)'
-            '      do 10 i=1,m*n '
-            '        c(i) = sin(a(i))+b'
-            '   10 continue'
-            '      end'];
-            mputl(f1,'foof.f')
+    ilib_for_link('foof','foof.f',[],"f")
 
-            //creating the shared library (a gateway, a Makefile and a loader are
-            //generated.
+    // load the shared library
+    exec loader.sce
 
-            ilib_for_link('foof','foof.f',[],"f")
-
-            // load the shared library
-
-            exec loader.sce
-
-            //using the new primitive
-            a=[1,2,3;4,5,6];b= %pi;
-            [m,n]=size(a);
-            c=call("foof",a,2,"d",b,3,"d",m,4,"i",n,5,"i","out",[m,n],1,"d");
-        </programlisting>
+    // use the new primitive
+    a = [1,2,3;4,5,6];
+    b =  %pi;
+    [m,n] = size(a);
+    c = call("foof",a,2,"d",b,3,"d",m,4,"i",n,5,"i","out",[m,n],1,"d")
+    cd(oldDir);
+    dir(Dir)
+end
+        ]]></programlisting>
         <refsection>
             <title>Limitations to Shared Library Support</title>
             <para>Scilab shared library interface (call function) supports only C and fortran

@@ -1,5 +1,5 @@
 #
-# Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+# Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 # Copyright (C) INRIA - 2006-2008 - Sylvestre Ledru
 # Copyright (C) DIGITEO - 2009 - Sylvestre Ledru
 #
@@ -56,7 +56,6 @@ fftw \
 statistics \
 dynamic_link \
 console \
-arnoldi \
 spreadsheet \
 tclsci \
 commons \
@@ -187,6 +186,7 @@ ENGINE_LIBS =	$(top_builddir)/modules/fileio/libscifileio.la \
 	$(top_builddir)/modules/integer/libsciinteger.la \
 	$(top_builddir)/modules/io/libsciio.la \
 	$(top_builddir)/modules/linear_algebra/libscilinear_algebra.la \
+	$(top_builddir)/modules/arnoldi/libsciarnoldi.la \
 	$(top_builddir)/modules/localization/libscilocalization.la \
 	$(top_builddir)/modules/polynomials/libscipolynomials.la \
 	$(top_builddir)/modules/special_functions/libscispecial_functions.la \
@@ -214,7 +214,6 @@ ENGINE_LIBS_DYNAMIC_LOAD = \
 	$(top_builddir)/modules/optimization/libscioptimization.la \
 	$(top_builddir)/modules/signal_processing/libscisignal_processing.la \
 	$(top_builddir)/modules/interpolation/libsciinterpolation.la \
-	$(top_builddir)/modules/arnoldi/libsciarnoldi.la \
 	$(top_builddir)/modules/randlib/libscirandlib.la \
 	$(top_builddir)/modules/xcos/libscixcos.la \
 	$(top_builddir)/modules/scicos_blocks/libsciscicos_blocks.la \
@@ -241,7 +240,7 @@ else
 libscilab_la_LIBADD += $(NO_GUI_LIBS)
 endif
 
-libscilab_la_LIBADD += $(top_builddir)/modules/libscilab-cli.la
+libscilab_la_LIBADD += libscilab-cli.la
 
 # Core modules
 libscilab_la_LIBADD += $(OTHER_LIBS) $(EXTERNAL_LIBS)
@@ -264,8 +263,5 @@ libscilab_cli_la_LDFLAGS = $(AM_LDFLAGS) $(SCI_LDFLAGS)
 
 # Core modules
 libscilab_cli_la_LIBADD = $(ENGINE_LIBS) $(NO_GUI_LIBS) $(OTHER_LIBS) $(EXTERNAL_LIBS) $(FLIBS) $(LAPACK_LIBS) $(BLAS_LIBS)
-
-# Compiler specific support
-libscilab_cli_la_LIBADD += -lstdc++fs # needed before gcc 9 (Ubuntu 18.04)
 
 .NOTPARALLEL: libscilab-cli.la libscilab.la

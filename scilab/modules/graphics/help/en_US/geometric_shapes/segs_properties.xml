@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA - Djalel Abdemouche
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -157,10 +157,7 @@
                         to select the type of mark to use when
                         <literal>mark_mode</literal> property is
                         <literal>"on"</literal>. The value should be an integer
-                        in <literal>[0 14]</literal> which stands for: dot,
-                        plus, cross, star, filled diamond, diamond, triangle up,
-                        triangle down, diamond plus, circle, asterisk, square,
-                        triangle right, triangle left and pentagram. The figure
+                        in <literal>[0 20]</literal>. The figure
                         below shows the aspects of the marks depending on the
                         <literal>mark_style</literal> and the
                         <literal>mark_foreground</literal> and

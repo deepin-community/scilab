@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Samuel Gougeon
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -11,9 +11,8 @@
 // along with this program.
 
 function r = iscolumn(v)
-    rhs=argn(2);
-    if rhs<>1 then
-        error(msprintf(gettext("%s: Wrong number of input argument(s): %d expected.\n"),"iscolumn", 1));
+    arguments
+        v
     end
 
     s = size(v)

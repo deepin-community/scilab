@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009-2009 - DIGITEO - Bruno JOFRET
  * Copyright (C) 2009-2010 - DIGITEO - Clement DAVID
  * Copyright (C) 2011-2017 - Scilab Enterprises - Clement DAVID
@@ -18,36 +18,40 @@
  */
 package org.scilab.modules.xcos.graph;
 
-import org.scilab.modules.xcos.graph.model.XcosGraphModel;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.rmi.server.UID;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.IllegalFormatException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.Set;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import javax.swing.Timer;
 
-import org.scilab.modules.action_binding.highlevel.ScilabInterpreterManagement;
 import org.scilab.modules.action_binding.highlevel.ScilabInterpreterManagement.InterpreterException;
 import org.scilab.modules.graph.ScilabGraph;
 import org.scilab.modules.graph.utils.ScilabGraphConstants;
-import org.scilab.modules.gui.bridge.filechooser.SwingScilabFileChooser;
+import org.scilab.modules.gui.filechooser.FileChooser;
 import org.scilab.modules.gui.bridge.tab.SwingScilabDockablePanel;
 import org.scilab.modules.gui.messagebox.ScilabModalDialog;
 import org.scilab.modules.gui.messagebox.ScilabModalDialog.AnswerOption;
@@ -57,8 +61,10 @@ import org.scilab.modules.gui.tabfactory.ScilabTabFactory;
 import org.scilab.modules.xcos.JavaController;
 import org.scilab.modules.xcos.Kind;
 import org.scilab.modules.xcos.ObjectProperties;
+import org.scilab.modules.xcos.VectorOfBool;
 import org.scilab.modules.xcos.VectorOfDouble;
 import org.scilab.modules.xcos.VectorOfInt;
+import org.scilab.modules.xcos.VectorOfScicosID;
 import org.scilab.modules.xcos.VectorOfString;
 import org.scilab.modules.xcos.Xcos;
 import org.scilab.modules.xcos.XcosTab;
@@ -66,7 +72,10 @@ import org.scilab.modules.xcos.actions.SaveAsAction;
 import org.scilab.modules.xcos.block.AfficheBlock;
 import org.scilab.modules.xcos.block.BasicBlock;
 import org.scilab.modules.xcos.block.SplitBlock;
+import org.scilab.modules.xcos.block.SuperBlock;
 import org.scilab.modules.xcos.block.TextBlock;
+import org.scilab.modules.xcos.block.io.ContextUpdate;
+import org.scilab.modules.xcos.block.io.ContextUpdate.IOBlocks;
 import org.scilab.modules.xcos.block.io.EventInBlock;
 import org.scilab.modules.xcos.block.io.EventOutBlock;
 import org.scilab.modules.xcos.block.io.ExplicitInBlock;
@@ -78,9 +87,10 @@ import org.scilab.modules.xcos.graph.model.BlockInterFunction;
 import org.scilab.modules.xcos.graph.model.ScicosObjectOwner;
 import org.scilab.modules.xcos.graph.model.XcosCell;
 import org.scilab.modules.xcos.graph.model.XcosCellFactory;
+import org.scilab.modules.xcos.graph.model.XcosGraphModel;
 import org.scilab.modules.xcos.graph.swing.GraphComponent;
+import org.scilab.modules.xcos.io.ScilabTypeCoder;
 import org.scilab.modules.xcos.io.XcosFileType;
-import org.scilab.modules.xcos.io.scicos.ScilabDirectHandler;
 import org.scilab.modules.xcos.link.BasicLink;
 import org.scilab.modules.xcos.link.CommandControlLink;
 import org.scilab.modules.xcos.link.ExplicitLink;
@@ -97,9 +107,9 @@ import org.scilab.modules.xcos.port.output.ExplicitOutputPort;
 import org.scilab.modules.xcos.port.output.ImplicitOutputPort;
 import org.scilab.modules.xcos.preferences.XcosOptions;
 import org.scilab.modules.xcos.utils.BlockPositioning;
-import org.scilab.modules.xcos.utils.Stack;
 import org.scilab.modules.xcos.utils.XcosConstants;
 import org.scilab.modules.xcos.utils.XcosDialogs;
+import org.scilab.modules.xcos.utils.XcosEvent;
 import org.scilab.modules.xcos.utils.XcosMessages;
 
 import com.mxgraph.model.mxCell;
@@ -111,19 +121,6 @@ import com.mxgraph.util.mxEventObject;
 import com.mxgraph.util.mxPoint;
 import com.mxgraph.view.mxGraphSelectionModel;
 import com.mxgraph.view.mxMultiplicity;
-import java.lang.reflect.Constructor;
-import java.rmi.server.UID;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import org.scilab.modules.types.ScilabType;
-import org.scilab.modules.xcos.VectorOfBool;
-import org.scilab.modules.xcos.VectorOfScicosID;
-import org.scilab.modules.xcos.block.SuperBlock;
-import org.scilab.modules.xcos.block.io.ContextUpdate;
-import org.scilab.modules.xcos.io.ScilabTypeCoder;
-import org.scilab.modules.xcos.utils.XcosEvent;
 
 /**
  * The base class for a diagram. This class contains jgraphx + Scicos data.
@@ -152,7 +149,11 @@ public class XcosDiagram extends ScilabGraph {
      * @param uid the string UID that will be used on the default parent
      */
     public XcosDiagram(final JavaController controller, final long diagramId, final Kind kind, String uid) {
-        super(new XcosGraphModel(controller, diagramId, kind, uid), Xcos.getInstance().getStyleSheet());
+        this(controller, new ScicosObjectOwner(controller, diagramId, kind), uid);
+    }
+
+    public XcosDiagram(final JavaController controller, final ScicosObjectOwner owner, String uid) {
+        super(new XcosGraphModel(controller, owner, uid), Xcos.getInstance().getStyleSheet());
 
         // set the default parent (the JGraphX layer) defined on the model
         setDefaultParent(getModel().getChildAt(getModel().getRoot(), 0));
@@ -220,54 +221,19 @@ public class XcosDiagram extends ScilabGraph {
     }
 
     /**
-     * Fill the hierarchy from the first element up to the root diagram
-     * (included)
-     * <p>
-     * Should be used as :
-     * <pre>
-     *  hierarchy = fillHierarchy(new ScicosObjectOwner(getUID(), getKind()))
-     * </pre>
-     *
-     * @param hierarchy the collection to fill
-     * @return the filled collection (the root at the end)
-     */
-    public static Stack<ScicosObjectOwner> lookForHierarchy(ScicosObjectOwner current) {
-        ScicosObjectOwner local = current;
-        Stack<ScicosObjectOwner> hierarchy = new Stack<>();
-        JavaController controller = new JavaController();
-
-        long[] parent = new long[] {local.getUID()};
-        if (local.getKind() == Kind.DIAGRAM) {
-            hierarchy.push(local);
-            return hierarchy;
-        }
-
-        while (parent[0] != 0l) {
-            hierarchy.push(new ScicosObjectOwner(parent[0], Kind.BLOCK));
-            controller.getObjectProperty(parent[0], Kind.BLOCK, ObjectProperties.PARENT_BLOCK, parent);
-        }
-
-        controller.getObjectProperty(local.getUID(), local.getKind(), ObjectProperties.PARENT_DIAGRAM, parent);
-        hierarchy.push(new ScicosObjectOwner(parent[0], Kind.DIAGRAM));
-
-        return hierarchy;
-    }
-
-    /**
      * Sort the blocks per first integer parameter value
      *
      * @param blocks the block list
      * @param the shared controller
      * @return the sorted block list (same instance)
      */
-    public static List<? extends BasicBlock> iparSort(final List<? extends BasicBlock> blocks, final JavaController controller) {
+    public static List<ContextUpdate> iparSort(final List<ContextUpdate> blocks, final JavaController controller) {
+        final VectorOfInt data1 = new VectorOfInt();
+        final VectorOfInt data2 = new VectorOfInt();
+
         Collections.sort(blocks, new Comparator<BasicBlock>() {
             @Override
             public int compare(BasicBlock o1, BasicBlock o2) {
-
-
-                final VectorOfInt data1 = new VectorOfInt();
-                final VectorOfInt data2 = new VectorOfInt();
 
                 controller.getObjectProperty(o1.getUID(), Kind.BLOCK, ObjectProperties.IPAR, data1);
                 controller.getObjectProperty(o2.getUID(), Kind.BLOCK, ObjectProperties.IPAR, data2);
@@ -298,7 +264,7 @@ public class XcosDiagram extends ScilabGraph {
      * @return list of typed block
      */
     @SuppressWarnings("unchecked")
-    private <T extends BasicBlock> List<T> getAllTypedBlock(Class<T> klass) {
+    private <T extends ContextUpdate> List<T> getAllTypedBlock(Class<T> klass) {
         final List<T> list = new ArrayList<T>();
 
         int blockCount = getModel().getChildCount(getDefaultParent());
@@ -320,7 +286,7 @@ public class XcosDiagram extends ScilabGraph {
      * @param klasses the class instance list to work on
      * @return list of typed block
      */
-    private <T extends BasicBlock> List<T> getAllTypedBlock(Class<T>[] klasses) {
+    private <T extends ContextUpdate> List<T> getAllTypedBlock(Class<T>[] klasses) {
         final List<T> list = new ArrayList<T>();
         for (Class<T> klass : klasses) {
             list.addAll(getAllTypedBlock(klass));
@@ -336,7 +302,7 @@ public class XcosDiagram extends ScilabGraph {
      * @return the context
      */
     @SuppressWarnings("unchecked")
-    public final Map<Object, Object> fillContext(final Map<Object, Object> context, final JavaController controller) {
+    public final Map<String, List<ContextUpdate>> fillContext(final Map<String, List<ContextUpdate>> context, final JavaController controller) {
         if (!context.containsKey(IN)) {
             context.put(IN, iparSort(getAllTypedBlock(new Class[] {ExplicitInBlock.class, ImplicitInBlock.class}), controller));
         }
@@ -373,39 +339,32 @@ public class XcosDiagram extends ScilabGraph {
      * @param context Hashtable that represents the global validation state.
      * @return the error message or null
      */
-    public String validateChildDiagram(final Object cell, final Map<Object, Object> context) {
+    public String validateChildDiagram(final Object cell, final Hashtable<Object, Object> context) {
         String err = null;
 
         /*
          * Only validate I/O blocks
          */
         // get the key
-        final String key;
-        if (cell instanceof ExplicitInBlock || cell instanceof ImplicitInBlock) {
-            key = IN;
-        } else if (cell instanceof ExplicitOutBlock || cell instanceof ImplicitOutBlock) {
-            key = OUT;
-        } else if (cell instanceof EventInBlock) {
-            key = EIN;
-        } else if (cell instanceof EventOutBlock) {
-            key = EOUT;
-        } else {
+        final String key = IOBlocks.getContextKey(cell);
+        if (key.isEmpty())
             return null;
-        }
+
         final BasicBlock block = (BasicBlock) cell;
         final JavaController controller = new JavaController();
 
         /*
          * Prepare validation
          */
-        // fill the context once
-        fillContext(context, controller);
+        
+        Map<String, List<ContextUpdate>> ioblocks = new HashMap<>();
+        fillContext(ioblocks, controller);
 
         /*
          * Validate with ipar
          */
         // get the real index
-        final List<? extends BasicBlock> blocks = (List<? extends BasicBlock>) context.get(key);
+        final List<? extends BasicBlock> blocks = ioblocks.get(key);
         final int realIndex = blocks.indexOf(block) + 1;
 
         // get the user index
@@ -620,6 +579,59 @@ public class XcosDiagram extends ScilabGraph {
             return instance;
         }
 
+        /**
+         * Update IOBlocks {@link ObjectProperties#IPAR} and {@link ObjectProperties#EXPRS} to a non-existing value
+         */
+        private static void updatePortNumber(JavaController controller, List<ContextUpdate> updatedIOBlocks, Map<String, List<ContextUpdate>> context) {
+            VectorOfInt ipar = new VectorOfInt(1);
+            
+            // create a local map where IOBlocks are not initially present but are added during the loop
+            Map<String, List<ContextUpdate>> inProgressContext = new HashMap<>();
+            for (String k : context.keySet())
+            {
+                ArrayList<ContextUpdate> blocks = new ArrayList<>(context.get(k));
+                blocks.removeAll(updatedIOBlocks);
+                inProgressContext.put(k, blocks);
+            }
+
+            // iterate on each added cell
+            for (ContextUpdate cell : updatedIOBlocks) {
+                for (Map.Entry<String, List<ContextUpdate>> kv : inProgressContext.entrySet()) {
+                    if (!IOBlocks.getContextKey(cell).equals(kv.getKey()))
+                        continue;
+                    List<ContextUpdate> blocks = kv.getValue();
+
+                    // ensure blocks are sorted even after a previous IPAR update in case of copy-pasting multiple IOBlocks
+                    iparSort(blocks, controller);
+
+                    // try to detect a missing index
+                    int pre = 0;
+                    for (int i = 0; i < blocks.size(); i++)
+                    {
+                        controller.getObjectProperty(blocks.get(i).getUID(), Kind.BLOCK, ObjectProperties.IPAR, ipar);
+                        if (ipar.size() < 1)
+                            return; // something is buggy in this block avoid editing the diagram
+                        
+                        int blockIndex = ipar.get(0);
+                        if (blockIndex - pre > 1)
+                        {
+                            cell.setOrdering(controller, pre + 1);
+                            break;
+                        }
+
+                        pre = blockIndex;
+                    }
+
+                    // no missing index, set to previous value +1
+                    if (pre == blocks.size())
+                    {
+                        cell.setOrdering(controller, pre + 1);
+                    }
+                    blocks.add(cell);
+                }
+            }
+        }
+
         @Override
         public void invoke(Object sender, mxEventObject evt) {
             final XcosDiagram diagram = (XcosDiagram) sender;
@@ -629,16 +641,19 @@ public class XcosDiagram extends ScilabGraph {
             }
 
             // common behavior for both block adding/removing and block update
-            List<Object> updatedIOBlocks;
+            List<ContextUpdate> updatedIOBlocks;
             if (XcosEvent.UPDATE_BLOCK.equals(evt.getName())) {
                 updatedIOBlocks = new ArrayList<>();
                 Object b = evt.getProperty(XcosEvent.BLOCK);
                 if  (b instanceof ContextUpdate) {
-                    updatedIOBlocks.add(b);
+                    updatedIOBlocks.add((ContextUpdate) b);
                 }
             } else { // ADD_CELLS or REMOVE_CELLS
                 Object[] cells = (Object[]) evt.getProperty("cells");
-                updatedIOBlocks = Arrays.stream(cells).filter(b -> b instanceof ContextUpdate).collect(Collectors.toList());
+                updatedIOBlocks = Arrays.stream(cells)
+                    .filter(b -> b instanceof ContextUpdate)
+                    .map(b -> (ContextUpdate) b)
+                    .collect(Collectors.toList());
             }
             if (updatedIOBlocks.isEmpty()) {
                 return;
@@ -648,7 +663,17 @@ public class XcosDiagram extends ScilabGraph {
 
             String[] superBlockUID = {""};
             controller.getObjectProperty(diagram.getUID(), diagram.getKind(), ObjectProperties.UID, superBlockUID);
+            
+            // create a full context
+            Map<String, List<ContextUpdate>> context = new HashMap<>();
+            diagram.fillContext(context, controller);
 
+            // update ipar value on the added IOBlock if its a move
+            if (evt.getName() == mxEvent.MOVE_CELLS && evt.getProperty("clone") == Boolean.TRUE) {
+                updatePortNumber(controller, updatedIOBlocks, context);
+            }
+
+            // update parent diagram
             List<XcosDiagram> diagrams = Xcos.getInstance().openedDiagrams(Xcos.findRoot(controller, diagram));
             for (XcosDiagram parent : diagrams) {
                 final XcosGraphModel model = (XcosGraphModel) parent.getModel();
@@ -657,23 +682,21 @@ public class XcosDiagram extends ScilabGraph {
                     // associated parent superblock when visible
                     SuperBlock superblock = (SuperBlock) cell;
 
-                    // create a full context
-                    Map<Object, Object> context = new HashMap<>();
-                    diagram.fillContext(context, controller);
-
                     // only update the superblock ports if all of them are valids
                     diagram.getAsComponent().clearCellOverlays();
                     String status = diagram.getAsComponent().validateGraph();
-                    if (status != null) {
+                    if (status != null && !status.isEmpty()) {
                         return;
                     }
 
                     model.beginUpdate();
                     try {
-                        syncPorts(controller, superblock, ObjectProperties.INPUTS, (List<ContextUpdate>) context.get(IN), parent);
-                        syncPorts(controller, superblock, ObjectProperties.OUTPUTS, (List<ContextUpdate>) context.get(OUT), parent);
-                        syncPorts(controller, superblock, ObjectProperties.EVENT_INPUTS, (List<ContextUpdate>) context.get(EIN), parent);
-                        syncPorts(controller, superblock, ObjectProperties.EVENT_OUTPUTS, (List<ContextUpdate>) context.get(EOUT), parent);
+                        syncPorts(controller, superblock, ObjectProperties.INPUTS, context.get(IN), parent);
+                        syncPorts(controller, superblock, ObjectProperties.OUTPUTS, context.get(OUT), parent);
+                        syncPorts(controller, superblock, ObjectProperties.EVENT_INPUTS, context.get(EIN), parent);
+                        syncPorts(controller, superblock, ObjectProperties.EVENT_OUTPUTS, context.get(EOUT), parent);
+
+                        BlockPositioning.updateBlockView(parent, superblock);
                     } finally {
                         model.endUpdate();
                     }
@@ -717,40 +740,40 @@ public class XcosDiagram extends ScilabGraph {
          * @param updatedIOBlocks the blocks to add
          * @param controller shared controller
          */
-        public static void updateContext(Map<Object, Object> context, List<XcosCell> updatedIOBlocks, final JavaController controller) {
+        public static void updateContext(Map<String, List<ContextUpdate>> context, List<XcosCell> updatedIOBlocks, final JavaController controller) {
             {
-                List<BasicBlock> l = (List<BasicBlock>) context.getOrDefault(IN, new ArrayList<>());
+                List<ContextUpdate> l = context.getOrDefault(IN, new ArrayList<>());
                 updatedIOBlocks.stream()
                 .filter(b -> b instanceof ExplicitInBlock || b instanceof ImplicitInBlock)
                 .map(b -> (ContextUpdate) b)
-                .collect(Collectors.toCollection(() -> l));
+                .forEachOrdered(l::add);
                 iparSort(l, controller);
                 context.putIfAbsent(IN, l);
             }
             {
-                List<BasicBlock> l = (List<BasicBlock>) context.getOrDefault(OUT, new ArrayList<>());
+                List<ContextUpdate> l = context.getOrDefault(OUT, new ArrayList<>());
                 updatedIOBlocks.stream()
                 .filter(b -> b instanceof ExplicitOutBlock || b instanceof ImplicitOutBlock)
                 .map(b -> (ContextUpdate) b)
-                .collect(Collectors.toCollection(() -> l));
+                .forEachOrdered(l::add);
                 iparSort(l, controller);
                 context.putIfAbsent(OUT, l);
             }
             {
-                List<BasicBlock> l = (List<BasicBlock>) context.getOrDefault(EIN, new ArrayList<>());
+                List<ContextUpdate> l = context.getOrDefault(EIN, new ArrayList<>());
                 updatedIOBlocks.stream()
                 .filter(b -> b instanceof EventInBlock)
                 .map(b -> (ContextUpdate) b)
-                .collect(Collectors.toCollection(() -> l));
+                .forEachOrdered(l::add);
                 iparSort(l, controller);
                 context.putIfAbsent(EIN, l);
             }
             {
-                List<BasicBlock> l = (List<BasicBlock>) context.getOrDefault(EOUT, new ArrayList<>());
+                List<ContextUpdate> l = context.getOrDefault(EOUT, new ArrayList<>());
                 updatedIOBlocks.stream()
                 .filter(b -> b instanceof EventOutBlock)
                 .map(b -> (ContextUpdate) b)
-                .collect(Collectors.toCollection(() -> l));
+                .forEachOrdered(l::add);
                 iparSort(l, controller);
                 context.putIfAbsent(EOUT, l);
             }
@@ -1813,16 +1836,15 @@ public class XcosDiagram extends ScilabGraph {
 
         info(XcosMessages.SAVING_DIAGRAM);
         if (fileName == null) {
-            final SwingScilabFileChooser fc = SaveAsAction.createFileChooser();
+            final FileChooser fc = SaveAsAction.createFileChooser();                
             SaveAsAction.configureFileFilters(fc);
             ConfigurationManager.configureCurrentDirectory(fc);
-
             if (getSavedFile() != null) {
                 // using save-as, the file chooser should have a filename
                 // without extension as default
                 String filename = getSavedFile().getName();
                 filename = filename.substring(0, filename.lastIndexOf('.'));
-                fc.setSelectedFile(new File(filename));
+                fc.setInitialFileName(filename);
             } else {
                 final String title = getTitle();
                 if (title != null) {
@@ -1834,23 +1856,15 @@ public class XcosDiagram extends ScilabGraph {
                     for (char c : regex) {
                         escaped = escaped.replace(c, '-');
                     }
-
-                    fc.setSelectedFile(new File(escaped));
-                }
+                    fc.setInitialFileName(escaped);
+                }             
             }
-
-            int status = fc.showSaveDialog(this.getAsComponent());
-            if (status != JFileChooser.APPROVE_OPTION) {
-                info(XcosMessages.EMPTY_INFO);
-                return isSuccess;
+            fc.displayAndWait();
+            String[] selection = fc.getSelection();
+            if (selection.length==0 || selection[0] == "") {
+                return isSuccess;   
             }
-
-            // change the format if the user choose a save-able file format
-            final XcosFileType selectedFilter = XcosFileType.findFileType(fc.getFileFilter());
-            if (XcosFileType.getAvailableSaveFormats().contains(selectedFilter)) {
-                format = selectedFilter;
-            }
-            writeFile = fc.getSelectedFile();
+            writeFile = new File(selection[0]);             
         }
 
         /* Extension/format update */
@@ -1983,6 +1997,9 @@ public class XcosDiagram extends ScilabGraph {
      * Update the title
      */
     public void updateTabTitle() {
+        if (isReadonly())
+            return;
+
         // get the modifier string
         final String modified;
         if (Xcos.getInstance().isModified(Xcos.findRoot(this))) {
@@ -2066,6 +2083,10 @@ public class XcosDiagram extends ScilabGraph {
                             filetype.load(file, XcosDiagram.this);
                         } else {
                             XcosCellFactory.insertChildren(controller, XcosDiagram.this);
+                            // upgrade hard-coded diagram settings to the configured ones
+                            XcosOptions.getSimulation();
+                            ScicosObjectOwner root = Xcos.findRoot(controller, XcosDiagram.this);
+                            controller.setObjectProperty(root.getUID(), root.getKind(), ObjectProperties.PROPERTIES, ScicosParameters.DEFAULT_PARAMETERS);
                         }
 
                         instance.setLastError("");
@@ -2380,70 +2401,6 @@ public class XcosDiagram extends ScilabGraph {
         } else {
             return getRootDiagram().getSavedFile();
         }
-    }
-
-    /**
-     * Read the applicable context on this diagram.
-     * <p>
-     * This function retrieve the current diagram's context and all its parent
-     *
-     * @return the full context
-     */
-    public String[] getContext() {
-        final ArrayList<String> allContext = new ArrayList<>();
-        final Stack<ScicosObjectOwner> hierarchy = lookForHierarchy(new ScicosObjectOwner(getUID(), getKind()));
-
-        final JavaController controller = new JavaController();
-        final VectorOfString context = new VectorOfString();
-
-        hierarchy.stream().forEach(o -> {
-            controller.getObjectProperty(o.getUID(), o.getKind(), ObjectProperties.DIAGRAM_CONTEXT, context);
-
-            final int length = context.size();
-            for (int i = 0; i < length; i++) {
-                allContext.add(context.get(i));
-            }
-            allContext.add("");
-        });
-
-        return allContext.toArray(new String[allContext.size()]);
-    }
-
-    /**
-     * Evaluate the current context
-     *
-     * @return The resulting data. Keys are variable names and Values are
-     * evaluated values.
-     */
-    public Map<String, ScilabType> evaluateContext() {
-        Map<String, ScilabType> result = Collections.emptyMap();
-        final ScilabDirectHandler handler = ScilabDirectHandler.acquire();
-        if (handler == null) {
-            return result;
-        }
-
-        try {
-            // first write the context strings
-            handler.writeContext(getContext());
-
-            // evaluate using script2var and convert to string keys and list of values
-            ScilabInterpreterManagement.synchronousScilabExec(ScilabDirectHandler.CONTEXT + " = script2var(" + ScilabDirectHandler.CONTEXT + ", struct()); "
-                 + ScilabDirectHandler.CONTEXT + "_names = fieldnames("+ScilabDirectHandler.CONTEXT+")'; "
-                 + ScilabDirectHandler.CONTEXT + "_values = list(); "
-                 + "for i=1:size(" + ScilabDirectHandler.CONTEXT + "_names, '*') ;"
-                 + "   " + ScilabDirectHandler.CONTEXT + "_values(i) = " + ScilabDirectHandler.CONTEXT + "(" +  ScilabDirectHandler.CONTEXT + "_names(i));"
-                 + "end");
-
-            // read the structure
-            result = handler.readContext();
-        } catch (final InterpreterException e) {
-            info("Unable to evaluate the context");
-            e.printStackTrace();
-        } finally {
-            handler.release();
-        }
-
-        return result;
     }
 
     /**

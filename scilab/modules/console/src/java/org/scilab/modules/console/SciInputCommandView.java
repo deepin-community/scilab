@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2007-2008 - INRIA - Vincent COUVERT
  * Copyright (C) 2010-2011 - Calixte DENIZET
  *
@@ -81,6 +81,7 @@ public class SciInputCommandView extends ConsoleTextPane implements InputCommand
     private static BlockingQueue<Boolean> displayQueue = new LinkedBlockingQueue<Boolean>();
 
     private Thread concurrentThread = null;
+    private boolean disableLock = false;
 
     private SciConsole console;
     private int height = -1;
@@ -166,6 +167,20 @@ public class SciInputCommandView extends ConsoleTextPane implements InputCommand
      */
     public String getCmdBuffer() {
         String command = null;
+
+        // concurrent access at exit:
+        //  - the cmd buffer is returned empty
+        //  - the previous concurrentThread has been already interrupted
+        //  - the queue and displayQueue are ignored as a quit() has been already called
+        synchronized(this)
+        {
+            if (disableLock)
+            {
+                return "";
+            }
+        }
+
+        // lock the current store-command thread
         try {
             if (concurrentThread == null) {
                 concurrentThread = Thread.currentThread();
@@ -183,6 +198,7 @@ public class SciInputCommandView extends ConsoleTextPane implements InputCommand
              * If we have concurrent access let's interrupt the first one, then allow
              * the second to return the command.
              */
+            concurrentThread = null;
             return "";
         }
         concurrentThread = null;
@@ -190,9 +206,13 @@ public class SciInputCommandView extends ConsoleTextPane implements InputCommand
     }
 
     /**
-     * Interrupt the 'await input commant' queue. This will throw an {@link InterruptedException} back to the Scilab engine.
+     * Interrupt the 'await input command' queue and discard further commands. This will send an empty command "" back to the Scilab engine.
      */
-    final public void interrupt() {
+    final public void interruptAndDisable() {
+        synchronized(this)
+        {
+            disableLock = true;
+        }
         if (concurrentThread != null) {
             concurrentThread.interrupt();
         }

@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 // Copyright (C) DIGITEO - 2011 - Allan CORNET
 //
@@ -11,7 +11,7 @@
 // For more information, see the COPYING file which you should have received
 // along with this program.
 
-function [P] = binomial(p,N)
+function [P] = binomial(p, N)
     //
     //  PURPOSE
     //     Compute probabilities of the binomial law B(N,p)
@@ -27,33 +27,9 @@ function [P] = binomial(p,N)
     //  cdfbin which computes the cumulative probability)
     //
 
-    rhs = argn(2);
-    if rhs <> 2 then
-        error(msprintf(gettext("%s: Wrong number of input argument(s): %d expected.\n"),"binomial", 2));
-    end
-
-    if type(p) ~= 1 then
-        error(msprintf(gettext("%s: Wrong type for input argument #%d: A real expected.\n"),"binomial",1));
-    end
-
-    if type(N) ~= 1 then
-        error(msprintf(gettext("%s: Wrong type for input argument #%d: An integer expected.\n"),"binomial",2));
-    end
-
-    if length(p) ~= 1 then
-        error(msprintf(gettext("%s: Wrong size for input argument #%d: A real expected.\n"),"binomial",1));
-    end
-
-    if length(N) ~= 1 then
-        error(msprintf(gettext("%s: Wrong size for input argument #%d: An integer expected.\n"),"binomial",2));
-    end
-
-    if  p < 0  | p > 1 then
-        error(msprintf(gettext("%s: Wrong value for input argument #%d: Must be between %d and %d.\n"),"binomial",1,0,1));
-    end
-
-    if  N < 1  |  floor(N)-N ~= 0 then
-        error(msprintf(gettext("%s: Wrong value for input argument #%d: Integer >= %d expected.\n"),"binomial",2,1));
+    arguments
+        p (1, 1) {mustBeA(p, "double"), mustBeInRange(p, 0, 1)}
+        N (1, 1) {mustBeA(N, "double"), mustBeInteger, mustBeGreaterThanOrEqual(N, 1)}
     end
 
     un = ones(1,N+1);

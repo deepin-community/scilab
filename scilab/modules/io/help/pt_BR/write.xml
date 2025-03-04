@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) XXXX-2008 - INRIA
- *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ * Copyright (C) 2012 - 2021 - Samuel GOUGEON
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
  * pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -13,41 +13,82 @@
  * along with this program.
  *
  -->
-<refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svg="http://www.w3.org/2000/svg" xmlns:ns4="http://www.w3.org/1999/xhtml" xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:db="http://docbook.org/ns/docbook" xmlns:scilab="http://www.scilab.org" xml:id="write" xml:lang="pt">
+<refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg" xmlns:ns4="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:db="http://docbook.org/ns/docbook"
+          xmlns:scilab="http://www.scilab.org" xml:id="write" xml:lang="pt">
     <refnamediv>
         <refname>write</refname>
-        <refpurpose>Escrita em arquivo formatado</refpurpose>
+        <refpurpose>escreve números reais ou strings no console ou em um arquivo formatado</refpurpose>
     </refnamediv>
     <refsynopsisdiv>
         <title>Seqüência de Chamamento</title>
-        <synopsis>write(file-desc,a,[format])
-            write(file-desc,a,k,format)
+        <synopsis>
+            write(file_desc, a)
+            write(file_desc, a, format)
+            write(file_desc, a, k, format)
         </synopsis>
     </refsynopsisdiv>
     <refsection>
         <title>Parâmetros</title>
         <variablelist>
             <varlistentry>
-                <term>file-desc</term>
+                <term>file_desc</term>
                 <listitem>
                     <para>string especificando o nome do arquivo ou valor inteiro
                         especificando a unidade lógica (ver file).
+                    </para>
+                    <para>Quer
+                        <itemizedlist>
+                            <listitem>
+                                o string especificando o nome do arquivo. Tentar sobrescrever um
+                                arquivo existente produzirá um erro.
+                            </listitem>
+                            <listitem>
+                                ou o ID inteiro de um arquivo aberto com  <literal>file(…)</literal>
+                                (veja <link linkend="file">file</link>).
+                                Usando <literal>%io(2)</literal> irá escrever no console.
+                            </listitem>
+                        </itemizedlist>
+                    </para>
+                    <para>
+                        Esta função não consegue abrir um arquivo UTF.
+                        Neste caso, por favor use  <link linkend="file">file</link>.
                     </para>
                 </listitem>
             </varlistentry>
             <varlistentry>
                 <term>a</term>
                 <listitem>
-                    <para>matriz de reais ou vetor coluna de strings</para>
+                    <para>matriz de reais, ou vetor coluna de strings.</para>
                 </listitem>
             </varlistentry>
             <varlistentry>
                 <term>format</term>
                 <listitem>
                     <para>string, especifica um formato "Fortran". Este string deve
-                        começar com um parêntese direito e terminar com um parêntese
-                        esquerdo. Formatos não podem misturar pontos flutuantes, inteiros ou
+                        começar com um parêntese esquerdo e terminar com um parêntese
+                        direito. Formatos não podem misturar pontos flutuantes, inteiros ou
                         modo de edição de caractere.
+                    </para>
+                    <para>
+                        Exemplos de formatos : <literal>"(1x,e10.3,5x,3(f3.0),1x,i4)"</literal>,
+                        <literal>"(10x,a20)"</literal>.
+                        <table border="0">
+                            <tr><td valign="top">"x":</td>
+                                <td>white space. "5x" = 5 white spaces</td></tr>
+                            <tr><td valign="top">"a":</td>
+                                <td>string. "a20" = 20 first characters of the input string.</td></tr>
+                            <tr><td valign="top">"i":</td>
+                                <td>print as integer</td></tr>
+                            <tr><td valign="top">"f":</td>
+                                <td>real number</td></tr>
+                            <tr><td valign="top">"e":</td>
+                                <td>real number in exponential form.</td></tr>
+                            <tr><td valign="top">"(…)":</td>
+                                <td>group. 3(…) = iterate 3 times the group.</td></tr>
+                        </table>
+                        Consulte um livro de Fortran para obter mais informações.
                     </para>
                 </listitem>
             </varlistentry>
@@ -61,26 +102,21 @@
     </refsection>
     <refsection>
         <title>Descrição</title>
-        <para>Escreve linha por linha uma matriz de reais ou um vetor coluna de
+        <para>Escreve linha por linha uma matriz de reais, ou um vetor coluna de
             strings em um arquivo formatado. Cada linha do argumento
-            <literal>a</literal> começa em uma nova linha do arquivo
-            <literal>file-desc</literal>. Dependendo de <literal>format</literal> uma
-            dada linha do argumento <literal>a</literal> pode ser escrita em mais de
-            uma linha do arquivo <literal>file-desc</literal>.
+            <varname>a</varname> começa em uma nova linha do arquivo
+            <varname>file_desc</varname>. Dependendo de <varname>format</varname> uma
+            dada linha do argumento <varname>a</varname> pode ser escrita em mais de
+            uma linha do arquivo <varname>file_desc</varname>.
         </para>
-        <para>
-            Exemplos de formatos : <literal>(1x,e10.3,5x,3(f3.0))</literal> ,
-            <literal>(10x,a20)</literal> ;
-        </para>
-        <para>Veja um livro de Fortran para maior precisão.</para>
         <para>Arquivos de acesso direto :
             <literal>x=write(file_desc,a,k,format)</literal>. Aqui
-            <literal>k</literal> é o vetor de gravações (uma gravação por linha, i.e.
+            <varname>k</varname> é o vetor de gravações (uma gravação por linha, i.e.
             <literal>m=prod(size(k)</literal>)
         </para>
         <para>
             <literal>write(%io(2),....)</literal> escreve em uma janela do
-            Scilab. Note que neste caso <literal>format</literal> deve produzir uma
+            Scilab. Note que neste caso <varname>format</varname> deve produzir uma
             linha de saída por linha da matriz. Se esta restrição não for respeitada,
             um erro imprevisível acontece.
         </para>
@@ -90,7 +126,10 @@
         <programlisting role="example"><![CDATA[
 if getos() == 'Windows' then unix('del asave');
 else unix('rm -f asave'); end
-A=rand(5,3); write('asave',A); A=read('asave',5,3);
+A = rand(5,3);
+write('asave',A);
+A = read('asave',5,3);
+
 write(%io(2),A,'('' | '',3(f10.3,'' | ''))')
 write(%io(2),string(1:10))
 write(%io(2),strcat(string(1:10),','))
@@ -105,22 +144,16 @@ write('foo',A)
         <title>Ver Também</title>
         <simplelist type="inline">
             <member>
+                <link linkend="save">save</link>
+            </member>
+            <member>
                 <link linkend="file">file</link>
             </member>
             <member>
                 <link linkend="fileinfo">fileinfo</link>
             </member>
             <member>
-                <link linkend="writb">writb</link>
-            </member>
-            <member>
-                <link linkend="read">read</link>
-            </member>
-            <member>
                 <link linkend="print">print</link>
-            </member>
-            <member>
-                <link linkend="string">string</link>
             </member>
             <member>
                 <link linkend="mfprintf">mfprintf</link>
@@ -129,11 +162,19 @@ write('foo',A)
                 <link linkend="mprintf">mprintf</link>
             </member>
             <member>
-                <link linkend="msprintf">msprintf</link>
-            </member>
-            <member>
                 <link linkend="fprintfMat">fprintfMat</link>
             </member>
         </simplelist>
+    </refsection>
+    <refsection role="history">
+        <title>Histórico</title>
+        <revhistory>
+            <revision>
+                <revnumber>2023.1</revnumber>
+                <revdescription>
+                    write(…) overwrites existing file.
+                </revdescription>
+            </revision>
+        </revhistory>
     </refsection>
 </refentry>

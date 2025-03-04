@@ -51,6 +51,9 @@ plot(filt_sinc(100,0.1))
         <title>See also</title>
         <simplelist type="inline">
             <member>
+                <link linkend="sinc">sinc</link>
+            </member>
+            <member>
                 <link linkend="sincd">sincd</link>
             </member>
         </simplelist>

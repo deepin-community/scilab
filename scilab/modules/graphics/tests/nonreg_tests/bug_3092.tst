@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008-2008 - INRIA - Jean-Baptiste Silvy
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,8 +9,8 @@
 //
 // <-- Non-regression test for bug 3092 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/3092
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/3092
 //
 // <-- Short Description -->
 // clf(<handle>,"reset") doesn't reset the figure size to the default value.

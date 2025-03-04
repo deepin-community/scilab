@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008 - INRIA - Allan CORNET
 // Copyright (C) 2009 - INRIA - Michael Baudin, Antoine Elias
 // Copyright (C) 2010-2011 - DIGITEO - Michael Baudin
@@ -9,8 +9,8 @@
 // <-- Non-regression test for bug 2775 -->
 //
 // <-- CLI SHELL MODE -->
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=2775
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/2775
 //
 // Bibliography :
 // "IEEE Standard for Floating-Point Arithmetic"

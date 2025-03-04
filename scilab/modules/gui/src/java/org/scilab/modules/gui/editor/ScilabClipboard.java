@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2012 - Pedro Arthur dos S. Souza
  * Copyright (C) 2012 - Caio Lucas dos S. Souza
  *
@@ -78,7 +78,7 @@ public class ScilabClipboard {
             CommonHandler.cut(object);
         }
 
-        Integer axesTo = AxesHandler.clickedAxes(figure, position);
+        Integer axesTo = AxesHandler.clickedAxes(figure, position)[0];
         if (axesTo != null) { /* If there is an axes in the clicked position then adjust the bounds, make the axes visible and paste */
             AxesHandler.setAxesVisible(axesTo);
             CommonHandler.insert(axesTo, object);

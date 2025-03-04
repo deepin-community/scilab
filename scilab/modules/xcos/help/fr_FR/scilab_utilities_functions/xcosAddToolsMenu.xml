@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2012 - Scilab Enterprises - Clément DAVID
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -69,11 +69,5 @@ xcosAddToolsMenu("met à jour le block", "myUpdateFunction(blk, scs_m)");
                 <link linkend="scicos_diagram">scicos_diagram</link>
             </member>
         </simplelist>
-    </refsection>
-    <refsection id="Authors_xcosAddToolsMenu">
-        <title>Authors</title>
-        <para>
-            <emphasis role="bold">Clément David</emphasis> - Scilab Enterprises
-        </para>
     </refsection>
 </refentry>

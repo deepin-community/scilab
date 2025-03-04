@@ -1,8 +1,7 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Antoine ELIAS
-// Copyright (C) 2016, 2018 - Samuel GOUGEON
-//
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
+// Copyright (C) 2016, 2018, 2021 - Samuel GOUGEON
 //
 // This file is hereby licensed under the terms of the GNU GPL v2.0,
 // pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -19,6 +18,7 @@ function ret = tbx_generate_pofile(tbx_name, tbx_path)
 
     fname = "tbx_generate_pofile"
     rhs = argn(2)
+    ret = []
 
     // CHECKING INPUT PARAMETERS
     // -------------------------
@@ -63,14 +63,15 @@ function ret = tbx_generate_pofile(tbx_name, tbx_path)
     else
         XGETTEXT="xgettext";
     end
-    XGETTEXT_OPTIONS=" --omit-header  --language=python --no-wrap " + ..
-                 "-k --keyword=gettext:2 --keyword=_:2 " + ..
-                 "--keyword=dgettext:2 --keyword=_d:2 --keyword=xmlgettext:2";
+    // -F : sort by file
+    XGETTEXT_OPTIONS = " --omit-header  --language=python --no-wrap -F " + ..
+        "-k --keyword=gettext:2 --keyword=_:2 " + ..
+        "--keyword=dgettext:2 --keyword=_d:2 --keyword=xmlgettext:2";
 
-    EXTENSIONS=["c" "h" "cpp" "cxx" "hxx" "hpp" "java"];
-    EXTENSIONS_MACROS=["sci" "sce" "start" "quit"];
-    EXTENSIONS_XML=["xml" "xsl"];
-    TARGETDIR="locales";
+    EXTENSIONS = ["c" "h" "cpp" "cxx" "hxx" "hpp" "java"];
+    EXTENSIONS_MACROS = ["sci" "sce" "start" "quit"];
+    EXTENSIONS_XML = ["xml" "xsl"];
+    TARGETDIR = "locales";
 
     mkdir(TARGETDIR);
     srcFiles = getFilesList("src", EXTENSIONS);
@@ -98,31 +99,40 @@ function ret = tbx_generate_pofile(tbx_name, tbx_path)
         mclose(xmlFake);
     end
 
-    //parse all files
-    srcFiles = strcat(""""+srcFiles+"""", " ");
-    cmd = XGETTEXT + XGETTEXT_OPTIONS + " -d " + tbx_name + " " + srcFiles + " -p " + TARGETDIR + " -o " + "en_US.po.tmp";
-    host(cmd);
+    // parse all files
+    if srcFiles==[] then
+        cd(old)
+        return
+    end
+    tmp = fullfile(TMPDIR,"xgettext_srcFiles.txt")
+    mputl(srcFiles, tmp)
+    cmd = XGETTEXT + XGETTEXT_OPTIONS + " --files-from="""+tmp+""" -d " + ..
+          tbx_name + " -p " + TARGETDIR + " -o " + "en_US.po.tmp";
+    status = host(cmd)
+    deletefile(tmp)
     if exists("xmlTmpFile") then
         deletefile(xmlTmpFile);
     end
 
-    fi = fileinfo(TARGETDIR + "/en_US.po.tmp");
+    TARGETDIR = TARGETDIR + filesep()
+    fi = fileinfo(TARGETDIR + "en_US.po.tmp");
     if fi == [] | fi(1) == 0 then
         //nothing to extract
-        deletefile(TARGETDIR + "/en_US.po.tmp");
+        deletefile(TARGETDIR + "en_US.po.tmp");
         rmdir(TARGETDIR);
-        cd(old);
-        ret = [];
-        return;
+        cd(old)
+        return
     end
 
+    // Finalizing the new en_US.po version
+    // -----------------------------------
     //add header
     header = ["msgid """"";
     "msgstr """"";
     """Content-Type: text/plain; charset=UTF-8\n""";
     """Content-Transfer-Encoding: 8bit\n""";""];
 
-    poFile = mgetl(TARGETDIR + "/en_US.po.tmp");
+    poFile = mgetl(TARGETDIR + "en_US.po.tmp");
     poFile = [header ; poFile];
 
     // Translating '' coming from Scilab into '
@@ -133,13 +143,32 @@ function ret = tbx_generate_pofile(tbx_name, tbx_path)
     if isdef("xmlTmpFile", "l") then
         poFile = strsubst(poFile, "#: "+xmlTmpFile, "#: a XML file");
     end
+    mputl(poFile, TARGETDIR + "en_US.po.tmp");
+     if ~isfile(TARGETDIR + "en_US.po") then
+         mputl(poFile, TARGETDIR + "en_US.po");
+     end
 
-    // Building the final file
-    mputl(poFile, TARGETDIR + "/en_US.po");
-    deletefile(TARGETDIR + "/en_US.po.tmp");
+    // Merging former defined *.po files with the new REF one
+    // ------------------------------------------------------
+    poFiles = findfiles("locales", "*.po")'
+    if poFile <> []
+        if getos() == "Windows" then
+            cmd = WSCI + "\tools\gettext\msgcat"
+        else
+            cmd = "msgcat"
+        end
+        cmd = cmd + " --use-first --no-wrap --sort-by-file "
+        for f = poFiles
+            newPo = TARGETDIR + f
+            Cmd = cmd + " -o " + newPo + ..
+                        " " + TARGETDIR + "en_US.po.tmp " + newPo
+            s = host(Cmd);
+         end
+    end
+    deletefile(TARGETDIR + "en_US.po.tmp");
 
     cd(old);
-    ret = tbx_path + filesep() + TARGETDIR + filesep() + "en_US.po";
+    ret = fullfile(tbx_path, TARGETDIR, "en_US.po");
 endfunction
 
 function result = sedLoc(str, findExp, replaceExp)

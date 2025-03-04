@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 // Copyright (C) 2008 - INRIA - Sylvestre LEDRU (add cc options)
 // Copyright (C) 2010-2011 - DIGITEO - Allan CORNET

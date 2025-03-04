@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+    * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
     * Copyright (C) ????-2007 - INRIA - Scilab
     *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -16,7 +16,10 @@
 <refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svg="http://www.w3.org/2000/svg" xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:db="http://docbook.org/ns/docbook" xmlns:scilab="http://www.scilab.org" xml:lang="ja" xml:id="sound">
     <refnamediv>
         <refname>sound</refname>
-        <refpurpose>サウンドプレイヤー機能</refpurpose>
+        <!--<refpurpose>サウンドプレイヤー機能</refpurpose> -->
+        <refpurpose>
+			<emphasis role="bold">Obsolete</emphasis>. Please use <link linkend="playsnd">playsnd(…)</link> instead
+		</refpurpose>
     </refnamediv>
     <refsynopsisdiv>
         <title>呼び出し手順</title>
@@ -61,6 +64,12 @@
     </refsection>
     <refsection>
         <title>説明</title>
+         <para>
+           <warning>
+             <emphasis role="bold">sound(…) is obsolete</emphasis> and will be removed from
+			 Scilab 2025.0. Please use <literal>playsnd(…)</literal> instead.
+           </warning>
+         </para>
         <para>
             <literal>sound(y,fs)</literal>は,行列<literal>y</literal>
             (サンプリング周波数fs)で指定されたサウンド信号を演奏します.
@@ -80,7 +89,7 @@
         <title>例</title>
         <programlisting role="example"><![CDATA[
 // 2チャンネル信号
-y=loadwave("SCI/modules/sound/demos/chimes.wav");
+y = loadwave("SCI/modules/sound/demos/chimes.wav");
 sound(y)
  ]]></programlisting>
     </refsection>
@@ -91,5 +100,17 @@ sound(y)
                 <link linkend="playsnd">playsnd</link>
             </member>
         </simplelist>
+    </refsection>
+    <refsection role="history">
+        <title>履歴</title>
+        <revhistory>
+            <revision>
+                <revnumber>2023.1</revnumber>
+                <revdescription>
+                    <literal>sound()</literal> is declared obsolete.
+					<literal>playsnd()</literal> replaces it.
+                </revdescription>
+            </revision>
+        </revhistory>
     </refsection>
 </refentry>

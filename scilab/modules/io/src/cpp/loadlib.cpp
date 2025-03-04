@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2014 - Scilab Enterprises - Antoine ELIAS
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -26,9 +26,9 @@ extern "C"
 #include "fullpath.h"
 #include "PATH_MAX.h"
 #include "pathconvert.h"
+}
 #include <libxml/xpath.h>
 #include <libxml/xmlreader.h>
-}
 
 #define DEFAULT_ENCODING "UTF-8"
 

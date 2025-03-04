@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2014 - Scilab Enterprises - Paul Bignier
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -30,27 +30,29 @@ Xcos trace:   propertyUpdated( 1 , ANNOTATION , DESCRIPTION ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 1 , ANNOTATION , FONT ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 1 , ANNOTATION , FONT_SIZE ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 1 , ANNOTATION , STYLE ) : NO_CHANGES
- o  = 
-GUI     : TEXT_f
-Graphics: 
-          orig = [0,0]
-          sz = [2,1]
-          exprs = ["Text";"2";"1"]
-          style = ""
+ o = (Text) with fields:
+  graphics: (graphics mlist) with fields:
+      orig = [0,0]
+      sz = [2,1]
+      exprs = ["Text";"2";"1"]
+      style = ""
+  model = []
+  void = []
+  gui = "TEXT_f"
 o.graphics
- ans  =
+ ans = (graphics mlist) with fields:
 orig = [0,0]
 sz = [2,1]
 exprs = ["Text";"2";"1"]
 style = ""
 o.model
- ans  =
+ ans = 
     []
 o.void
- ans  =
+ ans = 
     []
 o.gui
- ans  =
+ ans = 
   "TEXT_f"
 // Redefine gca() to prevent graphic display
 p = funcprot();
@@ -81,27 +83,29 @@ Xcos debug:   propertyUpdated( 2 , ANNOTATION , FONT ) : SUCCESS
 Xcos debug:   propertyUpdated( 2 , ANNOTATION , FONT_SIZE ) : SUCCESS
 Xcos trace:   propertyUpdated( 2 , ANNOTATION , STYLE ) : NO_CHANGES
 Xcos info:    objectDeleted( 1 , ANNOTATION )
- o  = 
-GUI     : TEXT_f
-Graphics: 
-          orig = [0,0]
-          sz = [3,4]
-          exprs = ["newText";"3";"4"]
-          style = ""
+ o = (Text) with fields:
+  graphics: (graphics mlist) with fields:
+      orig = [0,0]
+      sz = [3,4]
+      exprs = ["newText";"3";"4"]
+      style = ""
+  model = []
+  void = []
+  gui = "TEXT_f"
 o.graphics
- ans  =
+ ans = (graphics mlist) with fields:
 orig = [0,0]
 sz = [3,4]
 exprs = ["newText";"3";"4"]
 style = ""
 o.model
- ans  =
+ ans = 
     []
 o.void
- ans  =
+ ans = 
     []
 o.gui
- ans  =
+ ans = 
   "TEXT_f"
 // Check that all the model items are freed
 clear

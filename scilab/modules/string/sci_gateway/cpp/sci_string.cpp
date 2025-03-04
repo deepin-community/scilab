@@ -1,5 +1,5 @@
 /*
-*  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+*  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 *  Copyright (C) 2010-2010 - DIGITEO - Bruno JOFRET
 *  Copyright (C) 2014 - Scilab Enterprises - Anais AUBERT
 *
@@ -87,7 +87,7 @@ static void getMacroString(types::Macro* _pM, types::InternalType** _pOut, types
     *_pBody = pBody;
 
     //get inputs
-    std::list<symbol::Variable*>* pIn = _pM->getInputs();
+    std::vector<symbol::Variable*>* pIn = _pM->getInputs();
 
     if (pIn->size() == 0)
     {
@@ -96,18 +96,16 @@ static void getMacroString(types::Macro* _pM, types::InternalType** _pOut, types
     else
     {
         types::String *pSIn = new types::String(1, (int)pIn->size());
-
-        std::list<symbol::Variable*>::iterator itIn = pIn->begin();
-        for (int i = 0 ; i < pIn->size() ; i++, itIn++)
+        for (int i = 0 ; i < pIn->size() ; ++i)
         {
-            pSIn->set(i, (*itIn)->getSymbol().getName().c_str());
+            pSIn->set(i, (*pIn)[i]->getSymbol().getName().c_str());
         }
 
         *_pIn = pSIn;
     }
 
     //get outputs
-    std::list<symbol::Variable*>* pOut = _pM->getOutputs();
+    std::vector<symbol::Variable*>* pOut = _pM->getOutputs();
     if (pOut->size() == 0)
     {
         *_pOut = types::Double::Empty();
@@ -115,110 +113,12 @@ static void getMacroString(types::Macro* _pM, types::InternalType** _pOut, types
     else
     {
         types::String* pSOut = new types::String(1, (int)pOut->size());
-
-        std::list<symbol::Variable*>::iterator itOut = pOut->begin();
-        for (int i = 0 ; i < pOut->size() ; i++, itOut++)
+        for (int i = 0 ; i < pOut->size() ; ++i)
         {
-            pSOut->set(i, (*itOut)->getSymbol().getName().c_str());
+            pSOut->set(i, (*pOut)[i]->getSymbol().getName().c_str());
         }
 
         *_pOut = pSOut;
-    }
-}
-
-static void DoubleComplexMatrix2String(std::wostringstream *_postr,  double _dblR, double _dblI)
-{
-    /*
-    if R && !C -> R
-    if R && C -> R + Ci
-    if !R && !C -> 0
-    if(!R aa C	-> Ci
-    */
-    DoubleFormat dfR, dfI;
-    dfR.bPrintBlank = false;
-    dfI.bPrintBlank = false;
-
-    getDoubleFormat(_dblR, &dfR);
-    getDoubleFormat(_dblI, &dfI);
-
-    dfR.bPrintPoint = dfR.bExp;
-    dfR.bPaddSign = false;
-
-    dfI.bPrintPoint = dfI.bExp;
-    dfI.bPaddSign = false;
-
-    // decrease precision when the real number will be rounded
-    // format(10) with number 1.12345678 should return 1.1234568
-    if (dfR.iWidth == ConfigVariable::getFormatSize())
-    {
-        if (dfR.iPrec != 0)
-        {
-            dfR.iPrec--;
-        }
-
-        dfR.iWidth--;
-    }
-
-    if (dfI.iWidth == ConfigVariable::getFormatSize())
-    {
-        if (dfI.iPrec != 0)
-        {
-            dfI.iPrec--;
-        }
-
-        dfI.iWidth--;
-    }
-
-    if (_dblR == 0)
-    {
-        //no real part
-        if (_dblI == 0)
-        {
-            //no imaginary part
-
-            //0
-            addDoubleValue(_postr, 0, &dfR);
-        }
-        else
-        {
-            //imaginary part
-
-            //I
-            *_postr << (_dblI < 0 ? L"-" : L"");
-            *_postr << L"%i";
-            if (fabs(_dblI) != 1 || dfI.bExp)
-            {
-                //specail case if I == 1 write only %i and not %i*1
-                *_postr << L"*";
-                addDoubleValue(_postr, fabs(_dblI), &dfI);
-            }
-        }
-    }
-    else
-    {
-        //real part
-        if (_dblI == 0)
-        {
-            //no imaginary part
-
-            //R
-            addDoubleValue(_postr, _dblR, &dfR);
-        }
-        else
-        {
-            //imaginary part
-
-            //R
-            addDoubleValue(_postr, _dblR, &dfR);
-            //I
-            *_postr << (_dblI < 0 ? L"-%i" : L"+%i");
-            if (fabs(_dblI) != 1 || dfI.bExp)
-            {
-                //special case if I == 1 write only %i and not %i*1
-                *_postr << L"*";
-                addDoubleValue(_postr, fabs(_dblI), &dfI);
-            }
-        }
     }
 }
 
@@ -541,7 +441,10 @@ types::Function::ReturnValue sci_string(types::typed_list &in, int _iRetCount, t
             return PolynomString(in[0]->getAs<types::Polynom>(), out);
             break;            
         }
-        
+        case types::InternalType::ScilabStruct:
+        case types::InternalType::ScilabList:
+        case types::InternalType::ScilabCell:
+            return Overload::generateNameAndCall(L"string", in, _iRetCount, out);
         default:
         {
             std::wostringstream ostr;

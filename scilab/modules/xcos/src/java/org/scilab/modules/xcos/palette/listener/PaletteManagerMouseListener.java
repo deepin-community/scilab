@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009 - DIGITEO - Clement DAVID
  * Copyright (C) 2011-2015 - Scilab Enterprises - Clement DAVID
  *
@@ -60,7 +60,7 @@ public class PaletteManagerMouseListener implements MouseListener {
         if ((e.getClickCount() == 1 && SwingUtilities.isRightMouseButton(e)) || e.isPopupTrigger() || XcosMessages.isMacOsPopupTrigger(e)) {
 
             if (PaletteManagerView.get() == null) {
-                PaletteManagerView.restore(null);
+                PaletteManagerView.restore();
             }
             final JTree paletteTree = PaletteManagerView.get().getTree();
             final TreePath path = paletteTree.getPathForLocation(e.getX(), e.getY());

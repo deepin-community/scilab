@@ -1,54 +1,90 @@
 Source: scilab
 Section: math
 Priority: optional
-Maintainer: Deepin Developer <deepin-dev@deepin.org>
-Uploaders: Deepin Packages Builder <packages@deepin.org>
-Build-Depends: debhelper-compat (= 13), gfortran, time,
- default-jdk, chrpath, ocaml-nox (>= 3.11.2-3), libnum-ocaml-dev, fakeroot,
- tcl-dev, tk-dev, libxml2-dev, libpcre3-dev, libcurl4-openssl-dev,
- gettext, libreadline-dev, pkg-config, procps, dpkg-dev (>= 1.16.0),
+Maintainer: Debian Science Team <debian-science-maintainers@alioth-lists.debian.net>
+Uploaders: Julien Puydt <jpuydt@debian.org>,
+           Pierre Gruet <pgt@debian.org>
+Build-Depends: debhelper-compat (= 13),
+               bash-completion,
+               chrpath,
+               fakeroot,
+               gfortran,
+               javahelper,
+               libarchive-dev,
+               libcurl4-openssl-dev,
+               libnum-ocaml-dev,
+               libpcre2-dev,
+               libxml2-dev,
+               pkgconf,
+               tcl-dev,
+               time,
+               tk-dev,
 # numerical libraries
- libblas-dev | librefblas3-dev | libatlas-base-dev, liblapack-dev,
- libarpack2-dev (>= 3.0), libeigen3-dev,
+               libarpack2-dev,
+               libblas-dev | libblas.so,
+               libeigen3-dev,
+               liblapack-dev,
 # Java deps
- default-jre-headless, libflexdock-java (>= 1.2.3), libjogl2-java (>= 2.3.2),
- libgl1-mesa-dev, libjrosetta-java (>= 1.0.1), ant, libjgoodies-looks-java,
- libskinlf-java, liblucene4.10-java, libactivation-java, libjaxb-java,
+               ant,
+               default-jdk,
+               libactivation-java,
+               libflexdock-java,
+               libgl-dev,
+               libjakarta-activation-java,
+               libjaxb-java,
+               libjgoodies-looks-java,
+               libjogl2-java (>= 2.4.0+dfsg),
+               libjrosetta-java,
+               liblucene8-java,
+               libskinlf-java,
 # graphic
- libfreehep-graphics2d-java, libfreehep-graphicsio-java, libfreehep-graphicsio-emf-java,
- libfreehep-util-java,
+               libfreehep-graphicsio-emf-java,
+               libfreehep-graphicsio-java,
+               libfreehep-graphics2d-java,
+               libfreehep-util-java,
 # Documentation
- libjeuclid-core-java (>= 3.1.3), libbatik-java (>= 1.7), fop (>= 0.95),
- javahelp2, libsaxon-java, libavalon-framework-java, docbook-xsl,
- libxml-commons-external-java,
+               docbook-xsl,
+               fop,
+               javahelp2,
+               libavalon-framework-java,
+               libbatik-java,
+               libjeuclid-core-java,
+               libsaxonhe-java,
+               libxml-commons-external-java,
 # Optional Scilab features
- libfftw3-dev, libsuitesparse-dev (>= 3.4.0),
- libmatio-dev (>= 1.5.18),
+               libfftw3-dev,
+               libmatio-dev,
+               libsuitesparse-dev,
 # latex rendering
- libjlatexmath-java (>= 1.0.2),  libjlatexmath-fop-java (>= 1.0.2),
+               libjlatexmath-fop-java,
+               libjlatexmath-java,
 # Xcos
- libjgraphx-java (>= 1.8.0.0), libhdf5-dev (>= 1.8.8),
+               libhdf5-dev,
+               libjgraphx-java,
 # MPI
- mpi-default-dev,
+               mpi-default-dev,
 # Java binding
- libecj-java,
+               libeclipse-jdt-core-java,
 # Unitary testing
- ant-optional, junit4, libcobertura-java
-Standards-Version: 4.6.0
+               ant-optional <!nocheck>,
+               junit4 <!nocheck>,
+               libcobertura-java <!nocheck>
+Standards-Version: 4.7.0
 Rules-Requires-Root: no
 Homepage: https://www.scilab.org
-#Vcs-Git
-#Vcs-Browser
+Vcs-Git: https://salsa.debian.org/science-team/scilab.git
+Vcs-Browser: https://salsa.debian.org/science-team/scilab
 
 Package: scilab-cli
 Architecture: all
-Depends: scilab-minimal-bin (>= ${source:Version}),
- scilab-data (= ${binary:Version}), ${misc:Depends},
- scilab-include (>= ${source:Version})
+Depends: scilab-data (= ${binary:Version}),
+         scilab-include (>= ${source:Version}),
+         scilab-minimal-bin (>= ${source:Version}),
+         ${misc:Depends}
 # scilab-include is installed by default since it is widely used by many
 # toolboxes
-Recommends: scilab-sivp (>= 0.5.2)
-Suggests: gfortran, gcc, scilab-swt, scilab-scimax, scilab-plotlib, scilab-ann
+Suggests: gcc,
+          gfortran
 # For the dynamic link
 Description: Scientific software package - Command Line Interpreter
  Scilab is a matrix-based scientific software package.
@@ -63,11 +99,14 @@ Description: Scientific software package - Command Line Interpreter
 
 Package: scilab
 Architecture: all
-Depends: scilab-cli (>= ${source:Version}), ${misc:Depends}, scilab-full-bin
+Depends: scilab-cli (>= ${source:Version}),
+         scilab-full-bin (>= ${binary:Version}),
+         scilab-full-bin (<< ${binary:Version}.1~),
+         ${misc:Depends}
 Recommends: scilab-doc (= ${binary:Version}),
 Suggests: scilab-doc-fr (= ${binary:Version}),
- scilab-doc-pt-br (= ${binary:Version}),
- scilab-doc-ja (= ${binary:Version})
+          scilab-doc-ja (= ${binary:Version}),
+          scilab-doc-pt-br (= ${binary:Version})
 Description: Scientific software package for numerical computations
  Scilab is a matrix-based scientific software package.
  Scilab contains hundreds of built-in mathematical functions, rich
@@ -108,8 +147,7 @@ Description: Scientific software package for numerical computations (data files)
 
 
 Package: scilab-include
-# any because of the bug #550243
-Architecture: amd64 armhf i386 powerpc s390x arm64 ppc64el
+Architecture: any
 Depends: ${misc:Depends}
 Description: Scientific software package for numerical computations (include files)
  Scilab is a matrix-based scientific software package.
@@ -130,10 +168,13 @@ Description: Scientific software package for numerical computations (include fil
 
 
 Package: scilab-minimal-bin
-Architecture: amd64 armhf i386 powerpc s390x arm64 ppc64el
-Depends: ${shlibs:Depends}, scilab-data (= ${source:Version}),
- ${misc:Depends}, default-jre-headless
-Replaces: scilab-bin, scilab-full-bin (<< 5.4.1-3)
+Architecture: any
+Depends: default-jre-headless,
+         scilab-data (= ${source:Version}),
+         ${shlibs:Depends},
+         ${misc:Depends}
+Replaces: scilab-bin,
+          scilab-full-bin (<< 5.4.1-3)
 Breaks: scilab-full-bin (<< 5.4.1-3)
 Description: Scientific software package for numerical computations (minimal binary files)
  Scilab is a matrix-based scientific software package.
@@ -155,18 +196,42 @@ Description: Scientific software package for numerical computations (minimal bin
  Please install the package "scilab" to have all features.
 
 Package: scilab-full-bin
-Architecture: amd64 armhf i386 powerpc s390x arm64 ppc64el
-Depends: ${shlibs:Depends}, scilab-minimal-bin (= ${binary:Version}),
- libflexdock-java (>= 1.2.3), libjogl2-java (>= 2.3.2), libjrosetta-java (>= 1.0.1),
- libjlatexmath-java (>= 1.0.2), libjlatexmath-fop-java (>= 1.0.2),
- libjeuclid-core-java, libbatik-java (>= 1.7), default-jre, bwidget,
- fop (>= 0.95), libsaxon-java, libavalon-framework-java, docbook-xsl,
- javahelp2, libjgraphx-java (>= 1.8.0.0), libjgoodies-looks-java,
- libskinlf-java, ${misc:Depends}, libecj-java, libfreehep-graphics2d-java,
- libfreehep-graphicsio-emf-java, liblucene4.10-java, libactivation-java,
- libjaxb-java
-Replaces: scilab (<< 5.0), scilab-bin, scilab-minimal-bin (<< 5.4.1-3), libscilab2-java (<< 5.4.1-4)
-Breaks: scilab-minimal-bin (<< 5.4.1-3), libscilab2-java (<< 5.4.1-4)
+Architecture: any
+Depends: bwidget,
+         default-jre,
+         docbook-xsl,
+         fop,
+         javahelp2,
+         libactivation-java,
+         libavalon-framework-java,
+         libbatik-java,
+         libeclipse-jdt-core-java,
+         libflexdock-java,
+         libfreehep-graphicsio-emf-java,
+         libfreehep-graphicsio-java,
+         libfreehep-graphics2d-java,
+         libfreehep-util-java,
+         libjakarta-activation-java,
+         libjaxb-java,
+         libjeuclid-core-java,
+         libjgoodies-looks-java,
+         libjgraphx-java,
+         libjlatexmath-fop-java,
+         libjlatexmath-java,
+         libjogl2-java (>= 2.4.0+dfsg),
+         libjrosetta-java,
+         liblucene8-java,
+         libsaxonhe-java,
+         libskinlf-java,
+         scilab-minimal-bin (= ${binary:Version}),
+         ${shlibs:Depends},
+         ${misc:Depends}
+Replaces: libscilab2-java (<< 5.4.1-4),
+          scilab (<< 5.0),
+          scilab-bin,
+          scilab-minimal-bin (<< 5.4.1-3)
+Breaks: libscilab2-java (<< 5.4.1-4),
+        scilab-minimal-bin (<< 5.4.1-3)
 Description: Scientific software package for numerical computations (all binary files)
  Scilab is a matrix-based scientific software package.
  Scilab contains hundreds of built-in mathematical functions, rich
@@ -211,7 +276,8 @@ Package: scilab-doc-fr
 Section: doc
 Architecture: all
 Multi-Arch: foreign
-Depends: scilab-doc, ${misc:Depends}
+Depends: scilab-doc,
+         ${misc:Depends}
 Description: Scientific software package (French documentation)
  Scilab is a matrix-based scientific software package.
  Scilab contains hundreds of built-in mathematical functions, rich
@@ -233,7 +299,8 @@ Package: scilab-doc-pt-br
 Section: doc
 Architecture: all
 Multi-Arch: foreign
-Depends: scilab-doc, ${misc:Depends}
+Depends: scilab-doc,
+         ${misc:Depends}
 Description: Scientific software package (Brazilian Portuguese documentation)
  Scilab is a matrix-based scientific software package.
  Scilab contains hundreds of built-in mathematical functions, rich
@@ -255,7 +322,8 @@ Package: scilab-doc-ja
 Section: doc
 Architecture: all
 Multi-Arch: foreign
-Depends: scilab-doc, ${misc:Depends}
+Depends: scilab-doc,
+         ${misc:Depends}
 Description: Scientific software package (Japanese documentation)
  Scilab is a matrix-based scientific software package.
  Scilab contains hundreds of built-in mathematical functions, rich
@@ -276,7 +344,9 @@ Description: Scientific software package (Japanese documentation)
 
 Package: scilab-test
 Architecture: all
-Depends: ${misc:Depends}, scilab, fonts-dejavu-core
+Depends: fonts-dejavu-core,
+         scilab,
+         ${misc:Depends}
 Description: Scientific software package for numerical computations (test files)
  Scilab is a matrix-based scientific software package.
  Scilab contains hundreds of built-in mathematical functions, rich

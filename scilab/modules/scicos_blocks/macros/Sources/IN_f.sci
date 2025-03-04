@@ -37,7 +37,7 @@ function [x,y,typ]=IN_f(job,arg1,arg2)
             exprs=[exprs(1);"[-1 -2]";"-1"],
         end //compatibility
         while %t do
-            [ok,prt,otsz,ot,exprs]=getvalue(..
+            [ok,prt,otsz,ot,exprs]=scicos_getvalue(..
             msprintf(_("Set %s block parameters"), "Input port"), ..
             [_("Port number");
             _("Outport size ([-1 -2] for inherit)");

@@ -1,5 +1,5 @@
 dnl
-dnl Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+dnl Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 dnl Copyright (C) INRIA - 2008 - Sylvestre Ledru
 dnl
 dnl Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -19,7 +19,7 @@ AC_DEFUN([AC_EIGEN], [
 AC_LANG_PUSH([C++])
 
 AC_ARG_WITH(eigen_include,
-        AC_HELP_STRING([--with-eigen-include=DIR],[Set the path to the EIGEN headers]),
+        AS_HELP_STRING([--with-eigen-include=DIR],[Set the path to the EIGEN headers]),
         [with_eigen_include=$withval],
         [with_eigen_include='yes']
         )
@@ -62,22 +62,16 @@ CHK_EIGEN_MAJOR=3
 CHK_EIGEN_MINOR=2
 
 AC_MSG_CHECKING([if Eigen is version $CHK_EIGEN_WORLD.$CHK_EIGEN_MAJOR.$CHK_EIGEN_MINOR or later])
-AC_GREP_CPP(EIGEN_VERSION_OK,
-[
+ac_saved_cxxflags=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS $EIGEN_CPPFLAGS"
+AC_RUN_IFELSE([AC_LANG_PROGRAM([
 #include "$PATH_TO_EIGEN/Eigen/Sparse"
-#if EIGEN_VERSION_AT_LEAST(3,3,2)
-EIGEN_VERSION_OK
-#endif
-],\
-EIGEN_VERSION_OK=1,\
-EIGEN_VERSION_OK=0 )
-if test $EIGEN_VERSION_OK = 0; then
-   AC_MSG_ERROR([Version $CHK_EIGEN_WORLD.$CHK_EIGEN_MAJOR.$CHK_EIGEN_MINOR of Eigen expected (at least)])
-else
-   AC_MSG_RESULT([yes])
-fi
-AC_SUBST(EIGEN_CPPFLAGS)
+], [if (EIGEN_VERSION_AT_LEAST(3,3,2)) {return 0;}; return 1;])],
+    AC_MSG_RESULT([yes]),
+    AC_MSG_ERROR([Version $CHK_EIGEN_WORLD.$CHK_EIGEN_MAJOR.$CHK_EIGEN_MINOR of Eigen expected (at least)]))
+CXXFLAGS=$ac_saved_cxxflags
 
+AC_SUBST(EIGEN_CPPFLAGS)
 AC_DEFINE([WITH_EIGEN], [], [With the EIGEN library])
 AC_LANG_POP([C++])
 ])

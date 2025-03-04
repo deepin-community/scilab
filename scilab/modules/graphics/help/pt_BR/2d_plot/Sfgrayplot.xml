@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) ENPC - Jean-Philippe Chancelier
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -112,7 +112,7 @@ function z=surf2(x,y), z=x^2-y^2, endfunction
 function z=surf3(x,y), z=x^3+y^2, endfunction
 function z=surf4(x,y), z=x^2+y^2, endfunction
 clf()
-set(gcf(),"color_map",[jetcolormap(64);hotcolormap(64)])
+set(gcf(),"color_map",[jet(64);hot(64)])
 x = linspace(-1,1,60);
 y = linspace(-1,1,60);
 drawlater();
@@ -141,7 +141,7 @@ function z=surf2(x,y), z=x^2-y^2, endfunction
 function z=surf3(x,y), z=x^3+y^2, endfunction
 function z=surf4(x,y), z=x^2+y^2, endfunction
 clf()
-set(gcf(),"color_map",[jetcolormap(64);hotcolormap(64)])
+set(gcf(),"color_map",[jet(64);hot(64)])
 x = linspace(-1,1,60);
 y = linspace(-1,1,60);
 drawlater();
@@ -169,7 +169,7 @@ function z=surf3(x,y), z=x^3+y^2, endfunction
 clf()
 x = linspace(-1,1,60);
 y = linspace(-1,1,60);
-set(gcf(),"color_map",hotcolormap(128))
+set(gcf(),"color_map",hot(128))
 drawlater();
 colorbar(-1,2)
 Sfgrayplot(x,y,surf3,strf="041")
@@ -183,7 +183,7 @@ function z=surf3(x,y), z=x^3+y^2, endfunction
 clf()
 x = linspace(-1,1,60);
 y = linspace(-1,1,60);
-set(gcf(),"color_map",hotcolormap(128))
+set(gcf(),"color_map",hot(128))
 drawlater();
 colorbar(-1,2)
 Sfgrayplot(x,y,surf3,strf="041")
@@ -199,7 +199,7 @@ function z=surf3(x,y), z=x^3+y^2, endfunction
 clf()
 x = linspace(-1,1,60);
 y = linspace(-1,1,60);
-set(gcf(),"color_map",jetcolormap(128))
+set(gcf(),"color_map",jet(128))
 drawlater();
 zminmax = [-0.5 1]; colors=[32 96];
 colorbar(zminmax(1),zminmax(2),colors)
@@ -214,7 +214,7 @@ function z=surf3(x,y), z=x^3+y^2, endfunction
 clf()
 x = linspace(-1,1,60);
 y = linspace(-1,1,60);
-set(gcf(),"color_map",jetcolormap(128))
+set(gcf(),"color_map",jet(128))
 drawlater();
 zminmax = [-0.5 1]; colors=[32 96];
 colorbar(zminmax(1),zminmax(2),colors)

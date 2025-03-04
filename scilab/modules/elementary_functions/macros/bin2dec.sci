@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ???? - INRIA - Farid BELAHCENE
 // Copyright (C) 2006 - INRIA - Pierre MARECHAL
 // Copyright (C) 2011 - DIGITEO - Pierre MARECHAL
@@ -35,13 +35,8 @@
 
 function y = bin2dec(str)
 
-    rhs = argn(2);
-    if rhs <> 1 then
-        error(msprintf(gettext("%s: Wrong number of input argument(s): %d expected.\n"),"bin2dec", 1));
-    end
-
-    if type(str)<>10
-        error(msprintf(gettext("%s: Wrong type for input argument #%d: Matrix of strings expected.\n"),"bin2dec",1));
+    arguments
+        str {mustBeA(str, "string")}
     end
 
     // delete all spaces included in the str

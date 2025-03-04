@@ -1,11 +1,11 @@
 //This file is part of the Cardiovascular Wawes Analysis toolbox
 //Copyright (C) 2014 - INRIA - Serge Steer
-//Copyright (C) 2020 - Stéphane Mottelet (improvement of computation at boudaries)
+//Copyright (C) 2020 - UTC - Stéphane MOTTELET (improvement of computation at boudaries)
 //This file must be used under the terms of the CeCILL.
 //This source file is licensed as described in the file COPYING, which
 //you should have received as part of this distribution.  The terms
 //are also available at
-//http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt
+//https://www.cecill.info/licences/Licence_CeCILL_V2-en.txt
 function D=sgolaydiff(X,order,varargin)
   if type(X)<>1|~isreal(X) then
     error(msprintf(_("%s: Wrong type for argument %d: Real matrix expected.\n"),"sgolaydiff",1))

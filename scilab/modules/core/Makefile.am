@@ -1,4 +1,4 @@
-# Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+# Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 # Copyright (C) 2006-2008 - INRIA - Sylvestre LEDRU
 #
 # Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -19,7 +19,6 @@ CORE_C_SOURCES = \
     src/c/isanan.c \
     src/c/returnanan.c \
     src/c/loadversion.c \
-    src/c/version.c \
     src/c/GetXmlFileEncoding.c \
     src/c/islittleendian.c \
     src/c/getcommandlineargs.c \
@@ -40,7 +39,9 @@ CORE_C_SOURCES = \
     src/c/sci_mem_alloc.c \
     src/c/hashtable/hashtable.c \
     src/c/hashtable/hashtable_utility.c \
-    src/c/InitializePreferences.c
+    src/c/InitializePreferences.c \
+    src/c/hasHandleType.c \
+    src/c/hasUIControlStyle.c
 
 CORE_CPP_SOURCES = \
     src/cpp/demangle.cpp \
@@ -82,61 +83,63 @@ GATEWAY_C_SOURCES = \
 
 GATEWAY_CPP_SOURCES = \
 	sci_gateway/cpp/core_gw.cpp \
-	sci_gateway/cpp/sci_getmodules.cpp \
+	sci_gateway/cpp/sci_abort.cpp \
+	sci_gateway/cpp/sci_analyzeroptions.cpp \
+	sci_gateway/cpp/sci_argn.cpp \
+	sci_gateway/cpp/sci_banner.cpp \
+	sci_gateway/cpp/sci_cell.cpp \
+	sci_gateway/cpp/sci_checkNamedArguments.cpp \
 	sci_gateway/cpp/sci_clear.cpp \
 	sci_gateway/cpp/sci_clearfun.cpp \
-	sci_gateway/cpp/sci_newfun.cpp \
-	sci_gateway/cpp/sci_funptr.cpp \
-	sci_gateway/cpp/sci_banner.cpp \
-	sci_gateway/cpp/sci_quit.cpp \
-	sci_gateway/cpp/sci_exit.cpp \
-	sci_gateway/cpp/sci_argn.cpp \
 	sci_gateway/cpp/sci_clearglobal.cpp \
-	sci_gateway/cpp/sci_global.cpp \
-	sci_gateway/cpp/sci_isglobal.cpp \
-	sci_gateway/cpp/sci_getscilabmode.cpp \
-	sci_gateway/cpp/sci_getos.cpp \
-	sci_gateway/cpp/sci_exists.cpp \
-	sci_gateway/cpp/sci_with_module.cpp \
-	sci_gateway/cpp/sci_lasterror.cpp \
-	sci_gateway/cpp/sci_getversion.cpp \
-	sci_gateway/cpp/sci_warning.cpp \
-	sci_gateway/cpp/sci_getmd5.cpp \
+	sci_gateway/cpp/sci_debug.cpp \
+	sci_gateway/cpp/sci_errclear.cpp \
 	sci_gateway/cpp/sci_error.cpp \
-	sci_gateway/cpp/sci_pause.cpp \
-	sci_gateway/cpp/sci_abort.cpp \
-	sci_gateway/cpp/sci_who.cpp \
+	sci_gateway/cpp/sci_exists.cpp \
+	sci_gateway/cpp/sci_exit.cpp \
+	sci_gateway/cpp/sci_isatty.cpp \
+	sci_gateway/cpp/sci_fieldnames.cpp \
 	sci_gateway/cpp/sci_format.cpp \
-	sci_gateway/cpp/sci_sciargs.cpp \
-	sci_gateway/cpp/sci_ieee.cpp \
 	sci_gateway/cpp/sci_funcprot.cpp \
+	sci_gateway/cpp/sci_funptr.cpp \
+	sci_gateway/cpp/sci_getmd5.cpp \
+	sci_gateway/cpp/sci_getmemory.cpp \
+	sci_gateway/cpp/sci_getmodules.cpp \
+	sci_gateway/cpp/sci_getos.cpp \
+	sci_gateway/cpp/sci_getscilabmode.cpp \
+	sci_gateway/cpp/sci_getversion.cpp \
+	sci_gateway/cpp/sci_global.cpp \
+	sci_gateway/cpp/sci_hash.cpp \
+	sci_gateway/cpp/sci_ieee.cpp \
+	sci_gateway/cpp/sci_insert.cpp \
+	sci_gateway/cpp/sci_intppty.cpp \
+	sci_gateway/cpp/sci_isfield.cpp \
+	sci_gateway/cpp/sci_isglobal.cpp \
+	sci_gateway/cpp/sci_lasterror.cpp \
+	sci_gateway/cpp/sci_list.cpp \
+	sci_gateway/cpp/sci_macr2tree.cpp \
+	sci_gateway/cpp/sci_makecell.cpp \
+	sci_gateway/cpp/sci_mlist.cpp \
 	sci_gateway/cpp/sci_mode.cpp \
+	sci_gateway/cpp/sci_newfun.cpp \
+	sci_gateway/cpp/sci_null.cpp \
+	sci_gateway/cpp/sci_oldEmptyBehaviour.cpp \
+	sci_gateway/cpp/sci_pause.cpp \
+	sci_gateway/cpp/sci_predef.cpp \
+	sci_gateway/cpp/sci_quit.cpp \
+	sci_gateway/cpp/sci_recursionlimit.cpp \
+	sci_gateway/cpp/sci_sciargs.cpp \
+	sci_gateway/cpp/sci_skipArguments.cpp \
+	sci_gateway/cpp/sci_struct.cpp \
+	sci_gateway/cpp/sci_tlist.cpp \
+	sci_gateway/cpp/sci_type.cpp \
 	sci_gateway/cpp/sci_typename.cpp \
+	sci_gateway/cpp/sci_typeof.cpp \
+	sci_gateway/cpp/sci_warning.cpp \
 	sci_gateway/cpp/sci_what.cpp \
 	sci_gateway/cpp/sci_where.cpp \
-	sci_gateway/cpp/sci_getmemory.cpp \
-	sci_gateway/cpp/sci_errclear.cpp \
-	sci_gateway/cpp/sci_intppty.cpp \
-	sci_gateway/cpp/sci_analyzeroptions.cpp \
-	sci_gateway/cpp/sci_macr2tree.cpp \
-	sci_gateway/cpp/sci_predef.cpp \
-	sci_gateway/cpp/sci_debug.cpp \
-	sci_gateway/cpp/sci_recursionlimit.cpp \
-	sci_gateway/cpp/sci_type.cpp \
-	sci_gateway/cpp/sci_list.cpp \
-	sci_gateway/cpp/sci_struct.cpp \
-	sci_gateway/cpp/sci_insert.cpp \
-	sci_gateway/cpp/sci_null.cpp \
-	sci_gateway/cpp/sci_cell.cpp \
-	sci_gateway/cpp/sci_makecell.cpp \
-	sci_gateway/cpp/sci_typeof.cpp \
-	sci_gateway/cpp/sci_tlist.cpp \
-	sci_gateway/cpp/sci_mlist.cpp \
-	sci_gateway/cpp/sci_isfield.cpp \
-	sci_gateway/cpp/sci_oldEmptyBehaviour.cpp \
-	sci_gateway/cpp/sci_fieldnames.cpp \
-	sci_gateway/cpp/sci_checkNamedArguments.cpp \
-	sci_gateway/cpp/sci_hash.cpp
+	sci_gateway/cpp/sci_who.cpp \
+	sci_gateway/cpp/sci_with_module.cpp
 
 if ENABLE_DEBUG
 GATEWAY_CPP_SOURCES += \
@@ -161,7 +164,6 @@ libscicore_la_CPPFLAGS = \
     -I$(top_srcdir)/modules/ast/includes/symbol/ \
     -I$(top_srcdir)/modules/ast/includes/system_env/ \
     -I$(top_srcdir)/modules/ast/includes/types/ \
-    -I$(top_srcdir)/modules/ast/includes/analysis/ \
     -I$(top_srcdir)/modules/call_scilab/includes/ \
     -I$(top_srcdir)/modules/api_scilab/includes/ \
     -I$(top_srcdir)/modules/action_binding/includes/ \

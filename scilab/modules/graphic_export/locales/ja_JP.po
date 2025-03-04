@@ -141,7 +141,7 @@ msgid ""
 "Unable to create export file, please fill a bug report at http://bugzilla."
 "scilab.org."
 msgstr ""
-"エキスポートするファイルを作成できません. http://bugzilla.scilab.org でバグを"
+"エキスポートするファイルを作成できません. https://gitlab.com/scilab/scilab/-/issues でバグを"
 "レポートしてください."
 
 msgid ""

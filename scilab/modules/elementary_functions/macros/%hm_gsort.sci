@@ -1,5 +1,5 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
-// Copyrifht (C) 2012 - Scilab Enterprises - Cedric Delamarre
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
+// Copyright (C) 2012 - Scilab Enterprises - Cedric Delamarre
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
 // Copyright (C) 2016 - 2020 - Samuel GOUGEON
 //

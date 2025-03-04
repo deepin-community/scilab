@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2005 - INRIA - Allan Cornet
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -16,3 +16,4 @@ end
 
 genlib("graphicslib","SCI/modules/graphics/macros",%f,%t);
 genlib("datatipslib","SCI/modules/graphics/macros/datatips",%f,%t);
+genlib("colormapslib","SCI/modules/graphics/macros/colormaps",%f,%t);

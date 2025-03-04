@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Raise Partner - Mohamed Houacine: fixed bug #13116
 // Copyright (C) INRIA - Serge Steer
 //

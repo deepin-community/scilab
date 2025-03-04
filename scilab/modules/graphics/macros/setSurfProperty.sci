@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2004-2006 - INRIA - Fabrice Leray
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
 // Copyright (C) 2018, 2019 - Samuel GOUGEON
@@ -152,7 +152,8 @@ function fail = setSurfProperty(PropertyName, PropertyValue, Surface, X, Y, Z, C
                 Surface.line_style=1;
                 Surface.surface_mode = "on";
             elseif (PropertyValue=="none")
-                Surface.surface_mode = "off";
+                Surface.color_mode = -1; // color_mode < 0 hides the mesh and displays only facets bodies.
+                Surface.surface_mode = "on";
             end
         else
             msg = gettext("%s: Wrong type for input argument #%d: string expected.\n");
@@ -180,8 +181,8 @@ function fail = setSurfProperty(PropertyName, PropertyValue, Surface, X, Y, Z, C
 
             str = convstr(PropertyValue);
             //Marks
-            Table = [ "+" "o" "*" "." "x" "square" "diamond" "^" "v" ">" "<" "pentagram" "none"];
-            MarksStyleVal=[1 9 10 0 2 11 5 6 7 12 13 14 -99];
+            Table = [ "+" "o" "*" "." "x" "square" "diamond" "^" "v" ">" "<" "pentagram" "^." "v." ">." "<." "minus" "|" "none"];
+            MarksStyleVal=[1 9 10 0 2 11 5 6 7 12 13 14 15 16 17 18 19 20 -99];
             //    MarksSizeVal =[4 3 7  1 3  3 4 3 3  3  3  3 -99];
 
             opt1=[];

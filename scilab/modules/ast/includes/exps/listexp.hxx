@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2008-2008 - DIGITEO - Bruno JOFRET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -16,6 +16,7 @@
 #ifndef AST_LISTEXP_HXX
 #define AST_LISTEXP_HXX
 
+#include <limits> // std::numeric_limits
 #include "exp.hxx"
 
 namespace ast

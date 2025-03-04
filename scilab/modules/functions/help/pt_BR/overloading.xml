@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -89,7 +89,6 @@
                 <tr><td>inteiro</td>            <td><literal>i</literal></td>   </tr>
                 <tr><td>número decimal</td>     <td><literal>s</literal></td>   </tr>
                 <tr><td>matriz esparsa</td>     <td><literal>sp</literal></td>  </tr>
-                <tr><td>matriz esparsa do Matlab</td><td><literal>msp</literal></td></tr>
                 <tr><td>polinômio</td>          <td><literal>p</literal></td>   </tr>
                 <tr><td>fração racional</td>    <td><literal>r</literal></td>   </tr>
                 <tr><td>texto</td>              <td><literal>c</literal></td>   </tr>
@@ -437,8 +436,9 @@
             <revision>
                 <revnumber>6.0</revnumber>
                 <revdescription>
-                  <literal>function</literal> replaces <literal>mc</literal> as overloading code
-                  for functions in Scilab language.
+                  <para><literal>function</literal> replaces <literal>mc</literal> as overloading code
+                  for functions in Scilab language.</para>
+                  <para><literal>hm</literal> is no longer used for hypermatrix, as for matrices <literal>s</literal> is used instead.</para>
                 </revdescription>
             </revision>
         </revhistory>

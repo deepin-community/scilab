@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA - Allan CORNET
  * ...
  *
@@ -74,7 +74,7 @@
             <code>rmdir(dirname,'s')</code> удаляет директорию <varname>dirname</varname> и всё её содержимое из текущей директории.
         </para>
         <para>
-            <code>[status, message] = rmdir(dirname,'s')</code> удаляет директорию <varname>dirname</varname> и всё её содержимое из текущей директории, возвращая статус <varname>status</varname> и сообщение <varname>message</varname>. Здесь <varname>status</varname> равен 1 в случае успеха и равен 0 в случае ошибки.
+            <code>[status, msg] = rmdir(dirname,'s')</code> удаляет директорию <varname>dirname</varname> и всё её содержимое из текущей директории, возвращая статус <varname>status</varname> и сообщение <varname>message</varname>. Здесь <varname>status</varname> равен 1 в случае успеха и равен 0 в случае ошибки.
         </para>
         <para>
             В любой операционной системе, если создание директории удалось, то статус <varname>status</varname> равен 1, а сообщение <varname>message</varname> пустое.

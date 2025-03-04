@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010 -INRIA - Serge Steer
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,8 +9,8 @@
 //
 // <-- ENGLISH IMPOSED -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=4505
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/4505
 //
 // <-- Short Description -->
 //  A red vertical bar appeared  for some bode plots of continuous time systems.

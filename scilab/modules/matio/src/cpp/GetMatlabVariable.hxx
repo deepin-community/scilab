@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2015 - Scilab Enterprises - Sylvain GENIN
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -35,6 +35,8 @@ extern "C"
 
 
 matvar_t* GetDoubleMatVar(types::Double* pDblIn, const char* name, int matfile_version);
+
+matvar_t* GetBooleanMatVar(types::Bool* pITIn, const char* name);
 
 matvar_t* GetIntegerMatVar(types::InternalType* pITIn, const char* name);
 

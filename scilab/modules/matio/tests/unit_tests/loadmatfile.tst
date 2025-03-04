@@ -1,11 +1,12 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008 - INRIA - Vincent Couvert <vincent.couvert@inria.fr>
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
 
 // <-- CLI SHELL MODE -->
+// <-- ENGLISH IMPOSED --> // For warnings
 
 // This Scilab script loads MAT-files to test the MATIO module
 
@@ -129,8 +130,22 @@ for formatIndex = 1:size(binFormats, "*")
     //
     // TESTS FOR SINGLE PRECISION ARRAYS
     //
+    if binFormats(formatIndex) <> "-v4" then
+        %epssingle = 5.96E-08 * 2;
+        assert_checkalmostequal(realsinglescalar , 1.23, %epssingle);
+        assert_checkalmostequal(cplxsinglescalar , 1.23 + 4.56*%i, %epssingle);
 
-    // TODO
+        assert_checkalmostequal(realsinglerowvector , [1.23 -4.56 7.89], %epssingle);
+        assert_checkalmostequal(cplxsinglerowvector , [1.23+7.89*%i 4.56-1.23*%i 7.89+4.56*%i], %epssingle);
+
+        assert_checkalmostequal(realsinglecolvector , [1.23;-4.56;7.89], %epssingle);
+        assert_checkalmostequal(cplxsinglecolvector , [1.23+7.89*%i;4.56-1.23*%i;7.89+4.56*%i], %epssingle);
+
+        assert_checkalmostequal(realsinglematrix , [1.23 -4.56 7.89;9.87 6.54 -3.21], %epssingle);
+        assert_checkalmostequal(cplxsinglematrix , [1.23+7.89*%i 4.56-1.23*%i 7.89+4.56*%i;9.87+3.21*%i 6.54+9.87*%i 3.21-6.54*%i], %epssingle);
+
+        clear realsinglescalar cplxsinglescalar realsinglerowvector cplxsinglerowvector realsinglecolvector cplxsinglecolvector realsinglematrix cplxsinglematrix
+    end
 
     //
     // TESTS FOR SPARSE MATRICES
@@ -254,7 +269,4 @@ for formatIndex = 1:size(binFormats, "*")
     // MISC
     //
     assert_checkequal(eye100x100 , eye(100,100));
-
 end
-
-// TODO: read all variables from a single file ?

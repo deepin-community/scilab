@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 // Copyright (C) 2017 - Samuel GOUGEON
 //
@@ -66,7 +66,7 @@ function colordef(varargin)
         sda();
 
     case "white"
-        f.color_map = [jetcolormap(64); [1 1 1]*0.8];
+        f.color_map = [jet(64); [1 1 1]*0.8];
         f.background = 65;
         a.background = -2;
         a.foreground = -1;
@@ -83,7 +83,7 @@ function colordef(varargin)
         else
             c = 0.35
         end
-        f.color_map  = [jetcolormap(64); [1 1 1]*c];
+        f.color_map  = [jet(64); [1 1 1]*c];
         f.background = 65;
         a.background = -1;
         a.foreground = -2;
@@ -95,7 +95,7 @@ function colordef(varargin)
         a.z_label.font_foreground = -2;
 
     case "none"
-        f.color_map  = [hsvcolormap(64)];
+        f.color_map  = [hsv(64)];
         f.background = -1;
         a.background = -1;
         a.foreground = -2;

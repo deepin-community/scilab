@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2010 - 2011 - Calixte DENIZET <calixte@contrib.scilab.org>
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -18,19 +18,16 @@ package org.scilab.modules.external_objects_java;
 import java.io.BufferedWriter;
 import java.io.CharArrayWriter;
 import java.io.File;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.InputStreamReader;
 import java.io.FileInputStream;
-import java.io.StringWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URLClassLoader;
 import java.net.URL;
-import java.util.Arrays;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -44,13 +41,13 @@ import javax.tools.DiagnosticCollector;
 import javax.tools.FileObject;
 import javax.tools.ForwardingJavaFileManager;
 import javax.tools.JavaCompiler;
-import javax.tools.StandardLocation;
+import javax.tools.JavaCompiler.CompilationTask;
 import javax.tools.JavaFileObject;
+import javax.tools.JavaFileObject.Kind;
 import javax.tools.SimpleJavaFileObject;
 import javax.tools.StandardJavaFileManager;
+import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
-import javax.tools.JavaCompiler.CompilationTask;
-import javax.tools.JavaFileObject.Kind;
 
 import org.scilab.modules.commons.ScilabCommonsUtils;
 
@@ -103,7 +100,7 @@ public class ScilabJavaCompiler {
 
             if (compiler == null) {
                 if (ecjLoaded) {
-                    throw new ScilabJavaException("No java compiler in the classpath\nCheck for tools.jar (comes from JDK) or ecj-4.4.x.jar (Eclipse Compiler for Java)");
+                    throw new ScilabJavaException("No java compiler in the classpath\nCheck for tools.jar (comes from JDK) or ecj.jar (Eclipse Compiler for Java)");
                 }
 
                 // Compiler should be in thirdparty so we load it
@@ -149,16 +146,11 @@ public class ScilabJavaCompiler {
 
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
         StandardJavaFileManager stdFileManager = compiler.getStandardFileManager(null, Locale.getDefault(), null);
-        String cp = null;
 
-        if (isECJ) {
-            // it seems that with the embedded ecj, the only way to set the cp is to use java.class.path...
-            cp = getClasspath();
-            System.setProperty("java.class.path", cp + File.pathSeparatorChar + System.getProperty("java.class.path"));
-        } else {
-            try {
-                stdFileManager.setLocation(StandardLocation.CLASS_PATH, getClasspathFiles());
-            } catch (Exception e) { }
+        try {
+            stdFileManager.setLocation(StandardLocation.CLASS_PATH, getClasspathFiles());
+        } catch (Exception e) {
+            System.err.println(e.getLocalizedMessage());
         }
 
         ClassFileManager manager = new ClassFileManager(stdFileManager);
@@ -185,7 +177,7 @@ public class ScilabJavaCompiler {
             compilationUnits.add(sourceString);
         }
 
-        String[] compileOptions = new String[] {"-d", BINPATH};
+        String[] compileOptions = new String[] {"-d", BINPATH, "-target", "17"};
         Iterable<String> options = Arrays.asList(compileOptions);
 
         try {
@@ -194,13 +186,13 @@ public class ScilabJavaCompiler {
             Logger.getLogger(ScilabJavaCompiler.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        CompilationTask task = compiler.getTask(out, manager, diagnostics, options, null, compilationUnits);
-        boolean success = task.call();
-
-        if (cp != null) {
-            final String s = System.getProperty("java.class.path").replace(cp + File.pathSeparatorChar, "");
-            System.setProperty("java.class.path", s);
+        CompilationTask task = null;
+        try { // Use try/catch here to detect invalid options, ...
+            task = compiler.getTask(out, manager, diagnostics, options, null, compilationUnits);
+        } catch (IllegalArgumentException e) {
+            System.err.println(e.getLocalizedMessage());
         }
+        boolean success = task.call();
 
         String error = "";
 
@@ -317,18 +309,9 @@ public class ScilabJavaCompiler {
      * @param url the class url
      */
     public static void addURLToClassPath(URL url) {
-        URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-        try {
-            final Method method = URLClassLoader.class.getDeclaredMethod("addURL", new Class[] {URL.class});
-            method.setAccessible(true);
-            method.invoke(sysloader , new Object[] {url});
-        } catch (NoSuchMethodException e) {
-            System.err.println("Error: Cannot find the declared method: " + e.getLocalizedMessage());
-        } catch (IllegalAccessException e) {
-            System.err.println("Error: Illegal access: " + e.getLocalizedMessage());
-        } catch (InvocationTargetException e) {
-            System.err.println("Error: Could not invocate target: " + e.getLocalizedMessage());
-        }
+        // Use ScilabClassLoader to get easy access to addURL()
+        org.scilab.modules.jvm.ScilabClassLoader sysloader = (org.scilab.modules.jvm.ScilabClassLoader) ClassLoader.getSystemClassLoader();
+        sysloader.addURL(url);
     }
 
     /**
@@ -337,9 +320,19 @@ public class ScilabJavaCompiler {
     private static class SourceString extends SimpleJavaFileObject {
 
         private final String code;
+        private File fakeFile;
 
         private SourceString(String className, String[] code) {
             super(new File(BINPATH + "/" + className.replace('.', '/') + Kind.SOURCE.extension).toURI(), Kind.SOURCE);
+
+            // Create an empty file on disk to workaround this issue: https://git.eclipse.org/r/c/jdt/eclipse.jdt.core/+/126498
+            // A fix is under review since a long time now: https://git.eclipse.org/r/c/jdt/eclipse.jdt.core/+/126498
+            try {
+				this.fakeFile = new File(BINPATH + "/" + className.replace('.', '/') + Kind.SOURCE.extension);
+				this.fakeFile.createNewFile();
+			} catch (IOException e) {
+				System.err.println(e.getLocalizedMessage());
+			}
 
             StringBuffer buf = new StringBuffer();
             for (String str : code) {
@@ -350,6 +343,10 @@ public class ScilabJavaCompiler {
         }
 
         public CharSequence getCharContent(boolean ignoreEncodingErrors) {
+            // The check on file existence was already done so we can delete it now...
+            if (this.fakeFile != null) {
+                this.fakeFile.delete();
+            }
             return code;
         }
     }

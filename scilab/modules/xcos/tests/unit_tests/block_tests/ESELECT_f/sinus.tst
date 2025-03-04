@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010 DIGITEO Clément DAVID
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -7,6 +7,7 @@
 
 // <-- ENGLISH IMPOSED -->
 // <-- XCOS TEST -->
+// <-- NO CHECK REF -->
 //
 // <-- Short Description -->
 // This script validate the eselect functionality with a sinus input.
@@ -17,8 +18,7 @@
 currentPath = SCI + "/modules/xcos/tests/unit_tests/block_tests/ESELECT_f/";
 
 // Import the reference data (A_ref)
-ierr = execstr("load(currentPath + ""sinus_ref.sod"");", "errcatch");
-assert_checktrue(ierr == 0);
+load(currentPath + "sinus_ref.sod");
 
 // Import the diagram structure
 ierr = importXcosDiagram(currentPath + "sinus.zcos");

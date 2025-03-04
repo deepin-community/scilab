@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2007 - INRIA - Allan CORNET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -25,7 +25,7 @@
 * @param[in] returns with the full path name
 * @return array of strings
 */
-char **getfilesdictionary(char *somechars, int *sizearray, BOOL fullpath);
+char **getfilesdictionary(const char *somechars, int *sizearray, BOOL fullpath);
 
 #endif /* __GETFILESDICTIONARY_H__ */
 /*--------------------------------------------------------------------------*/

@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2014 - Scilab Enterprises - Paul Bignier
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -64,104 +64,110 @@ Xcos debug:   propertyUpdated( 1 , BLOCK , INTERFACE_FUNCTION ) : SUCCESS
 l = list(Sum);
 // Copy the list content (no duplicate)
 Sum2 = l(1)
- Sum2  = 
-GUI     : BIGSOM_f
-Graphics: 
+ Sum2 = (Block) with fields:
 Xcos trace:   objectReferenced( 1 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 1 , BLOCK ) : 0
-          orig = [0,0]
-          sz = [2,3]
-          exprs = "[1;1]"
-          pin = [0;0]
-          pout = 0
-          pein = []
-          peout = []
-          gr_i = []
-          id = ""
-          in_implicit = ["E";"E"]
-          out_implicit = "E"
-          in_style = ["";""]
-          out_style = ""
-          in_label = ["";""]
-          out_label = ""
-          style = ""
-Model   : 
 Xcos trace:   objectReferenced( 1 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 1 , BLOCK ) : 0
-          sum type: 2
-          in = [-1;-1]
-          in2 = [1;1]
-          intyp = [1;1]
-          out = -1
-          out2 = 1
-          outtyp = 1
-          evtin = []
-          evtout = []
-          state = []
-          dstate = []
-          odstate = list()
-          rpar = [1;1]
-          ipar = []
-          opar = list()
-          blocktype = "c"
-          firing = []
-          dep_ut = [%t,%f]
-          label = ""
-          nzcross = 0
-          nmode = 0
-          equations = list()
-          uid = ""
+  graphics: (graphics mlist) with fields:
+      orig = [0,0]
+      sz = [2,3]
+      exprs = "[1;1]"
+      pin = [0;0]
+      pout = 0
+      pein = []
+      peout = []
+      gr_i = []
+      id = ""
+      in_implicit = ["E";"E"]
+      out_implicit = "E"
+      in_style = ["";""]
+      out_style = ""
+      in_label = ["";""]
+      out_label = ""
+      style = ""
+  model: (model mlist) with fields:
+      sim: (2-elements list)
+          (1) = "sum"
+          (2) = 2
+      in = [-1;-1]
+      in2 = [1;1]
+      intyp = [1;1]
+      out = -1
+      out2 = 1
+      outtyp = 1
+      evtin = []
+      evtout = []
+      state = []
+      dstate = []
+      odstate: (empty list)
+      rpar = [1;1]
+      ipar = []
+      opar: (empty list)
+      blocktype = "c"
+      firing = []
+      dep_ut = [%t,%f]
+      label = ""
+      nzcross = 0
+      nmode = 0
+      equations: (empty list)
+      uid = ""
+  gui = "BIGSOM_f"
+  doc: (empty list)
 // The following action should not delete the Block in the model
 clear Sum
 // Sum2's refCount must have been affected by "clear Sum"
 Sum2
- Sum2  = 
-GUI     : BIGSOM_f
-Graphics: 
+ Sum2 = (Block) with fields:
 Xcos trace:   objectReferenced( 1 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 1 , BLOCK ) : 0
-          orig = [0,0]
-          sz = [2,3]
-          exprs = "[1;1]"
-          pin = [0;0]
-          pout = 0
-          pein = []
-          peout = []
-          gr_i = []
-          id = ""
-          in_implicit = ["E";"E"]
-          out_implicit = "E"
-          in_style = ["";""]
-          out_style = ""
-          in_label = ["";""]
-          out_label = ""
-          style = ""
-Model   : 
 Xcos trace:   objectReferenced( 1 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 1 , BLOCK ) : 0
-          sum type: 2
-          in = [-1;-1]
-          in2 = [1;1]
-          intyp = [1;1]
-          out = -1
-          out2 = 1
-          outtyp = 1
-          evtin = []
-          evtout = []
-          state = []
-          dstate = []
-          odstate = list()
-          rpar = [1;1]
-          ipar = []
-          opar = list()
-          blocktype = "c"
-          firing = []
-          dep_ut = [%t,%f]
-          label = ""
-          nzcross = 0
-          nmode = 0
-          equations = list()
-          uid = ""
+  graphics: (graphics mlist) with fields:
+      orig = [0,0]
+      sz = [2,3]
+      exprs = "[1;1]"
+      pin = [0;0]
+      pout = 0
+      pein = []
+      peout = []
+      gr_i = []
+      id = ""
+      in_implicit = ["E";"E"]
+      out_implicit = "E"
+      in_style = ["";""]
+      out_style = ""
+      in_label = ["";""]
+      out_label = ""
+      style = ""
+  model: (model mlist) with fields:
+      sim: (2-elements list)
+          (1) = "sum"
+          (2) = 2
+      in = [-1;-1]
+      in2 = [1;1]
+      intyp = [1;1]
+      out = -1
+      out2 = 1
+      outtyp = 1
+      evtin = []
+      evtout = []
+      state = []
+      dstate = []
+      odstate: (empty list)
+      rpar = [1;1]
+      ipar = []
+      opar: (empty list)
+      blocktype = "c"
+      firing = []
+      dep_ut = [%t,%f]
+      label = ""
+      nzcross = 0
+      nmode = 0
+      equations: (empty list)
+      uid = ""
+  gui = "BIGSOM_f"
+  doc: (empty list)
 // Delete the original block in the model
 clear
 Xcos debug:   propertyUpdated( 1 , BLOCK , INPUTS ) : SUCCESS

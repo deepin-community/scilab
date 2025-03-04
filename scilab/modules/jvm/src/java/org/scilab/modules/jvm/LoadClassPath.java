@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2010 - DIGITEO - Clement DAVID
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -15,9 +15,11 @@
 
 package org.scilab.modules.jvm;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,9 +35,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import org.scilab.modules.commons.xml.ScilabDocumentBuilderFactory;
-import org.scilab.modules.commons.xml.ScilabXPathFactory;
-import org.scilab.modules.commons.xml.ScilabXMLUtilities;
 
 /**
  * Utility class to ease the jar loading management.
@@ -58,6 +57,7 @@ public final class LoadClassPath {
      *
      * @param module the module to be loaded
      */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public static void loadOnUse(String module) {
         if (loadedModules.contains(module)) {
             return;
@@ -67,11 +67,49 @@ public final class LoadClassPath {
         String xpathExpression = XPATH_EXPRS + "[@on='" + module + "']";
 
         // Initialize xpath
-        XPathFactory factory = ScilabXPathFactory.newInstance();
+        final ClassLoader classloader = ClassLoader.getSystemClassLoader();
+        XPathFactory factory = null;
+		Class sxpfClass = null;
+        try {
+        	sxpfClass = classloader.loadClass("org.scilab.modules.commons.xml.ScilabXPathFactory");
+        } catch (ClassNotFoundException e) {
+        	System.err.println("Error: ClassNotFoundException: " + e.getLocalizedMessage());
+        }
+        try {
+        	Class[] parameters = new Class[] {};
+            final Method method = sxpfClass.getDeclaredMethod("newInstance", parameters);
+            factory = (XPathFactory) method.invoke(classloader , new Object[] {});
+
+        } catch (NoSuchMethodException e) {
+            System.err.println("Error: Cannot find the declared method: " + e.getLocalizedMessage());
+        } catch (IllegalAccessException e) {
+            System.err.println("Error: Illegal access: " + e.getLocalizedMessage());
+        } catch (InvocationTargetException e) {
+            System.err.println("Error: Could not invocate target: " + e.getLocalizedMessage());
+        }
         XPath xpath = factory.newXPath();
 
         // initialize document factory
-        DocumentBuilderFactory domFactory = ScilabDocumentBuilderFactory.newInstance();
+        DocumentBuilderFactory domFactory = null;
+        Class sdbfClass = null;
+        try {
+        	sdbfClass = classloader.loadClass("org.scilab.modules.commons.xml.ScilabDocumentBuilderFactory");
+        } catch (ClassNotFoundException e) {
+        	System.err.println("Error: Class Not Found: " + e.getLocalizedMessage());
+        }
+        try {
+        	Class[] parameters = new Class[] {};
+            final Method method = sdbfClass.getDeclaredMethod("newInstance", parameters);
+            domFactory = (DocumentBuilderFactory) method.invoke(classloader , new Object[] {});
+
+        } catch (NoSuchMethodException e) {
+            System.err.println("Error: Cannot find the declared method: " + e.getLocalizedMessage());
+        } catch (IllegalAccessException e) {
+            System.err.println("Error: Illegal access: " + e.getLocalizedMessage());
+        } catch (InvocationTargetException e) {
+            System.err.println("Error: Could not invocate target: " + e.getLocalizedMessage());
+        }
+        
         domFactory.setValidating(false);
         domFactory.setNamespaceAware(true);
 
@@ -103,7 +141,7 @@ public final class LoadClassPath {
                 Node n = result.item(i).getParentNode();
 
                 String jar = n.getAttributes().getNamedItem("value").getNodeValue();
-                ClassPath.addFile(jar.replace("$SCILAB", SCI), 0);
+                ClassPath.addFile(new File(jar.replace("$SCILAB", SCI)), 0);
                 loadedModules.add(module);
             }
 

@@ -1,5 +1,5 @@
 ;
-; Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+; Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 ; Copyright (C) DIGITEO - 2010 - Allan CORNET
 ;
 ; Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -32,6 +32,7 @@ OutputBaseFilename={#ScilabBaseFilename}-nojre
 #endif
 AppName={#ScilabName}
 AppVerName={#ScilabName}
+AppVersion={#ScilabVersion}
 ;always shown welcome page
 DisableWelcomePage=no
 ;always shown destination path page
@@ -42,10 +43,10 @@ SetupIconFile=tools\innosetup\scilab.ico
 LicenseFile=COPYING
 ChangesAssociations=yes
 WindowVisible=false
-AppPublisher=Scilab Enterprises
-AppPublisherURL=http://www.scilab.org
-AppSupportURL=http://bugzilla.scilab.org/
-AppUpdatesURL=http://www.scilab.org/products/scilab/download
+AppPublisher=Dassault Systèmes
+AppPublisherURL=https://www.scilab.org/
+AppSupportURL=https://gitlab.com/scilab/scilab/-/issues
+AppUpdatesURL=https://www.scilab.org/download/
 WizardImageStretch=no
 WizardImageBackColor=clBlack
 WizardImageFile=tools\innosetup\ScilabLogo.bmp
@@ -53,14 +54,22 @@ WizardSmallImageFile=tools\innosetup\ScilabLogoSmall.bmp
 BackColor=clGray
 BackColor2=clBlack
 BackColorDirection=lefttoright
-AppCopyright=Scilab Enterprises - Copyright Â© {#CurrentYear}
+AppCopyright=Dassault Systèmes - Copyright © {#CurrentYear}
 UninstallDisplayIcon={app}\bin\wscilex.exe
-Compression=lzma/ultra64
-InternalCompressLevel=ultra64
 SolidCompression=true
 VersionInfoVersion={#ScilabVersion}
-VersionInfoCompany=Scilab Enterprises
+VersionInfoCompany=Dassault Systèmes
 ; minimum right to install Scilab
 PrivilegesRequired=none
+
+#ifndef MR
+#define MR="0"
+#endif
+
+#if MR == "0"
+Compression=lzma2/ultra64
+#else
+Compression=lzma2/fast
+#endif
 ;-------------------------------------------------------------------------------
 ;

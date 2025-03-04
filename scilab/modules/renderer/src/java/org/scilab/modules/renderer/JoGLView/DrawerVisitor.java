@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2010 - DIGITEO - Pierre Lando
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -294,9 +294,13 @@ public class DrawerVisitor implements Visitor, Drawer, GraphicView {
     public void draw(DrawingTools drawingTools) {
         this.drawingTools = drawingTools;
         if (figure instanceof Figure) {
-            visit((Figure) figure);
+            if (((Figure) figure).isValid() == true) {
+                visit((Figure) figure);
+            }
         } else {
-            visit((Frame) figure);
+            if (((Frame) figure).isValid() == true) {
+                visit((Frame) figure);
+            }
         }
 
         for (PostRendered postRendered : postRenderedList) {

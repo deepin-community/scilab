@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010 - INRIA - Michael Baudin
 // Copyright (C) 2011 - DIGITEO - Michael Baudin
 //
@@ -50,7 +50,7 @@ end
 // table = [x mu sigma PDF-P CDF-P CDF-Q]
 // Some tests do not pass with Scilab.
 //
-// See : http://bugzilla.scilab.org/show_bug.cgi?id=8032
+// See : https://gitlab.com/scilab/scilab/-/issues/8032
 //
 // Prints the number of accurate digits.
 table = [
@@ -105,7 +105,7 @@ for k = 1 : nt
     end
 end
 // IEEE support
-// See http://bugzilla.scilab.org/show_bug.cgi?id=7296
+// See https://gitlab.com/scilab/scilab/-/issues/7296
 Mean = 0;
 Std = 1;
 x = %inf; // Inf

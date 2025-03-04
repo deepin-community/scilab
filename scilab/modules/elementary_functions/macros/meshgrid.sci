@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA - Farid BELAHCENE
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -30,13 +30,13 @@ function  varargout=meshgrid(varargin)
     elseif rhs>3 then
         error(msprintf(gettext("%s: Wrong number of input arguments: At most %d expected.\n"),"meshgrid",3));
     end
-    if or(lhs==[1 2]) & rhs==1 then
+    if or(lhs==[0 1 2]) & rhs==1 then
         [x,y]=ndgrid(varargin(1),varargin(1));
         varargout(1)=x';
         if lhs==2
             varargout(2)=y';
         end
-    elseif or(lhs==[1 2]) & rhs==2 then
+    elseif or(lhs==[0 1 2]) & rhs==2 then
         [x,y]=ndgrid(varargin(:));
         varargout(1)=x';
         if lhs==2
@@ -52,6 +52,10 @@ function  varargout=meshgrid(varargin)
             varargout(3)=permute(z,[2,1,3]);
         end
     else
-        error(msprintf(gettext("%s: Wrong number of output arguments vs. input arguments: Same number expected.\n"),"meshgrid"));
+        if or(rhs == [1 2]) then
+            error(msprintf(gettext("%s: Wrong number of output arguments: At most %d expected.\n"),"meshgrid",2));
+        else
+            error(msprintf(gettext("%s: Wrong number of output arguments: At most %d expected.\n"),"meshgrid",3));
+        end
     end
 endfunction

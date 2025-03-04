@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA
- *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ * Copyright (C) 2023 - Samuel GOUGEON
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
  * pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -42,15 +42,15 @@
             Y = grand(m, n, "uin", Low, High)
             Y = grand(m, n, "lgi")
 
-            Y = grand(m, n, o,..,"..",...)
-            Y = grand(X, ...)
+            Y = grand(m, n, o, …, PDFname, …)
+            Y = grand(X, PDFname, …)
         </synopsis>
         <para/>
         <synopsis>
             Y = grand(n, "mn", Mean, Cov)
             Y = grand(n, "markov", P, x0)
             Y = grand(n, "mul", nb, P)
-            Y = grand(n, "prm", vect)
+            Y = grand(n, "prm", array)
         </synopsis>
         <para/>
         <synopsis>
@@ -85,7 +85,17 @@
                 <term>X</term>
                 <listitem>
                     <para>
-                        次元(つまり<literal>mx n</literal>) のみ使用される行列
+                        次元(つまり<literal>m x n</literal>) のみ使用される行列
+                    </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>PDFname</term>
+                <listitem>
+                    <para>
+                        Name of the chosen probability Density Function:
+                        <literal>"def", "unf", "uin", "bet", "gam","exp", "nor", "geo", "poi",
+                        "bin", "chi", "nbn", "nch", "f", "nf",  "lgi"</literal>.
                     </para>
                 </listitem>
             </varlistentry>
@@ -107,33 +117,85 @@
     </refsection>
     <refsection>
         <title>説明</title>
-        <para>警告: シードを指定しない場合,系列はあるセッションと別のセッションで
-            同一のままとなります.
-        </para>
-        <para>rand関数を使用する各スクリプトの初めに,
-            以下を実行する必要があります:
-        </para>
-        <programlisting role="example"><![CDATA[rand('seed',getdate('s'))]]></programlisting>
         <para>
-            この関数は種々の分布により乱数を生成する際に使用することができます.
-            この場合,<literal>m x n</literal>行列を得るには
-            最初の形式が異なる3種類の呼び出し手順のどれかを適用する必要があります.
-            <literal>X</literal> が <literal>m x n</literal>行列の
-            場合,最初の2つの形式は等価で,3番目の形式は
-            '多値'分布(例えば,多項分布,多変量分布,ガウス分布, etc...)に対応します.
-            この際,サンプルは列ベクトル(つまり,次元<literal>m</literal>)で,
-            そのような<literal>n</literal>個の乱数ベクトル
-            (つまり<literal> m x n</literal> 行列)が得られます.
+            警告: シードを指定しない場合,系列はあるセッションと別のセッションで 同一のままとなります.
+        </para>
+        <para>rand関数を使用する各スクリプトの初めに, 以下を実行する必要があります:
+        <programlisting role="example"><![CDATA[
+rand('seed',getdate('s'))
+     ]]></programlisting>
         </para>
         <para>
-            最後の形式は基底生成器を変更(v2.7以降基底生成器を選択できます)
-            したり,内部の状態(シード)を変更または取得したり,...
-            といった基底生成器への
-            種々の操作を行う際に使用されます.
-            これらの基底生成器はランダムな整数を
-            大きな整数区間(lgi)上の一様分布に従い,
-            他の全ての分布はそこから取得されます.
-            (一般にはあるスキーム lgi -&gt; U([0,1)) -&gt; 指定する分布)
+            <function>grand(…)</function> generates random numbers from various probability distributions.
+        </para>
+        <para>
+            The syntaxes
+            <screen><![CDATA[
+Y = grand(m, n, "bet", A, B)
+Y = grand(m, n, "bin", N, p)
+Y = grand(m, n, "nbn", N, p)
+Y = grand(m, n, "chi", Df)
+Y = grand(m, n, "nch", Df, Xnon)
+Y = grand(m, n, "exp", Av)
+Y = grand(m, n, "f", Dfn, Dfd)
+Y = grand(m, n, "nf", Dfn, Dfd, Xnon)
+Y = grand(m, n, "gam", shape, rate)
+Y = grand(m, n, "nor", Av, Sd)
+Y = grand(m, n, "geom", p)
+Y = grand(m, n, "poi", mu)
+Y = grand(m, n, "def")
+Y = grand(m, n, "unf", Low, High)
+Y = grand(m, n, "uin", Low, High)
+Y = grand(m, n, "lgi")
+]]></screen>
+            produce a <varname>m</varname> x <varname>n</varname> matrix with random entries.
+        </para>
+        <para>
+            The syntax
+            <screen><![CDATA[
+Y = grand(m, n, o, …, PDFname, …)
+]]></screen>
+            produces a <varname>m</varname> x <varname>n</varname> x <varname>o</varname> x... hypermatrix
+            with random entries.
+        </para>
+        <para>
+            <screen><![CDATA[
+Y = grand(X, PDFname, …)
+]]></screen>
+            produces a scalar, vector, matrix or hypermatrix of size <literal>size(X)</literal>,
+            with random entries. <varname>X</varname> is used only as template to size the result.
+        </para>
+        <para>
+            The syntaxes
+        <screen><![CDATA[
+Y = grand(n, "mn", Mean, Cov)
+Y = grand(n, "markov", P, x0)
+Y = grand(n, "mul", nb, P)
+Y = grand(n, "prm", array)
+]]></screen>
+            produce an array with random entries, whose sizes depend on <varname>n</varname> and on
+            the size of the parameters <varname>Mean</varname>, <varname>P</varname> or
+            <varname>array</varname> (see below for details).
+        </para>
+        <para>
+            The syntaxes
+            <screen><![CDATA[
+S = grand("getgen")
+grand("setgen", gen)
+
+S = grand("getsd")
+grand("setsd", S)
+
+grand("setcgn", G)
+S = grand("getcgn")
+
+grand("initgn", I)
+
+grand("setall", s1, s2, s3, s4)
+
+grand("advnst", K)
+]]></screen>
+            configure or query the state of the underlying random number generators.
         </para>
     </refsection>
     <refsection>
@@ -143,8 +205,8 @@
                 <term>ベータ分布</term>
                 <listitem>
                     <para>
-                        <literal>Y=grand(m,n,'bet',A,B)</literal> は
-                        パラメータ<literal>A</literal> およびd <literal>B</literal>
+                        <code>Y = grand(m,n, 'bet', A,B)</code> は
+                        パラメータ<varname>A</varname> およびd <varname>B</varname>
                         を指定したベータ分布からランダム変量を生成します.
                         ベータ分布の密度は (0 &lt; x &lt; 1) です:
                     </para>
@@ -152,8 +214,8 @@
                         \dfrac{x^{A-1}(1-x)^{B-1}}{\beta(A,B)}
                     </latex>
                     <para>
-                        <literal>A</literal> および <literal>B</literal> は
-                        実数で >10<superscript>-37</superscript>とします.  関係する関数は
+                        <varname>A</varname> および <varname>B</varname> は
+                        実数で &gt; 10<superscript>-37</superscript>とします.  関係する関数は
                         : <link linkend="cdfbet">cdfbet</link>です.
                     </para>
                 </listitem>
@@ -162,11 +224,11 @@
                 <term>二項分布</term>
                 <listitem>
                     <para>
-                        <literal>Y=grand(m,n,'bin',N,p)</literal> は
-                        パラメータ<literal>N</literal> (正の整数) および <literal>p</literal>
+                        <code>Y = grand(m,n, 'bin', N,p)</code> は
+                        パラメータ<varname>N</varname> (正の整数) および <varname>p</varname>
                         ([0,1]の範囲の実数)を指定した二項分布に基づきランダム変量を生成します.
-                        この分布では,成功する確率が<literal>p</literal>の
-                        <literal>N</literal>回の独立なベルヌーイ試行における
+                        この分布では,成功する確率が<varname>p</varname>の
+                        <varname>N</varname>回の独立なベルヌーイ試行における
                         成功回数となります.
                         関係する関数: <link linkend="binomial">binomial</link>,
                         <link linkend="cdfbin">cdfbin</link>.
@@ -177,12 +239,12 @@
                 <term>負の二項分布</term>
                 <listitem>
                     <para>
-                        <literal>Y=grand(m,n,'nbn',N,p)</literal> は
-                        パラメータ<literal>N</literal> (正の整数) および<literal>p</literal> (
+                        <code>Y = grand(m,n, 'nbn', N,p)</code> は
+                        パラメータ<varname>N</varname> (正の整数) および<varname>p</varname> (
                         (0,1)の実数)を指定した負の二項分布に基づきランダム変量を生成します
                         :
-                        成功確率 <literal>p</literal>の独立なベルヌーイ試行において
-                        <literal>N</literal>回成功する前に発生する失敗の回数.
+                        成功確率 <varname>p</varname>の独立なベルヌーイ試行において
+                        <varname>N</varname>回成功する前に発生する失敗の回数.
                         関係する関数 : <link linkend="cdfnbn">cdfnbn</link>.
                     </para>
                 </listitem>
@@ -191,8 +253,8 @@
                 <term>カイ二乗分布</term>
                 <listitem>
                     <para>
-                        <literal>Y=grand(m,n,'chi', Df)</literal> は,自由度
-                        <literal>Df</literal>(実数 &gt; 0.0)を指定した
+                        <code>Y = grand(m,n, 'chi', Df)</code> は,自由度
+                        <varname>Df</varname>(実数 &gt; 0.0)を指定した
                         カイ二乗分布に基づくランダム変量を生成します.
                         関係する関数: <link linkend="cdfchi">cdfchi</link>.
                     </para>
@@ -202,9 +264,9 @@
                 <term>非心カイ二乗分布</term>
                 <listitem>
                     <para>
-                        <literal>Y=grand(m,n,'nch',Df,Xnon)</literal> は,
-                        自由度<literal>Df</literal>(実数 &gt; 0.0)および
-                        非心度パラメータ<literal>Xnonc</literal> (実数 &gt;= 0.0)
+                        <code>Y = grand(m,n, 'nch', Df,Xnon)</code> は,
+                        自由度<varname>Df</varname>(実数 &gt; 0.0)および
+                        非心度パラメータ<varname>Xnonc</varname> (実数 &gt;= 0.0)
                         を指定した非心カイ二乗分布に基づくランダム変量を生成します.
                         関係する関数 : <link linkend="cdfchn">cdfchn</link>.
                     </para>
@@ -214,8 +276,8 @@
                 <term>指数分布</term>
                 <listitem>
                     <para>
-                        <literal>Y=grand(m,n,'exp',Av)</literal> は
-                        平均<literal>Av</literal>(実数 &gt;= 0.0)
+                        <code>Y = grand(m,n, 'exp', Av)</code> は
+                        平均<varname>Av</varname>(実数 &gt;= 0.0)
                         を指定した指数分布に基づくランダム変量を生成します.
                     </para>
                 </listitem>
@@ -224,9 +286,9 @@
                 <term>F分布</term>
                 <listitem>
                     <para>
-                        <literal>Y=grand(m,n,'f',Dfn,Dfd)</literal> は,
-                        分子の自由度<literal>Dfn</literal> (実数 &gt; 0.0) および
-                        分母の自由度<literal>Dfd</literal> (実数
+                        <code>Y = grand(m,n, 'f', Dfn,Dfd)</code> は,
+                        分子の自由度<varname>Dfn</varname> (実数 &gt; 0.0) および
+                        分母の自由度<varname>Dfd</varname> (実数
                         &gt; 0.0) を指定した
                         F(分散比)分布に基づくランダム変量を生成します.
                         関係する関数 : <link linkend="cdff">cdff</link>.
@@ -237,12 +299,12 @@
                 <term>非心F分布</term>
                 <listitem>
                     <para>
-                        <literal>Y=grand(m,n,'nf',Dfn,Dfd,Xnon)</literal>は,
-                        分子の自由度<literal>Dfn</literal> (実数
+                        <code>Y = grand(m,n, 'nf', Dfn,Dfd,Xnon)</code>は,
+                        分子の自由度<varname>Dfn</varname> (実数
                         &gt;= 1), および
-                        分母の自由度<literal>Dfd</literal> (実数 &gt; 0) ,
+                        分母の自由度<varname>Dfd</varname> (実数 &gt; 0) ,
                         および非心パラメータ
-                        <literal>Xnonc</literal> (実数 &gt;= 0)を指定して
+                        <varname>Xnonc</varname> (実数 &gt;= 0)を指定して
                         非心F分布に基づくランダム変量を生成します.
                         関係する関数 : <link linkend="cdffnc">cdffnc</link>.
                     </para>
@@ -252,14 +314,14 @@
                 <term>ガンマ分布</term>
                 <listitem>
                     <para>
-                        <literal>Y=grand(m,n,'gam',shape,rate)</literal>
-                        は,パラメータ<literal>shape</literal> (実数 &gt; 0)および
-                        <literal>rate</literal> (実数 &gt; 0)を指定して
+                        <code>Y = grand(m,n, 'gam', shape,rate)</code>
+                        は,パラメータ<varname>shape</varname> (実数 &gt; 0)および
+                        <varname>rate</varname> (実数 &gt; 0)を指定して
                         ガンマ分布に基づくランダム変量を生成します.
                         ガンマの密度は以下となります :
                     </para>
                     <latex>
-                        \dfrac{ \textrm{rate}^{\textrm{shape}} x^{\textrm{shape}-1} e^{-\textrm{rate} x}}{\gamma(\textrm{shape}) }
+                        \dfrac{ \textrm{rate}^{\textrm{shape}} x^{\textrm{shape}-1} e^{-x.\textrm{rate}}}{\gamma(\textrm{shape}) }
                     </latex>
                     <para>
                         関係する関数 : <link linkend="gamma">gamma</link>,
@@ -271,9 +333,9 @@
                 <term>ガウスラプラス(正規)分布</term>
                 <listitem>
                     <para>
-                        <literal>Y=grand(m,n,'nor',Av,Sd)</literal> は
-                        平均<literal>Av</literal> (実数) および標準偏差
-                        <literal>Sd</literal> (実数 &gt;= 0)の
+                        <code>Y = grand(m,n, 'nor', Av,Sd)</code> は
+                        平均<varname>Av</varname> (実数) および標準偏差
+                        <varname>Sd</varname> (実数 &gt;= 0)の
                         正規分布に基づくランダム変量を生成します.
                         関係する関数
                         : <link linkend="cdfnor">cdfnor</link>.
@@ -284,18 +346,14 @@
                 <term>多変量ガウス(多変量正規)分布</term>
                 <listitem>
                     <para>
-                        <literal>Y=grand(n,'mn',Mean,Cov)</literal>は,
-                        <literal>n</literal>次の多変量正規ランダム変量を
+                        <code>Y = grand(n, 'mn', Mean,Cov)</code>は,
+                        <varname>n</varname>次の多変量正規ランダム変量を
                         生成します;
-                        <literal>Mean</literal> は <literal>m x
-                            1
-                        </literal>
-                        行列, <literal>Cov</literal>は <literal>m x
-                            m
-                        </literal>
-                        対称正定行列です
-                        (<literal>Y</literal> はこの場合 <literal>m x n</literal>
-                        行列となります).
+                        <varname>Mean</varname> は <literal>m x 1</literal>
+                        行列, <varname>Cov</varname>は <literal>m x m</literal>
+                        対称正定行列です.
+                        <varname>Y</varname> はこの場合 <literal>m x n</literal>
+                        行列となります.
                     </para>
                 </listitem>
             </varlistentry>
@@ -303,14 +361,14 @@
                 <term>幾何分布</term>
                 <listitem>
                     <para>
-                        <literal>Y=grand(m,n,'geom', p)</literal> は,
-                        パラメータ<literal>p</literal>を指定した
+                        <code>Y = grand(m,n, 'geom', p)</code> は,
+                        パラメータ<varname>p</varname>を指定した
                         幾何分布に基づくランダム変量を生成します:
-                        (成功率<literal>p</literal>の)ベルヌーイ試行に1回成功するまでの回数.
-                        <literal>p</literal> は [1.3e-307,1]の範囲とします.
+                        (成功率<varname>p</varname>の)ベルヌーイ試行に1回成功するまでの回数.
+                        <varname>p</varname> は [1.3e-307,1]の範囲とします.
                     </para>
                     <para>
-                        <literal>Y</literal> は整数の値を有する正の実数となり,
+                        <varname>Y</varname> は整数の値を有する正の実数となり,
                         これらは "1回の成功を得る時の試行回数"です.
                     </para>
                 </listitem>
@@ -319,12 +377,12 @@
                 <term>マルコフ分布</term>
                 <listitem>
                     <para>
-                        <literal>Y=grand(n,'markov',P,x0)</literal> は,
-                        推移行列 <literal>P</literal>で記述されたマルコフ連鎖の
-                        <literal>n</literal>個の一連の状態量を生成します.
-                        状態量の初期値は<literal>x0</literal>で指定されます.
-                        <literal>x0</literal>が大きさ<literal>m=size(x0,'*')</literal>の
-                        行列の場合,<literal>Y</literal>は大きさ<literal>m x n</literal>
+                        <code>Y = grand(n, 'markov', P,x0)</code> は,
+                        推移行列 <varname>P</varname>で記述されたマルコフ連鎖の
+                        <varname>n</varname>個の一連の状態量を生成します.
+                        状態量の初期値は<varname>x0</varname>で指定されます.
+                        <varname>x0</varname>が大きさ<literal>m=size(x0,'*')</literal>の
+                        行列の場合,<varname>Y</varname>は大きさ<literal>m x n</literal>
                         の行列となります.
                         <literal>Y(i,:)</literal> は初期状態量<literal>x0(i)</literal>
                         から得られるサンプルパスです.
@@ -335,21 +393,19 @@
                 <term>多項分布</term>
                 <listitem>
                     <para>
-                        <literal>Y=grand(n,'mul',nb,P)</literal> は,
-                        多項分布に基づき<literal>n</literal>個の観測量を生成します:
+                        <code>Y = grand(n, 'mul', nb,P)</code> は,
+                        多項分布に基づき<varname>n</varname>個の観測量を生成します:
                         <literal>m</literal>個のカテゴリの中に
-                        <literal>nb</literal>個の分類のイベント
-                        (<literal>m</literal>個の"boxes"の中に<literal>nb</literal>個の"balls").
+                        <varname>nb</varname>個の分類のイベント
+                        (<literal>m</literal>個の"boxes"の中に<varname>nb</varname>個の"balls").
                         <literal>P(i)</literal>はあるイベントがカテゴリ i に分類される確率です.
-                        確率ベクトル<literal>P</literal>の大きさは<literal>m-1</literal>です
+                        確率ベクトル<varname>P</varname>の大きさは<literal>m-1</literal>です
                         (カテゴリ<literal>m</literal>の確率は<literal>1-sum(P)</literal>となります).
-                        <literal>Y</literal> の大きさは <literal>m x n</literal>で,
+                        <varname>Y</varname> の大きさは <literal>m x n</literal>で,
                         各列 <literal>Y(:,j)</literal> は多項分布の観測量,
                         <literal>Y(i,j)</literal>は(
                         <literal>j</literal>番目の観測値に関する)カテゴリ<literal>i</literal>に
-                        分類されるイベントの数です(<literal>sum(Y(:,j))
-                            = nb
-                        </literal>
+                        分類されるイベントの数です(<literal>sum(Y(:,j)) = nb</literal>
                         ).
                     </para>
                 </listitem>
@@ -358,8 +414,8 @@
                 <term>ポワソン分布</term>
                 <listitem>
                     <para>
-                        <literal>Y=grand(m,n,'poi',mu)</literal>は,
-                        平均 <literal>mu (実数 &gt;= 0.0)</literal>のポワソン分布に基づき
+                        <code>Y = grand(m,n, 'poi', mu)</code>は,
+                        平均 <varname>mu (実数 &gt;= 0.0)</varname>のポワソン分布に基づき
                         乱数を生成します. 関係する機能
                         : <link linkend="cdfpoi">cdfpoi</link>.
                     </para>
@@ -369,10 +425,29 @@
                 <term>ランダム置換</term>
                 <listitem>
                     <para>
-                        <literal>Y=grand(n,'prm',vect)</literal> は,
-                        列ベクトル (<literal>m x 1</literal>)
-                        <literal>vect</literal>の<literal>n</literal>個の
-                        ランダム置換を生成します.
+                        <code>Y = grand(n, "prm", array)</code> generates
+                        <varname>n</varname> random permutations of the <varname>array</varname>
+                        elements.
+                        <varname>array</varname> can be a vector, matrix or hypermatrix of real or
+                        complex numbers, of integers, booleans, polynomials or strings; full or sparse.
+                        <itemizedlist>
+                            <listitem>
+                                If <varname>array</varname> is a <literal>1 x m</literal> row vector,
+                                <varname>Y</varname> is a <literal>n x m</literal> matrix.
+                            </listitem>
+                            <listitem>
+                                If <varname>array</varname> is a <literal>m x 1</literal> column vector,
+                                <varname>Y</varname> is a <literal>m x n</literal> matrix.
+                            </listitem>
+                            <listitem>
+                                If <varname>array</varname> is a <literal>m x p</literal> matrix,
+                                <varname>Y</varname> is a <literal>m x p x n</literal> hypermatrix.
+                            </listitem>
+                            <listitem>
+                                If <varname>array</varname> is a <literal>m x p x q…</literal> hypermatrix,
+                                <varname>Y</varname> is a <literal>m x p x q… x n</literal> hypermatrix.
+                            </listitem>
+                        </itemizedlist>
                     </para>
                 </listitem>
             </varlistentry>
@@ -380,7 +455,7 @@
                 <term>一様分布 (def)</term>
                 <listitem>
                     <para>
-                        <literal>Y=grand(m,n,'def')</literal> は,
+                        <code>Y = grand(m,n, 'def')</code> は,
                         は,<literal>[0,1)</literal> (1は含まれません) の範囲の
                         一様分布に基づきランダム変量を生成します.
                     </para>
@@ -390,7 +465,7 @@
                 <term>一様分布 (unf)</term>
                 <listitem>
                     <para>
-                        <literal>Y=grand(m,n,'unf',Low,High)</literal>
+                        <code>Y = grand(m,n, 'unf', Low,High)</code>
                         は <literal>[Low, High)</literal> の範囲の一様分布に基づく
                         の実数のランダム変量を生成します.
                     </para>
@@ -400,12 +475,12 @@
                 <term>一様分布 (uin)</term>
                 <listitem>
                     <para>
-                        <literal>Y=grand(m,n,'uin',Low,High)</literal>は,
-                        <literal>Low</literal> および <literal>High</literal> (含む)
+                        <code>Y = grand(m,n, 'uin', Low,High)</code>は,
+                        <varname>Low</varname> および <varname>High</varname> (含む)
                         の範囲の一様分布に基づく
                         の整数のランダム変量を生成します.
-                        <literal>High</literal> および
-                      <literal>Low</literal> は <literal>(High-Low+1) &lt; 2147483561</literal>の
+                        <varname>High</varname> および
+                      <varname>Low</varname> は <literal>(High-Low+1) &lt; 2147483561</literal>の
                         範囲の整数とする必要があります.
                     </para>
                 </listitem>
@@ -414,7 +489,7 @@
                 <term>一様分布 (lgi)</term>
                 <listitem>
                     <para>
-                        <literal>Y=grand(m,n,'lgi')</literal> は
+                        <code>Y = grand(m,n, 'lgi')</code> は
                         カレントの生成器の基底出力として
                         以下の範囲の一様分布に基づくランダムな整数を返します:
                     </para>
@@ -515,8 +590,8 @@
                 <term>action= 'getgen'</term>
                 <listitem>
                     <para>
-                        <literal>S=grand('getgen')</literal> はカレントの基底生成器を返します
-                        ( <literal>S</literal> は以下の文字列のどれかです:
+                        <code>S = grand('getgen')</code> はカレントの基底生成器を返します
+                        ( <varname>S</varname> は以下の文字列のどれかです:
                         'mt', 'kiss', 'clcg2', 'clcg4', 'urand'.
                     </para>
                 </listitem>
@@ -525,8 +600,8 @@
                 <term>action= 'setgen'</term>
                 <listitem>
                     <para>
-                        <literal>grand('setgen',gen)</literal>は
-                        カレントの基底生成器を<literal>gen</literal>に設定します.
+                        <code>grand('setgen', gen)</code>は
+                        カレントの基底生成器を<varname>gen</varname>に設定します.
                         この文字列には 'mt', 'kiss', 'clcg2', 'clcg4', 'urand'
                         のどれかを指定します(
                         このコールは新しいカレントの生成器を返すことに注意してください).
@@ -537,9 +612,9 @@
                 <term>action= 'getsd'</term>
                 <listitem>
                     <para>
-                        <literal>S=grand('getsd')</literal> はカレントの基底生成器の
+                        <code>S = grand('getsd')</code> はカレントの基底生成器の
                         カレントの状態 (カレントのシード)を返します ;
-                        <literal>S</literal> には, mt の場合は<literal>625</literal>次
+                        <varname>S</varname> には, mt の場合は<literal>625</literal>次
                         (先頭は<literal>[1,624]</literal>の範囲のインデックスです),
                         kiss の場合は <literal>4</literal> 次, clcg2の場合は <literal>2</literal>次,
                         clcg4 の場合は <literal>4</literal>次
@@ -553,7 +628,7 @@
                 <term>action= 'setsd'</term>
                 <listitem>
                     <para>
-                        <literal>grand('setsd',S), grand('setsd',s1[,s2,s3,s4])</literal> は
+                        <code>grand('setsd', S), grand('setsd',s1[,s2,s3,s4])</code> は
                         カレントの基底生成器の状態(新しいシード)を設定します:
                     </para>
                     <variablelist>
@@ -561,7 +636,7 @@
                             <term>mtの場合</term>
                             <listitem>
                                 <para>
-                                    <literal>S</literal>は<literal>625</literal>次の整数ベクトル
+                                    <varname>S</varname>は<literal>625</literal>次の整数ベクトル
                                     (最初の要素はインデックスで<literal>[1,624]</literal>の範囲とする
                                     必要があります, 続く<literal>624</literal>個の要素は
                                     <literal>[0,2^32[</literal>)の範囲とします)
@@ -622,7 +697,7 @@
                 <term>action= 'phr2sd'</term>
                 <listitem>
                     <para>
-                        <literal>Sd=grand('phr2sd', phrase)</literal> は,
+                        <code>Sd = grand('phr2sd', phrase)</code> は,
                         基底生成器(clcg2に適しています)の状態を変更するシードとして使用可能な
                         <literal>1 x 2</literal> ベクトル <literal>Sd</literal>を生成する
                         <literal>phrase</literal> (文字列)を指定します.
@@ -657,10 +732,10 @@
                 <term>action= 'setcgn'</term>
                 <listitem>
                     <para>
-                        <literal>grand('setcgn',G)</literal> は clcg4 のカレントの仮想生成器を設定します
-                        (clcg4 が設定された時, この値は使用される仮想 (clcg4)生成器の数<literal>G</literal>となります);
+                        <code>grand('setcgn', G)</code> は clcg4 のカレントの仮想生成器を設定します
+                        (clcg4 が設定された時, この値は使用される仮想 (clcg4)生成器の数<varname>G</varname>となります);
                         仮想 clcg4 生成器は<literal>0,1,..,100</literal>と番号付けられます
-                        (そして, <literal>G</literal>は<literal>[0,100]</literal>の範囲の整数となります);
+                        (そして, <varname>G</varname>は<literal>[0,100]</literal>の範囲の整数となります);
                         デフォルトで,カレントの仮想生成器は<literal>0</literal>です.
                     </para>
                 </listitem>
@@ -669,7 +744,7 @@
                 <term>action= 'getcgn'</term>
                 <listitem>
                     <para>
-                        <literal>S=grand('getcgn')</literal> はカレントの仮想 clcg4 生成器の数を返します.
+                        <code>S = grand('getcgn')</code> はカレントの仮想 clcg4 生成器の数を返します.
                     </para>
                 </listitem>
             </varlistentry>
@@ -677,7 +752,7 @@
                 <term>action= 'initgn'</term>
                 <listitem>
                     <para>
-                        <literal>grand('initgn',I)</literal> はカレントの仮想生成器の状態を再度初期化します
+                        <code>grand('initgn', I)</code> はカレントの仮想生成器の状態を再度初期化します
                     </para>
                     <variablelist>
                         <varlistentry>
@@ -708,7 +783,7 @@
                 <term>action= 'setall'</term>
                 <listitem>
                     <para>
-                        <literal>grand('setall',s1,s2,s3,s4)</literal> は
+                        <code>grand('setall',s1,s2,s3,s4)</code> は
                         生成器<literal>0</literal>の初期状態を<literal>s1,s2,s3,s4</literal>に設定します.
                         他の生成器の初期シードは同期がとれるように設定されます.
                         <literal>s1, s2, s3, s4</literal>に関する制約については,'setsd'アクションを参照ください.
@@ -719,12 +794,182 @@
                 <term>action= 'advnst'</term>
                 <listitem>
                     <para>
-                        <literal>grand('advnst',K)</literal> はカレントの生成器の状態を
+                        <code>grand('advnst',K)</code> はカレントの生成器の状態を
                         <literal>2^K</literal>だけ前に進め,初期シードをその値でリセットします.
                     </para>
                 </listitem>
             </varlistentry>
         </variablelist>
+    </refsection>
+    <refsection>
+        <title>例</title>
+        <para>
+            In the following example, we generate random numbers from various distributions and
+            plot the associated histograms.
+        </para>
+        <programlisting role="example"><![CDATA[
+// Returns a 400 x 800 matrix of random doubles,
+// with normal distribution and average 0 and standard deviation 1.
+R = grand(400,800,"nor",0,1);
+scf();
+histplot(10,R);
+xtitle("Normal random numbers from grand","X","Frequency");
+ ]]></programlisting>
+        <scilab:image localized="true">
+            R = grand(400,800,"nor",0,1);
+            histplot(10,R);
+            xtitle("Normal random numbers from grand","X","Frequency");
+        </scilab:image>
+
+        <programlisting role="example"><![CDATA[
+// Returns a 400 x 800 matrix of random doubles,
+// uniform in [0,1).
+R = grand(400,800,"def");
+scf();
+histplot(10,R);
+xtitle("Uniform random numbers from grand","X","Frequency");
+ ]]></programlisting>
+        <scilab:image localized="true">
+            R = grand(400,800,"def");
+            histplot(10,R);
+            xtitle("Uniform random numbers from grand","X","Frequency");
+        </scilab:image>
+
+        <programlisting role="example"><![CDATA[
+// Returns a 400 x 800 matrix of random doubles,
+// with Poisson distribution and average equal to 5.
+R = grand(400,800,"poi",5);
+scf();
+histplot(10,R);
+xtitle("Poisson random numbers from grand","X","Frequency");
+ ]]></programlisting>
+        <scilab:image localized="true">
+            R = grand(400,800,"poi",5);
+            histplot(10,R);
+            xtitle("Poisson random numbers from grand","X","Frequency");
+        </scilab:image>
+
+        <para>
+            In the following example, we generate random numbers from the exponential distribution and
+            then compare the empirical with the theoretical distribution.
+        </para>
+        <programlisting role="example"><![CDATA[
+lambda=1.6;
+N=100000;
+X = grand(1,N,"exp",lambda);
+scf();
+classes = linspace(0,12,25);
+histplot(classes,X);
+x=linspace(0,12,25);
+y = (1/lambda)*exp(-(1/lambda)*x);
+plot(x,y,"ro-");
+legend(["Empirical" "Theory"]);
+xtitle("Exponential random numbers from grand","X","Frequency");
+ ]]></programlisting>
+        <scilab:image localized="true">
+            lambda=1.6;
+            N=100000;
+            X = grand(1,N,"exp",lambda);
+            classes = linspace(0,12,25);
+            histplot(classes,X)
+            x=linspace(0,12,25);
+            y = (1/lambda)*exp(-(1/lambda)*x);
+            plot(x,y,"ro-");
+            legend(["Empirical" "Theory"]);
+            xtitle("Exponential random numbers from grand","X","Frequency");
+        </scilab:image>
+        <para>
+            In the following example, we generate random numbers from the gamma distribution and
+            then compare the empirical with the theoretical distribution.
+        </para>
+        <programlisting role="example"><![CDATA[
+N=10000;
+A=10;
+B=4;
+R=grand(1,N,"gam",A,B);
+XS=gsort(R,"g","i")';
+PS=(1:N)'/N;
+P=cdfgam("PQ",XS,A*ones(XS),B*ones(XS));
+scf();
+plot(XS,PS,"b-"); // Empirical distribution
+plot(XS,P,"r-"); // Theoretical distribution
+legend(["Empirical" "Theory"]);
+xtitle("Cumulative distribution function of Gamma random numbers","X","F");
+ ]]></programlisting>
+        <scilab:image localized="true">
+            N=10000;
+            A=10;
+            B=4;
+            R=grand(1,N,"gam",A,B);
+            XS=gsort(R,"g","i")';
+            PS=(1:N)'/N;
+            P=cdfgam("PQ",XS,A*ones(XS),B*ones(XS));
+            scf();
+            plot(XS,PS,"b-"); // Empirical distribution
+            plot(XS,P,"r-"); // Theoretical distribution
+            legend(["Empirical" "Theory"]);
+            xtitle("Cumulative distribution function of Gamma random numbers","X","F");
+        </scilab:image>
+        <para>
+            In the following example, we generate 10 random integers in the [1,365] interval.
+        </para>
+        <programlisting role="example"><![CDATA[
+grand(10,1,"uin",1,365)
+ ]]></programlisting>
+        <para>
+            In the following example, we generate 12 permutations of the [1,2,...,7] set.
+            The 12 permutations are stored column by column.
+        </para>
+        <programlisting role="example"><![CDATA[
+grand(12,"prm",(1:7)')
+ ]]></programlisting>
+        <para>
+            In the following example, we generate a
+            <literal>10</literal>×<literal>10</literal>×<literal>10</literal>
+            hypermatrix of random numbers from the "normal" distribution and plot the associated histograms.
+            Showing the first and last layers.
+        </para>
+        <programlisting role="example"><![CDATA[
+// Returns a 10 x 10 x 10 hypermatrix of random doubles,
+// with normal distribution, average 0 and standard deviation 1.
+// Showing the first and last layers.
+R = grand(10,10,10,"nor",0,1);
+
+subplot(1,2,1)
+bar3d(R(:,:,1));
+xtitle("Layer 1");
+subplot(1,2,2)
+bar3d(R(:,:,10));
+xtitle("Layer 10");
+ ]]></programlisting>
+        <scilab:image localized="true">
+            R = grand(10,10,10,"nor",0,1);
+            subplot(1,2,1)
+            bar3d(R(:,:,1));
+            xtitle("Layer 1");
+            subplot(1,2,2)
+            bar3d(R(:,:,10));
+            xtitle("Layer 10");
+        </scilab:image>
+    </refsection>
+    <refsection>
+        <title>Get predictable or less predictable numbers</title>
+        <para>
+            The pseudo random number generators are based on deterministic sequences.
+            In order to get reproducible simulations, the initial seed of the generator is constant,
+            such that the sequence will remain the same from a session to the other.
+            Hence, by default, the first numbers produced by <function>grand</function> are always
+            the same.
+        </para>
+        <para>
+            In some situations, we may want to initialize the seed of the generator in
+            order to produce less predictable numbers.
+            In this case, we may initialize the seed with the output of the <function>getdate</function> function:
+        </para>
+        <programlisting role="example"><![CDATA[
+n = getdate("s");
+grand("setsd",n)
+    ]]></programlisting>
     </refsection>
     <refsection>
         <title>clcg4のテスト例</title>

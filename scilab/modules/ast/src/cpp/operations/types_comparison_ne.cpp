@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2011 - DIGITEO - Antoine ELIAS
  *  Copyright (C) 2015 - Scilab Enterprises - Sylvain GENIN
  *  Copyright (C) 2016 - Scilab Enterprises - Pierre-Aimé AGNEL
@@ -31,12 +31,13 @@
 #include "overload.hxx"
 #include "user.hxx"
 #include "opexp.hxx"
+#include "operations.hxx"
 
 using namespace types;
 
 //define arrays on operation functions
 static compnoequal_function pComparisonEqualfunction[types::InternalType::IdLast][types::InternalType::IdLast] = { NULL };
-
+static std::wstring op = L"<>";
 
 void fillComparisonNoEqualFunction()
 {
@@ -3481,23 +3482,13 @@ types::InternalType* compnoequal_M_M<GraphicHandle, GraphicHandle, Bool>(Graphic
     }
 
     /* check dimension*/
-    if (_pL->getDims() != _pR->getDims())
+    std::wstring error = checkSameSize(_pL, _pR, op);
+    if (error.empty() == false)
     {
-        throw ast::InternalError(_W("Inconsistent row/column dimensions.\n"));
+        throw ast::InternalError(error);
     }
 
-    int* piDimsL = _pL->getDimsArray();
-    int* piDimsR = _pR->getDimsArray();
-
-    for (int i = 0; i < _pL->getDims(); i++)
-    {
-        if (piDimsL[i] != piDimsR[i])
-        {
-            throw ast::InternalError(_W("Inconsistent row/column dimensions.\n"));
-        }
-    }
-
-    Bool* pOut = new Bool(_pL->getDims(), piDimsL);
+    Bool* pOut = new Bool(_pL->getDims(), _pL->getDimsArray());
     int iSize = pOut->getSize();
 
     compnoequal(_pL->get(), iSize, _pR->get(), pOut->get());

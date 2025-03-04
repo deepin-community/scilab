@@ -1,5 +1,5 @@
 // ===================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010-2015 - Scilab Enterprises - Juergen Koch <juergen.koch@hs-esslingen.de>
 // Copyright (C) 2018-2020 - Samuel GOUGEON
 //
@@ -46,7 +46,7 @@ assert_checkequal(p.mark_background,0);
 //
 // Test #3 Vary marker size and color
 clf reset
-set(gcf(),"color_map",coolcolormap(64));
+set(gcf(),"color_map",cool(64));
 p = scatter3d(x,y,z,s,t);
 assert_checkequal(p.line_mode,"off");
 assert_checkequal(p.fill_mode,"off");
@@ -198,10 +198,12 @@ assert_checkerror("scatter3d(1,2,3,%i)", msg);
 // Marks styles (case insensitive)
 prop = ["marker" "MarKeR" "markerstyle"  "MARKSTYLE"];
 markersT = ["." "+" "x" "o" "o+" "circle plus" "d" "fd" "filled diamond" ..
-"d+" "diamond plus" "^" "v" ">" "<" "*" "*5" "p" "pentagram" "s" "square"];
+"d+" "diamond plus" "^" "v" ">" "<" "*" "*5" "p" "pentagram" "s" "square" ..
+"^." "v." ">." "<." "m" "minus" "|"];
     // Markers Numerical codes styles (available)
 markersN = [ 0   1   2   9   3        3         5   4         4 ..
-  8       8          6   7   12  13  10  14  14      14      11    11];
+  8       8          6   7   12  13  10  14  14      14      11    11 ..
+  15   16   17   18   19   19   20];
 x = rand(1,20);
 y = rand(1,20);
 z = rand(1,20);
@@ -217,7 +219,7 @@ for p = prop
 end
 msg = "scatter3d: Argument #5: Wrong marker specification.";
 assert_checkerror("scatter3d(1,2,3,""marker"",""ab"")", msg);
-assert_checkerror("scatter3d(1,2,3,""marker"", 20)", msg);
+assert_checkerror("scatter3d(1,2,3,""marker"", 25)", msg);
 msg = "scatter3d: Argument #5: Scalar (1 element) expected.";
 assert_checkerror("scatter3d(1,2,3,""marker"",[1 2])", msg);
 

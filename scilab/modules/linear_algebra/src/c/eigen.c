@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009 - DIGITEO - Bernard HUGUENEY
  * Copyright (C) 2011 - DIGITEO - Cedric DELAMARRE
  *
@@ -385,12 +385,12 @@ static doublecomplex* allocateZggevWorkspace(int iCols, int* pWorksize)
     C2F(zggev)("N", "N", &iCols, NULL, &iCols, NULL, &iCols, NULL, NULL, NULL, &iCols, NULL, &iCols, &opt, &query, NULL, &info);
 
     *pWorksize = (int) opt.r;
-    ret = MALLOC(*pWorksize * sizeof(double));
+    ret = MALLOC(*pWorksize * sizeof(doublecomplex));
 
     if (!ret)
     {
-        *pWorksize = Max(1, 8 * iCols);
-        ret = MALLOC(*pWorksize * sizeof(double));
+        *pWorksize = Max(1, sizeof(doublecomplex) * iCols);
+        ret = MALLOC(*pWorksize * sizeof(doublecomplex));
         if (!ret)
         {
             *pWorksize = 0;
@@ -531,7 +531,7 @@ int iEigen2RealM(double* pData1, double* pData2, int iCols, double* pAlphaReal, 
 
 /******************************************************************************
  * Code below lifted from assembleEigenvectors.c
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA - Micha\EBl Baudin
  *
  ******************************************************************************/

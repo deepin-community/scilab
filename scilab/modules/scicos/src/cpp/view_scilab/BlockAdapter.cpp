@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2014-2016 - Scilab Enterprises - Clement DAVID
  *  Copyright (C) 2017 - ESI Group - Clement DAVID
  *
@@ -124,51 +124,6 @@ struct doc
         adaptor.setDocContent(v->clone());
         return true;
     }
-};
-
-link_indices_t getPortEnd(const Controller& controller, org_scilab_modules_scicos::model::Block* adaptee, portKind port)
-{
-    ScicosID parent;
-    kind_t parentKind = BLOCK;
-    controller.getObjectProperty(adaptee, PARENT_BLOCK, parent);
-    if (parent == ScicosID())
-    {
-        parentKind = DIAGRAM;
-        controller.getObjectProperty(adaptee, PARENT_DIAGRAM, parent);
-    }
-
-    // early return if this block is out of a hierarchy
-    if (parent == ScicosID())
-    {
-        return link_indices_t();
-    }
-
-    org_scilab_modules_scicos::model::BaseObject* parentObject = controller.getBaseObject(parent);
-
-    std::vector<ScicosID> children;
-    controller.getObjectProperty(parentObject, CHILDREN, children);
-
-    std::vector<ScicosID> ports;
-    controller.getObjectProperty(parentObject, property_from_port(port), children);
-
-    // store the index of the connected signal, 0 if absent
-    link_indices_t portIndices(ports.size());
-    for (size_t i = 0; i < ports.size(); ++i)
-    {
-        ScicosID signal;
-        controller.getObjectProperty(ports[i], PORT, CONNECTED_SIGNALS, signal);
-
-        if (signal != ScicosID())
-        {
-            auto it = std::find(children.begin(), children.end(), signal);
-            if (it != children.end())
-            {
-                portIndices[i] = (int)std::distance(children.begin(), it);
-            }
-        }
-    }
-
-    return portIndices;
 };
 
 } /* namespace */

@@ -1,6 +1,6 @@
 
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) DIGITEO - 2009-2010 - Allan CORNET <allan.cornet@scilab.org>
  * Copyright (C) DIGITEO - 2010-2010 - Clément DAVID <clement.david@scilab.org>
  *

@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2008-2010 - DIGITEO - Allan CORNET
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -21,7 +21,7 @@
 #include "os_string.h"
 #include "charEncoding.h"
 #include "setgetlanguage.h"
-#include "version.h"
+#include "getversion.h"
 #include "sci_malloc.h"
 #include "GetWindowsVersion.h"
 /*--------------------------------------------------------------------------*/
@@ -123,7 +123,8 @@ static wchar_t *readRegistryLanguage(HKEY hKeyRoot, wchar_t *keyStringFormat)
 #define LENGTH_LANGUAGE_REGISTRY 64
     wchar_t LANGUAGE_REGISTRY[LENGTH_LANGUAGE_REGISTRY] = DEFAULT_LANGUAGE_VALUE;
     wchar_t *keyString = NULL;
-    int lenkeyString = (int)(wcslen(keyStringFormat) + wcslen(SCI_VERSION_WIDE_STRING)) + 1;
+    wchar_t *scilabVersionWideString = getScilabVersionAsWideString();
+    int lenkeyString = (int)(wcslen(keyStringFormat) + wcslen(scilabVersionWideString)) + 1;
 
     keyString = (wchar_t*) MALLOC(sizeof(wchar_t) * lenkeyString);
 
@@ -133,7 +134,7 @@ static wchar_t *readRegistryLanguage(HKEY hKeyRoot, wchar_t *keyStringFormat)
         DWORD OpensKeyOptions = 0;
         HKEY hKey;
         int length = LENGTH_LANGUAGE_REGISTRY;
-        wsprintfW(keyString, keyStringFormat, SCI_VERSION_WIDE_STRING);
+        wsprintfW(keyString, keyStringFormat, scilabVersionWideString);
 #ifdef _WIN64 /* Scilab x64 on x64 windows */
         OpensKeyOptions = KEY_READ | KEY_WOW64_64KEY;
 #else
@@ -154,6 +155,7 @@ static wchar_t *readRegistryLanguage(HKEY hKeyRoot, wchar_t *keyStringFormat)
                 FREE(keyString);
                 keyString = NULL;
             }
+            free(scilabVersionWideString);
             return NULL;
         }
 
@@ -165,6 +167,7 @@ static wchar_t *readRegistryLanguage(HKEY hKeyRoot, wchar_t *keyStringFormat)
                 FREE(keyString);
                 keyString = NULL;
             }
+            free(scilabVersionWideString);
             return NULL;
         }
 
@@ -175,6 +178,9 @@ static wchar_t *readRegistryLanguage(HKEY hKeyRoot, wchar_t *keyStringFormat)
             keyString = NULL;
         }
     }
+
+    free(scilabVersionWideString);
+
     return os_wcsdup(LANGUAGE_REGISTRY);
 }
 /*--------------------------------------------------------------------------*/
@@ -196,14 +202,15 @@ BOOL setLanguagePreferences(void)
     if (pwstLang)
     {
         wchar_t *keyString = NULL;
-        int lenkeyString = (int)(wcslen(HKCU_LANGUAGE_FORMAT) + wcslen(SCI_VERSION_WIDE_STRING)) + 1;
+        wchar_t *scilabVersionWideString = getScilabVersionAsWideString();
+        int lenkeyString = (int)(wcslen(HKCU_LANGUAGE_FORMAT) + wcslen(scilabVersionWideString)) + 1;
         keyString = (wchar_t*) MALLOC(sizeof(wchar_t) * lenkeyString);
         if (keyString)
         {
             DWORD OpensKeyOptions = 0;
             HKEY hKey;
             DWORD result = 0;
-            wsprintfW(keyString, HKCU_LANGUAGE_FORMAT, SCI_VERSION_WIDE_STRING);
+            wsprintfW(keyString, HKCU_LANGUAGE_FORMAT, scilabVersionWideString);
 
 #ifdef _WIN64 /* Scilab x64 on x64 windows */
             OpensKeyOptions = KEY_ALL_ACCESS | KEY_WOW64_64KEY;
@@ -255,6 +262,7 @@ BOOL setLanguagePreferences(void)
         }
 
         free(pwstLang);
+        free(scilabVersionWideString);
     }
     return FALSE;
 }

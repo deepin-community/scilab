@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA -
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
  * Copyright (C) 2019 - Samuel GOUGEON
@@ -34,8 +34,7 @@
             <varlistentry>
                 <term>x</term>
                 <listitem>
-                    <para>Booléen, complexe, réel, entier, polynôme matrice,
-                        bibliotheque ou fonction
+                    <para>Tout type de variable Scilab.
                     </para>
                 </listitem>
             </varlistentry>
@@ -148,7 +147,13 @@ string(1:4:$)
             <revision>
                 <revnumber>5.4.0</revnumber>
                 <revremark>
-                    implicitlist typeof input accepted.
+                    Argument d'entré de type implicitlist accepté.
+                </revremark>
+            </revision>
+            <revision>
+                <revnumber>2024.0.0</revnumber>
+                <revremark>
+                    Arguments d'entrés de type list, cell et struct acceptés.
                 </revremark>
             </revision>
         </revhistory>

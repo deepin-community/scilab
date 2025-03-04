@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2005-2008 - INRIA - Serge STEER <serge.steer@inria.fr>
 * Copyright (C) 2005-2008 - INRIA - Pierrick MODE
 * Copyright (C) 2007-2008 - INRIA - Allan CORNET <allan.cornet@inria.fr>
@@ -33,6 +33,7 @@ extern "C"
 #include "ripole.h"
 #include "expandPathVariable.h"
 #include "mopen.h"
+#include "mclose.h"
 #include "sci_tmpdir.h"
 #include "freeArrayOfString.h"
 #include "FileExist.h"
@@ -213,39 +214,28 @@ types::Function::ReturnValue sci_xls_open(types::typed_list &in, int _iRetCount,
     4 = incorrect file
     5 = not a BIFF8 xls file
     */
-    switch (iErr)
+    if (iErr)
     {
-        case 0:
-            /* OK */
-            break;
-
-        case 1:
-            Scierror(999, _("%s: Not an ole2 file.\n"), "xls_open");
-            return types::Function::Error;
-            break;
-
-        case 2:
-            Scierror(999, _("%s: The file has no Workbook directory.\n"), "xls_open");
-            return types::Function::Error;
-            break;
-
-        case 3:
-            Scierror(999, _("%s: No more memory.\n"), "xls_open");
-            return types::Function::Error;
-            break;
-
-        case 4:
-            Scierror(990, _("%s: Incorrect or corrupted file.\n"), "xls_open");
-            return types::Function::Error;
-            break;
-
-        case 5:
-            Scierror(999, _("%s: Only BIFF8 file format is handled.\n"), "xls_open");
-            return types::Function::Error;
-            break;
-
-        default :
-            break;
+        //first close opened file
+        mclose(iId);
+        switch (iErr)
+        {
+            case 1:
+                Scierror(999, _("%s: Not an ole2 file.\n"), "xls_open");
+                return types::Function::Error;
+            case 2:
+                Scierror(999, _("%s: The file has no Workbook directory.\n"), "xls_open");
+                return types::Function::Error;
+            case 3:
+                Scierror(999, _("%s: No more memory.\n"), "xls_open");
+                return types::Function::Error;
+            case 4:
+                Scierror(990, _("%s: Incorrect or corrupted file.\n"), "xls_open");
+                return types::Function::Error;
+            case 5:
+                Scierror(999, _("%s: Only BIFF8 file format is handled.\n"), "xls_open");
+                return types::Function::Error;
+        }
     }
 
     // *** Return result in Scilab. ***

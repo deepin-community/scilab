@@ -173,9 +173,6 @@
               <literal>@</literal> est équivalent à <literal>~</literal>
           </para>
           <para>
-              <literal>`</literal> est équivalent à  <literal>&lt;</literal>.
-          </para>
-          <para>
             <literal>**</literal> est équivalent à  <literal>^</literal>.
           </para>
           <para>

@@ -1,13 +1,14 @@
 //<-- CLI SHELL MODE -->
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ????-2008 - INRIA
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
 
 // <!-- ENGLISH IMPOSED -->
-// <-- NOT FIXED --> 6.0.0
+// <-- CLI SHELL MODE -->
+// <-- NO CHECK REF -->
 
 funcprot(0);
 

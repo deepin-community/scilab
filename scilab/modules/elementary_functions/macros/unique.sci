@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
 // Copyright (C) 2018 - 2020 - Samuel GOUGEON
@@ -16,14 +16,14 @@ function [x, ki, ko, nb] = unique(x, varargin)
     //
     // History:
     // * 2019 - S. Gougeon :
-    //   - add uniqueNan option: http://bugzilla.scilab.org/15522
-    //   - add keepOrder option: http://bugzilla.scilab.org/15795
-    //   - add nb output option: http://bugzilla.scilab.org/8418
+    //   - add uniqueNan option: https://gitlab.com/scilab/scilab/-/issues/15522
+    //   - add keepOrder option: https://gitlab.com/scilab/scilab/-/issues/15795
+    //   - add nb output option: https://gitlab.com/scilab/scilab/-/issues/8418
     //
     // * 2020 - S. Gougeon :
     //   - Complex numbers are now completely sorted, by magnitude, + by phase
-    //   - add ku output indices: http://bugzilla.scilab.org/16337
-    //   - Sparse 2D matrices accepted: http://bugzilla.scilab.org/15842
+    //   - add ku output indices: https://gitlab.com/scilab/scilab/-/issues/16337
+    //   - Sparse 2D matrices accepted: https://gitlab.com/scilab/scilab/-/issues/15842
 
     keepOrder = %f
     uniqueNan = %f

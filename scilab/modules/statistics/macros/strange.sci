@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2000 - INRIA - Carlos Klimann
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -23,25 +23,15 @@ function [r] = strange(x,orien)
     //with the range of each row.
     //
     //
-    [lhs,rhs] = argn(0)
-    if rhs==0 then 
-        msg = _("%s: Wrong number of input arguments: %d to %d expected.\n")
-        error(msprintf(msg,"strange",0,2))
+    arguments
+        x
+        orien (1, 1) {mustBeA(orien, ["double", "string"]), mustBeMember(orien, {1, 2, "r", "c", "*"})} = "*"
     end
-    if rhs==1 then
-        if x==[]
-            r = %nan
-        else
-            r = max(x) - min(x)
-        end
-    elseif rhs==2 then
-        if orien=="r" | orien==1 then
-            r = max(x,"r")-min(x,"r")
-        elseif orien=="c" | orien==2 then
-            r = max(x,"c") - min(x,"c")
-        else
-            msg = _("%s: Wrong value for %d input argument: ''%s'', ''%s'', %d or %d expected.\n")
-            error(msprintf(msg,"strange",2,"r","c",1,2))
-        end
+
+    if x==[]
+        r = %nan
+    else
+        r = max(x, orien) - min(x, orien)
     end
+    
 endfunction

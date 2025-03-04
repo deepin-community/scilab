@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2018 - Samuel GOUGEON
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -11,8 +11,8 @@
 
 // <-- Non-regression test for bug 15638 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/15638
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/15638
 //
 // <-- Short Description -->
 // colorbar() displayed tips colors twice smaller than for other ones
@@ -20,7 +20,7 @@
 x = linspace(0,1,81);
 z = cos(2*%pi*x)'*sin(2*%pi*x);
 clf()
-gcf().color_map = jetcolormap(4);
+gcf().color_map = jet(4);
 Sgrayplot(x, x, z);
 colorbar(min(z), max(z));
 contour(x,x,z,[-0.5 0 0.5]);
@@ -39,7 +39,7 @@ function z = f(x,y)
     z = cos(2*%pi*x)'*sin(2*%pi*y);
 endfunction
 clf()
-gcf().color_map = jetcolormap(4);
+gcf().color_map = jet(4);
 x = linspace(0,1,81);
 Sfgrayplot(x, x, f);
 z = f(x,x);

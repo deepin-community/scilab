@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2015 - Scilab Enterprises - Calixte DENIZET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -16,6 +16,7 @@
 #include "SciFile.hxx"
 #include "SLint.hxx"
 #include "SLintContext.hxx"
+#include "all.hxx"
 
 namespace slint
 {

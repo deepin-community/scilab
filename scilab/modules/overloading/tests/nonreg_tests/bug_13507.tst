@@ -1,6 +1,6 @@
 //<-- CLI SHELL MODE -->
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2014 - Scilab Enterprises - Cedric Delamarre
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -8,8 +8,8 @@
 
 // <-- Non-regression test for bug 13507 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=13507
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/13507
 //
 // <-- Short Description -->
 // Imaginary part in result of a complex power was missing.

@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2011 - DIGITEO - Antoine ELIAS
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -22,10 +22,13 @@ extern "C"
 {
 #include "loadOnUseClassPath.h"
 #include "Scierror.h"
-
+}
     //XML API
 #include <libxml/xpath.h>
 #include <libxml/xmlreader.h>
+
+extern "C"
+{
 #include "sci_malloc.h"
 #include "configvariable_interface.h"
 }

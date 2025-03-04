@@ -1,6 +1,6 @@
 
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2005-2008 - INRIA - Serge STEER <serge.steer@inria.fr>
  * Copyright (C) 2005-2008 - INRIA - Pierrick MODE
  *
@@ -483,14 +483,14 @@ void xls_open(int *err, int *fd, char ***sst, int *ns, char ***Sheetnames, int**
                 }
                 if (*err > 0)
                 {
-                    return;
+                    goto Err2;
                 }
                 break;
             case 252: /* SST= Shared String table*/
                 getSST(fd, Len, BOFData[0], ns, sst, err);
                 if (*err > 0)
                 {
-                    return;
+                    goto Err2;
                 }
                 cur_pos = cur_pos + 4 + Len;
                 break;
@@ -500,6 +500,25 @@ void xls_open(int *err, int *fd, char ***sst, int *ns, char ***Sheetnames, int**
     }
 
 Err2:
+    if (*Sheetnames != NULL)
+    {
+        for (int i = 0; i < *nsheets; i++)
+        {
+            if ( (*Sheetnames)[i] != NULL )
+            {
+                FREE((*Sheetnames)[i]);
+            }
+        }
+        FREE(*Sheetnames);
+        *Sheetnames = NULL;
+    }
+
+    if(*Abspos)
+    {
+        FREE(*Abspos);
+        *Abspos = NULL;
+    }
+
     *err = 4; /* read problem */
     return;
 
@@ -686,10 +705,8 @@ static void getSST(int *fd, short Len, int BIFF, int *ns, char ***sst, int *err)
             {
                 goto ErrL;
             }
-            for (i = 0; i < nm; i++)
-            {
-                (*sst)[i] = NULL;
-            }
+            memset(*sst, 0, nm * sizeof(char*));
+
             for (i = 0; i < nm; i++) /* LOOP ON STRINGS */
             {
                 *err = i; /*for debug*/
@@ -882,6 +899,8 @@ static void getString(int *fd, short *PosInRecord, short *RecordLen, int flag, c
                 /* character  encoding changes from twobytes to a single byte*/
                 /* may this happen ???? */
                 l1 = Min(BytesToBeRead - bytesRead, *RecordLen - *PosInRecord);
+                // compute the number of element (single byte) to read
+                l1/=2;
                 for (j = 0; j < l1; j++)
                 {
                     C2F(mgetnc) (fd, (void*)(*str + strindex), &one, typ_char, err);
@@ -892,8 +911,11 @@ static void getString(int *fd, short *PosInRecord, short *RecordLen, int flag, c
                     (*str)[strindex + 1] = '\0';
                     strindex += 2;
                     *PosInRecord += 2;
-                    UTFEncoding = 0;
+                    bytesRead += 2;
                 }
+                // don't witch to UTFEncoding = 0 to 
+                // let the end of the function rework str
+                //UTFEncoding = 0;
             }
             else
             {
@@ -968,6 +990,7 @@ ErrL:
     if (*err == 0)
     {
         FREE(*str);
+        *str = NULL;
         *err = 3; /* malloc problem */
     }
     else
@@ -1045,10 +1068,12 @@ static void getBoundsheets(int * fd, char ***Sheetnames, int** Abspos, int *nshe
     {
         goto ErrL;
     }
+    memset(*Sheetnames, 0, ns * sizeof(char*));
     if ( (*Abspos = (int *)MALLOC(ns * sizeof(int))) == NULL)
     {
         goto ErrL;
     }
+    memset(*Abspos, 0, ns * sizeof(int));
 
     /* rescan boundsheet sequence to get the data */
     *cur_pos = pos;
@@ -1098,14 +1123,20 @@ static void getBoundsheets(int * fd, char ***Sheetnames, int** Abspos, int *nshe
 ErrL:
     if (*Sheetnames != NULL)
     {
-        for (i = 0; i < ns; i++)
+        for (int i = 0; i < ns; i++)
+        {
             if ( (*Sheetnames)[i] != NULL )
             {
                 FREE((*Sheetnames)[i]);
             }
+        }
         FREE(*Sheetnames);
+        *Sheetnames = NULL;
     }
+
     FREE(*Abspos);
+    *Abspos = NULL;
+
     if (*err == 0)
     {
         *err = 3;    /* malloc problem */

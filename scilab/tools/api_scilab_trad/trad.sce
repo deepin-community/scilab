@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2012 - Scilab Enterprises - Antoine ELIAS
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -34,7 +34,7 @@ function status = trad(inputFile, backupFile)
         error(msprintf("file %s not find", inputFile));
     end
 
-    printf("\nStarting convertion of ""%s""\n\n", inputFile);
+    printf("\nStarting conversion of ""%s""\n\n", inputFile);
 
     if bBackup then
         printf("Backup in ""%s""\n", backupFile);
@@ -181,7 +181,7 @@ function status = trad(inputFile, backupFile)
 
     sciErrPos = grep(result, "SciErr sciErr;");
     result = [result(1:sciErrPos) ; dec ; "" ; result(sciErrPos+1:$)];
-    printf("\nConvertion finished\n");
+    printf("\nConversion finished\n");
     mputl(result, inputFile);
 
     //call astyle again

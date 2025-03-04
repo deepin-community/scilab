@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2006 - INRIA - Fabrice Leray
  * Copyright (C) 2006 - INRIA - Jean-Baptiste Silvy
  * Copyright (C) 2011 - DIGITEO - Bruno JOFRET
@@ -17,7 +17,7 @@
 
 /*------------------------------------------------------------------------*/
 /* file: sci_champ.c                                                      */
-/* desc : interface for champ (and champ1) routine                        */
+/* desc : interface for champ routine                                     */
 /*------------------------------------------------------------------------*/
 #include <string.h>
 #include "gw_graphics.h"
@@ -33,14 +33,6 @@
 int sci_champ (char *fname, void *pvApiCtx)
 {
     return sci_champ_G(fname, C2F(champ), pvApiCtx);
-}
-/*--------------------------------------------------------------------------*/
-int sci_champ1 (char *fname, void *pvApiCtx)
-{
-    sciprint(_("%s: Feature %s is obsolete and will be permanently removed in Scilab %s\n"), _("Warning"), "champ1()", "6.1.x");
-    sciprint(_("%s: Please use %s instead.\n"), _("Warning"), "champ().colored");
-
-    return sci_champ_G(fname, C2F(champ1), pvApiCtx);
 }
 /*--------------------------------------------------------------------------*/
 int sci_champ_G(char *fname,

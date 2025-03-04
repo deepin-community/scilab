@@ -15,7 +15,8 @@
         <synopsis>
           covStart(macro)
           covStart([dirs names])
-          covStart(lib), covStart("all")
+          covStart(lib)
+          covStart(libnames)
           counters = covStart(...)
        </synopsis>
     </refsynopsisdiv>
@@ -25,7 +26,10 @@
             <varlistentry>
                 <term>macro</term>
                 <listitem>
-                    <para>a specific function (as a string name or a function value).</para>
+                    <para>
+                        handle of a specific function. Example: <literal>covStart(members)</literal>,
+                        not <literal>covStart("members")</literal>.
+                    </para>
                 </listitem>
             </varlistentry>
             <varlistentry>
@@ -43,7 +47,7 @@
             <varlistentry>
                 <term>lib</term>
                 <listitem>
-                    <para>a library or a string which is a Scilab library name for instrumenting a Scilab-provided library. Can be <literal>"all"</literal> to instrument all the currently loaded Scilab-provided libraries.</para>
+                    <para>a library or a string which is a Scilab library name for instrumenting a Scilab-provided library. Can be the result of <literal>librarieslist()</literal> to instrument all the currently loaded Scilab-provided libraries.</para>
                 </listitem>
             </varlistentry>
             <varlistentry>
@@ -60,7 +64,7 @@
             Instruments the passed arguments to store runtime informations on execution. These informations can be latter exported by calling <literal>covWrite</literal> or <literal>profileGetInfo</literal>. To remove any instrumentation data <literal>covStop</literal> can be used.
         </para>
         <para>
-            You can either select a single function, user-defined libraries (as macros directories) or Scilab-provided libraries. The <literal>"all"</literal> analysis is useful to have a global overview and later specific informations can be produced for one or a set of identified functions.
+            You can either select a single function, user-defined libraries (as macros directories) or Scilab-provided libraries. The call of <literal>covStart(librarieslist())</literal> is useful to have a global overview and later specific informations can be produced for one or a set of identified functions.
         </para>
         <para>
             Each time the function is called, it clears the previous instrumented counters. The associated <literal>profileEnable</literal> and <literal>profileDisable</literal> functions could be used to fine-tune your selection without clearing everything.
@@ -125,5 +129,15 @@ covStop();
             </member>
         </simplelist>
     </refsection>
+    <refsection>
+        <title>History</title>
+        <revhistory>
+            <revision>
+                <revnumber>2024.0.0</revnumber>
+                <revremark>
+                    <literal>covStart("all")</literal> is no more supported. Use <literal>covStart(librarylist())</literal> instead.
+                </revremark>
+            </revision>
+        </revhistory>
+    </refsection>
 </refentry>
-

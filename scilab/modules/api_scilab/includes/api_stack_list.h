@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009 - DIGITEO - Antoine ELIAS
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -23,11 +23,7 @@
 extern "C" {
 #endif
 
-#include "version.h"
-
-#if SCI_VERSION_MAJOR > 5
 #define __SCILAB_INT64__
-#endif
 
 /**********************/
 /*   list functions   */

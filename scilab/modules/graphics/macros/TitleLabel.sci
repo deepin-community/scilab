@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2004-2006 - INRIA - Farid Belahcene
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
 // Copyright (C) 2013, 2019 - Samuel GOUGEON

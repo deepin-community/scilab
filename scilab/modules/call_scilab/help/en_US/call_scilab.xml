@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009  - DIGITEO - Sylvestre LEDRU
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -108,22 +108,10 @@ int main(void)
         <title>See also</title>
         <simplelist type="inline">
             <member>
-                <link linkend="api_scilab">api Scilab</link>
+                <link linkend="api_scilab">API Scilab</link>
             </member>
             <member>
                 <link linkend="compile_and_run_call_scilab">Compile and run with call_scilab</link>
-            </member>
-            <member>
-                <link linkend="DoubleManagement_callscilab">Matrix Management</link>
-            </member>
-            <member>
-                <link linkend="BooleanManagement_callscilab">Boolean Management</link>
-            </member>
-            <member>
-                <link linkend="ComplexManagement_callscilab">Complex Management</link>
-            </member>
-            <member>
-                <link linkend="StringManagement_callscilab">String Management</link>
             </member>
         </simplelist>
     </refsection>

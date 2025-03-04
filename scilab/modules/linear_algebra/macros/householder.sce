@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2016 - Samuel GOUGEON
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -43,7 +43,7 @@ Zm = mirror(X,Y,n);
 clf
 drawlater
 f = gcf();
-f.color_map = [ 0.8 0.8 0.8 ; jetcolormap(100)];
+f.color_map = [ 0.8 0.8 0.8 ; jet(100)];
 surf(Xe,Ye,Ze)
 surf(X,Y,Zm)
 surf(Xr,Yr,Zr)

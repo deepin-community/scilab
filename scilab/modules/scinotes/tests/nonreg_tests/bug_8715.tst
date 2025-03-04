@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2011 - Calixte DENIZET
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -10,9 +10,9 @@
 //
 // <-- Non-regression test for bug 8715 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/8715
-// http://bugzilla.scilab.org/8716
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/8715
+// https://gitlab.com/scilab/scilab/-/issues/8716
 //
 // <-- Short Description -->
 // Problem of order when dnd'ing the tabs

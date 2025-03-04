@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2010-2011 - DIGITEO - Clement DAVID
  * Copyright (C) 2011-2017 - Scilab Enterprises - Clement DAVID
  * Copyright (C) 2017-2018 - ESI Group - Clement DAVID
@@ -17,21 +17,26 @@
 
 package org.scilab.modules.xcos;
 
-import com.mxgraph.util.mxEvent;
-import com.mxgraph.util.mxEventObject;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 
+import org.flexdock.docking.activation.ActiveDockableTracker;
 import org.scilab.modules.graph.actions.CopyAction;
 import org.scilab.modules.graph.actions.CutAction;
 import org.scilab.modules.graph.actions.DeleteAction;
@@ -55,12 +60,10 @@ import org.scilab.modules.gui.menubar.MenuBar;
 import org.scilab.modules.gui.menubar.ScilabMenuBar;
 import org.scilab.modules.gui.menuitem.MenuItem;
 import org.scilab.modules.gui.menuitem.ScilabMenuItem;
-import org.scilab.modules.gui.tab.SimpleTab;
 import org.scilab.modules.gui.tabfactory.ScilabTabFactory;
 import org.scilab.modules.gui.textbox.ScilabTextBox;
 import org.scilab.modules.gui.toolbar.ScilabToolBar;
 import org.scilab.modules.gui.toolbar.ToolBar;
-import org.scilab.modules.gui.utils.BarUpdater;
 import org.scilab.modules.gui.utils.ClosingOperationsManager;
 import org.scilab.modules.gui.utils.WindowsConfigurationManager;
 import org.scilab.modules.xcos.actions.AboutXcosAction;
@@ -124,6 +127,9 @@ import org.scilab.modules.xcos.palette.view.PaletteManagerView;
 import org.scilab.modules.xcos.preferences.XcosOptions;
 import org.scilab.modules.xcos.utils.XcosMessages;
 
+import com.mxgraph.util.mxEvent;
+import com.mxgraph.util.mxEventObject;
+
 /**
  * Xcos tab operations
  *
@@ -132,9 +138,8 @@ import org.scilab.modules.xcos.utils.XcosMessages;
 // CSOFF: ClassFanOutComplexity
 // CSOFF: ClassDataAbstractionCoupling
 @SuppressWarnings(value = { "serial" })
-public class XcosTab extends SwingScilabDockablePanel implements SimpleTab {
-    public static final String DEFAULT_WIN_UUID = "xcos-default-window";
-    public static final String DEFAULT_TAB_UUID = "xcos-default-tab";
+public class XcosTab extends SwingScilabDockablePanel {
+    private static final String DEFAULT_WIN_UUID = "xcos-default-window";
 
     /*
      * Instance fields
@@ -252,8 +257,6 @@ public class XcosTab extends SwingScilabDockablePanel implements SimpleTab {
             }
 
             diag.updateTabTitle();
-
-            ConfigurationManager.getInstance().removeFromRecentTabs(diag.getGraphTab());
         }
     }
 
@@ -302,45 +305,107 @@ public class XcosTab extends SwingScilabDockablePanel implements SimpleTab {
     }
 
     /**
-     * Restore or create the viewport tab for the graph
-     *
-     * @param graph
-     *            the graph
+     * Make the tab visible
      */
-    public static void restore(XcosDiagram graph) {
-        restore(graph, true);
+    public static void restore(final XcosDiagram graph) {
+        Optional<String> uuid = resolveTabUUID(graph);
+        graph.setGraphTab(uuid.orElse(UUID.randomUUID().toString()));
+        ConfigurationManager.getInstance().addToRecentTabs(graph);
+
+        boolean restored = false;
+        if (uuid.isPresent()) {
+            restored = WindowsConfigurationManager.restoreUUID(graph.getGraphTab());
+        } 
+        if (!restored) {
+            create(graph);
+        }
     }
 
     /**
-     * Restore or create the tab for the graph
+     * Resolve the UUID to a pre-existing one
+     */
+    private static Optional<String> resolveTabUUID(XcosDiagram graph) {
+        String uuid = graph.getGraphTab();
+        if (uuid != null)
+            return Optional.of(uuid);
+
+        // look for an existing uuid which is not already in used, this algorithm is predictable.
+        Set<String> openedDiagram = Xcos.getInstance().openedDiagrams().stream()
+            .map(d -> d.getGraphTab())
+            .collect(Collectors.toSet());
+        Pattern uuidPattern = Pattern.compile("^[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$");
+        String[] winIDs = WindowsConfigurationManager.getApplicationUUIDs(Xcos.TRADENAME);
+        Arrays.sort(winIDs);
+
+        // check if previous uuid have been stored in settings
+        final String url;
+        if (graph.getSavedFile() != null)
+        {
+            String temp;
+            try {
+                temp = graph.getSavedFile().toURI().toURL().toExternalForm();  
+            } catch (MalformedURLException e) {
+                temp = null;
+            }
+            url = temp;
+        } else {
+            url = null;
+        }
+        Set<String> settingsIDs = ConfigurationManager.getInstance().streamTab()
+            .filter(t -> Objects.equals(url, t.getUrl()))
+            .filter(t -> t.getPath() == null)
+            .map(t -> t.getUuid())
+            .collect(Collectors.toSet());
+        Set<String> reservedSettingsIDs = ConfigurationManager.getInstance().streamTab()
+            .filter(t -> !Objects.equals(url, t.getUrl()))
+            .map(t -> t.getUuid())
+            .collect(Collectors.toSet());
+
+        // Look for the id which is not already opened and is in the settings
+        Optional<String> unusedID = Arrays.stream(winIDs)
+            .filter(id -> !openedDiagram.contains(id))
+            .filter(id -> !reservedSettingsIDs.contains(id))
+            .filter(id -> uuidPattern.matcher(id).matches())
+            .filter(id -> settingsIDs.isEmpty() || settingsIDs.contains(id))
+            .findFirst();
+
+        return unusedID;
+    }
+
+    /**
+     * Create the tab for the graph
      *
      * @param graph
      *            the graph
-     * @param visible
-     *            should the tab should be visible
      */
-    public static void restore(final XcosDiagram graph, final boolean visible) {
-        String uuid = graph.getGraphTab();
-        if (uuid == null) {
-            uuid = UUID.randomUUID().toString();
-        }
+    private static void create(final XcosDiagram graph) {
+        final XcosTab tab = allocate(graph);
 
-        // FIXME: fix a crash on DnD and Tab restore
+        SwingScilabWindow win = WindowsConfigurationManager.createWindow(DEFAULT_WIN_UUID, false);
+        win.addTab(tab);
+        win.setVisible(true);
 
-        final XcosTab tab = new XcosTab(graph, uuid);
-        ScilabTabFactory.getInstance().addToCache(tab);
+        graph.updateTabTitle();
+        graph.fireEvent(new mxEventObject(mxEvent.ROOT));
+        
+        ActiveDockableTracker.requestDockableActivation(tab);
+    }
 
-        if (visible) {
-            tab.createDefaultWindow().setVisible(true);
-
-            graph.fireEvent(new mxEventObject(mxEvent.ROOT));
-            graph.updateTabTitle();
-            BarUpdater.updateBars(tab.getParentWindowId(), tab.getMenuBar(), tab.getToolBar(), tab.getInfoBar(), tab.getName(), tab.getWindowIcon());
-        }
+    /**
+     * Create a tab from scratch
+     * @implNote should only be used after trying a {@link WindowsConfigurationManager#restoreUUID(String)};
+     */
+    protected static XcosTab allocate(XcosDiagram graph)
+    {
+        final XcosTab tab = new XcosTab(graph, graph.getGraphTab());
 
         ClosingOperationsManager.addDependencyWithRoot(tab);
         ClosingOperationsManager.registerClosingOperation(tab, new ClosingOperation(graph));
+
         WindowsConfigurationManager.registerEndedRestoration(tab, new EndedRestoration(graph));
+        
+        ScilabTabFactory.getInstance().addToCache(tab);
+        return tab;
     }
 
     /*
@@ -701,20 +766,6 @@ public class XcosTab extends SwingScilabDockablePanel implements SimpleTab {
      */
     public boolean isViewportChecked() {
         return viewport.isSelected();
-    }
-
-    private SwingScilabWindow createDefaultWindow() {
-        final SwingScilabWindow win;
-
-        final SwingScilabWindow configuration = WindowsConfigurationManager.createWindow(DEFAULT_WIN_UUID, false);
-        if (configuration != null) {
-            win = configuration;
-        } else {
-            win = SwingScilabWindow.createWindow(true);
-        }
-
-        win.addTab(this);
-        return win;
     }
 }
 

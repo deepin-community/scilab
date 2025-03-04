@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2012 - Gustavo Barbosa Libotte
  * Copyright (C) 2014 - Scilab Enterprises - Calixte DENIZET
  *

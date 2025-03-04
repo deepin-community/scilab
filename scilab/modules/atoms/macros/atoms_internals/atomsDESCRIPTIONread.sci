@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009 - DIGITEO - Pierre MARECHAL <pierre.marechal@scilab.org>
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -59,7 +59,6 @@
 
 
 function description_out = atomsDESCRIPTIONread(file_in,additional)
-
     // Check input parameters
     // =========================================================================
 
@@ -123,79 +122,54 @@ function description_out = atomsDESCRIPTIONread(file_in,additional)
         // its processing will be very fast:
         winId = []
     end
-    for i=1:(size(lines_in,"*")+1)
 
-        atomsUpdateProgressBar(winId, i / size(lines_in,"*"));
+    lines_count = size(lines_in,"*");
+    progressStep = max(1, round(lines_count/100)); // i step to update the progressionbar
 
-        // First case : new field, or file all read
-        if ((i == (size(lines_in,"*")+1)) | (regexp(lines_in(i),"/^[a-zA-Z0-9]*:\s/","o") == 1)) then
+    for i = 1:size(lines_in,"*")
+        // updade progress bar only each percentile
+        roundedProgress = i / progressStep;
+        if winId <> [] & round(roundedProgress) == roundedProgress
+            atomsUpdateProgressBar(winId, roundedProgress / 100);
+        end
+        current_line = lines_in(i);
 
-            // subcase of First case: new toolbox, or file all read: register the latest toolbox
-            if ((i == (size(lines_in,"*")+1)) | (regexp(lines_in(i),"/^Toolbox:\s/","o") == 1)) then
-
-                if and(isfield(current_toolbox,["Toolbox";"Version"])) then
-
-                    if  ~ isfield(packages,current_toolbox("Toolbox")) then
-                        // This is the first version of the package
-                        this_toolbox = struct();
-                    else
-                        // Get the version list of this package
-                        this_toolbox = packages(current_toolbox("Toolbox"));
-                    end
-
-                    // Register the current toolbox : Check the mandatory fields
-                    missingfield = atomsCheckFields( current_toolbox );
-                    if ~ isempty(missingfield) then
-                        atomsCloseProgressBar(winId);
-                        error(msprintf(gettext("%s: The file ""%s"" is not well formatted, the toolbox ""%s - %s"" does not contain the %s field\n"), ..
-                        "atomsDESCRIPTIONread",..
-                        file_in,current_toolbox("Toolbox"),..
-                        current_toolbox("Version"),..
-                        missingfield));
-                    end
-
-                    // Register the current toolbox : Check the scilab version
-                    // comptability
-                    if atomsIsCompatible(current_toolbox("ScilabVersion")) then
-                        if isfield(current_toolbox,"PackagingVersion") then
-                            current_toolbox("Version") = current_toolbox("Version") + "-" + current_toolbox("PackagingVersion");
-                            this_toolbox(current_toolbox("Version")) = current_toolbox;
-                        else
-                            this_toolbox(current_toolbox("Version")) = current_toolbox;
-                        end
-                    end
-
-                    // Register the current toolbox : Fill the packages struct
-                    packages(current_toolbox("Toolbox")) = this_toolbox;
-
-                    if i == (size(lines_in,"*")+1) then
-                        break
-                    end                
-                end
-
+        // First case : new field
+        if regexp(current_line,"/^[a-zA-Z0-9]*:\s/","o") == 1 then
+            // subcase of First case: new toolbox: register the latest toolbox
+            if regexp(current_line,"/^Toolbox:\s/","o") == 1 then
+                packages = atomsRegisterToolbox(current_toolbox, packages);
+                
                 // Reset the current_toolbox struct
                 current_toolbox  = struct();
             end
 
             // process field
-            current_field_length           = regexp(lines_in(i),"/:\s/","o")
-            current_field                  = part(lines_in(i),1:current_field_length-1);
-            current_value                  = part(lines_in(i),current_field_length+2:length(lines_in(i)));
+            current_field_length           = regexp(current_line,"/:\s/","o")
+            current_field                  = part(current_line,1:current_field_length-1);
+            current_value                  = part(current_line,current_field_length+2:length(current_line));
 
             // process binary files
-            if regexp(current_field,"/^(windows|linux|macosx|solaris|bsd)(32|64)?(Url|Name|Md5|Sha1|Id)$/","o")<>[] then
+
+            //goal is to have "binaryName" as field of atoms struct. (see atomsInstall L~315 "Define the path of the downloaded file")
+            if regexp(current_field, "/^(binary|windows|linux|macosx|solaris|bsd)(32|64)?(Url|Name|Md5|Sha1|Id)$/","o") <> [] then
                 // This field doesn't concern this platform => Next line
-                if regexp(current_field,"/^"+OSNAME+ARCH+"/","o")==[] then
-                    continue;
+                if regexp(current_field,"/^"+OSNAME+ARCH+"/","o") == [] then
+                    //fallback to binary keys
+                    if regexp(current_field,"/^" + "binary" + ARCH + "/","o") == [] then
+                        continue;
+                    else
+                        current_field = "binary" + part(current_field, length("binary" + ARCH) + 1:length(current_field));
+                    end
                 else
-                    current_field = "binary"+part(current_field,length(OSNAME+ARCH)+1:length(current_field));
+                    current_field = "binary" + part(current_field, length(OSNAME + ARCH) + 1:length(current_field));
                 end
             end
 
             // process URLs
             if isfield(additional,"repository") & ..
                 ( regexp(current_field,"/^(source|binary|windows|linux|macosx|solaris|bsd)(32|64)?Url$/","o")<>[] | current_field=="URL" ) & ..
-                regexp(current_value,"/^(https?|ftps?|file):\/\//","o")==[] then
+                  regexp(current_value, "/^(https?|ftps?|file):\/\//","o") == [] then
                 current_value = additional("repository") + current_value;
             end
 
@@ -218,8 +192,8 @@ function description_out = atomsDESCRIPTIONread(file_in,additional)
         end
 
         // Second case : Current field continuation
-        if regexp(lines_in(i),"/^\s/","o") == 1 then
-            current_value = part(lines_in(i),2:length(lines_in(i)));
+        if regexp(current_line, "/^\s/","o") == 1 then
+            current_value = part(current_line, 2:length(current_line));
             current_toolbox(current_field)($+1) =  current_value;
 
             // Category management
@@ -239,12 +213,12 @@ function description_out = atomsDESCRIPTIONread(file_in,additional)
         end
 
         // Third case : blank line
-        if length(lines_in(i)) == 0 then
+        if current_line == "" then
             continue;
         end
 
         // Fourth case: comment
-        if regexp(lines_in(i),"/^\/\//","o") == 1 then
+        if regexp(current_line,"/^\/\//","o") == 1 then
             continue;
         end
 
@@ -253,6 +227,9 @@ function description_out = atomsDESCRIPTIONread(file_in,additional)
         error(msprintf(gettext("%s: The file ''%s'' is not well formatted at line %d\n"),"atomsDESCRIPTIONread",file_in,i));
 
     end
+    
+    // register the last in-progress toolbox
+    packages = atomsRegisterToolbox(current_toolbox, packages);
 
     description_out("packages")        = packages;
     description_out("categories")      = categories;
@@ -342,6 +319,51 @@ function cat_flat_out = atomsAddPackage2Cat( cat_flat_in , package , category)
         cat_flat_out = atomsAddPackage2Cat( cat_flat_out , package , label_mat(1))
     end
 
+endfunction
+
+
+// =============================================================================
+// atomsRegisterToolbox
+// =============================================================================
+
+function packages = atomsRegisterToolbox(current_toolbox, packages)
+
+    if and(isfield(current_toolbox,["Toolbox";"Version"])) then
+    
+        if  ~ isfield(packages,current_toolbox("Toolbox")) then
+            // This is the first version of the package
+            this_toolbox = struct();
+        else
+            // Get the version list of this package
+            this_toolbox = packages(current_toolbox("Toolbox"));
+        end
+        
+        // Register the current toolbox : Check the mandatory fields
+        missingfield = atomsCheckFields( current_toolbox );
+        if ~ isempty(missingfield) then
+            atomsCloseProgressBar(winId);
+            error(msprintf(gettext("%s: The file ""%s"" is not well formatted, the toolbox ""%s - %s"" does not contain the %s field\n"), ..
+            "atomsDESCRIPTIONread",..
+            file_in,current_toolbox("Toolbox"),..
+            current_toolbox("Version"),..
+            missingfield));
+        end
+    
+        // Register the current toolbox :
+        //   Check the scilab version comptability
+        if atomsIsCompatible(current_toolbox("ScilabVersion")) then
+            if isfield(current_toolbox,"PackagingVersion") then
+                current_toolbox("Version") = current_toolbox("Version") + "-" + current_toolbox("PackagingVersion");
+                this_toolbox(current_toolbox("Version")) = current_toolbox;
+            else
+                this_toolbox(current_toolbox("Version")) = current_toolbox;
+            end
+        end
+    
+        // Register the current toolbox : Fill the packages struct
+        packages(current_toolbox("Toolbox")) = this_toolbox;
+    
+    end
 endfunction
 
 // =============================================================================

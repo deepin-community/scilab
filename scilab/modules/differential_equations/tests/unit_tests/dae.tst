@@ -1,5 +1,5 @@
 // ===========================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Paul Bignier : added "root2" (daskr)
 // Copyright (C) 2008 - INRIA - Sabinere Gauzere
 //
@@ -70,7 +70,7 @@ if norm(pp*x1-x1,1)>1.d-5 then pause,end // Bug because we don't have the first 
 t=1.5409711;
 ww=dae([x0,x0d],t0,t,g);
 ww=[t;ww];
-if abs(ww(5)-1)>0.001 then pause,end
+if abs(abs(ww(5))-1)>0.001 then pause,end
 deff("[rt]=surface(t,y,yd)","rt=y(4)-1");
 nbsurf=1;
 [yyy,nnn]=dae("root",[x0,x0d],t0,t,g,nbsurf,surface);
@@ -476,3 +476,6 @@ assert_checkalmostequal(nn(1),81.163512,0.003);
 t01=nn(1);t=100:20:200;[pp,qq]=size(yy);y01=yy(2:3,qq);y0d1=yy(3:4,qq);
 [yy,nn,hotd]=dae("root2",[y01,y0d1],t01,t,rtol,atol,"res2","jac2",ng,"gr2",hotd);
 assert_checkalmostequal(nn(1),162.57763,0.004);
+
+// cleanup memory
+ludel();

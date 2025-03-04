@@ -418,10 +418,10 @@ msgstr "Je vyžadován kompilátor C nebo Fortran."
 #, c-format
 msgid ""
 "%s: Warning: Scilab has not been able to find where the Scilab sources are. "
-"Please submit a bug report on http://bugzilla.scilab.org/\n"
+"Please submit a bug report on https://gitlab.com/scilab/scilab/-/issues\n"
 msgstr ""
 "%s: Varování: Scilab nebyl schopen zjistit, kde se nalézá jeho zdrojový kód. "
-"Pošlete, prosím, hlášení o chybě na http://bugzilla.scilab.org/\n"
+"Pošlete, prosím, hlášení o chybě na https://gitlab.com/scilab/scilab/-/issues\n"
 
 #, c-format
 msgid "%s: Build command: %s\n"

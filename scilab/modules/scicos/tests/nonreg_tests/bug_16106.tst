@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2020 - ESI Group - Clement DAVID
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -10,8 +10,8 @@
 //
 // <-- Non-regression test for bug 16106 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=16106
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/16106
 //
 // <-- Short Description -->
 // block.opar and block.oz could not be used for block implemented in Scilab

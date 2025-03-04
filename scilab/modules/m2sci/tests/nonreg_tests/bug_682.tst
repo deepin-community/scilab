@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ????-2008 - INRIA - Vincent COUVERT <vincent.couvert@inria.fr>
 // Copyright (C) 2005-2008 - INRIA - Pierre MARECHAL <pierre.marechal@inria.fr>
 //
@@ -12,8 +12,8 @@
 
 // <-- Non-regression test for bug 682 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=682
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/682
 //
 // <-- Short Description -->
 //    probleme with the logical or in tests.
@@ -29,10 +29,10 @@ SCIFILECONTENTS=mgetl(SCIFILE);
 
 SCIFILECONTENTSREF=[""
         "b = 1;"
-        "if b==0 | mtlb_logic(b(2),"">"",0) then"
+        "if b==0 | b(2)>0 then"
         "  a = 1;"
         "else"
         "  a = 0;"
-        "end;"];
+        "end"];
 
 assert_checkequal(SCIFILECONTENTSREF, SCIFILECONTENTS);

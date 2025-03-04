@@ -1,6 +1,6 @@
 //<-- CLI SHELL MODE -->
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2005-2008 - INRIA - Pierre MARECHAL <pierre.marechal@inria.fr>
 // Copyright (C) 2011 - DIGITEO - Allan CORNET
 //
@@ -8,8 +8,8 @@
 // =============================================================================
 // <-- Non-regression test for bug 768 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=768
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/768
 //
 // <-- Short Description -->
 //    as on Scilab 2.7.2, the "window" function still has a bug 

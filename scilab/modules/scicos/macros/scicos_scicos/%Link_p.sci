@@ -1,39 +1,15 @@
-//  Scicos
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
+// Copyright (C) 2024 - UTC - Stéphane MOTTELET
 //
-//  Copyright (C) 2014 - Scilab Enterprises - Paul Bignier
-//
-// This program is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation; either version 2 of the License, or
-// (at your option) any later version.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-//
-// See the file ../license.txt
-//
+// This file is hereby licensed under the terms of the GNU GPL v2.0,
+// pursuant to article 5.3.4 of the CeCILL v.2.1.
+// This file was originally licensed under the terms of the CeCILL v2.1,
+// and continues to be available under such terms.
+// For more information, see the COPYING file which you should have received
+// along with this program.
 
-function %Link_p(l)
 
-    mprintf("Link    :\n");
-
-    fn = getfield(1, l);
-
-    for i=2:size(fn,"*")
-        field = string(evstr("l."+fn(i)));
-
-        fieldSize = size(field, "*");
-        if fieldSize == 0 then
-            mprintf("          %s: %s\n", fn(i), "[]")
-        else
-            mprintf("          %s: %s\n", fn(i), strcat(field, " "))
-        end
-    end
-
+function %Link_p(x)
+    t =  %l_string_inc(x);
+    mprintf("  %s\n",t);
 endfunction

@@ -1,7 +1,7 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA -
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
-// Copyright (C) 2016, 2017, 2019 - Samuel GOUGEON
+// Copyright (C) 2016, 2017, 2019, 2021 - Samuel GOUGEON
 //
 // This file is hereby licensed under the terms of the GNU GPL v2.0,
 // pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -50,8 +50,9 @@ function t=sci2exp(a,nom,lmax)
             [lmax,nom]=(nom,lmax)
         end
     end
+
     // For an hypermatrix, we concatenate all components in a single row:
-    hyperMat = or(type(a)==[1 2 4 8 10]) && ndims(a) > 2;
+    hyperMat = or(type(a)==[1 2 4 8 10] | typeof(a) == "ce") && ndims(a) > 2;
     if hyperMat then
         s = size(a);
         a = matrix(a,1,-1);
@@ -104,6 +105,8 @@ function t=sci2exp(a,nom,lmax)
     case 17 then            // cells, struct, mlists
         if typeof(a)=="st"
             t = struct2exp(a, lmax);
+        elseif typeof(a) == "ce" then
+            t = cell2exp(a, lmax);
         else
             t = mlist2exp(a, lmax);
         end
@@ -135,8 +138,8 @@ function t=sci2exp(a,nom,lmax)
             t = "matrix(" + t + ", ["+s+"])";
         end
     end
-    if named&and(type(a)<>13) then
-        t(1)=nom+" = "+t(1)
+    if named & and(type(a)<>13) then
+        t(1) = nom + " = " + t(1)
     end
 endfunction
 
@@ -146,7 +149,7 @@ function t=str2exp(a,lmax)
 
     [m,n]=size(a),
     dots="."+"."
-    t="";
+    t=[];
     quote="''"
 
     a=strsubst(a,quote,quote+quote)
@@ -180,6 +183,8 @@ function t=str2exp(a,lmax)
         if i<m then x($)=x($)+";",end
         if lmax>0 then
             t=[t;x]
+        elseif isempty(t) then
+            t = x;
         else
             t=t+x
         end
@@ -193,20 +198,47 @@ function t=str2exp(a,lmax)
     end
 endfunction
 
-function t=mat2exp(a,lmax)
+function t = mat2exp(a,lmax)
     if rhs<2 then lmax=0,end
     [lhs,rhs]=argn(0)
     if size(a,"*")==0 then t="[]",return,end
     [m,n]=size(a);
+
+    // Special case #1: eye() and its multiples
     if m<0 then
-        t=mat2exp(a+0);
+        t = mat2exp(a(1));
         if t=="1" then
             t="eye()";
         else
-            t="("+t+")*eye()";
+            if imag(a(1))<>0 & part(t,1:8)<>"complex("
+                t = "(" + t + ")"
+            end
+            t = t + "*eye()"
         end
         return
     end
+
+    // Special case #2: Complex with Inf or Nan parts
+    // Process issue 16317
+    if or(isinf(imag(a))) | or(isnan(imag(a)))
+        ar = sci2exp(real(a),lmax)
+        ai = sci2exp(imag(a),lmax)
+        if ~lmax | 10+length(ar)+length(ai) <= lmax
+            t = "complex("+ar+"," + ai +")"
+        else
+            if 7+length(ar(1)) <= lmax
+                ar(1) = "complex(" + ar(1);
+            else
+                ar = ["complex(.." ; ar]
+            end
+            ar($) = ar($) + ","
+            ai($) = ai($) + ")"
+            t = [ar ; ai]
+        end
+        return
+    end
+
+    // Regular case
     a=String(a);
     dots="."+"."
     t="";
@@ -220,9 +252,15 @@ function t=mat2exp(a,lmax)
             k1=1;l=0;I=[];
             while %t
                 if lx-l<lmax|k1>length(ind) then,break,end
-                k2=k1-1+max(find(ind(k1:$)<l+lmax))
+                found = find(ind(k1:$)<l+lmax);
+                if found then
+                    k2=k1-1+max(found);
+                else
+                    // keep the element size in case where
+                    // the element is bigger than lmax
+                    k2=k1
+                end
                 I=[I ind(k2)];
-                //	t=[t;part(x,l+1:ind(k2))]
                 k1=k2+1
                 l=ind(k2)
             end
@@ -233,19 +271,25 @@ function t=mat2exp(a,lmax)
         lx=length(x)
         if lmax==0|lx<lmax then
             t=x;
-
         else
             ind=strindex(x,",");
             k1=1;l=0;I=[];
             while %t
                 if lx-l<lmax|k1>length(ind) then break,end
-                k2=k1-1+max(find(ind(k1:$)<l+lmax))
+                found = find(ind(k1:$)<l+lmax);
+                if found then
+                    k2=k1-1+max(found);
+                else
+                    // keep the element size in case where
+                    // the element is bigger than lmax
+                    k2=k1
+                end
                 I=[I ind(k2)];
-                //	t=[t;part(x,l+1:ind(k2))+dots]
                 k1=k2+1
                 l=ind(k2)
             end
-            x=strsplit(x,I);x(1:$-1)=x(1:$-1)+dots;
+            x=strsplit(x,I);
+            x(1:$-1)=x(1:$-1)+dots;
             t=[t;x]
         end
     else
@@ -294,11 +338,14 @@ function t=pol2exp(a,lmax)
     lvar=length(var);
     while part(var,lvar)==" " then lvar=lvar-1,end
     var=part(var,1:lvar);
+
+    // polynomial eye()
     if m<0 then
-        t=pol2exp(a+0)
-        t="("+t+")*eye()"
+        t = pol2exp(a(1))
+        t = "(" + t + ")*eye()"
         return
     end
+
     t=[];
     for i=1:m
         x=emptystr(1)
@@ -404,43 +451,16 @@ function t = glist2exp(listType, l, lmax)
     [lhs,rhs] = argn(0)
     if rhs<3 then lmax = 0, end
     dots = "."+".";
-    isCell = typeof(l)=="ce";
-    if isCell then
-        if length(l)==0
-            t = "{}"
-            return
-        end
-        s = size(l);
-        s = strcat(msprintf("%d\n",s(:)),",");  // Literal list of sizes
-        t = "makecell(";
-        if lmax>0 & (length(t) > (lmax-length(s)-4))
-            t = [t + dots; "["+s+"],.. "];
-        else
-            t = t + "["+s+"], ";
-        end
-        // ND-transposition needed due to makecell() special indexing:
-        if ndims(l)<3
-            l = l'
-        else
-            i = 1:ndims(l);
-            i([1 2]) = [2 1];
-            l = permute(l, i);
-        end
-        //
-        l = l{:};
-        L = length(l);
+    t = listType + "("
+    if or(listType==["list", "mlist", "tlist"]) then
+        L = length(l)
     else
-        t = listType + "("
-        if or(listType==["list", "mlist", "tlist"]) then
-            L = length(l)
-        else
-             L = size(getfield(1,l),"*");
-        end
+        L = size(getfield(1,l),"*");
     end
     for k = 1:L
         sep = ",", if k==1 then sep = "", end
         clear lk
-        if isCell | listType ~= "mlist"
+        if listType ~= "mlist"
             lk = l(k)
         else
             try
@@ -460,7 +480,45 @@ function t = glist2exp(listType, l, lmax)
             t = [t; t1]
         end
     end
+
     t($) = t($)+")"
+
+endfunction
+
+function t = cell2exp(l, lmax)
+    if argn(2)<2 then lmax = 0, end
+    dots = "."+".";
+    [m, n]=size(l);
+    s = m * n;
+    if s == 0 then
+        t = "{}"
+        return
+    end
+    t = "{";
+    if m > 1 && n > 1 then
+        L = m
+    else
+        L = 1 
+    end
+
+    l = l{:}
+    for ki = 1:m
+        for kj = 1:n
+            sep = ",", if kj==1 then sep = "", end
+            lk = l(ki+L*(kj-1))
+            t1 = sci2exp(lk, lmax)
+            if size(t1,"*")==1 & (lmax==0|max(length(t1))+length(t($))<lmax) then
+                t($) = t($)+sep+t1
+            else
+                t($) = t($)+sep+dots
+                t = [t; t1]
+            end
+        end
+        if ki * kj < s then
+            t($) = t($)+";";
+        end
+    end
+    t($) = t($) + "}";
 endfunction
 
 function t = struct2exp(l, lmax)
@@ -602,6 +660,7 @@ function t=sp2exp(a,lmax)
     if lmax==0|length(t($))+length(v(1))+1<lmax then
         t($)=t($)+","+v(1)
         t=[t;v(2:$)]
+
     else
         t($)=t($)+","+dots
         t=[t;v]
@@ -617,11 +676,14 @@ function t=sp2exp(a,lmax)
 endfunction
 
 
-function t=int2exp(a,lmax)
+function t = int2exp(a,lmax)
     it=inttype(a)
     if it>10 then f="uint",else f="int",end
     f=f+string(8*modulo(it,10))
-    t=mat2exp(double(a),lmax)
+    tmp = format()
+    format("v",22)    // be sure to not truncate big uint64
+    t = mat2exp(double(a),lmax)
+    format(tmp([2 1]))
     t(1)=f+"("+t(1)
     t($)=t($)+")"
 endfunction

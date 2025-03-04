@@ -1,8 +1,8 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
-* Copyright (C) 2005 - INRIA - Allan CORNET
-* Copyright (C) 2010 - DIGITEO - Allan CORNET
-*
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
+ * Copyright (C) 2005 - INRIA - Allan CORNET
+ * Copyright (C) 2010 - DIGITEO - Allan CORNET
+ *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
@@ -11,49 +11,50 @@
  * and continues to be available under such terms.
  * For more information, see the COPYING file which you should have received
  * along with this program.
-*
-*/
+ *
+ */
 
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include "BOOL.h"
 #include "call_scilab.h"
-#include "lasterror.h"          /* clearInternalLastError, getInternalLastErrorValue */
-#include "sci_malloc.h"
+#include "BOOL.h"
+#include "FigureList.h"
+#include "InitScilab.h"
+#include "Thread_Wrapper.h"
+#include "api_scilab.h"
+#include "call_scilab_engine_state.h"
+#include "charEncoding.h"
 #include "configvariable_interface.h"
 #include "fromc.h"
 #include "isdir.h"
-#include "sci_path.h"
-#include "scilabDefaults.h"
-#include "sci_tmpdir.h"
-#include "Thread_Wrapper.h"
-#include "storeCommand.h"
-#include "FigureList.h"
-#include "api_scilab.h"
-#include "call_scilab_engine_state.h"
+#include "lasterror.h" /* clearInternalLastError, getInternalLastErrorValue */
 #include "os_string.h"
-#include "charEncoding.h"
-#include "InitScilab.h"
+#include "sci_malloc.h"
+#include "sci_path.h"
+#include "sci_tmpdir.h"
+#include "scilabDefaults.h"
 #include "scilabRead.h"
 #include "scilabWrite.hxx"
+#include "storeCommand.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #ifdef _MSC_VER
-#include "setenvvar.h"
 #include "getScilabDirectory.h"
+#include "setenvvar.h"
 #include <Windows.h>
 #endif
 
-extern char *getCmdLine(void);
+extern char* getCmdLine(void);
 
-static void TermPrintf(const char *text)
+static void TermPrintf(const char* text)
 {
-    //std::cout << text;
+    // std::cout << text;
     printf("%s", text);
 }
 
 static ScilabEngineInfo* pGlobalSEI = NULL;
 static __threadId threadIdScilab;
+static char stacktrace[4096] = {'\0'};
 
 /*--------------------------------------------------------------------------*/
 static CALL_SCILAB_ENGINE_STATE csEngineState = CALL_SCILAB_ENGINE_STOP;
@@ -64,32 +65,45 @@ void DisableInteractiveMode(void)
 }
 
 /*--------------------------------------------------------------------------*/
-BOOL StartScilab(char *SCIpath, char *ScilabStartup, int Stacksize)
+BOOL StartScilab(char* SCIpath, char* ScilabStartup, int Stacksize)
 {
     return Call_ScilabOpen(SCIpath, TRUE, ScilabStartup, Stacksize) == 0;
 }
 
 /*--------------------------------------------------------------------------*/
 /**
-* Start Scilab engine
-* Function created in the context of javasci v2.
-* This function is just like StartScilab but provides more error messages
-* in case or error. For now, it is only used in javasci v2 but it might
-* be public sooner or later.
-* @return
-* 0: success
-* -1: already running
-* -2: Could not find SCI
-* -3: No existing directory
-* Any other positive integer: A Scilab internal error
-*/
+ * Start Scilab engine
+ * Function created in the context of javasci v2.
+ * This function is just like StartScilab but provides more error messages
+ * in case or error. For now, it is only used in javasci v2 but it might
+ * be public sooner or later.
+ * @return
+ * 0: success
+ * -1: already running
+ * -2: Could not find SCI
+ * -3: No existing directory
+ * Any other positive integer: A Scilab internal error
+ */
 
 #define FORMAT_SCRIPT_STARTUP "_errorCall_ScilabOpen = exec(\"%s\", \"errcatch\", -1);"
 
-int Call_ScilabOpen(char *SCIpath, BOOL advancedMode, char *ScilabStartup, int Stacksize)
+static void* runScilabEngine(void* arg)
+{
+    int ret = RunScilabEngine((ScilabEngineInfo*) arg);
+    if (ret == 0)
+    {
+        return NULL;
+    }
+    else
+    {
+        return arg;
+    }
+}
+
+int Call_ScilabOpen(char* SCIpath, BOOL advancedMode, char* ScilabStartup, int Stacksize)
 {
     __threadKey threadKeyScilab;
-    char *InitStringToScilab = NULL;
+    char* InitStringToScilab = NULL;
     static int iflag = -1, ierr = 0;
 
     if (advancedMode == FALSE)
@@ -104,7 +118,7 @@ int Call_ScilabOpen(char *SCIpath, BOOL advancedMode, char *ScilabStartup, int S
 
     SetFromCToON();
 
-    if (SCIpath == NULL)        /* No SCIpath provided... */
+    if (SCIpath == NULL) /* No SCIpath provided... */
     {
 #ifndef _MSC_VER
         /* Other doesn't */
@@ -126,7 +140,7 @@ int Call_ScilabOpen(char *SCIpath, BOOL advancedMode, char *ScilabStartup, int S
     if (ScilabStartup)
     {
         int lengthStringToScilab = (int)(strlen(FORMAT_SCRIPT_STARTUP) + strlen(ScilabStartup) + 1);
-        InitStringToScilab = (char *)MALLOC(lengthStringToScilab * sizeof(char));
+        InitStringToScilab = (char*)MALLOC(lengthStringToScilab * sizeof(char));
         sprintf(InitStringToScilab, FORMAT_SCRIPT_STARTUP, ScilabStartup);
         pGlobalSEI->iNoStart = 1;
     }
@@ -139,13 +153,9 @@ int Call_ScilabOpen(char *SCIpath, BOOL advancedMode, char *ScilabStartup, int S
     pGlobalSEI->iConsoleMode = 1;
     pGlobalSEI->iStartConsoleThread = 0;
 
-    if (getScilabMode() != SCILAB_NWNI)
-    {
-        pGlobalSEI->iNoJvm = 1;
-    }
+    pGlobalSEI->iNoJvm = getScilabMode() == SCILAB_NWNI;
 
-    pGlobalSEI->iNoJvm = 0;
-
+    setForceQuit(0);
     ierr = StartScilabEngine(pGlobalSEI);
 
     if (InitStringToScilab)
@@ -160,15 +170,14 @@ int Call_ScilabOpen(char *SCIpath, BOOL advancedMode, char *ScilabStartup, int S
         return ierr;
     }
 
-    __CreateThreadWithParams(&threadIdScilab, &threadKeyScilab, &RunScilabEngine, pGlobalSEI);
+    __CreateThreadWithParams(&threadIdScilab, &threadKeyScilab, &runScilabEngine, pGlobalSEI);
 
     setCallScilabEngineState(CALL_SCILAB_ENGINE_STARTED);
 
     return 0;
 }
-
 /*--------------------------------------------------------------------------*/
-BOOL TerminateScilab(char *ScilabQuit)
+BOOL TerminateScilab(char* ScilabQuit)
 {
     if (getCallScilabEngineState() == CALL_SCILAB_ENGINE_STARTED)
     {
@@ -203,8 +212,8 @@ BOOL TerminateScilab(char *ScilabQuit)
 
 /*--------------------------------------------------------------------------*/
 /**
-* function called javasci
-*/
+ * function called javasci
+ */
 void ScilabDoOneEvent(void)
 {
     if (getCallScilabEngineState() == CALL_SCILAB_ENGINE_STARTED)
@@ -242,22 +251,22 @@ CALL_SCILAB_ENGINE_STATE getCallScilabEngineState(void)
 }
 
 /*--------------------------------------------------------------------------*/
-sci_types getVariableType(char *varName)
+sci_types getVariableType(char* varName)
 {
     int iSciType = -1;
     SciErr sciErr = getNamedVarType(NULL, (char*)varName, &iSciType);
 
     if (sciErr.iErr == API_ERROR_NAMED_UNDEFINED_VAR)
     {
-        return (sci_types) - 2;
+        return (sci_types)-2;
     }
 
     if (sciErr.iErr)
     {
         printError(&sciErr, 0);
-        return (sci_types) - 1;
+        return (sci_types)-1;
     }
-    return (sci_types) iSciType;
+    return (sci_types)iSciType;
 }
 
 /*--------------------------------------------------------------------------*/
@@ -266,8 +275,8 @@ sci_types getVariableType(char *varName)
  * Call the Scilab function getLastErrorMessage
  * Take the result (a matrix of string) and concatenate into a single string
  * This is way easier to manage in swig.
-*/
-char *getLastErrorMessageSingle(void)
+ */
+char* getLastErrorMessageSingle(void)
 {
     return wide_string_to_UTF8(getLastErrorMessage());
 }

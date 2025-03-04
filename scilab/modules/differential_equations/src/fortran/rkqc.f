@@ -38,6 +38,8 @@ c     Corrected error formula Stéphane Mottelet UTC- Apr 2018
       double precision rwork(*)
 
       external derivs
+cDEC$ ATTRIBUTES DLLIMPORT:: /ierode/
+      COMMON /ierode/ierror
 
       lysav=1
       ldysav=lysav+n

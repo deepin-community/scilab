@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2009 - DIGITEO - Bernard HUGUENEY
 * Copyright (C) 2011 - DIGITEO - Cedric DELAMARRE
 *
@@ -104,7 +104,6 @@ types::Function::ReturnValue sci_schur(types::typed_list &in, int _iRetCount, ty
             }
 
             pDbl[1] = pDbl[1]->clone()->getAs<types::Double>(); // pDbl will be modified
-
             iCase = 11;
         }
         else if (in[1]->isString())
@@ -328,6 +327,23 @@ types::Function::ReturnValue sci_schur(types::typed_list &in, int _iRetCount, ty
         }
         default:// case 1 and 11
             break;
+    }
+
+
+    if (pDbl[0] != nullptr && pDbl[0]->isComplex())
+    {
+        if (pDbl[1] != nullptr && pDbl[1]->isComplex() == false)
+        {
+            pDbl[1]->setComplex(true);
+        }
+    }
+
+    if (pDbl[1] != nullptr && pDbl[1]->isComplex())
+    {
+        if (pDbl[0] != nullptr && pDbl[0]->isComplex() == false)
+        {
+            pDbl[0]->setComplex(true);
+        }
     }
 
     int iRet = schurSelect(pDbl, pDblOut, bComplexArgs, bIsDiscreteStr, bIsContinuStr, pStrFunction);

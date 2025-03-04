@@ -1,4 +1,4 @@
-# Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+# Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 # Copyright (C) 2008 - INRIA - Sylvestre LEDRU
 #
 # This file is distributed under the same license as the Scilab package.
@@ -53,7 +53,6 @@ libscihelptools_la_CPPFLAGS= \
     -I$(top_srcdir)/modules/ast/includes/symbol/ \
     -I$(top_srcdir)/modules/ast/includes/system_env/ \
     -I$(top_srcdir)/modules/ast/includes/types/ \
-    -I$(top_srcdir)/modules/ast/includes/analysis/ \
 	-I$(top_srcdir)/modules/localization/includes/ \
 	-I$(top_srcdir)/modules/jvm/includes/ \
 	-I$(top_srcdir)/modules/output_stream/includes/ \
@@ -92,6 +91,11 @@ libscihelptools_la_sci_gateway_DATA = sci_gateway/helptools_gateway.xml
 libscihelptools_la_data_configurationdir = $(mydatadir)/data/configuration
 libscihelptools_la_data_configuration_DATA = data/configuration/scilab_primitives.txt \
 data/configuration/scilab_macros.txt
+# when these file are not present, generate them empty ; Scilab will populate them later
+data/configuration/scilab_macros.txt:
+	touch $@
+data/configuration/scilab_primitives.txt:
+	touch $@
 
 libscihelptools_la_data_templatedir = $(mydatadir)/data/template
 libscihelptools_la_data_template_DATA = data/template/template_chm.html \

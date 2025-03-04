@@ -1,0 +1,60 @@
+Description: fixing the build of the doc by skipping the Russian part,
+ including the shared libs in the modules in java.library.path and also loading
+ the native libraries in a clean, non-reflective way.
+Author: Pierre Gruet <pgt@debian.org>
+Forwarded: not-needed
+Last-Update: 2023-03-10
+
+--- a/scilab/modules/jvm/src/java/org/scilab/modules/jvm/LibraryPath.java
++++ b/scilab/modules/jvm/src/java/org/scilab/modules/jvm/LibraryPath.java
+@@ -67,8 +67,8 @@
+             /* The order matter here... see bug #4022 */
+             String newLibPath = System.getProperty(JAVALIBRARYPATH) + File.pathSeparator + p;
+             System.setProperty(JAVALIBRARYPATH, newLibPath);
+-            try {
+-            	/* Enable modifications on USER_PATHS field in LibraryPaths class */
++            /*try {
++            	/* Enable modifications on USER_PATHS field in LibraryPaths class
+             	final Class<?>[] declClassArr = NativeLibraries.class.getDeclaredClasses();
+             	final Class<?> libraryPaths = Arrays.stream(declClassArr).filter(klass -> klass.getSimpleName().equals("LibraryPaths")).findFirst().get();
+             	final Field field = libraryPaths.getDeclaredField("USER_PATHS");
+@@ -77,7 +77,7 @@
+             	varHandle.set(field, field.getModifiers() & ~Modifier.FINAL);
+             	field.setAccessible(true);
+             	
+-            	/* Update field by adding new path to current value */
++            	/* Update field by adding new path to current value
+             	String[] paths = (String[])field.get(null);
+                 String[] newPaths = new String[paths.length+1];
+                 System.arraycopy(paths, 0, newPaths, 0, paths.length);
+@@ -88,7 +88,7 @@
+         		throw new IOException("Error NoSuchFieldException, could not add path to " + JAVALIBRARYPATH);
+             } catch (IllegalAccessException e) {
+                 throw new IOException("Error IllegalAccessException, could not add path to " + JAVALIBRARYPATH);
+-            }
++            }*/
+         }
+     }
+ 
+--- a/scilab/Makefile.am
++++ b/scilab/Makefile.am
+@@ -305,7 +305,7 @@
+ 				LANG=$$l.UTF-8 SCI_DISABLE_TK=1 SCI_JAVA_ENABLE_HEADLESS=1 _JAVA_OPTIONS='-Djava.awt.headless=true' HOME=/tmp $(top_builddir)/bin/scilab-adv-cli -noatomsautoload -nb -l $$l -nouserstartup -e "$$COMMAND" || exit 1;\
+ 			else \
+ 				echo "LANG=$$l.UTF-8 LC_ALL=C SCI_DISABLE_TK=1 SCI_JAVA_ENABLE_HEADLESS=1 _JAVA_OPTIONS='-Djava.awt.headless=true' HOME=/tmp $(top_builddir)/bin/scilab-adv-cli -noatomsautoload -nb -l $$l -nouserstartup -e \"$$COMMAND\"";\
+-				LANG=$$l.UTF-8 LC_ALL=C SCI_DISABLE_TK=1 SCI_JAVA_ENABLE_HEADLESS=1 _JAVA_OPTIONS='-Djava.awt.headless=true' HOME=/tmp $(top_builddir)/bin/scilab-adv-cli -noatomsautoload -nb -l $$l -nouserstartup -e "$$COMMAND" || exit 1;\
++				LANG=$$l.UTF-8 LC_ALL=C SCI_DISABLE_TK=1 SCI_JAVA_ENABLE_HEADLESS=1 _JAVA_OPTIONS="-Djava.awt.headless=true -Djava.library.path=/usr/lib/jni:$$(find . -name "*.so" -a -wholename "*modules*" | sed 's/\/[^/]*$$//' | sort | uniq | tr '\n' ':' | sed 's/:$$//')" HOME=/tmp $(top_builddir)/bin/scilab-adv-cli -noatomsautoload -nb -l $$l -nouserstartup -e "$$COMMAND" || exit 1;\
+ 			fi; \
+ 		done; \
+ 	else \
+--- a/scilab/configure.ac
++++ b/scilab/configure.ac
+@@ -1629,7 +1629,7 @@
+ #######################
+ 
+ ALL_LINGUAS="en_US fr_FR zh_CN zh_TW ru_RU ca_ES de_DE es_ES pt_BR ja_JP it_IT uk_UA pl_PL cs_CZ"
+-ALL_LINGUAS_DOC="en_US fr_FR pt_BR ja_JP ru_RU"
++ALL_LINGUAS_DOC="en_US fr_FR pt_BR ja_JP"
+ 
+ AC_ARG_ENABLE(build-localization,
+         AS_HELP_STRING([--disable-build-localization],[Disable the localization build])

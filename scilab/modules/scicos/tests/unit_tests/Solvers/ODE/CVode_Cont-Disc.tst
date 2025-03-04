@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Paul Bignier
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -39,7 +39,7 @@ CVode_time_ref = (17.2:.1:29.9)';
 for i=1:4
 
     scs_m.props.tol(6) = i; // Solver
-    try scicos_simulate(scs_m); catch disp(lasterror()); end; // CVode
+    try scicos_simulate(scs_m); catch disp(lasterror()); exit(1); end; // CVode
 
     assert_checkalmostequal(res.values($-19:$, :), CVode_val_ref, 1d-4);
     assert_checkalmostequal(res.time, CVode_time_ref);

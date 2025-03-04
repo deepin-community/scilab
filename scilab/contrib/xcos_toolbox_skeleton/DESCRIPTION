@@ -1,9 +1,9 @@
 // Modify this file to provide a description of your toolbox.
 // This file is  used by Atoms GUI in scilab, to show information about the toolbox.
 //
-// Note that it will NOT be used when publishing your toolbox on http://atoms.scilab.org;
+// Note that it will NOT be used when publishing your toolbox on https://atoms.scilab.org;
 // the present file is only used if you distribute your toolbox yourself.
-// On the http://atoms.scilab.org site, only the information you provide there is used.
+// On the https://atoms.scilab.org site, only the information you provide there is used.
 //
 //
 // Lines starting with // are comments
@@ -46,10 +46,10 @@ Category: Xcos
 
 // Name of the institution (company, university, lab...) who has developped the toolbox.
 // If you developped the toolbox as an individual, then just enter "private individual"
-Entity: Scilab Enterprises
+Entity: Personnal
 
 // Optional website that has more information about this toolbox
-WebSite: http://www.scilab.org
+WebSite: https://www.scilab.org
 
 // License under which the toolbox will be published
 License: GPL 2.0

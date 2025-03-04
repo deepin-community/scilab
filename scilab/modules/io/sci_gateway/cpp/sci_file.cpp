@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2006 - INRIA - Allan CORNET
  * Copyright (C) 2009-2010 - DIGITEO - Allan CORNET
  * Copyright (C) 2013 - Scilab Enterprises - Cedric Delamarre
@@ -231,23 +231,25 @@ types::Function::ReturnValue sci_file(types::typed_list &in, int _iRetCount, typ
                         Scierror(iErr, _("%s: Can not open File \"%s\"\n"), "file", pstFilename);
                 }
 
+                FREE(pstFilename);
                 return types::Function::Error;
             }
             else
             {
+                FREE(pstFilename);
                 out.push_back(types::Double::Empty());
                 out.push_back(new types::Double((double)iErr));
                 return types::Function::OK;
             }
         }
 
+        FREE(pstFilename);
+
         out.push_back(new types::Double((double)lunit));
         if (_iRetCount == 2)
         {
             out.push_back(new types::Double(0.0));
         }
-
-        FREE(pstFilename);
     }
     else if (wcscmp(pSAction->get(0), L"close") == 0 ||
              wcscmp(pSAction->get(0), L"rewind") == 0 ||
@@ -340,12 +342,12 @@ types::Function::ReturnValue sci_file(types::typed_list &in, int _iRetCount, typ
                 int iErr = 0;
                 while (iErr == 0)
                 {
-                    iErr = C2F(readinter)(&iFileUnit, "(a)", 1L);
+                    iErr = C2F(readinter)(&iFileUnit, "(a)", 3L);
                 }
 
                 if (iErr == 2)
                 {
-                    Scierror(999, _("%s: \n"), "file");
+                    Scierror(999, _("%s: Incorrect file or format.\n"), "file");
                     return types::Function::Error;
                 }
 

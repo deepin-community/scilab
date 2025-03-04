@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010 - DIGITEO - Manuel Juliachs
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -11,8 +11,8 @@
 //
 // <-- Non-regression test for bug 7492 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=7492
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/7492
 //
 // <-- Short Description -->
 // The Grayplot object's data is transposed when displayed if its
@@ -28,7 +28,7 @@ y = 1:7;
 // Grayplot with direct data mapping
 f = scf();
 grayplot(x,y,z);
-f.color_map = jetcolormap(3);
+f.color_map = jet(3);
 f.children(1).children(1).data_mapping = "direct";
 f.children.title.text = "Direct Mapping";
 

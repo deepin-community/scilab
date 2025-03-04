@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2014 - Scilab Enterprises - Pierre-Aime Agnel
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -7,8 +7,8 @@
 //
 // <-- Unit-test for color in marks -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues
 //
 // <-- Short Description -->
 // Tests that the marks can be coloured in 2D plots with offset and stride set
@@ -26,7 +26,7 @@ plot(x, y_1, ".c");
 plot(x, y_2, ".c");
 
 fig = gcf();
-fig.color_map = rainbowcolormap(32);
+fig.color_map = rainbow(32);
 ax = gca();
 pl_2 = ax.children(1).children(1);
 pl_2.mark_mode = "on";

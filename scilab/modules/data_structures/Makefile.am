@@ -1,4 +1,4 @@
-# Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+# Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 # Copyright (C) 2006 - INRIA - Sylvestre LEDRU
 #
 # This file is distributed under the same license as the Scilab package.
@@ -20,7 +20,6 @@ libscidata_structures_la_CPPFLAGS = \
     -I$(top_srcdir)/modules/ast/includes/symbol/ \
     -I$(top_srcdir)/modules/ast/includes/system_env/ \
     -I$(top_srcdir)/modules/ast/includes/types/ \
-    -I$(top_srcdir)/modules/ast/includes/analysis/ \
     -I$(top_srcdir)/modules/dynamic_link/includes/ \
     -I$(top_srcdir)/modules/string/includes/ \
     -I$(top_srcdir)/modules/output_stream/includes/ \
@@ -50,7 +49,7 @@ libscidata_structures_la_rootdir = $(mydatadir)
 libscidata_structures_la_root_DATA =  license.txt
 
 
-#### data_structures : init scripts ####
+####ï¿½data_structures : init scripts ####
 libscidata_structures_la_etcdir = $(mydatadir)/etc
 libscidata_structures_la_etc_DATA = \
     etc/data_structures.quit \

@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2017 - Samuel GOUGEON
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -11,7 +11,7 @@
 // along with this program.
 
 function yn = isDocked(fh)
-    // http://fileexchange.scilab.org/toolboxes/360000
+    // https://fileexchange.scilab.org/toolboxes/360000
     // Shared internal function used by clf(), fchamp(), etc.
     //
     // fh: matrix of figures handles

@@ -1,10 +1,10 @@
 #
-# Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+# Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 # Copyright (C) INRIA   - 2006-2008 - Sylvestre Ledru
 # Copyright (C) INRIA   - 2007 - Vincent COUVERT
 # Copyright (C) DIGITEO - 2009 - Sylvestre Ledru
 # Copyright (C) DIGITEO - 2009 - Pierre MARECHAL
-# Copyright (C) DIGITEO - 2010 - Clément DAVID
+# Copyright (C) DIGITEO - 2010 - ClÃ©ment DAVID
 #
 # Copyright (C) 2012 - 2016 - Scilab Enterprises
 #
@@ -59,7 +59,9 @@ GUI_C_SOURCES = \
     src/c/checkColorRange.c \
     src/c/messageboxoptions.c \
     src/c/ScilabTermination.c \
-    src/jni/ScilabTermination_wrap.c
+    src/jni/ScilabTermination_wrap.c \
+    src/c/getHandleType.c \
+    src/c/getUIStyle.c
 
 GUI_CXX_SOURCES = \
     src/cpp/InitializeGUI.cpp \
@@ -181,7 +183,6 @@ GATEWAY_C_SOURCES = \
     sci_gateway/c/sci_uicontrol.c \
     sci_gateway/c/sci_uimenu.c \
     sci_gateway/c/sci_uiwait.c \
-    sci_gateway/c/sci_mpopup.c \
     sci_gateway/c/sci_messagebox.c \
     sci_gateway/c/sci_waitbar.c \
     sci_gateway/c/sci_progressionbar.c \
@@ -212,7 +213,6 @@ GATEWAY_CXX_SOURCES = \
     sci_gateway/cpp/sci_datatipremove.cpp \
     sci_gateway/cpp/sci_plotbrowser.cpp \
     sci_gateway/cpp/sci_datatip_manager_mode.cpp \
-    sci_gateway/cpp/sci_datatip_toggle.cpp \
     sci_gateway/cpp/sci_datatipmove.cpp \
     sci_gateway/cpp/sci_datatip_set_style.cpp \
     sci_gateway/cpp/sci_datatip_set_display.cpp \
@@ -238,7 +238,6 @@ libscigui_la_CPPFLAGS = \
     -I$(top_srcdir)/modules/ast/includes/symbol/ \
     -I$(top_srcdir)/modules/ast/includes/system_env/ \
     -I$(top_srcdir)/modules/ast/includes/types/ \
-    -I$(top_srcdir)/modules/ast/includes/analysis/ \
     -I$(top_srcdir)/modules/output_stream/includes \
     -I$(top_srcdir)/modules/fileio/includes/ \
     -I$(top_srcdir)/modules/graphics/includes/ \
@@ -265,7 +264,6 @@ libscigui_disable_la_CPPFLAGS = \
     -I$(top_srcdir)/modules/ast/includes/symbol/ \
     -I$(top_srcdir)/modules/ast/includes/system_env/ \
     -I$(top_srcdir)/modules/ast/includes/types/ \
-    -I$(top_srcdir)/modules/ast/includes/analysis/ \
     -I$(top_srcdir)/modules/api_scilab/includes/ \
     -I$(top_srcdir)/modules/localization/includes/ \
     -I$(top_srcdir)/modules/output_stream/includes/ \
@@ -309,6 +307,7 @@ libscigui_la_iconsdir=$(mydatadir)/
 nobase_libscigui_la_icons_DATA = \
 images/icons/16x16/actions/code-navigator.png \
 images/icons/16x16/actions/color-fill.png \
+images/icons/16x16/actions/deselect_all.png \
 images/icons/16x16/actions/document-new.png \
 images/icons/16x16/actions/document-open.png \
 images/icons/16x16/actions/document-open-sci.png \
@@ -330,6 +329,7 @@ images/icons/16x16/actions/edit-undo.png \
 images/icons/16x16/actions/execute-all.png \
 images/icons/16x16/actions/filter.png \
 images/icons/16x16/actions/format-text-bold.png \
+images/icons/16x16/actions/ged_move.png \
 images/icons/16x16/actions/go-bottom.png \
 images/icons/16x16/actions/go-next.png \
 images/icons/16x16/actions/go-previous.png \
@@ -343,6 +343,7 @@ images/icons/16x16/actions/media-playback-stop.png \
 images/icons/16x16/actions/plot.png \
 images/icons/16x16/actions/save-and-execute.png \
 images/icons/16x16/actions/scilab_search.png \
+images/icons/16x16/actions/select_all.png \
 images/icons/16x16/actions/shorte.png \
 images/icons/16x16/actions/short.png \
 images/icons/16x16/actions/SizeColumnsToFit.png \
@@ -381,6 +382,7 @@ images/icons/16x16/mimetypes/text-csv.png \
 images/icons/16x16/mimetypes/text-html.png \
 images/icons/16x16/mimetypes/text-x-generic.png \
 images/icons/16x16/mimetypes/text-xml.png \
+images/icons/16x16/mimetypes/x-office-presentation.png \
 images/icons/16x16/mimetypes/application-mat.png \
 images/icons/16x16/places/folder.png \
 images/icons/16x16/places/folder-saved-search.png \
@@ -408,7 +410,7 @@ images/icons/48x48/emblems/emblem-readonly.png \
 images/icons/64x40/mimetypes/application-x-scilab-champ.png \
 images/icons/64x40/mimetypes/application-x-scilab-contour2d.png \
 images/icons/64x40/mimetypes/application-x-scilab-grayplot.png \
-images/icons/64x40/mimetypes/application-x-scilab-hist3d.png \
+images/icons/64x40/mimetypes/application-x-scilab-bar3d.png \
 images/icons/64x40/mimetypes/application-x-scilab-histplot.png \
 images/icons/64x40/mimetypes/application-x-scilab-Matplot.png \
 images/icons/64x40/mimetypes/application-x-scilab-mesh.png \
@@ -419,7 +421,6 @@ images/icons/64x40/mimetypes/application-x-scilab-Sgrayplot.png \
 images/icons/64x40/mimetypes/application-x-scilab-surf.png \
 images/icons/256x256/apps/accessories-text-editor.png \
 images/icons/256x256/apps/puffin.png \
-images/icons/256x256/apps/scilabMacOS.png \
 images/icons/256x256/apps/rrze_table.png \
 images/icons/256x256/apps/system-search.png \
 images/icons/256x256/apps/utilities-system-monitor.png \

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2012 - Scilab Enterprises - Calixte DENIZET
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -59,7 +59,7 @@
         <programlisting role="example"><![CDATA[
     doc = xmlDocument("TMPDIR/foo.xml");
     doc.root = xmlElement(doc, "root");
-    ns = xmlNs(doc.root, "scilab", "http://www.scilab.org");
+    ns = xmlNs(doc.root, "scilab", "https://www.scilab.org");
     doc.root.children(1) = "<a>hello</a>";
     doc.root.children(1).namespace = ns;
     xmlDump(doc)

@@ -1,5 +1,5 @@
 //
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 //
 // This file is distributed under the same license as the Scilab package.
@@ -11,6 +11,7 @@ function demo_cplxroot()
 
     my_handle = scf(100001);
     clf(my_handle,"reset");
+    my_handle.color_map = jet(128);
     cplxroot(2,20,130,45);
     demo_viewCode("cplxroot.sce");
 

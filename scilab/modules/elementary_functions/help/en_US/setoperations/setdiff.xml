@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
  * Copyright (C) 2018 - 2019 - Samuel GOUGEON
@@ -20,7 +20,7 @@
     <refnamediv>
         <refname>setdiff</refname>
         <refpurpose>
-            returns elements or rows or columns of an array that do not belong to another one
+            returns elements that are in a set but not in another one.
         </refpurpose>
     </refnamediv>
     <refsynopsisdiv>
@@ -35,20 +35,17 @@
         <title>Arguments</title>
         <variablelist>
             <varlistentry>
-                <term>a, b</term>
+                <term>a</term>
                 <listitem>
                     <para>
-                        vectors, matrices or hypermatrices of real or complex numbers, encoded
-                        integers, booleans, or strings. Sparse-encoded inputs are accepted.
-                        Both <varname>a</varname> and <varname>b</varname> must have the same
-                        data type (and integer type), but may mix dense and sparse encoding.
+                        a set of elements 
                     </para>
-                    <para>
-                        If the option <literal>orien="r"</literal> is used, <varname>a</varname>
-                        and <varname>b</varname> must have the same number of columns.
-                        If the <literal>orien="c"</literal> is used, they must have the same
-                        number of rows.
-                    </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>b</term>
+                <listitem>
+                    <para>elements to remove from <varname>a</varname>.</para>
                 </listitem>
             </varlistentry>
             <varlistentry>
@@ -70,6 +67,12 @@
                         </listitem>
                     </itemizedlist>
                 </listitem>
+                <para>
+                    If the option <literal>orien="r"</literal> is used, <varname>a</varname>
+                    and <varname>b</varname> must have the same number of columns.
+                    If the <literal>orien="c"</literal> is used, they must have the same
+                    number of rows.
+                </para>
             </varlistentry>
             <varlistentry>
                 <term>v</term>
@@ -117,11 +120,16 @@
         <title>Description</title>
         <para>
             <literal>setdiff(a, b,..)</literal> computes and returns the elements or rows or columns
-            of <varname>a</varname> that are NOT in <varname>b</varname>.
+            of <varname>a</varname> that are <emphasis role="bold">not</emphasis> in <varname>b</varname>.
         </para>
         <para>
             All duplicates (elements or rows or columns) are removed from <varname>a</varname> and
             from <varname>b</varname> before processing.
+        </para>
+        <para>
+            Both <varname>a</varname> and <varname>b</varname> must have the same
+            data type (and integer type), but may mix dense and sparse encoding.
+            It can be vectors, matrices or hypermatrices of real or complex numbers, encoded integers, booleans, or strings. Sparse-encoded inputs are also accepted.
         </para>
         <para>
             If <varname>a</varname> is an hypermatrix and the <literal>"r"</literal> option is used,

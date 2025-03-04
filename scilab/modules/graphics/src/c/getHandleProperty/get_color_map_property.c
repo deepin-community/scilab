@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2004-2006 - INRIA - Fabrice Leray
  * Copyright (C) 2006 - INRIA - Allan Cornet
  * Copyright (C) 2006 - INRIA - Jean-Baptiste Silvy
@@ -36,6 +36,7 @@
 void* get_color_map_property(void* _pvCtx, int iObjUID)
 {
     double *pdblColorMap = NULL;
+    void* pvReturn = NULL;
 
     int iCmapSize = 0;
     int * piCmapSize = &iCmapSize;
@@ -48,6 +49,10 @@ void* get_color_map_property(void* _pvCtx, int iObjUID)
         return NULL;
     }
 
-    return sciReturnMatrix(pdblColorMap, iCmapSize, 3);
+    pvReturn = sciReturnMatrix(pdblColorMap, iCmapSize, 3);
+
+    releaseGraphicObjectProperty(__GO_COLORMAP__, pdblColorMap, jni_double_vector, iCmapSize * 3);
+
+    return pvReturn;
 }
 /*--------------------------------------------------------------------------*/

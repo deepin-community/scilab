@@ -47,7 +47,11 @@ function mac=genmac(tt,nin,nout)
         get_u=[]
     end
     y="y"
-    set_y=blank+"y=list("+strcat(y(ones(1,nout))+string(1:nout),",")+")"
+    if nout>0 then
+        set_y=blank+"y=list("+strcat(y(ones(1,nout))+string(1:nout),",")+")"
+    else
+        set_y=blank+"y=list()";
+    end
     mac_txt=[
     get_u
     "select %_flag";
@@ -85,6 +89,6 @@ function mac=genmac(tt,nin,nout)
     "  xd=[]";
     set_y
     "end";]
-
+    
     deff("[xd,t_evo,z,x,y]=mac(%_flag,n_evi,t,x,z,rpar,ipar,u)",mac_txt)
 endfunction

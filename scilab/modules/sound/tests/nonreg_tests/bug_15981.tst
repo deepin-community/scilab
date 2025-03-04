@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2019 - Samuel GOUGEON
 // Copyright (C) 2019 - Federico MIYARA      // mu-law sample file
 //
@@ -12,8 +12,8 @@
 //
 // <-- Non-regression test for bug 15981 -->
 //
-// <-- Bugzilla URL -->
-// https://bugzilla.scilab.org/15981
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/15981
 //
 // <-- Short Description -->
 // wavread()

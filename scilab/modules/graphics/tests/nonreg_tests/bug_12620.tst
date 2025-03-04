@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2014 - Scilab Enterprises - Vincent COUVERT
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,8 +9,8 @@
 
 // <-- Non-regression test for bug 12620 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/12620
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/12620
 //
 // <-- Short Description -->
 // Size of uicontextmenu is not correct when we want to display all uimenu

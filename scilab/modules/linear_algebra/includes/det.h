@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) ????-2008 - INRIA
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -17,7 +17,7 @@
 #include "dynlib_linear_algebra.h"
 /*
  * computes the determinant of a real or complex square matrix, performing MALLOCation of temp variables as needed.
- * Cf. http://www.scilab.org/product/man/det.html
+ * Cf. https://www.scilab.org/product/man/det.html
  *
  * in :
  *

@@ -153,7 +153,11 @@ function [txt,rpar,ipar] = create_modelica(blklst,corinvm,cmat,NvM,name,scs_m)
             p2=blklst(to(1)).equations.inputs(to(2))
             n2=Bnames(find(Bnumbers==to(1)))
         else
-            if size(blklst(to(1)).equations.outputs,"*")<to(2) then pause,end
+            if size(blklst(to(1)).equations.outputs,"*")<to(2) then
+                errmsg = strcat(["Unable to compile xcos to modelica"
+                         msprintf("  block #%d - ""%s"" has %d output ports and %d modelica connector.", to(1), blklst(to(1)).uid, to(2), size(blklst(to(1)).equations.outputs,"*"))], ascii(10));
+                error(errmsg);
+            end
             p2=blklst(to(1)).equations.outputs(to(2))
             n2=Bnames(find(Bnumbers==to(1)))
         end

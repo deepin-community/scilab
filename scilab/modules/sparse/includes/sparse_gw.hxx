@@ -1,8 +1,9 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2013 - Scilab Enterprises - Cedric Delamarre
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ * Copyright (C) 2023 - UTC - UTC - Stéphane MOTTELET
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
  * pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -56,5 +57,9 @@ CPP_GATEWAY_PROTOTYPE(sci_bfinit);
 CPP_GATEWAY_PROTOTYPE(sci_inpnv);
 CPP_GATEWAY_PROTOTYPE(sci_blkfc1i);
 CPP_GATEWAY_PROTOTYPE(sci_blkslvi);
+CPP_OPT_GATEWAY_PROTOTYPE_EXPORT(sci_spCompJacobian, SPARSE_GW_IMPEXP);
+CPP_OPT_GATEWAY_PROTOTYPE_EXPORT(sci_spCompHessian, SPARSE_GW_IMPEXP);
+CPP_GATEWAY_PROTOTYPE_EXPORT(sci_percent_spCompGeneric_clear, SPARSE_GW_IMPEXP);
+CPP_GATEWAY_PROTOTYPE_EXPORT(sci_percent_spCompGeneric_e, SPARSE_GW_IMPEXP);
 
 #endif /* !__SPARSE_GW_HXX__ */

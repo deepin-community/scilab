@@ -1,0 +1,49 @@
+Description: adapting Debian-specific jar names in scilab/configure.ac
+Author: Pierre Gruet <pgt@debian.org>
+Forwarded: not-needed
+Last-Update: 2023-11-16
+
+--- a/scilab/configure.ac
++++ b/scilab/configure.ac
+@@ -940,7 +940,7 @@
+                 # Jakarta Activation (Run dependency)
+                 # Do not look for jakarta.activation.spi.MimeTypeRegistry here since it will detect jakarta.activation-api.jar
+                 # Checked before activation.jar to avoid false detection
+-                AC_JAVA_CHECK_JAR([jakarta.activation],[com.sun.activation.registries.MimeTypeFile],[Scilab Help - MimeTypes for image conversion])
++                AC_JAVA_CHECK_JAR([jakarta-activation],[com.sun.activation.registries.MimeTypeFile],[Scilab Help - MimeTypes for image conversion])
+                 JAKARTA_ACTIVATION=$PACKAGE_JAR_FILE
+                 AC_SUBST(JAKARTA_ACTIVATION)
+ 
+@@ -1017,9 +1017,9 @@
+                 #AC_SUBST(JAVAX_ANNOTATION)
+ 
+                 # Jakarta Activation API (Build dependency)
+-                AC_JAVA_CHECK_JAR([jakarta.activation-api],[jakarta.activation.spi.MimeTypeRegistryProvider],[Scilab Help - MimeTypes for image conversion])
+-                JAKARTA_ACTIVATION_API=$PACKAGE_JAR_FILE
+-                AC_SUBST(JAKARTA_ACTIVATION_API)
++                #AC_JAVA_CHECK_JAR([jakarta.activation-api],[jakarta.activation.spi.MimeTypeRegistryProvider],[Scilab Help - MimeTypes for image conversion])
++                #JAKARTA_ACTIVATION_API=$PACKAGE_JAR_FILE
++                #AC_SUBST(JAKARTA_ACTIVATION_API)
+ 
+                 # JOGL 2
+                 AC_JAVA_CHECK_JAR([jogl],[com.jogamp.opengl.GLAutoDrawable],[Scilab 3D rendering], [], [], 2.5)
+@@ -1226,7 +1226,7 @@
+                 AC_SUBST(JLATEXMATH_FOP)
+ 
+                 # Saxon 9 HE
+-                AC_JAVA_CHECK_JAR([saxon9he],[net.sf.saxon.TransformerFactoryImpl],[Saxon processor for XSLT, XQuery, and XML Schema])
++                AC_JAVA_CHECK_JAR([Saxon-HE],[net.sf.saxon.TransformerFactoryImpl],[Saxon processor for XSLT, XQuery, and XML Schema])
+                 SAXON=$PACKAGE_JAR_FILE
+                 AC_SUBST(SAXON)
+ 
+--- a/scilab/build.incl.xml.in
++++ b/scilab/build.incl.xml.in
+@@ -85,7 +85,7 @@
+         <pathelement location="${freehep-graphics2d.jar}"/>
+         <pathelement location="${freehep-graphicsio-emf.jar}"/>
+         <pathelement location="${freehep-graphicsio.jar}"/>
+-        <pathelement location="${jakarta.activation-api.jar}"/>
++        <pathelement location="/usr/share/java/jakarta-activation.jar"/>
+         <pathelement location="${javax.annotation-api.jar}"/>
+         <pathelement location="${jaxb-api.jar}"/>
+     </path>

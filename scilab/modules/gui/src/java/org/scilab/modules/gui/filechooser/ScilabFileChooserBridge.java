@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2007 - INRIA - Vincent COUVERT
  * Copyright (C) 2008 - DIGITEO - Sylvestre KOUMAR
  *
@@ -18,6 +18,8 @@ package org.scilab.modules.gui.filechooser;
 
 import org.scilab.modules.gui.bridge.filechooser.SwingScilabExportFileChooser;
 import org.scilab.modules.gui.bridge.filechooser.SwingScilabFileChooser;
+import org.scilab.modules.gui.bridge.filechooser.JFXScilabFileChooser;
+import org.scilab.modules.gui.bridge.filechooser.JFXScilabExportFileChooser;
 
 /**
  * Bridge dedicated to Scilab file chooser GUIs
@@ -38,7 +40,12 @@ public class ScilabFileChooserBridge {
      * @return the created FileChooser
      */
     public static SimpleFileChooser createFileChooser() {
-        return new SwingScilabFileChooser();
+        boolean ismacOS = System.getProperty("os.name").toLowerCase().contains("mac");
+        if (ismacOS == true) {
+            return new JFXScilabFileChooser();
+        } else {
+            return new SwingScilabFileChooser();
+        }
     }
 
     /**
@@ -47,7 +54,12 @@ public class ScilabFileChooserBridge {
      * @return the created ExportFileChooser
      */
     public static SimpleFileChooser createExportFileChooser(Integer figureUID) {
-        return new SwingScilabExportFileChooser(figureUID);
+        boolean ismacOS = System.getProperty("os.name").toLowerCase().contains("mac");
+        if (ismacOS == true) {
+            return new JFXScilabExportFileChooser(figureUID);
+        } else {
+            return new SwingScilabExportFileChooser(figureUID);
+        }
     }
 
     /**
@@ -66,6 +78,15 @@ public class ScilabFileChooserBridge {
      */
     public static void setInitialDirectory(FileChooser fileChooser, String path) {
         fileChooser.getAsSimpleFileChooser().setInitialDirectory(path);
+    }
+
+    /**
+     * Set the initial file name
+     * @param fileChooser the file chooser we want to set the initial filename of
+     * @param path the initial file name
+     */
+    public static void setInitialFileName(FileChooser fileChooser, String path) {
+        fileChooser.getAsSimpleFileChooser().setInitialFileName(path);
     }
 
     /**
@@ -136,5 +157,32 @@ public class ScilabFileChooserBridge {
      */
     public static void setUiDialogType(FileChooser fileChooser, int dialogType) {
         fileChooser.getAsSimpleFileChooser().setUiDialogType(dialogType);
+    }
+
+    /**
+     * Add a file type extension mask to select files of given type
+     * @param fileChooser the file chooser we want to add a mask
+     * @param theMask the mask strings
+     * @param theFileMaskDescription the description strings for each mask
+     */
+    public static void addMask(FileChooser fileChooser, String[] theMask, String[] theFileMaskDescription) {
+       fileChooser.getAsSimpleFileChooser().addMask(theMask, theFileMaskDescription);
+    }
+
+    /**
+     * Set accept all file types filter
+     * @param fileChooser the file chooser we want to add a mask
+     * @param flag enable  all file type
+     */
+    public static void setAcceptAllFileFilterUsed(FileChooser fileChooser, boolean flag) {
+         fileChooser.getAsSimpleFileChooser().setAcceptAllFileFilterUsed(flag);
+    }
+
+    /**
+     * Invalidate filechooser
+     * @param fileChooser the file chooser to invalidate
+     */
+    public static void invalidate(FileChooser fileChooser) {
+        fileChooser.getAsSimpleFileChooser().invalidate();
     }
 }

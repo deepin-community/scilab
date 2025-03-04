@@ -36,7 +36,9 @@ The option is "disableUnderMode" and can be:
 <path value="@LUCENE@"/>
 <path value="@LUCENE_ANALYZER@"/>
 <path value="@LUCENE_PARSER@"/>
-
+<path value="@JAVAFX_BASE@"/>
+<path value="@JAVAFX_SWING@"/>
+<path value="@JAVAFX_GRAPHICS@"/>
 <!-- Load when needed -->
 
 <path value="@FREEHEP_UTIL@" load="onUse">
@@ -73,6 +75,37 @@ The option is "disableUnderMode" and can be:
     <load on="documentationGeneration"/>
 </path>
 
+<path value="@JAXB_RUNTIME@" load="onUse">
+    <load on="Xcos"/>
+    <load on="documentationGeneration"/>
+</path>
+
+<path value="@JAXB_IMPL@" load="onUse">
+    <load on="Xcos"/>
+    <load on="documentationGeneration"/>
+</path>
+
+<!-- java.lang.NoClassDefFoundError: javax/activation/DataSource -->
+<path value="@ACTIVATION@" load="onUse">
+    <load on="Xcos"/>
+    <load on="documentationGeneration"/>
+</path>
+
+<path value="@ISTACK_COMMONS_RUNTIME@" load="onUse">
+    <load on="Xcos"/>
+    <load on="documentationGeneration"/>
+</path>
+
+<!-- java.lang.NoClassDefFoundError: jakarta/activation/MimetypesFileTypeMap -->
+<!-- java.lang.RuntimeException: Provider for jakarta.activation.spi.MimeTypeRegistryProvider cannot be found -->
+<path value="@JAKARTA_ACTIVATION@" load="onUse"> 
+    <load on="documentationGeneration"/>
+</path>
+
+<!--<path value="@JAKARTA_ACTIVATION_API@" load="onUse"> 
+    <load on="documentationGeneration"/>
+</path>-->
+
 <path value="@SCIRENDERER_CP@"/>
 
 <path value="@JOGL2@"/>
@@ -98,9 +131,6 @@ The option is "disableUnderMode" and can be:
     <load on="documentationGeneration"/>
     <load on="pdf_ps_eps_graphic_export"/>
 </path>
-<path value="@SAXON@" load="onUse">
-    <load on="documentationGeneration"/>
-</path>
 <path value="@BATIK@" load="onUse">
     <load on="documentationGeneration"/>
     <load on="graphics_mathml_textrendering"/>
@@ -120,6 +150,9 @@ The option is "disableUnderMode" and can be:
     <load on="graphics_mathml_textrendering"/>
     <load on="pdf_ps_eps_graphic_export"/>
     <load on="Xcos"/>
+</path>
+<path value="@SAXON@" load="onUse">
+    <load on="documentationGeneration"/>
 </path>
 
 <!-- PDF doc generation (dep of jeuclid) -->

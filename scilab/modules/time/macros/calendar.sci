@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA - Allan CORNET
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
 // Copyright (C) 2019 - Samuel GOUGEON
@@ -24,17 +24,7 @@ function varargout = calendar(varargin)
     case 2
         Y = varargin(1);
         M = varargin(2);
-        msg = gettext("%s: Argument #%d: Scalar (1 element) expected.\n");
-        if length(Y)>1
-            error(msprintf(msg,"calendar", 1));
-        end
-        if length(M)>1
-            error(msprintf(msg,"calendar", 2));
-        end
-        if (M < 1) | (M > 12) then
-            msg = gettext("%s: Argument #%d: Must be in the interval [%d, %d].\n")
-            error(msprintf(msg, "calendar", 2, 1, 12));
-        end
+        %calendar(Y, M)
         c = [Y, M, 1];
         break
     else
@@ -73,5 +63,12 @@ function varargout = calendar(varargin)
         mprintf(" %s\n", t)
     else
         varargout = list(list(Title, dayNames, cal));
+    end
+endfunction
+
+function %calendar(y, m)
+    arguments
+        y (1,1) {mustBeA(y, "double")}
+        m (1,1) {mustBeA(m, "double"), mustBeInRange(m, 1, 12)}
     end
 endfunction

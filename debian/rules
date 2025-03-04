@@ -3,9 +3,11 @@
 include /usr/share/dpkg/architecture.mk
 
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+export DEB_CPPFLAGS_MAINT_APPEND = -DH5_USE_110_API
 export CCACHE_DIR := $(CURDIR)/debian/ccache
 
 CONFIGURE_ARGS += --prefix=/usr \
+	--libdir=/usr/lib/$(DEB_HOST_MULTIARCH) \
 	--with-fftw \
 	--with-umfpack --enable-build-localization \
 	--with-install-help-xml --enable-build-help \
@@ -23,16 +25,24 @@ ifneq (,$(filter $(DEB_HOST_ARCH),arm64 armel ppc64el mips mipsel s390x sparc))
 endif
 
 ifneq (,$(findstring $(DEB_HOST_ARCH),amd64))
-	DOC=1
+    ifeq (,$(filter nodoc,$(DEB_BUILD_OPTIONS)))
+        DOC=1
+    else
+        DOC=0
+    endif
 else
-	DOC=0
+    DOC=0
 endif
 
 %:
-	dh $@ --sourcedirectory=scilab
+	dh $@ --sourcedirectory=scilab --with bash-completion,javahelper
 
 # Do not run libtoolize because it can mess up with Scilab library
 override_dh_autoreconf:
+	# First, making backups of some files that will get changed during the build.
+	for F in $$(find . -name "Makefile.in") scilab/aclocal.m4 scilab/configure scilab/etc/Info.plist.in scilab/modules/core/includes/machine.h.in scilab/modules/core/src/cpp/banner.cpp scilab/modules/windows_tools/src/c/scilab_windows/console.c; do \
+	    cp $$F $${F}.save ;\
+	done
 	cd scilab && autoreconf
 
 override_dh_auto_configure:
@@ -55,9 +65,10 @@ override_dh_auto_install:
 	make -C scilab install install-data install-html \
 		prefix=$(CURDIR)/debian/tmp/usr \
 		bindir=$(CURDIR)/debian/tmp/usr/bin \
-		datadir=$(CURDIR)/debian/tmp/usr/share/ \
-		sharedir=$(CURDIR)/debian/tmp/usr/share/ \
-		docdir=$(CURDIR)/debian/tmp/usr/share/doc/
+		libdir=$(CURDIR)/debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH) \
+		datadir=$(CURDIR)/debian/tmp/usr/share \
+		sharedir=$(CURDIR)/debian/tmp/usr/share \
+		docdir=$(CURDIR)/debian/tmp/usr/share/doc
 
 # Remove empty directories but not files (#907607: scilab-cli doesn't start)
 	find debian/tmp/usr/share/scilab -type d -empty -delete
@@ -157,6 +168,46 @@ endif
 	mkdir -p $(CURDIR)/debian/scilab-full-bin/usr/share/java/
 	mkdir -p $(CURDIR)/debian/scilab-full-bin/usr/lib/jni/
 	cp debian/tmp/usr/share/scilab/modules/javasci/jar/org.scilab.modules.javasci.jar $(CURDIR)/debian/scilab-full-bin/usr/share/java/
-	mv debian/tmp/usr/lib/scilab/libjavasci2.so*  $(CURDIR)/debian/scilab-full-bin/usr/lib/jni/
+	mv debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/scilab/libjavasci2.so*  $(CURDIR)/debian/scilab-full-bin/usr/lib/jni/
 
-override_dh_dwz:
+execute_after_dh_install-arch:
+	# Hiding the build path written in /usr/include/scilab/machine.h
+	sed -i 's/\(ffile-prefix-map=\).*\(=\.\)/\1<builddir>\2/' debian/scilab-include/usr/include/scilab/machine.h
+
+execute_after_dh_install-indep:
+	# Converting encoding to UTF-8 for some files
+	for F in usr/share/scilab/contrib/toolbox_skeleton/toolbox_skeleton_redist.iss usr/share/scilab/modules/graphics/tcl/ged/Axes.tcl; do \
+	    iconv -f ISO_8859-1 debian/scilab-data/$$F > debian/scilab-data/$$F.temp;\
+	    mv debian/scilab-data/$$F.temp debian/scilab-data/$$F;\
+	done
+	for F in usr/share/scilab/modules/differential_equations/demos/n_pendulum/demo_pendulum_eng.htm usr/share/scilab/modules/differential_equations/demos/n_pendulum/demo_pendulum_fr.htm; do \
+	    iconv -f ISO_8859-1 debian/scilab-doc/$$F > debian/scilab-doc/$$F.temp;\
+	    mv debian/scilab-doc/$$F.temp debian/scilab-doc/$$F;\
+	done
+	for F in usr/share/scilab/modules/elementary_functions/tests/unit_tests/asec.tst usr/share/scilab/modules/elementary_functions/tests/unit_tests/asecd.tst usr/share/scilab/modules/elementary_functions/tests/unit_tests/cosh.tst usr/share/scilab/modules/fileio/tests/nonreg_tests/bug_6449_ANSI.txt usr/share/scilab/modules/spreadsheet/tests/nonreg_tests/ticket_684.txt usr/share/scilab/modules/windows_tools/tests/nonreg_tests/text_ANSI.txt usr/share/scilab/modules/xml/tests/nonreg_tests/bug_10645.xml; do \
+	    iconv -f ISO_8859-1 debian/scilab-test/$$F > debian/scilab-test/$$F.temp;\
+	    mv debian/scilab-test/$$F.temp debian/scilab-test/$$F;\
+	done
+
+override_dh_fixperms-indep:
+	dh_fixperms
+	# Setting this script as executable
+	chmod 755 debian/scilab-data/usr/share/scilab/modules/dynamic_link/src/scripts/ltmain.sh
+
+override_dh_clean:
+	# Removing .class and .jar files left by the build
+	find . -name "*.class" -delete
+	find . -name "*.jar" -delete
+	# Removing the ccache dir, under debian/
+	rm -rf $(CCACHE_DIR)
+	# Saving four files that dh_clean will remove, to restore the orig source tree afterwards.
+	for F in scilab/modules/atoms/tests/unit_tests/repositories.orig scilab/modules/cacsd/tests/unit_tests/dscr.tst.orig scilab/modules/differential_equations/src/patched_sundials/src/sunlinsol/lapackband/sunlinsol_lapackband.c.orig scilab/modules/differential_equations/src/patched_sundials/src/sunlinsol/lapackdense/sunlinsol_lapackdense.c.orig; do \
+	    cp $$F $${F}.save ;\
+	done
+	dh_clean
+	# Restoring files that are modified during the build.
+	for F in $$(find . -name "*.save"); do \
+	    if [ -e $$F ]; then \
+	        mv $$F $${F%.save} ;\
+	    fi \
+	done

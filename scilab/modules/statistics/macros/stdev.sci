@@ -1,8 +1,8 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2000 - INRIA - Carlos Klimann
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
 // Copyright (C) 2013 - Scilab Enteprises - Paul Bignier: added given mean
-// Copyright (C) 2017 - Samuel GOUGEON : http://bugzilla.scilab.org/15144
+// Copyright (C) 2017 - Samuel GOUGEON : https://gitlab.com/scilab/scilab/-/issues/15144
 //
 // This file is hereby licensed under the terms of the GNU GPL v2.0,
 // pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -57,7 +57,7 @@ function sd = stdev(x, o, m)
             return
         else
             msg = gettext("%s: Function not defined for given argument #%d type.\nCheck arguments or define function %s for overloading.\n");
-            error(msprintf(msg, "mean", 1, ovname+"()"))
+            error(msprintf(msg, "stdev", 1, ovname+"()"))
         end
     end
 

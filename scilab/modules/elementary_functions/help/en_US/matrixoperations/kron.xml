@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
  * Copyright (C) 2014, 2019, 2020 - Samuel GOUGEON
@@ -66,9 +66,9 @@
             <literal>B</literal>. The resulting matrix has the following block
             form:
             <latex style="display" alt="
-          [ A(1,1).B  ..  A(1,n).B ] \n
-A .✶. B = |   ⋮        ⋮     ⋮      | \n
-          [ A(m,1).B  ..  A(m,n).B ]">
+          [ A(1,1).B  ⋯  A(1,n).B ] \n
+A .*. B = |   ⋮        ⋮     ⋮      | \n
+          [ A(m,1).B  ⋯  A(m,n).B ]">
                 A \; .*.\; B = \begin{pmatrix}
                     A_{1,1}\cdot B &amp; \cdots &amp; A_{1,n}\cdot B  \\
                           \vdots   &amp;        &amp;        \vdots   \\

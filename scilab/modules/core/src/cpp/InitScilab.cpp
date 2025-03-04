@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2013 - Scilab Enterprises - Antoine ELIAS
  * Copyright (C) 2013 - Scilab Enterprises - Cedric DELAMARRE
  *
@@ -90,11 +90,17 @@ extern "C"
 #endif
 
 #include "InitializeTclTk.h"
+#include "TerminateTclTk.h"
 #include "dynamic_link.h"
 
     /* Defined without include to avoid useless header dependency */
     extern BOOL isItTheDisabledLib(void);
 }
+
+__threadId threadIdConsole;
+__threadKey threadKeyConsole;
+__threadId threadIdCommand;
+__threadKey threadKeyCommand;
 
 static void Add_i(void);
 static void Add_pi(void);
@@ -166,10 +172,6 @@ int StartScilabEngine(ScilabEngineInfo* _pSEI)
         _pSEI->pstExec = NULL;
     }
 
-    // ignore -quit if -e or -f are not given
-    _pSEI->iForceQuit = _pSEI->iForceQuit && (_pSEI->pstExec || _pSEI->pstFile);
-    ConfigVariable::setForceQuit(_pSEI->iForceQuit == 1);
-
     // setup timeout delay
     if (_pSEI->iTimeoutDelay != 0)
     {
@@ -177,7 +179,7 @@ int StartScilabEngine(ScilabEngineInfo* _pSEI)
     }
 
     /* This bug only occurs under Linux 32 bits
-     * See: http://wiki.scilab.org/Scilab_precision
+     * See: https://scilab.gitlab.io/legacy_wiki/Scilab(20)precision.html
      */
 #if defined(linux) && defined(__i386__)
     setFPUToDouble();
@@ -270,27 +272,24 @@ int StartScilabEngine(ScilabEngineInfo* _pSEI)
     InitializeWindows_tools();
 #endif
 
-    BOOL bRet = TRUE;
+    BOOL bTCLStartupSucceeded = TRUE;
+    BOOL bJVMStartupSucceeded = TRUE;
+    BOOL bGUIStartupSucceeded = TRUE;
+    BOOL bClasspathStartupSucceeded = TRUE;
+    BOOL bConsoleStartupSucceeded = TRUE;
     if (_pSEI->iNoJvm == 0) // With JVM
     {
-        bRet = InitializeTclTk();
-        InitializeJVM();
-        InitializeGUI();
+        bTCLStartupSucceeded = InitializeTclTk();
+        bJVMStartupSucceeded = InitializeJVM();
+        bGUIStartupSucceeded = InitializeGUI();
 
         /* create needed data structure if not already created */
         loadGraphicModule();
 
-        loadBackGroundClassPath();
+        bClasspathStartupSucceeded = loadBackGroundClassPath();
 
         //update %gui to true
         Add_Boolean_Constant(L"%gui", true);
-    }
-
-    if(bRet == FALSE)
-    {
-        std::wcerr << "TCL Initialization failed." << std::endl;
-        std::wcerr << ConfigVariable::getLastErrorMessage() << std::endl;
-        return 1;
     }
 
     // Make sure the default locale is applied at startup
@@ -300,13 +299,47 @@ int StartScilabEngine(ScilabEngineInfo* _pSEI)
     if (_pSEI->iConsoleMode == 0)
     {
         /* Initialize console: lines... */
-        InitializeConsole();
+        bConsoleStartupSucceeded = InitializeConsole();
     }
     else
     {
 #ifndef _MSC_VER
-        initConsoleMode(RAW);
+        bConsoleStartupSucceeded = (BOOL) (initConsoleMode(RAW) >= 0);
 #endif
+    }
+
+    // Report initialization failure after startup but before user commands
+    {
+        if(bTCLStartupSucceeded == FALSE)
+        {
+            std::wcerr << "TCL Initialization failed." << std::endl;
+            std::wcerr << ConfigVariable::getLastErrorMessage() << std::endl;
+            // do not exit, this is an acceptable error on some systems
+        }
+        if(bJVMStartupSucceeded == FALSE)
+        {
+            std::wcerr << "JVM Initialization failed." << std::endl;
+            std::wcerr << ConfigVariable::getLastErrorMessage() << std::endl;
+            exit(-1);
+        }
+        if(bGUIStartupSucceeded == FALSE)
+        {
+            std::wcerr << "GUI Initialization failed." << std::endl;
+            std::wcerr << ConfigVariable::getLastErrorMessage() << std::endl;
+            exit(-1);
+        }
+        if(bClasspathStartupSucceeded == FALSE)
+        {
+            std::wcerr << "Classpath Initialization failed." << std::endl;
+            std::wcerr << ConfigVariable::getLastErrorMessage() << std::endl;
+            exit(-1);
+        }
+        if(bConsoleStartupSucceeded == FALSE)
+        {
+            std::wcerr << "Console Initialization failed." << std::endl;
+            std::wcerr << ConfigVariable::getLastErrorMessage() << std::endl;
+            exit(-1);
+        }
     }
 
     //set prompt value
@@ -395,6 +428,9 @@ int StartScilabEngine(ScilabEngineInfo* _pSEI)
         if (parser.getExitStatus() == Parser::Failed)
         {
             scilabWriteW(parser.getErrorMessage());
+            // set lasterror to return an error number at scilab exit when -quit is used
+            ConfigVariable::setLastErrorNumber(999);
+            ConfigVariable::setLastErrorMessage(parser.getErrorMessage());
         }
         else if (parser.getControlStatus() !=  Parser::AllControlClosed)
         {
@@ -432,6 +468,13 @@ int StartScilabEngine(ScilabEngineInfo* _pSEI)
         _pSEI->pstExec = NULL;
         _pSEI->pstFile = NULL;
         iScript = 1;
+    }
+
+    // If -quit argument is passed to Scilab, add a "exit" command to command queue.
+    // Setting ConfigVariable::setForceQuit() here avoids Scilab to quit before executing callbacks.
+    if (_pSEI->iForceQuit == 1)
+    {
+        StoreCommand("[_,__err__]=lasterror();exit(__err__);");
     }
 
     ConfigVariable::setUserMode(2);
@@ -536,6 +579,7 @@ void StopScilabEngine(ScilabEngineInfo* _pSEI)
     {
         TerminateGraphics();
         TerminateJVM();
+        TerminateTclTk();
     }
 
     // reset struct to prevent the use of deleted objects
@@ -594,6 +638,11 @@ void StopScilabEngine(ScilabEngineInfo* _pSEI)
 
     ConfigVariable::clearLastError();
     ConfigVariable::setEndProcessing(false);
+
+    // wait for the "command" thread end before leaving (and free _pSEI)
+    // the "console" thread may be waiting for a command, so don't wait for it to die
+    // ie: exit in a callback will not release the console
+    __WaitThreadDie(threadIdCommand);
 }
 
 static void processCommand(ScilabEngineInfo* _pSEI)
@@ -682,7 +731,7 @@ void* scilabReadAndExecCommand(void* param)
         processCommand(_pSEI);
         FREE(command);
     }
-    while (ConfigVariable::getForceQuit() == false);
+    while (ConfigVariable::getForceQuit() == false || isEmptyCommandQueue() == false);
 
     return NULL;
 }
@@ -738,7 +787,7 @@ void* scilabReadAndStore(void* param)
             int pause = ConfigVariable::getPauseLevel();
 
             //set prompt value
-           setPreviousLevel(pause);
+            setPreviousLevel(pause);
 
             if (scilabRead() == 0)
             {
@@ -831,8 +880,14 @@ void* scilabReadAndStore(void* param)
             continue;
         }
 
-        // store the command and wait for this execution ends.
-        StoreConsoleCommand(command, 1);
+        // when Scilab is executed in a pipe |
+        // quit can be already executed because of -quit,
+        // so the quit sent when closing the pipe must not be stored.
+        if(ConfigVariable::getForceQuit() == false)
+        {
+            // store the command and wait for this execution ends.
+            StoreConsoleCommand(command, 1);
+        }
 
         FREE(command);
         command = NULL;
@@ -883,11 +938,6 @@ static int interactiveMain(ScilabEngineInfo* _pSEI)
         return 1;
     }
 
-    __threadId threadIdConsole;
-    __threadKey threadKeyConsole;
-    __threadId threadIdCommand;
-    __threadKey threadKeyCommand;
-
     if (_pSEI->iStartConsoleThread)
     {
         // thread to manage console command
@@ -907,6 +957,7 @@ static int interactiveMain(ScilabEngineInfo* _pSEI)
 #endif // DEBUG_THREAD
 
     int iRet = 0;
+    bool bQuit = false;
     do
     {
         // wait for available runner
@@ -927,9 +978,14 @@ static int interactiveMain(ScilabEngineInfo* _pSEI)
             iRet = 1;
         }
 
+        // Check if the queue is empty before unlocking the "command thread".
+        // Sometimes, the "command thread" can unqueue commands between the call of 'SendAwakeRunnerSignal' and the 'while'.
+        // That makes this thread leaving before executing the last runner.
+        bQuit = ConfigVariable::getForceQuit() == false || isEmptyCommandQueue() == false;
+
         ThreadManagement::SendAwakeRunnerSignal();
     }
-    while (ConfigVariable::getForceQuit() == false);
+    while (bQuit);
 
     return iRet;
 }
@@ -1024,7 +1080,7 @@ static void checkForLinkerErrors(void)
        doing the check to help them.
     */
 #define LINKER_ERROR_1 "Scilab startup function detected that the function proposed to the engine is the wrong one. Usually, it comes from a linker problem in your distribution/OS.\n"
-#define LINKER_ERROR_2 "If you do not know what it means, please report a bug on http://bugzilla.scilab.org/. If you do, you probably know that you should change the link order in SCI/modules/Makefile.am\n"
+#define LINKER_ERROR_2 "If you do not know what it means, please report a bug on https://gitlab.com/scilab/scilab/-/issues. If you do, you probably know that you should change the link order in SCI/modules/Makefile.am\n"
 
     if (getScilabMode() != SCILAB_NWNI && getScilabMode() != SCILAB_API)
     {

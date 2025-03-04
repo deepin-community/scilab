@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2012 - DIGITEO - Antoine ELIAS
 // Copyright (C) 2012 - DIGITEO - Vincent COUVERT
 //
@@ -783,13 +783,16 @@ function varargout = %_sodload(%__varnameList__)
                 continue
             end
             v = datatipProperties(f)
-            if f == "z_component" // up to 5.5.2: http://bugzilla.scilab.org/16374
-                if v=="on"
-                    [f, v] = ("display_components", "xyz")
+            // backward compatibility, z_component removed in 2023.0.0
+            if f == "z_component" then
+                f = "display_components";
+                if v == "on" then
+                    v = "xyz";
                 else
-                    continue
+                    v = "xy";
                 end
             end
+
             set(h, f, v);
         end
     endfunction

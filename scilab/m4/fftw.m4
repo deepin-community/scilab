@@ -1,5 +1,5 @@
 dnl
-dnl Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+dnl Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 dnl Copyright (C) INRIA - 2008 - Sylvestre Ledru
 dnl 
 dnl Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -18,13 +18,13 @@ dnl
 AC_DEFUN([AC_FFTW], [
 
 AC_ARG_WITH(fftw_include,
-		AC_HELP_STRING([--with-fftw-include=DIR],[Set the path to the FFTW headers]),
+		AS_HELP_STRING([--with-fftw-include=DIR],[Set the path to the FFTW headers]),
 		[with_fftw_include=$withval],
 		[with_fftw_include='yes']
 		)
 
 AC_ARG_WITH(fftw_library,
-		AC_HELP_STRING([--with-fftw-library=DIR],[Set the path to the FFTW libraries]),
+		AS_HELP_STRING([--with-fftw-library=DIR],[Set the path to the FFTW libraries]),
 		[with_fftw_library=$withval],
 		[with_fftw_library='yes']
 		)

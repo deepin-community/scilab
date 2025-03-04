@@ -1,4 +1,4 @@
-# Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+# Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 # Copyright (C) 2006 - INRIA - Sylvestre LEDRU
 #
 # This file is distributed under the same license as the Scilab package.
@@ -17,7 +17,6 @@ MEXLIB_FLAGS = \
     -I$(top_srcdir)/modules/ast/includes/symbol/ \
     -I$(top_srcdir)/modules/ast/includes/system_env/ \
     -I$(top_srcdir)/modules/ast/includes/types/ \
-    -I$(top_srcdir)/modules/ast/includes/analysis/ \
 	-I$(top_srcdir)/modules/localization/includes/ \
 	-I$(top_srcdir)/modules/output_stream/includes/ \
 	-I$(top_srcdir)/modules/call_scilab/includes/ \
@@ -74,14 +73,14 @@ INCLUDE_FLAGS = $(MEXLIB_FLAGS) $(AM_CPPFLAGS)
 libmex_la_rootdir = $(mydatadir)
 libmex_la_root_DATA =  license.txt
 
-#### mexlib : init scripts ####
+####ï¿½mexlib : init scripts ####
 libmex_la_etcdir = $(mydatadir)/etc
 libmex_la_etc_DATA = \
     etc/mexlib.quit \
     etc/mexlib.start
 
 
-#### mexlib : include files ####
+####ï¿½mexlib : include files ####
 libmex_la_includedir=$(pkgincludedir)
 libmex_la_include_HEADERS = \
 includes/mex.h \

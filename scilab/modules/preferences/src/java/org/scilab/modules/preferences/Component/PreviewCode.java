@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2011 - Pierre GRADIT
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -65,8 +65,8 @@ public class PreviewCode extends Panel implements XComponent, XChooser {
         previewEditorPane.setEditorKit(kit);
         previewEditorPane.setFont(kit.getStylePreferences().tokenFonts[0]);
         String codeSample = "// A comment with whites    and tabulations \t\t\n"
-                            + "// Email: <contrib@scilab.org>\n"
-                            + "// Scilab editor: http://www.scilab.io\n"
+                            + "// Email: <contact@scilab.org>\n"
+                            + "// Scilab website: https://www.scilab.org\n"
                             + "//\n"
                             + "// LaTeX $\\sum_{n=1}^{+\\infty}\\frac1{n^2}=\\frac{\\pi^2}6$\n"
                             + "// TODO: blah blah\n"

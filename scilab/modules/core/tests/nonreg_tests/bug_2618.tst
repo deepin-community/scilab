@@ -1,6 +1,6 @@
 //<-- CLI SHELL MODE -->
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008 - INRIA - Serge STEER <serge.steer@inria.fr>
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,8 +9,8 @@
 
 // <-- Non-regression test for bug 2618  -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=2618
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/2618
 //
 // <-- Short Description -->
 // try/catch statement makes Scilab unstable,
@@ -21,7 +21,7 @@ r=%f;a = 1;
 try
     ev("a*z");
 catch
-    r=%t
+    r=%t;
 end
 if ~r then pause,end
 [str,n]=lasterror();
@@ -34,7 +34,7 @@ r=%f;a = 1;
 try
     ev("a*z");
 catch
-    r=%t
+    r=%t;
 end
 if ~r then pause,end
 [str,n]=lasterror();
@@ -98,9 +98,9 @@ deff(" r=ev(str)","execstr(''r=''+str),")
 function r=foo()
     r=%f;
     try
-        ev("a*z")
+        ev("a*z");
     catch
-        r=%t
+        r=%t;
     end
 endfunction
 r=foo();
@@ -117,7 +117,7 @@ deff("r=foo()",[
 "try"
 "   ev(a*z);"
 "catch"
-"   r=%t"
+"   r=%t;"
 "end"])
 r=foo();
 if ~r then pause,end
@@ -134,7 +134,7 @@ deff("r=foo()",[
 "try"
 "   ev(a*z);"
 "catch"
-"   r=%t"
+"   r=%t;"
 "end"])
 r=foo();
 if ~r then pause,end
@@ -147,7 +147,7 @@ clear  foo
 function r=foo()
     r=%f;a=1;
     try
-        execstr("r=a*z")
+        execstr("r=a*z");
     catch
         r=%t;
     end
@@ -164,7 +164,7 @@ mputl("r=a*z",TMPDIR+"/ev");
 function r=foo()
     r=%f;a=1;
     try
-        exec(TMPDIR+"/ev")
+        exec(TMPDIR+"/ev");
     catch
         r=%t;
     end

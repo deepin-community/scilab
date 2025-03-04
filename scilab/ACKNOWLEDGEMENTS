@@ -1,7 +1,7 @@
                 CONTRIBUTORS
                 ************
 
-Outside of ESI Group, many people contributed to Scilab.
+Outside of Dassault Systèmes, many people contributed to Scilab.
 We are very grateful for all the work and the time they all spend to make
 Scilab a better software.
 
@@ -137,10 +137,14 @@ Scilab a better software.
 * Armin Mohring
       - German localization
 
-* Stéphane Mottelet
+* Stéphane Mottelet (UTC)
     - Advice
     - Bug reports
-    - Misc patches for Mac OS X
+    - Bug fixes
+    - Misc patches for macOS
+    - macOS version build
+    - SUNDIALS solvers interface
+    - ColPack interface
 
 * Bruno Pinçon
     - UMFPACK interface

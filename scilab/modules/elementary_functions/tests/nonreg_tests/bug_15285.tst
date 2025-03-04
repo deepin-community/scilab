@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2017 - ESI - Antoine ELIAS
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -10,11 +10,11 @@
 
 // <-- Non-regression test for bug 15285 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=15285
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/15285
 //
 // <-- Short Description -->
-//resize_matrix does not manage convertion to int64 and uint64
+//resize_matrix does not manage conversion to int64 and uint64
 
 a = rand(2, 3) * 1000;
 ref = zeros(5, 5);

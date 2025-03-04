@@ -1,5 +1,5 @@
 // ============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2016 - Scilab Enterprises - Clement DAVID
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -18,7 +18,6 @@ function check_memleaks(diary_id)
 
     log = mgetl(TMPDIR + "/mvc_leak.log");
     log = log(grep(log, ["objectCreated", "objectDeleted"]));
-
 
     objects = strtod(csvTextScan(log, " ", ".", "string")(:, 7));
     objects = gsort(objects);
@@ -39,6 +38,7 @@ diary_id = diary(TMPDIR + "/mvc_leak.log");
 importXcosDiagram(SCI+"/modules/xcos/demos/Discrete-KalmanFilter.zcos");
 clear scs_m;
 System.gc();
+System.runFinalization();
 sleep(2, "s");
 check_memleaks(diary_id);
 
@@ -47,6 +47,7 @@ importXcosDiagram(SCI+"/modules/xcos/demos/Discrete-KalmanFilter.zcos");
 xcos_simulate(scs_m, 4);
 clear scs_m;
 System.gc();
+System.runFinalization();
 sleep(2, "s");
 check_memleaks(diary_id);
 

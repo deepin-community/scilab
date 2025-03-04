@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009 - DIGITEO - Antoine ELIAS
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -18,14 +18,60 @@
 #include "double.hxx"
 #include "bool.hxx"
 #include "function.hxx"
+#include "string.hxx"
 #include "integer_gw.hxx"
+#include "overload.hxx"
+
 extern "C"
 {
 #include "Scierror.h"
+#include "sciprint.h"
+}
+
+enum CONVERT_STATUS
+{
+    OK,
+    NOT_A_NUMBER,
+    OUT_OF_RANGE
+};
+
+template <class T>
+CONVERT_STATUS convert_fromString(wchar_t** strs, int size, T* out)
+{
+    for (int i = 0; i < size; ++i)
+    {
+        try
+        {
+            size_t pos;
+            wchar_t* s = strs[i];
+            size_t len = wcslen(s);
+            out[i] = static_cast<T>(std::stoull(s, &pos));
+            if (pos != len)
+            {
+                for (size_t j = pos; j < len; ++j)
+                {
+                    if (isspace(s[j]) == 0)
+                    {
+                        return NOT_A_NUMBER;
+                    }
+                }
+            }
+        }
+        catch (std::invalid_argument& /*e*/)
+        {
+            return NOT_A_NUMBER;
+        }
+        catch (std::out_of_range& /*e*/)
+        {
+            return OUT_OF_RANGE;
+        }
+    }
+
+    return OK;
 }
 
 template <class T, class U>
-void convert_int(U* _pIn, int _iSize, T* _pOut)
+bool convert_int(U* _pIn, int _iSize, T* _pOut)
 {
     static T minval = std::numeric_limits<T>::min();
     static T maxval = std::numeric_limits<T>::max();
@@ -52,10 +98,12 @@ void convert_int(U* _pIn, int _iSize, T* _pOut)
             _pOut[i] = (T)_pIn[i];
         }
     }
+
+    return true;
 }
 
 template <class T>
-void convertInt(types::InternalType* _pIn, T* _pOut)
+CONVERT_STATUS convertInt(types::InternalType* _pIn, T* _pOut)
 {
     switch (_pIn->getType())
     {
@@ -119,9 +167,14 @@ void convertInt(types::InternalType* _pIn, T* _pOut)
             convert_int(pD->get(), pD->getSize(), _pOut->get());
             break;
         }
-        default:
-            return;
+        case types::InternalType::ScilabString:
+        {
+            types::String* pS = _pIn->getAs<types::String>();
+            return convert_fromString(pS->get(), pS->getSize(), _pOut->get());
+        }
     }
+
+    return OK;
 }
 
 template< class T>
@@ -133,9 +186,15 @@ types::Callable::ReturnValue commonInt(types::typed_list &in, int _iRetCount, ty
         return types::Function::Error;
     }
 
-    if (in[0]->isDouble() == false && in[0]->isInt() == false && in[0]->isBool() == false)
+    if (_iRetCount > 1)
     {
-        Scierror(999, _("%s: Wrong type for input argument #%d: %s, %s or %s expected.\n"), _stName.c_str(), 1, "integer", "boolean", "double");
+        Scierror(77, _("%s: Wrong number of output argument(s): %d expected.\n"), _stName.c_str(), 1);
+        return types::Function::Error;
+    }
+
+    if (in[0]->isDouble() == false && in[0]->isInt() == false && in[0]->isBool() == false && in[0]->isString() == false)
+    {
+        Scierror(999, _("%s: Wrong type for input argument #%d: %s, %s, %s or %s expected.\n"), _stName.c_str(), 1, "Double", "Integer", "Boolean", "String");
         return types::Function::Error;
     }
 
@@ -148,7 +207,23 @@ types::Callable::ReturnValue commonInt(types::typed_list &in, int _iRetCount, ty
 
     T* pOut = new T(pGT->getDims(), pGT->getDimsArray());
 
-    convertInt(in[0], pOut);
+    CONVERT_STATUS res = convertInt(in[0], pOut);
+    switch (res)
+    {
+        case NOT_A_NUMBER:
+        {
+            pOut->killMe();
+            Scierror(999, _("%s: Only '-+0123456789' characters are allowed.\n"), _stName.data());
+            return types::Callable::Error;
+        }
+        case OUT_OF_RANGE:
+        {
+            pOut->killMe();
+            Scierror(999, _("%s: out of range [0 2^64[.\n"), _stName.data());
+            return types::Callable::Error;
+        }
+    }
+
     out.push_back(pOut);
     return types::Function::OK;
 }

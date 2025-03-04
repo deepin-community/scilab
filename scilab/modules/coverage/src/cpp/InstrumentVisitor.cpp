@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2015 - Scilab Enterprises - Calixte DENIZET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -39,6 +39,11 @@ void InstrumentVisitor::visit(ast::SeqExp & e)
             exp->accept(*this);
         }
     }
+}
+
+void InstrumentVisitor::visit(ast::ArgumentsExp & e)
+{
+    /* FIXME : Implement InstrumentVisitor for ArgumentsExp */
 }
 
 void InstrumentVisitor::visit(ast::IfExp & e)
@@ -98,7 +103,7 @@ void InstrumentVisitor::visit(ast::FunctionDec & e)
     types::Macro * pMacro = e.getMacro();
     if (!pMacro)
     {
-        std::list<symbol::Variable *> * pVarList = new std::list<symbol::Variable *>();
+        std::vector<symbol::Variable*>* pVarList = new std::vector<symbol::Variable*>();
         const ast::exps_t & vars = e.getArgs().getVars();
         for (const auto var : vars)
         {
@@ -106,7 +111,7 @@ void InstrumentVisitor::visit(ast::FunctionDec & e)
         }
 
         //get output parameters list
-        std::list<symbol::Variable * > * pRetList = new std::list<symbol::Variable *>();
+        std::vector<symbol::Variable*>* pRetList = new std::vector<symbol::Variable*>();
         const ast::exps_t & rets = e.getReturns().getVars();
         for (const auto ret : rets)
         {
@@ -122,4 +127,10 @@ void InstrumentVisitor::visit(ast::FunctionDec & e)
 
     inners.push_back(pMacro);
 }
+
+void InstrumentVisitor::visit(ast::ArgumentDec & e)
+{
+    /* FIXME : Implement InstrumentVisitor for ArgumentDec */
+}
+
 }

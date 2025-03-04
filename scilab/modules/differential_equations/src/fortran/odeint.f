@@ -16,7 +16,7 @@ c .
 c .   The original version has been modified to replace statically
 c .   allocated arrays y, yscal and dxdy by parts of rwork argument
 c     array + blas use. Serge Steer INRIA- feb 2012
-c     change atol->rtol. Stéphane Mottelet UTC- Apr 2018
+c     change atol->rtol. Stéphane MOTTELET UTC- Apr 2018
 c     ====================================
       subroutine odeint(ystart,nvar,x1,x2,rtol,itask,hmin,nok,nbad,
      $     derivs,rkqc,rwork)
@@ -30,6 +30,8 @@ c     ====================================
       double precision rwork(*)
       character*80 messag
       integer lh,ly,lyscal,ldydx,lwork
+cDEC$ ATTRIBUTES DLLIMPORT:: /ierode/
+      COMMON /ierode/ierror
 c
       ly=1
       lh=ly+nvar

@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2012 - Scilab Enterprises - Antoine ELIAS
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -25,4 +25,5 @@ CPP_GATEWAY_PROTOTYPE_EXPORT(sci_xset, GRAPHICS_IMPEXP);
 CPP_GATEWAY_PROTOTYPE_EXPORT(sci_winsid, GRAPHICS_IMPEXP);
 CPP_OPT_GATEWAY_PROTOTYPE_EXPORT(sci_matplot, GRAPHICS_IMPEXP);
 CPP_GATEWAY_PROTOTYPE_EXPORT(sci_matplot1, GRAPHICS_IMPEXP);
+CPP_GATEWAY_PROTOTYPE_EXPORT(sci_glue, GRAPHICS_IMPEXP);
 #endif /* !__GUI_GW_HXX__ */

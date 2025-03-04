@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA -
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -26,14 +26,14 @@
     <refsynopsisdiv>
         <title>Синтаксис</title>
         <synopsis>
-            res = strcspn(string_one, string_two)
+            res = strcspn(Strings, forbiddenChars)
         </synopsis>
     </refsynopsisdiv>
     <refsection>
         <title>Аргументы</title>
         <variablelist>
             <varlistentry>
-                <term>string_one</term>
+                <term>Strings</term>
                 <listitem>
                     <para>
                         символьная строка или матрица символьных строк.
@@ -41,7 +41,7 @@
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term>string_two</term>
+                <term>forbiddenChars</term>
                 <listitem>
                     <para>
                         символьная строка или матрица символьных строк.
@@ -59,22 +59,23 @@
     <refsection>
         <title>Описание</title>
         <para>
-            <code>res = strcspn(string_one,string_two)</code> сканирует
-            <varname>string_one</varname> на предмет первого появления любого из
-            символов, которые являются частью <varname>string_two</varname>,
-            возвращая количество символов <varname>string_one</varname>, прочитанных до этого первого появления.
+            <code>res = strcspn(Strings, forbiddenChars)</code> сканирует
+            <varname>Strings</varname> на предмет первого появления любого из
+            символов, которые являются частью <varname>forbiddenChars</varname>,
+            возвращая количество символов <varname>Strings</varname>, прочитанных до этого первого появления.
         </para>
         <para>
-            <varname>string_two</varname> должна быть того же размера, что и <varname>string_one</varname>, либо <varname>string_two</varname>
+            <varname>forbiddenChars</varname> должна быть того же размера, что и
+			<varname>Strings</varname>, либо <varname>forbiddenChars</varname>
             должна быть строкой.
         </para>
     </refsection>
     <refsection>
         <title>Примеры</title>
         <programlisting role="example"><![CDATA[
-strcspn("fcba73","1234567890")
-strcspn(["fcba73","f7cba73"],"1234567890")
-strcspn(["fcba73","f7cba73"],["312","34567890"])
+strcspn("fcba73", "1234567890")
+strcspn(["fcba73", "f7cba73"], "1234567890")
+strcspn(["fcba73", "f7cba73"], ["312", "34567890"])
  ]]></programlisting>
     </refsection>
     <refsection role="see also">

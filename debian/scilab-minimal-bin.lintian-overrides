@@ -1,4 +1,15 @@
 # the actual binary which should not be called directly
-scilab-minimal-bin: binary-without-manpage usr/bin/scilab-cli-bin
-# False positive
-scilab-minimal-bin: spelling-error-in-binary usr/lib/scilab/libscioptimization.so.6.1.0 pres press
+scilab-minimal-bin: no-manual-page [usr/bin/scilab-cli-bin]
+
+# French word
+spelling-error-in-binary complet complete *
+
+# Overriding dh_makeshlibs with an empty target to avoid this warning causes
+# errors in dh_shlibsdeps.
+package-has-unnecessary-activation-of-ldconfig-trigger
+
+# Plugins
+shared-library-lacks-prerequisites
+
+# False positives, CPPFLAGS are conveniently used to compile every file.
+hardening-no-fortify-functions [usr/lib/*/scilab/*.so*]

@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2015 - Scilab Enterprises - Calixte DENIZET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -14,7 +14,7 @@
  */
 
 #include "CodePrinterVisitor.hxx"
-
+#include "all.hxx"
 namespace coverage
 {
 
@@ -131,7 +131,7 @@ void CodePrinterVisitor::visit(const ast::DoubleExp & e)
 {
     printer.handleExpStart(&e);
     const double x = e.getValue();
-    if (analysis::tools::isAnInt(x))
+    if (0 /*analysis::tools::isAnInt(x)*/)
     {
         printer.handleNumber(x >= 0 ? std::to_wstring((uint64_t)x) : std::to_wstring((int64_t)x));
     }
@@ -449,6 +449,11 @@ void CodePrinterVisitor::visit(const ast::CallExp & e)
     }
     printer.handleOpenClose(SCI_CLOSE_CALL);
     printer.handleExpEnd(&e);
+}
+
+void CodePrinterVisitor::visit(const ast::ArgumentsExp & e)
+{
+    /* FIXME : Implement CodePrinterVisitor for ArgumentsExp */
 }
 
 void CodePrinterVisitor::visit(const ast::IfExp & e)
@@ -785,6 +790,11 @@ void CodePrinterVisitor::visit(const ast::FunctionDec & e)
     printer.handleExpEnd(&e);
 }
 
+void CodePrinterVisitor::visit(const ast::ArgumentDec & e)
+{
+    /* FIXME : Implement CodePrinterVisitor for ArgumentDec */
+}
+
 void CodePrinterVisitor::visit(const ast::ListExp & e)
 {
     printer.handleExpStart(&e);
@@ -825,41 +835,6 @@ void CodePrinterVisitor::visit(const ast::ListExp & e)
     {
         e.getEnd().accept(*this);
     }
-    printer.handleExpEnd(&e);
-}
-
-void CodePrinterVisitor::visit(const ast::OptimizedExp & e)
-{
-    printer.handleExpStart(&e);
-    e.getOriginal()->accept(*this);
-    printer.handleExpEnd(&e);
-}
-
-void CodePrinterVisitor::visit(const ast::DAXPYExp & e)
-{
-    printer.handleExpStart(&e);
-    e.getOriginal()->accept(*this);
-    printer.handleExpEnd(&e);
-}
-
-void CodePrinterVisitor::visit(const ast::MemfillExp & e)
-{
-    printer.handleExpStart(&e);
-    e.getOriginal()->accept(*this);
-    printer.handleExpEnd(&e);
-}
-
-void CodePrinterVisitor::visit(const ast::IntSelectExp & e)
-{
-    printer.handleExpStart(&e);
-    e.getOriginal()->accept(*this);
-    printer.handleExpEnd(&e);
-}
-
-void CodePrinterVisitor::visit(const ast::StringSelectExp & e)
-{
-    printer.handleExpStart(&e);
-    e.getOriginal()->accept(*this);
     printer.handleExpEnd(&e);
 }
 }

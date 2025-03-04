@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2019 - Samuel GOUGEON
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -11,7 +11,7 @@
 // unit tests for sylm()
 // =====================
 // https://en.wikipedia.org/wiki/Sylvester_matrix
-// http://bugzilla.scilab.org/15744
+// https://gitlab.com/scilab/scilab/-/issues/15744
 
 assert_checkequal(sylm(0*%s, 0*%s), []);
 assert_checkequal(sylm(1+0*%s, 0*%s), []);

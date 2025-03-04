@@ -1,6 +1,6 @@
 //<-- CLI SHELL MODE -->
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ????-2008 - INRIA - Serge Steer
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -33,7 +33,7 @@ if or(sl.A<>a)|or(sl.B<>b)|or(sl.C<>c)|or(sl.D<>d)|or(sl.dt<>'d') then bugmes();
 sl=syslin(0.1,a,b,c,d);
 if or(sl.A<>a)|or(sl.B<>b)|or(sl.C<>c)|or(sl.D<>d)|or(sl.dt<>0.1) then bugmes();quit;end
 c=[];d=[]
- d  = 
+ d = 
     []
 sl=syslin('c',a,b,c,d);
 if or(sl.A<>a)|or(sl.B<>b)|or(sl.C<>c)|or(sl.D<>d)|or(sl.dt<>'c') then bugmes();quit;end

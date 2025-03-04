@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA, Serge Steer
 // Copyright (C) - 2010 - DIGITEO - Michael Baudin
 // Copyright (C) DIGITEO - 2011 - Allan CORNET
@@ -15,16 +15,9 @@
 function y = asind(x)
     //Inverse sine, result in degrees.
 
-    rhs = argn(2);
-    if rhs <> 1 then
-        error(msprintf(gettext("%s: Wrong number of input argument(s): %d expected.\n"),"asind", 1));
+    arguments
+        x {mustBeA(x, "double"), mustBeReal, mustBeInRange(x, -1, 1)}
     end
-
-    if  type(x) <> 1 | ~isreal(x) then
-        error(msprintf(gettext("%s: Wrong type for input argument #%d: Real matrix expected.\n"),"asind",1));
-    end
-    if min(x)<-1|max(x)>1 then
-        error(msprintf(gettext("%s: Wrong value for input argument #%d: Must be in the interval [%s, %s].\n"),"asind",1,"-1","1"));
-    end
+    
     y = 180/%pi*asin(x);
 endfunction

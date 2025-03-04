@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) Scilab Enterprises - 2017 - Cedric Delamarre
  *
  * Copyright (C) 2012 - 2017 - Scilab Enterprises
@@ -12,7 +12,10 @@
  * along with this program.
  *
  */
+
 #include <stddef.h>
+#include <stdlib.h>
+
 #include "os_string.h"
 #include "os_wcstod.h"
 #include "stdio.h"

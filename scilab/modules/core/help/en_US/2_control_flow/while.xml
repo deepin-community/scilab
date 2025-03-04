@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -86,10 +86,6 @@ end
         <programlisting role=""><![CDATA[
 i = 0; while i<5, disp(i), i = i + 1; end
 ]]></programlisting>
-        <warning>
-          The number of characters used to define the body of any conditional instruction
-          (if while for or select/case) must be limited to 16k.
-        </warning>
     </refsection>
     <refsection>
         <title>Examples</title>
@@ -129,14 +125,17 @@ e,k
                 <revnumber>6.0.0</revnumber>
                 <revremark>
                     <itemizedlist>
-                      <listitem>
-                        The <literal>[,else instructions]</literal> syntax is no longer supported.
-                      </listitem>
-                      <listitem>
-                        <literal>while</literal> is now protected:
-                        Assignments like <literal>while=1</literal> are no longer possible.
-                      </listitem>
-                  </itemizedlist>
+                        <listitem>
+                            The <literal>[,else instructions]</literal> syntax is no longer supported.
+                        </listitem>
+                        <listitem>
+                            <literal>while</literal> is now protected:
+                            Assignments like <literal>while=1</literal> are no longer possible.
+                        </listitem>
+                        <listitem>
+                            The number of characters used to define the body of any conditional instruction (<literal>if</literal>, <literal>while</literal>, <literal>for</literal>, or <literal>select/case</literal>) is no more limited to 16k.
+                        </listitem>
+                    </itemizedlist>
                 </revremark>
             </revision>
         </revhistory>

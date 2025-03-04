@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) INRIA - Allan CORNET
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -162,15 +162,17 @@ int sci_dos(char *fname, void* pvApiCtx)
 
     double exitCode = 0.;
     BOOL DetachProcessOption = FALSE;
-    BOOL *StatusExit = NULL;
+    BOOL StartOption = FALSE;
+    BOOL* StatusExit = NULL;
 
     DetachProcessOption = DetectDetachProcessInCommandLine(pStVarOne);
+    StartOption = DetectStartInCommandLine(pStVarOne);
     exitCode = (double)spawncommand(pStVarOne, DetachProcessOption);
     freeAllocatedSingleWideString(pStVarOne);
 
     StatusExit = (BOOL*)MALLOC(sizeof(BOOL));
 
-    if (DetachProcessOption)
+    if (StartOption)
     {
         if (strlen((const char *)(pipeSpawnErr.OutputBuffer)))
         {

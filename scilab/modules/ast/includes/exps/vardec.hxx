@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2008-2008 - DIGITEO - Bruno JOFRET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -25,7 +25,6 @@
 
 #include "dec.hxx"
 #include "context.hxx"
-#include "ForList.hxx"
 
 namespace ast
 {
@@ -126,26 +125,6 @@ public:
         return *_exps[0];
     }
 
-    analysis::ForList64 getListInfo() const
-    {
-        return list_info;
-    }
-
-    analysis::ForList64 & getListInfo()
-    {
-        return list_info;
-    }
-
-    void setListInfo(analysis::ForList64 & _list_info)
-    {
-        list_info = _list_info;
-    }
-
-    void setListInfo(analysis::ForList64 && _list_info)
-    {
-        list_info = _list_info;
-    }
-
     virtual ExpType getType() const
     {
         return VARDEC;
@@ -155,7 +134,6 @@ public:
         return true;
     }
 protected:
-    analysis::ForList64 list_info;
     /** \brief Name of the declared variable. */
     symbol::Symbol _name;
     symbol::Variable* _stack;

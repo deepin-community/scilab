@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA
  * Copyright (C) 2016 - Samuel GOUGEON
  *
@@ -5682,7 +5682,7 @@
         <programlisting role="example"><![CDATA[
 plot3d();
 h = gcf();
-h.color_map = jetcolormap(16);
+h.color_map = jet(16);
 addcolor(name2rgb('grey')/255);
 addcolor(name2rgb('red'));
 

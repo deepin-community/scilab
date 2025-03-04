@@ -1,5 +1,5 @@
 
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 1999 - INRIA - Carlos Klimann
 // corrected by bruno pincon (2006-08-16) (fix for bug 2092)
 //
@@ -33,23 +33,21 @@ function [s2]=mad(x,orien)
     //References:  Wonacott, T.H. & Wonacott, R.J.; Introductory
     //Statistics, J.Wiley & Sons, 1990.
     //
-    [lhs,rhs]=argn()
-    if rhs < 1 | rhs > 2 then
-        error(msprintf(gettext("%s: Wrong number of input argument: %d to %d expected.\n"),"mad",1,2)),
+    arguments
+        x
+        orien (1, 1) {mustBeA(orien, ["double", "string"]), mustBeMember(orien, {1, 2, "r", "c", "*"})} = "*"
     end
 
     if x==[] then s2=%nan, return, end
 
     [nrow,ncol] = size(x);
-    if rhs==1 then
+    if orien == "*" then
         s2=sum(abs(x-mean(x)))/(nrow*ncol)
     else // rhs == 2
         if orien=="r" | orien==1 then
             s2=sum(abs(x-(ones(nrow,1)*mean(x,1))),1)/nrow
         elseif orien=="c" | orien==2 then
             s2=sum(abs(x-(mean(x,2)*ones(1,ncol))),2)/ncol
-        else
-            error(msprintf(gettext("%s: Wrong value for input argument #%d: ''%s'', ''%s'', %d or %d expected.\n"),"mad",2, "r","c",1,2)),
         end
     end
 endfunction

@@ -1021,6 +1021,8 @@ cDEC$ ATTRIBUTES DLLIMPORT:: /lsa001/
      1   insufr, insufi, ixpr, iowns2(2), jtyp, mused, mxordn, mxords
 c
       data mord(1),mord(2)/12,5/, mxstp0/500/, mxhnl0/10/
+cDEC$ ATTRIBUTES DLLIMPORT:: /ierode/
+      COMMON /ierode/ierror
 c-----------------------------------------------------------------------
 c block a.
 c this code block is executed on every call.

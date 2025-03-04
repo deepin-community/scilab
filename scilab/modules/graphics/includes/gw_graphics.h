@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2005 - INRIA - Allan Cornet
  * Copyright (C) 2006 - INRIA - Jean-Baptiste Silvy
  *
@@ -23,7 +23,6 @@
 /*--------------------------------------------------------------------------*/
 GRAPHICS_IMPEXP int sci_addcb(char *fname, void *pvApiCtx);
 GRAPHICS_IMPEXP int sci_champ(char *fname, void *pvApiCtx);
-GRAPHICS_IMPEXP int sci_champ1(char *fname, void *pvApiCtx);
 GRAPHICS_IMPEXP int sci_champ_G(char *fname,
                                 int (*func) (double *, double *, double *, double *, int *, int *, char *, double *, double *, int),
                                 void *pvApiCtx);
@@ -40,7 +39,6 @@ GRAPHICS_IMPEXP int sci_xrects(char *fname, void *pvApiCtx);
 GRAPHICS_IMPEXP int sci_xrect(char *fname, void *pvApiCtx);
 GRAPHICS_IMPEXP int sci_xpolys(char *fname, void *pvApiCtx);
 GRAPHICS_IMPEXP int sci_xpoly(char *fname, void *pvApiCtx);
-GRAPHICS_IMPEXP int sci_xname(char *fname, void *pvApiCtx);
 GRAPHICS_IMPEXP int sci_xlfont(char *fname, void *pvApiCtx);
 GRAPHICS_IMPEXP int sci_xgrid(char *fname, void *pvApiCtx);
 GRAPHICS_IMPEXP int sci_xgraduate(char *fname, void *pvApiCtx);
@@ -49,7 +47,6 @@ GRAPHICS_IMPEXP int sci_xgetmouse(char *fname, void *pvApiCtx);
 GRAPHICS_IMPEXP int sci_xfpolys(char *fname, void *pvApiCtx);
 GRAPHICS_IMPEXP int sci_xfpoly(char *fname, void *pvApiCtx);
 GRAPHICS_IMPEXP int sci_xfarcs(char *fname, void *pvApiCtx);
-GRAPHICS_IMPEXP int sci_xdel(char *fname, void *pvApiCtx);
 GRAPHICS_IMPEXP int sci_xclick(char *fname, void *pvApiCtx);
 GRAPHICS_IMPEXP int sci_xchange(char *fname, void *pvApiCtx);
 GRAPHICS_IMPEXP int sci_xarrows(char *fname, void *pvApiCtx);
@@ -83,7 +80,7 @@ GRAPHICS_IMPEXP int sci_matlot(char *fname, void *pvApiCtx);
 GRAPHICS_IMPEXP int sci_Legend(char *fname, void *pvApiCtx);
 GRAPHICS_IMPEXP int sci_is_handle_valid(char *fname, void *pvApiCtx);
 GRAPHICS_IMPEXP int sci_grayplot(char *fname, void *pvApiCtx);
-GRAPHICS_IMPEXP int sci_glue(char *fname, void *pvApiCtx);
+//GRAPHICS_IMPEXP int sci_glue(char *fname, void *pvApiCtx);
 //GRAPHICS_IMPEXP int sci_get(char *fname, void *pvApiCtx);
 GRAPHICS_IMPEXP int sci_geom3d(char *fname, void *pvApiCtx);
 GRAPHICS_IMPEXP int sci_fec(char *fname, void *pvApiCtx);

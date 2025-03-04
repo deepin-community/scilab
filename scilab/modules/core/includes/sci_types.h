@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA
  * Copyright (C) ENPC
  *
@@ -28,7 +28,6 @@ typedef enum
     sci_boolean = 4 ,
     sci_sparse = 5  ,
     sci_boolean_sparse = 6,
-    sci_matlab_sparse = 7, /* matlab sparse matrix  */
     sci_ints = 8,
     sci_handles = 9,
     sci_strings = 10,

@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2011-2011 - Gsoc 2011 - Iuri SILVIO
  *  Copyright (C) 2011-2011 - DIGITEO - Bruno JOFRET
  *  Copyright (C) 2011 - DIGITEO - Antoine ELIAS
@@ -26,9 +26,7 @@
  *    matrix which cannot be used here.
  *    -Assumes that sparse matrices have been converted into the Matlab
  *    format. Scilab sparse matrices are stored in the transposed Matlab
- *    format. If A is a sparse Scilab matrix, it should be converted
- *    by the command A=mtlb_sparse(A) in the syntax of the
- *    mex function.
+ *    format.
   --------------------------------------------------------------------------*/
 #include <stdarg.h>
 
@@ -891,14 +889,14 @@ int mxSetDimensions(mxArray *array_ptr, const int *dims, int ndim)
     }
     else if (mxIsSparse(array_ptr))
     {
-        int temp_dim = 0;
-
-        for (int i = 0; i < ndim; i++)
+        if (ndim == 1)
         {
-            temp_dim += dims[i];
+            ((types::Sparse*)array_ptr->ptr)->resize(dims[0], 1);
         }
-
-        ((types::Sparse *)array_ptr->ptr)->resize(temp_dim, 1);
+        else
+        {
+            ((types::Sparse*)array_ptr->ptr)->resize(dims[0], dims[1]);
+        }
         ((types::Sparse *)array_ptr->ptr)->reshape((int *)dims, ndim);
     }
     else if (mxIsInt8(array_ptr))
@@ -1829,11 +1827,11 @@ void mexErrMsgTxt(const char *error_msg)
     throw ast::InternalError(error_msg);
 }
 
-void mexWarnMsgTxt(const char *error_msg)
+void mexWarnMsgTxt(const char *warning_msg)
 {
-    scilabError(_("Warning: "));
-    scilabError(error_msg);
-    scilabError("\n\n");
+    scilabWrite(_("Warning: "));
+    scilabWrite(warning_msg);
+    scilabWrite("\n\n");
 }
 
 int mexIsLocked(void)

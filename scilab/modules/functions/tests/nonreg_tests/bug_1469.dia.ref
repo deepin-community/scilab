@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2006-2008 - INRIA - Serge STEER <serge.steer@inria.fr>
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -10,8 +10,8 @@
 //
 // <-- Non-regression test for bug 1469 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=1469
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/1469
 //
 // <-- Short Description -->
 //    Appended comments are considered as a new physical line
@@ -156,12 +156,6 @@ deff("y=foo(a,b,c)",["","y=a+b+c"]);
 R18=foo("aaa","bbb","cc")=="aaabbbcc";
 if ~R18 then bugmes();quit;end
 clear foo
-// ================ Test 19 ====================================================
-// comp is obsolete since Scilab 6
-//comp(foo)
-//R19=foo('aaa','bbb','cc')=='aaabbbcc'
-//if ~R19 then bugmes();quit;end
-//clear foo
 // ================ Test 20 ====================================================
 //function definition nested in a or loop!
 z=0;R20=%t;

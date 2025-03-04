@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA - Allan CORNET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -163,7 +163,7 @@ BOOL startJVM(char *SCI_PATH)
         {
             fprintf(stderr, _("\nCould not load JVM dynamic library (libjava).\n"));
             fprintf(stderr, _("Error: %s\n"), GetLastDynLibError());
-            fprintf(stderr, _("If you are using a binary version of Scilab, please report a bug http://bugzilla.scilab.org/.\n"));
+            fprintf(stderr, _("If you are using a binary version of Scilab, please report a bug https://gitlab.com/scilab/scilab/-/issues.\n"));
             fprintf(stderr, _("If you are using a self-built version of Scilab, update the script bin/scilab to provide the path to the JVM.\n"));
 
             fprintf(stderr, _("The problem might be related to SELinux. Try to deactivate it.\n"));
@@ -235,6 +235,10 @@ BOOL startJVM(char *SCI_PATH)
                 vm_args.nOptions = nOptions;
                 vm_args.ignoreUnrecognized = FALSE;
                 status = SciJNI_CreateJavaVM(&jvm_SCILAB, (JNIEnv **) & env, &vm_args);
+                if (status == JNI_EEXIST)
+                {
+                    status = SciJNI_GetCreatedJavaVMs(&jvm_SCILAB, 1, NULL);
+                }
 
                 if (status != JNI_OK)
                 {
@@ -283,11 +287,20 @@ BOOL finishJVM(void)
 
     if (jvm_SCILAB)
     {
-        // Detach the shared thread, to let the JVM finish itself
-        (*jvm_SCILAB)->DetachCurrentThread(jvm_SCILAB);
-
-        // force destroy the JVM (commented due to the javasci case)
-        // (*jvm_SCILAB)->DestroyJavaVM(jvm_SCILAB);
+#ifndef __APPLE__
+        // force destroy the JVM if not on the javasci case
+        if (!IsFromJava())
+        {
+            (*jvm_SCILAB)->DestroyJavaVM(jvm_SCILAB);
+        }
+        else
+        {
+#endif
+        // Detach the shared thread, to let the JVM finish itself later
+            (*jvm_SCILAB)->DetachCurrentThread(jvm_SCILAB);
+#ifndef __APPLE__
+        }
+#endif
     }
     if (FreeDynLibJVM())
     {

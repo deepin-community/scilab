@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2015 - Scilab Enterprises - Sylvain GENIN
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -43,6 +43,11 @@ matvar_t *ConvertSciVarToMatVar(types::InternalType* pIT, const char *name, int 
 #endif
         {
             return GetIntegerMatVar(pIT, name);
+        }
+        break;
+        case types::GenericType::ScilabBool:
+        {
+            return GetBooleanMatVar(pIT->getAs<types::Bool>(), name);
         }
         break;
         case types::InternalType::ScilabString:

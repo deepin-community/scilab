@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2016 - Scilab Enterprises - Delamarre Cedric
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
@@ -66,9 +66,9 @@
             end
 
             if evenRnk <> -1 then
-                disp("even  "+string(worldRnk)+ "      "+string(worldSize)+ "      "+string(evenRnk)+ "      "+string(evenSize))
+                mprintf("even     %d    %d    %d    %d\n", worldRnk, worldSize, evenRnk, evenSize);
             else
-                disp("odd   "+string(worldRnk)+ "      "+string(worldSize)+ "      "+string(oddRnk) + "      "+string(oddSize))
+                mprintf("odd      %d    %d    %d    %d\n", worldRnk, worldSize, oddRnk, oddSize);
             end
 
             MPI_Finalize();

@@ -1,8 +1,9 @@
-/* A Bison parser, made by GNU Bison 3.0.5.  */
+/* A Bison parser, made by GNU Bison 3.8.2.  */
 
 /* Bison interface for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015, 2018 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2021 Free Software Foundation,
+   Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -15,7 +16,7 @@
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+   along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
 /* As a special exception, you may create a larger work that contains
    part or all of the Bison parser skeleton and distribute that work
@@ -30,6 +31,10 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
+/* DO NOT RELY ON FEATURES THAT ARE NOT DOCUMENTED in the manual,
+   especially those whose name start with YY_ or yy_.  They are
+   private implementation details that can be changed or removed.  */
+
 #ifndef YY_YY_Y_TAB_H_INCLUDED
 # define YY_YY_Y_TAB_H_INCLUDED
 /* Debug traces.  */
@@ -40,98 +45,106 @@
 extern int yydebug;
 #endif
 
-/* Token type.  */
+/* Token kinds.  */
 #ifndef YYTOKENTYPE
 # define YYTOKENTYPE
   enum yytokentype
   {
-    YYEOF = 0,
-    DOTS = 258,
-    EOL = 259,
-    SPACES = 260,
-    BOOLTRUE = 261,
-    BOOLFALSE = 262,
-    QUOTE = 263,
-    NOT = 264,
-    DOLLAR = 265,
-    COMMA = 266,
-    COLON = 267,
-    SEMI = 268,
-    LPAREN = 269,
-    RPAREN = 270,
-    LBRACK = 271,
-    RBRACK = 272,
-    LBRACE = 273,
-    RBRACE = 274,
-    DOT = 275,
-    DOTQUOTE = 276,
-    PLUS = 277,
-    MINUS = 278,
-    TIMES = 279,
-    DOTTIMES = 280,
-    KRONTIMES = 281,
-    CONTROLTIMES = 282,
-    RDIVIDE = 283,
-    DOTRDIVIDE = 284,
-    CONTROLRDIVIDE = 285,
-    KRONRDIVIDE = 286,
-    LDIVIDE = 287,
-    DOTLDIVIDE = 288,
-    CONTROLLDIVIDE = 289,
-    KRONLDIVIDE = 290,
-    POWER = 291,
-    DOTPOWER = 292,
-    EQ = 293,
-    NE = 294,
-    LT = 295,
-    LE = 296,
-    GT = 297,
-    GE = 298,
-    AND = 299,
-    ANDAND = 300,
-    OR = 301,
-    OROR = 302,
-    ASSIGN = 303,
-    IF = 304,
-    THEN = 305,
-    ELSE = 306,
-    ELSEIF = 307,
-    END = 308,
-    SELECT = 309,
-    SWITCH = 310,
-    CASE = 311,
-    OTHERWISE = 312,
-    FUNCTION = 313,
-    ENDFUNCTION = 314,
-    FOR = 315,
-    WHILE = 316,
-    DO = 317,
-    BREAK = 318,
-    CONTINUE = 319,
-    TRY = 320,
-    CATCH = 321,
-    RETURN = 322,
-    FLEX_ERROR = 323,
-    STR = 324,
-    ID = 325,
-    VARINT = 326,
-    VARFLOAT = 327,
-    NUM = 328,
-    PATH = 329,
-    COMMENT = 330,
-    BLOCKCOMMENT = 331,
-    TOPLEVEL = 332,
-    HIGHLEVEL = 333,
-    UPLEVEL = 334,
-    LISTABLE = 335,
-    CONTROLBREAK = 336,
-    UMINUS = 337,
-    UPLUS = 338,
-    FUNCTIONCALL = 339
+    YYEMPTY = -2,
+    YYEOF = 0,                     /* "end of file"  */
+    YYerror = 256,                 /* error  */
+    YYUNDEF = 257,                 /* "invalid token"  */
+    DOTS = 258,                    /* "line break"  */
+    EOL = 259,                     /* "end of line"  */
+    SPACES = 260,                  /* "spaces"  */
+    BOOLTRUE = 261,                /* "%t or %T"  */
+    BOOLFALSE = 262,               /* "%f or %F"  */
+    QUOTE = 263,                   /* "'"  */
+    NOT = 264,                     /* "~ or @"  */
+    DOLLAR = 265,                  /* "$"  */
+    COMMA = 266,                   /* ","  */
+    COLON = 267,                   /* ":"  */
+    SEMI = 268,                    /* ";"  */
+    LPAREN = 269,                  /* "("  */
+    RPAREN = 270,                  /* ")"  */
+    LBRACK = 271,                  /* "["  */
+    RBRACK = 272,                  /* "]"  */
+    LBRACE = 273,                  /* "{"  */
+    RBRACE = 274,                  /* "}"  */
+    DOT = 275,                     /* "."  */
+    DOTQUOTE = 276,                /* ".'"  */
+    PLUS = 277,                    /* "+"  */
+    MINUS = 278,                   /* "-"  */
+    TIMES = 279,                   /* "*"  */
+    DOTTIMES = 280,                /* ".*"  */
+    KRONTIMES = 281,               /* ".*."  */
+    CONTROLTIMES = 282,            /* "*."  */
+    RDIVIDE = 283,                 /* "/"  */
+    DOTRDIVIDE = 284,              /* "./"  */
+    CONTROLRDIVIDE = 285,          /* "/."  */
+    KRONRDIVIDE = 286,             /* "./."  */
+    LDIVIDE = 287,                 /* "\\"  */
+    DOTLDIVIDE = 288,              /* ".\\"  */
+    CONTROLLDIVIDE = 289,          /* "\\."  */
+    KRONLDIVIDE = 290,             /* ".\\."  */
+    POWER = 291,                   /* "** or ^"  */
+    DOTPOWER = 292,                /* ".^"  */
+    EQ = 293,                      /* "=="  */
+    NE = 294,                      /* "<> or ~="  */
+    LT = 295,                      /* "<"  */
+    LE = 296,                      /* "<="  */
+    GT = 297,                      /* ">"  */
+    GE = 298,                      /* ">="  */
+    AND = 299,                     /* "&"  */
+    ANDAND = 300,                  /* "&&"  */
+    OR = 301,                      /* "|"  */
+    OROR = 302,                    /* "||"  */
+    ASSIGN = 303,                  /* "="  */
+    ARGUMENTS = 304,               /* "arguments"  */
+    IF = 305,                      /* "if"  */
+    THEN = 306,                    /* "then"  */
+    ELSE = 307,                    /* "else"  */
+    ELSEIF = 308,                  /* "elseif"  */
+    END = 309,                     /* "end"  */
+    SELECT = 310,                  /* "select"  */
+    SWITCH = 311,                  /* "switch"  */
+    CASE = 312,                    /* "case"  */
+    OTHERWISE = 313,               /* "otherwise"  */
+    FUNCTION = 314,                /* "function"  */
+    ENDFUNCTION = 315,             /* "endfunction"  */
+    FOR = 316,                     /* "for"  */
+    WHILE = 317,                   /* "while"  */
+    DO = 318,                      /* "do"  */
+    BREAK = 319,                   /* "break"  */
+    CONTINUE = 320,                /* "continue"  */
+    TRY = 321,                     /* "try"  */
+    CATCH = 322,                   /* "catch"  */
+    RETURN = 323,                  /* "return"  */
+    FLEX_ERROR = 324,              /* FLEX_ERROR  */
+    STR = 325,                     /* "string"  */
+    ID = 326,                      /* "identifier"  */
+    VARINT = 327,                  /* "integer"  */
+    VARFLOAT = 328,                /* "float"  */
+    NUM = 329,                     /* "number"  */
+    PATH = 330,                    /* "path"  */
+    COMMENT = 331,                 /* "line comment"  */
+    BLOCKCOMMENT = 332,            /* "block comment"  */
+    TOPLEVEL = 333,                /* TOPLEVEL  */
+    HIGHLEVEL = 334,               /* HIGHLEVEL  */
+    UPLEVEL = 335,                 /* UPLEVEL  */
+    LISTABLE = 336,                /* LISTABLE  */
+    CONTROLBREAK = 337,            /* CONTROLBREAK  */
+    UMINUS = 338,                  /* UMINUS  */
+    UPLUS = 339,                   /* UPLUS  */
+    FUNCTIONCALL = 340             /* FUNCTIONCALL  */
   };
+  typedef enum yytokentype yytoken_kind_t;
 #endif
-/* Tokens.  */
+/* Token kinds.  */
+#define YYEMPTY -2
 #define YYEOF 0
+#define YYerror 256
+#define YYUNDEF 257
 #define DOTS 258
 #define EOL 259
 #define SPACES 260
@@ -178,49 +191,48 @@ extern int yydebug;
 #define OR 301
 #define OROR 302
 #define ASSIGN 303
-#define IF 304
-#define THEN 305
-#define ELSE 306
-#define ELSEIF 307
-#define END 308
-#define SELECT 309
-#define SWITCH 310
-#define CASE 311
-#define OTHERWISE 312
-#define FUNCTION 313
-#define ENDFUNCTION 314
-#define FOR 315
-#define WHILE 316
-#define DO 317
-#define BREAK 318
-#define CONTINUE 319
-#define TRY 320
-#define CATCH 321
-#define RETURN 322
-#define FLEX_ERROR 323
-#define STR 324
-#define ID 325
-#define VARINT 326
-#define VARFLOAT 327
-#define NUM 328
-#define PATH 329
-#define COMMENT 330
-#define BLOCKCOMMENT 331
-#define TOPLEVEL 332
-#define HIGHLEVEL 333
-#define UPLEVEL 334
-#define LISTABLE 335
-#define CONTROLBREAK 336
-#define UMINUS 337
-#define UPLUS 338
-#define FUNCTIONCALL 339
+#define ARGUMENTS 304
+#define IF 305
+#define THEN 306
+#define ELSE 307
+#define ELSEIF 308
+#define END 309
+#define SELECT 310
+#define SWITCH 311
+#define CASE 312
+#define OTHERWISE 313
+#define FUNCTION 314
+#define ENDFUNCTION 315
+#define FOR 316
+#define WHILE 317
+#define DO 318
+#define BREAK 319
+#define CONTINUE 320
+#define TRY 321
+#define CATCH 322
+#define RETURN 323
+#define FLEX_ERROR 324
+#define STR 325
+#define ID 326
+#define VARINT 327
+#define VARFLOAT 328
+#define NUM 329
+#define PATH 330
+#define COMMENT 331
+#define BLOCKCOMMENT 332
+#define TOPLEVEL 333
+#define HIGHLEVEL 334
+#define UPLEVEL 335
+#define LISTABLE 336
+#define CONTROLBREAK 337
+#define UMINUS 338
+#define UPLUS 339
+#define FUNCTIONCALL 340
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-
 union YYSTYPE
 {
-
 
   /* Tokens. */
     double                      number;
@@ -237,6 +249,7 @@ union YYSTYPE
     ast::SeqExp*                t_seq_exp;
     ast::ReturnExp*             t_return_exp;
 
+    ast::ArgumentsExp*          t_arguments_exp;
     ast::IfExp*                 t_if_exp;
     ast::WhileExp*              t_while_exp;
     ast::ForExp*                t_for_exp;
@@ -268,6 +281,7 @@ union YYSTYPE
     ast::CellCallExp*           t_cell_call_exp;
 
     ast::FunctionDec*           t_function_dec;
+    ast::ArgumentDec*           t_argument_dec;
 
     ast::ArrayListExp*          t_arraylist_exp;
     ast::AssignListExp*         t_assignlist_exp;
@@ -277,7 +291,6 @@ union YYSTYPE
 
 
 };
-
 typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
@@ -300,6 +313,8 @@ struct YYLTYPE
 
 extern YYSTYPE yylval;
 extern YYLTYPE yylloc;
+
 int yyparse (void);
+
 
 #endif /* !YY_YY_Y_TAB_H_INCLUDED  */

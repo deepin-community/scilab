@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA, Serge Steer
 // Copyright (C) DIGITEO - 2011 - Allan CORNET
 //
@@ -16,15 +16,8 @@ function s = csgn(z)
     //  in Numerical Analysis, University of Birmingham,
     //  A. Iserles & M.J.D. Powell, eds, Clarendon Press, Oxford, 1987, 165-210.
 
-    rhs = argn(2);
-    if rhs <> 1 then
-        msg = gettext("%s: Wrong number of input argument(s): %d expected.\n")
-        error(msprintf(msg, "csgn", 1));
-    end
-    
-    if and(typeof(z) <> ["constant" "sparse"]) then
-        msg = _("%s: Wrong type for input argument #%d: Real or complex, sparse or full matrix or hypermatrix expected.\n")
-        error(msprintf(msg, "csgn", 1));
+    arguments
+        z {mustBeA(z, ["double", "sparse"])}
     end
 
     s = -ones(z);

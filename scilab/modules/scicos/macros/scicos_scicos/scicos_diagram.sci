@@ -22,7 +22,7 @@
 function scs_m=scicos_diagram(v1,v2,v3,v4)
     if exists("props","local")==0 then props=scicos_params(),end
     if exists("objs","local")==0 then objs=list(),end
-    if exists("version","local")==0 then version="",end
+    if exists("version","local")==0 then version=get_scicos_version(),end
     if exists("contrib","local")==0 then contrib=list(),end
 
     scs_m=scicos_new(["diagram","props","objs","version","contrib"],...

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) ENPC - Jean-Philippe Chancelier
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -20,8 +20,8 @@
     </refnamediv>
     <refsynopsisdiv>
         <title>Seqüência de Chamamento</title>
-        <synopsis>contour(x,y,z,nz,[theta,alpha,leg,flag,ebox,zlev])
-            contour(x,y,z,nz,&lt;opt_args&gt;)
+        <synopsis>contour(x, y, z, nz, [theta, alpha, leg, flag, ebox, zlev, fpf])
+            contour(x, y, z, nz, &lt;opt_args&gt;)
         </synopsis>
     </refsynopsisdiv>
     <refsection>
@@ -290,6 +290,18 @@ plot2d(x(im)',y(jm)',-9,"000")
                     <para>número real.</para>
                 </listitem>
             </varlistentry>
+            <varlistentry>
+                <term>fpf</term>
+                <listitem>
+                    <para>
+                        You can change the format of the floating point number printed on
+                        the levels where <varname>fpf</varname> is the format in C format syntax 
+                        (for example <code>fpf="%.3f"</code>).
+                        Set <varname>fpf</varname> to " " implies that the level are not drawn on the level curves.
+                        If not given, the default format is <literal>"%.2g"</literal>.
+                    </para>
+                </listitem>
+            </varlistentry>
         </variablelist>
     </refsection>
     <refsection>
@@ -327,13 +339,6 @@ plot2d(x(im)',y(jm)',-9,"000")
                 </listitem>
             </varlistentry>
         </variablelist>
-        <para>Você pode modificar o formato dos pontos flutuantes impressos sobre
-            os níveis utilizando <literal>xset("fpf",string)</literal> onde
-            <literal>string</literal> fornece o formato em na sintaxe de formato C
-            (por exemplo <literal>string="%.3f"</literal>). Use
-            <literal>string=""</literal> para voltar ao formato padrão e use
-            <literal>string=" "</literal> para suprimir a impressão.
-        </para>
         <para>
             Geralmente é usado <literal>contour2d</literal> para se esboçar
             curvas de nível em um esboço 2d.
@@ -347,13 +352,11 @@ plot2d(x(im)',y(jm)',-9,"000")
         <title>Exemplos</title>
         <programlisting role="example"><![CDATA[
 t=linspace(-%pi,%pi,30);
-function z=my_surface(x,y),z=x*sin(x)^2*cos(y),endfunction
-
-contour(t,t,my_surface,10)
-// mudando o formato da impressão dos níveis
-xset("fpf","%.1f")
 clf()
-contour(t,t,my_surface,10)
+function z=my_surface(x,y),z=x*sin(x)^2*cos(y),endfunction
+// mudando o formato da impressão dos níveis
+contour(t,t,my_surface,10, fpf="%.1f")
+
 // 3D
 clf()
 z=feval(t,t,my_surface);

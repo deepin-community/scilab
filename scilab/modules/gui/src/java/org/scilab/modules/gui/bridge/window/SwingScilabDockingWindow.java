@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2014 - Scilab Enterprises - Bruno JOFRET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -125,6 +125,10 @@ public class SwingScilabDockingWindow extends SwingScilabWindow {
      */
     @Override
     public int getNbDockedObjects() {
+        if (sciDockingPort == null)
+        {
+            return 0;
+        }
         return sciDockingPort.getDockables().size();
     }
 

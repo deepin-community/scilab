@@ -1,5 +1,5 @@
 //
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2001 - Bruno PINCON
 // Copyright (C) 2005 - INRIA - Pierre MARECHAL <pierre.marechal@inria.fr>
 //

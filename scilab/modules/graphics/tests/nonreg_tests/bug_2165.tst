@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008-2008 - INRIA - Vincent COUVERT
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -12,9 +12,9 @@
 // <-- Non-regression test for bug 2165 -->
 // <-- Non-regression test for bug 15410 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/2165
-// http://bugzilla.scilab.org/15410
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/2165
+// https://gitlab.com/scilab/scilab/-/issues/15410
 //
 // <-- Short Description -->
 // Impossible to save Scilab variables when there are no more existing handles.

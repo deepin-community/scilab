@@ -1,6 +1,6 @@
 //<-- CLI SHELL MODE -->
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Antoine ELIAS
 // Copyright (C) 2013 - Test case - Luc GABRIEL
 //
@@ -9,8 +9,8 @@
 //
 // <-- Non-regression test for bug 12968 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=12968
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/12968
 //
 // <-- Short Description -->
 //  Cannot save variable with name "temp"

@@ -1,9 +1,9 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009 - DIGITEO - Vincent COUVERT
  * Copyright (C) 2011 - Scilab Enterprises - Clement DAVID
- *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ * Copyright (C) 2021 - Stéphane MOTTELET
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
  * pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -23,13 +23,14 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.scilab.modules.graph.ScilabGraph;
 import org.scilab.modules.graph.actions.base.DefaultAction;
-import org.scilab.modules.gui.bridge.filechooser.SwingScilabFileChooser;
 import org.scilab.modules.gui.filechooser.ScilabFileChooser;
+import org.scilab.modules.gui.filechooser.FileChooser;
+import org.scilab.modules.gui.filechooser.Juigetfile;
 import org.scilab.modules.gui.menuitem.MenuItem;
 import org.scilab.modules.xcos.Xcos;
 import org.scilab.modules.xcos.configuration.ConfigurationManager;
@@ -89,12 +90,10 @@ public final class OpenAction extends DefaultAction {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        final SwingScilabFileChooser fc = createFileChooser();
-
+        final FileChooser fc = createFileChooser();
         /* Configure the file chooser */
         configureFileFilters(fc);
         ConfigurationManager.configureCurrentDirectory(fc);
-
         try {
             displayAndOpen(fc, getGraph(e).getAsComponent());
         } catch (IOException e1) {
@@ -106,43 +105,37 @@ public final class OpenAction extends DefaultAction {
      * Helpers functions to share file chooser code
      */
 
-    public static SwingScilabFileChooser createFileChooser() {
-        final SwingScilabFileChooser fc = ((SwingScilabFileChooser) ScilabFileChooser.createFileChooser().getAsSimpleFileChooser());
+    public static FileChooser createFileChooser() {
+        final FileChooser fc = ScilabFileChooser.createFileChooser();
 
         fc.setTitle(XcosMessages.OPEN);
-        fc.setUiDialogType(JFileChooser.OPEN_DIALOG);
+        fc.setUiDialogType(Juigetfile.OPEN_DIALOG);
         fc.setMultipleSelection(true);
         return fc;
     }
 
-    public static void configureFileFilters(final JFileChooser fc) {
+    public static void configureFileFilters(final FileChooser fc) {
         fc.setAcceptAllFileFilterUsed(true);
 
         final FileFilter[] filters = XcosFileType.getLoadingFilters();
         for (FileFilter fileFilter : filters) {
-            fc.addChoosableFileFilter(fileFilter);
+            String[] exts = {"*."+((FileNameExtensionFilter)fileFilter).getExtensions()[0]};
+            String[] descr = {((FileNameExtensionFilter)fileFilter).getDescription()};
+            fc.addMask(exts,descr);
         }
 
         // the first valid filter is the "All valid files" one
-        fc.setFileFilter(filters[0]);
+        // fc.setFileFilter(filters[0]);
     }
 
-    protected static void displayAndOpen(final SwingScilabFileChooser fc, final java.awt.Component component) throws IOException {
-        final int status = fc.showOpenDialog(component);
-        if (status != JFileChooser.APPROVE_OPTION) {
-            return;
-        }
-
-        final File onlySelected = fc.getSelectedFile();
-        if (onlySelected != null) {
-            Xcos.getInstance().open(onlySelected.getCanonicalPath(), 0);
-        }
-
-        final File[] multiSelected = fc.getSelectedFiles();
-        for (File file : multiSelected) {
-            if (file != onlySelected) {
-                Xcos.getInstance().open(file.getCanonicalPath(), 0);
+    protected static void displayAndOpen(final FileChooser fc, final java.awt.Component component) throws IOException {
+        fc.displayAndWait();
+        String[] selection = fc.getSelection();
+        if (selection.length>0 && selection[0] != "") {
+            for (int i=0; i<selection.length; i++) {
+                 Xcos.getInstance().open(selection[i], 0);
             }
         }
     }
+
 }

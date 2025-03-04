@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2003 - INRIA - Carlos Klimann
 // Copyright (C) 2013 - Scilab Enterprises - Adeline CARNIS
 //
@@ -35,17 +35,9 @@ function [s]=nancumsum(x,orient)
     //s(i,:)=nancumsum(x(i,:))
     //
 
-    [lhs, rhs] = argn(0)
-    if lhs > 1 then
-        error(msprintf(gettext("%s: Wrong number of output argument: %d expected.\n"),"nancumsum",1))
-    end
-    
-    if rhs < 1 | rhs > 2 then
-        error(msprintf(gettext("%s: Wrong number of input argument(s): %d to %d expected.\n"),"nancumsum",1,2))
-    end
-    
-    if or(type(x) == [10 15 16]) then
-        error(msprintf(gettext("%s: Wrong type for input argument #%d: Real or complex, boolean, polynomial matrix expected.\n"), "nancumsum", 1));
+    arguments
+        x {mustBeA(x, ["double", "polynomial", "boolean", "sparse", "int"])}
+        orient (1, 1) {mustBeA(orient, ["double", "string"]), mustBeMember(orient, {1, 2, "r", "c", "*"})} = "*"
     end
     
     // cumsum([]) == []
@@ -53,19 +45,7 @@ function [s]=nancumsum(x,orient)
         s = [];
         return
     end
-    
-    if rhs == 1 then
-        orient = "*";
-    else
-        if and(type(orient) <> [1  10])  then
-            error(msprintf(gettext("%s: Wrong type for input argument #%d: string or scalar expected.\n"), "nancumsum", 2));
-        end
-        
-        if ~or(orient == ["r", "*", "c"] | orient == [1, 2]) then
-            error(msprintf(gettext("%s: Wrong value for input argument #%d: Must be in the set {%s}.\n"), "nancumsum", 2, """r"", ""c"", ""*"", 1, 2"));
-        end
-    end
-    
+       
     isn=isnan(x)
     x(isn)=0
     s=cumsum(x,orient)

@@ -1,6 +1,6 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
-// Copyright (C) 2019 - Stéphane MOTTELET
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
+// Copyright (C) 2019 - UTC - Stéphane MOTTELET
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
@@ -10,8 +10,8 @@
 //
 // <-- Non-regression test for bug 16122 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/16122
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/16122
 //
 // <-- Short Description -->
 // polynomials with different variables are concatenated without error

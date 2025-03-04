@@ -59,6 +59,9 @@
     <ClCompile Include="..\..\sci_gateway\cpp\sci_simpMode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\sci_gateway\cpp\sci_polyDisplay.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\cpp\polynomial.cc">
       <Filter>Source Files</Filter>
     </ClCompile>

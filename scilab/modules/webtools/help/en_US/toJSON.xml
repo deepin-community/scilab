@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2017 - ESI-Group
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
@@ -27,8 +27,10 @@
         <synopsis>
             result = toJSON(var)
             result = toJSON(var, indent)
-            result = toJSON(var, filename)
-            result = toJSON(var, indent, filename)
+
+            toJSON(var, filename)
+            toJSON(var, filename, indent)
+            toJSON(var, indent, filename)
         </synopsis>
     </refsynopsisdiv>
     <refsection>
@@ -54,7 +56,7 @@
                 <term>indent</term>
                 <listitem>
                     <para>
-                        If this argument is given, the result is indented. The value is the size of TAB.
+                        If this argument is given, the result is indented. The value is the number of spaces.
                     </para>
                 </listitem>
             </varlistentry>
@@ -72,7 +74,7 @@
     <refsection>
         <title>Description</title>
         <para>
-            This function convert a Scilab variable into a string or JSON files.
+            This function convert a Scilab variable into a JSON string or a JSON file.
         </para>
     </refsection>
     <refsection>
@@ -118,6 +120,12 @@ toJSON(st, 4)
                 <revnumber>6.1</revnumber>
                 <revremark>
                     Function introduced.
+                </revremark>
+            </revision>
+            <revision>
+                <revnumber>2023.0.0</revnumber>
+                <revremark>
+                    Handling of tabs (ascii(9)) changed.
                 </revremark>
             </revision>
         </revhistory>

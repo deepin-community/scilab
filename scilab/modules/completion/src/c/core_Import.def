@@ -10,4 +10,5 @@ MyHeapFree
 MyHeapRealloc
 getFunctionsName
 getcommandkeywords
+getmustbekeywords
 getMacrosName

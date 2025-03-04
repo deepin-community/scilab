@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2021 - ESI Group - Clement DAVID
 //
 // This file is hereby licensed under the terms of the GNU GPL v2.0,
@@ -39,5 +39,5 @@ assert_checkequal(diag(sparse(1), 1), sparse([0 1 ; 0 0]));
 assert_checkequal(diag(sparse([1 ; 2]), 1), sparse([0 1 0 ; 0 0 2 ; 0 0 0]));
 assert_checkequal(diag(sparse([1 ; 2 ; 3]), 1), sparse([0 1 0 0 ; 0 0 2 0 ; 0 0 0 3 ; 0 0 0 0]));
 
-// http://bugzilla.scilab.org/16664
+// https://gitlab.com/scilab/scilab/-/issues/16664
 diag(spzeros(2,2))

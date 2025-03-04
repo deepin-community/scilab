@@ -7,9 +7,9 @@
     <refsynopsisdiv>
         <title>Syntax</title>
         <synopsis>
-            log=scicos_log(log);
-            log=scicos_log(log, msg);
-            refCounters=scicos_log("refCounters");
+            log = scicos_log(log);
+            log = scicos_log(log, msg);
+            refCounters = scicos_log("refCounters");
         </synopsis>
     </refsynopsisdiv>
     <refsection>
@@ -62,6 +62,12 @@ scicos_log("refCounters")
     <refsection role="see also">
         <title>See also</title>
         <simplelist type="inline">
+            <member>
+                <link linkend="DEBUG">DEBUG block</link>
+            </member>
+            <member>
+                <link linkend="xcos_debug_gui">xcos_debug_gui</link>
+            </member>
             <member>
                 <link linkend="scicos_debug">scicos_debug</link>
             </member>

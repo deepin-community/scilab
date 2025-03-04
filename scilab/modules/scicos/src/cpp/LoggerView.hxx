@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2014-2016 - Scilab Enterprises - Clement DAVID
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -49,7 +49,7 @@ public:
 
     static enum LogLevel indexOf(const wchar_t* name);
     static const wchar_t* toString(enum LogLevel level);
-    static const char* toDisplay(enum LogLevel level);
+    static const std::string toDisplay(enum LogLevel level);
 
     enum LogLevel getLevel() const
     {

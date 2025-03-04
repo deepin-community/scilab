@@ -64,10 +64,6 @@ function [%cpr, ok] = xcos_simulate(scs_m, needcompile)
         end
     end
 
-    //**---- prepare from and to workspace stuff ( "From workspace" block )
-    scicos_workspace_init()
-
-
     //** extract tolerances from scs_m.props.tol
     tolerances = scs_m.props.tol ;
     //** extract solver type from tolerances

@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2018 - Samuel GOUGEON
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,8 +9,8 @@
 
 // <-- Non-regression test for bug 5567 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/5567
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/5567
 //
 // <-- Short Description -->
 // * bar() did not allow skipping the bar width input with []
@@ -33,7 +33,7 @@ bar(1,[2 3 4],"pink")   // single named color => replicated
 subplot(2,4,4)
 bar(1,y, ["green" "orange" "#AA6655"]);
 //bar(1,[1 2 3],"stacked"); // default colors
-// starts plotting at ymin=1 instead of 0 == http://bugzilla.scilab.org/15403
+// starts plotting at ymin=1 instead of 0 == https://gitlab.com/scilab/scilab/-/issues/15403
 
 
 x = [1 2 5];

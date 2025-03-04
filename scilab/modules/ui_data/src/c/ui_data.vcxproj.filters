@@ -59,9 +59,6 @@
     <ClCompile Include="..\jni\FileBrowser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\sci_gateway\cpp\sci_closeEditvar.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\cpp\BrowseVarManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

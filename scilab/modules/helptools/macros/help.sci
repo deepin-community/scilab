@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008 - INRIA - Vincent COUVERT
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
 // Copyright (C) 2020 - 2021 - Samuel GOUGEON
@@ -44,7 +44,7 @@ function help(varargin)
     key = stripblanks(key)
 
     symbols = strsplit("()[]{}%''"":*/\.<>&^|~+-")';
-    exceptions = ["%t" "%T" "%f" "%F" "%onprompt"]; // http://bugzilla.scilab.org/15356
+    exceptions = ["%t" "%T" "%f" "%F" "%onprompt"]; // https://gitlab.com/scilab/scilab/-/issues/15356
     if or(part(key,1)==symbols) & exists(key)==0 & and(key~=exceptions) then
         key = "symbols";
     end

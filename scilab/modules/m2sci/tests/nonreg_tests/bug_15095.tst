@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2018 - Samuel GOUGEON
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -11,8 +11,8 @@
 //    Extension to Linux and MacOS to come later
 // <-- Non-regression test for bug 15095 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/15095
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/15095
 //
 // <-- Short Description -->
 // mfile2sci() and translatepaths() failed when working with non-ASCII paths

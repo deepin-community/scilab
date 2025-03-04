@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010 - DIGITEO - pierre.lando@scilab.org
 // Copyright (C) 2013 - Scilab Enterprises - Calixte DENIZET
 //
@@ -15,7 +15,7 @@
 
 // Try this :
 
-for i = [1:11] do
+for i = [1:10] do
     plot([i,i]);
     e=gce();
     e=e.children();

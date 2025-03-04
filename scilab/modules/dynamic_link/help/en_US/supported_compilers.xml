@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) DIGITEO - 2010-2011 - Allan CORNET
  * Copyright (C) ESI Group - 2020 - Antoine ELIAS
  *
@@ -26,9 +26,8 @@
     </refsection>
     <refsection>
         <title>Windows</title>
-        <para>-- Visual studio C++ 2013, 2015, 2017, 2019 Professional/Enterprise 32 and 64 bits</para>
-        <para>-- Visual studio C++ 2013, 2015, 2017, 2019 Express/Community Edition <ulink url="https://visualstudio.microsoft.com">Visual Studio official web site</ulink> (free of charge)</para>
-        <para>-- Intel Fortran 9, 10, 11, XE 2011, XE 2012, XE 2013</para>
+        <para>-- C/C++: Visual Studio C++ 2017, 2019, 2022 Enterprise / Professional / Community / BuildTools</para>
+        <para>-- Fortran: Intel oneAPI HPC 2022</para>
         <para>-- MinGW requires to install a ATOMS module:
             <programlisting role="exec">atomsInstall('mingw');</programlisting>
         </para>

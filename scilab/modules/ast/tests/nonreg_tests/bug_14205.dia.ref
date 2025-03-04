@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Cedric Delamarre
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -8,8 +8,8 @@
 //
 // <-- Non-regression test for bug 14205 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/14205
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/14205
 //
 // <-- Short Description -->
 // Console crash when assigning uint32 numbers to double matrix

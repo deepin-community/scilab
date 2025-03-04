@@ -1,5 +1,5 @@
 /*
-*  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+*  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 *  Copyright (C) 2008-2008 - DIGITEO - Antoine ELIAS
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -192,6 +192,11 @@ bool GraphicHandle::invoke(typed_list & in, optional_list & opt, int _iRetCount,
         in.push_back(this);
 
         Overload::call(L"%h_e", in, 1, out);
+
+        // remove `this` from `in` to avoid delete it too early
+        // when cleaning the `in` vector.
+        this->DecreaseRef();
+        in.pop_back();
     }
     else
     {

@@ -1,6 +1,6 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
-// Copyright (C) 2019 - Samuel GOUGEON
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
+// Copyright (C) 2019-2023 - Samuel GOUGEON
 //
 // This file is hereby licensed under the terms of the GNU GPL v2.0,
 // pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -178,3 +178,28 @@ c = {
 //        Director: "Steven Spielberg"
 //        Duration: 140
 
+// 9) DISPLAY OF REGULAR ARRAYS
+// ============================
+// https://gitlab.com/scilab/scilab/-/issues/16950
+smallBool = [%T %F ; %F %T];
+longBool = grand(5,6,"def") < 0.5;
+smallInt = uint32([12 345 ; 6789 101112]);
+longInt = int8(grand(4,10,"uin",-128, 128));
+smallReal = [-1.5 -1 0 1.5];
+longReal = -2:0.2:1;
+hugeReal = round(grand(6,10,"def")*10000)/10000;
+smallComplex = [-1.5 -1 0 1.5]+%i;
+longComplex = (-2:0.2:1)-2*%i;
+hugeComplex = round(grand(6,10,"def")*10000)/10000 -3*%i;
+smallShortText = ["a" "bc" "def"];
+smallLongText = ["aaaaaaaaaaaa" "BBBBBBBBBBBBBBBBB" "ccccccccccccccccc"];
+longShortText = strsplit("a":"z");
+hyperBool = rand(3,7,3) < 0.5;
+hyperReal = round(rand(5,4,2)*1e5)/1e5;
+L = list(%F, %pi, %e-%pi*%i, "Scilab", [%T %T %F], int32([-1234,103,3456]), ..
+    [-5.5 4.4 10.11], [3-%i, 2+%i], ..
+    ["ABCDEF" "FEDCBA"], smallShortText, smallLongText, longShortText, ..
+    smallBool, smallInt, smallReal, smallComplex, ..
+    longBool, longInt, longReal, longComplex, hugeReal,hyperBool,hyperReal);
+L($+1) = L;
+tree_show(L);

@@ -1,4 +1,4 @@
-# Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+# Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 # Copyright (C) 2004 - INRIA - Fabrice Leray
 # Copyright (C) 2006 - INRIA - Jean-Baptiste Silvy
 #
@@ -489,7 +489,7 @@ pack  $w.scicom.label1 -in $w.scicom -side left
 
 #text $w.scicom.text1 -height 3m -width 50 -relief sunken -yscrollcommand "$w.scicom.scroll set"
 entry $w.scicom.text1 -relief sunken -textvariable scicomint_colormap -width 10 -font $gedFont
-set_balloon $w.scicom.text1 "Enter a graycolormap(COLOR_NUMBER), hotcolormap(COLOR_NUMBER)\n or jetcolormap(COLOR_NUMBER) call to initialize the \"colormap\" field."
+set_balloon $w.scicom.text1 "Enter a gray(COLOR_NUMBER), hot(COLOR_NUMBER)\n or jet(COLOR_NUMBER) call to initialize the \"colormap\" field."
 bind  $w.scicom.text1 <Return> "sciCommandColormap"
 bind  $w.scicom.text1 <KP_Enter> "sciCommandColormap"
 
@@ -656,7 +656,7 @@ proc sciCommandColormap {} {
     set longueur [expr [string length $scicomint_colormap]]
 
     if { $longueur == 0 } {
-	tk_messageBox -icon error -type ok -title "Incorrect input" -message "You must specify an entry (such as graycolormap(COLOR_NUMBER), hotcolormap(COLOR_NUMBER) or jetcolormap(COLOR_NUMBER) or...) to initialize the \"colormap\" field."
+	tk_messageBox -icon error -type ok -title "Incorrect input" -message "You must specify an entry (such as gray(COLOR_NUMBER), hot(COLOR_NUMBER) or jet(COLOR_NUMBER) or...) to initialize the \"colormap\" field."
     } else {
 
 	ScilabEval "global ged_handle;ged_handle.color_map=$scicomint_colormap;" "seq"

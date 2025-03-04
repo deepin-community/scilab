@@ -1,4 +1,4 @@
-// Copyright (C) 2019 - Stéphane MOTTELET
+// Copyright (C) 2019 - UTC - Stéphane MOTTELET
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
@@ -7,8 +7,8 @@
 //
 // <-- Non-regression test for bug 15781 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/15781
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/15781
 //
 // <-- Short Description -->
 // display of complex matrix is ugly.

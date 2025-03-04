@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009 - DIGITEO - Sylvestre Ledru
  * Copyright (C) 2011 - Calixte DENIZET
  *
@@ -435,11 +435,11 @@ public class SwingScilabHelpBrowserViewer extends BasicContentViewerUI implement
             privateField.setAccessible(true);
         } catch (SecurityException e) {
             System.err.println("Security error: Could not change the accessibility on the html component of the help browser.");
-            System.err.println("Please submit a bug report: http://bugzilla.scilab.org");
+            System.err.println("Please submit a bug report: https://gitlab.com/scilab/scilab/-/issues");
             e.printStackTrace();
         } catch (NoSuchFieldException e) {
             System.err.println("Could not find the field of the html component of the help browser.");
-            System.err.println("Please submit a bug report: http://bugzilla.scilab.org");
+            System.err.println("Please submit a bug report: https://gitlab.com/scilab/scilab/-/issues");
             e.printStackTrace();
         }
 

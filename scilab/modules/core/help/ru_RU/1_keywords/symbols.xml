@@ -171,9 +171,6 @@
             <para>
                 <literal>@</literal> то же самое, что и <literal>~</literal>
             </para>
-            <para>
-                <literal>`</literal> то же самое, что и &lt;
-            </para>
             <para><literal>**</literal> то же самое, что и <literal>^</literal>.</para>
             <para>
                 Настоятельно рекомендуется не использовать эти символы, поскольку они будут в будущем удалены.

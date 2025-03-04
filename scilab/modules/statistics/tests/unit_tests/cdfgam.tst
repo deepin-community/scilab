@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010 - DIGITEO - Michael Baudin
 // Copyright (C) 2011 - DIGITEO - Michael Baudin
 //
@@ -84,7 +84,7 @@ table = [
 ];
 
 // Some tests do not pass:
-// http://bugzilla.scilab.org/8030
+// https://gitlab.com/scilab/scilab/-/issues/8030
 //
 // Prints the number of accurate digits.
 
@@ -122,7 +122,7 @@ for i = 1 : ntests
 end
 
 // IEEE support
-// See http://bugzilla.scilab.org/7296
+// See https://gitlab.com/scilab/scilab/-/issues/7296
 Shape = 0;
 Rate = 1;
 

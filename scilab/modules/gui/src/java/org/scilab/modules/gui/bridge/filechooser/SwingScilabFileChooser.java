@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2007 - INRIA - Vincent Couvert
  * Copyright (C) 2008 - DIGITEO - Sylvestre KOUMAR
  *
@@ -26,6 +26,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import javax.swing.filechooser.FileFilter;
 
 import org.scilab.modules.gui.filechooser.FileChooserInfos;
 import org.scilab.modules.gui.filechooser.SimpleFileChooser;
@@ -131,6 +132,16 @@ public class SwingScilabFileChooser extends JFileChooser implements SimpleFileCh
     }
 
     /**
+     * Set the initial file name
+     * @param path the initial file name
+     */
+    public void setInitialFileName(String path) {
+        if (path != null) {
+            super.setSelectedFile(new File(path));
+        }
+     }
+
+    /**
      * Set the parent frame
      * @param parent the parent frame
      */
@@ -180,7 +191,13 @@ public class SwingScilabFileChooser extends JFileChooser implements SimpleFileCh
                 }
             } else {
                 File file = this.getSelectedFile();
-
+                FileFilter fileFilter = this.getFileFilter();
+                if (!fileFilter.accept(file)) {
+                    String[] extensions = ((SciFileFilter)fileFilter).getExtensions();
+                    if (extensions != null && extensions.length > 0) {
+                        file = new File(file.getPath() + "." + extensions[0]);
+                    }
+                }
                 if (this.dialogType == JFileChooser.SAVE_DIALOG) {
                     //Test if there is a file with the same name
                     if (file.exists()) {
@@ -311,6 +328,20 @@ public class SwingScilabFileChooser extends JFileChooser implements SimpleFileCh
     @Override
     public String[] getSelectionFileNames() {
         return selectionFileNames;
+    }
+
+    /**
+     * Get the user-selected extension from the dialog
+     * @return the user-selected extension from the dialog
+     */
+    public String getSelectedExtension()
+    {
+        String ext = "";
+        FileFilter filter = getFileFilter();
+        if (filter instanceof javax.swing.filechooser.FileNameExtensionFilter) {
+            ext = ((javax.swing.filechooser.FileNameExtensionFilter)filter).getExtensions()[0];
+        }
+        return ext;
     }
 
     /**

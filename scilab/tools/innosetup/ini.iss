@@ -1,5 +1,5 @@
 ;
-; Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+; Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 ; Copyright (C) DIGITEO - 2010 - Allan CORNET
 ;
 ; Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -15,6 +15,6 @@
 ; Inno Setup Script (5.3 and more) for Scilab (UNICODE version required)
 ;
 ;-------------------------------------------------------------------------------
-Filename: {app}\scilabwebsite.url; Section: InternetShortcut; Key: "URL"; String: "http://www.scilab.org"; Check: DoTasksJustAfterInstall
+Filename: {app}\scilabwebsite.url; Section: InternetShortcut; Key: "URL"; String: "https://www.scilab.org"; Check: DoTasksJustAfterInstall
 ;-------------------------------------------------------------------------------
 

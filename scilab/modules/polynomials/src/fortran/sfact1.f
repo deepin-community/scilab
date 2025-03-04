@@ -1,4 +1,4 @@
-c Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+c Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 c Copyright (C) 1986-2008 - INRIA - Francois DELBECQUE
 c Copyright (C) 1990-2008 - INRIA - Serge STEER
 c
@@ -13,7 +13,7 @@ c along with this program.
       subroutine sfact1(b,n,w,maxit,ierr)
 c!but
 c     on cherche une factorisation spectrale d'un polynome a donne
-c     par : a*(a(1/z) = b(n)*z**-n+....+b(0)+ ... +b(n)*z**n
+c     par : a*a(1/z) = b(n)*z**-n+....+b(0)+ ... +b(n)*z**n
 c!liste d'appel
 c     subroutine sfact1(b,n,w,maxit,ierr)
 c

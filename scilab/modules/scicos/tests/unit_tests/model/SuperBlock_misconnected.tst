@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2017 - ESI Group - Clement DAVID
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -251,17 +251,17 @@ uid="-38f07e57:12bd41b596e:-7f20"),..
 doc=list("-38f07e57:12bd41b596e:-7f20"))
 
 clear scs_m_1
-scs_m_1 = scs_m.objs(1).model.rpar, 1;
-scs_m_1.objs, 1;
+scs_m_2 = scs_m.objs(1).model.rpar;
+scs_m_2.objs;
 
-assert_checkequal(scs_m_1.objs(4).from, [2,1,1])
-assert_checkequal(scs_m_1.objs(4).to,   [3,1,0])
+assert_checkequal(scs_m_2.objs(4).from, [2,1,1])
+assert_checkequal(scs_m_2.objs(4).to,   [3,1,0])
 
-assert_checkequal(scs_m_1.objs(5).from, [3,1,1])
-assert_checkequal(scs_m_1.objs(5).to,   [1,1,1])
+assert_checkequal(scs_m_2.objs(5).from, [3,1,1])
+assert_checkequal(scs_m_2.objs(5).to,   [1,1,1])
 
-assert_checkequal(scs_m_1.objs(6).from, [3,2,0])
-assert_checkequal(scs_m_1.objs(6).to,   [2,1,0])
+assert_checkequal(scs_m_2.objs(6).from, [3,2,0])
+assert_checkequal(scs_m_2.objs(6).to,   [2,1,0])
 
 clear
 

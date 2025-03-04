@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2018 - Samuel GOUGEON
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -11,8 +11,8 @@
 //
 // <-- Non-regression test for bug 15484 -->
 //
-// <-- Bugzilla URL -->
-// https://bugzilla.scilab.org/15484
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/15484
 //
 // <-- Short Description -->
 // isdir("w:"), isdir("w:\"), and  isdir("w:/") returned %T whenever the w:

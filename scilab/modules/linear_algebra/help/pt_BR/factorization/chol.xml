@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -13,14 +13,17 @@
  * along with this program.
  *
  -->
-<refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svg="http://www.w3.org/2000/svg" xmlns:ns3="http://www.w3.org/1999/xhtml" xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:db="http://docbook.org/ns/docbook" xmlns:scilab="http://www.scilab.org" xml:id="chol" xml:lang="pt">
+<refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg" xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:db="http://docbook.org/ns/docbook"
+          xmlns:scilab="http://www.scilab.org" xml:id="chol" xml:lang="pt">
     <refnamediv>
         <refname>chol</refname>
         <refpurpose>Cholesky factorization</refpurpose>
     </refnamediv>
     <refsynopsisdiv>
         <title>Seqüência de Chamamento</title>
-        <synopsis>[R]=chol(X)</synopsis>
+        <synopsis>R = chol(X)</synopsis>
     </refsynopsisdiv>
     <refsection>
         <title>Parâmetros</title>
@@ -28,8 +31,8 @@
             <varlistentry>
                 <term>X</term>
                 <listitem>
-                    <para>uma matriz simétrica e positiva definida de reais ou
-                        complexos.
+                    <para>
+                        uma matriz quadrada positiva definida simétrica de reais ou hermitiana complexa.
                     </para>
                 </listitem>
             </varlistentry>
@@ -38,9 +41,7 @@
     <refsection>
         <title>Descrição</title>
         <para>
-            Se <literal>X</literal> é positiva definida, então <literal>R =
-                chol(X)
-            </literal>
+            Se <literal>X</literal> é positiva definida, então <literal>R = chol(X)</literal>
             produz uma matriz triangular superior
             <literal>R</literal> tal que <literal>R'*R = X</literal>.
         </para>
@@ -49,19 +50,18 @@
             superior de <literal>X</literal>. O triângulo inferior é assumido como
             sendo a transposta (ou complexo conjugado) da superior.
         </para>
-    </refsection>
-    <refsection>
-        <title>Referências</title>
-        <para>A decomposição de Cholesky é baseada nas rotinas de Lapack DPOTRF
-            para matrizes de reais e ZPOTRF no caso de matrizes de complexos.
-        </para>
+        <note>
+          <para>A decomposição de Cholesky é baseada nas rotinas de Lapack DPOTRF
+              para matrizes de reais e ZPOTRF no caso de matrizes de complexos.
+          </para>
+        </note>
     </refsection>
     <refsection>
         <title>Exemplos</title>
         <programlisting role="example"><![CDATA[
-W=rand(5,5)+%i*rand(5,5);
-X=W*W';
-R=chol(X);
+W = rand(5,5) + %i*rand(5,5);
+X = W * W';
+R = chol(X)
 norm(R'*R-X)
  ]]></programlisting>
     </refsection>

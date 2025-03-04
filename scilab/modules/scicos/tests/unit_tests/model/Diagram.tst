@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2014 - Scilab Enterprises - Paul Bignier
 // Copyright (C) 2017-2018 - ESI Group - Clement DAVID
 //
@@ -36,11 +36,11 @@ scs_m.objs
 
 // Link output port #1 of block #1 with input port #1 of block #2 thanks to lnk1
 scs_m.objs(4).from = [1 1 0]; // Link block #1
-assert_checkequal(scs_m.objs(1).graphics.pout, 4);   // Check that block #1 is connected to lnk1
-assert_checkequal(scs_m.objs(1).model.out,    -1);   // "
 scs_m.objs(4).to = [2 1 1];   // Link block #2
 assert_checkequal(scs_m.objs(4).from, [1 1 0]);
 assert_checkequal(scs_m.objs(4).to,   [2 1 1]);
+assert_checkequal(scs_m.objs(1).graphics.pout, 4);   // Check that block #1 is connected to lnk1
+assert_checkequal(scs_m.objs(1).model.out,    -1);   // "
 assert_checkequal(scs_m.objs(2).graphics.pin, 4);    // Check that block #2 is connected to lnk1
 assert_checkequal(scs_m.objs(2).model.in,    -1);    // "
 
@@ -55,9 +55,11 @@ assert_checkequal(scs_m.objs(2).graphics.pin, 4); // block #2 is still connected
 scs_m.objs(4).to = [0 0 0];
 assert_checkequal(scs_m.objs(2).graphics.pin, 4);  // Check that block #2 is still connected
 
-// Verify that it is impossible to create event links
+// connect a link to an event port should trigger a warning
 scs_m.objs(5).from = [2 1 1]; // Link the input of block #2
-scs_m.objs(5).to = [3 1 0];   // Try to add an event output to block #3 ; it should fail !
+// adding an event output to block #3 will produce a warning and no modification
+scs_m.objs(5).to = [3 1 0];
+
 assert_checkequal(scs_m.objs(5).from, [2 1 1]);
 assert_checkequal(scs_m.objs(5).to,   [3 1 0]);
 assert_checkequal(scs_m.objs(2).graphics.pein,  0);  // Check that block #2 is connected to lnk2
@@ -65,9 +67,10 @@ assert_checkequal(scs_m.objs(2).model.evtin,    1);  // "
 assert_checkequal(scs_m.objs(3).graphics.peout, []);  // Check that block #3 is not connected to lnk2
 assert_checkequal(scs_m.objs(3).model.evtout,  []);  // "
 
-// Verify that it is impossible to link two inputs or two outputs together
-scs_m.objs(5).from = [2 1 0]; // Two outputs
-scs_m.objs(5).to = [3 1 1];   // Two inputs
+// link two outputs together should produce a warning
+scs_m.objs(5) = scicos_link(from=[2 1 0], to=[3 1 0]);
+// link two inputs together should produce a warning
+scs_m.objs(5) = scicos_link(from=[2 1 1], to=[3 1 1]);
 
 
 //===================================================================================================

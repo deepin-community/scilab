@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) DIGITEO - 2012 - Cedric Delamarre
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -12,15 +12,9 @@
 
 function x = %_kron(a, b)
 
-    rhs = argn(2)
-    lhs = argn(1)
-
-    if rhs <> 2 then
-        error(msprintf(_("%s: Wrong number of output argument(s): %d expected.\n"), "kron", 2));
-    end
-
-    if lhs <> 1 then
-        error(msprintf(_("%s: Wrong number of input argument(s): %d expected.\n"), "kron", 1));
+    arguments
+        a
+        b
     end
 
     x = a .*. b;

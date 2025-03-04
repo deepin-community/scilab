@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2012 - Pedro Arthur dos S. Souza
  * Copyright (C) 2012 - Caio Lucas dos S. Souza
  *
@@ -123,7 +123,7 @@ public class LabelHandler {
 
         if (update) {
             axis = EntityPicker.pickLabel(figure, pos);
-            axes = AxesHandler.clickedAxes(figure, pos);
+            axes = AxesHandler.clickedAxes(figure, pos)[0];
         }
         if (axes == null || axis == null) {
             return;

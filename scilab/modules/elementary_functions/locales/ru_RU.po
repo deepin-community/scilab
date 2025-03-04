@@ -60,13 +60,13 @@ msgid "Invalid index.\n"
 msgstr "Недопустимый индекс.\n"
 
 #, c-format
-msgid "%s: Wrong value for input argument #%d : Singularity of the function.\n"
+msgid "%s: Wrong value for input argument #%d: Singularity of the function.\n"
 msgstr ""
-"%s: Неверное значение входного аргумента №%d : сингулярность функции.\n"
+"%s: Неверное значение входного аргумента №%d: сингулярность функции.\n"
 
 #, c-format
 msgid ""
-"%s: Warning: Wrong value for input argument #%d : Singularity of the "
+"%s: Warning: Wrong value for input argument #%d: Singularity of the "
 "function.\n"
 msgstr ""
 "%s: Предупреждение: Неверное значение входного аргумента №%d : сингулярность "
@@ -255,7 +255,7 @@ msgstr "%s: Неверные значения входного аргумент�
 
 #, c-format
 msgid ""
-"%ls: Warning: Wrong value for input argument #%d : Singularity of the "
+"%ls: Warning: Wrong value for input argument #%d: Singularity of the "
 "function.\n"
 msgstr ""
 "%ls: Предупреждение: Неверное значение входного аргумента №%d : "

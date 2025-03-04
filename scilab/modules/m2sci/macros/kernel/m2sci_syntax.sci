@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ???? - INRIA - Scilab
 // Copyright (C) 2002-2004 - INRIA - Vincent COUVERT
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -246,11 +246,8 @@ function [helppart, txt, batch] = m2sci_syntax(txt)
             if length(com)==0 then com = " ",end
             com = strsubst(com, quote, quote+quote)
             com = strsubst(com, dquote, dquote+dquote)
-            if part(com,1:12)=="m2sciassume " | part(com,1:13)=="m2scideclare " then
+            if part(com,1:13)=="m2scideclare " then
                 // User has given a clue to help translation
-                if part(com,1:12)=="m2sciassume " then
-                    warning(gettext("m2sciassume is obsolete, used m2scideclare instead."));
-                end
                 com = "m2scideclare("+quote+part(com,13:$)+quote+")"
                 if kc>1
                     com = ";" + com

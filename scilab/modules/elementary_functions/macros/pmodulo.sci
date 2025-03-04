@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 // Copyright (C) DIGITEO - 2011 - Allan CORNET
 // Copyright (C) 2012 - Scilab Enterprises - Adeline CARNIS
@@ -15,30 +15,16 @@
 
 function i = pmodulo(n, m)
 
-    [lhs, rhs] = argn(0);
-    if rhs <> 2 then
-        msg = _("%s: Wrong number of input argument(s): %d expected.\n")
-        error(msprintf(msg, "pmodulo", 2))
+    arguments
+        n {mustBeA(n, ["double", "polynomial", "int"]), mustBeReal}
+        m {mustBeA(m, ["double", "polynomial", "int"]), mustBeReal, mustBeEqualDimsOrScalar(m,n)}
     end
 
-    mt = type(m)
-    nt = type(n)
-
-    // -----------------------  Checking arguments --------------------------
-
-    if and(nt <> [1 2 8]) | (nt==1 & ~isreal(n)) then
-        msg = _("%s: Wrong type for input argument #%d: Real, integer or polynomial matrix expected.\n")
-        error(msprintf(msg, "pmodulo", 1))
-    end
-
-    if and(mt <> [1 2 8]) | (mt==1 & ~isreal(m)) then
-        msg = _("%s: Wrong type for input argument #%d: Real, integer or polynomial matrix expected.\n")
-        error(msprintf(msg, "pmodulo", 2))
-    end
-
-    if (nt==8 | mt==8)  & nt~=mt
-        msg = _("%s: Incompatible input arguments: Same types expected.\n")
-        error(msprintf(msg, "pmodulo"))
+    nt = type(n);
+    mt = type(m);
+    if (nt == 8 | mt == 8) & nt <> mt then
+        msg = _("%s: Incompatible input arguments #%d and #%d: Same types expected.\n")
+        error(msprintf(msg, "pmodulo", 1, 2))
     end
 
     // --------------------------  Processing ------------------------
@@ -47,14 +33,10 @@ function i = pmodulo(n, m)
         i = n;
         return;
     end
-    if  nt==2 then
-        [i,?] = pdiv(n, m)
+    if  nt== 2 then
+        [i,_] = pdiv(n, m)
     else
-        m = abs(m)  // else returns i<0 for m<0 : http://bugzilla.scilab.org/12373
-        if length(n)>1 & length(m)>1 & or(size(n)<>size(m)) then
-            msg = _("%s: Wrong size for input arguments: Same size expected.\n")
-            error(msprintf(msg, "pmodulo"))
-        end
+        m = abs(m)  // else returns i<0 for m<0 : https://gitlab.com/scilab/scilab/-/issues/12373
         i = n - floor(n ./ m) .* m
         k = find(i<0)           // this may occur for encoded integers
         if k~=[]
@@ -64,7 +46,9 @@ function i = pmodulo(n, m)
                 i(k) = i(k) + m
             end
         end
-        i = iconvert(i, inttype(n))
+        if nt == 8 then
+            i = iconvert(i, inttype(n))
+        end
     end
 
 endfunction

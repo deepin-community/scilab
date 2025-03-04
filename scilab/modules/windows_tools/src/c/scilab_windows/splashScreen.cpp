@@ -1,5 +1,5 @@
 ﻿/*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) INRIA - Allan CORNET
 * Copyright (C) DIGITEO - 2012 - Allan CORNET
 *
@@ -26,7 +26,7 @@ extern "C"
 #include "splashScreen.h"
 #include "localization.h"
 #include "resource.h"
-#include "version.h"
+#include "getversion.h"
 #include "WndThread.h"
 #include "charEncoding.h"
 #include "sci_path.h"
@@ -220,15 +220,17 @@ static BOOL haveConsoleWindow(void)
     HWND hWndMainScilab = NULL;
     char titleMainWindow[MAX_PATH];
     int id = getCurrentScilabId();
-
-    wsprintf(titleMainWindow, "%s (%d)", SCI_VERSION_STRING, id);
+    char *scilabVersionString = getScilabVersionAsString();
+    wsprintf(titleMainWindow, "%s (%d)", scilabVersionString, id);
     hWndMainScilab = FindWindow(NULL, titleMainWindow);
 
     if (hWndMainScilab == NULL)
     {
-        wsprintf(titleMainWindow, _("Scilab %s Console"),  std::string(SCI_VERSION_STRING).substr(strlen("scilab-"), std::string::npos).c_str());
+        wsprintf(titleMainWindow, _("Scilab %s Console"), std::string(scilabVersionString).substr(strlen("scilab-"), std::string::npos).c_str());
         hWndMainScilab = FindWindow(NULL, titleMainWindow);
     }
+
+    free(scilabVersionString);
 
     return (hWndMainScilab == NULL) ? FALSE : TRUE;
 }

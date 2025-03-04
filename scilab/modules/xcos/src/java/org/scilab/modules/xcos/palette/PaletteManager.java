@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009 - DIGITEO - Clement DAVID
  * Copyright (C) 2011-2015 - Scilab Enterprises - Clement DAVID
  *
@@ -21,7 +21,6 @@ import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.util.logging.Logger;
 
-import javax.swing.SwingUtilities;
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -30,7 +29,6 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
-import org.scilab.modules.action_binding.InterpreterManagement;
 import org.scilab.modules.commons.ScilabConstants;
 import org.scilab.modules.gui.bridge.tab.SwingScilabDockablePanel;
 import org.scilab.modules.gui.messagebox.ScilabModalDialog;
@@ -156,7 +154,7 @@ public final class PaletteManager {
         if (newValue && tab == null) {
             final boolean view = WindowsConfigurationManager.restoreUUID(PaletteManagerView.DEFAULT_TAB_UUID);
             if (!view) {
-                PaletteManagerView.restore(null, true);
+                PaletteManagerView.restore();
             }
         } else if (oldValue) {
             ClosingOperationsManager.startClosingOperation((SwingScilabDockablePanel) PaletteManagerView.get());
@@ -269,21 +267,5 @@ public final class PaletteManager {
         }
 
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-    }
-
-    /**
-     * For debugging purpose
-     *
-     * @param args
-     *            Non used
-     */
-    public static void main(final String[] args) {
-        InterpreterManagement.requestScilabExec("");
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                setVisible(true);
-            }
-        });
     }
 }

@@ -1,5 +1,5 @@
 // ===================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2018 - Samuel GOUGEON
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -10,8 +10,8 @@
 //
 // <-- Non-regression test for bug 13522 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/13522
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/13522
 //
 // <-- Short Description -->
 // savematfile() failed for hypermatrices
@@ -49,19 +49,16 @@ for it = [1 2 4 8 11 12 14 18]
     deletefile(testfile);
 end
 
-// Booleans: TO BE FIXED:
-//    http://bugzilla.scilab.org/15567
-//    http://bugzilla.scilab.org/15568
-//h = rand(3,4,5,6)<0.5;
-//h = rand(3,4)<0.5;
-//savematfile(testfile, "h", "-v7.3");
-//h0 = h;
-//clear h
-//loadmatfile(testfile);
-//assert_checkequal(h, h0);
-//deletefile(testfile);
+// Booleans:
+h = rand(3,4,5,6)<0.5;
+savematfile(testfile, "h", "-v7.3");
+h0 = h;
+clear h
+loadmatfile(testfile);
+assert_checkequal(h, h0);
+deletefile(testfile);
 
-// Texts: TO BE FIXED : http://bugzilla.scilab.org/15569
+// Texts: TO BE FIXED : https://gitlab.com/scilab/scilab/-/issues/15569
 //h = string(rand(3,4,5,6));
 //savematfile(testfile, "h", "-v7.3");
 //h0 = h;

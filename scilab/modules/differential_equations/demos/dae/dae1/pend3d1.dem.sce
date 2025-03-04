@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008 - INRIA
 // Copyright (C) 2010 - DIGITEO - Allan CORNET
 //
@@ -36,10 +36,10 @@ function demo_pend3d1()
     t0      = 0;
 
     //Observation dates for simulation
-    T       = t0:0.01:15;
+    T       = t0:0.01:14;
 
-    //Slver tolerances
-    info = list([],0,[],[],[],0,0);
+    //Solver tolerances
+    %DAEOPTIONS = list([], 0, [], [], [], 0, 0); 
     atol = [0.0001;0.0001;0.0001;0.001;0.001;0.001;1];
     rtol = atol;
 
@@ -58,8 +58,8 @@ function demo_pend3d1()
         ires     = 0;
     endfunction
 
-    y1   = dassl([y0,yd0],t0,T,rtol,atol,index1,info);
-    x1=y1(2:4,:);
+    y1   = dae([y0,yd0],t0,T,rtol,atol,index1);
+    x1=y1(1:3,:);
 
     //index 1 + stabilization  DAE model
     //----------------------------------
@@ -76,8 +76,8 @@ function demo_pend3d1()
     function c=gg(x),c= x'*x-l*l;endfunction
     function c=ggp(x,u),c = 2*x'*u;endfunction
 
-    y1s  = dassl([y0,yd0],t0,T,rtol,atol,index1s,info);
-    x1s  = y1s(2:4,:);
+    y1s  = dae([y0,yd0],t0,T,rtol,atol,index1s);
+    x1s  = y1s(1:3,:);
 
     //index 2  DAE model
     function [res,ires]=index2(t,y,ydot)
@@ -93,8 +93,8 @@ function demo_pend3d1()
         ires=0;
     endfunction
 
-    y2 = dassl([y0,yd0],t0,T,rtol,atol,index2,info);
-    x2 = y2(2:4,:);
+    y2 = dae([y0,yd0],t0,T,rtol,atol,index2);
+    x2 = y2(1:3,:);
 
     //disp([norm(x1(:,$),2) norm(x1s(:,$),2) norm(x2(:,$),2) ])
 

@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) - 2011 -  INRIA, Serge Steer
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
 // Copyright (C) - 2018 - Samuel GOUGEON
@@ -81,7 +81,7 @@ function B = repmat(A,varargin)
         Bsizes = [sA ones(1,(ndimsR-ndimsA))] .* sizes
     end
     // Sparse matrices are only 2D (limited output dimensions):
-    if or(type(A) == [5 6]) & length(Bsize) > 2 then
+    if or(type(A) == [5 6]) & length(Bsizes) > 2 then
         msg = _("%s: Wrong dimensions for input arguments: The sparse result must be 2D, not %dD.\n");
         error(msprintf(msg, "repmat", length(Bsizes)));
     end

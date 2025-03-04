@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) - 2013 - Samuel GOUGEON
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -97,7 +97,7 @@ function %_unwrap(typexample)
         ax = gda();
         ax.title.font_size = 2;
         f = scf();
-        f.color_map = hotcolormap(100);
+        f.color_map = hot(100);
         f.figure_size = [475 1050];
         f.figure_position(2) = 0;
         f.figure_name = "unwrap()" + _(": 2-D examples");

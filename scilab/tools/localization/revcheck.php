@@ -839,8 +839,8 @@ END_OF_MULTILINE;
     // If we have a 'numeric' revision diff and it is not zero,
     // make a link to the git repository's diff script
     if ($file["revision"][2] != "n/a" && $file["revision"][2] !== 0) {
-        $url="http://cgit.scilab.org/scilab/diff/?id="
-            .$file['commit'][0]."d2=".$file['commit'][1];
+        $url="https://gitlab.com/scilab/scilab/-/compare/"
+            .$file['commit'][0]."...".$file['commit'][1];
         $file['short_name'] = '<a href="' . $url . '">'. $file["short_name"] . '</a> ';
 //                            '<a href="' . $url_ws . '">[NoWS]</a>';--
     }
@@ -1110,7 +1110,7 @@ if ($count > 0) {
         $prev_dir = $new_dir;
     }
 
-    echo "<tr class=wip><td><a href=\"http://cgit.scilab.org/scilab/tree/scilab/$file\">$short_file</a></td>" .
+    echo "<tr class=wip><td><a href=\"https://gitlab.com/scilab/scilab/-/blob/6.1/scilab/$file\">$short_file</a></td>" .
           "<td class=r>$info[0]</td></tr>\n";
   }
   echo "</table>\n<p>&nbsp;</p>\n$navbar<p>&nbsp;</p>\n";

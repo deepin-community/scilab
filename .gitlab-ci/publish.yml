@@ -1,0 +1,49 @@
+# Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+# Copyright (C) Dassault Systemes - 2022 - Clement DAVID
+#
+#
+# This YAML file describe the publish stage of the CI. This stage is used to
+# extract artifacts and publish them to other websites.
+#
+
+# generate index.html files for each directory in public/
+index_gitlab_pages:
+  stage: publish
+  tags: [x86_64-linux-gnu, docker, scilab]
+  image: ${DOCKER_LINUX_BUILDER}:${DOCKER_TAG}
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - mkdir public ||true
+    - |
+      find public -type d -print0 | while IFS= read -r -d '' d; do
+        cd $CI_PROJECT_DIR/$d;
+        echo '<html><body>' >index.html;
+        find . -name '*.html' -printf '<a href="%p">%p</a><br/>\n' >>index.html;
+        echo '</body></html>' >>index.html;
+      done;
+  artifacts:
+    paths:
+      - public
+  when: always
+
+# generate an archive of all tests files and logs
+archive_test_results:
+  stage: publish
+  tags: [x86_64-linux-gnu, docker, scilab]
+  image: ${DOCKER_LINUX_BUILDER}:${DOCKER_TAG}
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - echo "${SCI_VERSION_STRING} ${CI_COMMIT_TIMESTAMP} ${CI_COMMIT_SHORT_SHA};tests;errors;failures" >${SCI_VERSION_STRING}/archive_test_results.csv
+    - awk 'BEGIN{FS="\""; OFS=";"} /\<testsuite /{print $2,$6,$8,$10; }' ${SCI_VERSION_STRING}/*/*.xml |sort -t\; >>${SCI_VERSION_STRING}/archive_test_results.csv
+    - while IFS=";" read name tests errors failures ; do printf "%-40s%10s%10s%10s\n" "$name" "$tests" "$errors" "$failures"; done <${SCI_VERSION_STRING}/archive_test_results.csv
+  artifacts:
+    paths:
+      - "${SCI_VERSION_STRING}/archive_test_results.csv"
+      - "${SCI_VERSION_STRING}/*/*.xml"
+      - "${SCI_VERSION_STRING}/*/*.tst"
+      - "${SCI_VERSION_STRING}/*/*.res"
+      - "${SCI_VERSION_STRING}/*/*.err"
+      - "${SCI_VERSION_STRING}/*/*.dia.tmp"
+      - "${SCI_VERSION_STRING}/*/*.dia"

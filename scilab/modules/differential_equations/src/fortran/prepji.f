@@ -22,6 +22,8 @@ cDEC$ ATTRIBUTES DLLIMPORT:: /ls0001/
      3   iownd(14), iowns(6),
      4   icf, ierpj, iersl, jcur, jstart, kflag, l, meth, miter,
      5   maxord, maxcor, msbp, mxncf, n, nq, nst, nre, nje, nqu
+cDEC$ ATTRIBUTES DLLIMPORT:: /ierode/
+      COMMON /ierode/ierror
 c-----------------------------------------------------------------------
 c%purpose
 c prepji is called by stodi to compute and process the matrix

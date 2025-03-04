@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2007-2008 - DIGITEO - Bruno JOFRET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -76,7 +76,7 @@ public:
         // Unary plus
         /** \brief "+" */ unaryPlus,
 
-        /** unknow operator*/ unknown
+        /** unknown operator*/ unknown
     };
 
     /** \name Ctor & dtor.

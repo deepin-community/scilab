@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2007-2008 - DIGITEO - Bruno JOFRET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -48,6 +48,11 @@
 #include "caseexp.hxx"
 
 /*
+** Arguments Expression
+*/
+#include "argumentsexp.hxx"
+
+/*
 ** Mathematical Expressions
 */
 #include "mathexp.hxx"
@@ -76,14 +81,5 @@
 
 // Type Dedicated Expressions
 #include "listexp.hxx"
-#include "optimizedexp.hxx"
-#include "daxpyexp.hxx"
-#include "fastselectexp.hxx"
-#include "intselectexp.hxx"
-#include "mapintselectexp.hxx"
-#include "smallintselectexp.hxx"
-#include "stringselectexp.hxx"
-#include "tableintselectexp.hxx"
-#include "memfillexp.hxx"
 
 #endif /* !AST_ALLEXP_HXX */

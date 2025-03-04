@@ -61,7 +61,7 @@ function [x,y,typ]=TIME_DELAY(job,arg1,arg2)
                 model.dep_ut=[%f %t];
                 // dp_t = %t
                 // updated for Scilab 5.5.1
-                // see http://bugzilla.scilab.org/show_bug.cgi?id=13436
+                // see https://gitlab.com/scilab/scilab/-/issues/13436
                 x.graphics=graphics;
                 x.model=model
                 break

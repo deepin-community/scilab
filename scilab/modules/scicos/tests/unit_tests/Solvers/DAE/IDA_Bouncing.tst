@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Paul Bignier
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -11,10 +11,11 @@
 // <-- XCOS TEST -->
 //
 
+loadXcosLibs();
 ilib_verbose(0); //to remove ilib_* traces
 
 // Import diagram
-assert_checktrue(importXcosDiagram("SCI/modules/xcos/tests/unit_tests/Solvers/DAE/Bouncing.zcos"));
+exec("SCI/modules/scicos/tests/unit_tests/Solvers/DAE/Bouncing.sce");
 
 IDA_val_ref = [ 10.
 11.3875

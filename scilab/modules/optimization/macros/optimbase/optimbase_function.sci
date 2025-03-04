@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009 - INRIA - Michael Baudin
 // Copyright (C) 2009-2011 - DIGITEO - Michael Baudin
 //
@@ -108,14 +108,7 @@ function varargout = optimbase_function ( this , x , index )
     funtype = typeof(this.fun)
     if ( funtype == "function" ) then
         __optimbase_f__ = this.fun
-        //
-        // Backward-compatibility: process the costfargument field
-        //
-        if ( typeof(this.costfargument) == "string" ) then
-            __optimbase_args__ = list()
-        else
-            __optimbase_args__ = list(this.costfargument)
-        end
+        __optimbase_args__ = list()
     else
         __optimbase_f__ = this.fun(1)
         __optimbase_args__ = list(this.fun(2:$))

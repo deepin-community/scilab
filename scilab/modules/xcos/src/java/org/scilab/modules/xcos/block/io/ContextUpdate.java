@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009 - DIGITEO - Clement DAVID
  * Copyright (C) 2011-2017 - Scilab Enterprises - Clement DAVID
  *
@@ -35,6 +35,7 @@ import org.scilab.modules.xcos.JavaController;
 import org.scilab.modules.xcos.Kind;
 import org.scilab.modules.xcos.block.BasicBlock;
 import org.scilab.modules.xcos.block.SuperBlock;
+import org.scilab.modules.xcos.io.ScilabTypeCoder;
 import org.scilab.modules.xcos.port.BasicPort;
 import org.scilab.modules.xcos.port.command.CommandPort;
 import org.scilab.modules.xcos.port.control.ControlPort;
@@ -50,6 +51,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.rmi.server.UID;
 import java.util.logging.Level;
 import org.scilab.modules.xcos.ObjectProperties;
+import org.scilab.modules.xcos.VectorOfDouble;
+import org.scilab.modules.xcos.VectorOfInt;
 
 /**
  * Common class for the SuperBlock I/O blocks (represent ports)
@@ -305,6 +308,22 @@ public abstract class ContextUpdate extends BasicBlock {
         }
 
         /**
+         * @return the context key to use for a block
+         */
+        public static String getContextKey(Object block) {
+            if (block instanceof ExplicitInBlock || block instanceof ImplicitInBlock) {
+                return "in";
+            } else if (block instanceof ExplicitOutBlock || block instanceof ImplicitOutBlock) {
+                return "out";
+            } else if (block instanceof EventInBlock) {
+                return "ein";
+            } else if (block instanceof EventOutBlock) {
+                return "eout";
+            }
+            return "";
+        }
+
+        /**
          * Create a corresponding I/O block
          *
          * @param port
@@ -406,6 +425,23 @@ public abstract class ContextUpdate extends BasicBlock {
         super(controller, controller.createObject(Kind.BLOCK), Kind.BLOCK, null, new mxGeometry(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT), blockName, new UID().toString());
 
         controller.setObjectProperty(getUID(), Kind.BLOCK, ObjectProperties.INTERFACE_FUNCTION, blockName);
+    }
+
+    
+
+    /**
+     * Set the ordering on the I/O block
+     * @param ordering
+     *            the ordering to set
+     */
+    public void setOrdering(JavaController controller, int ordering) {
+        // update the child ordering
+        VectorOfInt ipar = new VectorOfInt(1);
+        ipar.set(0, ordering);
+        controller.setObjectProperty(getUID(), Kind.BLOCK, ObjectProperties.IPAR, ipar);
+
+        VectorOfDouble exprs = new ScilabTypeCoder().var2vec(new ScilabString(Integer.toString(ordering)));
+        controller.setObjectProperty(getUID(), Kind.BLOCK, ObjectProperties.EXPRS, exprs);
     }
 
 

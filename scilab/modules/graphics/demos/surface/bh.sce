@@ -1,5 +1,5 @@
 //
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 //
 // This file is distributed under the same license as the Scilab package.
@@ -31,7 +31,7 @@ function bh(nn)
     my_handle.immediate_drawing = "off";
     plot3d2(f.*cosphi,f.*sinphi,dup(t'.*2-1,length(x)));
     my_plot                     = my_axe.children;
-    my_handle.color_map         = jetcolormap(128);
+    my_handle.color_map         = jet(128);
     my_plot.color_flag          = 1;
     my_axe.rotation_angles      = [70,20];
     my_handle.immediate_drawing = "on";

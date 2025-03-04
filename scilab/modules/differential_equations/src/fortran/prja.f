@@ -28,6 +28,8 @@ cDEC$ ATTRIBUTES DLLIMPORT:: /ls0001/
 cDEC$ ATTRIBUTES DLLIMPORT:: /lsa001/
       common /lsa001/ rownd2, rowns2(20), pdnorm,
      1   iownd2(3), iowns2(2), jtyp, mused, mxordn, mxords
+cDEC$ ATTRIBUTES DLLIMPORT:: /ierode/
+      COMMON /ierode/ierror
 c-----------------------------------------------------------------------
 c%purpose
 c prja is called by stoda to compute and process the matrix

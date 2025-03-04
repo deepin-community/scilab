@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2004-2006 - INRIA - Fabrice Leray
  * Copyright (C) 2006 - INRIA - Allan Cornet
  * Copyright (C) 2006 - INRIA - Jean-Baptiste Silvy
@@ -32,7 +32,7 @@
 #include "setGraphicObjectProperty.h"
 #include "graphicObjectProperties.h"
 
-#define MAX_MARK_STYLE 14
+#define MAX_MARK_STYLE 20
 
 /*------------------------------------------------------------------------*/
 int set_mark_style_property(void* _pvCtx, int iObjUID, void* _pvData, int valueType, int nbRow, int nbCol)

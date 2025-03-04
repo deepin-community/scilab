@@ -1,5 +1,5 @@
 
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 1999 - INRIA - Carlos Klimann
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -36,20 +36,10 @@ function [m]=meanf(val,fre,orient)
     //References:  Wonacott, T.H. & Wonacott, R.J.; Introductory
     //Statistics, J.Wiley & Sons, 1990.
     //
-    [lhs, rhs] = argn(0);
-
-    if rhs == 0 | rhs == 1| rhs >= 4 then
-        error(msprintf(gettext("%s: Wrong number of input argument: %d to %d expected.\n"),"meanf",2,3));
-    end
-
-    // If val is not constant, sparse, integer, hypermat
-    if and(type(val) <> [1 5 8]) then
-        error(msprintf(gettext("%s: Wrong type for input argument #%d: A full or sparse matrix, or an integer matrix, or an hypermat expected.\n"),"meanf",1));
-    end
-
-    // If fre is not constant, sparse, integer, hypermat
-    if and(type(fre) <> [1 5 8]) then
-        error(msprintf(gettext("%s: Wrong type for input argument #%d: A full or sparse matrix, or an integer matrix, or an hypermat expected.\n"),"meanf", 2));
+    arguments
+        val {mustBeA(val, ["double", "sparse", "int"])}
+        fre {mustBeA(fre, ["double", "sparse", "int"])}
+        orient (1, 1) {mustBeA(orient, ["double", "string"]), mustBeMember(orient, {1, 2, "r", "c", "*"})} = "*"
     end
 
     if or(size(val) <> size(fre)) && (size(val, "*") <> 1 && size(fre, "*") <> 1 && ~isempty(fre)) then
@@ -61,17 +51,5 @@ function [m]=meanf(val,fre,orient)
         return
     end
 
-    if rhs == 2 then
-        m=sum(val .* fre)/sum(fre);
-    elseif rhs==3 then
-        if orient=="*" then
-            m=sum(val .* fre)/sum(fre)
-        elseif orient=="r"|orient==1 then
-            m=sum(val .* fre,"r") ./ sum(fre,"r")
-        elseif orient=="c"|orient==2 then
-            m=sum(val .* fre,"c") ./ sum(fre,"c")
-        else
-            error(msprintf(gettext("%s: Wrong value for input argument #%d: ''%s'', ''%s'', %d or %d expected.\n"),"meanf",3,"r","c",1,2)),
-        end
-    end
+    m = sum(val .* fre, orient) ./ sum(fre, orient)
 endfunction

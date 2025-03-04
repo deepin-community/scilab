@@ -1,5 +1,5 @@
 /*
-*  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+*  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 *  Copyright (C) 2011 - DIGITEO - Antoine ELIAS
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -33,7 +33,7 @@ public :
     ~Struct();
     Struct();
     // _bInit: true, fill the struct by empty SingleStructs.
-    // _bInit: false, Only alocate the array and fill each element by NULL.
+    // _bInit: false, Only allocate the array and fill each element by NULL.
     //           that mean you have to fill it by SingleStructs and increase there ref.
     Struct(int _iRows, int _iCols, bool _bInit = true);
     Struct(int _iDims, const int* _piDims, bool _bInit = true);

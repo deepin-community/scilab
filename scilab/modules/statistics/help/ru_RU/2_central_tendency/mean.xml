@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2000 - INRIA - Carlos Klimann
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
  * Copyright (C) 2020 - Samuel GOUGEON
@@ -44,10 +44,20 @@
             <varlistentry>
                 <term>orientation</term>
                 <listitem>
-                    направление соответствует индексу размерности по которой
-                    вычисляется матожидание. <literal>"r"</literal> эквивалентен 1.
-                    <literal>"c"</literal> эквивалентно 2. <literal>"m"</literal>
-                    эквивалентно <literal>find(size(x)>1,1)</literal>.
+                    <para>
+                    index of the dimension along which the mean is computed.
+                    It can be either
+                    </para>
+                    <itemizedlist>
+                        <listitem>
+                            a character <literal>"*"</literal> (default), <literal>"r"</literal>,
+                          <literal>"c"</literal> or <literal>"m"</literal>. "m" is equivalent
+                          to <literal>find(size(x)>1,1)</literal>.
+                        </listitem>
+                        <listitem>
+                            a positive integer. 1 is equivalent to "r" and 2 is equivalent to "c".
+                        </listitem>
+                    </itemizedlist>
                     <para/>
                 </listitem>
             </varlistentry>
@@ -66,7 +76,8 @@
     <refsection>
         <title>Описание</title>
         <para>
-            <emphasis role="bold">y = mean(x)</emphasis> возвращает матожидание
+            <emphasis role="bold">y = mean(x)</emphasis> или <emphasis role="bold">y = mean(x, "*")</emphasis> 
+            возвращает матожидание
             всех элементов. Если хотя бы один элемент равен NaN, то возвращается
             NaN. Этот скалярный результат всегда плотно кодирован.
         </para>

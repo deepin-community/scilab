@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009 - DIGITEO - Pierre MARECHAL <pierre.marechal@scilab.org>
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -62,6 +62,8 @@ function varargout = atomsGetInstalled(section)
     if argn(1) > 0 then
         varargout = list(packages)
     else
-        mprintf("%s\n", strcat(justify(packages,"l"), "  ", "c"))
+        if packages <> [] then
+            mprintf("%s\n", strcat(justify(packages,"l"), "  ", "c"))
+        end
     end
 endfunction

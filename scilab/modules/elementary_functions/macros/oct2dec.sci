@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA - Farid BELAHCENE
 // Copyright (C) DIGITEO - 2010-2011 - Allan CORNET
 //
@@ -27,13 +27,8 @@
 
 function d = oct2dec(o)
 
-    [lhs, rhs] = argn(0);
-    if rhs <> 1 then
-        error(msprintf(gettext("%s: Wrong number of input argument(s): %d expected.\n"),"oct2dec", 1));
-    end
-
-    if type(o) <>  10 then
-        error(msprintf(gettext("%s: Wrong type for input argument #%d: Matrix of strings expected.\n"), "oct2dec", 1));
+    arguments
+        o {mustBeA(o, "string")}
     end
 
     d = base2dec(o, 8);

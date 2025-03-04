@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Paul Bignier
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -8,8 +8,8 @@
 // <-- ENGLISH IMPOSED -->
 // <-- Non-regression test for bug 8561 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=8561
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/8561
 //
 // <-- Short Description -->
 //    Absolute and relative tolerances sizes were not properly checked.
@@ -31,12 +31,12 @@ endfunction
 //rtol and atol should have 7 elements, because neq = 7
 rtol = [1e-5, 1e-5, 1e-5, 1e-4, 1e-4, 1e-4];
 atol = 2*rtol;
-assert_checkfalse(execstr("y = dassl([Y0 Yd0], 0, t, atol, rtol, f);", "errcatch") == 0);
-refMsg = msprintf(_("%s: Wrong size for input argument #%d: A scalar or a matrix of size %d expected.\n"), "dassl", 4, 7);
-assert_checkerror("y = dassl([Y0 Yd0], 0, t, atol, rtol, f);", refMsg);
+assert_checkfalse(execstr("y = %_dassl([Y0 Yd0], 0, t, atol, rtol, f);", "errcatch") == 0);
+refMsg = msprintf(_("%s: Wrong size for input argument #%d: A scalar or a matrix of size %d expected.\n"), "%_dassl", 4, 7);
+assert_checkerror("y = %_dassl([Y0 Yd0], 0, t, atol, rtol, f);", refMsg);
 rtol = [1e-5, 1e-5, 1e-5, 1e-4, 1e-4, 1e-4, 1e-3];
 atol = 2*rtol;
-y = dassl([Y0 Yd0], 0, t, atol, rtol, f);
+y = %_dassl([Y0 Yd0], 0, t, atol, rtol, f);
 expected = [ 15.;
               0.1104081129188701354549;
               0.5384584912402592404845;
@@ -57,12 +57,12 @@ assert_checkalmostequal(y(:,1501), expected, 5*10^-1);
 //rtol and atol should have 7 elements, because neq = 7
 rtol = [1e-5, 1e-5, 1e-5, 1e-4, 1e-4, 1e-4];
 atol = 2*rtol;
-assert_checkfalse(execstr("[y, n] = dasrt([Y0 Yd0], 0, t, atol, rtol, f, 0, ''gr1'');", "errcatch") == 0);
-refMsg = msprintf(_("%s: Wrong size for input argument #%d: A scalar or a matrix of size %d expected.\n"), "dasrt", 4, 7);
-assert_checkerror("[y, n] = dasrt([Y0 Yd0], 0, t, atol, rtol, f, 0, ''gr1'');", refMsg);
+assert_checkfalse(execstr("[y, n] = %_dasrt([Y0 Yd0], 0, t, atol, rtol, f, 0, ''gr1'');", "errcatch") == 0);
+refMsg = msprintf(_("%s: Wrong size for input argument #%d: A scalar or a matrix of size %d expected.\n"), "%_dasrt", 4, 7);
+assert_checkerror("[y, n] = %_dasrt([Y0 Yd0], 0, t, atol, rtol, f, 0, ''gr1'');", refMsg);
 rtol = [1e-5, 1e-5, 1e-5, 1e-4, 1e-4, 1e-4, 1e-3];
 atol = 2*rtol;
-[y, n] = dasrt([Y0 Yd0], 0, t, atol, rtol, f, 0, 'gr1');
+[y, n] = %_dasrt([Y0 Yd0], 0, t, atol, rtol, f, 0, 'gr1');
 expected = [ 15.;
               0.1104081129188701354549;
               0.5384584912402592404845;
@@ -83,12 +83,12 @@ assert_checkalmostequal(y(:,1501), expected, 5*10^-1);
 //rtol and atol should have 7 elements, because neq = 7
 rtol = [1e-5, 1e-5, 1e-5, 1e-4, 1e-4, 1e-4];
 atol = 2*rtol;
-assert_checkfalse(execstr("[y, n] = daskr([Y0 Yd0], 0, t, atol, rtol, f, 0, ''gr1'');", "errcatch") == 0);
-refMsg = msprintf(_("%s: Wrong size for input argument #%d: A scalar or a matrix of size %d expected.\n"), "daskr", 4, 7);
-assert_checkerror("[y, n] = daskr([Y0 Yd0], 0, t, atol, rtol, f, 0, ''gr1'');", refMsg);
+assert_checkfalse(execstr("[y, n] = %_daskr([Y0 Yd0], 0, t, atol, rtol, f, 0, ''gr1'');", "errcatch") == 0);
+refMsg = msprintf(_("%s: Wrong size for input argument #%d: A scalar or a matrix of size %d expected.\n"), "%_daskr", 4, 7);
+assert_checkerror("[y, n] = %_daskr([Y0 Yd0], 0, t, atol, rtol, f, 0, ''gr1'');", refMsg);
 rtol = [1e-5, 1e-5, 1e-5, 1e-4, 1e-4, 1e-4, 1e-3];
 atol = 2*rtol;
-[y, n] = daskr([Y0 Yd0], 0, t, atol, rtol, f, 0, 'gr1');
+[y, n] = %_daskr([Y0 Yd0], 0, t, atol, rtol, f, 0, 'gr1');
 expected = [ 15.;
               0.1092127719669352264864;
               0.5544355723986162942651;

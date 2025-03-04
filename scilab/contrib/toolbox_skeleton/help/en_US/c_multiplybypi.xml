@@ -3,7 +3,7 @@
  * This file is released under the 3-clause BSD license. See COPYING-BSD.
  *
  -->
-<refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svg="http://www.w3.org/2000/svg" xmlns:ns3="http://www.w3.org/1999/xhtml" xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:db="http://docbook.org/ns/docbook" version="5.0-subset Scilab" xml:id="c_multiplybypi" xml:lang="en">
+<refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svg="http://www.w3.org/2000/svg" xmlns:ns3="http://www.w3.org/1999/xhtml" xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:db="http://docbook.org/ns/docbook" xmlns:scilab="http://www.scilab.org" version="5.0-subset Scilab" xml:id="c_multiplybypi" xml:lang="en">
     <refnamediv>
         <refname>c_multiplybypi</refname>
         <refpurpose>multiply by %pi a number</refpurpose>
@@ -40,6 +40,10 @@
     <refsection>
         <title>Examples</title>
         <programlisting role="example">c_multiplybypi(3)</programlisting>
+        <scilab:image localized="true">
+            // Image using function from current toolbox
+            plot([1 2], [c_multiplybypi(1), c_multiplybypi(2)]);
+        </scilab:image>
     </refsection>
     <refsection role="see also">
         <title>See also</title>

@@ -69,7 +69,7 @@ function [x,y,typ]=CMAT3D(job,arg1,arg2)
     case "define" then
         cmin = 0;
         cmax = 100;
-        colormap = jetcolormap(25);
+        colormap = jet(25);
         size_c = 25;
         x=-1;
         y=-1;
@@ -89,7 +89,7 @@ function [x,y,typ]=CMAT3D(job,arg1,arg2)
 
         exprs=[strcat(string(x)," ");
         strcat(string(y)," ");
-        string("jetcolormap(25)");
+        string("jet(25)");
         string(cmin);
         string(cmax)];
         gr_i=[]

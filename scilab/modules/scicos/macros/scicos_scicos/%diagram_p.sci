@@ -1,32 +1,20 @@
-//  Scicos
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
+// Copyright (C) 2024 - UTC - Stéphane MOTTELET
 //
-//  Copyright (C) INRIA - METALAU Project <scicos@inria.fr>
-//
-// This program is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation; either version 2 of the License, or
-// (at your option) any later version.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-//
-// See the file ../license.txt
-//
+// This file is hereby licensed under the terms of the GNU GPL v2.0,
+// pursuant to article 5.3.4 of the CeCILL v.2.1.
+// This file was originally licensed under the terms of the CeCILL v2.1,
+// and continues to be available under such terms.
+// For more information, see the COPYING file which you should have received
+// along with this program.
 
 function %diagram_p(scs_m)
-    %params_p(scs_m.props)
-
-    i = 1;
-    for o=scs_m.objs
-        if typeof(o)=="Block" then
-            mprintf("%s%s\n", part(string(i), 1:6), o.gui)
-            i = i + 1;
-        end
-    end
+    t =  %l_string_inc(scs_m);
+    i = grep(t,"objs:");
+    j = grep(t,"version =");
+    i_blocks = grep(t(i+1:j-1),"Block");
+    t = [t(1:i); t(i+1:j-1)(i_blocks); t(j:$)];
+    mprintf("  %s\n",t);
 endfunction
+
+

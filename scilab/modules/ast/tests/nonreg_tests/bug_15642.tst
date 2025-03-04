@@ -1,6 +1,6 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
-// Copyright (C) 2018 - Stéphane MOTTELET
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
+// Copyright (C) 2018 - UTC - Stéphane MOTTELET
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
@@ -9,8 +9,8 @@
 //
 // <-- Non-regression test for bug 15642 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/15642
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/15642
 //
 // <-- Short Description -->
 // A(:) gives incorrect display when A is sparse boolean (regression)

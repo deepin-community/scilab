@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) DIGITEO - 2010 - Allan CORNET
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -33,7 +33,7 @@ function res = dlwMake(files, objects_or_dll)
 
     //create a scibuild.bat file in TMPDIR directory
     cmd = "nmake /Y /nologo /f Makefile.mak " + OBJ;
-    scibuildfile = writeBatchFile(cmd);
+    scibuildfile = dlwWriteBatchFile(cmd);
     if ilib_verbose() > 1 then
         msg = unix_g(scibuildfile);
         disp(msg);
@@ -44,35 +44,4 @@ function res = dlwMake(files, objects_or_dll)
     deletefile(scibuildfile);
     res = [OBJ];
 
-endfunction
-//=============================================================================
-function filename = writeBatchFile(cmd)
-
-    //update DEBUG_SCILAB_DYNAMIC_LINK to match with Scilab compilation mode
-    val = getenv("DEBUG_SCILAB_DYNAMIC_LINK","");
-    if val <> "NO" & val <> "YES" then
-        if isDebug() then
-            val = "YES";
-        else
-            val = "NO";
-        end
-    end
-
-    if win64() then
-        arch = "x64";
-    else
-        arch = "x86";
-    end
-
-    path = dlwGetVisualStudioPath();
-
-    scibuild = [ ...
-    "@call """ + path + "\vcvarsall.bat"" " + arch;
-    "set DEBUG_SCILAB_DYNAMIC_LINK=" + val;
-    cmd
-    ];
-
-    filename = TMPDIR + "/scibuild.bat";
-    mputl(scibuild, filename);
-    //filename = "call " + filename;
 endfunction

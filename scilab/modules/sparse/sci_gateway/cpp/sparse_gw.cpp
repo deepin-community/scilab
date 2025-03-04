@@ -1,8 +1,9 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2013 - Scilab Enterprises - Cedric Delamarre
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ * Copyright (C) 2023 - UTC - UTC - Stéphane MOTTELET
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
  * pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -40,5 +41,10 @@ int SparseModule::Load()
     symbol::Context::getInstance()->addFunction(types::Function::createFunction(L"inpnvi", &sci_inpnv, MODULE_NAME));
     symbol::Context::getInstance()->addFunction(types::Function::createFunction(L"blkfc1i", &sci_blkfc1i, MODULE_NAME));
     symbol::Context::getInstance()->addFunction(types::Function::createFunction(L"blkslvi", &sci_blkslvi, MODULE_NAME));
+    symbol::Context::getInstance()->addFunction(types::Function::createFunction(L"spCompJacobian", &sci_spCompJacobian, MODULE_NAME));
+    symbol::Context::getInstance()->addFunction(types::Function::createFunction(L"spCompHessian", &sci_spCompHessian, MODULE_NAME));
+    symbol::Context::getInstance()->addFunction(types::Function::createFunction(L"%_spCompGeneric_clear", &sci_percent_spCompGeneric_clear, MODULE_NAME));
+    symbol::Context::getInstance()->addFunction(types::Function::createFunction(L"%_spCompJacobian_e", &sci_percent_spCompGeneric_e, MODULE_NAME));
+    symbol::Context::getInstance()->addFunction(types::Function::createFunction(L"%_spCompHessian_e", &sci_percent_spCompGeneric_e, MODULE_NAME));
     return 1;
 }

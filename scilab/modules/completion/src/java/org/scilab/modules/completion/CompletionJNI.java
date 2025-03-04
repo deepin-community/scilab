@@ -11,7 +11,7 @@ package org.scilab.modules.completion;
 
 /* It is generated code. Disable checkstyle */
 //CHECKSTYLE:OFF
- /** 
+ /**
    * @author Allan CORNET
    * @copyright INRIA 2007
    */
@@ -46,6 +46,7 @@ public class CompletionJNI {
   public final static native String[] searchFilesDictionary(String jarg1);
   public final static native String[] searchFieldsDictionary(String jarg1, String jarg2);
   public final static native String[] searchHandleGraphicsPropertiesDictionary(String jarg1);
+  public final static native String[] searchMustBeDictionary(String jarg1);
   public final static native String getPartLevel(String jarg1);
   public final static native String getFilePartLevel(String jarg1);
   public final static native String getCommonPart(String[] jarg1, int jarg2);

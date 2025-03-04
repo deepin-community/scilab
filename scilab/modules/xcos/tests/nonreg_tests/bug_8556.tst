@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010 - DIGITEO - Clément DAVID <clement.david@scilab.org>
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,8 +9,8 @@
 // <-- XCOS TEST -->
 // <-- Non-regression test for bug NotReportedYet -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=8556
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/8556
 
 xcos();
 // put 2 SUM_f block

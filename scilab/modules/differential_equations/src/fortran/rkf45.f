@@ -184,6 +184,8 @@ c
       double precision y(neqn),t,tout,rerr,aerr,work(1)
 c
       external fydot
+cDEC$ ATTRIBUTES DLLIMPORT:: /ierode/
+      COMMON /ierode/ierror
 c
       integer k1,k2,k3,k4,k5,k6,k1m
 
@@ -240,6 +242,8 @@ c
      2  savae,savey(*)
 c
       external fydot
+cDEC$ ATTRIBUTES DLLIMPORT:: /ierode/
+      COMMON /ierode/ierror
 c
       double precision  a,ae,dt,ee,eeoet,esttol,et,hmin,remin,rer,s,
      1  scale,tol,toln,twoeps,u26,ypk
@@ -602,6 +606,8 @@ c
       double precision  ch
       integer  k
       external fydot
+cDEC$ ATTRIBUTES DLLIMPORT:: /ierode/
+      COMMON /ierode/ierror
 c
       ch=h/4.0d0
       do 221 k=1,neqn

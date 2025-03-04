@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="console-application">
+  <id>org.scilab.scilab_cli</id>
+  
+  <name>scilab-cli</name>
+  <summary>Scientific software for numerical computations, command line only</summary>
+  
+  <metadata_license>CC-BY-4.0</metadata_license>
+  <project_license>GPL-2 or CECILL-2.1</project_license>
+
+  <url type="homepage">https://www.scilab.org/</url>
+  <developer_name>Dassault Systèmes</developer_name>
+  
+  <description>
+    <p>
+      Scilab is a matrix-based scientific software package. It contains hundreds of built-in mathematical functions, rich data structures (including polynomials, rationals, linear systems, lists, etc.) and comes with a number of specific toolboxes for control, signal processing, ...
+    </p>
+    <p>
+      scilab-cli is the command-line interpreter, which provides Scilab as a computing engine or script interpreter, with no graphics.
+    </p>
+  </description>
+  
+  <icon type="stock">scilab</icon>
+  
+  <categories>
+    <category>Science</category>
+    <category>NumericalAnalysis</category>
+  </categories>
+  
+  <launchable type="desktop-id">scilab-cli.desktop</launchable>
+
+  <provides>
+    <binary>scilab-cli</binary>
+  </provides>
+
+  <content_rating type="oars-1.0" />
+</component>

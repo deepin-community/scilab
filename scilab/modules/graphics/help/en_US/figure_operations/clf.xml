@@ -1,5 +1,5 @@
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA - Serge Steer
  * Copyright (C) INRIA - Jean-Baptiste Silvy
  * Copyright (C) 2013, 2017 - Samuel GOUGEON
@@ -154,7 +154,7 @@
                 </listitem>
                 <listitem>
                     Deleting only menus: <literal>c=gcf().children; delete(c(c.type=="uimenu"))</literal>.
-                    This assumes that <literal>get(get(0), "ShowHiddenHandles")</literal> is
+                    This assumes that <literal>get(0).ShowHiddenHandles</literal> is
                     <literal>"on"</literal>.
                 </listitem>
             </itemizedlist>
@@ -164,14 +164,14 @@
         <title>Examples</title>
         <programlisting role="example">
             f4 = scf(4);  //creates figure with id==4 and makes it the current one
-            f4.color_map = jetcolormap(64);
+            f4.color_map = jet(64);
             f4.figure_size = [400, 200];
             plot2d()
             sleep(4000)   // wait and see for 4s
             clf(f4, "reset")
 
             f0 = scf(0); //creates figure with id==0 and make it the current one
-            f0.color_map = hotcolormap(128); // changes color map
+            f0.color_map = hot(128); // changes color map
             t = -%pi:0.3:%pi;
             plot3d1(t,t,sin(t)'*cos(t));
 

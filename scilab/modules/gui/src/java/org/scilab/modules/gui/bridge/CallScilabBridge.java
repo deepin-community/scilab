@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2007-2008 - INRIA - Vincent COUVERT
  * Copyright (C) 2008 - DIGITEO - Sylvestre KOUMAR
  * Copyright (C) 2010 - DIGITEO - Manuel JULIACHS
@@ -623,49 +623,49 @@ public class CallScilabBridge {
      * Open a Browser on Scilab Web Site
      */
     public static void openScilabWebSite() {
-        WebBrowser.openUrl("http://www.scilab.org/");
+        WebBrowser.openUrl("https://www.scilab.org/");
     }
 
     /**
      * Open a Browser on Wiki Web Site
      */
     public static void openWiki() {
-        WebBrowser.openUrl("http://wiki.scilab.org/");
+        WebBrowser.openUrl("https://gitlab.com/scilab/scilab/-/wikis/home");
     }
 
     /**
      * Open a Browser on ATOMS Web Site
      */
     public static void openAtomsScilab() {
-        WebBrowser.openUrl("http://atoms.scilab.org/");
+        WebBrowser.openUrl("https://atoms.scilab.org/");
     }
 
     /**
      * Open a Browser on File Exchange Web Site
      */
     public static void openFileExchange() {
-        WebBrowser.openUrl("http://fileexchange.scilab.org/");
+        WebBrowser.openUrl("https://fileexchange.scilab.org/");
     }
 
     /**
      * Open a Browser on Bugzilla Web Site
      */
     public static void openBugzilla() {
-        WebBrowser.openUrl("http://bugzilla.scilab.org/");
+        WebBrowser.openUrl("https://gitlab.com/scilab/scilab/-/issues");
     }
 
     /**
      * Open a Browser on Forge Web Site
      */
     public static void openForge() {
-        WebBrowser.openUrl("http://forge.scilab.org/");
+        WebBrowser.openUrl("https://gitlab.com/scilab/forge/");
     }
 
     /**
      * Open a Browser on Scilab Online Help
      */
     public static void openOnlineHelp() {
-        WebBrowser.openUrl("http://help.scilab.org/");
+        WebBrowser.openUrl("https://help.scilab.org/");
     }
 
     /**
@@ -676,17 +676,17 @@ public class CallScilabBridge {
     }
 
     /**
-     * Open a Browser on Mailing List Archives
+     * Open a Browser on Discourse
      */
-    public static void openMailingListArchives() {
-        WebBrowser.openUrl("http://mailinglists.scilab.org/");
+    public static void openDiscourse() {
+        WebBrowser.openUrl("https://scilab.discourse.group/");
     }
 
     /**
-     * Open a Browser on S/E
+     * Open a Browser on Dassault Systèmes
      */
-    public static void openSE() {
-        WebBrowser.openUrl("http://www.scilab.io");
+    public static void open3DS() {
+        WebBrowser.openUrl("https://www.3ds.com/");
     }
 
     /***************************/

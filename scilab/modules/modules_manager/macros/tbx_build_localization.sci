@@ -1,7 +1,7 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Antoine ELIAS
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
-// Copyright (C) 2016, 2018, 2019 - Samuel GOUGEON
+// Copyright (C) 2016, 2018, 2019, 2021 - Samuel GOUGEON
 //
 // This file is hereby licensed under the terms of the GNU GPL v2.0,
 // pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -55,24 +55,37 @@ function tbx_build_localization(tbx_name, tbx_path)
     // ---------------------------
     tbx_name = tbx_get_name_from_path(tbx_path)
 
-
     // Run tbx_generate_pofile() ?  Yes if /locales or *.po do not exist
     //------------------------
     localePath = pathconvert(tbx_path + "/locales/")
-    generatePOfile =  ~isdir(localePath) // No locales is present => So: yes
-    if ~generatePOfile
-        generatePOfile = findfiles(localePath, "*.po")==[] 
-    end
-    if generatePOfile then
-        tbx_generate_pofile(tbx_path);
-        if findfiles(localePath, "*.po")==[]
-            msg = _("%s: The module ''%s'' has no entry to be localized.\n")
-            mprintf(msg, fname, tbx_name)
-            return
+    tbx_generate_pofile(tbx_path);
+    poFiles = findfiles(localePath, "*.po")'
+    if poFiles==[]
+        msg = _("%s: The module ''%s'' has no entry to be localized.\n")
+        mprintf(msg, fname, tbx_name)
+        return
+    else
+        poFiles = fileparts(poFiles, "fname")
+        poFiles(poFiles=="en_US") = []
+        msg = _("tbx_build_localization (%s): \n   - The msgid have been updated in ''*.po'' files.\n")
+        if poFiles==[]
+            msg = msg + _("   Please\n   - Copy the en_US.po file into la_LA.po (ex: pt_BR.po) in the same directory.\n   - Write missing msgstr translated messages in the copies\n   - Rerun the build.\n")
+            warning(msprintf(msg, tbx_name+"\locales\"))
         else
-            msg = _("%s: \n   ''%s'' has been generated in the module.\n   Please\n   - clone it into la_LA.po (ex: pt_BR.po) in the same directory\n   - translate the copies\n   - rerun the build\n");
-            warning(msprintf(msg, fname, "~\locales\en_US.po"))
-            // We anyway build the localization with only en_US, without returning here
+            warning(msprintf(msg, tbx_name+"\locales\"))
+            n = 0;
+            // We display how many msgstr are missing in each .po file
+            for po = poFiles
+                tmp = mgetl(localePath + po + ".po");
+                tmp = length(grep(tmp, "/^msgstr """"$/", "r")) - 1
+                n = n + tmp
+                msg = _("   - %s.po : %d untranslated messages.\n")
+                warning(msprintf(msg, po, tmp))
+            end
+            if n > 0
+                warning(msprintf(_("Please\n   - Write missing translated messages msgstr in la_LA.po files.\n   - Rerun the build.\n")))
+            end
+            mprintf("\n")
         end
     end
 

@@ -460,10 +460,10 @@ msgstr "Fortran または C コンパイラが必要です。"
 #, c-format
 msgid ""
 "%s: Warning: Scilab has not been able to find where the Scilab sources are. "
-"Please submit a bug report on http://bugzilla.scilab.org/\n"
+"Please submit a bug report on https://gitlab.com/scilab/scilab/-/issues\n"
 msgstr ""
 "%s: 警告: Scilabは, Scilabソースコードの場所を見つけることができませんでし"
-"た. http://bugzilla.scilab.org/ でバグ・レポートを提出してください.\n"
+"た. https://gitlab.com/scilab/scilab/-/issues でバグ・レポートを提出してください.\n"
 
 #
 # File: macros/ilib_compile.sci, line: 120

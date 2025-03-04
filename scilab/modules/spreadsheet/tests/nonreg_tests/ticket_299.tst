@@ -5,9 +5,6 @@
 // =============================================================================
 // <-- Non-regression test for bug 299 -->
 //
-// <-- URL -->
-//  http://forge.scilab.org/index.php/p/csv-readwrite/issues/299/
-//
 // <-- Short Description -->
 // extends format to digit in csvDefault and csvWrite
 // =============================================================================

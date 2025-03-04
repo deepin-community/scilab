@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2017 - ESI Group - Clement DAVID
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -10,8 +10,8 @@
 
 // <-- Non-regression test for bug 14982 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=14982
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/14982
 //
 // <-- Short Description -->
 // passing incorrect arguments to msprintf (too many data with respect to the

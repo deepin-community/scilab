@@ -1,4 +1,4 @@
-# Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+# Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 # Copyright (C) 2007 - INRIA - Allan CORNET
 #
 # This file is distributed under the same license as the Scilab package.
@@ -22,7 +22,6 @@ GATEWAY_CPP_SOURCES = \
     sci_gateway/cpp/sci_loadhistory.cpp \
     sci_gateway/cpp/sci_removelinehistory.cpp \
     sci_gateway/cpp/sci_resethistory.cpp \
-    sci_gateway/cpp/sci_saveafterncommands.cpp \
     sci_gateway/cpp/sci_saveconsecutivecommands.cpp \
     sci_gateway/cpp/sci_savehistory.cpp \
     sci_gateway/cpp/sci_sethistoryfile.cpp \
@@ -59,7 +58,6 @@ libscihistory_manager_la_CPPFLAGS = \
     -I$(top_srcdir)/modules/ast/includes/symbol/ \
     -I$(top_srcdir)/modules/ast/includes/system_env/ \
     -I$(top_srcdir)/modules/ast/includes/types/ \
-    -I$(top_srcdir)/modules/ast/includes/analysis/ \
     -I$(top_srcdir)/modules/fileio/includes/ \
     -I$(top_srcdir)/modules/api_scilab/includes \
     -I$(top_srcdir)/modules/localization/includes \

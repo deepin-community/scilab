@@ -1,6 +1,6 @@
 
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) ????-2009 - INRIA
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -18,7 +18,7 @@
 #define __RCOND_H__
 #include "dynlib_linear_algebra.h"
 /*
- * inverse condition number of a real or complex matrix. see http://www.scilab.org/product/man/rcond.html
+ * inverse condition number of a real or complex matrix. see https://www.scilab.org/product/man/rcond.html
  *
  * in:
  *

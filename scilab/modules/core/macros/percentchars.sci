@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2020 - Samuel GOUGEON
 //
 // This file is hereby licensed under the terms of the GNU GPL v2.0,
@@ -10,7 +10,7 @@
 
 function %chars = percentchars()
     // Internal function called by scilab.start
-    // http://bugzilla.scilab.org/9221
+    // https://gitlab.com/scilab/scilab/-/issues/9221
 
     %chars.greek.lower       = "αβγδεϵζηθ ι κλμνξοπρστυφϕχψωάϐέήϑίϊϰόϱςύϋΰϖώ";
     %chars.greek.upper       = "ΑΒΓΔΕ ΖΗΘϴΙΪΚΛΜΝΞΟΠΡΣΤΥΫΦΧΨΩ KΩ℧";

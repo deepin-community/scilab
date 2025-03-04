@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2011 - DIGITEO - Vincent COUVERT
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -49,6 +49,13 @@ Building gateway...
 Generating loader_gateway.sce...
 Generating cleaner_gateway.sce...
 Building help...
+Start Xcos toolbox skeleton
+	Load macros
+	Load palette
+	Load simulations functions
+	Load gateways
+	Load help
+	Load demos
 Building the master document:
 	TMPDIR\xcos_toolbox_skeleton\help\en_US
 Building the manual file [javaHelp] in TMPDIR\xcos_toolbox_skeleton\help\en_US.
@@ -65,7 +72,7 @@ Start Xcos toolbox skeleton
 	Load demos
 test_run("TMPDIR/xcos_toolbox_skeleton/", [], "short_summary");
  Module  001/001 - [TMPDIR/xcos_toolbox_skeleton/] : 
-   001/001 - [TMPDIR/xcos_toolbox_skeleton/] tbx_sum............passed
+   001/001 - [TMPDIR/xcos_toolbox_skeleton/] tbx_sum .......... passed
    --------------------------------------------------------------------------
    Tests:    1,    Passed:    1,    Failed:    0,    Skipped:    0
    --------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2018 - ESI Group - Cedric Delamarre
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -10,8 +10,8 @@
 //
 // <-- Non-regression test for bug 14218 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=14218
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/14218
 
 A     = [-3 -1;1 -1;2 -1];
 b     = [-3;0;2];

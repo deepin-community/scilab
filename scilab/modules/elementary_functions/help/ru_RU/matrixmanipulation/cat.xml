@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA - Farid BELAHCENE
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
  * Copyright (C) 2018 - Samuel GOUGEON
@@ -37,7 +37,9 @@
             <varlistentry>
                 <term>A1,A2,..An</term>
                 <listitem>
-                    <para>скаляры, векторы, матрицы или многомерные массивы или cell-массивы.
+                    <para>
+                        скаляры, векторы, матрицы или гиперматрицы совместимых типов данных, или
+                        cell-массивы.
                         A1,A2,...,An должны быть одинакового размера (за исключением номера размерности
                         <literal>dim</literal>). <literal>size(A1,i)=size(A2,i)=...=size(An,i)</literal> для
                         <literal>i</literal>, отличных от <literal>dim</literal>,
@@ -49,7 +51,7 @@
                 <term>y</term>
                 <listitem>
                     <para>
-                        скаляр, вектор, матрица или многомерный массив того же типа, что и <literal>A1, A2,..., An</literal>.
+                        скаляр, вектор, матрица, многомерный cell-массив или многомерный массив структур.
                     </para>
                 </listitem>
             </varlistentry>
@@ -65,6 +67,11 @@
             <literal>cat(1, A1, A2, A3)</literal> эквивалентно <literal>[A1 ; A2 ; A3]</literal>.
             <literal>cat(2, A1, A2, A3)</literal> эквивалентно <literal>[A1 A2 A3]</literal>.
             Квадратные скобки работают быстрее и гораздо предпочтительней в обоих случаях.
+        </para>
+        <para>
+            Когда входные массивы имеют неодинаковый тип данных, то применяются правила автоматического
+            преобразования, подобные правилам <literal>[,]</literal> и <literal>[;]</literal>, как
+            описано на странице <link linkend="brackets_Types_conversions">[brackets]</link>.
         </para>
         <para>
             <literal>cat()</literal> полезна главным образом для <literal>dim > 2</literal>, чтобы построить
@@ -181,5 +188,16 @@ cat(3, A1, A2)
                 <link linkend="matrix">matrix</link>
             </member>
         </simplelist>
+    </refsection>
+    <refsection role="history">
+        <title>История</title>
+        <revhistory>
+            <revision>
+                <revnumber>2023.1</revnumber>
+                <revdescription>
+                    Arrays of compatible types accepted, according to [,] and [;] transtyping rules.
+                </revdescription>
+            </revision>
+        </revhistory>
     </refsection>
 </refentry>

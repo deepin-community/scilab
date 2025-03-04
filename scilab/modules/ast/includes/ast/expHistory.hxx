@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2014 - Scilab Enterpprises - Cedric Delamarre
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -16,25 +16,25 @@
 #ifndef __EXPHISTORY_HXX__
 #define __EXPHISTORY_HXX__
 
+#include "ast.hxx"
+#include "exp.hxx"
+#include "types.hxx"
 #include <list>
 #include <vector>
-#include "types.hxx"
-#include "ast.hxx"
-#include "simplevar.hxx"
 
 class ExpHistory
 {
 public :
     ExpHistory();
-    ExpHistory(ExpHistory*, ast::SimpleVar*);
+    ExpHistory(ExpHistory*, ast::Exp*);
     ExpHistory(ExpHistory*, types::typed_list*);
-    ExpHistory(ExpHistory*, ast::SimpleVar*, types::typed_list*, int, bool, types::InternalType*);
+    ExpHistory(ExpHistory*, ast::Exp*, types::typed_list*, int, bool, types::InternalType*);
 
     ~ExpHistory();
 
     // expression "a"
-    void                    setExp(ast::SimpleVar*);
-    ast::SimpleVar*         getExp();
+    void                    setExp(ast::Exp*);
+    ast::Exp*               getExp();
     std::wstring            getExpAsString();
 
     // arguments x of a(x)
@@ -77,7 +77,7 @@ private :
 
     types::typed_list*      m_pArgs;
     int*                    m_piArgsDimsArray;
-    ast::SimpleVar*         m_pExp;
+    ast::Exp*               m_pExp;
     ExpHistory*             m_pParent;
     types::InternalType*    m_pITCurrent;
     bool                    m_bReinsertMe;

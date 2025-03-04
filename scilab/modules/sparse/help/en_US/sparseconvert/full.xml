@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) XXXX-2008 - INRIA
- *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ * Copyright (C) 2022 - Samuel GOUGEON
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
  * pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -13,14 +13,17 @@
  * along with this program.
  *
  -->
-<refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svg="http://www.w3.org/2000/svg" xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:db="http://docbook.org/ns/docbook" xmlns:scilab="http://www.scilab.org" xml:lang="en" xml:id="full">
+<refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg" xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook" xmlns:scilab="http://www.scilab.org"
+          xml:lang="en" xml:id="full">
     <refnamediv>
         <refname>full</refname>
         <refpurpose>sparse to full matrix conversion</refpurpose>
     </refnamediv>
     <refsynopsisdiv>
         <title>Syntax</title>
-        <synopsis>X=full(sp)</synopsis>
+        <synopsis>X = full(sp)</synopsis>
     </refsynopsisdiv>
     <refsection>
         <title>Arguments</title>
@@ -28,7 +31,10 @@
             <varlistentry>
                 <term>sp</term>
                 <listitem>
-                    <para>real or complex sparse (or full) matrix</para>
+                    <para>
+                      dense or sparse vector or matrix of booleans or real or complex numbers,
+                      or of strings.
+                    </para>
                 </listitem>
             </varlistentry>
             <varlistentry>
@@ -50,9 +56,26 @@
     <refsection>
         <title>Examples</title>
         <programlisting role="example"><![CDATA[
-sp=sparse([1,2;5,4;3,1],[1,2,3]);
-A=full(sp)
- ]]></programlisting>
+sp = sparse([1,2;5,4;3,1],[1,2,3])
+A = full(sp)
+     ]]></programlisting>
+        <screen>
+--> sp = sparse([1,2;5,4;3,1],[1,2,3])
+ sp  =
+(  5,  4) sparse matrix
+
+(  1,  2)     1.
+(  3,  1)     3.
+(  5,  4)     2.
+
+--> A = full(sp)
+ A  =
+   0.   1.   0.   0.
+   0.   0.   0.   0.
+   3.   0.   0.   0.
+   0.   0.   0.   0.
+   0.   0.   0.   2.
+</screen>
     </refsection>
     <refsection role="see also">
         <title>See also</title>
@@ -67,5 +90,23 @@ A=full(sp)
                 <link linkend="speye">speye</link>
             </member>
         </simplelist>
+    </refsection>
+
+    <refsection role="history">
+        <title>History</title>
+        <revhistory>
+            <revision>
+                <revnumber>5.5.0</revnumber>
+                <revdescription>
+                    full() extended to dense booleans.
+                </revdescription>
+            </revision>
+            <revision>
+                <revnumber>6.0.0</revnumber>
+                <revdescription>
+                    full() returns as is any non-sparse input.
+                </revdescription>
+            </revision>
+        </revhistory>
     </refsection>
 </refentry>

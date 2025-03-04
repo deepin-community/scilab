@@ -7,9 +7,6 @@
 //
 // <-- Non-regression test for bug 194 -->
 //
-// <-- URL -->
-// http://forge.scilab.org/index.php/p/csv-readwrite/issues/194/
-//
 // <-- Short Description -->
 // csvRead may fail on large files.
 // =============================================================================

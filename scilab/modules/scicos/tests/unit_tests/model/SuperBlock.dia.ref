@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2014 - Scilab Enterprises - Paul Bignier
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -18,7 +18,7 @@ Xcos trace:   propertyUpdated( 1 , DIAGRAM , PROPERTIES ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 1 , DIAGRAM , CONTEXT ) : NO_CHANGES
 Xcos trace:   objectUnreferenced( 1 , DIAGRAM ) : 0
 Xcos trace:   propertyUpdated( 1 , DIAGRAM , CHILDREN ) : NO_CHANGES
-Xcos debug:   propertyUpdated( 1 , DIAGRAM , VERSION_NUMBER ) : SUCCESS
+Xcos trace:   propertyUpdated( 1 , DIAGRAM , VERSION_NUMBER ) : NO_CHANGES
 Xcos trace:   objectReferenced( 1 , DIAGRAM ) : 1
 Xcos trace:   objectUnreferenced( 1 , DIAGRAM ) : 0
 Xcos trace:   objectReferenced( 1 , DIAGRAM ) : 1
@@ -205,11 +205,11 @@ Xcos debug:   propertyUpdated( 6 , BLOCK , OUTPUTS ) : SUCCESS
 Xcos trace:   propertyUpdated( 6 , BLOCK , EVENT_INPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 6 , BLOCK , EVENT_OUTPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 6 , BLOCK , PARENT_BLOCK ) : NO_CHANGES
-Xcos trace:   propertyUpdated( 7 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 6 , BLOCK , CHILDREN ) : NO_CHANGES
 Xcos trace:   objectReferenced( 6 , BLOCK ) : 1
 Xcos debug:   propertyUpdated( 6 , BLOCK , PARENT_DIAGRAM ) : SUCCESS
 Xcos trace:   propertyUpdated( 6 , BLOCK , PARENT_BLOCK ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 7 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos debug:   propertyUpdated( 1 , DIAGRAM , CHILDREN ) : SUCCESS
 Xcos trace:   objectUnreferenced( 6 , BLOCK ) : 0
 Xcos trace:   objectReferenced( 6 , BLOCK ) : 1
@@ -253,11 +253,11 @@ Xcos trace:   propertyUpdated( 8 , BLOCK , OUTPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 8 , BLOCK , EVENT_INPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 8 , BLOCK , EVENT_OUTPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 8 , BLOCK , PARENT_BLOCK ) : NO_CHANGES
-Xcos trace:   propertyUpdated( 9 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 8 , BLOCK , CHILDREN ) : NO_CHANGES
 Xcos trace:   objectReferenced( 8 , BLOCK ) : 1
 Xcos debug:   propertyUpdated( 8 , BLOCK , PARENT_DIAGRAM ) : SUCCESS
 Xcos trace:   propertyUpdated( 8 , BLOCK , PARENT_BLOCK ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 9 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos debug:   propertyUpdated( 1 , DIAGRAM , CHILDREN ) : SUCCESS
 Xcos trace:   objectUnreferenced( 8 , BLOCK ) : 0
 Xcos trace:   objectUnreferenced( 6 , BLOCK ) : 0
@@ -336,7 +336,6 @@ Xcos debug:   propertyUpdated( 13 , BLOCK , OUTPUTS ) : SUCCESS
 Xcos trace:   propertyUpdated( 13 , BLOCK , EVENT_INPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 13 , BLOCK , EVENT_OUTPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 13 , BLOCK , PARENT_BLOCK ) : NO_CHANGES
-Xcos trace:   propertyUpdated( 14 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 13 , BLOCK , CHILDREN ) : NO_CHANGES
 Xcos info:    objectCreated( 15 , BLOCK )
 Xcos info:    objectCloned( 8 , 15 , BLOCK )
@@ -378,8 +377,6 @@ Xcos trace:   propertyUpdated( 15 , BLOCK , OUTPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 15 , BLOCK , EVENT_INPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 15 , BLOCK , EVENT_OUTPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 15 , BLOCK , PARENT_BLOCK ) : NO_CHANGES
-Xcos trace:   propertyUpdated( 14 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
-Xcos trace:   propertyUpdated( 16 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 15 , BLOCK , CHILDREN ) : NO_CHANGES
 Xcos trace:   objectReferenced( 13 , BLOCK ) : 1
 Xcos trace:   propertyUpdated( 13 , BLOCK , PARENT_DIAGRAM ) : NO_CHANGES
@@ -387,6 +384,8 @@ Xcos debug:   propertyUpdated( 13 , BLOCK , PARENT_BLOCK ) : SUCCESS
 Xcos trace:   objectReferenced( 15 , BLOCK ) : 1
 Xcos trace:   propertyUpdated( 15 , BLOCK , PARENT_DIAGRAM ) : NO_CHANGES
 Xcos debug:   propertyUpdated( 15 , BLOCK , PARENT_BLOCK ) : SUCCESS
+Xcos trace:   propertyUpdated( 14 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 16 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos debug:   propertyUpdated( 10 , BLOCK , CHILDREN ) : SUCCESS
 Xcos trace:   objectUnreferenced( 13 , BLOCK ) : 0
 Xcos trace:   objectUnreferenced( 15 , BLOCK ) : 0
@@ -437,59 +436,60 @@ Xcos trace:   propertyUpdated( 8 , BLOCK , EVENT_OUTPUTS ) : NO_CHANGES
 Xcos info:    objectDeleted( 9 , PORT )
 Xcos info:    objectDeleted( 8 , BLOCK )
 Xcos info:    objectDeleted( 1 , DIAGRAM )
- sb  = 
-GUI     : SUPER_f
-Graphics: 
+ sb = (Block) with fields:
 Xcos trace:   objectReferenced( 10 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 10 , BLOCK ) : 0
-          orig = [0,0]
-          sz = [2,2]
-          exprs = []
-          pin = 0
-          pout = 0
-          pein = []
-          peout = []
-          gr_i = []
-          id = ""
-          in_implicit = "E"
-          out_implicit = "E"
-          in_style = ""
-          out_style = ""
-          in_label = ""
-          out_label = ""
-          style = ""
-Model   : 
 Xcos trace:   objectReferenced( 10 , BLOCK ) : 1
 Xcos trace:   objectReferenced( 10 , BLOCK ) : 2
 Xcos trace:   objectUnreferenced( 10 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 10 , BLOCK ) : 0
-          super type: 0
-          in = 1
-          in2 = 1
-          intyp = 1
-          out = 1
-          out2 = 1
-          outtyp = 1
-          evtin = []
-          evtout = []
-          state = []
-          dstate = []
-          odstate = list()
-          rpar : SuperBlock
-          ipar = []
-          opar = list()
-          blocktype = "h"
-          firing = []
-          dep_ut = [%f,%f]
-          label = ""
-          nzcross = 0
-          nmode = 0
-          equations = list()
-          uid = ""
+  graphics: (graphics mlist) with fields:
+      orig = [0,0]
+      sz = [2,2]
+      exprs = []
+      pin = 0
+      pout = 0
+      pein = []
+      peout = []
+      gr_i = []
+      id = ""
+      in_implicit = "E"
+      out_implicit = "E"
+      in_style = ""
+      out_style = ""
+      in_label = ""
+      out_label = ""
+      style = ""
+  model: (model mlist) with fields:
+      sim = "super"
+      in = 1
+      in2 = 1
+      intyp = 1
+      out = 1
+      out2 = 1
+      outtyp = 1
+      evtin = []
+      evtout = []
+      state = []
+      dstate = []
+      odstate: (empty list)
+      rpar: (diagram)
+      ipar = []
+      opar: (empty list)
+      blocktype = "h"
+      firing = []
+      dep_ut = [%f,%f]
+      label = ""
+      nzcross = 0
+      nmode = 0
+      equations: (empty list)
+      uid = ""
+  gui = "SUPER_f"
+  doc: (empty list)
 sb.graphics
 Xcos trace:   objectReferenced( 10 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 10 , BLOCK ) : 0
- ans  =
+ ans = (graphics mlist) with fields:
 orig = [0,0]
 sz = [2,2]
 exprs = []
@@ -510,75 +510,69 @@ sb.model
 Xcos trace:   objectReferenced( 10 , BLOCK ) : 1
 Xcos trace:   objectReferenced( 10 , BLOCK ) : 2
 Xcos trace:   objectUnreferenced( 10 , BLOCK ) : 1
- ans  =
-super type: 0
-Xcos trace:   objectReferenced( 10 , BLOCK ) : 2
-Xcos trace:   objectUnreferenced( 10 , BLOCK ) : 1
-Xcos trace:   objectReferenced( 13 , BLOCK ) : 1
-Xcos trace:   objectReferenced( 15 , BLOCK ) : 1
-Xcos trace:   objectReferenced( 13 , BLOCK ) : 2
-Xcos trace:   objectUnreferenced( 13 , BLOCK ) : 1
-Xcos trace:   objectReferenced( 13 , BLOCK ) : 2
-Xcos trace:   objectUnreferenced( 13 , BLOCK ) : 1
-Xcos trace:   objectReferenced( 15 , BLOCK ) : 2
-Xcos trace:   objectUnreferenced( 15 , BLOCK ) : 1
-Xcos trace:   objectReferenced( 15 , BLOCK ) : 2
-Xcos trace:   objectUnreferenced( 15 , BLOCK ) : 1
-Xcos trace:   objectUnreferenced( 13 , BLOCK ) : 0
-Xcos trace:   objectUnreferenced( 15 , BLOCK ) : 0
-in = 1
-in2 = 1
-intyp = 1
-out = 1
-out2 = 1
-outtyp = 1
-evtin = []
-evtout = []
-state = []
-dstate = []
-odstate = list()
-rpar = mlist(["diagram","props","objs","version","contrib"],tlist(["params","wpar","title","tol","tf","context","void1","options","void2","void3","doc"],[600,450,0,0,600,450],["";""],[],[],[],[],tlist(["scsopt","3D","Background","Link","ID","Cmap"],list(%t,33),[8,1],[1,5],list([4,1,10,1],[4,1,2,1]),[0.8,0.8,0.8]),[],[],list()),list(mlist(["Block","graphics","model","gui","doc"],mlist(["graphics","orig","sz","exprs","pin","pout","pein","peout","gr_i","id","in_implicit","out_implicit","in_style","out_style","in_label","out_label","style"],[40,40],[20,20],"1",[],0,[],[],[],"",[],"E","","","","",""),mlist(["model","sim","in","in2","intyp","out","out2","outtyp","evtin","evtout","state","dstate","odstate","rpar","ipar","opar","blocktype","firing","dep_ut","label","nzcross","nmode","equations","uid"],"input",[],[],1,-1,-2,-1,[],[],[],[],list(),[],1,list(),"c",[],[%f,%f],"",0,0,list(),""),"IN_f",list()),mlist(["Block","graphics","model","gui","doc"],mlist(["graphics","orig","sz","exprs","pin","pout","pein","peout","gr_i","id","in_implicit","out_implicit","in_style","out_style","in_label","out_label","style"],[240,40],[20,20],"1",0,[],[],[],[],"","E",[],"","","","",""),mlist(["model","sim","in","in2","intyp","out","out2","outtyp","evtin","evtout","state","dstate","odstate","rpar","ipar","opar","blocktype","firing","dep_ut","label","nzcross","nmode","equations","uid"],"output",-1,-2,-1,[],[],1,[],[],[],[],list(),[],1,list(),"c",[],[%f,%f],"",0,0,list(),""),"OUT_f",list())),"",list())
-ipar = []
-opar = list()
-blocktype = "h"
-firing = []
-dep_ut = [%f,%f]
-label = ""
-nzcross = 0
-nmode = 0
-equations = list()
-uid = ""
+ ans = (model mlist) with fields:
+  sim = "super"
+  in = 1
+  in2 = 1
+  intyp = 1
+  out = 1
+  out2 = 1
+  outtyp = 1
+  evtin = []
+  evtout = []
+  state = []
+  dstate = []
+  odstate: (empty list)
+  rpar: (diagram)
+  ipar = []
+  opar: (empty list)
+  blocktype = "h"
+  firing = []
+  dep_ut = [%f,%f]
+  label = ""
+  nzcross = 0
+  nmode = 0
+  equations: (empty list)
+  uid = ""
 sb.gui
 Xcos trace:   objectUnreferenced( 10 , BLOCK ) : 0
- ans  =
+ ans = 
   "SUPER_f"
 sb.doc
- ans  =
-  empty list()
+ ans = (empty list)
 // Access the contained diagram's fields
 sb.model.rpar
 Xcos trace:   objectReferenced( 10 , BLOCK ) : 1
 Xcos trace:   objectReferenced( 10 , BLOCK ) : 2
 Xcos trace:   objectUnreferenced( 10 , BLOCK ) : 1
- ans  =
+ ans = (diagram) with fields:
 Xcos trace:   objectReferenced( 10 , BLOCK ) : 2
 Xcos trace:   objectUnreferenced( 10 , BLOCK ) : 1
-wpar = [600,450,0,0,600,450]
-title = ["";""]
-tol = []
-tf = []
-context = []
-void1 = []
-options = tlist(["scsopt","3D","Background","Link","ID","Cmap"],list(%t,33),[8,1],[1,5],list([4,1,10,1],[4,1,2,1]),[0.8,0.8,0.8])
-void2 = []
-void3 = []
-doc = list()
 Xcos trace:   objectReferenced( 13 , BLOCK ) : 1
 Xcos trace:   objectReferenced( 15 , BLOCK ) : 1
-1     IN_f
-2     OUT_f
 Xcos trace:   objectUnreferenced( 13 , BLOCK ) : 0
 Xcos trace:   objectUnreferenced( 15 , BLOCK ) : 0
+  props: (params tlist) with fields:
+      wpar = [600,450,0,0,600,450]
+      title = ["";""]
+      tol = []
+      tf = []
+      context = []
+      void1 = []
+      options: (scsopt tlist) with fields:
+          3D: (2-elements list)
+          Background = [8,1]
+          Link = [1,5]
+          ID: (2-elements list)
+          Cmap = [0.8,0.8,0.8]
+      void2 = []
+      void3 = []
+      doc: (empty list)
+  objs: (2-elements list)
+      (1): (IN_f Block)
+      (2): (OUT_f Block)
+  version = ""
+  contrib: (empty list)
 sb.model.rpar.props
 Xcos trace:   objectReferenced( 10 , BLOCK ) : 2
 Xcos trace:   objectReferenced( 10 , BLOCK ) : 3
@@ -587,17 +581,26 @@ Xcos trace:   objectReferenced( 10 , BLOCK ) : 3
 Xcos trace:   objectUnreferenced( 10 , BLOCK ) : 2
 Xcos trace:   objectUnreferenced( 10 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 10 , BLOCK ) : 0
- ans  =
-wpar = [600,450,0,0,600,450]
-title = ["";""]
-tol = []
-tf = []
-context = []
-void1 = []
-options = tlist(["scsopt","3D","Background","Link","ID","Cmap"],list(%t,33),[8,1],[1,5],list([4,1,10,1],[4,1,2,1]),[0.8,0.8,0.8])
-void2 = []
-void3 = []
-doc = list()
+ ans = (params tlist) with fields:
+  wpar = [600,450,0,0,600,450]
+  title = ["";""]
+  tol = []
+  tf = []
+  context = []
+  void1 = []
+  options: (scsopt tlist) with fields:
+      3D: (2-elements list)
+          (1) = %t
+          (2) = 33
+      Background = [8,1]
+      Link = [1,5]
+      ID: (2-elements list)
+          (1) = [4,1,10,1]
+          (2) = [4,1,2,1]
+      Cmap = [0.8,0.8,0.8]
+  void2 = []
+  void3 = []
+  doc: (empty list)
 sb.model.rpar.objs
 Xcos trace:   objectReferenced( 10 , BLOCK ) : 1
 Xcos trace:   objectReferenced( 10 , BLOCK ) : 2
@@ -605,9 +608,9 @@ Xcos trace:   objectUnreferenced( 10 , BLOCK ) : 1
 Xcos trace:   objectReferenced( 13 , BLOCK ) : 1
 Xcos trace:   objectReferenced( 15 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 10 , BLOCK ) : 0
- ans  =
-  (1) : Block
-  (2) : Block
+ ans = (2-elements list)
+  (1): (IN_f Block)
+  (2): (OUT_f Block)
 sb.model.rpar.objs(1).graphics
 Xcos trace:   objectReferenced( 10 , BLOCK ) : 1
 Xcos trace:   objectReferenced( 10 , BLOCK ) : 2
@@ -621,7 +624,7 @@ Xcos trace:   objectUnreferenced( 13 , BLOCK ) : 2
 Xcos trace:   objectUnreferenced( 13 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 13 , BLOCK ) : 0
 Xcos trace:   objectUnreferenced( 15 , BLOCK ) : 0
- ans  =
+ ans = (graphics mlist) with fields:
 orig = [40,40]
 sz = [20,20]
 exprs = "1"
@@ -649,30 +652,30 @@ Xcos trace:   objectUnreferenced( 15 , BLOCK ) : 0
 Xcos trace:   objectReferenced( 13 , BLOCK ) : 2
 Xcos trace:   objectUnreferenced( 13 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 13 , BLOCK ) : 0
- ans  =
-input type: 0
-in = []
-in2 = []
-intyp = 1
-out = -1
-out2 = -2
-outtyp = -1
-evtin = []
-evtout = []
-state = []
-dstate = []
-odstate = list()
-rpar = []
-ipar = 1
-opar = list()
-blocktype = "c"
-firing = []
-dep_ut = [%f,%f]
-label = ""
-nzcross = 0
-nmode = 0
-equations = list()
-uid = ""
+ ans = (model mlist) with fields:
+  sim = "input"
+  in = []
+  in2 = []
+  intyp = 1
+  out = -1
+  out2 = -2
+  outtyp = -1
+  evtin = []
+  evtout = []
+  state = []
+  dstate = []
+  odstate: (empty list)
+  rpar = []
+  ipar = 1
+  opar: (empty list)
+  blocktype = "c"
+  firing = []
+  dep_ut = [%f,%f]
+  label = ""
+  nzcross = 0
+  nmode = 0
+  equations: (empty list)
+  uid = ""
 sb.model.rpar.objs(2).graphics
 Xcos trace:   objectReferenced( 10 , BLOCK ) : 1
 Xcos trace:   objectReferenced( 10 , BLOCK ) : 2
@@ -684,7 +687,7 @@ Xcos trace:   objectUnreferenced( 13 , BLOCK ) : 0
 Xcos trace:   objectReferenced( 15 , BLOCK ) : 2
 Xcos trace:   objectUnreferenced( 15 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 15 , BLOCK ) : 0
- ans  =
+ ans = (graphics mlist) with fields:
 orig = [240,40]
 sz = [20,20]
 exprs = "1"
@@ -712,44 +715,43 @@ Xcos trace:   objectUnreferenced( 13 , BLOCK ) : 0
 Xcos trace:   objectReferenced( 15 , BLOCK ) : 2
 Xcos trace:   objectUnreferenced( 15 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 15 , BLOCK ) : 0
- ans  =
-output type: 0
-in = -1
-in2 = -2
-intyp = -1
-out = []
-out2 = []
-outtyp = 1
-evtin = []
-evtout = []
-state = []
-dstate = []
-odstate = list()
-rpar = []
-ipar = 1
-opar = list()
-blocktype = "c"
-firing = []
-dep_ut = [%f,%f]
-label = ""
-nzcross = 0
-nmode = 0
-equations = list()
-uid = ""
+ ans = (model mlist) with fields:
+  sim = "output"
+  in = -1
+  in2 = -2
+  intyp = -1
+  out = []
+  out2 = []
+  outtyp = 1
+  evtin = []
+  evtout = []
+  state = []
+  dstate = []
+  odstate: (empty list)
+  rpar = []
+  ipar = 1
+  opar: (empty list)
+  blocktype = "c"
+  firing = []
+  dep_ut = [%f,%f]
+  label = ""
+  nzcross = 0
+  nmode = 0
+  equations: (empty list)
+  uid = ""
 sb.model.rpar.version
 Xcos trace:   objectReferenced( 10 , BLOCK ) : 1
 Xcos trace:   objectReferenced( 10 , BLOCK ) : 2
 Xcos trace:   objectUnreferenced( 10 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 10 , BLOCK ) : 0
- ans  =
+ ans = 
   ""
 sb.model.rpar.contrib
 Xcos trace:   objectReferenced( 10 , BLOCK ) : 1
 Xcos trace:   objectReferenced( 10 , BLOCK ) : 2
 Xcos trace:   objectUnreferenced( 10 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 10 , BLOCK ) : 0
- ans  =
-  empty list()
+ ans = (empty list)
 clk = CLOCK_c("define")
 Xcos info:    objectCreated( 17 , BLOCK )
 Xcos trace:   objectReferenced( 17 , BLOCK ) : 1
@@ -1090,7 +1092,7 @@ Xcos trace:   propertyUpdated( 26 , DIAGRAM , PROPERTIES ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 26 , DIAGRAM , CONTEXT ) : NO_CHANGES
 Xcos trace:   objectUnreferenced( 26 , DIAGRAM ) : 0
 Xcos trace:   propertyUpdated( 26 , DIAGRAM , CHILDREN ) : NO_CHANGES
-Xcos debug:   propertyUpdated( 26 , DIAGRAM , VERSION_NUMBER ) : SUCCESS
+Xcos trace:   propertyUpdated( 26 , DIAGRAM , VERSION_NUMBER ) : NO_CHANGES
 Xcos info:    objectCreated( 27 , BLOCK )
 Xcos info:    objectCloned( 20 , 27 , BLOCK )
 Xcos trace:   propertyUpdated( 27 , BLOCK , SIM_FUNCTION_API ) : NO_CHANGES
@@ -1131,11 +1133,11 @@ Xcos trace:   propertyUpdated( 28 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos debug:   propertyUpdated( 27 , BLOCK , EVENT_INPUTS ) : SUCCESS
 Xcos trace:   propertyUpdated( 27 , BLOCK , EVENT_OUTPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 27 , BLOCK , PARENT_BLOCK ) : NO_CHANGES
-Xcos trace:   propertyUpdated( 28 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 27 , BLOCK , CHILDREN ) : NO_CHANGES
 Xcos trace:   objectReferenced( 27 , BLOCK ) : 1
 Xcos debug:   propertyUpdated( 27 , BLOCK , PARENT_DIAGRAM ) : SUCCESS
 Xcos trace:   propertyUpdated( 27 , BLOCK , PARENT_BLOCK ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 28 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos debug:   propertyUpdated( 26 , DIAGRAM , CHILDREN ) : SUCCESS
 Xcos trace:   objectUnreferenced( 27 , BLOCK ) : 0
 Xcos trace:   objectReferenced( 27 , BLOCK ) : 1
@@ -1190,12 +1192,12 @@ Xcos debug:   propertyUpdated( 31 , PORT , SOURCE_BLOCK ) : SUCCESS
 Xcos trace:   propertyUpdated( 31 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos debug:   propertyUpdated( 29 , BLOCK , EVENT_OUTPUTS ) : SUCCESS
 Xcos trace:   propertyUpdated( 29 , BLOCK , PARENT_BLOCK ) : NO_CHANGES
-Xcos trace:   propertyUpdated( 30 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
-Xcos trace:   propertyUpdated( 31 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 29 , BLOCK , CHILDREN ) : NO_CHANGES
 Xcos trace:   objectReferenced( 29 , BLOCK ) : 1
 Xcos debug:   propertyUpdated( 29 , BLOCK , PARENT_DIAGRAM ) : SUCCESS
 Xcos trace:   propertyUpdated( 29 , BLOCK , PARENT_BLOCK ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 30 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 31 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos debug:   propertyUpdated( 26 , DIAGRAM , CHILDREN ) : SUCCESS
 Xcos trace:   objectUnreferenced( 29 , BLOCK ) : 0
 Xcos trace:   objectUnreferenced( 27 , BLOCK ) : 0
@@ -1224,7 +1226,8 @@ Xcos trace:   propertyUpdated( 33 , LINK , DESTINATION_PORT ) : NO_CHANGES
 Xcos trace:   objectReferenced( 33 , LINK ) : 1
 Xcos debug:   propertyUpdated( 33 , LINK , PARENT_DIAGRAM ) : SUCCESS
 Xcos trace:   propertyUpdated( 33 , LINK , PARENT_BLOCK ) : NO_CHANGES
-Xcos trace:   propertyUpdated( 31 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 33 , LINK , SOURCE_PORT ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 33 , LINK , DESTINATION_PORT ) : NO_CHANGES
 Xcos debug:   propertyUpdated( 31 , PORT , CONNECTED_SIGNALS ) : SUCCESS
 Xcos debug:   propertyUpdated( 33 , LINK , SOURCE_PORT ) : SUCCESS
 Xcos debug:   propertyUpdated( 26 , DIAGRAM , CHILDREN ) : SUCCESS
@@ -1297,14 +1300,18 @@ Xcos debug:   propertyUpdated( 37 , PORT , SOURCE_BLOCK ) : SUCCESS
 Xcos trace:   propertyUpdated( 37 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos debug:   propertyUpdated( 34 , BLOCK , EVENT_OUTPUTS ) : SUCCESS
 Xcos trace:   propertyUpdated( 34 , BLOCK , PARENT_BLOCK ) : NO_CHANGES
-Xcos trace:   propertyUpdated( 35 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
-Xcos trace:   propertyUpdated( 36 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
-Xcos trace:   propertyUpdated( 37 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 34 , BLOCK , CHILDREN ) : NO_CHANGES
 Xcos trace:   objectReferenced( 34 , BLOCK ) : 1
 Xcos debug:   propertyUpdated( 34 , BLOCK , PARENT_DIAGRAM ) : SUCCESS
 Xcos trace:   propertyUpdated( 34 , BLOCK , PARENT_BLOCK ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 35 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 36 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 37 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos debug:   propertyUpdated( 35 , PORT , CONNECTED_SIGNALS ) : SUCCESS
+Xcos trace:   propertyUpdated( 31 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 33 , LINK , SOURCE_PORT ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 35 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
+Xcos debug:   propertyUpdated( 33 , LINK , DESTINATION_PORT ) : SUCCESS
 Xcos debug:   propertyUpdated( 26 , DIAGRAM , CHILDREN ) : SUCCESS
 Xcos trace:   objectUnreferenced( 34 , BLOCK ) : 0
 Xcos trace:   objectUnreferenced( 27 , BLOCK ) : 0
@@ -1337,10 +1344,10 @@ Xcos trace:   propertyUpdated( 39 , LINK , DESTINATION_PORT ) : NO_CHANGES
 Xcos trace:   objectReferenced( 39 , LINK ) : 1
 Xcos debug:   propertyUpdated( 39 , LINK , PARENT_DIAGRAM ) : SUCCESS
 Xcos trace:   propertyUpdated( 39 , LINK , PARENT_BLOCK ) : NO_CHANGES
-Xcos trace:   propertyUpdated( 36 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 39 , LINK , SOURCE_PORT ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 39 , LINK , DESTINATION_PORT ) : NO_CHANGES
 Xcos debug:   propertyUpdated( 36 , PORT , CONNECTED_SIGNALS ) : SUCCESS
 Xcos debug:   propertyUpdated( 39 , LINK , SOURCE_PORT ) : SUCCESS
-Xcos trace:   propertyUpdated( 28 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos debug:   propertyUpdated( 28 , PORT , CONNECTED_SIGNALS ) : SUCCESS
 Xcos debug:   propertyUpdated( 39 , LINK , DESTINATION_PORT ) : SUCCESS
 Xcos debug:   propertyUpdated( 26 , DIAGRAM , CHILDREN ) : SUCCESS
@@ -1378,10 +1385,10 @@ Xcos trace:   propertyUpdated( 41 , LINK , DESTINATION_PORT ) : NO_CHANGES
 Xcos trace:   objectReferenced( 41 , LINK ) : 1
 Xcos debug:   propertyUpdated( 41 , LINK , PARENT_DIAGRAM ) : SUCCESS
 Xcos trace:   propertyUpdated( 41 , LINK , PARENT_BLOCK ) : NO_CHANGES
-Xcos trace:   propertyUpdated( 37 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 41 , LINK , SOURCE_PORT ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 41 , LINK , DESTINATION_PORT ) : NO_CHANGES
 Xcos debug:   propertyUpdated( 37 , PORT , CONNECTED_SIGNALS ) : SUCCESS
 Xcos debug:   propertyUpdated( 41 , LINK , SOURCE_PORT ) : SUCCESS
-Xcos trace:   propertyUpdated( 30 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos debug:   propertyUpdated( 30 , PORT , CONNECTED_SIGNALS ) : SUCCESS
 Xcos debug:   propertyUpdated( 41 , LINK , DESTINATION_PORT ) : SUCCESS
 Xcos debug:   propertyUpdated( 26 , DIAGRAM , CHILDREN ) : SUCCESS
@@ -1612,7 +1619,6 @@ Xcos trace:   propertyUpdated( 45 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos debug:   propertyUpdated( 44 , BLOCK , EVENT_INPUTS ) : SUCCESS
 Xcos trace:   propertyUpdated( 44 , BLOCK , EVENT_OUTPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 44 , BLOCK , PARENT_BLOCK ) : NO_CHANGES
-Xcos trace:   propertyUpdated( 45 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 44 , BLOCK , CHILDREN ) : NO_CHANGES
 Xcos info:    objectCreated( 46 , BLOCK )
 Xcos info:    objectCloned( 29 , 46 , BLOCK )
@@ -1665,9 +1671,6 @@ Xcos debug:   propertyUpdated( 48 , PORT , SOURCE_BLOCK ) : SUCCESS
 Xcos trace:   propertyUpdated( 48 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos debug:   propertyUpdated( 46 , BLOCK , EVENT_OUTPUTS ) : SUCCESS
 Xcos trace:   propertyUpdated( 46 , BLOCK , PARENT_BLOCK ) : NO_CHANGES
-Xcos trace:   propertyUpdated( 45 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
-Xcos trace:   propertyUpdated( 47 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
-Xcos trace:   propertyUpdated( 48 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 46 , BLOCK , CHILDREN ) : NO_CHANGES
 Xcos info:    objectCreated( 49 , LINK )
 Xcos info:    objectCloned( 33 , 49 , LINK )
@@ -1744,14 +1747,6 @@ Xcos debug:   propertyUpdated( 53 , PORT , SOURCE_BLOCK ) : SUCCESS
 Xcos trace:   propertyUpdated( 53 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos debug:   propertyUpdated( 50 , BLOCK , EVENT_OUTPUTS ) : SUCCESS
 Xcos trace:   propertyUpdated( 50 , BLOCK , PARENT_BLOCK ) : NO_CHANGES
-Xcos trace:   propertyUpdated( 51 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
-Xcos trace:   propertyUpdated( 52 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
-Xcos trace:   propertyUpdated( 45 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
-Xcos trace:   propertyUpdated( 47 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
-Xcos debug:   propertyUpdated( 48 , PORT , CONNECTED_SIGNALS ) : SUCCESS
-Xcos trace:   propertyUpdated( 49 , LINK , SOURCE_PORT ) : NO_CHANGES
-Xcos trace:   propertyUpdated( 49 , LINK , DESTINATION_PORT ) : NO_CHANGES
-Xcos trace:   propertyUpdated( 53 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 50 , BLOCK , CHILDREN ) : NO_CHANGES
 Xcos info:    objectCreated( 54 , LINK )
 Xcos info:    objectCloned( 39 , 54 , LINK )
@@ -1799,16 +1794,34 @@ Xcos trace:   propertyUpdated( 55 , LINK , PARENT_DIAGRAM ) : NO_CHANGES
 Xcos debug:   propertyUpdated( 55 , LINK , PARENT_BLOCK ) : SUCCESS
 Xcos debug:   propertyUpdated( 45 , PORT , CONNECTED_SIGNALS ) : SUCCESS
 Xcos debug:   propertyUpdated( 47 , PORT , CONNECTED_SIGNALS ) : SUCCESS
-Xcos trace:   propertyUpdated( 48 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
+Xcos debug:   propertyUpdated( 48 , PORT , CONNECTED_SIGNALS ) : SUCCESS
+Xcos trace:   propertyUpdated( 49 , LINK , SOURCE_PORT ) : NO_CHANGES
+Xcos debug:   propertyUpdated( 49 , LINK , DESTINATION_PORT ) : SUCCESS
 Xcos trace:   propertyUpdated( 51 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos debug:   propertyUpdated( 52 , PORT , CONNECTED_SIGNALS ) : SUCCESS
 Xcos debug:   propertyUpdated( 53 , PORT , CONNECTED_SIGNALS ) : SUCCESS
-Xcos debug:   propertyUpdated( 48 , PORT , CONNECTED_SIGNALS ) : SUCCESS
-Xcos debug:   propertyUpdated( 48 , PORT , CONNECTED_SIGNALS ) : SUCCESS
+Xcos trace:   propertyUpdated( 54 , LINK , SOURCE_PORT ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 54 , LINK , DESTINATION_PORT ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 55 , LINK , SOURCE_PORT ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 55 , LINK , DESTINATION_PORT ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 45 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 52 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 54 , LINK , SOURCE_PORT ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 45 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 54 , LINK , DESTINATION_PORT ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 47 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 48 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 53 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 55 , LINK , SOURCE_PORT ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 47 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 55 , LINK , DESTINATION_PORT ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 48 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 49 , LINK , SOURCE_PORT ) : NO_CHANGES
-Xcos debug:   propertyUpdated( 51 , PORT , CONNECTED_SIGNALS ) : SUCCESS
-Xcos debug:   propertyUpdated( 51 , PORT , CONNECTED_SIGNALS ) : SUCCESS
-Xcos debug:   propertyUpdated( 49 , LINK , DESTINATION_PORT ) : SUCCESS
+Xcos trace:   propertyUpdated( 51 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 49 , LINK , DESTINATION_PORT ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 51 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 52 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 53 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos debug:   propertyUpdated( 42 , BLOCK , CHILDREN ) : SUCCESS
 Xcos trace:   objectUnreferenced( 44 , BLOCK ) : 0
 Xcos trace:   objectUnreferenced( 46 , BLOCK ) : 0
@@ -1866,6 +1879,7 @@ Xcos debug:   propertyUpdated( 29 , BLOCK , EVENT_OUTPUTS ) : SUCCESS
 Xcos debug:   propertyUpdated( 33 , LINK , SOURCE_PORT ) : SUCCESS
 Xcos info:    objectDeleted( 31 , PORT )
 Xcos info:    objectDeleted( 29 , BLOCK )
+Xcos debug:   propertyUpdated( 35 , PORT , CONNECTED_SIGNALS ) : SUCCESS
 Xcos info:    objectDeleted( 33 , LINK )
 Xcos trace:   propertyUpdated( 34 , BLOCK , INPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 34 , BLOCK , OUTPUTS ) : NO_CHANGES
@@ -1921,59 +1935,60 @@ Xcos trace:   propertyUpdated( 22 , BLOCK , EVENT_INPUTS ) : NO_CHANGES
 Xcos debug:   propertyUpdated( 22 , BLOCK , EVENT_OUTPUTS ) : SUCCESS
 Xcos info:    objectDeleted( 25 , PORT )
 Xcos info:    objectDeleted( 22 , BLOCK )
- clk  = 
-GUI     : CLOCK_c
-Graphics: 
+ clk = (Block) with fields:
 Xcos trace:   objectReferenced( 42 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 42 , BLOCK ) : 0
-          orig = [0,0]
-          sz = [2,2]
-          exprs = []
-          pin = []
-          pout = []
-          pein = []
-          peout = 0
-          gr_i = []
-          id = ""
-          in_implicit = []
-          out_implicit = []
-          in_style = ""
-          out_style = ""
-          in_label = ""
-          out_label = ""
-          style = ""
-Model   : 
 Xcos trace:   objectReferenced( 42 , BLOCK ) : 1
 Xcos trace:   objectReferenced( 42 , BLOCK ) : 2
 Xcos trace:   objectUnreferenced( 42 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 42 , BLOCK ) : 0
-          csuper type: 0
-          in = []
-          in2 = []
-          intyp = 1
-          out = []
-          out2 = []
-          outtyp = 1
-          evtin = []
-          evtout = 1
-          state = []
-          dstate = []
-          odstate = list()
-          rpar : SuperBlock
-          ipar = []
-          opar = list()
-          blocktype = "h"
-          firing = -1
-          dep_ut = [%f,%f]
-          label = ""
-          nzcross = 0
-          nmode = 0
-          equations = list()
-          uid = ""
+  graphics: (graphics mlist) with fields:
+      orig = [0,0]
+      sz = [2,2]
+      exprs = []
+      pin = []
+      pout = []
+      pein = []
+      peout = 0
+      gr_i = []
+      id = ""
+      in_implicit = []
+      out_implicit = []
+      in_style = ""
+      out_style = ""
+      in_label = ""
+      out_label = ""
+      style = ""
+  model: (model mlist) with fields:
+      sim = "csuper"
+      in = []
+      in2 = []
+      intyp = 1
+      out = []
+      out2 = []
+      outtyp = 1
+      evtin = []
+      evtout = 1
+      state = []
+      dstate = []
+      odstate: (empty list)
+      rpar: (diagram)
+      ipar = []
+      opar: (empty list)
+      blocktype = "h"
+      firing = -1
+      dep_ut = [%f,%f]
+      label = ""
+      nzcross = 0
+      nmode = 0
+      equations: (empty list)
+      uid = ""
+  gui = "CLOCK_c"
+  doc: (empty list)
 clk.graphics
 Xcos trace:   objectReferenced( 42 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 42 , BLOCK ) : 0
- ans  =
+ ans = (graphics mlist) with fields:
 orig = [0,0]
 sz = [2,2]
 exprs = []
@@ -1994,89 +2009,72 @@ clk.model
 Xcos trace:   objectReferenced( 42 , BLOCK ) : 1
 Xcos trace:   objectReferenced( 42 , BLOCK ) : 2
 Xcos trace:   objectUnreferenced( 42 , BLOCK ) : 1
- ans  =
-csuper type: 0
-Xcos trace:   objectReferenced( 42 , BLOCK ) : 2
-Xcos trace:   objectUnreferenced( 42 , BLOCK ) : 1
-Xcos trace:   objectReferenced( 44 , BLOCK ) : 1
-Xcos trace:   objectReferenced( 46 , BLOCK ) : 1
-Xcos trace:   objectReferenced( 49 , LINK ) : 1
-Xcos trace:   objectReferenced( 50 , BLOCK ) : 1
-Xcos trace:   objectReferenced( 54 , LINK ) : 1
-Xcos trace:   objectReferenced( 55 , LINK ) : 1
-Xcos trace:   objectReferenced( 44 , BLOCK ) : 2
-Xcos trace:   objectUnreferenced( 44 , BLOCK ) : 1
-Xcos trace:   objectReferenced( 44 , BLOCK ) : 2
-Xcos trace:   objectUnreferenced( 44 , BLOCK ) : 1
-Xcos trace:   objectReferenced( 46 , BLOCK ) : 2
-Xcos trace:   objectUnreferenced( 46 , BLOCK ) : 1
-Xcos trace:   objectReferenced( 46 , BLOCK ) : 2
-Xcos trace:   objectUnreferenced( 46 , BLOCK ) : 1
-Xcos trace:   objectReferenced( 50 , BLOCK ) : 2
-Xcos trace:   objectUnreferenced( 50 , BLOCK ) : 1
-Xcos trace:   objectReferenced( 50 , BLOCK ) : 2
-Xcos trace:   objectUnreferenced( 50 , BLOCK ) : 1
-Xcos trace:   objectUnreferenced( 44 , BLOCK ) : 0
-Xcos trace:   objectUnreferenced( 46 , BLOCK ) : 0
-Xcos trace:   objectUnreferenced( 49 , LINK ) : 0
-Xcos trace:   objectUnreferenced( 54 , LINK ) : 0
-Xcos trace:   objectUnreferenced( 50 , BLOCK ) : 0
-Xcos trace:   objectUnreferenced( 55 , LINK ) : 0
-in = []
-in2 = []
-intyp = 1
-out = []
-out2 = []
-outtyp = 1
-evtin = []
-evtout = 1
-state = []
-dstate = []
-odstate = list()
-rpar = mlist(["diagram","props","objs","version","contrib"],tlist(["params","wpar","title","tol","tf","context","void1","options","void2","void3","doc"],[600,450,0,0,600,450],["";""],[],[],[],[],tlist(["scsopt","3D","Background","Link","ID","Cmap"],list(%t,33),[8,1],[1,5],list([4,1,10,1],[4,1,2,1]),[0.8,0.8,0.8]),[],[],list()),list(mlist(["Block","graphics","model","gui","doc"],mlist(["graphics","orig","sz","exprs","pin","pout","pein","peout","gr_i","id","in_implicit","out_implicit","in_style","out_style","in_label","out_label","style"],[399,162],[20,20],"1",[],[],5,[],[],"",[],[],"","","","",""),mlist(["model","sim","in","in2","intyp","out","out2","outtyp","evtin","evtout","state","dstate","odstate","rpar","ipar","opar","blocktype","firing","dep_ut","label","nzcross","nmode","equations","uid"],"output",[],[],1,[],[],1,1,[],[],[],list(),[],1,list(),"d",[],[%f,%f],"",0,0,list(),""),"CLKOUT_f",list()),mlist(["Block","graphics","model","gui","doc"],mlist(["graphics","orig","sz","exprs","pin","pout","pein","peout","gr_i","id","in_implicit","out_implicit","in_style","out_style","in_label","out_label","style"],[320,232],[40,40],["0.1";"0.1"],[],[],6,3,[],"",[],[],"","","","",""),mlist(["model","sim","in","in2","intyp","out","out2","outtyp","evtin","evtout","state","dstate","odstate","rpar","ipar","opar","blocktype","firing","dep_ut","label","nzcross","nmode","equations","uid"],list("evtdly4",4),[],[],1,[],[],1,1,1,[],[],list(),[0.1;0.1],[],list(),"d",0.1,[%f,%f],"",0,0,list(),""),"EVTDLY_c",list()),mlist(["Link","xx","yy","id","thick","ct","from","to"],[340;340;380.71],[226.29;172;172],"",[0,0],[5,-1],[2,1,0],[4,1,1]),mlist(["Block","graphics","model","gui","doc"],mlist(["graphics","orig","sz","exprs","pin","pout","pein","peout","gr_i","id","in_implicit","out_implicit","in_style","out_style","in_label","out_label","style"],[380.71066,172],[0.3333333,0.3333333],[],[],[],3,[5;6],[],"",[],[],"","","","",""),mlist(["model","sim","in","in2","intyp","out","out2","outtyp","evtin","evtout","state","dstate","odstate","rpar","ipar","opar","blocktype","firing","dep_ut","label","nzcross","nmode","equations","uid"],"split",[],[],1,[],[],1,1,[1;1],[],[],list(),[],[],list(),"d",[-1;-1],[%f,%f],"",0,0,list(),""),"CLKSPLIT_f",list()),mlist(["Link","xx","yy","id","thick","ct","from","to"],[380.71;399],[172;172],"",[0,0],[5,-1],[4,1,0],[1,1,1]),mlist(["Link","xx","yy","id","thick","ct","from","to"],[380.71;380.71;340;340],[172;302;302;277.71],"",[0,0],[5,-1],[4,2,0],[2,1,1])),"",list())
-ipar = []
-opar = list()
-blocktype = "h"
-firing = -1
-dep_ut = [%f,%f]
-label = ""
-nzcross = 0
-nmode = 0
-equations = list()
-uid = ""
+ ans = (model mlist) with fields:
+  sim = "csuper"
+  in = []
+  in2 = []
+  intyp = 1
+  out = []
+  out2 = []
+  outtyp = 1
+  evtin = []
+  evtout = 1
+  state = []
+  dstate = []
+  odstate: (empty list)
+  rpar: (diagram)
+  ipar = []
+  opar: (empty list)
+  blocktype = "h"
+  firing = -1
+  dep_ut = [%f,%f]
+  label = ""
+  nzcross = 0
+  nmode = 0
+  equations: (empty list)
+  uid = ""
 clk.model.rpar
 Xcos trace:   objectReferenced( 42 , BLOCK ) : 2
 Xcos trace:   objectReferenced( 42 , BLOCK ) : 3
 Xcos trace:   objectUnreferenced( 42 , BLOCK ) : 2
 Xcos trace:   objectUnreferenced( 42 , BLOCK ) : 1
- ans  =
+ ans = (diagram) with fields:
 Xcos trace:   objectReferenced( 42 , BLOCK ) : 2
 Xcos trace:   objectUnreferenced( 42 , BLOCK ) : 1
-wpar = [600,450,0,0,600,450]
-title = ["";""]
-tol = []
-tf = []
-context = []
-void1 = []
-options = tlist(["scsopt","3D","Background","Link","ID","Cmap"],list(%t,33),[8,1],[1,5],list([4,1,10,1],[4,1,2,1]),[0.8,0.8,0.8])
-void2 = []
-void3 = []
-doc = list()
 Xcos trace:   objectReferenced( 44 , BLOCK ) : 1
 Xcos trace:   objectReferenced( 46 , BLOCK ) : 1
 Xcos trace:   objectReferenced( 49 , LINK ) : 1
 Xcos trace:   objectReferenced( 50 , BLOCK ) : 1
 Xcos trace:   objectReferenced( 54 , LINK ) : 1
 Xcos trace:   objectReferenced( 55 , LINK ) : 1
-1     CLKOUT_f
-2     EVTDLY_c
-3     CLKSPLIT_f
 Xcos trace:   objectUnreferenced( 44 , BLOCK ) : 0
 Xcos trace:   objectUnreferenced( 46 , BLOCK ) : 0
 Xcos trace:   objectUnreferenced( 49 , LINK ) : 0
 Xcos trace:   objectUnreferenced( 50 , BLOCK ) : 0
 Xcos trace:   objectUnreferenced( 54 , LINK ) : 0
 Xcos trace:   objectUnreferenced( 55 , LINK ) : 0
+  props: (params tlist) with fields:
+      wpar = [600,450,0,0,600,450]
+      title = ["";""]
+      tol = []
+      tf = []
+      context = []
+      void1 = []
+      options: (scsopt tlist) with fields:
+          3D: (2-elements list)
+          Background = [8,1]
+          Link = [1,5]
+          ID: (2-elements list)
+          Cmap = [0.8,0.8,0.8]
+      void2 = []
+      void3 = []
+      doc: (empty list)
+  objs: (6-elements list)
+      (1): (CLKOUT_f Block)
+      (2): (EVTDLY_c Block)
+      (4): (CLKSPLIT_f Block)
+  version = ""
+  contrib: (empty list)
 clk.model.rpar.props
 Xcos trace:   objectReferenced( 42 , BLOCK ) : 2
 Xcos trace:   objectReferenced( 42 , BLOCK ) : 3
@@ -2085,17 +2083,26 @@ Xcos trace:   objectReferenced( 42 , BLOCK ) : 3
 Xcos trace:   objectUnreferenced( 42 , BLOCK ) : 2
 Xcos trace:   objectUnreferenced( 42 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 42 , BLOCK ) : 0
- ans  =
-wpar = [600,450,0,0,600,450]
-title = ["";""]
-tol = []
-tf = []
-context = []
-void1 = []
-options = tlist(["scsopt","3D","Background","Link","ID","Cmap"],list(%t,33),[8,1],[1,5],list([4,1,10,1],[4,1,2,1]),[0.8,0.8,0.8])
-void2 = []
-void3 = []
-doc = list()
+ ans = (params tlist) with fields:
+  wpar = [600,450,0,0,600,450]
+  title = ["";""]
+  tol = []
+  tf = []
+  context = []
+  void1 = []
+  options: (scsopt tlist) with fields:
+      3D: (2-elements list)
+          (1) = %t
+          (2) = 33
+      Background = [8,1]
+      Link = [1,5]
+      ID: (2-elements list)
+          (1) = [4,1,10,1]
+          (2) = [4,1,2,1]
+      Cmap = [0.8,0.8,0.8]
+  void2 = []
+  void3 = []
+  doc: (empty list)
 clk.model.rpar.objs
 Xcos trace:   objectReferenced( 42 , BLOCK ) : 1
 Xcos trace:   objectReferenced( 42 , BLOCK ) : 2
@@ -2107,13 +2114,13 @@ Xcos trace:   objectReferenced( 50 , BLOCK ) : 1
 Xcos trace:   objectReferenced( 54 , LINK ) : 1
 Xcos trace:   objectReferenced( 55 , LINK ) : 1
 Xcos trace:   objectUnreferenced( 42 , BLOCK ) : 0
- ans  =
-  (1) : Block
-  (2) : Block
-  (3) : Link
-  (4) : Block
-  (5) : Link
-  (6) : Link
+ ans = (6-elements list)
+  (1): (CLKOUT_f Block)
+  (2): (EVTDLY_c Block)
+  (3): (Link)
+  (4): (CLKSPLIT_f Block)
+  (5): (Link)
+  (6): (Link)
 clk.model.rpar.objs(1).graphics
 Xcos trace:   objectReferenced( 42 , BLOCK ) : 1
 Xcos trace:   objectReferenced( 42 , BLOCK ) : 2
@@ -2139,7 +2146,7 @@ Xcos trace:   objectUnreferenced( 49 , LINK ) : 0
 Xcos trace:   objectUnreferenced( 50 , BLOCK ) : 0
 Xcos trace:   objectUnreferenced( 54 , LINK ) : 0
 Xcos trace:   objectUnreferenced( 55 , LINK ) : 0
- ans  =
+ ans = (graphics mlist) with fields:
 orig = [399,162]
 sz = [20,20]
 exprs = "1"
@@ -2175,30 +2182,30 @@ Xcos trace:   objectUnreferenced( 55 , LINK ) : 0
 Xcos trace:   objectReferenced( 44 , BLOCK ) : 2
 Xcos trace:   objectUnreferenced( 44 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 44 , BLOCK ) : 0
- ans  =
-output type: 0
-in = []
-in2 = []
-intyp = 1
-out = []
-out2 = []
-outtyp = 1
-evtin = 1
-evtout = []
-state = []
-dstate = []
-odstate = list()
-rpar = []
-ipar = 1
-opar = list()
-blocktype = "d"
-firing = []
-dep_ut = [%f,%f]
-label = ""
-nzcross = 0
-nmode = 0
-equations = list()
-uid = ""
+ ans = (model mlist) with fields:
+  sim = "output"
+  in = []
+  in2 = []
+  intyp = 1
+  out = []
+  out2 = []
+  outtyp = 1
+  evtin = 1
+  evtout = []
+  state = []
+  dstate = []
+  odstate: (empty list)
+  rpar = []
+  ipar = 1
+  opar: (empty list)
+  blocktype = "d"
+  firing = []
+  dep_ut = [%f,%f]
+  label = ""
+  nzcross = 0
+  nmode = 0
+  equations: (empty list)
+  uid = ""
 clk.model.rpar.objs(2).graphics
 Xcos trace:   objectReferenced( 42 , BLOCK ) : 1
 Xcos trace:   objectReferenced( 42 , BLOCK ) : 2
@@ -2218,7 +2225,7 @@ Xcos trace:   objectUnreferenced( 55 , LINK ) : 0
 Xcos trace:   objectReferenced( 46 , BLOCK ) : 2
 Xcos trace:   objectUnreferenced( 46 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 46 , BLOCK ) : 0
- ans  =
+ ans = (graphics mlist) with fields:
 orig = [320,232]
 sz = [40,40]
 exprs = ["0.1";"0.1"]
@@ -2254,30 +2261,32 @@ Xcos trace:   objectUnreferenced( 55 , LINK ) : 0
 Xcos trace:   objectReferenced( 46 , BLOCK ) : 2
 Xcos trace:   objectUnreferenced( 46 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 46 , BLOCK ) : 0
- ans  =
-evtdly4 type: 4
-in = []
-in2 = []
-intyp = 1
-out = []
-out2 = []
-outtyp = 1
-evtin = 1
-evtout = 1
-state = []
-dstate = []
-odstate = list()
-rpar = [0.1;0.1]
-ipar = []
-opar = list()
-blocktype = "d"
-firing = 0.1
-dep_ut = [%f,%f]
-label = ""
-nzcross = 0
-nmode = 0
-equations = list()
-uid = ""
+ ans = (model mlist) with fields:
+  sim: (2-elements list)
+      (1) = "evtdly4"
+      (2) = 4
+  in = []
+  in2 = []
+  intyp = 1
+  out = []
+  out2 = []
+  outtyp = 1
+  evtin = 1
+  evtout = 1
+  state = []
+  dstate = []
+  odstate: (empty list)
+  rpar = [0.1;0.1]
+  ipar = []
+  opar: (empty list)
+  blocktype = "d"
+  firing = 0.1
+  dep_ut = [%f,%f]
+  label = ""
+  nzcross = 0
+  nmode = 0
+  equations: (empty list)
+  uid = ""
 clk.model.rpar.objs(3).from
 Xcos trace:   objectReferenced( 42 , BLOCK ) : 1
 Xcos trace:   objectReferenced( 42 , BLOCK ) : 2
@@ -2295,7 +2304,7 @@ Xcos trace:   objectUnreferenced( 50 , BLOCK ) : 0
 Xcos trace:   objectUnreferenced( 54 , LINK ) : 0
 Xcos trace:   objectUnreferenced( 55 , LINK ) : 0
 Xcos trace:   objectUnreferenced( 49 , LINK ) : 0
- ans  =
+ ans = [1x3 double]
    2.   1.   0.
 clk.model.rpar.objs(3).to
 Xcos trace:   objectReferenced( 42 , BLOCK ) : 1
@@ -2314,7 +2323,7 @@ Xcos trace:   objectUnreferenced( 50 , BLOCK ) : 0
 Xcos trace:   objectUnreferenced( 54 , LINK ) : 0
 Xcos trace:   objectUnreferenced( 55 , LINK ) : 0
 Xcos trace:   objectUnreferenced( 49 , LINK ) : 0
- ans  =
+ ans = [1x3 double]
    4.   1.   1.
 clk.model.rpar.objs(4).graphics
 Xcos trace:   objectReferenced( 42 , BLOCK ) : 1
@@ -2335,7 +2344,7 @@ Xcos trace:   objectUnreferenced( 55 , LINK ) : 0
 Xcos trace:   objectReferenced( 50 , BLOCK ) : 2
 Xcos trace:   objectUnreferenced( 50 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 50 , BLOCK ) : 0
- ans  =
+ ans = (graphics mlist) with fields:
 orig = [380.71066,172]
 sz = [0.3333333,0.3333333]
 exprs = []
@@ -2371,30 +2380,30 @@ Xcos trace:   objectUnreferenced( 55 , LINK ) : 0
 Xcos trace:   objectReferenced( 50 , BLOCK ) : 2
 Xcos trace:   objectUnreferenced( 50 , BLOCK ) : 1
 Xcos trace:   objectUnreferenced( 50 , BLOCK ) : 0
- ans  =
-split type: 0
-in = []
-in2 = []
-intyp = 1
-out = []
-out2 = []
-outtyp = 1
-evtin = 1
-evtout = [1;1]
-state = []
-dstate = []
-odstate = list()
-rpar = []
-ipar = []
-opar = list()
-blocktype = "d"
-firing = [-1;-1]
-dep_ut = [%f,%f]
-label = ""
-nzcross = 0
-nmode = 0
-equations = list()
-uid = ""
+ ans = (model mlist) with fields:
+  sim = "split"
+  in = []
+  in2 = []
+  intyp = 1
+  out = []
+  out2 = []
+  outtyp = 1
+  evtin = 1
+  evtout = [1;1]
+  state = []
+  dstate = []
+  odstate: (empty list)
+  rpar = []
+  ipar = []
+  opar: (empty list)
+  blocktype = "d"
+  firing = [-1;-1]
+  dep_ut = [%f,%f]
+  label = ""
+  nzcross = 0
+  nmode = 0
+  equations: (empty list)
+  uid = ""
 clk.model.rpar.objs(5).from
 Xcos trace:   objectReferenced( 42 , BLOCK ) : 1
 Xcos trace:   objectReferenced( 42 , BLOCK ) : 2
@@ -2412,7 +2421,7 @@ Xcos trace:   objectUnreferenced( 49 , LINK ) : 0
 Xcos trace:   objectUnreferenced( 50 , BLOCK ) : 0
 Xcos trace:   objectUnreferenced( 55 , LINK ) : 0
 Xcos trace:   objectUnreferenced( 54 , LINK ) : 0
- ans  =
+ ans = [1x3 double]
    4.   1.   0.
 clk.model.rpar.objs(5).to
 Xcos trace:   objectReferenced( 42 , BLOCK ) : 1
@@ -2431,7 +2440,7 @@ Xcos trace:   objectUnreferenced( 49 , LINK ) : 0
 Xcos trace:   objectUnreferenced( 50 , BLOCK ) : 0
 Xcos trace:   objectUnreferenced( 55 , LINK ) : 0
 Xcos trace:   objectUnreferenced( 54 , LINK ) : 0
- ans  =
+ ans = [1x3 double]
    1.   1.   1.
 clk.model.rpar.objs(6).from
 Xcos trace:   objectReferenced( 42 , BLOCK ) : 1
@@ -2450,7 +2459,7 @@ Xcos trace:   objectUnreferenced( 49 , LINK ) : 0
 Xcos trace:   objectUnreferenced( 50 , BLOCK ) : 0
 Xcos trace:   objectUnreferenced( 54 , LINK ) : 0
 Xcos trace:   objectUnreferenced( 55 , LINK ) : 0
- ans  =
+ ans = [1x3 double]
    4.   2.   0.
 clk.model.rpar.objs(6).to
 Xcos trace:   objectReferenced( 42 , BLOCK ) : 1
@@ -2469,7 +2478,7 @@ Xcos trace:   objectUnreferenced( 49 , LINK ) : 0
 Xcos trace:   objectUnreferenced( 50 , BLOCK ) : 0
 Xcos trace:   objectUnreferenced( 54 , LINK ) : 0
 Xcos trace:   objectUnreferenced( 55 , LINK ) : 0
- ans  =
+ ans = [1x3 double]
    2.   1.   1.
 // Check that all the model items are freed
 clear sb clk
@@ -2483,19 +2492,19 @@ Xcos debug:   propertyUpdated( 10 , BLOCK , OUTPUTS ) : SUCCESS
 Xcos trace:   propertyUpdated( 10 , BLOCK , EVENT_INPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 10 , BLOCK , EVENT_OUTPUTS ) : NO_CHANGES
 Xcos info:    objectDeleted( 12 , PORT )
-Xcos debug:   propertyUpdated( 10 , BLOCK , CHILDREN ) : SUCCESS
 Xcos trace:   propertyUpdated( 13 , BLOCK , INPUTS ) : NO_CHANGES
 Xcos debug:   propertyUpdated( 13 , BLOCK , OUTPUTS ) : SUCCESS
 Xcos trace:   propertyUpdated( 13 , BLOCK , EVENT_INPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 13 , BLOCK , EVENT_OUTPUTS ) : NO_CHANGES
 Xcos info:    objectDeleted( 14 , PORT )
-Xcos info:    objectDeleted( 13 , BLOCK )
 Xcos debug:   propertyUpdated( 10 , BLOCK , CHILDREN ) : SUCCESS
+Xcos info:    objectDeleted( 13 , BLOCK )
 Xcos debug:   propertyUpdated( 15 , BLOCK , INPUTS ) : SUCCESS
 Xcos trace:   propertyUpdated( 15 , BLOCK , OUTPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 15 , BLOCK , EVENT_INPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 15 , BLOCK , EVENT_OUTPUTS ) : NO_CHANGES
 Xcos info:    objectDeleted( 16 , PORT )
+Xcos debug:   propertyUpdated( 10 , BLOCK , CHILDREN ) : SUCCESS
 Xcos info:    objectDeleted( 15 , BLOCK )
 Xcos info:    objectDeleted( 10 , BLOCK )
 Xcos trace:   propertyUpdated( 42 , BLOCK , INPUTS ) : NO_CHANGES
@@ -2503,15 +2512,14 @@ Xcos trace:   propertyUpdated( 42 , BLOCK , OUTPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 42 , BLOCK , EVENT_INPUTS ) : NO_CHANGES
 Xcos debug:   propertyUpdated( 42 , BLOCK , EVENT_OUTPUTS ) : SUCCESS
 Xcos info:    objectDeleted( 43 , PORT )
-Xcos debug:   propertyUpdated( 42 , BLOCK , CHILDREN ) : SUCCESS
 Xcos trace:   propertyUpdated( 44 , BLOCK , INPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 44 , BLOCK , OUTPUTS ) : NO_CHANGES
 Xcos debug:   propertyUpdated( 44 , BLOCK , EVENT_INPUTS ) : SUCCESS
 Xcos trace:   propertyUpdated( 44 , BLOCK , EVENT_OUTPUTS ) : NO_CHANGES
 Xcos debug:   propertyUpdated( 54 , LINK , DESTINATION_PORT ) : SUCCESS
 Xcos info:    objectDeleted( 45 , PORT )
-Xcos info:    objectDeleted( 44 , BLOCK )
 Xcos debug:   propertyUpdated( 42 , BLOCK , CHILDREN ) : SUCCESS
+Xcos info:    objectDeleted( 44 , BLOCK )
 Xcos trace:   propertyUpdated( 46 , BLOCK , INPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 46 , BLOCK , OUTPUTS ) : NO_CHANGES
 Xcos debug:   propertyUpdated( 46 , BLOCK , EVENT_INPUTS ) : SUCCESS
@@ -2524,11 +2532,11 @@ Xcos trace:   propertyUpdated( 46 , BLOCK , EVENT_INPUTS ) : NO_CHANGES
 Xcos debug:   propertyUpdated( 46 , BLOCK , EVENT_OUTPUTS ) : SUCCESS
 Xcos debug:   propertyUpdated( 49 , LINK , SOURCE_PORT ) : SUCCESS
 Xcos info:    objectDeleted( 48 , PORT )
+Xcos debug:   propertyUpdated( 42 , BLOCK , CHILDREN ) : SUCCESS
 Xcos info:    objectDeleted( 46 , BLOCK )
-Xcos debug:   propertyUpdated( 42 , BLOCK , CHILDREN ) : SUCCESS
 Xcos debug:   propertyUpdated( 51 , PORT , CONNECTED_SIGNALS ) : SUCCESS
-Xcos info:    objectDeleted( 49 , LINK )
 Xcos debug:   propertyUpdated( 42 , BLOCK , CHILDREN ) : SUCCESS
+Xcos info:    objectDeleted( 49 , LINK )
 Xcos trace:   propertyUpdated( 50 , BLOCK , INPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 50 , BLOCK , OUTPUTS ) : NO_CHANGES
 Xcos debug:   propertyUpdated( 50 , BLOCK , EVENT_INPUTS ) : SUCCESS
@@ -2546,6 +2554,7 @@ Xcos trace:   propertyUpdated( 50 , BLOCK , EVENT_INPUTS ) : NO_CHANGES
 Xcos debug:   propertyUpdated( 50 , BLOCK , EVENT_OUTPUTS ) : SUCCESS
 Xcos debug:   propertyUpdated( 55 , LINK , SOURCE_PORT ) : SUCCESS
 Xcos info:    objectDeleted( 53 , PORT )
+Xcos debug:   propertyUpdated( 42 , BLOCK , CHILDREN ) : SUCCESS
 Xcos info:    objectDeleted( 50 , BLOCK )
 Xcos debug:   propertyUpdated( 42 , BLOCK , CHILDREN ) : SUCCESS
 Xcos info:    objectDeleted( 54 , LINK )

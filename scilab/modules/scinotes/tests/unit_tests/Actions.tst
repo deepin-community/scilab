@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2011 - Calixte DENIZET
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -9,6 +9,8 @@
 // and continues to be available under such terms.
 // For more information, see the COPYING file which you should have received
 // along with this program.
+
+// <-- NO CHECK REF -->
 
 f=TMPDIR + "/file_to_correct.sci";
 mputl(["a=''abcdef''									";
@@ -31,7 +33,7 @@ good = ["a=""abcdef""";
 	"    if";
 	"        a=""abcdef""""""";
 	"    end";
-	"end"]
+	"end"];
 
 corrected = mgetl(f);
 

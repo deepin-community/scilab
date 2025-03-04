@@ -18,6 +18,7 @@
 #include "sciprint.h"
 #include "api_scilab.h"
 #include "Scierror.h"
+#include "Sciwarning.h"
 #include "sci_malloc.h"
 #include "dlManager.h"
 #include "localization.h"
@@ -40,9 +41,10 @@ int sci_getURL(char *fname, void* pvApiCtx)
 
     int iRhs = nbInputArgument(pvApiCtx);
 
+    Sciwarning(_("%s: %s will be permanently removed in Scilab %s.\n Please use %s instead.\n"), _("Warning"), "getURL", "2025.0.0", "http_get");
+
     CheckInputArgument(pvApiCtx, 1, 4);
     CheckOutputArgument(pvApiCtx, 0, 2);
-
 
     sciErr = getVarAddressFromPosition(pvApiCtx, 1, &piAddressVarOne);
     if (sciErr.iErr)

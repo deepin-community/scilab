@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) Scilab Enterprises - 2013 - Paul Bignier
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -22,6 +22,8 @@
 #include <math.h>    // fabs() and pow() functions
 
 #include "ddaskr.h"
+#include "idas/idas.h"              // used for error shared error messages
+#include "../src/idas/idas_impl.h"  // for MSG_NO_MEM and other messages 
 
 #define NO_FPRINTF_OUTPUT 1
 

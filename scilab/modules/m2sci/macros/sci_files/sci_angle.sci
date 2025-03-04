@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2002-2004 - INRIA - Vincent COUVERT
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -16,21 +16,10 @@ function tree=sci_angle(tree)
     // Input: tree = Matlab funcall tree
     // Ouput: tree = Scilab equivalent for tree
 
-    A=getrhs(tree)
-    A=convert2double(A)
+    A = getrhs(tree)
+    A = convert2double(A)
+    tree.rhs = Rhs_tlist(A)
 
-    if typeof(A)=="variable" then
-        n=A
-    else
-        n=gettempvar()
-        m2sci_insert(Equal(list(n),A))
-    end
-
-    realpart=Funcall("real",1,list(n),list())
-    imagpart=Funcall("imag",1,list(n),list())
-
-    tree=Funcall("atan",1,list(imagpart,realpart),tree.lhs)
-
-    tree.lhs(1).dims=A.dims
-    tree.lhs(1).type=Type(Double,Real)
+    tree.lhs(1).dims = A.dims
+    tree.lhs(1).type = Type(Double, Real)
 endfunction

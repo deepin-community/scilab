@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA - Vincent COUVERT
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
 // Copyright (C) 2020 - Samuel GOUGEON
@@ -38,7 +38,7 @@ function [txt, space] = format_txt(txt, instr, bprettyprintformat, nextinstr)
     else
         if instr <> list("EOL")
             if bprettyprintformat & nextinstr<>list("EOL")
-                if nextinstr(1)(1) <> "comment"  // http://bugzilla.scilab.org/16586
+                if nextinstr(1)(1) <> "comment"  // https://gitlab.com/scilab/scilab/-/issues/16586
                     txt = cat_code(txt,"")
                 else
                     txt($) = txt($) + "  "

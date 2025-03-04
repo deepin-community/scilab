@@ -1,6 +1,6 @@
 //<-- CLI SHELL MODE -->
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010 - DIGITEO - Allan CORNET
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -8,8 +8,8 @@
 
 // <-- Non-regression test for bug 6516 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=6516
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/6516
 //
 // <-- Short Description -->
 // fullfile did not remove blanks and not create a valid path

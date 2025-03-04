@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2010 - DIGITEO - Clement DAVID
  * Copyright (C) 2011 - Scilab Enterprises - Clement DAVID
  *
@@ -115,21 +115,21 @@ public class PaletteManagerView extends SwingScilabDockablePanel implements Simp
                .getFromCache(DEFAULT_TAB_UUID);
     }
 
-    public static void restore(Void v) {
-        restore(v, true);
+    public static void restore() {
+        restore(true);
     }
 
-    public static void restore(Void v, final boolean visible) {
-        PaletteManagerView tab = new PaletteManagerView(
-            PaletteManager.getInstance());
+    public static void restore(final boolean visible) {
+        PaletteManagerView tab = new PaletteManagerView(PaletteManager.getInstance());
         if (visible) {
-            tab.createDefaultWindow().setVisible(true);
+            final SwingScilabWindow win = WindowsConfigurationManager.restoreWindow(DEFAULT_TAB_UUID);
+            win.addTab(tab);
+            win.setVisible(true);
         }
         PaletteManager.getInstance().firePropertyChange("visible", false, true);
 
         ClosingOperationsManager.addDependencyWithRoot((SwingScilabDockablePanel) tab);
-        ClosingOperationsManager.registerClosingOperation((SwingScilabDockablePanel) tab,
-                new ClosingOperation());
+        ClosingOperationsManager.registerClosingOperation((SwingScilabDockablePanel) tab, new ClosingOperation());
         ScilabTabFactory.getInstance().addToCache(tab);
     }
 
@@ -233,7 +233,7 @@ public class PaletteManagerView extends SwingScilabDockablePanel implements Simp
      */
     public static void updateTree() {
         if (get() == null) {
-            restore(null);
+            restore();
         }
         final JTree t = get().getTree();
         final TreePath p = t.getSelectionPath();
@@ -258,7 +258,7 @@ public class PaletteManagerView extends SwingScilabDockablePanel implements Simp
      */
     public static void updateWholeTree() {
         if (get() == null) {
-            restore(null);
+            restore();
         }
         final JTree t = get().getTree();
 
@@ -273,21 +273,6 @@ public class PaletteManagerView extends SwingScilabDockablePanel implements Simp
      */
     public void setInfo(final String info) {
         getInfoBar().setText(info);
-    }
-
-    private SwingScilabWindow createDefaultWindow() {
-        final SwingScilabWindow win;
-
-        final SwingScilabWindow configuration = WindowsConfigurationManager.createWindow(
-                DEFAULT_WIN_UUID, false);
-        if (configuration != null) {
-            win = configuration;
-        } else {
-            win = SwingScilabWindow.createWindow(true);
-        }
-
-        win.addTab(this);
-        return win;
     }
 
     /**

@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ????-2008 - INRIA
 // Copyright (C) 2010 - DIGITEO - Allan CORNET
 //
@@ -19,7 +19,7 @@ function demo_irrfilter()
         clf(my_handle, "reset");
         plot2d(fr', hzm');
         xtitle(_("Discrete IIR filter: low pass  fr < 0.2"), " ", " ");
-        halt(_("Press Return to continue ... \n"));
+        messagebox(_("Please click OK to go on..."), _("Discrete IIR filter demo"), "modal");
     end
 
     //Band pass filter (length 3, type ellip, cut-offs .15 and .25)

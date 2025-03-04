@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2000 - INRIA - Carlos Klimann
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -28,8 +28,10 @@ function q=quart(x,orien)
     //
     //
 
-    [lhs, rhs] = argn(0)
-    if rhs==0 then error(msprintf(gettext("%s: Wrong number of input argument(s): %d or %d expected.\n"),"quart",1,2)), end
+    arguments
+        x
+        orien (1, 1) {mustBeA(orien, ["double", "string"]), mustBeMember(orien, {1, 2, "r", "c", "*"})} = "*"
+    end
 
     function y = vperctl(x,p)
         //inline function wich computes percentiles of a vector
@@ -46,7 +48,8 @@ function q=quart(x,orien)
         q = %nan;
         return;
     end
-    if rhs==1 then
+
+    if orien == "*" then
         q=vperctl(x(:),[25 50 75])
         q=q(:)
     else

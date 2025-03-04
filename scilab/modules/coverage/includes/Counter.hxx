@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2015 - Scilab Enterprises - Calixte DENIZET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -18,9 +18,8 @@
 
 #include <chrono>
 
-#include "allexp.hxx"
-#include "alltypes.hxx"
-#include "allvar.hxx"
+#include "exp.hxx"
+#include "macro.hxx"
 
 #include "MacroLoc.hxx"
 

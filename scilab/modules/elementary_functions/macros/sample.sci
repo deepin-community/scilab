@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2003 - INRIA - Carlos Klimann
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -31,26 +31,24 @@ function s = sample(n, X, orient)
     //random  sample of  n columns,  extracted  with replacement
     //from the columns of X.
     //
-    [lhs, rhs] = argn(0)
-    if rhs < 2 | rhs > 3 then error(msprintf(gettext("%s: Wrong number of input arguments: %d to %d expected.\n"), "sample", 2, 3)), end
-    if X == [] then s = []; return; end
-    if rhs == 2 then
-        orient = "*"
+
+    arguments
+        n
+        X
+        orient (1,1) {mustBeA(orient, ["double", "string"]), mustBeMember(orient, {1, 2, "r", "c", "*"})} = "*"
     end
+    
+    if X == [] then s = []; return; end
+
     if orient == "*" then
         s = X(grand(n, 1, "uin", 1, size(X, "*"))),
         s_size = size(s, '*');
         s = matrix(s, 1, s_size)
-        return
-    end
-    if orient == "r"|orient == 1 then
+    elseif orient == "r" | orient == 1 then
         s = X(grand(1, n, "uin", 1, size(X, "r")), :)
-        return
-    end
-    if orient == "c"|orient == 2 then
+    elseif orient == "c"|orient == 2 then
         s = X(:, grand(n, 1, "uin", 1, size(X, "c"))),
-        return
     end
-    error(msprintf(gettext("%s: Wrong value for input argument #%d: ''%s'', ''%s'', ''%s'', %d or %d expected.\n"), "sample", 3, "*", "r", "c", 1, 2))
+    
 endfunction
 

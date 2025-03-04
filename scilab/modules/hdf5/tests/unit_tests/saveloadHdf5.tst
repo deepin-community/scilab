@@ -1,7 +1,7 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2014 - Scilab Enterprises - Vladislav TRUBKIN
-// Copyright (C) 2018 - Stéphane MOTTELET
+// Copyright (C) 2018 - UTC - Stéphane MOTTELET
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
@@ -267,20 +267,20 @@ checkSaveLoad(valueRef);
 //// Void
 l = list(1, , 3);
 
-// l == l return [%t %f %t],
+// l == l return [%t %t %t],
 // we can't use assertcheck_equal(computed, expected)
 fileName = TMPDIR + "/saveloadHdf5.sod";
 // export to hdf5
 old_l = l;
 save(fileName, "l");
 // check that the "l" has not been modified by export
-assert_checkequal(old_l == l, [%t %f %t]);
+assert_checkequal(old_l == l, [%t %t %t]);
 // reset ref value
 clear l old_l
 assert_checktrue(exists("l")==0);
 // import from hdf5
 load(fileName);
-assert_checkequal(l == list(1, , 3), [%t %f %t]);
+assert_checkequal(l == list(1, , 3), [%t %t %t]);
 
 // Struct
 data.data.data = 0;

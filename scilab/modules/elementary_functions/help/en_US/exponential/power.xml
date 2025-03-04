@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
  * Copyright (C) 2020 - Samuel GOUGEON
  *
@@ -73,16 +73,7 @@
         <refsect3>
             <title>^ matricial power</title>
             <para>
-                The ^ operator is equivalent to the .^ by-element power in the following cases:
-                <itemizedlist>
-                    <listitem>
-                        <varname>A</varname> is scalar and <varname>b</varname> is a vector.
-                    </listitem>
-                    <listitem>
-                        <varname>A</varname> is a vector and <varname>b</varname> is scalar.
-                    </listitem>
-                </itemizedlist>
-                Otherwise, <varname>A</varname> or <varname>b</varname> must be a scalar,
+                <varname>A</varname> or <varname>b</varname> must be a scalar,
                 and the other one must be a square matrix:
                 <itemizedlist>
                     <listitem>
@@ -182,7 +173,6 @@
 A = [1 2 ; 3 4];
 A ^ 2.5,
 A .^ 2.5
-(1:10) ^ 2
 (1:10) .^ 2
 
 A ^ %i

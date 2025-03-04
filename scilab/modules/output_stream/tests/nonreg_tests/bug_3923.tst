@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009 - DIGITEO - Allan CORNET
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -15,8 +15,8 @@
 // diary() function produces bad files when it try to record interactive commands : it works when diary is used inside a
 // script file.
 
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=3923
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/3923
 //
 
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) Scilab Enterprises - 2015 - 2012 - Juergen Koch
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
  * Copyright (C) 2020 - Samuel GOUGEON
@@ -20,10 +20,6 @@
     <refnamediv>
         <refname>scatter3d</refname>
         <refpurpose>3D scatter plot</refpurpose>
-    </refnamediv>
-    <refnamediv xml:id="scatter3">
-        <refname>scatter3</refname>
-        <refpurpose>3D scatter plot <emphasis role="bold">(obsolete)</emphasis></refpurpose>
     </refnamediv>
     <refsynopsisdiv>
         <title>Syntax</title>
@@ -130,7 +126,7 @@
                 <listitem>
                     <para>
                         Selects the shape of the markers. The same shape is used for all
-                        specified points. The figure below shows the 15 different marker shapes.
+                        specified points. The figure below shows the different marker shapes.
                     </para>
                     <para>
                         <inlinemediaobject>
@@ -223,6 +219,36 @@
                                 <td>14</td>
                                 <td><literal>"pentagram"</literal> or <literal>"p"</literal></td>
                                 <td>Five-pointed star</td>
+                            </tr>
+                            <tr>
+                                <td>15</td>
+                                <td><literal>"^."</literal></td>
+                                <td>Upward-pointing triangle</td>
+                            </tr>
+                            <tr>
+                                <td>16</td>
+                                <td><literal>"v."</literal></td>
+                                <td>Downward-pointing triangle</td>
+                            </tr>
+                            <tr>
+                                <td>17</td>
+                                <td><literal>">."</literal></td>
+                                <td>Right-pointing triangle</td>
+                            </tr>
+                            <tr>
+                                <td>18</td>
+                                <td><literal>"&lt;."</literal></td>
+                                <td>Left-pointing triangle</td>
+                            </tr>
+                            <tr>
+                                <td>19</td>
+                                <td><literal>"minus" or "m"</literal></td>
+                                <td>Horizontal line (Minus sign)</td>
+                            </tr>
+                            <tr>
+                                <td>20</td>
+                                <td><literal>"|"</literal></td>
+                                <td>Vertical line</td>
                             </tr>
                         </informaltable>
                     </para>
@@ -321,7 +347,7 @@ y = 1.1*sind(az+lat/3) .* r;
 z = sind(lat);
 
 clf
-gcf().color_map = parulacolormap(50);
+gcf().color_map = parula(50);
 
 subplot(1,2,1)    // Plot on the left
 // Markers size according to r
@@ -347,7 +373,7 @@ gcf().children.rotation_angles = [83 -20];
             z = sind(lat);
 
             clf
-            gcf().color_map = parulacolormap(50);
+            gcf().color_map = parula(50);
 
             subplot(1,2,1)    // Plot on the left
             // Markers size according to r

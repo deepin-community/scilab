@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2014 - Scilab Enterprises - Clement DAVID
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -53,7 +53,7 @@ public class BrowserTab extends SwingScilabDockablePanel implements SimpleTab {
     public static final String DEFAULT_WIN_UUID = "xcos-browser-default-window";
     public static final String DEFAULT_TAB_UUID = "xcos-browser-default-tab";
 
-    private final BrowserView view;
+    private JTree tree;
 
     /**
      * Construct a new tab for the explorer
@@ -63,25 +63,34 @@ public class BrowserTab extends SwingScilabDockablePanel implements SimpleTab {
      */
     public BrowserTab(BrowserView view, String uuid) {
         super(XcosMessages.DIAGRAM_BROWSER, uuid);
+        initComponents(view);
+    }
 
-        this.view = view;
-
-        initComponents();
+    public JTree getTree() {
+        return tree;
     }
 
     /*
      * Static API for Tabs
      */
 
-    public static void restore(final BrowserView view, String uuid) {
-        if (uuid == null) {
-            uuid = UUID.randomUUID().toString();
-        }
+    public static BrowserTab get() {
+        return (BrowserTab) ScilabTabFactory.getInstance().getFromCache(DEFAULT_TAB_UUID);
+    }
 
-        BrowserTab tab = new BrowserTab(view, uuid);
-        tab.createDefaultWindow().setVisible(true);
-        tab.setCurrent();
+    public static void create() {
+        BrowserTab tab = allocate();
+        
+        final SwingScilabWindow win = WindowsConfigurationManager.createWindow(DEFAULT_WIN_UUID, false);
+        win.addTab(tab);
+        win.setVisible(true);
+    }
 
+    public static BrowserTab allocate()
+    {
+        BrowserView view = Xcos.getInstance().getBrowser();
+        BrowserTab tab = new BrowserTab(view, DEFAULT_TAB_UUID);
+        
         ScilabTabFactory.getInstance().addToCache(tab);
         ClosingOperationsManager.addDependencyWithRoot(tab);
         ClosingOperationsManager.registerClosingOperation(tab, new ClosingOperation() {
@@ -104,6 +113,8 @@ public class BrowserTab extends SwingScilabDockablePanel implements SimpleTab {
                 return null;
             }
         });
+
+        return tab;
     }
 
     /*
@@ -185,8 +196,8 @@ public class BrowserTab extends SwingScilabDockablePanel implements SimpleTab {
      * Specific implementation
      */
 
-    private void initComponents() {
-        final JTree tree = new JTree(view.getModel());
+    private void initComponents(BrowserView view) {
+        tree = new JTree(view.getModel());
         tree.setRootVisible(false);
 
         final JEditorPane editor = new JEditorPane("text/html", "<html><head><style type=\"text/css\">table { width: 100%; }\ncaption { text-align: center;\nfont: bold; }\ntd { text-align: left; }\n</style></head><body /></html>");
@@ -202,19 +213,5 @@ public class BrowserTab extends SwingScilabDockablePanel implements SimpleTab {
         Dimension preferredSize = new Dimension(161, 100);
         pane.getLeftComponent().setPreferredSize(preferredSize);
         pane.getRightComponent().setPreferredSize(preferredSize);
-    }
-
-    private SwingScilabWindow createDefaultWindow() {
-        final SwingScilabWindow win;
-
-        final SwingScilabWindow configuration = WindowsConfigurationManager.createWindow(DEFAULT_WIN_UUID, false);
-        if (configuration != null) {
-            win = configuration;
-        } else {
-            win = SwingScilabWindow.createWindow(true);
-        }
-
-        win.addTab(this);
-        return win;
     }
 }

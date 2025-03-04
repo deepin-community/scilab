@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2014 - Scilab Enterprises - Anais AUBERT
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -24,6 +24,7 @@
 extern "C"
 {
 #include "Scierror.h"
+#include "Sciwarning.h"
 #include "localization.h"
 #include "elem_common.h"
 #include "lu.h"
@@ -97,6 +98,37 @@ types::Function::ReturnValue sci_lusolve(types::typed_list &in, int _iRetCount, 
 
         abstol = nc_eps_machine();
         C2F(lufact1)(dbl, itemsRow, colPos, &m1, &nonZeros, &fmatindex, &abstol, &reltol, &nrank, &ierr);
+        switch (ierr)
+        {
+            case spOKAY:
+                break;
+            case spSMALL_PIVOT:
+                Sciwarning(_("%s: Warning: Matrix is singular at precision level.\n"), "lusolve");
+                break;
+            case spZERO_DIAG:
+                Scierror(999, _("%s: A zero was encountered on the diagonal the matrix.\n"), "lusolve");
+                break;
+            case spSINGULAR:
+                Sciwarning(_("%s: Warning: Matrix is singular.\n"), "lusolve");
+                break;
+            case spNO_MEMORY:
+                Scierror(999, _("%s: Memory allocation error.\n"), "lusolve");
+                break;
+            case spPANIC:
+                Scierror(77, _("%s: Error during LU factorization.\n"), "lusolve");
+                break;
+            default:
+                Scierror(77, _("%s: Error during LU factorization.\n"), "lusolve");
+                break;
+        }
+        if (ierr != spSINGULAR && ierr > spSMALL_PIVOT)
+        {
+            delete[] dbl;
+            delete[] colPos;
+            delete[] itemsRow;
+            
+            return types::Function::Error;  
+        }
         fact = true;
 
         delete[] dbl;

@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2018 - ESI Group - Adeline CARNIS
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -10,7 +10,7 @@
 //
 // <-- Non-regression test for bug 15472 -->
 //
-// http://bugzilla.scilab.org/show_bug.cgi?id=15472
+// https://gitlab.com/scilab/scilab/-/issues/15472
 //
 // <-- Short Description -->
 // mdelete("test") worked like mdelete("test.*") under Windows 

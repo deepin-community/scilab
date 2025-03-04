@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2018 - Samuel GOUGEON
 //
 // This file is hereby licensed under the terms of the GNU GPL v2.0,
@@ -79,7 +79,7 @@ assert_checkequal(length(gcf().children), 1); // the default axes must have been
 
 // 5) When merging the loaded figure into an existing one, the children must
 //    be copied in the right order
-//    http://mailinglists.scilab.org/Scilab-users-Legends-of-saved-SciLab-graphs-slip-away-tp4038074p4038077.html
+//    https://www.mail-archive.com/users@lists.scilab.org/msg07553.html
 // ------------------------------------------------------------------------
 // Preparing the file
 legended = path+"/legended.dat";

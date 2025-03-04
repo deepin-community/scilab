@@ -5,9 +5,6 @@
 // =============================================================================
 // <-- Non-regression test for bug 353 -->
 //
-// <-- URL -->
-//  http://forge.scilab.org/index.php/p/csv-readwrite/issues/353/
-//
 // <-- Short Description -->
 // The csvRead function does not manage the range.
 // =================================g============================================

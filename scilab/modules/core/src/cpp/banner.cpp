@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2010-2010 - DIGITEO - Bruno JOFRET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -21,7 +21,7 @@ extern "C"
 {
 #include <string.h>
 #include <math.h>
-#include "version.h"
+#include "getversion.h"
 #include "charEncoding.h"
 }
 /*--------------------------------------------------------------------------*/
@@ -34,11 +34,14 @@ void banner(void)
     scilabForcedWriteW(line);
     scilabForcedWriteW(L"\n");
 
-    centerPrint(SCI_VERSION_WIDE_STRING);
+    wchar_t* scilabVersionWideString = getScilabVersionAsWideString();
+    centerPrint(scilabVersionWideString);
+    free(scilabVersionWideString);
     scilabForcedWriteW(L"\n\n");
 
-    centerPrint(_W("ESI Group\n").c_str());
-    centerPrint(_W("Copyright (c) 2017-2021 (ESI Group)\n").c_str());
+    centerPrint(_W("Dassault Systèmes\n").c_str());
+    centerPrint(_W("Copyright (c) 2022-2024 (Dassault Systèmes)\n").c_str());
+    centerPrint(_W("Copyright (c) 2017-2022 (ESI Group)\n").c_str());
     centerPrint(_W("Copyright (c) 2011-2017 (Scilab Enterprises)\n").c_str());
     centerPrint(_W("Copyright (c) 1989-2012 (INRIA)\n").c_str());
     centerPrint(_W("Copyright (c) 1989-2007 (ENPC)\n").c_str());

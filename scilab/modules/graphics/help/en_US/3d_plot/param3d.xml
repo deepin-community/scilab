@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) ENPC - Jean-Philippe Chancelier
  * Copyright (C) 2018 - Samuel GOUGEON
  *
@@ -83,8 +83,9 @@
             <varlistentry>
                 <term>theta</term>
                 <listitem>
-                    <para>Polar angle of the (OP) observation point to the north pole (Oz+), in degrees,
-                        from 0 to 180. Default = 35°.
+                    <para>
+                        Azimuth angle of the (OP) observation point, around the (OZ+) axis,
+                        in degrees. Default = 45°.
                     </para>
                 </listitem>
             </varlistentry>
@@ -92,8 +93,8 @@
                 <term>alpha</term>
                 <listitem>
                     <para>
-                        Azimuth angle of the (OP) observation point, around the (OZ+) axis,
-                        in degrees. Default = 45°.
+                        Polar angle of the (OP) observation point to the north pole (Oz+), in degrees,
+                        from 0 to 180. Default = 35°.
                     </para>
                 </listitem>
             </varlistentry>
@@ -161,9 +162,9 @@
                                 </tr>
                                 </table>
                                 </para>
-								<note>
-									Isometrical modes are rendered with <literal>gca().cube_scaling="off"</literal>.
-								</note>
+                                <note>
+                                    Isometrical modes are rendered with <literal>gca().cube_scaling="off"</literal>.
+                                </note>
                             </listitem>
                         </varlistentry>
                         <varlistentry>
@@ -410,41 +411,41 @@ e.children.fill_mode = "on";
 gcf().children.foreground = color("grey70");
  ]]></programlisting>
         <scilab:image>
-		[X, Y] = ndgrid(-11:0.5:9, -7:0.5:6); // x is the long side, y the short one
-		// => X has constant rows. Y has constant columns
+        [X, Y] = ndgrid(-11:0.5:9, -7:0.5:6); // x is the long side, y the short one
+        // => X has constant rows. Y has constant columns
 
-		clf
+        clf
 
-		// Meshing lines at constant Y values
-		subplot(1, 3, 1)
-		R = sqrt(X.*X + Y.*Y) + %eps;
-		Z = sin(R)./R;
-		param3d1(X, Y, Z, 150, 85, flag=[2,4])
+        // Meshing lines at constant Y values
+        subplot(1, 3, 1)
+        R = sqrt(X.*X + Y.*Y) + %eps;
+        Z = sin(R)./R;
+        param3d1(X, Y, Z, 150, 85, flag=[2,4])
 
-		// Meshing lines at constant X values, with transposed X and Y:
-		subplot(1, 3, 2)
-		R = sqrt(X'.*X' + Y'.*Y') + %eps;
-		Z = sin(R)./R;
-		param3d1(X', Y', Z, 150, 85, flag=[2,4])
+        // Meshing lines at constant X values, with transposed X and Y:
+        subplot(1, 3, 2)
+        R = sqrt(X'.*X' + Y'.*Y') + %eps;
+        Z = sin(R)./R;
+        param3d1(X', Y', Z, 150, 85, flag=[2,4])
 
-		// With a curtain and filled curves to avoid messed overlaying parts
-		subplot(1, 3, 3)
-		[Xo, Yo] = ndgrid(-10:0.5:10);
-		R = sqrt(Xo.*Xo + Yo.*Yo) + %eps;
-		Zo = sin(R)./R;
-			// we add the curtain on starting and ending sides
-		nc = size(Xo,"c");
-		zmin = min(Zo);
-		X = [Xo(1,:) ; Xo ; Xo($,:)];
-		Y = [Yo(1,:) ; Yo ; Yo($,:)];
-		Z = [zmin*ones(1,nc) ; Zo ; zmin*ones(1,nc)];
-			// Rendering
-		param3d1(X, Y, Z, 150, 87, flag=[2,4])
-		e = gce();
-		e.children.fill_mode = "on";
+        // With a curtain and filled curves to avoid messed overlaying parts
+        subplot(1, 3, 3)
+        [Xo, Yo] = ndgrid(-10:0.5:10);
+        R = sqrt(Xo.*Xo + Yo.*Yo) + %eps;
+        Zo = sin(R)./R;
+            // we add the curtain on starting and ending sides
+        nc = size(Xo,"c");
+        zmin = min(Zo);
+        X = [Xo(1,:) ; Xo ; Xo($,:)];
+        Y = [Yo(1,:) ; Yo ; Yo($,:)];
+        Z = [zmin*ones(1,nc) ; Zo ; zmin*ones(1,nc)];
+            // Rendering
+        param3d1(X, Y, Z, 150, 87, flag=[2,4])
+        e = gce();
+        e.children.fill_mode = "on";
 
-		// grey box for all axes:
-		gcf().children.foreground = color("grey70");
+        // grey box for all axes:
+        gcf().children.foreground = color("grey70");
         // ----------------------------
         gcf().axes_size = [900 260];
         </scilab:image>
@@ -459,7 +460,7 @@ gcf().children.foreground = color("grey70");
                 <link linkend="plot3d3">plot3d3</link>
             </member>
             <member>
-                <link linkend="scatter3">scatter 3D</link>
+                <link linkend="scatter3d">scatter 3D</link>
             </member>
             <member>
                 <link linkend="axes_properties">axes_properties</link>

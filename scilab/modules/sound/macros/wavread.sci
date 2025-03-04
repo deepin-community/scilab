@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ???? - INRIA - Scilab
 // Copyright (C) ???? - ENPC
 // Copyright (C) 2008-2011 - DIGITEO - Allan CORNET
@@ -34,7 +34,7 @@ function [y, Fs, bits] = wavread(wavfile, ext)
     // siz=wavread(wavfile,"size") returns the size of the audio data contained
     //     in the file in place of the actual audio data, returning the
     //      vector siz=[samples channels].
-    // infos=wavread(wavfile,"size") returns a vector with the information about actual
+    // infos=wavread(wavfile,"info") returns a vector with the information about actual
     // audio data.
     // vector infos = [wFormatTag, nChannels, nSamplesPerSec,
     //                 nAvgBytesPerSec, nBlockAlign,

@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2012 - INRIA - Serge STEER
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -17,7 +17,8 @@ function demo_conv()
     t=0:dt:1;
     f=1;// frequency in Hertz
     y=sin(2*%pi*f*t)+0.1*rand(t);
-    scf(1000);clf;
+    my_handle             = scf(100001);
+    clf(my_handle,"reset");
     demo_viewCode("conv.dem.sce");
     drawlater()
 

@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2014-2016 - Scilab Enterprises - Clement DAVID
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -44,11 +44,17 @@ public:
     std::wstring getTypeStr() const override;
     std::wstring getShortTypeStr() const override;
 
-    // move (if possible) the partial informations to the model
+    // move (if possible) the Link partial informations to the model
     static void relink(Controller& controller, model::Link* adaptee, const std::vector<ScicosID>& children);
-    static void reverse_relink(Controller& controller, model::Block* adaptee, int index, const std::vector<ScicosID>& children);
+    // move (if possible) the Block partial informations to the model
+    static void reverse_relink(Controller& controller, model::Block* adaptee, const std::vector<ScicosID>& children);
+    // remove (if possible) the Link partial information
+    static void cleanup_relink(Controller& controller, model::Link* adaptee, const std::vector<ScicosID>& children);
+
     // manage partial information after a model clone
     static void add_partial_links_information(Controller& controller, ScicosID original, ScicosID cloned);
+    // manage partial information before a port deletion
+    static void add_partial_links_information(Controller& controller, ScicosID port);
     // manage partial information before a model delete
     static void store_partial_links_information(Controller& controller, model::BaseObject* added, int index, const std::vector<ScicosID>& children);
     // remove all information related to the link

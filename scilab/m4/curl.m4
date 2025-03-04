@@ -1,5 +1,5 @@
 dnl
-dnl Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+dnl Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 dnl Copyright (C) S/E - 2012 - Sylvestre Ledru
 dnl
 dnl Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -24,7 +24,7 @@ AC_DEFUN([AC_CURL], [
 
 
 AC_ARG_WITH(curl,
-    AC_HELP_STRING([--with-curl=DIR],[Set the path to your CURL installation]),
+    AS_HELP_STRING([--with-curl=DIR],[Set the path to your CURL installation]),
     [with_curl=$withval],
     [with_curl='yes']
     )

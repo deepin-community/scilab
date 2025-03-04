@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) XXXX-2008 - INRIA
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -20,8 +20,11 @@
     </refnamediv>
     <refsynopsisdiv>
         <title>Séquence d'appel</title>
-        <synopsis>execstr(instr)
+        <synopsis>
+            execstr(instr)
             ierr = execstr(instr, 'errcatch' [,msg])
+            [ierr, errormsg] = execstr(instr,'errcatch' [,msg])
+            [ierr, errormsg, callstack] = execstr(instr,'errcatch' [,msg])
         </synopsis>
     </refsynopsisdiv>
     <refsection>
@@ -45,6 +48,22 @@
                     <para>
                         chaîne de caractères (<literal>'m'</literal> ou <literal>'n'</literal>). La valeur
                         par défaut est <literal>'n'</literal>.
+                    </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>errormsg</term>
+                <listitem>
+                    <para>
+                        message d'erreur en cas d'erreur et que le d'argument <literal>'errcatch'</literal> est spécifié.
+                    </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>callstack</term>
+                <listitem>
+                    <para>
+                        pile d'appel en cas d'erreur et que le d'argument <literal>'errcatch'</literal> est spécifié.
                     </para>
                 </listitem>
             </varlistentry>
@@ -95,7 +114,8 @@
     </refsection>
     <refsection>
         <title>Exemples</title>
-        <programlisting role="example"><![CDATA[
+        <programlisting role="example">
+    <![CDATA[
 execstr('a=1') // affecte a=1.
 
 execstr('1+1') // ne fait rien de particulier (alors que evstr('1+1') renvoie 2)
@@ -132,7 +152,10 @@ if execstr('variable2;','errcatch')<>0 then
 else
    disp("execstr est content");
 end
- ]]></programlisting>
+
+//get errormsg if case of error
+[_ b] = execstr("acosd(""a"");", "errcatch")
+]]></programlisting>
     </refsection>
     <refsection role="see also">
         <title>Voir aussi</title>

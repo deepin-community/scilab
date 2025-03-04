@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2018 - Samuel GOUGEON
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -40,7 +40,7 @@ assert_checkequal((d(:,1)*ones(1,n-1)-d)', uint64([0 0;0 0]));
 n = 11;
 a = linspace(uint64([1 17]'), (uint64(2)^63)+[1 56]', n)'      // OK
 d = diff(a,1,1);
-//assert_checkequal(ones(n-1,1)*d(1,:)-d, uint64([0 0;0 0]));  // http://bugzilla.scilab.org/15836
+//assert_checkequal(ones(n-1,1)*d(1,:)-d, uint64([0 0;0 0]));  // https://gitlab.com/scilab/scilab/-/issues/15836
 
 // decreasing
 n = 3;
@@ -48,7 +48,7 @@ a = linspace(uint64(2)^63, uint64(1), n)'
 d = diff(a($:-1:1),1,1);
 assert_checkequal((d-d(1))', uint64([0 1]));
 n = 11;
-a = linspace(uint64(2)^63, uint64(1), n)';        // http://bugzilla.scilab.org/15836
+a = linspace(uint64(2)^63, uint64(1), n)';        // https://gitlab.com/scilab/scilab/-/issues/15836
 d = diff(a($:-1:1),1,1);
 //assert_checkequal((d-d(1))', uint64([0 1]));
 
@@ -93,7 +93,7 @@ assert_checkequal((d(:,1)*ones(1,n-1)-d)', int64([0 0;0 0]));
 n = 11;
 a = linspace(int64([1 17]'), (int64(2)^62)+[1 56]', n)'       // OK
 d = diff(a,1,1);
-//assert_checkequal(ones(n-1,1)*d(1,:)-d, int64([0 0;0 0]));  // http://bugzilla.scilab.org/15836
+//assert_checkequal(ones(n-1,1)*d(1,:)-d, int64([0 0;0 0]));  // https://gitlab.com/scilab/scilab/-/issues/15836
 
 // decreasing
 n = 3;

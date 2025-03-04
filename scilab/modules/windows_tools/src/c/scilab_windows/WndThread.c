@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) INRIA - Allan CORNET
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -19,7 +19,7 @@
 #include <windowsx.h>
 #include "WndThread.h"
 #include "sci_malloc.h"
-#include "version.h"
+#include "getversion.h"
 #include "wmcopydata.h"
 #include "storeCommand.h"
 #include "os_string.h"
@@ -117,16 +117,20 @@ static void GetFreeTitleOfWindowHidden(void)
 
     char SearchedScilabWindow[MAX_PATH];
 
-    wsprintf(SearchedScilabWindow, FORMAT_TITLE_HIDDEN_WINDOWS, SCI_VERSION_STRING, Number_of_Scilab);
+    char *scilabVersionString = getScilabVersionAsString();
+
+    wsprintf(SearchedScilabWindow, FORMAT_TITLE_HIDDEN_WINDOWS, scilabVersionString, Number_of_Scilab);
 
     hWndScilab = FindWindow(NULL, SearchedScilabWindow);
 
     while ( hWndScilab )
     {
         Number_of_Scilab++;
-        wsprintf(SearchedScilabWindow, FORMAT_TITLE_HIDDEN_WINDOWS, SCI_VERSION_STRING, Number_of_Scilab);
+        wsprintf(SearchedScilabWindow, FORMAT_TITLE_HIDDEN_WINDOWS, scilabVersionString, Number_of_Scilab);
         hWndScilab = FindWindow(NULL, SearchedScilabWindow);
     }
+
+    free(scilabVersionString);
 
     strcpy(titleHiddenScilabWindow, SearchedScilabWindow);
     ScilabId = Number_of_Scilab;

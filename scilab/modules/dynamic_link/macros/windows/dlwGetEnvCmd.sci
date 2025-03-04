@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) Scilab Enterprises - 2017  - Antoine ELIAS
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -13,15 +13,11 @@
 //=============================================================================
 function cmd = dlwGetEnvCmd()
     if win64() then
-        if dlwIsExpress() then
-            arch = "x86_amd64";
-        else
-            arch = "x64";
-        end
+        arch = "x64";
     else
         arch = "x86";
     end
 
-    path = dlwGetVisualStudioPath();
+    path = dlwGetVisualStudioPath() + "\VC\Auxiliary\Build";
     cmd = """" + path + "\vcvarsall.bat"" " + arch;
 endfunction

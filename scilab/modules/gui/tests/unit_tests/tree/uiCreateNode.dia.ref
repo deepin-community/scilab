@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009 - DIGITEO - Sylvestre KOUMAR
 // Copyright (C) 2014 - Scilab Enterprises - Anais AUBERT
 // Copyright (C) 2019 - Samuel GOUGEON
@@ -10,29 +10,26 @@
 // --------------------------------
 // node creation
 myNode = uiCreateNode("My Node")
- myNode  = 
-       myNode(1)
-  "uitree"
-       myNode(2)
-  label = "My Node"
-  icon = ""
-  callback = ""
+ myNode = (uitree tlist)
+  (1) = "uitree"
+  (2): [struct] with fields:
+      label = "My Node"
+      icon = ""
+      callback = ""
 myNode = uiCreateNode("My Node", "icon of My Node")
- myNode  = 
-       myNode(1)
-  "uitree"
-       myNode(2)
-  label = "My Node"
-  icon = "icon of My Node"
-  callback = ""
+ myNode = (uitree tlist)
+  (1) = "uitree"
+  (2): [struct] with fields:
+      label = "My Node"
+      icon = "icon of My Node"
+      callback = ""
 myNode = uiCreateNode("My Node", "icon of My Node", "callback of My Node")
- myNode  = 
-       myNode(1)
-  "uitree"
-       myNode(2)
-  label = "My Node"
-  icon = "icon of My Node"
-  callback = "callback of My Node"
+ myNode = (uitree tlist)
+  (1) = "uitree"
+  (2): [struct] with fields:
+      label = "My Node"
+      icon = "icon of My Node"
+      callback = "callback of My Node"
 // Error messages for wrong inputs
 // -------------------------------
 // Wrong number of input arguments:

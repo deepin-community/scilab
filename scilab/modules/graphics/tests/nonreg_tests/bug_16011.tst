@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2019 - Samuel GOUGEON
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -10,8 +10,8 @@
 
 // <-- Non-regression test for bug 16011 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/16011
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/16011
 //
 // <-- Short Description -->
 // colorbar(umin, umax) failed after plot3d2()

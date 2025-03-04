@@ -1,5 +1,5 @@
 /*
-*  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+*  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 *  Copyright (C) 2009-2010 - DIGITEO - Bruno JOFRET
 *  Copyright (C) 2009-2009 - DIGITEO - Antoine ELIAS
 *
@@ -128,7 +128,7 @@ bool MacroFile::parse(void)
             pFD = exp->getAs<ast::FunctionDec>();
 
             //get input parameters list
-            std::list<symbol::Variable*> *pVarList = new std::list<symbol::Variable*>();
+            std::vector<symbol::Variable*>* pVarList = new std::vector<symbol::Variable*>();
             ast::ArrayListVar *pListVar = pFD->getArgs().getAs<ast::ArrayListVar>();
             ast::exps_t & vars = pListVar->getVars();
             for (auto var : vars)
@@ -137,7 +137,7 @@ bool MacroFile::parse(void)
             }
 
             //get output parameters list
-            std::list<symbol::Variable*> *pRetList = new std::list<symbol::Variable*>();
+            std::vector<symbol::Variable*>* pRetList = new std::vector<symbol::Variable*>();
             ast::ArrayListVar *pListRet = pFD->getReturns().getAs<ast::ArrayListVar>();
             ast::exps_t & recs = pListRet->getVars();
             for (auto rec : recs)

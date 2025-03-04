@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2013 - Scilab Enterprises - Antoine ELIAS
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -35,8 +35,8 @@ extern "C"
 }
 
 types::InternalType* createString(std::list<std::wstring>& lst);
-void addIn(ast::MacrovarVisitor& pVisit, std::list<symbol::Variable*>* pSym);
-void addOut(ast::MacrovarVisitor& pVisit, std::list<symbol::Variable*>* pSym);
+void addIn(ast::MacrovarVisitor& pVisit, std::vector<symbol::Variable*>* pSym);
+void addOut(ast::MacrovarVisitor& pVisit, std::vector<symbol::Variable*>* pSym);
 
 types::Function::ReturnValue sci_macrovar(types::typed_list &in, int _iRetCount, types::typed_list &out)
 {
@@ -109,30 +109,28 @@ types::InternalType* createString(std::list<std::wstring>& lst)
     return pS;
 }
 
-void addOut(ast::MacrovarVisitor& visit, std::list<symbol::Variable*>* pSym)
+void addOut(ast::MacrovarVisitor& visit, std::vector<symbol::Variable*>* pSym)
 {
     if (pSym == 0 || pSym->size() == 0)
     {
         return;
     }
 
-    std::list<symbol::Variable*>::iterator it = pSym->begin();
-    for (int i = 0 ; it != pSym->end() ; it++, i++)
+    for (auto&& s : *pSym)
     {
-        visit.addOut((*it)->getSymbol().getName().c_str());
+        visit.addOut(s->getSymbol().getName().c_str());
     }
 }
 
-void addIn(ast::MacrovarVisitor& visit, std::list<symbol::Variable*>* pSym)
+void addIn(ast::MacrovarVisitor& visit, std::vector<symbol::Variable*>* pSym)
 {
     if (pSym == 0 || pSym->size() == 0)
     {
         return;
     }
 
-    std::list<symbol::Variable*>::iterator it = pSym->begin();
-    for (int i = 0 ; it != pSym->end() ; it++, i++)
+    for (auto&& s : *pSym)
     {
-        visit.addIn((*it)->getSymbol().getName().c_str());
+        visit.addIn(s->getSymbol().getName().c_str());
     }
 }

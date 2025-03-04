@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2013 Clement DAVID <clement.david@scilab-enterprises.com> -->
 <component type="desktop-application">
-    <id>org.scilab.www</id>
+    <id>org.scilab.Scilab</id>
     <name>Scilab</name>
     <metadata_license>CC0-1.0</metadata_license>
     <project_license>CECILL-2.1 or GPL-2.0+</project_license>
@@ -25,22 +25,45 @@
     <screenshots>
       <screenshot type="default">
         <caption>Scilab main window</caption>
-        <image width="1200" height="675">http://cgit.scilab.org/cgit.cgi/scilab/plain/scilab/desktop/images/scilab-desktop.png</image>
+        <image width="1200" height="675">https://gitlab.com/scilab/scilab/-/raw/6.1/scilab/desktop/images/scilab-desktop.png</image>
       </screenshot>
       <screenshot>
         <caption>Scilab plot</caption>
-        <image width="1200" height="675">http://cgit.scilab.org/cgit.cgi/scilab/plain/scilab/desktop/images/scilab-plot.png</image>
+        <image width="1200" height="675">https://gitlab.com/scilab/scilab/-/raw/6.1/scilab/desktop/images/scilab-plot.png</image>
       </screenshot>
       <screenshot>
         <caption>Scilab Xcos</caption>
-        <image width="1200" height="675">http://cgit.scilab.org/cgit.cgi/scilab/plain/scilab/desktop/images/scilab-xcos.png</image>
+        <image width="1200" height="675">https://gitlab.com/scilab/scilab/-/raw/6.1/scilab/desktop/images/scilab-xcos.png</image>
       </screenshot>
       <screenshot>
         <caption>Scilab text editor</caption>
-        <image width="1200" height="675">http://cgit.scilab.org/cgit.cgi/scilab/plain/scilab/desktop/images/scilab-scinotes.png</image>
+        <image width="1200" height="675">https://gitlab.com/scilab/scilab/-/raw/6.1/scilab/desktop/images/scilab-scinotes.png</image>
       </screenshot>
     </screenshots>
-    <url type="homepage">http://www.scilab.org</url>
+    <releases>
+      <release version="2024.0.0" date="2023-10-24">
+        <url>https://help.scilab.org/docs/2024.0.0/en_US/CHANGES.html</url>
+      </release>
+      <release version="2023.1.0" date="2023-05-23">
+        <url>https://help.scilab.org/docs/2023.1.0/en_US/CHANGES.html</url>
+      </release>
+      <release version="2023.0.0" date="2023-03-10">
+        <url>https://help.scilab.org/docs/2023.0.0/en_US/CHANGES.html</url>
+      </release>
+      <release version="6.1.1" date="2021-07-16">
+        <url>https://help.scilab.org/docs/6.1.1/en_US/CHANGES.html</url>
+      </release>
+    </releases>
+    <url type="homepage">https://www.scilab.org</url>
+    <url type="bugtracker">https://gitlab.com/scilab/scilab/-/issues</url>
+    <url type="help">https://help.scilab.org/</url>
+    <url type="translate">https://scilab.gitlab.io/legacy_wiki/Localization</url>
+    <url type="vcs-browser">https://gitlab.com/scilab/scilab</url>
+    <url type="contribute">https://www.scilab.org/about/scilab-open-source-software</url>
+    <translation type="gettext">scilab</translation>
+    <content_rating type="oars-1.1"/>
+    <provides>
+      <id>org.scilab.www</id>
+    </provides>
     <update_contact>dev@lists.scilab.org</update_contact>
 </component>
-

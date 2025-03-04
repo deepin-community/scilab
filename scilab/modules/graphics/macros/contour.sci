@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 // Copyright (C) 2011 - DIGITEO - Michael Baudin
 // Copyright (C) 2012 - DIGITEO - Allan CORNET
@@ -11,7 +11,7 @@
 // For more information, see the COPYING file which you should have received
 // along with this program.
 
-function contour(x, y, z, nz, theta, alpha, leg, flag, ebox, zlev)
+function contour(x, y, z, nz, theta, alpha, leg, flag, ebox, zlev, fpf)
 
     function contour_demo()
         function z = Surf1(x, y)
@@ -92,6 +92,9 @@ function contour(x, y, z, nz, theta, alpha, leg, flag, ebox, zlev)
     if exists("zlev" , "local") == 0 then
         zlev = 0;
     end
+    if exists("fpf", "l") == 0 || fpf == "" then
+        fpf = "%.2g";
+    end
 
     if or(type(z) == [13]) then
         fun = z;
@@ -101,7 +104,7 @@ function contour(x, y, z, nz, theta, alpha, leg, flag, ebox, zlev)
 
     job = flag(1);
     if rhs == 4 | job == 2 then
-        contour2d(x, y, z, nz);
+        contour2d(x, y, z, nz, fpf=fpf);
         return;
     end
 
@@ -122,10 +125,8 @@ function contour(x, y, z, nz, theta, alpha, leg, flag, ebox, zlev)
     fig.immediate_drawing = "off";
     cnt = 0;
 
-    fpf = xget("fpf");
-    if fpf == "" then
-        fpf = "%.2g";
-    end
+    
+
     k = 1;
     n = yc(k);
     c = 0;

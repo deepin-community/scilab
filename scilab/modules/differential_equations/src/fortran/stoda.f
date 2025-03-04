@@ -38,6 +38,8 @@ cDEC$ ATTRIBUTES DLLIMPORT:: /lsa001/
       data sm1/0.500d+0, 0.5750d+0, 0.550d+0, 0.450d+0, 0.3500d+0,
      1         0.250d+0, 0.2000d+0, 0.150d+0, 0.100d+0, 0.0750d+0,
      2         0.050d+0, 0.0250d+0/
+cDEC$ ATTRIBUTES DLLIMPORT:: /ierode/
+      COMMON /ierode/ierror
 c-----------------------------------------------------------------------
 c%purpose
 c stoda performs one step of the integration of an initial value

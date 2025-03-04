@@ -1,6 +1,6 @@
 //<-- CLI SHELL MODE -->
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ????-2016 - INRIA - Serge Steer
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -34,7 +34,6 @@ save TMPDIR/fii f1 bnds1 split1 f bnds split
 assert_checkalmostequal(f,f1);
 assert_checkalmostequal(bnds,bnds1);
 assert_checkequal(split,split1);
-return
 
 h=syslin("c",[1/(%s+0.5);1/(%s+0.3)]);n=2;
 [f,bnds,split]=calfrq(h,0.01,100);

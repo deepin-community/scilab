@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009-2010 - DIGITEO - Pierre Lando
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -148,6 +148,18 @@ public class MarkSpriteFactory {
                     return new TriangleLeftSpriteDrawer(appearance, finalSize);
                 case 14:
                     return new PentagramSpriteDrawer(appearance, finalSize);
+                case  15:
+                    return new TriangleUpPickSpriteDrawer(appearance, finalSize);
+                case  16:
+                    return new TriangleDownPickSpriteDrawer(appearance, finalSize);
+                case 17:
+                    return new TriangleRightPickSpriteDrawer(appearance, finalSize);
+                case 18:
+                    return new TriangleLeftPickSpriteDrawer(appearance, finalSize);
+                case  19:
+                    return new MinusSpriteDrawer(appearance, finalSize);
+                case  20:
+                    return new VerticalLineSpriteDrawer(appearance, finalSize);
 
                 default:
                     return new PlusSpriteDrawer(appearance, finalSize);
@@ -178,13 +190,14 @@ public class MarkSpriteFactory {
         public Dimension getTextureSize() {
 
             /** Add a margin such that (0, 0) was pixel aligned. */
+            int s = (int)((double)size * 1.5);
             int margin;
-            if (size % 2 == 0) {
+            if (s % 2 == 0) {
                 margin = 3;
             } else {
                 margin = 2;
             }
-            return new Dimension(size + margin, size + margin);
+            return new Dimension(s + margin, s + margin);
         }
     }
 
@@ -517,4 +530,86 @@ public class MarkSpriteFactory {
             textureDrawingTools.fillPolygon(coordinates, appearance);
         }
     }
+
+    /**
+     * Triangle up sprite
+     * Scilab ID = 15
+     */
+    private static class TriangleUpPickSpriteDrawer extends TriangleSpriteDrawer {
+        public TriangleUpPickSpriteDrawer(Appearance appearance, int size) {
+            super(appearance, size);
+
+            coordinates = new int[] { -basex, basey + r, 0, 0, basex, basey + r};
+        }
+    }
+
+    /**
+     * Triangle down sprite
+     * Scilab ID = 16
+     */
+    private static class TriangleDownPickSpriteDrawer extends TriangleSpriteDrawer {
+        public TriangleDownPickSpriteDrawer(Appearance appearance, int size) {
+            super(appearance, size);
+
+            coordinates = new int[] { -basex, -basey - r, basex, -basey - r, 0, 0};
+        }
+    }
+
+    /**
+     * Triangle right sprite
+     * Scilab ID = 17
+     */
+    private static class TriangleRightPickSpriteDrawer extends TriangleSpriteDrawer {
+        public TriangleRightPickSpriteDrawer(Appearance appearance, int size) {
+            super(appearance, size);
+
+            coordinates = new int[] { -basey - r, basex, -basey - r, -basex, 0, 0};
+        }
+    }
+
+    /**
+     * Triangle left pick sprite
+     * Scilab ID = 18
+     */
+    private static class TriangleLeftPickSpriteDrawer extends TriangleSpriteDrawer {
+        public TriangleLeftPickSpriteDrawer(Appearance appearance, int size) {
+            super(appearance, size);
+
+            coordinates = new int[] {basey + r, basex, 0, 0, basey + r, -basex};
+        }
+    }
+
+    /**
+     * Minus sprite
+     * Scilab ID = 19
+     */
+    private static class MinusSpriteDrawer extends ScilabSpriteDrawer {
+
+        public MinusSpriteDrawer(Appearance appearance, int size) {
+            super(appearance, size);
+        }
+
+        @Override
+        public void draw(TextureDrawingTools textureDrawingTools) {
+            textureDrawingTools.drawMinus(size, appearance);
+        }
+    }
+
+    /**
+     * Vertical line sprite
+     * Scilab ID = 20
+     */
+    private static class VerticalLineSpriteDrawer extends ScilabSpriteDrawer {
+
+        public VerticalLineSpriteDrawer(Appearance appearance, int size) {
+            super(appearance, size);
+        }
+
+        @Override
+        public void draw(TextureDrawingTools textureDrawingTools) {
+            textureDrawingTools.drawVerticalLine(size, appearance);
+        }
+    }
+
+
 }

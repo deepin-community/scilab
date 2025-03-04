@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA - F.D
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -22,7 +22,7 @@ function [h]=buttmag(order,omegac,sample_vector)
     //!
 
     // For ascendant compatibility before bug 4618 fix
-    // http://bugzilla.scilab.org/show_bug.cgi?id=4618
+    // https://gitlab.com/scilab/scilab/-/issues/4618
     // In case the users calls buttmag with named arguments
     if exists("sample","local")==1 then
         sample_vector = sample;

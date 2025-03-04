@@ -1,5 +1,5 @@
 #!/bin/sh
-# Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+# Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 # Copyright (C) INRIA - 2007-2008 - Sylvestre Ledru
 # Copyright (C) DIGITEO - 2009-2010 - Sylvestre Ledru
 # Copyright (C) 2010 - Calixte DENIZET

@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008-2008 - INRIA - Jean-Baptiste Silvy
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -10,8 +10,8 @@
 
 // <-- Non-regression test for bug 1857 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/1857
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/1857
 //
 // <-- Short Description -->
 // Problems with mtlb_semilogx, mtlb_semilogy and mtlb_loglog.
@@ -26,7 +26,7 @@ axes = gca();
 if (axes.log_flags <> "lnn") then pause; end
 
 // mtlb_semilogy
-x=[1:0.1:10];y=2*x^2;
+x=[1:0.1:10];y=2*x.^2;
 mtlb_semilogy(x,y)
 
 // check that current axes has log flags "nl";
@@ -34,7 +34,7 @@ axes = gca();
 if (axes.log_flags <> "nln") then pause; end
 
 // mtlb_loglog
-x=[1:0.1:10];y=2*x^2;
+x=[1:0.1:10];y=2*x.^2;
 mtlb_loglog(x,y)
 
 // check that current axes has log flags "ll";

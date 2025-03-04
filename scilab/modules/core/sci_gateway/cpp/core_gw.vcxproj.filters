@@ -54,6 +54,9 @@
     <ClCompile Include="sci_exit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="sci_isatty.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="sci_getmd5.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -220,6 +223,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\cpp\hash\sha256.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sci_skipArguments.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

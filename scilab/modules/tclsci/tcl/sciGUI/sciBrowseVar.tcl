@@ -262,7 +262,7 @@ proc sciGUIBrowseVarDraw { winId } {
 	    16 {set iconName "tp16";set typNam "tlist"}
 	    17 {set iconName "tp17";set typNam "mlist"}
 	    128 {set iconName "tp00";set typNam "pointer"}
-	    default {set iconName "tp00";set typNam "unknow"}
+	    default {set iconName "tp00";set typNam "unknown"}
 		}
 	
 	set putvar 0

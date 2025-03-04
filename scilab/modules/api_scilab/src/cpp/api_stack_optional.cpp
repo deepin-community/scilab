@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2012 - Scilab Enterprises - Antoine ELIAS
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -11,6 +11,8 @@
  * For more information, see the COPYING file which you should have received
  * along with this program.
  */
+
+#include "UTF8.hxx"
 
 #include "function.hxx"
 #include "gatewaystruct.hxx"
@@ -58,7 +60,7 @@ int getOptionals(void* _pvCtx, char* pstFuncName, rhs_opts opts[])
 
         if (index < 0)
         {
-            sciprint(_("%ls: Unrecognized optional arguments %ls.\n"), pStr->m_pstName, o.first.c_str());
+            sciprint(_("%s: Unrecognized optional arguments %s.\n"), pStr->m_pstName, scilab::UTF8::toUTF8(o.first).c_str());
             printOptionalNames(_pvCtx, opts);
             return 0;
         }

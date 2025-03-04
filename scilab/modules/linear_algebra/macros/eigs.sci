@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2012 - Scilab Enterprises - Adeline CARNIS
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -501,20 +501,18 @@ function [res_d, res_v] = speigs(A, %_B, nev, which, maxiter, tol, ncv, cholB, r
     while(ido <> 99)
         if(Areal & Breal)
             if(Asym)
-                [ido, resid, v, iparam, ipntr, workd, workl, info] = dsaupd(ido, bmat, nA, which, nev, tol, resid, ncv, v, iparam, ipntr, workd, workl, info);
+                [ido, resid, v, iparam, ipntr, workd, workl, info] = %_dsaupd(ido, bmat, nA, which, nev, tol, resid, ncv, v, iparam, ipntr, workd, workl, info);
                 if(info < 0)
                     error(msprintf(gettext("%s: Error with %s: info = %d.\n"), "eigs", "DSAUPD", info));
                 end
             else
-                [ido, resid, v, iparam, ipntr, workd, workl, info] = dnaupd(ido, bmat, nA, which, nev, tol, resid, ncv, v, iparam, ipntr, workd, workl, info);
-                // [arnoldi] https://help.scilab.org/docs/6.1.0/en_US/dnaupd.html
+                [ido, resid, v, iparam, ipntr, workd, workl, info] = %_dnaupd(ido, bmat, nA, which, nev, tol, resid, ncv, v, iparam, ipntr, workd, workl, info);
                 if(info < 0)
                     error(msprintf(gettext("%s: Error with %s: info = %d.\n"), "eigs", "DNAUPD", info));
                 end
             end
         else
-            [ido, resid, v, iparam, ipntr, workd, workl, rwork, info] = znaupd(ido, bmat, nA, which, nev, tol, resid, ncv, v, iparam, ipntr, workd, workl, rwork, info);
-            // [arnoldi] https://help.scilab.org/docs/6.1.0/en_US/znaupd.html
+            [ido, resid, v, iparam, ipntr, workd, workl, rwork, info] = %_znaupd(ido, bmat, nA, which, nev, tol, resid, ncv, v, iparam, ipntr, workd, workl, rwork, info);
             if(info < 0)
                 error(msprintf(gettext("%s: Error with %s: info = %d.\n"), "eigs", "ZNAUPD", info));
             end
@@ -585,8 +583,7 @@ function [res_d, res_v] = speigs(A, %_B, nev, which, maxiter, tol, ncv, cholB, r
     end
     if(Areal & Breal)
         if(Asym)
-            [d, z, resid, v, iparam, iptnr, workd, workl, info_eupd] = dseupd(rvec, howmny, _select, d, z, sigma, bmat, nA, which, nev, tol, resid, ncv, v, iparam, ipntr, workd, workl, info_eupd);
-            // [arnoldi] https://help.scilab.org/docs/6.1.0/en_US/dseupd.html
+            [d, z, resid, v, iparam, iptnr, workd, workl, info_eupd] = %_dseupd(rvec, howmny, _select, d, z, sigma, bmat, nA, which, nev, tol, resid, ncv, v, iparam, ipntr, workd, workl, info_eupd);
             if(info_eupd <> 0)
                 error(msprintf(gettext("%s: Error with %s: info = %d.\n"), "eigs", "DSEUPD", info_eupd));
             else
@@ -603,8 +600,7 @@ function [res_d, res_v] = speigs(A, %_B, nev, which, maxiter, tol, ncv, cholB, r
             if iparam(7) == 3 & sigmai then
                 computevec = 1;
             end
-            [dr, di, z, resid, v, iparam, ipntr, workd, workl, info_eupd] = dneupd(computevec, howmny, _select, dr, di, z, sigmar, sigmai, workev, bmat, nA, which, nev, tol, resid, ncv, v, iparam, ipntr, workd, workl, info_eupd);
-            // [arnoldi] https://help.scilab.org/docs/6.1.0/en_US/dneupd.html
+            [dr, di, z, resid, v, iparam, ipntr, workd, workl, info_eupd] = %_dneupd(computevec, howmny, _select, dr, di, z, sigmar, sigmai, workev, bmat, nA, which, nev, tol, resid, ncv, v, iparam, ipntr, workd, workl, info_eupd);
             if(info_eupd <> 0)
                 error(msprintf(gettext("%s: Error with %s: info = %d.\n"), "eigs", "DNEUPD", info_eupd));
             else
@@ -640,8 +636,7 @@ function [res_d, res_v] = speigs(A, %_B, nev, which, maxiter, tol, ncv, cholB, r
             end
         end
     else
-        [d, z, resid, iparam, ipntr, workd, workl, rwork, info_eupd] = zneupd(rvec, howmny, _select, d, z, sigma, workev, bmat, nA, which, nev, tol, resid, ncv, v, iparam, ipntr, workd, workl, rwork, info_eupd);
-        // [arnoldi] https://help.scilab.org/docs/6.1.0/en_US/zneupd.html
+        [d, z, resid, iparam, ipntr, workd, workl, rwork, info_eupd] = %_zneupd(rvec, howmny, _select, d, z, sigma, workev, bmat, nA, which, nev, tol, resid, ncv, v, iparam, ipntr, workd, workl, rwork, info_eupd);
         if(info_eupd <> 0)
             error(msprintf(gettext("%s: Error with %s: info = %d.\n"), "eigs", "ZNEUPD", info_eupd));
         else
@@ -948,18 +943,18 @@ function [res_d, res_v] = feigs(A_fun, nA, %_B, nev, which, maxiter, tol, ncv, c
     while(ido <> 99)
         if(a_real & Breal)
             if(a_sym)
-                [ido, resid, v, iparam, ipntr, workd, workl, info] = dsaupd(ido, bmat, nA, which, nev, tol, resid, ncv, v, iparam, ipntr, workd, workl, info_aupd);
+                [ido, resid, v, iparam, ipntr, workd, workl, info] = %_dsaupd(ido, bmat, nA, which, nev, tol, resid, ncv, v, iparam, ipntr, workd, workl, info_aupd);
                 if(info_aupd <0)
                     error(msprintf(gettext("%s: Error with %s: info = %d.\n"), "eigs", "DSAUPD", info_aupd));
                 end
             else
-                [ido, resid, v, iparam, ipntr, workd, workl, info] = dnaupd(ido, bmat, nA, which, nev, tol, resid, ncv, v, iparam, ipntr, workd, workl, info_aupd);
+                [ido, resid, v, iparam, ipntr, workd, workl, info] = %_dnaupd(ido, bmat, nA, which, nev, tol, resid, ncv, v, iparam, ipntr, workd, workl, info_aupd);
                 if(info_aupd <0)
                     error(msprintf(gettext("%s: Error with %s: info = %d.\n"), "eigs", "DNAUPD", info_aupd));
                 end
             end
         else
-            [ido, resid, v, iparam, ipntr, workd, workl, rwork, info] = znaupd(ido, bmat, nA, which, nev, tol, resid, ncv, v, iparam, ipntr, workd, workl, rwork, info_aupd);
+            [ido, resid, v, iparam, ipntr, workd, workl, rwork, info] = %_znaupd(ido, bmat, nA, which, nev, tol, resid, ncv, v, iparam, ipntr, workd, workl, rwork, info_aupd);
             if(info_aupd <0)
                 error(msprintf(gettext("%s: Error with %s: info = %d.\n"), "eigs", "ZNAUPD", info_aupd));
             end
@@ -1057,7 +1052,7 @@ function [res_d, res_v] = feigs(A_fun, nA, %_B, nev, which, maxiter, tol, ncv, c
 
     if(a_real & Breal)
         if(a_sym)
-            [d, z, resid, v, iparam, iptnr, workd, workl, info_eupd] = dseupd(rvec, howmny, _select, d, z, sigma, bmat, nA, which, nev, tol, resid, ncv, v, iparam, ipntr, workd, workl, info);
+            [d, z, resid, v, iparam, iptnr, workd, workl, info_eupd] = %_dseupd(rvec, howmny, _select, d, z, sigma, bmat, nA, which, nev, tol, resid, ncv, v, iparam, ipntr, workd, workl, info);
             if(info <> 0)
                 error(msprintf(gettext("%s: Error with %s: info = %d.\n"), "eigs", "DSEUPD", info));
             else
@@ -1074,7 +1069,7 @@ function [res_d, res_v] = feigs(A_fun, nA, %_B, nev, which, maxiter, tol, ncv, c
             if iparam(7) == 3 & sigmai then
                 computevec = 1;
             end
-            [dr, di, z, resid, v, iparam, ipntr, workd, workl, info_eupd] = dneupd(computevec, howmny, _select, dr, di, z, sigmar, sigmai, workev, bmat, nA, which, nev, tol, resid, ncv, v, iparam, ipntr, workd, workl, info);
+            [dr, di, z, resid, v, iparam, ipntr, workd, workl, info_eupd] = %_dneupd(computevec, howmny, _select, dr, di, z, sigmar, sigmai, workev, bmat, nA, which, nev, tol, resid, ncv, v, iparam, ipntr, workd, workl, info);
             if(info <> 0)
                 error(msprintf(gettext("%s: Error with %s: info = %d.\n"), "eigs", "DNEUPD", info));
             else
@@ -1110,7 +1105,7 @@ function [res_d, res_v] = feigs(A_fun, nA, %_B, nev, which, maxiter, tol, ncv, c
             end
         end
     else
-        [d, z, resid, iparam, ipntr, workd, workl, rwork, info_eupd] = zneupd(rvec, howmny, _select, d, z, sigma, workev, bmat, nA, which, nev, tol, resid, ncv, v, iparam, ipntr, workd, workl, rwork, info);
+        [d, z, resid, iparam, ipntr, workd, workl, rwork, info_eupd] = %_zneupd(rvec, howmny, _select, d, z, sigma, workev, bmat, nA, which, nev, tol, resid, ncv, v, iparam, ipntr, workd, workl, rwork, info);
         if(info <> 0)
             error(msprintf(gettext("%s: Error with %s: info = %d.\n"), "eigs", "ZNEUPD", info));
         else

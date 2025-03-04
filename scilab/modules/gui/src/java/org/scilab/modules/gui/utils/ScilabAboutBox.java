@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009-2012 - DIGITEO - Vincent COUVERT
  * Copyright (C) 2014 - Scilab Enterprises - Calixte DENIZET
  *
@@ -184,6 +184,7 @@ public class ScilabAboutBox {
             ackScrollPane = new JScrollPane();
             ackText = new JTextPane();
             ackText.setContentType("text/plain; charset=utf-8");
+            ackText.setEditable(false);
 
             setLayout(new BorderLayout());
 

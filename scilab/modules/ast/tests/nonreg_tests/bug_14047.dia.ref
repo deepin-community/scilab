@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2015 - Scilab Enterprises - Antoine ELIAS
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -8,8 +8,8 @@
 //
 // <-- Non-regression test for bug 14047 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/14047
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/14047
 //
 // <-- Short Description -->
 // wrong behaviour of break ( continue ) in if outside of loop

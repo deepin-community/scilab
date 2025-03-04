@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009 - DIGITEO - Allan CORNET
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -28,8 +28,8 @@ r = test_mode_foo(ref);
 if r <> ref then bugmes();quit;end
 ref = 2;
 mode(ref);
-exec mode : -1
-exec mode : 0
+exec mode : 2
+exec mode : 2
  a  = 
    1.
  b  = 
@@ -51,7 +51,7 @@ exec mode : 0
  j  = 
    10.
 printf("exec mode : %d\n", mode());
-exec mode : 1
+exec mode : 2
 a = 1
  a  = 
    1.
@@ -104,7 +104,7 @@ exec mode : 2
  j  = 
    10.
 printf("exec mode : %d\n", mode());
-exec mode : 3
+exec mode : 2
 a = 1
  a  = 
    1.

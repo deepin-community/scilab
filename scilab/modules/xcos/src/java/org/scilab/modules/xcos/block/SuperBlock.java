@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009 - DIGITEO - Bruno JOFRET
  * Copyright (C) 2014 - Scilab Enterprises - Clement DAVID
  *
@@ -29,6 +29,7 @@ import org.scilab.modules.xcos.block.actions.CodeGenerationAction;
 import org.scilab.modules.xcos.block.actions.SuperblockMaskCreateAction;
 import org.scilab.modules.xcos.block.actions.SuperblockMaskCustomizeAction;
 import org.scilab.modules.xcos.block.actions.SuperblockMaskRemoveAction;
+import org.scilab.modules.xcos.io.scicos.ScilabDirectHandler;
 import org.scilab.modules.xcos.utils.FileUtils;
 import org.scilab.modules.xcos.utils.XcosMessages;
 
@@ -69,12 +70,17 @@ public final class SuperBlock extends BasicBlock {
     /**
      * The interfunction name on a masked status (linked to Xcos-core)
      */
-    private static final String MASKED_INTERFUNCTION_NAME = "DSUPER";
+    public static final String MASKED_INTERFUNCTION_NAME = "DSUPER";
 
     public SuperBlock(JavaController controller, long uid, Kind kind, Object value, mxGeometry geometry, String style, String id) {
         super(controller, uid, kind, value, geometry, style, id);
 
-        controller.setObjectProperty(uid, kind, ObjectProperties.SIM_FUNCTION_NAME, SIMULATION_NAME);
+        String[] simulationName = { "" };
+        controller.getObjectProperty(uid, kind, ObjectProperties.SIM_FUNCTION_NAME, simulationName);
+        if (simulationName[0].isEmpty())
+        {
+            controller.setObjectProperty(uid, kind, ObjectProperties.SIM_FUNCTION_NAME, SIMULATION_NAME);
+        }
     }
 
     /**

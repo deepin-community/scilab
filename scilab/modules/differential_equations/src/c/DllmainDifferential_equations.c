@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2010 - DIGITEO - Allan CORNET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -28,6 +28,11 @@
 /*--------------------------------------------------------------------------*/
 
 /* we force fortran COMMON initialization */
+
+DIFFERENTIAL_EQUATIONS_IMPEXP struct
+{
+    int ierror;
+} C2F(ierdassl);
 
 DIFFERENTIAL_EQUATIONS_IMPEXP struct
 {

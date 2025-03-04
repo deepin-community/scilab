@@ -3,9 +3,6 @@
 ; xml.apache.org SVG Library 
 batik.jar=@BATIK@
 
-; The Saxon XSLT Processor 
-saxon.jar=@SAXON@
-
 ; Reusable components used by Batik and FOP 
 fop.jar=@FOP@
 
