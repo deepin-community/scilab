@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2014-2016 - Scilab Enterprises - Clement DAVID
  *  Copyright (C) 2017-2018 - ESI Group - Clement DAVID
  *
@@ -133,7 +133,7 @@ model::BaseObject* Adapters::descriptor(adapters_index_t index, types::InternalT
     }
 }
 
-types::InternalType* Adapters::allocate_view(ScicosID id, kind_t kind)
+types::InternalType* Adapters::allocate_view(ScicosID id, kind_t)
 {
     Controller controller;
 

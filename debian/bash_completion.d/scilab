@@ -49,6 +49,6 @@ _scilab()
 
     return 0
 }
-complete -F _scilab $filenames scilab scilab-cli scilab-adv-cli
+complete -o filenames -F _scilab scilab scilab-cli scilab-adv-cli
 
 

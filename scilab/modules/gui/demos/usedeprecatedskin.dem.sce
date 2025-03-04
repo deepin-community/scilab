@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2014 - Scilab Enterprises - Antoine ELIAS
 //
 // This file is released under the 3-clause BSD license. See COPYING-BSD.
@@ -7,8 +7,18 @@ function usedeprecatedskin()
     c = get(0);
     oldSkin = c.usedeprecatedskin;
     c.usedeprecatedskin = "off";
-    f = figure("dockable", "off" ,"infobar_visible", "off", "toolbar_visible", "off", "menubar_visible", "off", "position", [200 200 240 430], "figure_name", "");
-    fr1 = uicontrol("style", "frame", "position", [10 10 220 410], "border", createBorder("etched"));
+    if get("notusedeprecatedskin_figure") <> [] then
+        f = get("notusedeprecatedskin_figure");
+        delete(f.children);
+    else
+        close(100002)
+        // Create a figure
+        f = figure("dockable", "off" ,"infobar_visible", "off", "toolbar_visible", "off", "menubar_visible", "off", "position", [200 200 240 430], "figure_name", "");
+        f.figure_id = 100002;
+        f.tag = "notusedeprecatedskin_figure";
+    end
+    
+    fr1 = uicontrol(f, "style", "frame", "position", [10 10 220 410], "border", createBorder("etched"));
     label = uicontrol(fr1, "style", "text", "string", "usedeprecatedskin=""off""", "position", [10 370 200 30]);
     editbox = uicontrol(fr1, "style", "edit", "string", "Edit", "position", [10 330 200 30]);
     button = uicontrol(fr1, "style", "pushbutton", "string", "Pushbutton", "position", [10 290 200 30]);
@@ -23,8 +33,15 @@ function usedeprecatedskin()
     c = get(0);
     oldSkin = c.usedeprecatedskin;
     c.usedeprecatedskin = "on";
-    f = figure("dockable", "off" ,"infobar_visible", "off", "toolbar_visible", "off", "menubar_visible", "off", "position", [480 200 240 430], "figure_name", "");
-    fr1 = uicontrol("style", "frame", "position", [10 10 220 410], "border", createBorder("etched"));
+    if get("usedeprecatedskin_figure") <> [] then
+        f = get("usedeprecatedskin_figure");
+        delete(f.children);
+    else
+        // Create a figure
+        f = figure("dockable", "off" ,"infobar_visible", "off", "toolbar_visible", "off", "menubar_visible", "off", "position", [480 200 240 430], "figure_name", "");
+        f.tag = "usedeprecatedskin_figure";
+    end
+    fr1 = uicontrol(f, "style", "frame", "position", [10 10 220 410], "border", createBorder("etched"));
     label = uicontrol(fr1, "style", "text", "string", "usedeprecatedskin=""on""", "position", [10 370 200 30]);
     editbox = uicontrol(fr1, "style", "edit", "string", "Edit", "position", [10 330 200 30]);
     button = uicontrol(fr1, "style", "pushbutton", "string", "Pushbutton", "position", [10 290 200 30]);

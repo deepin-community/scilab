@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2015 - Scilab Enterprises - Vincent COUVERT
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,8 +9,8 @@
 //
 // <-- Non-regression test for bug 13866 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/13866
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/13866
 //
 // <-- Short Description -->
 // weird behaviour of fft(real(S))
@@ -30,7 +30,7 @@ is=fft(imag(S),-1);
 assert_checkalmostequal(real(rs), real(fft(CC,-1)), [], 100*%eps);
 
 rs2=fft(real(S),-1,dim=100,incr=1); // dim + incr forced
-assert_checkequal(real(rs), real(rs2));
+assert_checkalmostequal(real(rs), real(rs2), [], 100*%eps);
 
 assert_checkalmostequal(imag(is), imag(fft(CS,-1)), [], 100*%eps);
 
@@ -43,7 +43,7 @@ is=fft(imag(S),-1);
 assert_checkalmostequal(real(rs), real(fft(CC,-1)), [], 100*%eps);
 
 rs2=fft(real(S),-1,dim=100,incr=1); // dim + incr forced
-assert_checkequal(real(rs), real(rs2));
+assert_checkalmostequal(real(rs), real(rs2), [], 100*%eps);
 
 assert_checkalmostequal(imag(is), imag(fft(CS,-1)), [], 100*%eps);
 
@@ -55,7 +55,7 @@ is=fft(imag(S),-1);
 assert_checkalmostequal(real(rs), real(fft(CC,-1)), [], 100*%eps);
 
 rs2=fft(real(S),-1,dim=100,incr=1); // dim + incr forced
-assert_checkequal(real(rs), real(rs2));
+assert_checkalmostequal(real(rs), real(rs2), [], 100*%eps);
 
 assert_checkalmostequal(imag(is), imag(fft(CS,-1)), [], 100*%eps);
 

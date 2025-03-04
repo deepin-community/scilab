@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2006 - INRIA - Allan CORNET
  * Copyright (C) 2011 - DIGITEO - Allan CORNET
  *
@@ -29,7 +29,7 @@
 #include "os_string.h"
 #include "getshortpathname.h"
 #include "charEncoding.h"
-#include "version.h"
+#include "getversion.h"
 /*--------------------------------------------------------------------------*/
 BOOL getversionmodule(wchar_t* _pwstModule,
                       int *sci_version_major,
@@ -185,10 +185,10 @@ BOOL getversionmodule(wchar_t* _pwstModule,
         else
         {
             // version.xml does not exist but module exists then we returns scilab version
-            *sci_version_major =  SCI_VERSION_MAJOR;
-            *sci_version_minor = SCI_VERSION_MINOR;
-            *sci_version_maintenance = SCI_VERSION_MAINTENANCE;
-            *sci_version_revision = SCI_VERSION_TIMESTAMP;
+            *sci_version_major = getScilabVersionMajor();
+            *sci_version_minor = getScilabVersionMinor();
+            *sci_version_maintenance = getScilabVersionMaintenance();
+            *sci_version_revision = getScilabVersionTimestamp();
             wcscpy(_pwstSciVersionString, L"");
             bOK = TRUE;
         }

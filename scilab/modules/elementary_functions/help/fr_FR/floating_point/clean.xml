@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2006-2008 - INRIA
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
  * Copyright (C) 2018 - Samuel GOUGEON
@@ -57,8 +57,8 @@
         <title>Description</title>
         <para>
             Cette fonction met à 0 les termes de <varname>A</varname>
-            de valeur absolue &lt; <literal>epsa</literal>, ou de valeur relative
-            &lt; <literal>epsr</literal> (par rapport à max(abs(A)), %inf et %nan exclus)
+            de valeur absolue &lt;=<literal>epsa</literal>, ou de valeur relative
+            &lt;=<literal>epsr</literal> (par rapport à max(abs(A)), %inf et %nan exclus)
         </para>
         <para>
             Pour des polynômes ou fractions rationnelles, clean() est appliquée de la même façon

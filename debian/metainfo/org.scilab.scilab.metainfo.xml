@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>org.scilab.scilab</id>
+  
+  <name>scilab</name>
+  <summary>Scientific software for numerical computations</summary>
+  
+  <metadata_license>CC-BY-4.0</metadata_license>
+  <project_license>GPL-2 or CECILL-2.1</project_license>
+
+  <url type="homepage">https://www.scilab.org/</url>
+  <developer_name>Dassault Systèmes</developer_name>
+  
+  <description>
+    <p>
+      Scilab is a matrix-based scientific software package. It contains hundreds of built-in mathematical functions, rich data structures (including polynomials, rationals, linear systems, lists, etc.) and comes with a number of specific toolboxes for control, signal processing, ...
+    </p>
+    <p>
+      scilab provides the user with a graphical interface.
+    </p>
+  </description>
+  
+  <launchable type="desktop-id">scilab.desktop</launchable>
+
+  <screenshots>
+    <screenshot type="default">
+      <caption>The Scilab interface</caption>
+      <image>https://www.scilab.org/themes/bs43ds/img/home.png?v20211001</image>
+    </screenshot>
+    <screenshot>
+      <caption>Plotting interface</caption>
+      <image>https://www.scilab.org/sites/default/files/styles/large/public/prg/image/1302/ui.png?itok=pkOYeCfO</image>
+    </screenshot>
+  </screenshots>
+
+  <content_rating type="oars-1.0" />
+</component>

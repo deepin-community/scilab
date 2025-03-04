@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008 - INRIA - Pierre MARECHAL <pierre.marechal@inria.fr>
 // Copyright (C) 2010 - 2011 - DIGITEO - Michael Baudin
 // Copyright (C) 2012 - Scilab Enterprises - Cedric Delamarre

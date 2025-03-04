@@ -2,7 +2,7 @@
 <!DOCTYPE module SYSTEM "../../functions/xml/gateway.dtd">
 <!--
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2013 - Scilab Enterprises - Calixte DENIZET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -29,6 +29,7 @@
     <gateway name="sci_hdf5_load_v1"                    function="hdf5_load_v1"             type="0" />
     <gateway name="sci_hdf5_load_v2"                    function="hdf5_load_v2"             type="0" />
     <gateway name="sci_hdf5_load_v3"                    function="hdf5_load_v3"             type="1" />
+    <gateway name="sci_hdf5_load_v4"                    function="hdf5_load_v4"             type="1" />
     <gateway name="sci_hdf5_listvar"                    function="hdf5_listvar"             type="1" />
     <gateway name="sci_hdf5_listvar"                    function="listvarinfile"            type="1" />
     <gateway name="sci_hdf5_listvar_v2"                 function="hdf5_listvar_v2"          type="0" />

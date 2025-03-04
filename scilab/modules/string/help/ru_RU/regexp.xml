@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) INRIA -
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -20,7 +20,7 @@
     <refnamediv>
         <refname>regexp</refname>
         <refpurpose>
-            поиск подстроки, соответствующей строке регулярного выражения
+            в строке найдите (и распакуйте) подстроки, соответствующие регулярному выражению
         </refpurpose>
     </refnamediv>
     <refsynopsisdiv>
@@ -128,7 +128,7 @@ disp(piStringSplit(2))
 size(d)
 
 // получение имени сервера из URL
-myURL="http://www.scilab.org/download/";
+myURL="https://www.scilab.org/download/";
 [a,b,c,d]=regexp(myURL,'@^(?:http://)?([^/]+)@i')
 
 str='foobar: 2012';

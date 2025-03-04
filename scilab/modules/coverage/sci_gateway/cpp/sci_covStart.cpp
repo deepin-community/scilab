@@ -1,5 +1,6 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
+* Copyright (C) 2023 - Dassault Système - Clement DAVID
 * Copyright (C) 2006 - INRIA - Antoine ELIAS
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -22,6 +23,7 @@
 #include "scilabexception.hxx"
 #include "configvariable.hxx"
 #include "context.hxx"
+#include "macrofile.hxx"
 
 #include <iostream>
 #include <fstream>
@@ -53,6 +55,7 @@ types::Function::ReturnValue sci_covStart(types::typed_list &in, int _iRetCount,
     {
         types::String * strs = in[0]->getAs<types::String>();
         const unsigned int rows = strs->getRows();
+        symbol::Context* ctx = symbol::Context::getInstance();
 
         if (strs->getCols() == 2)
         {
@@ -61,10 +64,28 @@ types::Function::ReturnValue sci_covStart(types::typed_list &in, int _iRetCount,
 
             for (unsigned int i = 0; i < rows; ++i)
             {
-                paths_mods.emplace_back(strs->get(i, 0), strs->get(i, 1));
+                // resolve lib to its path
+                wchar_t* wvar = strs->get(i, 0);
+                types::InternalType* pIT = ctx->get(symbol::Symbol(wvar));
+                if (pIT != NULL && pIT->isLibrary())
+                {
+                    // use the library path
+                    types::Library* lib = pIT->getAs<types::Library>();
+                    paths_mods.emplace_back(lib->getPath(), strs->get(i, 1));
+                }
+                else
+                {
+                    // use the argument as path
+                    paths_mods.emplace_back(wvar, strs->get(i, 1));
+                }
             }
 
-            coverage::CoverModule::createInstance(paths_mods);
+            coverage::CoverModule* cover = coverage::CoverModule::createInstance(paths_mods);
+            if (cover->getMacros().empty())
+            {
+                Scierror(999, _("%s: Wrong input argument #%d: this is not a Scilab module and associated macros.\n"), "covStart", 1);
+                return types::Function::Error;
+            }
         }
         else
         {
@@ -73,10 +94,28 @@ types::Function::ReturnValue sci_covStart(types::typed_list &in, int _iRetCount,
 
             for (unsigned int i = 0; i < rows; ++i)
             {
-                mods.emplace_back(strs->get(i, 0));
+                // resolve lib to its path
+                wchar_t* wvar = strs->get(i, 0);
+                types::InternalType* pIT = ctx->get(symbol::Symbol(wvar));
+                if (pIT != NULL && pIT->isLibrary())
+                {
+                    // use the library path
+                    types::Library* lib = pIT->getAs<types::Library>();
+                    mods.emplace_back(lib->getPath());
+                }
+                else
+                {
+                    // use the argument as path
+                    mods.emplace_back(wvar);
+                }
             }
 
-            coverage::CoverModule::createInstance(mods);
+            coverage::CoverModule* cover = coverage::CoverModule::createInstance(mods);
+            if (cover->getMacros().empty())
+            {
+                Scierror(999, _("%s: Wrong input argument #%d: this is not a Scilab module with macros.\n"), "covStart", 1);
+                return types::Function::Error;
+            }
         }
     }
     else
@@ -85,9 +124,14 @@ types::Function::ReturnValue sci_covStart(types::typed_list &in, int _iRetCount,
         {
             coverage::CoverModule::createInstance()->instrumentSingleMacro(L"", L"", static_cast<types::Macro *>(in[0]), false);
         }
-        else
+        else if (in[0]->isMacroFile())
         {
             coverage::CoverModule::createInstance()->instrumentSingleMacro(L"", L"", static_cast<types::MacroFile *>(in[0])->getMacro(), false);
+        }
+        else
+        {
+            Scierror(999, _("%s: Wrong type for input argument #%d: Function expected.\n"), "covStart", 1);
+            return types::Function::Error;
         }
     }
 

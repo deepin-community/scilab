@@ -1,4 +1,4 @@
-# Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+# Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 # Copyright (C) 2009 - DIGITEO - Allan CORNET
 #
 # This file is distributed under the same license as the Scilab package.
@@ -11,8 +11,7 @@ GATEWAY_CPP_SOURCES =  \
     sci_gateway/cpp/sci_macrovar.cpp \
     sci_gateway/cpp/sci_libraryinfo.cpp \
     sci_gateway/cpp/sci_librarieslist.cpp \
-    sci_gateway/cpp/sci_testGVN.cpp \
-    sci_gateway/cpp/sci_testAnalysis.cpp
+    sci_gateway/cpp/sci_idempotence.cpp
 
 
 libscifunctions_la_CPPFLAGS = \
@@ -25,7 +24,6 @@ libscifunctions_la_CPPFLAGS = \
     -I$(top_srcdir)/modules/ast/includes/symbol/ \
     -I$(top_srcdir)/modules/ast/includes/system_env/ \
     -I$(top_srcdir)/modules/ast/includes/types/ \
-    -I$(top_srcdir)/modules/ast/includes/analysis/ \
     -I$(top_srcdir)/modules/functions_manager/includes/ \
     -I$(top_srcdir)/modules/api_scilab/includes/ \
     -I$(top_srcdir)/modules/localization/includes/ \

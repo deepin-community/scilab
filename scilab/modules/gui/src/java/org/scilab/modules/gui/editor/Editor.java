@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2012 - Pedro Arthur dos S. Souza
  * Copyright (C) 2012 - Caio Lucas dos S. Souza
  *
@@ -632,7 +632,7 @@ public class Editor {
      */
     public void onClickClear() {
         setSelected(null);
-        Integer axesTo = AxesHandler.clickedAxes(figureUid, lastClick);
+        Integer axesTo = AxesHandler.clickedAxes(figureUid, lastClick)[0];
         if (axesTo != null) {
             PolylineHandler.getInstance().deleteAll(axesTo);
         }
@@ -668,7 +668,7 @@ public class Editor {
      * @param axis axis number.
      */
     public void onClickLabel(AxesHandler.axisTo axis) {
-        Integer axes = AxesHandler.clickedAxes(figureUid, lastClick);
+        Integer axes = AxesHandler.clickedAxes(figureUid, lastClick)[0];
         if (axes != null && axis != null) {
             String text = LabelHandler.getLabelText(axes, axis);
             String s = (String)JOptionPane.showInputDialog(
@@ -693,7 +693,7 @@ public class Editor {
      * @param polyline Polyline to be inserted in the legend.
      */
     public void onClickInsert(Integer polyline) {
-        Integer axes = AxesHandler.clickedAxes(figureUid, lastClick);
+        Integer axes = AxesHandler.clickedAxes(figureUid, lastClick)[0];
         if (axes != null) {
             String text = LegendHandler.getLegendText(axes, polyline);
             String s = (String)JOptionPane.showInputDialog(
@@ -719,7 +719,7 @@ public class Editor {
      * Implements legend remove action(Callback).
      */
     public void onClickRemove() {
-        Integer axesTo = AxesHandler.clickedAxes(figureUid, lastClick);
+        Integer axesTo = AxesHandler.clickedAxes(figureUid, lastClick)[0];
         Integer legend = LegendHandler.searchLegend(axesTo);
         Integer[] links = LegendHandler.getLinks(legend);
         String[] text = LegendHandler.getText(legend);
@@ -779,7 +779,7 @@ public class Editor {
      */
     public void onClickCopyStyle() {
 
-        Integer axes = AxesHandler.clickedAxes(figureUid, lastClick);
+        Integer axes = AxesHandler.clickedAxes(figureUid, lastClick)[0];
         ScilabClipboard.getInstance().copyStyle(axes);
     }
 
@@ -788,7 +788,7 @@ public class Editor {
      */
     public void onClickPasteStyle() {
         boolean flag = true;
-        Integer axes = AxesHandler.clickedAxes(figureUid, lastClick);
+        Integer axes = AxesHandler.clickedAxes(figureUid, lastClick)[0];
         if (!AxesHandler.isAxesEmpty(axes)) {
             String msg =  "The axes which the style was copied is not in CubeView" +
                           "\nIf you don't copy the data bounds the view angles can appear different" +
@@ -802,7 +802,7 @@ public class Editor {
 
         Double[] oldColorMap = CommonHandler.getColorMap(figureUid);
         Integer backgroundColor = CommonHandler.getBackground(figureUid);
-        Integer oldAxes = AxesHandler.clickedAxes(figureUid, lastClick);
+        Integer oldAxes = AxesHandler.clickedAxes(figureUid, lastClick)[0];
         Integer newAxes = ScilabClipboard.getInstance().pasteStyle(oldAxes, flag);
         editorHistory.addAction(new ActionPasteStyle(newAxes, oldAxes, oldColorMap, backgroundColor));
     }

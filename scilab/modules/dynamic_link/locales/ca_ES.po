@@ -419,10 +419,10 @@ msgstr "Es necessita un compilador de Fortran o de C."
 #, c-format
 msgid ""
 "%s: Warning: Scilab has not been able to find where the Scilab sources are. "
-"Please submit a bug report on http://bugzilla.scilab.org/\n"
+"Please submit a bug report on https://gitlab.com/scilab/scilab/-/issues\n"
 msgstr ""
 "%s: Avís: L'Scilab no ha pogut trobar on són les fonts de Scilab. Obriu un "
-"informe d'error a http://bugzilla.scilab.org/\n"
+"informe d'error a https://gitlab.com/scilab/scilab/-/issues\n"
 
 #, c-format
 msgid "%s: Build command: %s\n"

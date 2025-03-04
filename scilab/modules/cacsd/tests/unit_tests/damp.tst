@@ -1,6 +1,6 @@
 //<-- CLI SHELL MODE -->
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2001 - INRIA - Serge Steer
 // Copyright (C) 2012 - DIGITEO - Allan CORNET
 //

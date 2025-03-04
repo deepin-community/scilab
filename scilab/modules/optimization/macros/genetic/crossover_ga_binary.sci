@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008 - Yann COLLETTE <yann.collette@renault.com>
 // Copyright (C) 2014 - Michael BAUDIN <michael.baudin@contrib.scilab.org>
 // Copyright (C) Scilab Enterprises - 2014 - Pierre-Aime AGNEL

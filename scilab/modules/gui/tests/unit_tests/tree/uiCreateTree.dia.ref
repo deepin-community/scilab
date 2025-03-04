@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009 - DIGITEO - Sylvestre KOUMAR
 // Copyright (C) 2019 - Samuel GOUGEON
 //
@@ -19,65 +19,32 @@ root = uiCreateNode("Root", "iconRoot", "callbackRoot");
 // Tree creation
 // --------------
 treeOnlyNode1 = uiCreateTree(node1)
- treeOnlyNode1  = 
-       treeOnlyNode1(1)
-  "uitree"
-       treeOnlyNode1(2)
-  label = "Node 1"
-  icon = "iconNode1"
-  callback = "callbackNode1"
+ treeOnlyNode1 = (uitree tlist)
+  (1) = "uitree"
+  (2): [struct] with fields:
+      label = "Node 1"
+      icon = "iconNode1"
+      callback = "callbackNode1"
 treeNode1 = uiCreateTree(node1, leaf11, leaf12)
- treeNode1  = 
-       treeNode1(1)
-  "uitree"
-       treeNode1(2)
-  label = "Node 1"
-  icon = "iconNode1"
-  callback = "callbackNode1"
-       treeNode1(3)
-              treeNode1(3)(1)
-  "uitree"
-              treeNode1(3)(2)
-  label = "leaf 1.1"
-  icon = "iconLeaf1.1"
-  callback = "callbackLeaf1.1"
-       treeNode1(4)
-              treeNode1(4)(1)
-  "uitree"
-              treeNode1(4)(2)
-  label = "leaf 1.2"
-  icon = "iconLeaf1.2"
-  callback = "callbackLeaf1.2"
+ treeNode1 = (uitree tlist)
+  (1) = "uitree"
+  (2): [struct] with fields:
+      label = "Node 1"
+      icon = "iconNode1"
+      callback = "callbackNode1"
+  (3): (uitree tlist)
+  (4): (uitree tlist)
 treeNode3 = uiCreateTree(node3, leaf31, leaf32);
 treeRoot = uiCreateTree(root, node1, node2, node3)
- treeRoot  = 
-       treeRoot(1)
-  "uitree"
-       treeRoot(2)
-  label = "Root"
-  icon = "iconRoot"
-  callback = "callbackRoot"
-       treeRoot(3)
-              treeRoot(3)(1)
-  "uitree"
-              treeRoot(3)(2)
-  label = "Node 1"
-  icon = "iconNode1"
-  callback = "callbackNode1"
-       treeRoot(4)
-              treeRoot(4)(1)
-  "uitree"
-              treeRoot(4)(2)
-  label = "Node 2"
-  icon = "iconNode2"
-  callback = "callbackNode2"
-       treeRoot(5)
-              treeRoot(5)(1)
-  "uitree"
-              treeRoot(5)(2)
-  label = "Node 3"
-  icon = "iconNode3"
-  callback = "callbackNode3"
+ treeRoot = (uitree tlist)
+  (1) = "uitree"
+  (2): [struct] with fields:
+      label = "Root"
+      icon = "iconRoot"
+      callback = "callbackRoot"
+  (3): (uitree tlist)
+  (4): (uitree tlist)
+  (5): (uitree tlist)
 // Erros messages
 // --------------
 // tree creation with wrong inputs

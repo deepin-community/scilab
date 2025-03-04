@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2007-2008 - INRIA
 // Copyright (C) 2009-2011 - DIGITEO
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -91,11 +91,13 @@ end
 
 // Helpbrowser: ========================================================
 // If the browser is open, restore the page left at last exit
-helpbrowser_update("startup");
-clear helpbrowser_update
+if or(getscilabmode() == ["STD", "NW"]) then
+    helpbrowser_update("startup");
+    clear helpbrowser_update
+end
 
 // Protect variable previously defined  ================================
-clear = clear          // special case: http://bugzilla.scilab.org/12198
+clear = clear          // special case: https://gitlab.com/scilab/scilab/-/issues/12198
 predef("all");
 
 // At startup, no interactive vertical paging by default. ==============

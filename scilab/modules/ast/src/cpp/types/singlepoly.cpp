@@ -1,5 +1,5 @@
 /*
-*  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+*  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 *  Copyright (C) 2008-2008 - DIGITEO - Antoine ELIAS
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -367,8 +367,11 @@ void SinglePoly::toStringInternal(double *_pdblR, double *_pdblI, const std::wst
     int iLen = 0;
     int iLastFlush = 2;
     int iParenthLen = 2;
+    bool bAsciiExponents = false;
+    
+    bAsciiExponents = ConfigVariable::getPolynomialDisplay() == 0;
 
-    std::wstring strExponentDigits (L"\u2070\u00B9\u00B2\u00B3\u2074\u2075\u2076\u2077\u2078\u2079");
+    std::wstring strExponentDigits (bAsciiExponents ? L"0123456789" : L"\u2070\u00B9\u00B2\u00B3\u2074\u2075\u2076\u2077\u2078\u2079");
     std::vector<int> iExponentsDigits = {0};
     std::wostringstream ostemp;
     bool bFirst = true;
@@ -427,7 +430,7 @@ void SinglePoly::toStringInternal(double *_pdblR, double *_pdblI, const std::wst
                  dfI.bPaddSign = ! bFirst;
              }
 
-             if (iLen + dfR.iWidth + dfR.iSignLen + dfI.iWidth + dfI.iSignLen + _szVar.length() + iExponentsDigits.size() >= iLineLen - 1)
+             if (iLen + dfR.iWidth + dfR.iSignLen + dfI.iWidth + dfI.iSignLen + _szVar.length() + (int)bAsciiExponents + iExponentsDigits.size() >= iLineLen - 1)
              {
                  iLastFlush = i;
                  _pListWstPoly->push_back(ostemp.str());
@@ -477,6 +480,10 @@ void SinglePoly::toStringInternal(double *_pdblR, double *_pdblI, const std::wst
             {
                 // add polynomial variable and exponent
                 ostemp << _szVar;
+                if (bAsciiExponents)
+                {
+                    ostemp << L"^";
+                }
                 for (auto it = iExponentsDigits.rbegin(); it != iExponentsDigits.rend(); ++it)
                 {
                     ostemp << strExponentDigits[*it];

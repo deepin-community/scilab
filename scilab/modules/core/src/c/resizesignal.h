@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2007 - INRIA - Sylvestre LEDRU
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -14,13 +14,6 @@
  */
 #ifndef __RESIZESIGNAL_H__
 #define __RESIZESIGNAL_H__
-#include <signal.h>
-
-/**
- * Set the console width read from the term size.
- */
-void resize_handler(int sig);
-
 
 /**
 * register the signal SIGWINCH.

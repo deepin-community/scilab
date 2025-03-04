@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2015 - Scilab Enterprises - Pierre-Aimé AGNEL
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -8,8 +8,8 @@
 //
 // <-- Non-regression test for bug 14326 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/14326
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/14326
 //
 // <-- Short Description -->
 // deletion of a element in a structure was impossible

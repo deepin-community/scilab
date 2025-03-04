@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2011 - Calixte DENIZET
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,8 +9,8 @@
 //
 // <-- INTERACTIVE TEST -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=9044
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/9044
 //
 // <-- Short Description -->
 // Updating a LaTeXed label of uimenu() misworks

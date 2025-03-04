@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2016 - Scilab Enterprises - Cedric Delamarre
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,8 +9,8 @@
 //
 // <-- CLI SHELL MODE -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/14775
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/14775
 //
 // <-- Short Description -->
 //

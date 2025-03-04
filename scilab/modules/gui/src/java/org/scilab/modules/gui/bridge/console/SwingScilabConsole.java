@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2007-2008 - INRIA - Vincent Couvert
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -262,7 +262,7 @@ public class SwingScilabConsole extends SciConsole implements SimpleConsole {
         }
 
         // interrupt any mscanf call (input, halt and so on)
-        ((SciInputCommandView) this.getConfiguration().getInputCommandView()).interrupt();
+        ((SciInputCommandView) this.getConfiguration().getInputCommandView()).interruptAndDisable();
     }
 
     /**

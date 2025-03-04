@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA - 1988 - C. Bunks
 // Copyright (C) INRIA - 2002 - S Steer
 //

@@ -1,6 +1,6 @@
 //<-- CLI SHELL MODE -->
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009 - Yung-Jang Lee <yjlee123@gmail.com>
 // Copyright (C) 2009 - INRIA - Sylvestre Ledru
 //

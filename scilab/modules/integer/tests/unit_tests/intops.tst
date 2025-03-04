@@ -1,15 +1,49 @@
 //<-- CLI SHELL MODE -->
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ????-2008 - INRIA
-// Copyright (C) 2016 - Samuel GOUGEON
+// Copyright (C) 2016, 2022 - Samuel GOUGEON
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
+// <-- CLI SHELL MODE -->
+// <-- ENGLISH IMPOSED -->
+// <-- NO CHECK REF -->
 
 funcprot(0);
 
-//extractions
+// Reading big literal int64 and uint64 integers > 2^53
+// ----------------------------------------------------
+t = ["6000000000000001000" "-7000000000000001000" "+80000000000000010" "6000000000000001000"];
+i = uint64(t);
+assert_checkequal(typeof(i), "uint64");
+i = uint64(t');
+assert_checkequal(typeof(i), "uint64");
+i = uint64(matrix(t,2,-1));
+assert_checkequal(typeof(i), "uint64");
+i = uint64(matrix(t,1,2,-1));
+assert_checkequal(typeof(i), "uint64");
+i = int64(t);
+assert_checkequal(typeof(i), "int64");
+i = int64(t');
+assert_checkequal(typeof(i), "int64");
+i = int64(matrix(t,2,-1));
+assert_checkequal(typeof(i), "int64");
+i = int64(matrix(t,1,2,-1));
+assert_checkequal(typeof(i), "int64");
+
+// Errors
+msg = sprintf(_("%s: out of range [0 2^64[.\n"), "int64");
+assert_checkerror("int64(""70000000000000010000"")", msg);
+msg = sprintf(_("%s: out of range [0 2^64[.\n"), "uint64");
+assert_checkerror("uint64(""70000000000000010000"")", msg);
+msg = sprintf(_("%s: Only ''-+0123456789'' characters are allowed.\n"), "int64");
+assert_checkerror("int64(""~70000000000000010000"")", msg);
+msg = sprintf(_("%s: Only ''-+0123456789'' characters are allowed.\n"), "uint64");
+assert_checkerror("uint64(""~70000000000000010000"")", msg);
+
+// extractions
+// -----------
 warning("off"); //WARNING_EMPTY_OPS
 v=int8([1 2 3]);
 assert_checkequal(v(2), int8(2));
@@ -38,7 +72,8 @@ assert_checktrue(v(1:$,2) == int8([2;5]));
 assert_checktrue(v([1 1],1:$) == int8([1 2 3;1 2 3]));
 assert_checktrue(v(1:$,[2 1]) == int8([2 1;5 4]));
 
-//insertion
+// insertion
+// ---------
 v = int8([1 2 3]);
 v(2) = int8(3);
 assert_checkequal(v, int8([1 3 3]));
@@ -203,7 +238,8 @@ a([%f %f],[%f %f]) = [];
 assert_checkequal(a, a_ref);
 
 
-//concatenations
+// concatenations
+// --------------
 x1 = int8(1);
 x2 = int8(7);
 assert_checkequal([x1 x2], int8([1 7]));
@@ -226,7 +262,8 @@ x1 = uint16(1:n);
 assert_checkequal([x1 x1], uint16([1:n 1:n]));
 assert_checkequal([x1; x1], uint16([1:n; 1:n]));
 
-//additions soustractions
+// additions soustractions
+// -----------------------
 X1 = 1;X2 = 7;x1 = int8(X1);x2 = int8(X2);
 assert_checkequal(x1+x2, int8(X1+X2));
 assert_checkequal(x1-x2, int8(X1-X2));
@@ -246,7 +283,8 @@ assert_checkequal(x1-x2, int8(X1-X2));
 assert_checkequal(x2+x1, int8(X2+X1));
 assert_checkequal(x2-x1, int8(X2-X1));
 
-//multiplication
+// multiplication
+// --------------
 X1 = 1;X2 = 7;x1 = int8(X1);x2 = int8(X2);
 assert_checkequal(x1 * x2, int8(X1 * X2));
 assert_checkequal(x1 .* x2, int8(X1 .* X2));
@@ -263,6 +301,7 @@ assert_checkequal(x1' * x2, int8(X1' * X2));
 assert_checkequal(x1 * x2', int8(X1 * X2'));
 
 // Implicit conversions by a*b, a/b, a+b, a-b
+// ------------------------------------------
 icodes = [ 1 2 4 8 11 12 14 18];
 for i = 1:8
     for j = i:8

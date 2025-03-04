@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2018 - ESI Group - Clement DAVID
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -10,8 +10,8 @@
 //
 // <-- Non-regression test for bug 15809 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=15809
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/15809
 //
 // <-- Short Description -->
 // HDF5 load/save was super slow for nested lists
@@ -27,12 +27,12 @@ for i=1:n
     filters_vec($+1) = [G.a G.b;G.c G.d];
 end
 
-tic();
+timer();
 save("TMPDIR/filters_sys.sod", "filters_sys");
-sys = toc();
-tic();
+sys = timer()
+
 save("TMPDIR/filters_vec.sod", "filters_vec");
-vec = toc();
+vec = timer()
 
 assert_checkfalse(sys > 15 * vec);
 

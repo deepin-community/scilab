@@ -15,10 +15,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Revision-Date: 2021-07-09 17:34+0100\n"
+"Revision-Date: 2023-02-16 15:29+0100\n"
 
 # File: modules/coverage/sci_gateway/cpp/sci_covMerge.cpp, line: 42
-# File: modules/coverage/sci_gateway/cpp/sci_covStart.cpp, line: 42
+# File: modules/coverage/sci_gateway/cpp/sci_covStart.cpp, line: 43
 # File: modules/coverage/sci_gateway/cpp/sci_covStop.cpp, line: 42
 # File: modules/coverage/sci_gateway/cpp/sci_profileGetInfo.cpp, line: 337
 #, c-format
@@ -41,11 +41,32 @@ msgid "%s: Wrong type for input argument #%d: A scalar string expected.\n"
 msgstr ""
 
 #
-# File: modules/coverage/sci_gateway/cpp/sci_covStart.cpp, line: 48
+# File: modules/coverage/sci_gateway/cpp/sci_covStart.cpp, line: 49
 #, c-format
 msgid ""
 "%s: Wrong type for input argument #%d: A two-columns string matrix "
 "expected.\n"
+msgstr ""
+
+#
+# File: modules/coverage/sci_gateway/cpp/sci_covStart.cpp, line: 85
+#, c-format
+msgid ""
+"%s: Wrong input argument #%d: this is not a Scilab module and associated "
+"macros.\n"
+msgstr ""
+
+#
+# File: modules/coverage/sci_gateway/cpp/sci_covStart.cpp, line: 115
+#, c-format
+msgid ""
+"%s: Wrong input argument #%d: this is not a Scilab module with macros.\n"
+msgstr ""
+
+#
+# File: modules/coverage/sci_gateway/cpp/sci_covStart.cpp, line: 132
+#, c-format
+msgid "%s: Wrong type for input argument #%d: Function expected.\n"
 msgstr ""
 
 #
@@ -75,13 +96,13 @@ msgstr ""
 
 #
 # File: modules/coverage/sci_gateway/cpp/sci_profileDisable.cpp, line: 114
-# File: modules/coverage/sci_gateway/cpp/sci_profileEnable.cpp, line: 117
+# File: modules/coverage/sci_gateway/cpp/sci_profileEnable.cpp, line: 123
 #, c-format
 msgid "%s: Wrong type for input argument #%d: A macro or library expected.\n"
 msgstr ""
 
 #
-# File: modules/coverage/sci_gateway/cpp/sci_profileEnable.cpp, line: 53
+# File: modules/coverage/sci_gateway/cpp/sci_profileEnable.cpp, line: 59
 #, c-format
 msgid "%s: No more memory.\n"
 msgstr ""
@@ -90,4 +111,22 @@ msgstr ""
 # File: modules/coverage/sci_gateway/cpp/sci_profileGetInfo.cpp, line: 342
 #, c-format
 msgid "%s: Wrong number of output arguments: %d expected.\n"
+msgstr ""
+
+#
+# File: modules/coverage/src/cpp/CoverModule.cpp, line: 149
+#, c-format
+msgid "%s: Argument \"%s\" is obsolete.\n"
+msgstr ""
+
+#
+# File: modules/coverage/src/cpp/CoverModule.cpp, line: 149
+# File: modules/coverage/src/cpp/CoverModule.cpp, line: 150
+msgid "Warning"
+msgstr ""
+
+#
+# File: modules/coverage/src/cpp/CoverModule.cpp, line: 150
+#, c-format
+msgid "%s: Please use %s instead.\n"
 msgstr ""

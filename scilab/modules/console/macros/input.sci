@@ -1,8 +1,8 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) XXXX-2008 - INRIA
 // Copyright (C) 2009-2010 - DIGITEO - Allan CORNET
-//
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
+// Copyright (C) 2021 - Samuel GOUGEON
 //
 // This file is hereby licensed under the terms of the GNU GPL v2.0,
 // pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -30,9 +30,6 @@ function [x] = input(msg, flag)
         error(msprintf(msg, "input",1));
     end
 
-    // a tricky way to get all ascii codes  sequences
-    fmt = "%[" + ascii(32) + "-" + ascii(254) + "]";
-
     if argn(2) == 2 then
         if type(flag) <> 10 then
             msg = _("%s: Wrong type for input argument #%d: String expected.\n")
@@ -49,14 +46,18 @@ function [x] = input(msg, flag)
             error(msprintf(msg, "input", 2, "string"));
         end
 
+        pprompt = prompt()
         prompt(msg);
-        x = mscanf(fmt);
+        x = read(%io(1),1,1,"(a)")
+        prompt(pprompt);
     else
+        __pprompt__ = prompt()
+        prompt(msg);
         while %t
+            __#x#__ = read(%io(1),1,1,"(a)")
             prompt(msg);
-            __#x#__ = mscanf(fmt);
 
-            if (length(__#x#__) == 0) | (__#x#__ == " ") then
+            if stripblanks(__#x#__)=="" then
                 __#x#__ = "[]";
             end
 
@@ -68,7 +69,9 @@ function [x] = input(msg, flag)
             mprintf("%s\n",lasterror());
             mprintf("\n");
         end
+        prompt(__pprompt__);
     end
-
-    mprintf("\n");
+    if mode()==2 then
+        mprintf("\n");
+    end
 endfunction

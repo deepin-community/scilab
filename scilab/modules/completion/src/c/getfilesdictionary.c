@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2007 - INRIA - Allan CORNET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -24,16 +24,16 @@
 #include "machine.h"
 #include "isdir.h"
 /*--------------------------------------------------------------------------*/
-static void mysplitpath(char *composite,  char *path,  char *fname);
+static void mysplitpath(const char* composite, char* path, char* fname);
 static char **addPath(char **dictionary, int sizearray, char *path);
 static char **addDirSeparator(char **dictionary, int sizearray, char *path);
 /*--------------------------------------------------------------------------*/
-static int cmpfiles( const void *a , const void *b)
+static int cmpfiles(const void* a , const void* b)
 {
-    return strcmp(*(const char **)a, *(const char **)b );
+    return strcmp(*(const char **)a, *(const char **)b);
 }
 /*--------------------------------------------------------------------------*/
-char **getfilesdictionary(char *somechars, int *sizearray, BOOL fullpath)
+char **getfilesdictionary(const char *somechars, int *sizearray, BOOL fullpath)
 {
     char **dictionary = NULL;
 
@@ -115,12 +115,12 @@ char **getfilesdictionary(char *somechars, int *sizearray, BOOL fullpath)
     return dictionary;
 }
 /*--------------------------------------------------------------------------*/
-static void mysplitpath(char *composite,  char *path,  char *fname)
+static void mysplitpath(const char* composite, char* path, char* fname)
 {
     if (composite && path && fname)
     {
-        char *lastslash = NULL;
-        char *p2 = NULL;
+        const char *lastslash = NULL;
+        const char *p2 = NULL;
 
         lastslash = NULL;
         p2 = composite;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2011 - DIGITEO - Sylvestre Ledru
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
@@ -17,7 +17,10 @@
     </refnamediv>
     <refsynopsisdiv>
         <title>呼び出し手順</title>
-        <synopsis>res = MPI_Wait(request)</synopsis>
+        <synopsis>
+			res = MPI_Wait(request)
+			res = MPI_Wait(request, comm=mpi_comm)
+		</synopsis>
     </refsynopsisdiv>
     <refsection>
         <title>引数</title>
@@ -26,6 +29,16 @@
                 <term>request</term>
                 <listitem>
                     <para>MPIリクエスト.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>comm=mpi_comm</term>
+                <listitem>
+                    <para>If the optional argument "comm" is given,
+                        this function will use the MPI communicator created by 
+						<link linkend="MPI_Create_comm">MPI_Create_comm</link>.
+                        If not, the default MPI_COMM_WORLD is used.
+                    </para>
                 </listitem>
             </varlistentry>
             <varlistentry>
@@ -58,14 +71,13 @@
                      MPI_Isend(value, slaveId, 42);
                    end
                 else
-                    rankSource=0;
-                    tag=0;
+                    rankSource = 0;
+                    tag = 0;
                     MPI_Irecv(rankSource, tag, 42); // MPI_Irecv は値を返しません
-                    value=MPI_Wait(42) // 値はMPI_Waitにより返されます
-                    assert_checkequal(value,2);
+                    value = MPI_Wait(42) // 値はMPI_Waitにより返されます
+                    value == 2
                 end
                 MPI_Finalize();
-                exit()
            ]]> </programlisting>
     </refsection>
     <refsection role="see also">

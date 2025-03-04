@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA -
  * Copyright (C) 2017 - Samuel GOUGEON
  *
@@ -326,6 +326,12 @@ Rp == p
                     The name of the predefined variables <literal>%s</literal> and
                     <literal>%z</literal> is now used as literal generator for input polynomials in
                     <literal>s</literal> or <literal>z</literal>.
+                </revremark>
+            </revision>
+            <revision>
+                <revnumber>2024.1.0</revnumber>
+                <revremark>
+                    <literal>sci2exp(c)</literal>, where c is a cell, now returns expression using <literal>{}</literal> instead of <literal>makecell</literal>.
                 </revremark>
             </revision>
         </revhistory>

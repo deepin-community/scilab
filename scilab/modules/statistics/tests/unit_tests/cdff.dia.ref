@@ -1,6 +1,6 @@
 //<-- CLI SHELL MODE -->
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ????-2008 - INRIA
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -21,7 +21,7 @@ if norm(f1-f)     > prec then bugmes();quit;end
 if norm(dfn1-dfn) > prec then bugmes();quit;end
 if norm(dfd1-dfd) > prec then bugmes();quit;end
 // IEEE support
-// See http://bugzilla.scilab.org/show_bug.cgi?id=7296
+// See https://gitlab.com/scilab/scilab/-/issues/7296
 dfn      = 1;
 dfd      = 2;
 f        = %inf; // Inf

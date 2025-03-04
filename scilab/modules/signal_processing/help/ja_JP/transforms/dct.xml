@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 1997   - INRIA
 * Copyright (C) 2012 - Serge Steer - INRIA
 *
@@ -426,7 +426,7 @@
   size(find(d<>0),'*')
   A1 = dct(d,1);
   clf
-  gcf().color_map = graycolormap(128);
+  gcf().color_map = gray(128);
   subplot(121), grayplot(x,x,A)
   subplot(122), grayplot(x,x,A1)
   ]]></programlisting>

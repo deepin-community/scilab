@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2012 - DIGITEO - Antoine ELIAS
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -72,9 +72,6 @@ static const std::string fname("hdf5_listvar");
 types::Function::ReturnValue sci_hdf5_listvar_v3(types::typed_list &in, int _iRetCount, types::typed_list &out)
 {
     int rhs = static_cast<int>(in.size());
-
-    _iRetCount = std::max(1, _iRetCount);
-
     if (rhs != 1)
     {
         Scierror(999, _("%s: Wrong number of input argument(s): %d expected.\n"), fname.data(), 1);
@@ -125,7 +122,7 @@ types::Function::ReturnValue sci_hdf5_listvar_v3(types::typed_list &in, int _iRe
         std::vector<char*> vars(items);
         items = getVariableNames6(iFile, vars.data());
 
-        if (_iRetCount <= 1)
+        if (_iRetCount == 0)
         {
             sciprint("Name                     Type           Size            Bytes\n");
             sciprint("-------------------------------------------------------------\n");
@@ -143,7 +140,6 @@ types::Function::ReturnValue sci_hdf5_listvar_v3(types::typed_list &in, int _iRe
                 break;
             }
 
-
             if (_iRetCount != 2)
             {
                 if (read_data(dset, info[i]) == false)
@@ -151,7 +147,7 @@ types::Function::ReturnValue sci_hdf5_listvar_v3(types::typed_list &in, int _iRe
                     break;
                 }
 
-                if (_iRetCount <= 1)
+                if (_iRetCount == 0)
                 {
                     sciprint("%s\n", info[i].info);
                 }
@@ -178,14 +174,17 @@ types::Function::ReturnValue sci_hdf5_listvar_v3(types::typed_list &in, int _iRe
 
     closeHDF5File(iFile);
 
-    //1st Lhs
-    types::String* out1 = new types::String(items, 1);
-    for (int i = 0; i < items; i++)
+    if (_iRetCount > 0)
     {
-        out1->set(i, info[i].name.data());
-    }
+        // 1st Lhs
+        types::String* out1 = new types::String(items, 1);
+        for (int i = 0; i < items; i++)
+        {
+            out1->set(i, info[i].name.data());
+        }
 
-    out.push_back(out1);
+        out.push_back(out1);
+    }
 
     //2nd
     if (_iRetCount > 1)

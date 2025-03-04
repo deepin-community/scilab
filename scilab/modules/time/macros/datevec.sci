@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA - Pierre MARECHAL
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -17,19 +17,14 @@
 
 function [Y,M,D,h,m,s] = datevec(N)
 
+    arguments
+        N {mustBeA(N, "double")}
+    end
+
     lhs=argn(1);
-    rhs=argn(2);
 
     common_year = [0,31,59,90,120,151,181,212,243,273,304,334,365];
     leap_year   = [0,31,60,91,121,152,182,213,244,274,305,335,366];
-
-    if rhs<>1 then
-        error(msprintf(gettext("%s: Wrong number of input argument: %d expected.\n"),"datevec",1));
-    end
-
-    if type(N) <> 1 then
-        error(msprintf(gettext("%s: Wrong type for input argument #%d: Real matrix expected.\n"),"datevec",1));
-    end
 
     [nr,nc] = size(N);
 
@@ -60,7 +55,6 @@ function [Y,M,D,h,m,s] = datevec(N)
     mask       = (temp <= 0);
     if or(mask)
         Year(mask) = Year(mask)-1;
-
         N(mask)    = N(mask) - (365.0*Year(mask) + ceil(0.25*Year(mask)) - ceil(0.01*Year(mask)) + ceil(0.0025*Year(mask)));
         N(~mask)   = temp(~mask);
     else
@@ -77,10 +71,10 @@ function [Y,M,D,h,m,s] = datevec(N)
     month_day_mat = ones(nr,nc);
     idx_leap_year = isLeapYear(Year);
 
-    if ~isempty(Month(idx_leap_year))
+    if Month(idx_leap_year) <> [] then
         month_day_mat(idx_leap_year)  = leap_year(Month(idx_leap_year)+1);
     end
-    if ~isempty(Month(~idx_leap_year))
+    if Month(~idx_leap_year) <> [] then
         month_day_mat(~idx_leap_year) = common_year(Month(~idx_leap_year)+1);
     end
 
@@ -88,13 +82,10 @@ function [Y,M,D,h,m,s] = datevec(N)
         Month( N>month_day_mat ) = Month( N>month_day_mat )+1;
     end
 
-
-    Day = ones(nr,nc);
-
-    if ~isempty(Month(idx_leap_year))
+    if Month(idx_leap_year) <> [] then
         month_day_mat(idx_leap_year)  = leap_year(Month(idx_leap_year));
     end
-    if ~isempty(Month(~idx_leap_year))
+    if Month(~idx_leap_year) <> [] then
         month_day_mat(~idx_leap_year) = common_year(Month(~idx_leap_year));
     end
 

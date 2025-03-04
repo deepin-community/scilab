@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2012 - INRIA - Serge STEER
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -19,11 +19,12 @@ function demo_conv2()
 
     load(get_absolute_file_path("conv2.dem.sce")+"image.dat")
 
-    f=scf(1000);clf;
+    f = scf(100001);
+    clf(f,"reset");
     f.axes_size=[800 400];
     demo_viewCode("conv2.dem.sce");
 
-    f.color_map=graycolormap(128);
+    f.color_map=gray(128);
     drawlater()
     subplot(121)
     Matplot(I*128);

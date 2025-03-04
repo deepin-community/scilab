@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2013 - Scilab Enterprises - Antoine Elias
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -40,6 +40,8 @@ static types::Function::ReturnValue sci_getfieldUserType(types::typed_list &in, 
 /*-----------------------------------------------------------------------------------*/
 types::Function::ReturnValue sci_getfield(types::typed_list &in, int _iRetCount, types::typed_list &out)
 {
+    int iRetCount = std::max(_iRetCount, 1);
+
     if (in.size() != 2)
     {
         Scierror(77, _("%s: Wrong number of input argument(s): %d expected.\n"), "getfield", 2);
@@ -57,8 +59,6 @@ types::Function::ReturnValue sci_getfield(types::typed_list &in, int _iRetCount,
     {
         return sci_getfieldUserType(in, _iRetCount, out);
     }
-
-    _iRetCount = std::max(_iRetCount, 1);
 
     types::InternalType* pIndex = in[0];
     if (in[1]->isList() == false && in[1]->isMList() == false && in[1]->isTList() == false)
@@ -116,7 +116,7 @@ types::Function::ReturnValue sci_getfield(types::typed_list &in, int _iRetCount,
     types::List* pList = pITOut->getAs<types::List>();
     int iListSize = pList->getSize();
 
-    if (_iRetCount < iListSize)
+    if (iRetCount != iListSize)
     {
         Scierror(78, _("%s: Wrong number of output argument(s): %d expected.\n"), "getfield", iListSize);
         return types::Function::Error;
@@ -192,7 +192,7 @@ types::Function::ReturnValue sci_getfield(types::typed_list &in, int _iRetCount,
         }
     }
 
-    for (int i = 0 ; i < iListSize ; i++)
+    for (int i = 0 ; i < iRetCount ; i++)
     {
         out.push_back(pList->get(i));
     }
@@ -208,6 +208,7 @@ static types::Function::ReturnValue sci_getfieldStruct(types::typed_list &in, in
     types::InternalType* pIndex = in[0];
     types::Struct* pSt = in[1]->getAs<types::Struct>();
     types::typed_list vectResult;
+    int iRetCount = std::max(_iRetCount, 1);
 
     if (pIndex->isString())
     {
@@ -236,13 +237,13 @@ static types::Function::ReturnValue sci_getfieldStruct(types::typed_list &in, in
         return types::Function::Error;
     }
 
-    if (_iRetCount != static_cast<int>(vectResult.size()))
+    if (iRetCount != static_cast<int>(vectResult.size()))
     {
-        Scierror(78, _("%s: Wrong number of output argument(s): %d expected.\n"), "getfield", vectResult.size());
+        Scierror(78, _("%s: Wrong number of output argument(s): %d expected.\n"), "getfield", (int) vectResult.size());
         return types::Function::Error;
     }
 
-    for (int i = 0 ; i < _iRetCount ; i++)
+    for (int i = 0 ; i < iRetCount ; i++)
     {
         out.push_back(vectResult[i]);
     }

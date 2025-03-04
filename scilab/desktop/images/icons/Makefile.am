@@ -1,5 +1,5 @@
 #
-# Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+# Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 # Copyright (C) Scilab Enterprises - 2011 - Clement David
 #
 # Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -43,6 +43,7 @@ nobase_icons_DATA = 16x16/apps/scilab.png \
 24x24/mimetypes/application-x-scilab-zcos.png \
 256x256/apps/puffin.png \
 256x256/apps/scilab.png \
+256x256/apps/scilabMacOS.png \
 256x256/apps/scinotes.png \
 256x256/apps/xcos.png \
 256x256/mimetypes/application-x-scilab-bin.png \

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA - Farid BELAHCENE
  * Copyright (C) 2013, 2016 - Samuel GOUGEON : 5.5.0 extensions, page overhauled
  *
@@ -124,6 +124,7 @@ flipdim(x, 1)
 // Rationals:
 n = inv_coeff(grand(3, 9, "uin", 0, 3), 2);
 d = inv_coeff(grand(3, 9, "uin", 0, 3), 2);
+d(d == 0) = 1;
 r = n./d
 flipdim(r, 2)
  ]]></programlisting>
@@ -138,7 +139,11 @@ flipdim(X, 2, 4) // => [8 9 10 11   4 5 6 7   0 1 2 3]
 flipdim(X, 2, 6) // => [6 7 8 9 10 11   0 1 2 3 4 5]
 
 // Error if blockSize does not divide the targeted dimension of x.
-y = flipdim(x, 2, 5); // size(X) = [1 12] and blockSize=5 does not divide 12.
+try
+    y = flipdim(X, 2, 5); // size(X) = [1 12] and blockSize=5 does not divide 12.
+catch
+    disp("size(X) = [1 12] and blockSize=5 does not divide 12");
+end
  ]]></programlisting>
     <para>Example of results:</para>
     <screen><![CDATA[

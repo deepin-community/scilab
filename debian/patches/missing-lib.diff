@@ -2,9 +2,9 @@ Description: add a missing lib to the list given to the linker
 Author: Sylvestre Ledru
 Forwarded: http://bugzilla.scilab.org/show_bug.cgi?id=15452
 
---- scilab.orig/scilab/Makefile.am
-+++ scilab/scilab/Makefile.am
-@@ -111,6 +111,7 @@
+--- a/scilab/Makefile.am
++++ b/scilab/Makefile.am
+@@ -110,6 +110,7 @@
  if NEED_JAVA
  scilab_bin_LDADD += \
  			$(top_builddir)/modules/console/libsciconsole.la \

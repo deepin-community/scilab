@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA, Serge Steer
 // Copyright (C) - 2010 - DIGITEO - Michael Baudin
 // Copyright (C) - 2011 - DIGITEO - Allan CORNET
@@ -13,17 +13,11 @@
 // along with this program.
 function x = secd(x)
 
-    rhs = argn(2);
-    if rhs <> 1 then
-        error(msprintf(gettext("%s: Wrong number of input argument(s): %d expected.\n"),"secd", 1));
+    arguments
+        x {mustBeA(x, "double"), mustBeReal}
     end
 
-    // Secant argument in degree
-    if type(x) <> 1 | ~isreal(x) then
-        error(msprintf(gettext("%s: Wrong type for input argument #%d: Real matrix expected.\n"),"secd",1));
-    end
-
-    if ~isempty(x)
+    if x <> [] then
         n = round(x/90);
         x = x - n*90;
         m = pmodulo(n, 4);

@@ -1,5 +1,5 @@
 //
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009 - DIGITEO - Jean-Baptiste Silvy
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -22,7 +22,7 @@ function [] = %_fec()
     mode(0)
     exec("SCI/modules/graphics/demos/fec/fec_demo.sci",-1);
     clf();
-    gcf().color_map = jetcolormap(128);
+    gcf().color_map = jet(128);
     N=20;
     n=1:N;
     x=cos(n*2*%pi/N);

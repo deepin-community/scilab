@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA - 2005 - Allan CORNET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -83,7 +83,8 @@ void *MyHeapAlloc(size_t dwSize, char *file, int line)
     else
     {
 #ifdef _DEBUG
-        sciprint("MALLOC (2) Error File %s Line %d ", file, line);
+        // MALLOC(0) does not report a warning anymore
+        // sciprint("MALLOC (2) Error File %s Line %d ", file, line);
 #endif
         _try
         {

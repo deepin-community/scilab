@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2010 - Calixte DENIZET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -56,7 +56,7 @@ public final class PlotAction extends CommonCallBack {
     public static final int HISTPLOT = 5;
     public static final int MESH = 6;
     public static final int SURF = 7;
-    public static final int HIST3D = 8;
+    public static final int BAR3D = 8;
     public static final int CONTOUR2D = 9;
     public static final int PIE = 10;
 
@@ -70,24 +70,24 @@ public final class PlotAction extends CommonCallBack {
         map.put("histplot", 5);
         map.put("mesh", 6);
         map.put("surf", 7);
-        map.put("hist3d", 8);
+        map.put("bar3d", 8);
         map.put("contour2d", 9);
         map.put("pie", 10);
     }
 
-    private static final String COM_PLOT2D = "plot2d(%s)";
-    private static final String COM_MATPLOT = "Matplot(%s)";
-    private static final String COM_GRAYPLOT = "grayplot(1:%s,1:%s,%s)";
-    private static final String COM_SGRAYPLOT = "Sgrayplot(1:%s,1:%s,%s)";
-    private static final String COM_CHAMP = "champ(1:%s,1:%s,real(%s),imag(%s))";
-    private static final String COM_HISTPLOT = "histplot(10,%s)";
-    private static final String COM_MESH = "mesh(%s)";
-    private static final String COM_SURF = "surf(%s)";
-    private static final String COM_HIST3D = "hist3d(%s)";
-    private static final String COM_CONTOUR2D = "L?8625083632641564278=xget(\"fpf\");xset(\"fpf\",\" \");contour2d(1:%s,1:%s,%s,10);xset(\"fpf\",L?8625083632641564278);clear(\"L?8625083632641564278\")";
-    private static final String COM_PIE = "L?8625083632641564278=%s;pie(L?8625083632641564278(find(L?8625083632641564278>0&L?8625083632641564278<>%%inf&L?8625083632641564278<>%%nan)))";
+    private static final String COM_PLOT2D = "plot2d(%s);";
+    private static final String COM_MATPLOT = "Matplot(%s);";
+    private static final String COM_GRAYPLOT = "grayplot(1:%s,1:%s,%s);";
+    private static final String COM_SGRAYPLOT = "Sgrayplot(1:%s,1:%s,%s);";
+    private static final String COM_CHAMP = "champ(1:%s,1:%s,real(%s),imag(%s));";
+    private static final String COM_HISTPLOT = "histplot(10,%s);";
+    private static final String COM_MESH = "mesh(%s);";
+    private static final String COM_SURF = "surf(%s);";
+    private static final String COM_BAR3D = "bar3d(%s);";
+    private static final String COM_CONTOUR2D = "contour2d(1:%s,1:%s,%s,10);";
+    private static final String COM_PIE = "L?8625083632641564278=%s;pie(L?8625083632641564278(find(L?8625083632641564278>0&L?8625083632641564278<>%%inf&L?8625083632641564278<>%%nan)));";
 
-    private static final String[] COMMANDS = new String[] {COM_PLOT2D, COM_MATPLOT, COM_GRAYPLOT, COM_SGRAYPLOT, COM_CHAMP, COM_HISTPLOT, COM_MESH, COM_SURF, COM_HIST3D, COM_CONTOUR2D, COM_PIE};
+    private static final String[] COMMANDS = new String[] {COM_PLOT2D, COM_MATPLOT, COM_GRAYPLOT, COM_SGRAYPLOT, COM_CHAMP, COM_HISTPLOT, COM_MESH, COM_SURF, COM_BAR3D, COM_CONTOUR2D, COM_PIE};
     private static final String[] IMG = new String[] {
         "application-x-scilab-plot2d",
         "application-x-scilab-Matplot",
@@ -97,7 +97,7 @@ public final class PlotAction extends CommonCallBack {
         "application-x-scilab-histplot",
         "application-x-scilab-mesh",
         "application-x-scilab-surf",
-        "application-x-scilab-hist3d",
+        "application-x-scilab-bar3d",
         "application-x-scilab-contour2d",
         "application-x-scilab-pie"
     };
@@ -178,9 +178,10 @@ public final class PlotAction extends CommonCallBack {
                 colC = Integer.parseInt(((SwingScilabVariableBrowser)editor).getTable().getModel().getValueAt(clickedRow, BrowseVar.NB_COLS_INDEX).toString());
                 data = ((SwingScilabVariableBrowser)editor).getTable().getValueAt(clickedRow, BrowseVar.NAME_COLUMN_INDEX).toString();
             }
-            int type = Integer.parseInt(((SwingScilabVariableBrowser)editor).getTable().getModel().getValueAt(clickedRow, BrowseVar.TYPE_COLUMN_INDEX).toString());
+            int modelRow = ((SwingScilabVariableBrowser)editor).getTable().convertRowIndexToModel(clickedRow);
+            int varType = Integer.parseInt(((SwingScilabVariableBrowser)editor).getTable().getModel().getValueAt(modelRow, BrowseVar.TYPE_COLUMN_INDEX).toString());
 
-            if (!ScilabTypeEnumDescription.getTypeDescriptionFromId(type).equals(EditVar.DOUBLE)) {
+            if (!ScilabTypeEnumDescription.getTypeDescriptionFromId(varType).equals(EditVar.DOUBLE)) {
                 data = "double(" + data + ")";
             }
 
@@ -258,7 +259,7 @@ public final class PlotAction extends CommonCallBack {
         popup.add(PlotAction.createJMenuItem(editor, "histplot", true));
         popup.add(PlotAction.createJMenuItem(editor, "mesh", true));
         popup.add(PlotAction.createJMenuItem(editor, "surf", true));
-        popup.add(PlotAction.createJMenuItem(editor, "hist3d", true));
+        popup.add(PlotAction.createJMenuItem(editor, "bar3d", true));
         popup.add(PlotAction.createJMenuItem(editor, "contour2d", true));
         popup.add(PlotAction.createJMenuItem(editor, "pie", true));
 

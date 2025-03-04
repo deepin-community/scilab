@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2011 - DIGITEO - Sylvestre Ledru
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
@@ -20,7 +20,10 @@
     </refnamediv>
     <refsynopsisdiv>
         <title>呼び出し手順</title>
-        <synopsis>res = MPI_Bcast(value,rootID)</synopsis>
+        <synopsis>
+            res = MPI_Bcast(value,rootID)
+            res = MPI_Bcast(value, rootID, comm=mpi_comm)
+        </synopsis>
     </refsynopsisdiv>
     <refsection>
         <title>引数</title>
@@ -35,6 +38,16 @@
                 <term>rootID</term>
                 <listitem>
                     <para>メッセージのソース</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>comm = mpi_comm</term>
+                <listitem>
+                    <para>If the optional argument "comm" is given,
+                        this function will use the MPI communicator created by
+                        <link linkend="MPI_Create_comm">MPI_Create_comm</link>.
+                        If not, the default MPI_COMM_WORLD is used.
+                    </para>
                 </listitem>
             </varlistentry>
             <varlistentry>
@@ -62,17 +75,17 @@
         <title>例</title>
         <programlisting role="example"><![CDATA[
             MPI_Init();
-            rnk =    MPI_Comm_rank();
-            sizeNodes =    MPI_Comm_size();
+            rnk = MPI_Comm_rank();
+            sizeNodes = MPI_Comm_size();
             SLV = rnk;                // 手軽なショートカット, マスターはランク0です
             Master = ~ SLV;            // その他は全てスレーブ
-            a=-1
+            a = -1;
             if Master
-            // aを宣言
-            a=42
+                // aを宣言
+                a = 42
             end
-            b=MPI_Bcast(a, 0);
-            assert_checkequal(b,42);
+            b = MPI_Bcast(a, 0);
+            b == 42
             MPI_Finalize();
             ]]></programlisting>
     </refsection>

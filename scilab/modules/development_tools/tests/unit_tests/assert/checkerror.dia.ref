@@ -114,7 +114,7 @@ instr = "assert_checkerror ( """" , ["""" """"] )";
 ierr = execstr(instr, "errcatch");
 MY_assert_equal ( ierr , 10000 );
 lerr = lasterror();
-MY_assert_equal ( lerr , sprintf( gettext ( "%s: No error was produced while evaluating ""%s"".") , "assert_checkerror" , "") );
+MY_assert_equal ( lerr , sprintf( gettext ( "%s: No error was produced while evaluating:\n""%s"".") , "assert_checkerror" , "") );
 //
 // Check error message when size of 3d argument of assert_checkerror is false
 instr = "assert_checkerror ( """" , """", [1 2] )";
@@ -135,14 +135,14 @@ instr = "assert_checkerror ( ""y=f(1)"" , ""foo"" )";
 ierr=execstr(instr,"errcatch");
 MY_assert_equal ( ierr , 10000 );
 lerr = lasterror();
-MY_assert_equal ( lerr , "assert_checkerror: No error was produced while evaluating ""y=f(1)""." );
+MY_assert_equal ( lerr , sprintf( gettext ( "%s: No error was produced while evaluating:\n""%s"".") , "assert_checkerror" , "y=f(1)" ) );
 //
 // Check error message when no error is produced by f (and error number is given)
 instr = "assert_checkerror ( ""y=f(1)"" , ""foo"" , 12 )";
 ierr=execstr(instr,"errcatch");
 MY_assert_equal ( ierr , 10000 );
 lerr = lasterror();
-MY_assert_equal ( lerr , sprintf( gettext ( "%s: No error was produced while evaluating ""%s"".") , "assert_checkerror" , "y=f(1)" ) );
+MY_assert_equal ( lerr , sprintf( gettext ( "%s: No error was produced while evaluating:\n""%s"".") , "assert_checkerror" , "y=f(1)" ) );
 //
 // Check error message when formatting the error message generates an error (!).
 instr = "assert_checkerror ( ""y=f()"" , ""foo%d%d"" , [] , 2 )";

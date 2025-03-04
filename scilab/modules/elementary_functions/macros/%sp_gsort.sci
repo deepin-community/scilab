@@ -1,6 +1,6 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) DIGITEO - 2009 - Allan CORNET
-// Copyrifht (C) 2012 - Scilab Enterprises - Adeline CARNIS
+// Copyright (C) 2012 - Scilab Enterprises - Adeline CARNIS
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
 // Copyright (C) 2018 - 2020 - Samuel GOUGEON : complete rewritting
 //

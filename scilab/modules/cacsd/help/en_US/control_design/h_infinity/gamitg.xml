@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA -
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
  *
@@ -112,7 +112,7 @@ B = ( B1 , B2 ) ,    C = ( C1 ) ,    D = ( D11  D12)
                 <revremark>
                     <literal>Sl</literal> is now checked for
                     continuous time linear dynamical system.  This modification
-                    has been introduced by this <ulink url="http://gitweb.scilab.org/?p=scilab.git;a=commit;h=3d7083daae3339813ba747c8adcda1f9599bb80d">commit</ulink>
+                    has been introduced by this <ulink url="https://gitlab.com/scilab/scilab/-/commit/3d7083daae3339813ba747c8adcda1f9599bb80d">commit</ulink>
                 </revremark>
             </revision>
         </revhistory>

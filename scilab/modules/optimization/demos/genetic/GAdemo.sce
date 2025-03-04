@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) DIGITEO - Yann COLLETTE
 // Copyright (C) 2012 - DIGITEO - Allan CORNET
 //
@@ -92,8 +92,7 @@ function demo_genetic_algo()
     if (size(pop_opt(1)', 2) == 2) then
         subplot(2, 1, 1);
         drawlater;
-        xset("fpf", " ");
-        contour(x, y, Z', 5);
+        contour(x, y, Z', 5, fpf=" ");
         _axes = gca();
         _axes.data_bounds = [Min(1) Max(1) Min(2) Max(2)];
         xtitle("Genetic Algorithm - real variable", "x1", "x2");
@@ -136,8 +135,7 @@ function demo_genetic_algo()
     if (size(pop_opt(1)',2)==2) then
         subplot(2, 1, 2);
         drawlater;
-        xset("fpf", " ");
-        contour(x, y, Z', 5);
+        contour(x, y, Z', 5, fpf=" ");
         _axes = gca();
         _axes.data_bounds = [Min(1) Max(1) Min(2) Max(2)];
         xtitle("Genetic Algorithm - binary variables","x1","x2");

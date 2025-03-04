@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ????-2008 - INRIA
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -272,17 +272,17 @@ deff("r=test()",[
 if test() then bugmes();quit;end
 deff("test()",["try a=2; try a=xxxx; catch a=a+1,end; catch;b=2;end"])
 tree2code(macr2tree(test))
- ans  =
+ ans = [12x1 string]
   "function test()"
   "try "           
   "  a = 2;  try " 
   "    a = xxxx;"  
   "  catch "       
   "    a = a+1"    
-  "  end;"         
+  "  end"          
   "catch "         
   "  b = 2;"       
-  "end;"           
+  "end"            
   "endfunction"    
   ""               
 deff("r=test()",[

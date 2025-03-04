@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2009-2010 - DIGITEO - Bruno JOFRET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -16,7 +16,8 @@
 #ifndef __MACRO_HXX__
 #define __MACRO_HXX__
 
-#include <list>
+#include <functional>
+#include <vector>
 #include <string>
 #include "context.hxx"
 #include "types.hxx"
@@ -24,20 +25,44 @@
 #include "double.hxx"
 #include "seqexp.hxx"
 
+struct ARG_VALIDATOR
+{
+    std::function<int(std::vector<types::InternalType*>&)> validator;
+    std::vector<std::tuple<int, types::InternalType*>> inputs;
+    std::tuple<std::string, int> error;
+    std::vector<std::string> errorArgs;
+};
+
+struct ARG_CONVERTOR
+{
+    std::function<types::InternalType*(types::InternalType*)> convertor;
+};
+
+struct ARG
+{
+    std::vector<ARG_CONVERTOR> convertors;
+    std::function<types::InternalType*(types::InternalType* x)> dimsConvertor;
+    std::function<std::wstring()> dimsStr;
+    std::vector<ARG_VALIDATOR> validators;
+    ast::Exp* default_value = nullptr;
+    Location loc;
+};
+
 namespace types
 {
 class EXTERN_AST Macro : public Callable
 {
 public :
     Macro() : Callable(),
-        m_Nargin(symbol::Context::getInstance()->getOrCreate(symbol::Symbol(L"nargin"))),
-        m_Nargout(symbol::Context::getInstance()->getOrCreate(symbol::Symbol(L"nargout"))),
-        m_Varargin(symbol::Context::getInstance()->getOrCreate(symbol::Symbol(L"varargin"))),
-        m_Varargout(symbol::Context::getInstance()->getOrCreate(symbol::Symbol(L"varargout")))
+              m_Nargin(symbol::Context::getInstance()->getOrCreate(symbol::Symbol(L"nargin"))),
+              m_Nargout(symbol::Context::getInstance()->getOrCreate(symbol::Symbol(L"nargout"))),
+              m_Varargin(symbol::Context::getInstance()->getOrCreate(symbol::Symbol(L"varargin"))),
+            m_Varargout(symbol::Context::getInstance()->getOrCreate(symbol::Symbol(L"varargout"))) /*,
+              m_firstCall(true)*/
     {
     }
 
-    Macro(const std::wstring& _stName, std::list<symbol::Variable*> &_inputArgs, std::list<symbol::Variable*> &_outputArgs, ast::SeqExp &_body, const std::wstring& _stModule);
+    Macro(const std::wstring& _stName, std::vector<symbol::Variable*> &_inputArgs, std::vector<symbol::Variable*> &_outputArgs, ast::SeqExp &_body, const std::wstring& _stModule);
     virtual                     ~Macro();
 
     // FIXME : Should not return NULL;
@@ -89,8 +114,8 @@ public :
         m_stPath = _fileName;
     }
 
-    std::list<symbol::Variable*>*   getInputs();
-    std::list<symbol::Variable*>*   getOutputs();
+    std::vector<symbol::Variable*>* getInputs();
+    std::vector<symbol::Variable*>* getOutputs();
 
     virtual int getNbInputArgument(void) override;
     virtual int getNbOutputArgument(void) override;
@@ -109,19 +134,22 @@ public :
         return m_submacro;
     }
 
-private :
-    std::list<symbol::Variable*>*   m_inputArgs;
-    std::list<symbol::Variable*>*   m_outputArgs;
-    ast::SeqExp*                    m_body;
-    bool                            bAutoAlloc;
-    symbol::Variable*               m_Nargin;
-    symbol::Variable*               m_Nargout;
-    symbol::Variable*               m_Varargin;
-    symbol::Variable*               m_Varargout;
-    Double*                         m_pDblArgIn;
-    Double*                         m_pDblArgOut;
+    void updateArguments();
+    bool checkArgument(ast::Exp* exp);
+    bool checkStaticDims(const std::vector<std::tuple<std::vector<int>, symbol::Variable*>>& dims);
+  private:
+    std::vector<symbol::Variable*>*     m_inputArgs;
+    std::vector<symbol::Variable*>*     m_outputArgs;
+    ast::SeqExp*                        m_body;
+    symbol::Variable*                   m_Nargin;
+    symbol::Variable*                   m_Nargout;
+    symbol::Variable*                   m_Varargin;
+    symbol::Variable*                   m_Varargout;
+    Double*                             m_pDblArgIn;
+    Double*                             m_pDblArgOut;
     std::map<symbol::Variable*, Macro*> m_submacro;
-    std::wstring                    m_stPath;
+    std::wstring                        m_stPath;
+    std::map<std::wstring, ARG>         m_arguments;
 };
 }
 

@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2010 - DIGITEO - Clement DAVID
  * Copyright (C) 2011-2015 - Scilab Enterprises - Clement DAVID
  *
@@ -23,14 +23,15 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 import javax.swing.JFileChooser;
 import javax.xml.XMLConstants;
@@ -59,12 +60,14 @@ import org.scilab.modules.xcos.configuration.model.SettingType;
 import org.scilab.modules.xcos.configuration.utils.ConfigurationConstants;
 import org.scilab.modules.xcos.graph.XcosDiagram;
 import org.scilab.modules.xcos.graph.model.ScicosObjectOwner;
+import org.scilab.modules.xcos.graph.model.XcosCellFactory;
 import org.scilab.modules.xcos.io.XcosFileType;
 import org.scilab.modules.xcos.preferences.XcosOptions;
 import org.scilab.modules.xcos.utils.FileUtils;
 import org.scilab.modules.xcos.utils.XcosConstants;
 import org.scilab.modules.xcos.utils.XcosMessages;
 import org.xml.sax.SAXException;
+import org.scilab.modules.gui.filechooser.FileChooser;
 
 /**
  * Entry point to manage the configuration
@@ -333,6 +336,13 @@ public final class ConfigurationManager {
         doc.setViewport(graph.getViewPortTab());
     }
 
+    /**
+     * @return a Stream of all existing Document
+     */
+    public Stream<DocumentType> streamTab() {
+        return getSettings().getTab().stream();
+    }
+
     private DocumentType allocate(XcosDiagram graph) {
         final List<DocumentType> tabs = getSettings().getTab();
         DocumentType doc = null;
@@ -387,7 +397,7 @@ public final class ConfigurationManager {
         /*
          * Clear the doc if empty
          */
-        if (doc != null && doc.getUuid() == null && doc.getViewport() == null) {
+        if (doc != null && doc.getUuid() == null) {
             tabs.remove(doc);
         }
     }
@@ -399,46 +409,112 @@ public final class ConfigurationManager {
      *            the document to load
      * @return the loaded diagram or null on error
      */
-    public XcosDiagram loadDiagram(DocumentType doc) {
+    public XcosDiagram loadDiagram(JavaController controller, DocumentType doc) {
+
         File f = getFile(doc);
         if (f != null && !f.exists()) {
             f = null;
         }
 
-        XcosDiagram graph;
+        // check if not already loaded by another restore
+        final Optional<ScicosObjectOwner> root = Xcos.getInstance().openedDiagram(controller, f);
+        // layer is the path if present or the root
+        final Optional<ScicosObjectOwner> layer = decodePath(doc, controller, root);
+
+        if (root.isPresent()) {
+            // the diagram is already being loaded by the caller as a tab
+            Optional<XcosDiagram> loaded = Xcos.getInstance().openedDiagrams(root.get()).stream()
+                .filter(d -> Objects.equals(d.getGraphTab(), doc.getUuid()))
+                .findFirst();
+            if (loaded.isPresent())
+                return loaded.get();
+
+            // the diagram is already being loaded by the caller as layer
+            loaded = Xcos.getInstance().openedDiagrams(root.get()).stream()
+                .filter(d -> d.getUID() == layer.map(c -> c.getUID()).orElse((long) 0))
+                .findFirst();
+            if (loaded.isPresent())
+                return loaded.get();   
+        }
+
+        if (root.isPresent() && root == layer) {
+            // the layer is the root, create a DIAGRAM
+            return createDiagram(controller, root.get(), root.get(), "", doc.getUuid());
+        }
+
+        if (root.isPresent() && layer.isPresent()) {
+            // diagram is loaded but not the layer
+            String[] blockUID = {""};
+            controller.getObjectProperty(layer.get().getUID(), layer.get().getKind(), ObjectProperties.UID, blockUID);
+
+            return createDiagram(controller, root.get(), layer.get(), blockUID[0], doc.getUuid());
+        }
+
+        if (root.isPresent()) {
+            // diagram is not supposed to be loaded from there
+            return null;
+        }
+
+        // load the file into a rootGraph
+        ScicosObjectOwner rootOwner = new ScicosObjectOwner(controller, controller.createObject(Kind.DIAGRAM), Kind.DIAGRAM);
+        XcosDiagram rootGraph = new XcosDiagram(controller, rootOwner.getUID(), rootOwner.getKind(), "");
+        rootGraph.setSavedFile(f);
+
         try {
-            JavaController controller = new JavaController();
-
-            graph = new XcosDiagram(controller, controller.createObject(Kind.DIAGRAM), Kind.DIAGRAM, "");
-            graph.installListeners();
-
-            Xcos.getInstance().addDiagram(new ScicosObjectOwner(graph.getUID(), Kind.DIAGRAM), graph);
-
             if (f != null) {
                 final String filename = f.getCanonicalPath();
                 final XcosFileType filetype = XcosFileType.findFileType(f);
 
-                filetype.load(filename, graph);
-                graph.postLoad(f);
+                filetype.load(filename, rootGraph);
             }
-
-
-            graph = loadPath(doc, graph);
-
-            graph.setGraphTab(doc.getUuid());
         } catch (Exception e) {
             // the only way to spot something on window restoration is to print the stacktrace
             e.printStackTrace();
-
             Logger.getLogger(ConfigurationManager.class.getName()).log(Level.SEVERE, null, e);
-            graph = null;
         }
+
+        Optional<ScicosObjectOwner> loadedLayer = decodePath(doc, controller, Optional.of(rootOwner));
+
+        if (loadedLayer.isPresent() && loadedLayer.get() == rootOwner) {
+            // the layer is the root, return the DIAGRAM
+            rootGraph.installListeners();
+            rootGraph.setModified(false);
+    
+            Xcos.getInstance().addDiagram(rootOwner, rootGraph);
+            rootGraph.setGraphTab(doc.getUuid());
+            return rootGraph;
+        }
+        
+        if (loadedLayer.isPresent()) {
+            // diagram is loaded but not the layer
+            String[] blockUID = {""};
+            controller.getObjectProperty(loadedLayer.get().getUID(), loadedLayer.get().getKind(), ObjectProperties.UID, blockUID);
+
+            return createDiagram(controller, rootOwner, loadedLayer.get(), blockUID[0], doc.getUuid());
+        }
+
+        // failed to restore a file
+        return null;
+    }
+
+    /**
+     * Create a new XcosDiagram and prepare for rendering
+     */
+    private XcosDiagram createDiagram(JavaController controller, ScicosObjectOwner root, ScicosObjectOwner layer, String uid, String tabUUID)
+    {
+        XcosDiagram graph = new XcosDiagram(controller, layer, uid);
+        XcosCellFactory.insertChildren(controller, graph);
+        graph.installListeners();
+        graph.setModified(false);
+
+        Xcos.getInstance().addDiagram(root, graph);
+        graph.setGraphTab(tabUUID);
 
         return graph;
     }
 
     /**
-     * Get the dile for the document
+     * Get the file for the document
      *
      * @param doc
      *            the doc
@@ -456,28 +532,27 @@ public final class ConfigurationManager {
         return f;
     }
 
-    private XcosDiagram loadPath(final DocumentType doc, final XcosDiagram root) {
+    private Optional<ScicosObjectOwner> decodePath(final DocumentType doc, final JavaController controller, final Optional<ScicosObjectOwner> root) {
         final String path = doc.getPath();
         if (path == null || path.isEmpty()) {
             return root;
         }
 
-        String[] splitedPath = path.split("/");
-        String uid = splitedPath[splitedPath.length - 1];
-        String[] blockUID = new String[0];
-
-        JavaController controller = new JavaController();
+        final String uid = doc.getPath();
+        String[] blockUID = {""};
+        
         // TODO is this algorithm fast enough ?
         VectorOfScicosID blocks = controller.getAll(Kind.BLOCK);
         final int len = blocks.size();
         for (int i = 0 ; i < len ; i++) {
             controller.getObjectProperty(blocks.get(i), Kind.BLOCK, ObjectProperties.UID, blockUID);
             if (uid.equals(blockUID[0])) {
-                return new XcosDiagram(controller, blocks.get(i), Kind.BLOCK, blockUID[0]);
+                // return the layer, the root has already been stored in Xcos#diagrams
+                return Optional.of(new ScicosObjectOwner(controller, blocks.get(i), Kind.BLOCK));
             }
         }
 
-        return root;
+        return Optional.empty();
     }
 
     private void savePath(XcosDiagram graph, final DocumentType doc) {
@@ -486,21 +561,10 @@ public final class ConfigurationManager {
         }
 
         JavaController controller = new JavaController();
+        String[] blockUID = {""};
 
-        ArrayList<String> elements = new ArrayList<>();
-        long[] parent = new long[1];
-        String[] parentUID = new String[1];
-
-        controller.getObjectProperty(graph.getUID(), Kind.BLOCK, ObjectProperties.PARENT_BLOCK, parent);
-        while (parent[0] != 0l) {
-            controller.getObjectProperty(parent[0], Kind.BLOCK, ObjectProperties.UID, parentUID);
-            elements.add(parentUID[0]);
-
-            controller.getObjectProperty(parent[0], Kind.BLOCK, ObjectProperties.PARENT_BLOCK, parent);
-        }
-
-        Collections.reverse(elements);
-        doc.setPath(String.join("/", elements.toArray(new String[elements.size()])));
+        controller.getObjectProperty(graph.getUID(), Kind.BLOCK, ObjectProperties.UID, blockUID);
+        doc.setPath(blockUID[0]);
     }
 
     /**
@@ -510,7 +574,7 @@ public final class ConfigurationManager {
      * @param fc
      *            any file chooser
      */
-    public static void configureCurrentDirectory(JFileChooser fc) {
+    public static void configureCurrentDirectory(Object fc) {
         final ConfigurationManager manager = ConfigurationManager.getInstance();
         final Iterator<DocumentType> recentFiles = manager.getSettings().getRecent().iterator();
 
@@ -522,8 +586,13 @@ public final class ConfigurationManager {
             } catch (URISyntaxException e) {
             }
         }
-
-        fc.setCurrentDirectory(lastFile);
+        if (lastFile != null) {
+            if (fc instanceof JFileChooser) {
+                ((JFileChooser) fc).setCurrentDirectory(lastFile);
+            } else if (fc instanceof FileChooser) {
+                ((FileChooser) fc).setInitialDirectory(lastFile.getPath());                
+            }
+        }
     }
 
     /*

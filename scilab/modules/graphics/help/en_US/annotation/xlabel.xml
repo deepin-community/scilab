@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) DIGITEO - 2011 - Allan CORNET
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
  * Copyright (C) 2016, 2019 - Samuel GOUGEON
@@ -252,7 +252,7 @@
         <title>Examples</title>
         <programlisting role="example"><![CDATA[
 t = linspace(-2*%pi, 2*%pi, 30);
-plotframe([0 0 1 1])
+plot2d([], [], 0, "011", " ", [0 0 1 1])
 
 subplot(2,1,1)
 plot(t, sin(t), "color", "orange")
@@ -272,7 +272,7 @@ ylabel color orange  rotation -90
 ]]>     </programlisting>
         <scilab:image>
             t = linspace(-2*%pi, 2*%pi, 30);
-            plotframe([0 0 1 1])
+            plot2d([], [], 0, "011", " ", [0 0 1 1])
 
             subplot(2,1,1)
             plot(t, sin(t), "color", "orange")

@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - DIGITEO - Bruno JOFRET
  * Copyright (C) 2012 - Scilab Enterprises - Bruno JOFRET
  *
@@ -22,12 +22,12 @@ import java.awt.HeadlessException;
 import java.util.Calendar;
 import java.util.StringTokenizer;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.GLCapabilities;
-import javax.media.opengl.GLException;
-import javax.media.opengl.GLProfile;
-import javax.media.opengl.awt.GLCanvas;
-import javax.media.opengl.awt.GLJPanel;
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GLCapabilities;
+import com.jogamp.opengl.GLException;
+import com.jogamp.opengl.GLProfile;
+import com.jogamp.opengl.awt.GLCanvas;
+import com.jogamp.opengl.awt.GLJPanel;
 
 import org.scilab.modules.action_binding.InterpreterManagement;
 import org.scilab.modules.commons.OS;

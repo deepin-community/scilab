@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA - Serge Steer
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -123,12 +123,12 @@ end
             plot3d1(t,t,z)
             f=gcf();
             for h=0:0.1:1
-            hsv=[h*ones(32,1) linspace(0,1,32)' 0.7*ones(32,1)];
-            f.color_map=hsv2rgb(hsv);
+            HSV=[h*ones(32,1) linspace(0,1,32)' 0.7*ones(32,1)];
+            f.color_map=hsv2rgb(HSV);
             end
             for v=0:0.1:1
-            hsv=[ones(32,1) linspace(0,1,32)' v*ones(32,1)];
-            f.color_map=hsv2rgb(hsv);
+            HSV=[ones(32,1) linspace(0,1,32)' v*ones(32,1)];
+            f.color_map=hsv2rgb(HSV);
             end
         </scilab:image>
     </refsection>

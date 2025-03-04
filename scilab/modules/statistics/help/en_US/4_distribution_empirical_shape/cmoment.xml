@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2000 - INRIA - Carlos Klimann
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -20,9 +20,9 @@
     </refnamediv>
     <refsynopsisdiv>
         <title>Syntax</title>
-        <synopsis>mom=cmoment(x,ord)
-            mom=cmoment(x,ord,'r') or mom=cmoment(x,ord,1)
-            mom=cmoment(x,ord,'c') or mom=cmoment(x,ord,2)
+        <synopsis>
+            mom = cmoment(x, ord)
+            mom = cmoment(x, ord, orientation)
         </synopsis>
     </refsynopsisdiv>
     <refsection>
@@ -40,19 +40,44 @@
                     <para>positive integer</para>
                 </listitem>
             </varlistentry>
+            <varlistentry>
+                <term>orientation</term>
+                <listitem>
+                    <para>
+                        index of the dimension along which the cmoment is computed. It can be either
+                    </para>
+                    <itemizedlist>
+                        <listitem>
+                            a character <literal>"*"</literal> (default), <literal>"r"</literal> or
+                          <literal>"c"</literal>
+                        </listitem>
+                        <listitem>
+                            a positive integer: 1 or 2. 1 is equivalent to "r" and 2 is equivalent to "c".
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>mom</term>
+                <listitem>
+                    <para>real or complex scalar or vector</para>
+                </listitem>
+            </varlistentry>
         </variablelist>
     </refsection>
     <refsection>
         <title>Description</title>
         <para>
-            cmoment<literal>(x,ord)</literal> is the central moment or order ord of
-            the elements of <literal>x</literal>.
+            <emphasis role="bold">cmoment(x, ord)</emphasis> or <emphasis role="bold">cmoment(x, ord, orientation)</emphasis>
+             is the central moment or order ord of the elements of <literal>x</literal>.
+        </para>
+        <para>
             If a  third argument  of type string  <literal>'r'</literal> (or
             <literal>1</literal>) or  <literal>'c'</literal> (or <literal> 2</literal>)  is used, we  get  in the
             first   case,   a  row   vector   <literal> mom</literal>  such   that
             <literal>mom(j)</literal>   contains  the   central  moment   of  order
             <literal>ord</literal>     of     the     <literal>j</literal>     column     of
-            <literal>x</literal>. <literal>cmoment(x,ord,'c')</literal>  is used in  the same way
+            <literal>x</literal>. <literal>cmoment(x, ord, 'c')</literal>  is used in  the same way
             for the central moments in the rows.
         </para>
     </refsection>

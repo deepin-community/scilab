@@ -1,1 +1,5 @@
-.pc/
+/workspace*/
+/NetBeans-*/
+.DS_Store
+/.gitreview
+/ccache/

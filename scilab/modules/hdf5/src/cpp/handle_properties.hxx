@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2015 - Scilab Enterprises - Antoine ELIAS
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -136,6 +136,22 @@ struct FigureHandle
 
 struct AxesHandle
 {
+    static HandleProp getPropertyList3()
+    {
+        //all properties of vers >= 4 but zoom_enabled, introduced in vers 4 (#16786)
+        HandleProp m = getPropertyList();
+        for (auto it = m.begin(); it != m.end(); ++it)
+        {
+            if (it->first == "zoom_enabled")
+            {
+                m.erase(it);
+                break;
+            }
+        }
+
+        return m;
+    }
+
     static HandleProp getPropertyList()
     {
         HandleProp m;
@@ -189,11 +205,13 @@ struct AxesHandle
         m.emplace_back("tight_limits_z", std::vector<int>({SAVE_LOAD, __GO_Z_TIGHT_LIMITS__, jni_bool}));
         m.emplace_back("data_bounds", std::vector<int>({SAVE_LOAD, __GO_DATA_BOUNDS__, jni_double_vector, -2, -3}));
         m.emplace_back("zoom_box", std::vector<int>({SAVE_LOAD, __GO_ZOOM_BOX__, jni_double_vector, -1, -6}));
+        m.emplace_back("zoom_enabled", std::vector<int>({SAVE_LOAD, __GO_ZOOM_ENABLED__, jni_bool}));
         m.emplace_back("margins", std::vector<int>({SAVE_LOAD, __GO_MARGINS__, jni_double_vector, -1, -4}));
         m.emplace_back("auto_margins", std::vector<int>({SAVE_LOAD, __GO_AUTO_MARGINS__, jni_bool}));
         m.emplace_back("axes_bounds", std::vector<int>({SAVE_LOAD, __GO_AXES_BOUNDS__, jni_double_vector, -1, -4}));
         m.emplace_back("auto_clear", std::vector<int>({SAVE_LOAD, __GO_AUTO_CLEAR__, jni_bool}));
         m.emplace_back("auto_scale", std::vector<int>({SAVE_LOAD, __GO_AUTO_SCALE__, jni_bool}));
+        m.emplace_back("auto_stretch", std::vector<int>({SAVE_LOAD, __GO_AUTO_STRETCH__, jni_bool}));
         m.emplace_back("hidden_axis_color", std::vector<int>({SAVE_LOAD, __GO_HIDDEN_AXIS_COLOR__, jni_int}));
         m.emplace_back("arc_drawing_method", std::vector<int>({SAVE_LOAD, __GO_ARC_DRAWING_METHOD__, jni_int}));
         m.emplace_back("hiddencolor", std::vector<int>({SAVE_LOAD, __GO_HIDDEN_COLOR__, jni_int}));
@@ -784,12 +802,14 @@ struct UicontrolHandle
     {
         HandleProp m;
 
-        //SAVE_ONLY, so don't care of reload ordering
+        //SAVE_ONLY, will be load explicitly
         m.emplace_back("type", std::vector<int>({SAVE_ONLY, __GO_TYPE__, jni_int}));
         m.emplace_back("style", std::vector<int>({SAVE_ONLY, __GO_STYLE__, jni_int}));
-        m.emplace_back("scrollable", std::vector<int>({SAVE_LOAD, __GO_UI_SCROLLABLE__, jni_bool}));
-        m.emplace_back("margins", std::vector<int>({SAVE_LOAD, __GO_MARGINS__, jni_double_vector, -1, -4}));
-        //constraint
+        m.emplace_back("layout", std::vector<int>({SAVE_ONLY, __GO_LAYOUT__, jni_int}));
+        m.emplace_back("scrollable", std::vector<int>({SAVE_ONLY, __GO_UI_SCROLLABLE__, jni_bool}));
+        m.emplace_back("margins", std::vector<int>({SAVE_ONLY, __GO_MARGINS__, jni_double_vector, -1, -4}));
+
+        //constraints
         m.emplace_back("border_position", std::vector<int>({SAVE_ONLY, __GO_UI_BORDER_POSITION__, jni_int}));
         m.emplace_back("border_size", std::vector<int>({SAVE_ONLY, __GO_UI_BORDER_PREFERREDSIZE__, jni_int_vector, -1, -2}));
         m.emplace_back("gridbad_grid", std::vector<int>({SAVE_ONLY, __GO_UI_GRIDBAG_GRID__, jni_int_vector, -1, -4}));
@@ -824,11 +844,13 @@ struct UicontrolHandle
         m.emplace_back("verticalalignment", std::vector<int>({SAVE_LOAD, __GO_UI_VERTICALALIGNMENT__, jni_string}));
         m.emplace_back("callback", std::vector<int>({SAVE_LOAD, __GO_CALLBACK__, jni_string}));
         m.emplace_back("callback_type", std::vector<int>({SAVE_LOAD, __GO_CALLBACKTYPE__, jni_int}));
-        m.emplace_back("layout", std::vector<int>({SAVE_LOAD, __GO_LAYOUT__, jni_int}));
         //layout_options
         m.emplace_back("layout_grid", std::vector<int>({SAVE_LOAD, __GO_GRID_OPT_GRID__, jni_int_vector, -1, -2}));
         m.emplace_back("layout_padding", std::vector<int>({SAVE_LOAD, __GO_GRID_OPT_PADDING__, jni_int_vector, -1, -2}));
         m.emplace_back("border_padding", std::vector<int>({SAVE_LOAD, __GO_BORDER_OPT_PADDING__, jni_int_vector, -1, -2}));
+        //tab
+        m.emplace_back("title_position", std::vector<int>({SAVE_LOAD, __GO_UI_TITLE_POSITION__, jni_int}));
+
 
         m.emplace_back("groupname", std::vector<int>({SAVE_LOAD, __GO_UI_GROUP_NAME__, jni_string}));
         m.emplace_back("icon", std::vector<int>({SAVE_LOAD, __GO_UI_ICON__, jni_string}));
@@ -840,6 +862,6 @@ struct UicontrolHandle
 };
 
 void update_link_path(int legend, Links::PathList& paths);
-int import_handle(hid_t dataset, int parent);
+int import_handle(hid_t dataset, int parent, int version);
 bool export_handle(hid_t parent, const std::string& name, int uid, hid_t xfer_plist_id);
-int add_current_entity(hid_t handle);
+int add_current_entity(hid_t handle, int version);

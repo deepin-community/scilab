@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2011 - INRIA - Serge Steer
 // Copyright (C) 2018 - Samuel GOUGEON
 //
@@ -32,6 +32,15 @@ assert_checkequal(repmat(matrix(1:2, [1 2]),2),[1 2 1 2; 1 2 1 2]);
 assert_checkequal(repmat([1,2;3,4],[2,3]),[1,2,1,2,1,2;3,4,3,4,3,4;1,2,1,2,1,2;3,4,3,4,3,4]);
 assert_checkequal(repmat(int8([1,2;3,4]),[2,3]),int8([1,2,1,2,1,2;3,4,3,4,3,4;1,2,1,2,1,2;3,4,3,4,3,4]));
 assert_checkequal(repmat(matrix(1:2, 1, 2),[2,3]),[1,2,1,2,1,2;1,2,1,2,1,2]);
+
+// With sparse matrices
+assert_checkequal(repmat(sparse([]), 2, 3), sparse([]));
+assert_checkequal(repmat(sparse(1), 1, 1), sparse(1));
+assert_checkequal(repmat(sparse(1), 1, 3), sparse([1 1 1]));
+assert_checkequal(repmat(sparse(1), 3, 1), sparse([1 1 1]'));
+assert_checkequal(repmat(sparse([1 0]), 1, 3), sparse([1 0 1 0 1 0]));
+assert_checkequal(repmat(sparse([1 0]), 3, 1), sparse([1 0 ; 1 0 ; 1 0]));
+assert_checkequal(repmat(sparse([1 0 -1]), 3, 2), sparse([1 0 -1 1 0 -1 ; 1 0 -1 1 0 -1 ; 1 0 -1 1 0 -1]));
 
 // With other hypermatrices
     // Polynomials

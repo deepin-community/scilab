@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA - Vincent COUVERT
  * Copyright (C) 2010 - DIGITEO - Yann COLLETTE
  *
@@ -40,6 +40,19 @@
  * @return Matlab variable (See MATIO library)
  */
 MATIO_IMPEXP matvar_t *GetMatlabVariable(void *pvApiCtx, int iVar, const char *name, int matfile_version, int * parent, int item_position);
+
+/*
+ * Get a Matlab Boolean variable from stack
+ *
+ * @param pvApiCtx Scilab context
+ * @param iVar position on the stack
+ * @param name the name of the variable
+ * @param parent parent mlist. If NULL, a normal variable is created.
+ * @parem item_position position of the variable in the mlist. Only effective if parent !=NULL
+ *
+ * @return Matlab variable (See MATIO library)
+ */
+matvar_t* GetBooleanVariable(void* pvApiCtx, int iVar, const char* name, int* parent, int item_position);
 
 /*
  * Get a Matlab Integer variable from stack

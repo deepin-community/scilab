@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA - Djalel Abdemouche
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -247,13 +247,12 @@
                     <para>
                         The <literal>mark_style</literal> property value is used to select the
                         type of mark to use when <literal>mark_mode</literal> property is
-                        <literal>"on"</literal>. The value should be an integer in [0 14] which
+                        <literal>"on"</literal>. The value should be an integer in <literal>[0 20]</literal> which
                         stands for: dot, plus, cross, star, filled diamond, diamond, triangle
                         up, triangle down, diamond plus, circle, asterisk, square, triangle right,
-                        triangle left and pentagram. The figure below shows the aspects of the marks
-                        depending on the <literal>mark_style</literal> and the
-                        <literal>mark_foreground</literal> and <literal>mark_background</literal>
-                        properties.
+                        triangle left, pentagram, triangle up/down/right/left centered on the tip, horizontal line (minus), vertical line.
+                        The figure below shows the aspects of the marks depending on the <literal>mark_style</literal>
+                        and the <literal>mark_foreground</literal> and <literal>mark_background</literal> properties.
                     </para>
                     <para>
                         <inlinemediaobject>
@@ -261,6 +260,39 @@
                                 <imagedata fileref="../../images/marks.svg"/>
                             </imageobject>
                         </inlinemediaobject>
+                        <!-- Scilab code to generate marks.svg -->
+                        <!-- Cannot be generated using scilab:image tag since referenced in other pages (build order matters) -->
+                        <!--
+                            function plotDot(coord, style, fg, bg)
+                                plot(coord(1), coord(2));
+                                e = gce().children(1);
+                                e.mark_size = 15;
+                                e.mark_style = style;
+                                e.mark_foreground = fg
+                                e.mark_background = bg
+                            endfunction
+
+                            f = figure("visible", "off", "background", -2, "axes_size", [800 125]);
+                            for i = 0:20
+                                if log10(i) >= 1 then
+                                    xnumb((i+1)*25-6, 13, i);
+                                else
+                                    xnumb((i+1)*25-3, 13, i);
+                                end
+                                plotDot([(i+1)*25 10], i, 1, 0);
+                                plotDot([(i+1)*25 5], i, 2, 7);
+                            end
+
+                            a = gca();
+                            a.axes_visible = "off";
+                            a.margins = [0 0 0 0];
+                            a.data_bounds = [0 0; 550 25];
+                            a.margins = [0,0,-0.25,0];
+                            a.tight_limits(1) = "on";
+                            f.visible = "on";
+
+                            xs2svg(f, "SCI/modules/graphics/help/images/marks.svg")
+                        -->
                     </para>
                 </listitem>
             </varlistentry>
@@ -580,9 +612,8 @@ p.line_style=4;
             <revision>
                 <revnumber>5.4.0</revnumber>
                 <revremark>
-                  line_style value 0 is obsolete, use 1 instead (both are equivalent for  SOLID).
-                  Using value 0 will produce an error in Scilab 5.4.1. New line_style values
-                  9 and 10 added.
+                  line_style value 0 is obsolete, use 1 instead (both are equivalent for SOLID).
+                  New line_style values 9 and 10 added.
                 </revremark>
             </revision>
             <revision>
@@ -616,6 +647,12 @@ p.line_style=4;
                             can have its own individual mark colors and size.
                         </listitem>
                     </itemizedlist>
+                </revremark>
+            </revision>
+            <revision>
+                <revnumber>2023.0.0</revnumber>
+                <revremark>
+                  line_style value 0 is no more available.
                 </revremark>
             </revision>
         </revhistory>

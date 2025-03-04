@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA -
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -18,7 +18,7 @@
           xmlns:scilab="http://www.scilab.org" xml:lang="en" xml:id="strncpy">
     <refnamediv>
         <refname>strncpy</refname>
-        <refpurpose>gets and gives the N first characters of the given strings</refpurpose>
+        <refpurpose>copy the N first characters of the given strings</refpurpose>
     </refnamediv>
     <refsynopsisdiv>
         <title>Syntax</title>

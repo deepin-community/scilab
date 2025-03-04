@@ -1,0 +1,16 @@
+Description: skipping check of flexdock version in configure script
+Author: Pierre Gruet <pgt@debian.org>
+Forwarded: not-needed
+Last-Update: 2024-06-03
+
+--- a/scilab/configure.ac
++++ b/scilab/configure.ac
+@@ -987,7 +987,7 @@
+                 AC_SUBST(SCIRENDERER_CP)
+ 
+                 # Docking system
+-                AC_JAVA_CHECK_JAR([flexdock],[org.flexdock.util.Utilities],[Scilab Gui],[],[VERSION],[1.2.5])
++                AC_JAVA_CHECK_JAR([flexdock],[org.flexdock.util.Utilities],[Scilab Gui])
+                 FLEXDOCK=$PACKAGE_JAR_FILE
+                 AC_SUBST(FLEXDOCK)
+ 

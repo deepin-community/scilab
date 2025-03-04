@@ -1,8 +1,8 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2011 - DIGITEO - Cedric DELAMARRE
 * Copyright (C) 2012 - 2016 - Scilab Enterprises
-* Copyright (C) 2021 - Stéphane MOTTELET
+* Copyright (C) 2021 - UTC - Stéphane MOTTELET
  *
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
@@ -204,14 +204,14 @@ types::Function::ReturnValue sci_int2d(types::typed_list &in, int _iRetCount, ty
     // params (optional)
     if (in.size() == iFPar+2)
     {
-        if (in[3]->isDouble() == false)
+        if (in[iFPar+1]->isDouble() == false)
         {
             Scierror(999, _("%s: Wrong type for input argument #%d: A real matrix expected.\n"), "int2d", iFPar+2);
             DifferentialEquation::removeDifferentialEquationFunctions();
             return types::Function::Error;
         }
 
-        pDblParams = in[3]->getAs<types::Double>();
+        pDblParams = in[iFPar+1]->getAs<types::Double>();
         if (pDblParams->isComplex())
         {
             Scierror(999, _("%s: Wrong type for input argument #%d: A real matrix expected.\n"), "int2d", iFPar+2);
@@ -286,6 +286,9 @@ types::Function::ReturnValue sci_int2d(types::typed_list &in, int _iRetCount, ty
         bCatch = false;
     }
 
+    pDblX->killMe();
+    pDblY->killMe();
+
     FREE(dwork);
     FREE(iwork);
     DifferentialEquation::removeDifferentialEquationFunctions();
@@ -293,7 +296,7 @@ types::Function::ReturnValue sci_int2d(types::typed_list &in, int _iRetCount, ty
     if (bCatch)
     {
         wchar_t szError[bsiz];
-        os_swprintf(szError, bsiz, _W("%s: An error occurred in '%s' subroutine.\n").c_str(), "int2d", "twodq");
+        os_swprintf(szError, bsiz, _W("%ls: An error occurred in '%ls' subroutine.\n").c_str(), L"int2d", L"twodq");
         os << szError;
         throw ast::InternalError(os.str());
     }

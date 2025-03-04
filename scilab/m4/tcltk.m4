@@ -1,32 +1,3 @@
-dnl Because this macro is used by AC_PROG_GCC_TRADITIONAL, which must
-dnl come early, it is not included in AC_BEFORE checks.
-dnl AC_GREP_CPP(PATTERN, PROGRAM, [ACTION-IF-FOUND [,
-dnl              ACTION-IF-NOT-FOUND]])
-AC_DEFUN([AC_GREP_CPP],
-[AC_REQUIRE_CPP()dnl
-cat > conftest.$ac_ext <<EOF
-[#]line __oline__ "configure"
-#include "confdefs.h"
-[$2]
-EOF
-dnl eval is necessary to expand ac_cpp.
-dnl Ultrix and Pyramid sh refuse to redirect output of eval, so use subshell.
-if (eval "$ac_cpp conftest.$ac_ext") 2>&AC_FD_CC |
-dnl Prevent m4 from eating character classes:
-changequote(, )dnl
-  grep "$1" >/dev/null 2>&1; then
-changequote([, ])dnl
-  ifelse([$3], , :, [rm -rf conftest*
-  $3])
-ifelse([$4], , , [else
-  rm -rf conftest*
-  $4
-])dnl
-fi
-rm -f conftest*
-])
-
-
 AC_DEFUN([AC_CHECK_TCL_VERSION], [
 dnl INPUTS :
 dnl  $1 : Path where to find the include file (/include f. ex.)
@@ -52,20 +23,21 @@ saved_cppflags="$CPPFLAGS"
 CFLAGS="$CFLAGS -I$CHK_TCL_INCLUDE_PATH"
 CPPFLAGS="$CPPFLAGS -I$CHK_TCL_INCLUDE_PATH"
 
-AC_MSG_CHECKING([if tcl is version $CHK_TCL_MAJOR.$CHK_TCL_MINOR or later])
-AC_GREP_CPP(TCL_VERSION_OK,
-[
-#include "$CHK_TCL_INCLUDE_PATH/$CHK_TCL_INC_NAME"
+AC_LINK_IFELSE(
+	[AC_LANG_SOURCE([dnl
+#include "confdefs.h"
+#include <stdio.h>
+#include <$CHK_TCL_INC_NAME>
 #if (TCL_MAJOR_VERSION > $CHK_TCL_MAJOR)
-TCL_VERSION_OK
-#else
+	int main (void) { return 0; }
+#endif
 #if ((TCL_MAJOR_VERSION == $CHK_TCL_MAJOR) && (TCL_MINOR_VERSION >= $CHK_TCL_MINOR))
-TCL_VERSION_OK
+	int main (void) { return 0; }
 #endif
-#endif
-],\
-TCL_VERSION_OK=1,\
-TCL_VERSION_OK=0 )
+])],
+	[TCL_VERSION_OK=1],
+	[TCL_VERSION_OK=0]
+)
 
 AC_RUN_IFELSE(
     [AC_LANG_SOURCE([dnl
@@ -211,19 +183,21 @@ CFLAGS="$CFLAGS $TCL_INC_PATH -I$CHK_TK_INCLUDE_PATH $X_CFLAGS"
 CPPFLAGS="$CPPFLAGS $TCL_INC_PATH -I$CHK_TK_INCLUDE_PATH $X_CFLAGS"
 AC_MSG_CHECKING([if tk is version $CHK_TK_MAJOR.$CHK_TK_MINOR or later])
 
-AC_GREP_CPP(TK_VERSION_OK,
-[
-#include "$CHK_TK_INCLUDE_PATH/$CHK_TK_INC_NAME"
+AC_LINK_IFELSE(
+	[AC_LANG_SOURCE([dnl
+#include "confdefs.h"
+#include <stdio.h>
+#include <$CHK_TK_INC_NAME>
 #if (TK_MAJOR_VERSION > $CHK_TK_MAJOR)
-TK_VERSION_OK
-#else
+	int main (void) { return 0; }
+#endif
 #if ((TK_MAJOR_VERSION == $CHK_TK_MAJOR) && (TK_MINOR_VERSION >= $CHK_TK_MINOR))
-TK_VERSION_OK
+	int main (void) { return 0; }
 #endif
-#endif
-],\
-TK_VERSION_OK=1,\
-TK_VERSION_OK=0 )
+])],
+	[TK_VERSION_OK=1],
+	[TK_VERSION_OK=0]
+)
 
 
 cat > conftest.$ac_ext <<EOF

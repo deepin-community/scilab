@@ -1,5 +1,5 @@
 //
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 // Copyright (C) DIGITEO - 2010 - Allan CORNET
 //
@@ -48,6 +48,7 @@ function demo_anim3()
     curAxe.box = "off";
     curAxe.axes_visible = "on";
     curAxe.grid= [12,12,12];
+    curAxe.auto_stretch = "off";
     drawnow()
 
     //Set the evolution of the view angle  Alpha

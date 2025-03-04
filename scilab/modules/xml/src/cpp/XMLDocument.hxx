@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2012 - Scilab Enterprises - Calixte DENIZET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -23,9 +23,9 @@
 
 #include "dynlib_xml_scilab.h"
 
+#include "xml.h"
 extern "C"
 {
-#include "xml.h"
 #ifndef XML_XPATH_CHECKNS
 #define XML_XPATH_CHECKNS
 #endif

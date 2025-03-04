@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2001 - 2002 - INRIA - Mathieu Philipe
  * Copyright (C) 2002 - 2004 - INRIA - Djalel Abdemouche
  * Copyright (C) 2004 - 2006 - INRIA - Fabrice Leray
@@ -47,5 +47,13 @@ GRAPHIC_OBJECTS_IMPEXP long getHandle(int iUID);
  * @return a reference to an existing uid or null if invalid.
  */
 GRAPHIC_OBJECTS_IMPEXP int getObjectFromHandle(long handle);
+
+/**
+ * @brief Get the type string of an UID.
+ *
+ * @param a UID
+ * @return a string type.
+ */
+GRAPHIC_OBJECTS_IMPEXP char* getHandleTypeStr(int iUID);
 
 #endif /* !__HANDLE_MANAGEMENT_H__ */

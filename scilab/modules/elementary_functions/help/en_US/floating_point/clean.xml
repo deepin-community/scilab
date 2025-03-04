@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2006-2008 - INRIA
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
  * Copyright (C) 2018 - Samuel GOUGEON
@@ -57,7 +57,7 @@
         <title>Description</title>
         <para>
             This function sets to 0 all the elements of <varname>A</varname>
-            with absolute value &lt; <varname>epsa</varname> or relative value &lt; <varname>epsr</varname>
+            with absolute value &lt;=<varname>epsa</varname> or relative value &lt;=<varname>epsr</varname>
             (relative w.r.t. to max(abs(A)), ignoring %inf and %nan values of <varname>A</varname>).
         </para>
         <para>

@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2007-2008 - INRIA
  * Copyright (C) 2008-2008 - Bruno JOFRET
  *
@@ -85,6 +85,12 @@ int GetCommand(char** command, int* piPrioritary, int* piInterruptible, enum com
 * @return 1 if empty , 0 is not empty
 */
 int isEmptyCommandQueue(void);
+
+/**
+ * check if command queue prioritary is empty
+ * @return 1 if empty , 0 is not empty
+ */
+int isEmptyCommandQueuePrioritary(void);
 
 /*
  * Checks if there's something on the

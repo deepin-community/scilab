@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2014 - Scilab Enterprises - Anais AUBERT
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -23,8 +23,10 @@
 extern "C"
 {
 #include "Scierror.h"
+#include "Sciwarning.h"
 #include "localization.h"
 #include "elem_common.h"
+#include "spmatrix.h"
 #include "lu.h"
 }
 
@@ -119,6 +121,36 @@ types::Function::ReturnValue sci_lufact(types::typed_list &in, int _iRetCount, t
     pSpIn->getColPos(colPos);
 
     C2F(lufact1)(dbl, itemsRow, colPos, &m, &nonZeros, fmatindex, &abstol, &reltol, &nrank, &ierr);
+    switch (ierr)
+    {
+        case spZERO_DIAG:
+            Scierror(999, _("%s: A zero was encountered on the diagonal the matrix.\n"), "lufact");
+            break;
+        case spNO_MEMORY:
+            Scierror(999, _("%s: Memory allocation error.\n"), "lufact");
+            break;
+        case spSINGULAR:
+            Sciwarning(_("%s: Warning: Matrix is singular.\n"), "lufact");
+            break;
+        case spSMALL_PIVOT:
+            Sciwarning(_("%s: Warning: Matrix is singular at precision level.\n"), "lufact");
+            break;
+        case spOKAY:
+            break;
+        default:
+            Scierror(77, _("%s: Error during LU factorization.\n"), "lufact");
+            break;
+    }
+
+    if (ierr != spSINGULAR && ierr > spSMALL_PIVOT)
+    {
+        delete[] dbl;
+        delete[] colPos;
+        delete[] itemsRow;
+        delete[] fmatindex;
+        
+        return types::Function::Error;  
+    }
 
     out.push_back(new types::Pointer(m, n, (void*)fmatindex, pSpIn->isComplex()));
 

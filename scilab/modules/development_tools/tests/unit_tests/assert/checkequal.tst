@@ -12,6 +12,7 @@
 // --------------------------------------------------------------------------
 // <-- NO CHECK REF -->
 // <-- ENGLISH IMPOSED -->
+// <-- NO ASSERT FAILURE -->
 
 // ====================================
 // Unitary tests of assert_checkequal()
@@ -165,7 +166,7 @@ assert_checkequal(s, s);
 assert_checkequal({}, {});
 o = {1, %f, %z ; "abc" %nan list(,3)};
 assert_checkequal(o, o);
-assert_checkequal({%nan}, {%nan});  // http://bugzilla.scilab.org/16274
+assert_checkequal({%nan}, {%nan});  // https://gitlab.com/scilab/scilab/-/issues/16274
 //
 // Polynomial
 // ----------
@@ -183,7 +184,7 @@ t = s;
 s(1)=12;
 instr="assert_checkequal(s, t)";
 ierr=execstr(instr,"errcatch");
-MY_assert_equal(ierr, 999);
+MY_assert_equal(ierr, 10000);
 
 //
 // Boolean
@@ -200,7 +201,7 @@ assert_checkequal(s, t);
 s(1)=%f;
 instr="assert_checkequal(s, t)";
 ierr=execstr(instr,"errcatch");
-MY_assert_equal(ierr, 999);
+MY_assert_equal(ierr, 10000);
 
 //
 // Integer 8

@@ -1,5 +1,5 @@
 //
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) DIGITEO - 2010 - Allan CORNET
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -37,8 +37,6 @@ begin
     ModulesXmlFileLines[i] := '<!-- =================== -->'; i := i + 1;
     ModulesXmlFileLines[i] := '<!--'; i := i + 1;
     ModulesXmlFileLines[i] := ' Modules list for Scilab'; i := i + 1;
-    ModulesXmlFileLines[i] := ' @author Scilab Enterprises'; i := i + 1;
-    ModulesXmlFileLines[i] := ' @date 2013'; i := i + 1;
     ModulesXmlFileLines[i] := ' ==================='; i := i + 1;
     ModulesXmlFileLines[i] := ' Do not touch if you do not know what you are doing'; i := i + 1;
     ModulesXmlFileLines[i] := ' Warning "core" module must be always the first module'; i := i + 1;

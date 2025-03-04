@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2000 - INRIA - Carlos Klimann
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -20,9 +20,9 @@
     </refnamediv>
     <refsynopsisdiv>
         <title>Syntax</title>
-        <synopsis>m=nanmedian(x)
-            m=nanmedian(x,'r') (or m=nanmedian(x,1))
-            m=nanmedian(x,'c') (or m=nanmedian(x,2))
+        <synopsis>
+            m = nanmedian(x)
+            m = nanmedian(x, orientation)
         </synopsis>
     </refsynopsisdiv>
     <refsection>
@@ -34,25 +34,48 @@
                     <para>real or complex vector or matrix</para>
                 </listitem>
             </varlistentry>
+            <varlistentry>
+                <term>orientation</term>
+                <listitem>
+                    <para>
+                        index of the dimension along which the nanmedian is computed. It can be either
+                    </para>
+                    <itemizedlist>
+                        <listitem>
+                            a character <literal>"*"</literal> (default), <literal>"r"</literal> or
+                          <literal>"c"</literal>
+                        </listitem>
+                        <listitem>
+                            a positive integer: 1 or 2. 1 is equivalent to "r" and 2 is equivalent to "c".
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>m</term>
+                <listitem>
+                    <para>real or complex scalar or vector</para>
+                </listitem>
+            </varlistentry>
         </variablelist>
     </refsection>
     <refsection>
         <title>Description</title>
         <para>
             For   a   vector    or   a  matrix   <literal>    x</literal>,
-            <literal>[m]=nanmedian(x)</literal>  returns in the vector  <literal>  m</literal> the
+            <literal>m = nanmedian(x)</literal>  or <literal>m = nanmedian(x, "*")</literal> returns in the vector  <literal>  m</literal> the
             median of the  values (ignoring the NANs)  of vector <literal>x</literal>.
         </para>
         <para>
-            <literal>[m]=nanmedian(x,'r')</literal>       (or,        equivalently,
-            <literal>[m]=nanmedian(x,1)</literal>) are  the  rowwise  medians.   It
+            <literal>m = nanmedian(x,'r')</literal>       (or,        equivalently,
+            <literal>m = nanmedian(x,1)</literal>) are  the  rowwise  medians.   It
             returns in each position of  the row vector  <literal> m</literal> the
             medians of data  (ignoring the NANs) in  the corresponding
             column of <literal> x</literal>.
         </para>
         <para>
-            <literal>[m]=nanmedian(x,'c')</literal>      (or,   equivalently,
-            <literal>[m]=nanmedian(x,2)</literal>)  are the  columnwise  medians.   It
+            <literal>m = nanmedian(x,'c')</literal>      (or,   equivalently,
+            <literal>m = nanmedian(x,2)</literal>)  are the  columnwise  medians.   It
             returns in each position of the column vector <literal> m</literal> the
             medians of data (ignoring  the NANs) in the  corresponding
             row of <literal> x</literal>.

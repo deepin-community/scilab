@@ -1,11 +1,13 @@
 //<-- CLI SHELL MODE -->
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - S/E - Sylvestre Ledru
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
 
+// <-- CLI SHELL MODE -->
+// <-- NO CHECK REF -->
 
 assert_checkalmostequal(dawson(2 + 1*%i), 0.1635394094345355614904345232875688576839 + -0.1531245755371229803585918112683241066853*%i, 1.e-10);
 assert_checkalmostequal(dawson(-2 + 1*%i), -0.1635394094345355614904345232875688576839 + -0.1531245755371229803585918112683241066853*%i, 1.e-10);
@@ -14,11 +16,7 @@ assert_checkalmostequal(dawson(-2 + -1*%i), -0.163539409434535561490434523287568
 assert_checkalmostequal(dawson(-28 + 9*%i), -0.01619082256681596362895875232699626384420 + -0.005210224203359059109181555401330902819419*%i, 1.e-10);
 assert_checkalmostequal(dawson(33 + -21*%i), 0.01078377080978103125464543240346760257008 + 0.006866888783433775382193630944275682670599*%i, 1.e-10);
 assert_checkalmostequal(dawson(1e3 + 1e3*%i), -0.5808616819196736225612296471081337245459 + 0.6688593905505562263387760667171706325749*%i, 1.e-10);
-if getos() == "Windows" then
-assert_checkalmostequal(dawson(-1000 + -3001*%i), complex(%nan, -%nan), 1.e-10);
-else
 assert_checkalmostequal(dawson(-1000 + -3001*%i), complex(%inf, -%inf), 1.e-10);
-end
 assert_checkalmostequal(dawson(1e-8 + 5.1e-3*%i), 0.1000052020902036118082966385855563526705e-7 + 0.005100088434920073153418834680320146441685*%i, 1.e-10);
 assert_checkalmostequal(dawson(4.95e-3 + -4.9e-3*%i), 0.004950156837581592745389973960217444687524 + -0.004899838305155226382584756154100963570500*%i, 1.e-10);
 assert_checkalmostequal(dawson(5.1e-3 + 5.1e-3*%i), 0.005100176864319675957314822982399286703798 + 0.005099823128319785355949825238269336481254*%i, 1.e-10);

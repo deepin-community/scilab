@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA
- * Copyright (C) 2018 - Samuel GOUGEON
- *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
- *
+ * Copyright (C) 2018, 2022 - Samuel GOUGEON
+  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
  * pursuant to article 5.3.4 of the CeCILL v.2.1.
  * This file was originally licensed under the terms of the CeCILL v2.1,
@@ -81,6 +80,8 @@
                     <para>
                         matriz de booleanos, de inteiros codificados, ou de números reais ou
                         complexos decimais.
+                        Matrix of strings representing literal big integers for <literal>int64</literal>
+                        and <literal>uint64</literal>.
                     </para>
                 </listitem>
             </varlistentry>
@@ -125,11 +126,20 @@
                 Only the real parts are converted and returned.
             </para>
             <para>[%f %t] is always converted into [0 1].</para>
+        </warning>
+        <warning>
             <para>
-            Converting big int64 or uint64 integers into decimal numbers may change them
-            and downgrade their relative accuracy. Indeed, int64|uint64 integers are encoded over
-            63|64 bits, while the mantissa of decimal numbers is encoded over 53 bits only.
-            For more details, please refer to the <link linkend="double">double()</link> page.
+            <emphasis role="bold">Reading big literal integers with int64 or uint64</emphasis>:
+            Any input like <literal>int64(1000000000000000000)</literal> implicitly considers
+            <literal>1000000000000000000</literal> as a decimal integer whose mantissa is encoded
+            with only 53 bits
+            &lt; 64 bits. Hence, this mantissa is most often truncated, and the encoded integer
+            we get after the floating point truncation is not the input one.
+            To avoid this effect, the integer can be provided as a string:
+            <literal>int64("1000000000000000000")</literal> returns the expected integer, without
+            loss of accuracy.
+            For more details about truncation effect for big integers, please refer to the
+            <link linkend="double">double()</link> page.
             </para>
         </warning>
         <warning>
@@ -271,6 +281,36 @@ uint8(-10.2 + 3.4*%i)
   246
 ]]></screen>
     <para>
+        Reading literal int64 or uint64 integers bigger than 2^53,
+        without floating point truncation effect:
+    </para>
+    <programlisting role="example"><![CDATA[
+a = [uint64(1000000000000001000) ; uint64("1000000000000001000")]
+typeof(a)
+
+a = [int64(-1000000000000001000) ; int64("-1000000000000001000")]
+typeof(a)
+ ]]></programlisting>
+    <screen><![CDATA[
+--> a = [uint64(1000000000000001000) ; uint64("1000000000000001000")]
+ a  =
+  1000000000000001024
+  1000000000000001000
+
+--> typeof(a)
+ ans  =
+  "uint64"
+
+--> a = [int64(-1000000000000001000) ; int64("-1000000000000001000")]
+ a  =
+ -1000000000000001024
+ -1000000000000001000
+
+--> typeof(a)
+ ans  =
+  "int64"
+]]></screen>
+    <para>
         [] is not convertible:
     </para>
     <programlisting role="example"><![CDATA[
@@ -351,6 +391,13 @@ typeof(i)
                             </table>
                         </listitem>
                     </itemizedlist>
+                </revdescription>
+            </revision>
+            <revision>
+                <revnumber>6.1.2</revnumber>
+                <revdescription>
+                    <literal>int64</literal> and <literal>uint64</literal> are extended to strings
+                    to read big integers > 2<superscript>53</superscript> without truncation.
                 </revdescription>
             </revision>
         </revhistory>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2014 - Scilab Enterprises - Calixte DENIZET
  * Copyright (C) 2017 - Samuel GOUGEON
  *
@@ -216,9 +216,6 @@ C:\Path\to\another\working\dir2\clf.sci
     <refsection role="see also">
         <title>Смотрите также</title>
         <simplelist type="inline">
-            <member>
-                <link linkend="setPreferencesValue">setPreferencesValue</link>
-            </member>
             <member>
                 <link linkend="xmlXPath">xmlXPath</link>
             </member>

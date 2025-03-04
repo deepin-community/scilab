@@ -185,16 +185,16 @@
     </refsection>
     <refsection id="Seealso_SQRT" role="see also">
         <title>See also</title>
-        <itemizedlist>
-            <listitem>
+        <simplelist type="inline">
+            <member>
                 <link linkend="POWBLK_f">POWBLK_f</link>
-            </listitem>
-            <listitem>
+            </member>
+            <member>
                 <link linkend="EXPBLK_m">EXPBLK_m</link>
-            </listitem>
-            <listitem>
+            </member>
+            <member>
                 <link linkend="LOGBLK_f">LOGBLK_m</link>
-            </listitem>
-        </itemizedlist>
+            </member>
+        </simplelist>
     </refsection>
 </refentry>

@@ -1,0 +1,537 @@
+Description: building with gcc14, which mainly consists in casting pointers to
+ add/remove the const qualifier
+Author: Pierre Gruet <pgt@debian.org>
+Bug-Debian: https://bugs.debian.org/1075494
+Forwarded: https://gitlab.com/scilab/scilab/-/merge_requests/996
+Last-Update: 2024-07-11
+
+--- a/scilab/modules/localization/sci_gateway/c/sci_gettext.c
++++ b/scilab/modules/localization/sci_gateway/c/sci_gettext.c
+@@ -33,7 +33,7 @@
+     SciErr sciErr;
+     int *piAddressVarOne = NULL;
+     char* pstDomain = NULL;
+-    char **TranslatedStrings = NULL;
++    const char **TranslatedStrings = NULL;
+     int m = 0;
+     int n = 0;
+     char **StringsToTranslate = NULL;
+@@ -93,7 +93,7 @@
+         return 0;
+     }
+ 
+-    TranslatedStrings = (char **)MALLOC(sizeof(char*) * (m * n));
++    TranslatedStrings = (const char **)MALLOC(sizeof(const char*) * (m * n));
+     if (TranslatedStrings == NULL)
+     {
+         Scierror(999, _("%s: No more memory.\n"), fname);
+@@ -121,7 +121,13 @@
+     StringsToTranslate = NULL;
+ 
+     sciErr = createMatrixOfString(pvApiCtx, Rhs + 1, m, n, TranslatedStrings);
+-    freeArrayOfString(TranslatedStrings, m * n);
++    //freeArrayOfString(TranslatedStrings, m * n);
++    // Freeing manually as freeArrayOfString works on char**, not const char**.
++    for (i = 0; i < m * n; i++)
++    {
++        free(TranslatedStrings[i]);
++    }
++    free(TranslatedStrings);
+     TranslatedStrings = NULL;
+ 
+     if (sciErr.iErr)
+--- a/scilab/modules/string/src/c/strsubst.c
++++ b/scilab/modules/string/src/c/strsubst.c
+@@ -198,7 +198,7 @@
+         }
+         else
+         {
+-            const wchar_t* end;
++            wchar_t* end;
+             wchar_t digit[3] = {(p + 1)[0], (p + 1)[1]};
+             double d = wcstod(digit, &end);
+             if (ISNAN(d) || end == digit)
+--- a/scilab/modules/fftw/sci_gateway/c/sci_fftw_flags.c
++++ b/scilab/modules/fftw/sci_gateway/c/sci_fftw_flags.c
+@@ -347,7 +347,7 @@
+     }
+ 
+     /* Create the string matrix as return of the function */
+-    sciErr = createMatrixOfString(pvApiCtx, nbInputArgument(pvApiCtx) + 3, j, 1, Str3);
++    sciErr = createMatrixOfString(pvApiCtx, nbInputArgument(pvApiCtx) + 3, j, 1, (const char**)(Str3));
+     freeArrayOfString(Str3, j); // Data have been copied into Scilab memory
+ 
+     if (sciErr.iErr)
+--- a/scilab/modules/fftw/sci_gateway/c/sci_get_fftw_wisdom.c
++++ b/scilab/modules/fftw/sci_gateway/c/sci_get_fftw_wisdom.c
+@@ -147,7 +147,7 @@
+     }
+     Str1[n1 - 1][0] = '\0';
+ 
+-    createMatrixOfString(pvApiCtx, nbInputArgument(pvApiCtx) + 1, n1, 1, Str1);
++    createMatrixOfString(pvApiCtx, nbInputArgument(pvApiCtx) + 1, n1, 1, (const char**)(Str1));
+ 
+     freeArrayOfString(Str1, n1);
+     if (Str)
+--- a/scilab/modules/spreadsheet/sci_gateway/c/sci_csvDefault.c
++++ b/scilab/modules/spreadsheet/sci_gateway/c/sci_csvDefault.c
+@@ -128,7 +128,7 @@
+         arrayOut[14] = os_strdup(getCsvDefaultEncoding());
+         arrayOut[15] = os_strdup(getCsvDefaultCsvIgnoreBlankLine());
+ 
+-        sciErr = createMatrixOfString(pvApiCtx, Rhs + 1, nbRows, nbCols, arrayOut);
++        sciErr = createMatrixOfString(pvApiCtx, Rhs + 1, nbRows, nbCols, (const char**)(arrayOut));
+         freeArrayOfString(arrayOut, sizeArray);
+         if (sciErr.iErr)
+         {
+--- a/scilab/modules/spreadsheet/sci_gateway/c/sci_csvRead.c
++++ b/scilab/modules/spreadsheet/sci_gateway/c/sci_csvRead.c
+@@ -377,11 +377,11 @@
+                     // string conversion, copy the data back to Scilab
+                     if (haveRange)
+                     {
+-                        sciErr = createMatrixOfWideString(pvApiCtx, Rhs + 1, (iRange[2] - iRange[0] + 1), (iRange[3] - iRange[1] + 1), pstrValues);
++                        sciErr = createMatrixOfWideString(pvApiCtx, Rhs + 1, (iRange[2] - iRange[0] + 1), (iRange[3] - iRange[1] + 1), (const wchar_t **)(pstrValues));
+                     }
+                     else
+                     {
+-                        sciErr = createMatrixOfWideString(pvApiCtx, Rhs + 1, m1, n1, pstrValues);
++                        sciErr = createMatrixOfWideString(pvApiCtx, Rhs + 1, m1, n1, (const wchar_t**)(pstrValues));
+                     }
+                     if (sciErr.iErr)
+                     {
+@@ -399,7 +399,7 @@
+ 
+                 if (result->nbComments > 0)
+                 {
+-                    sciErr = createMatrixOfWideString(pvApiCtx, Rhs + 3, result->nbComments, 1, result->pwstrComments);
++                    sciErr = createMatrixOfWideString(pvApiCtx, Rhs + 3, result->nbComments, 1, (const wchar_t**)(result->pwstrComments));
+                     if (sciErr.iErr)
+                     {
+                         printError(&sciErr, 0);
+@@ -415,7 +415,7 @@
+                 if (result->nbHeader > 0)
+                 {
+ 
+-                    sciErr = createMatrixOfWideString(pvApiCtx, Rhs + 4, result->nbHeader, 1, result->pwstrHeader);
++                    sciErr = createMatrixOfWideString(pvApiCtx, Rhs + 4, result->nbHeader, 1, (const wchar_t**)(result->pwstrHeader));
+                     if (sciErr.iErr)
+                     {
+                         printError(&sciErr, 0);
+@@ -438,7 +438,7 @@
+                 if (*getNbOutputArgument(pvApiCtx) > 1 && result->nbComments == 0 && result->nbHeader == 0)
+                 {
+                     wchar_t* emptystr = L"";
+-                    sciErr = createMatrixOfWideString(pvApiCtx, Rhs + 3, 1, 1, &emptystr);
++                    sciErr = createMatrixOfWideString(pvApiCtx, Rhs + 3, 1, 1, (const wchar_t**)(&emptystr));
+                     if (sciErr.iErr)
+                     {
+                         printError(&sciErr, 0);
+--- a/scilab/modules/spreadsheet/sci_gateway/c/sci_csvTextScan.c
++++ b/scilab/modules/spreadsheet/sci_gateway/c/sci_csvTextScan.c
+@@ -287,11 +287,11 @@
+         // string conversion, copy the data back to Scilab
+         if (haveRange)
+         {
+-            sciErr = createMatrixOfWideString(pvApiCtx, Rhs + 1, (iRange[2] - iRange[0] + 1), (iRange[3] - iRange[1] + 1), pstrValues);
++            sciErr = createMatrixOfWideString(pvApiCtx, Rhs + 1, (iRange[2] - iRange[0] + 1), (iRange[3] - iRange[1] + 1), (const wchar_t**)(pstrValues));
+         }
+         else
+         {
+-            sciErr = createMatrixOfWideString(pvApiCtx, Rhs + 1, m1, n1, pstrValues);
++            sciErr = createMatrixOfWideString(pvApiCtx, Rhs + 1, m1, n1, (const wchar_t**)(pstrValues));
+         }
+         if (sciErr.iErr)
+         {
+--- a/scilab/modules/tclsci/sci_gateway/c/sci_TCL_EvalStr.c
++++ b/scilab/modules/tclsci/sci_gateway/c/sci_TCL_EvalStr.c
+@@ -167,7 +167,7 @@
+             }
+         }
+ 
+-        sciErr = createMatrixOfString(pvApiCtx, nbInputArgument(pvApiCtx) + 1, m1, n1, ReturnArrayString);
++        sciErr = createMatrixOfString(pvApiCtx, nbInputArgument(pvApiCtx) + 1, m1, n1, (const char**)(ReturnArrayString));
+         if (sciErr.iErr)
+         {
+             printError(&sciErr, 0);
+--- a/scilab/modules/tclsci/sci_gateway/c/sci_TCL_GetVar.c
++++ b/scilab/modules/tclsci/sci_gateway/c/sci_TCL_GetVar.c
+@@ -125,7 +125,7 @@
+                         ReturnArrayString[j] = TCL_ArrayGetVar(TCLinterpreter, VarName, index_list[j]);
+                     }
+ 
+-                    sciErr = createMatrixOfString(pvApiCtx, nbInputArgument(pvApiCtx) + 1, nb_lines, nb_columns, ReturnArrayString);
++                    sciErr = createMatrixOfString(pvApiCtx, nbInputArgument(pvApiCtx) + 1, nb_lines, nb_columns, (const char**)(ReturnArrayString));
+                     if (sciErr.iErr)
+                     {
+                         printError(&sciErr, 0);
+@@ -163,7 +163,7 @@
+             if ( RetStr )
+             {
+                 char *output = os_strdup(RetStr);
+-                sciErr = createMatrixOfString(pvApiCtx, nbInputArgument(pvApiCtx) + 1, 1, 1, &output);
++                sciErr = createMatrixOfString(pvApiCtx, nbInputArgument(pvApiCtx) + 1, 1, 1, (const char**)(&output));
+                 if (sciErr.iErr)
+                 {
+                     printError(&sciErr, 0);
+--- a/scilab/modules/jvm/sci_gateway/c/sci_javaclasspath.c
++++ b/scilab/modules/jvm/sci_gateway/c/sci_javaclasspath.c
+@@ -40,7 +40,7 @@
+         char **pstClasspath = NULL;
+ 
+         pstClasspath = getClasspath(&iRows);
+-        createMatrixOfString(pvApiCtx, Rhs + 1, iRows, iCols, pstClasspath);
++        createMatrixOfString(pvApiCtx, Rhs + 1, iRows, iCols, (const char**)(pstClasspath));
+ 
+         LhsVar(1) = Rhs + 1;
+         PutLhsVar();
+--- a/scilab/modules/jvm/sci_gateway/c/sci_javalibrarypath.c
++++ b/scilab/modules/jvm/sci_gateway/c/sci_javalibrarypath.c
+@@ -40,7 +40,7 @@
+         char **pstLibrarypath = NULL;
+ 
+         pstLibrarypath = getLibrarypath(&iRows);
+-        createMatrixOfString(pvApiCtx, Rhs + 1, iRows, iCols, pstLibrarypath);
++        createMatrixOfString(pvApiCtx, Rhs + 1, iRows, iCols, (const char**)(pstLibrarypath));
+ 
+         LhsVar(1) = Rhs + 1;
+         PutLhsVar();
+--- a/scilab/modules/graphics/src/c/getHandleProperty/get_mark_foreground_property.c
++++ b/scilab/modules/graphics/src/c/getHandleProperty/get_mark_foreground_property.c
+@@ -48,7 +48,7 @@
+ 
+     if (numMarkForegrounds == 0)
+     {
+-        getGraphicObjectProperty(iObjUID, __GO_MARK_FOREGROUND__, jni_int, &piMarkForeground);
++        getGraphicObjectProperty(iObjUID, __GO_MARK_FOREGROUND__, jni_int, (void**)(&piMarkForeground));
+         if (piMarkForeground == NULL)
+         {
+             Scierror(999, _("'%s' property does not exist for this handle.\n"), "mark_foreground");
+@@ -58,7 +58,7 @@
+     }
+     else
+     {
+-        getGraphicObjectProperty(iObjUID, __GO_MARK_FOREGROUNDS__, jni_int_vector, &markForegrounds);
++        getGraphicObjectProperty(iObjUID, __GO_MARK_FOREGROUNDS__, jni_int_vector, (void**)(&markForegrounds));
+         return sciReturnRowVectorFromInt(markForegrounds, numMarkForegrounds);
+     }
+ }
+--- a/scilab/modules/graphics/src/c/getHandleProperty/get_mark_size_property.c
++++ b/scilab/modules/graphics/src/c/getHandleProperty/get_mark_size_property.c
+@@ -42,11 +42,11 @@
+     int numMarkSizes = 0;
+     int * piNumMarkSizes = &numMarkSizes;
+ 
+-    getGraphicObjectProperty(iObjUID, __GO_NUM_MARK_SIZES__, jni_int, &piNumMarkSizes);
++    getGraphicObjectProperty(iObjUID, __GO_NUM_MARK_SIZES__, jni_int, (void**)(&piNumMarkSizes));
+ 
+     if (numMarkSizes == 0)
+     {
+-        getGraphicObjectProperty(iObjUID, __GO_MARK_SIZE__, jni_int, &piMarkSize);
++        getGraphicObjectProperty(iObjUID, __GO_MARK_SIZE__, jni_int, (void**)(&piMarkSize));
+         if (piMarkSize == NULL)
+         {
+             Scierror(999, _("'%s' property does not exist for this handle.\n"), "mark_size");
+@@ -56,7 +56,7 @@
+     }
+     else
+     {
+-        getGraphicObjectProperty(iObjUID, __GO_MARK_SIZES__, jni_int_vector, &markSizes);
++        getGraphicObjectProperty(iObjUID, __GO_MARK_SIZES__, jni_int_vector, (void**)(&markSizes));
+         return sciReturnRowVectorFromInt(markSizes, numMarkSizes);
+     }
+ }
+--- a/scilab/modules/graphics/src/c/getHandleProperty/get_colors_property.c
++++ b/scilab/modules/graphics/src/c/getHandleProperty/get_colors_property.c
+@@ -45,7 +45,7 @@
+     }
+ 
+     getGraphicObjectProperty(iObjUID, __GO_DATA_MODEL_COLORS__, jni_int_vector, (void **)&colors);
+-    getGraphicObjectProperty(iObjUID, __GO_DATA_MODEL_NUM_COLORS__, jni_int, &piNumColors);
++    getGraphicObjectProperty(iObjUID, __GO_DATA_MODEL_NUM_COLORS__, jni_int, (void**)(&piNumColors));
+ 
+     if (colors == NULL || numColors == 0)
+     {
+--- a/scilab/modules/graphics/src/c/BuildObjects.c
++++ b/scilab/modules/graphics/src/c/BuildObjects.c
+@@ -833,7 +833,6 @@
+     int * piType = &type;
+     int hType = 0;
+     int * pihType = &hType;
+-    int * piVisible = &visible;
+ 
+     if (iSubwin == 0)
+     {
+--- a/scilab/modules/sound/sci_gateway/c/sci_PlaySound.c
++++ b/scilab/modules/sound/sci_gateway/c/sci_PlaySound.c
+@@ -105,7 +105,7 @@
+     expandedPath = expandPathVariableW(pStVarOne);
+     if (pStVarOne)
+     {
+-        freeAllocatedSingleString(pStVarOne);
++        freeAllocatedSingleWideString(pStVarOne);
+         pStVarOne = NULL;
+     }
+ 
+--- a/scilab/modules/matio/src/c/CreateCharVariable.c
++++ b/scilab/modules/matio/src/c/CreateCharVariable.c
+@@ -50,11 +50,11 @@
+ 
+         if (parent == NULL)
+         {
+-            sciErr = createMatrixOfString(pvApiCtx, iVar, nbRow, 1, ppcData);
++            sciErr = createMatrixOfString(pvApiCtx, iVar, nbRow, 1, (const char**)(ppcData));
+         }
+         else
+         {
+-            sciErr = createMatrixOfStringInList(pvApiCtx, iVar, parent, item_position, nbRow, 1, ppcData);
++            sciErr = createMatrixOfStringInList(pvApiCtx, iVar, parent, item_position, nbRow, 1, (const char**)(ppcData));
+         }
+ 
+         for (i = 0; i < nbRow; i++)
+--- a/scilab/modules/matio/sci_gateway/c/sci_matfile_listvar.c
++++ b/scilab/modules/matio/sci_gateway/c/sci_matfile_listvar.c
+@@ -168,7 +168,7 @@
+     {
+         nbRow = nbvar;
+         nbCol = 1;
+-        sciErr = createMatrixOfString(pvApiCtx, Rhs + 1, nbRow, nbCol, varnames);
++        sciErr = createMatrixOfString(pvApiCtx, Rhs + 1, nbRow, nbCol, (const char**)(varnames));
+         if (sciErr.iErr)
+         {
+             printError(&sciErr, 0);
+--- a/scilab/modules/elementary_functions/includes/elem_common.h
++++ b/scilab/modules/elementary_functions/includes/elem_common.h
+@@ -86,7 +86,7 @@
+ extern int C2F(zlacpy) (char *_pstUPLO, int *_piM, int *_piN, double *_pdblA, int *_piLDA, double *_pdblB, int *_piLDB);
+ extern void C2F(zgecon) (char *_pstNORM, int *_piN, doublecomplex * _pdblA, int *_piLDA, double *_pdblANORM, double *_pdblRNORM,
+                          doublecomplex * _pdblWORK, double *_pdblRWORD, int *_piINFO);
+-extern int C2F(ztrcon) (char *_pstNORM, char*uplo, char *diag, int *_piN, doublecomplex *_pdblA, int *_piLDA, double *_pdblRCOND, double *_pdblWORK,
++extern int C2F(ztrcon) (char *_pstNORM, char*uplo, char *diag, int *_piN, doublecomplex *_pdblA, int *_piLDA, double *_pdblRCOND, doublecomplex *_pdblWORK,
+                                                  double *_pdblRWORD, int *_piINFO);
+ extern int C2F(zgelsy1) (int *_piM, int *_piN, int *_piNRHS, doublecomplex * pdblA, int *_piLDA, doublecomplex * _pdblB, int *_piLDB, int *_piJPVT,
+                          double *_pdblRCOND, int *_piRANK, doublecomplex * _pdblWORK, int *_piLWORK, double *_pdblRWORK, int *_piINFO);
+--- a/scilab/modules/ui_data/src/jni/ui_data_wrap.c
++++ b/scilab/modules/ui_data/src/jni/ui_data_wrap.c
+@@ -239,7 +239,7 @@
+   }
+   arg3 = (int)jarg3; 
+   arg4 = (int)jarg4; 
+-  putScilabVariable(arg1,arg2,arg3,arg4);
++  putScilabVariable(arg1,(const char**)(arg2),arg3,arg4);
+   if (arg1) (*jenv)->ReleaseStringUTFChars(jenv, jarg1, (const char *)arg1);
+   {
+     int i;
+--- a/scilab/modules/scicos_blocks/src/c/scale_cmscope.c
++++ b/scilab/modules/scicos_blocks/src/c/scale_cmscope.c
+@@ -380,7 +380,7 @@
+             goto error_handler_periodCounter;
+         }
+ 
+-        sco->scope.minY = (int *) CALLOC(block->nin, sizeof(double));
++        sco->scope.minY = (double *) CALLOC(block->nin, sizeof(double));
+         if (sco->scope.minY == NULL)
+         {
+             goto error_handler_minY;
+@@ -390,7 +390,7 @@
+             sco->scope.minY[i] = SCOPE_INITIAL_MIN_Y;
+         }
+ 
+-        sco->scope.maxY = (int *) CALLOC(block->nin, sizeof(double));
++        sco->scope.maxY = (double *) CALLOC(block->nin, sizeof(double));
+         if (sco->scope.maxY == NULL)
+         {
+             goto error_handler_maxY;
+--- a/scilab/modules/scicos/src/c/import.c
++++ b/scilab/modules/scicos/src/c/import.c
+@@ -922,42 +922,6 @@
+     }
+ }
+ /*--------------------------------------------------------------------------*/
+-/*never used, never interfaced */
+-int C2F(getsciblockbylabel)(int*kfun, int label[], int *n)
+-{
+-    int k, i, i0, nblk, n1;
+-    int job = 1;
+-    char* lab[100];
+-    if (scicos_imp.x == (double *)NULL)
+-    {
+-        return (2); /* undefined import table scicos is not running */
+-    }
+-    nblk = scicos_imp.nblk[0];
+-
+-    F2C(cvstr)(n, lab, label, &job, *n);
+-
+-    *kfun = 0;
+-    for (k = 0; k < nblk; k++)
+-    {
+-        n1 = (int)(scicos_imp.izptr[k] - scicos_imp.izptr[k - 1]);
+-        if (n1 == *n)
+-        {
+-            i0 = scicos_imp.izptr[k - 1] - 1;
+-            i = 0;
+-            while ((lab[i] == scicos_imp.iz[i0 + i]) & (i < n1))
+-            {
+-                i++;
+-            }
+-            if (i == n1)
+-            {
+-                *kfun = k + 1;
+-                return 0;
+-            }
+-        }
+-    }
+-    return 0;
+-}
+-/*--------------------------------------------------------------------------*/
+ int getscilabel(int *kfun, char *label, int *n)
+ {
+     int k;
+--- a/scilab/modules/core/includes/BOOL.h
++++ b/scilab/modules/core/includes/BOOL.h
+@@ -29,22 +29,10 @@
+ #endif
+ 
+ 
+-#ifndef  _MSC_VER
+-typedef enum
+-{
+-    FALSE = 0,
+-    TRUE = 1
+-} BOOL;
+-
+-#else
+-/* Please notice that BOOL is defined in <windef.h> */
+-/* BUT windef.h includes all others windows include */
+-/* it is better to redefine as */
+ typedef int BOOL;
+ #define FALSE 0
+ #define TRUE 1
+ 
+-#endif
+ /* converts BOOL to bool */
+ #define BOOLtobool(w)     ((w != FALSE) ? true : false)
+ 
+--- a/scilab/modules/javasci/src/c/javasci2_helper.c
++++ b/scilab/modules/javasci/src/c/javasci2_helper.c
+@@ -449,7 +449,7 @@
+ 
+ }
+ 
+-int putLong(char *variableName, long *variable, int nbRow, int nbCol)
++int putLong(char *variableName, long long *variable, int nbRow, int nbCol)
+ {
+     SciErr sciErr;
+ 
+@@ -462,10 +462,10 @@
+     return 0;
+ }
+ 
+-unsigned long *getUnsignedLong(char *variableName, int *nbRow, int *nbCol)
++unsigned long long *getUnsignedLong(char *variableName, int *nbRow, int *nbCol)
+ {
+     SciErr sciErr;
+-    long *matrixOfLong = NULL;
++    long long *matrixOfLong = NULL;
+ 
+     sciErr = readNamedMatrixOfUnsignedInteger64(NULL, variableName, nbRow, nbCol, NULL);
+     if (sciErr.iErr)
+@@ -474,7 +474,7 @@
+     }
+ 
+     /* Alloc the memory */
+-    matrixOfLong = (long *)malloc(((*nbRow) * (*nbCol)) * sizeof(long));
++    matrixOfLong = (long long *)malloc(((*nbRow) * (*nbCol)) * sizeof(long long));
+ 
+     /* Load the matrix */
+     sciErr = readNamedMatrixOfUnsignedInteger64(NULL, variableName, nbRow, nbCol, matrixOfLong);
+@@ -487,7 +487,7 @@
+ 
+ }
+ 
+-int putUnsignedLong(char *variableName, unsigned long *variable, int nbRow, int nbCol)
++int putUnsignedLong(char *variableName, unsigned long long *variable, int nbRow, int nbCol)
+ {
+     SciErr sciErr;
+ 
+@@ -548,7 +548,7 @@
+ {
+     SciErr sciErr;
+ 
+-    sciErr = createNamedMatrixOfString(NULL, variableName, nbRow, nbCol, variable);
++    sciErr = createNamedMatrixOfString(NULL, variableName, nbRow, nbCol, (const char**)(variable));
+     if (sciErr.iErr)
+     {
+         printError(&sciErr, 0);
+@@ -600,7 +600,7 @@
+ {
+     SciErr sciErr;
+ 
+-    sciErr = createNamedMatrixOfPoly(NULL, variableName, polyVarName, nbRow, nbCol, nbCoef, data);
++    sciErr = createNamedMatrixOfPoly(NULL, variableName, polyVarName, nbRow, nbCol, nbCoef, (const double**)(data));
+     if (sciErr.iErr)
+     {
+         printError(&sciErr, 0);
+@@ -613,7 +613,7 @@
+ {
+     SciErr sciErr;
+ 
+-    sciErr = createNamedComplexMatrixOfPoly(NULL, variableName, polyVarName, nbRow, nbCol, nbCoef, data, imag);
++    sciErr = createNamedComplexMatrixOfPoly(NULL, variableName, polyVarName, nbRow, nbCol, nbCoef, (const double**)(data), (const double**)(imag));
+     if (sciErr.iErr)
+     {
+         printError(&sciErr, 0);
+--- a/scilab/modules/javasci/src/c/javasci2_helper.h
++++ b/scilab/modules/javasci/src/c/javasci2_helper.h
+@@ -271,7 +271,7 @@
+  * @param nbCol Number of cols
+  * @return 0 if successfull, != 0 otherwise
+  */
+-int putLong(char* variableName, long *variable, int nbRow, int nbCol);
++int putLong(char* variableName, long long *variable, int nbRow, int nbCol);
+ 
+ /**
+  * Return a matrix of unsigned long (uint64)
+@@ -281,7 +281,7 @@
+  * @param[out] nbCol Number of cols
+  * @return The matrix of unsigned long (column sorted)
+  */
+-unsigned long * getUnsignedLong(char* variableName, int *nbRow, int *nbCol);
++unsigned long long * getUnsignedLong(char* variableName, int *nbRow, int *nbCol);
+ 
+ /**
+  * Set a matrix of unsigned long (int64)
+@@ -292,7 +292,7 @@
+  * @param nbCol Number of cols
+  * @return 0 if successfull, != 0 otherwise
+  */
+-int putUnsignedLong(char* variableName, unsigned long *variable, int nbRow, int nbCol);
++int putUnsignedLong(char* variableName, unsigned long long *variable, int nbRow, int nbCol);
+ 
+ /**
+  * Return a matrix of string
+--- a/scilab/modules/javasci/src/jni/call_scilab.i
++++ b/scilab/modules/javasci/src/jni/call_scilab.i
+@@ -176,9 +176,9 @@
+ 
+ #ifdef __SCILAB_INT64__
+ // long = int64
+-int putLong(char * variableName, long variable[], int nbRow, int nbCol);
++int putLong(char * variableName, long long variable[], int nbRow, int nbCol);
+ 
+-int putUnsignedLong(char * variableName, unsigned long variable[], int nbRow, int nbCol);
++int putUnsignedLong(char * variableName, unsigned long long variable[], int nbRow, int nbCol);
+ #endif
+ 
+ // This position matters. It will apply only to the following lines
+--- a/scilab/modules/scicos/src/c/scicos.c
++++ b/scilab/modules/scicos/src/c/scicos.c
+@@ -838,7 +838,7 @@
+                      &nblk, subscr, nsubs,
+                      &tevts[1], &evtspt[1], nevts, pointi,
+                      &iord[1], &niord, &oord[1], &noord, &zord[1], &nzord,
+-                     funptr, &funtyp[1], &ztyp[1],
++                     (int*)(funptr), &funtyp[1], &ztyp[1],
+                      &cord[1], &ncord, &ordclk[1], &nordclk, &clkptr[1],
+                      &ordptr[1], &nordptr, &critev[1], iwa, Blocks,
+                      t0, tf, &Atol, &rtol, &ttol, &deltat, &hmax,

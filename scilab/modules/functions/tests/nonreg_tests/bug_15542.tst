@@ -1,6 +1,6 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
-// Copyright (C) 2018 - Stéphane Mottelet
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
+// Copyright (C) 2018 - UTC - Stéphane MOTTELET
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
@@ -9,8 +9,8 @@
 //
 // <-- Non-regression test for bug 15542 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/15542
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/15542
 //
 // <-- Short Description -->
 // whereis("my_user_defined_fun") returns [] and expects a function handle, unlike for macros in libraries and primitives in gateways

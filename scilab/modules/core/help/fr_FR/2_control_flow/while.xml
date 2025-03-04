@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -83,10 +83,6 @@ end
         <programlisting role=""><![CDATA[
 i = 0; while i<5, disp(i), i = i + 1; end
 ]]></programlisting>
-      <warning>
-        Le nombre de caractères constituant le corps d'une instruction conditionnelle (if while
-        for ou select/case) est limité à 16k.
-      </warning>
     </refsection>
     <refsection>
         <title>Exemples</title>
@@ -127,14 +123,17 @@ e,k
                 <revnumber>6.0.0</revnumber>
                 <revremark>
                     <itemizedlist>
-                      <listitem>
-                        La syntaxe avec <literal>[,else instructions]</literal> n'est plus admise.
-                      </listitem>
-                      <listitem>
-                        <literal>while</literal> est désormais protégé. Les affectations telles que
-                        <literal>while=1</literal> ne sont plus possibles.
-                      </listitem>
-                  </itemizedlist>
+                        <listitem>
+                            La syntaxe avec <literal>[,else instructions]</literal> n'est plus admise.
+                        </listitem>
+                        <listitem>
+                            <literal>while</literal> est désormais protégé. Les affectations telles que
+                            <literal>while=1</literal> ne sont plus possibles.
+                        </listitem>
+                        <listitem>
+                            Le nombre de caractères constituant le corps d'une instruction conditionnelle (<literal>if</literal>, <literal>while</literal>, <literal>for</literal>, ou <literal>select/case</literal>) n'est plus limité à 16k.
+                        </listitem>
+                    </itemizedlist>
                 </revremark>
             </revision>
         </revhistory>

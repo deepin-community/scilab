@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2012 - Scilab Enterprises - Cedric DELAMARRE
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -71,44 +71,41 @@ types::Function::ReturnValue sci_sfact(types::typed_list &in, int _iRetCount, ty
         // check symmetry
         int iDegree = pPolyIn->get(0)->getRank();
         int iDegD2  = (int)(iDegree / 2);
-        int n       = 1 + iDegD2;
+        int iSizeD2 = 1 + iDegD2;
 
         if (2 * iDegD2 != iDegree)
         {
-            Scierror(999, _("%s: Wrong value for input argument #%d: A symmetric polynomial expected.\n"), "sfact", 1);
+            Scierror(999, _("%s: Wrong value for input argument #%d: Maximum degree must be even.\n"), "sfact", 1);
             return types::Function::Error;
         }
 
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i < iDegD2; i++)
         {
             if (pdblCoef[i] != pdblCoef[iDegree - i])
             {
-                Scierror(999, _("%s: Wrong value for input argument #%d: A symmetric polynomial expected.\n"), "sfact", 1);
+                Scierror(999, _("%s: Wrong value for input argument #%d: A palindromic polynomial is expected.\n"), "sfact", 1);
                 return types::Function::Error;
             }
         }
 
         // create result
-        pPolyOut = new types::Polynom(pPolyIn->getVariableName(), 1, 1);
         double* pdblCoefOut = NULL;
         types::SinglePoly* pSP = new types::SinglePoly(&pdblCoefOut, iDegD2);
-        C2F(dcopy)(&n, pdblCoef, &iOne, pdblCoefOut, &iOne);
+        C2F(dcopy)(&iSizeD2, pdblCoef, &iOne, pdblCoefOut, &iOne);
 
         // perform operation
-        double* pdblWork = new double[7 * n];
+        double* pdblWork = new double[7 * iSizeD2];
         C2F(sfact1)(pdblCoefOut, &iDegD2, pdblWork, &iMaxIt, &iErr);
         delete[] pdblWork;
         if (iErr == 2)
         {
             delete pSP;
-            delete pPolyOut;
-            Scierror(999, _("%s: Wrong value for input argument #%d: Non negative or null value expected at degree %d.\n"), "sfact", 1, n);
+            Scierror(999, _("%s: Wrong value for input argument #%d: Non negative or null value expected at degree %d.\n"), "sfact", 1, iDegD2);
             return types::Function::Error;
         }
         else if (iErr == 1)
         {
             delete pSP;
-            delete pPolyOut;
             Scierror(999, _("%s: Wrong value for input argument #%d: Convergence problem.\n"), "sfact", 1);
             return types::Function::Error;
         }
@@ -118,6 +115,7 @@ types::Function::ReturnValue sci_sfact(types::typed_list &in, int _iRetCount, ty
         }
 
         // return result
+        pPolyOut = new types::Polynom(pPolyIn->getVariableName(), 1, 1);
         pPolyOut->set(0, pSP);
         delete pSP;
     }
@@ -133,26 +131,38 @@ types::Function::ReturnValue sci_sfact(types::typed_list &in, int _iRetCount, ty
         int iRows   = pPolyIn->getRows();
         int iDegree = pPolyIn->getMaxRank();
         int iDegD2  = (int)(iDegree / 2);
-        int n       = 1 + iDegD2;
+        int iSizeD2 = 1 + iDegD2;
 
-        double* pdblOut  = new double[iSize * n];
-        double* pdblWork = new double[(n + 1) * iRows * ((n + 1)*iRows) + 1];
+        if (2 * iDegD2 != iDegree)
+        {
+            Scierror(999, _("%s: Wrong value for input argument #%d: Maximum degree must be even.\n"), "sfact", 1);
+            return types::Function::Error;
+        }
 
-        memset(pdblOut, 0x00, iSize * n * sizeof(double));
+        double* pdblOut  = new double[iSize * iSizeD2];
+        int q = iSizeD2 * iRows;
+        double* pdblWork = new double[q * (q + 1) / 2];
+
+        memset(pdblOut, 0x00, iSize * iSizeD2 * sizeof(double));
 
         for (int i = 0; i < iSize; i++)
         {
+            // Copy all coeff from the middle to the end of the current polynom.
+            // The middle is computed using the max degree of all polynoms.
+            // ie: with max degree equal to 6, copy all coeff from deg 3 to the current poly coeff.
+            //     for polynoms with a degree < 6, missing coeff are considered as zero. 
+            //     s^2 + s^3 + s^4 considered as 0 + 0*s + s^2 + s^3 + s^4 + 0*s^5 + 0*s^6 by coping only the coeff of s^4.
+            //     pdblOut will contains degree 3 coeff of all polynoms, following by degree 4 coeff of all polynoms, ect...
             double* pdblIn = pPolyIn->get(i)->get();
-            int iSizeToCpy = 2 + pPolyIn->get(i)->getSize() - 1 - n;
+            int iSizeToCpy = pPolyIn->get(i)->getSize() - iDegD2;
             if (iSizeToCpy > 0)
             {
-                C2F(dcopy)(&iSizeToCpy, pdblIn + n - 1, &iOne, pdblOut + i, &iSize);
+                C2F(dcopy)(&iSizeToCpy, pdblIn + iSizeD2 - 1, &iOne, pdblOut + i, &iSize);
             }
         }
 
-        int nm1 = n - 1;
-        iMaxIt += n;
-        C2F(sfact2)(pdblOut, &iRows, &nm1, pdblWork, &iMaxIt, &iErr);
+        iMaxIt += iSizeD2;
+        C2F(sfact2)(pdblOut, &iRows, &iDegD2, pdblWork, &iMaxIt, &iErr);
         delete[] pdblWork;
 
         if (iErr < 0)
@@ -172,8 +182,8 @@ types::Function::ReturnValue sci_sfact(types::typed_list &in, int _iRetCount, ty
         for (int i = 0; i < iSize; i++)
         {
             double* pdblCoefOut = NULL;
-            types::SinglePoly* pSP = new types::SinglePoly(&pdblCoefOut, nm1);
-            C2F(dcopy)(&n, pdblOut + i, &iSize, pdblCoefOut, &iOne);
+            types::SinglePoly* pSP = new types::SinglePoly(&pdblCoefOut, iDegD2);
+            C2F(dcopy)(&iSizeD2, pdblOut + i, &iSize, pdblCoefOut, &iOne);
             pPolyOut->set(i, pSP);
             delete pSP;
         }

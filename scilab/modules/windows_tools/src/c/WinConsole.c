@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) INRIA - Allan CORNET
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -18,7 +18,6 @@
 #include <Windows.h>
 #include <stdio.h>
 #include "WinConsole.h"
-#include "version.h"
 #include "configvariable_interface.h"
 #include "sci_malloc.h"
 #include "scilab_windows/console.h"

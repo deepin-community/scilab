@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ????-2008 - INRIA - Vincent COUVERT <vincent.couvert@inria.fr>
 // Copyright (C) 2005-2008 - INRIA - Pierre MARECHAL <pierre.marechal@inria.fr>
 //
@@ -13,8 +13,8 @@
 //
 // <-- Non-regression test for bug 946 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=946
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/946
 //
 // <-- Short Description -->
 //    Code badly converted by mfile2sci when using particular

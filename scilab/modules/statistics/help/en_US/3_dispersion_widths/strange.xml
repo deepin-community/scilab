@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2000 - INRIA - Carlos Klimann
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -20,9 +20,8 @@
     </refnamediv>
     <refsynopsisdiv>
         <title>Syntax</title>
-        <synopsis>[r]=strange(x)
-            [r]=strange(x,'r') (or, equivalently, [r]=strange(x,1))
-            [r]=strange(x,'c') (or, equivalently, [r]=strange(x,2))
+        <synopsis>r = strange(x)
+            r = strange(x, orientation)
         </synopsis>
     </refsynopsisdiv>
     <refsection>
@@ -34,21 +33,44 @@
                     <para>real or complex vector or matrix</para>
                 </listitem>
             </varlistentry>
+            <varlistentry>
+                <term>orientation</term>
+                <listitem>
+                    <para>
+                        index of the dimension along which the strange is computed. It can be either
+                    </para>
+                    <itemizedlist>
+                        <listitem>
+                            a character <literal>"*"</literal> (default), <literal>"r"</literal> or
+                          <literal>"c"</literal>
+                        </listitem>
+                        <listitem>
+                            a positive integer: 1 or 2. 1 is equivalent to "r" and 2 is equivalent to "c".
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>r</term>
+                <listitem>
+                    <para>real or complex scalar or vector</para>
+                </listitem>
+            </varlistentry>
         </variablelist>
     </refsection>
     <refsection>
         <title>Description</title>
         <para>
             The  range  is the  distance   between  the largest  and
-            smallest value,  [r]=strange(x) computes   the  range of
+            smallest value,  r = strange(x) or r = strange(x, "*") computes   the  range of
             vector or matrix x.
         </para>
         <para>
-            [r]=strange(x,'r')  (or   equivalently [r]=strange(x,1))
+            r = strange(x,'r')  (or   equivalently r = strange(x,1))
             give a row vector with the range of each column.
         </para>
         <para>
-            [r]=strange(x,'c') (or  equivalently   [r]=strange(x,2))
+            r = strange(x,'c') (or  equivalently   r = strange(x,2))
             give a column vector with the range of each row.
         </para>
     </refsection>

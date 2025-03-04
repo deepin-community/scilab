@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA - Jean-Baptiste Silvy
  * Copyright (C) 2012 - Scilab Enterprises - Vincent COUVERT
  * desc : interface for xs2png routine

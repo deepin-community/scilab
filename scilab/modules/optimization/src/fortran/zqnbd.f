@@ -1,4 +1,4 @@
-c Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+c Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 c Copyright (C) INRIA
 c 
 c Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -16,13 +16,15 @@ c
 c
       implicit double precision (a-h,o-z)
       real rzs(*)
-      double precision dzs(*)
+      double precision dzs(*), itmax1, napmax1
       character bufstr*(4096)
       dimension x1(n),x2(n),g1(n),dir(n),epsx(n)
       dimension binf(n),bsup(n),x(n),g(n),dh(*),indic(n),izig(n),
      &izs(*)
       external simul,proj
 c
+      itmax1=itmax
+      napmax1=napmax
       if(iprint.lt.4)go to 3
       write(bufstr,1020)izag,ig,in,irel,iact,epsrel
       call basout(io_out ,io ,bufstr(1:lnblnk(bufstr)))
@@ -116,8 +118,10 @@ c     section 2  mise a jour dh
 c
 c     iter nombre d iterations de descente
       iter=0
+      itmax=iter
       scal=1.0d+0
       nap=1
+      napmax=nap
       indsim=4
       if(indqn.eq.1) call simul(indsim,n,x,f,g,izs,rzs,dzs)
       if(indsim.le.0)then
@@ -145,7 +149,8 @@ c     d ou cst=som((y(i)*(dx))**2))/(2*df0)
 82    dh(i1)=(cof1 + zero)/(epsx(i)**2 + zero)
       iconv=0
 200   iter=iter +1
-      if(iter.le.itmax)go to 202
+      itmax=iter
+      if(iter.le.itmax1)go to 202
       if(iprint.gt.0) then
         write(bufstr,1202)
         call basout(io_out ,io ,bufstr(1:lnblnk(bufstr)))
@@ -576,12 +581,13 @@ c     amd,amf tests sur h'(t) et diff
       amf=.1
       napm=15
       napm1=nap + napm
-      if(napm1.gt.napmax)napm1=napmax
+      if(napm1.gt.napmax1)napm1=napmax1
       call rlbd(indrl,n,simul,x,binf,bsup,fn,fpn,t,tmax,dir,g,
      & tproj,amd,amf,iprint,io,zero,nap,napm1,x2,izs,rzs,dzs)
       if(indrl.ge.10)then
          indsim=4
          nap=nap + 1
+         napmax=nap
          call simul(indsim,n,x,f,g,izs,rzs,dzs)
          if(indsim.le.0)then
             indqn=-3
@@ -613,7 +619,7 @@ c
 777   format(' i=',i2,' xgd ',3f11.4)
 c
 778   continue
-      if(nap.lt.napmax)go to 758
+      if(nap.lt.napmax1)go to 758
       f=fn
       if(iprint.gt.0) then
         write(bufstr,755)napmax

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2011 - DIGITEO - Sylvestre Ledru
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
@@ -19,7 +19,10 @@
     </refnamediv>
     <refsynopsisdiv>
         <title>呼び出し手順</title>
-        <synopsis>res = MPI_Isend(value,node)</synopsis>
+        <synopsis>
+            res = MPI_Isend(value, node)
+            res = MPI_Isend(value, node, comm=mpi_comm)
+        </synopsis>
     </refsynopsisdiv>
     <refsection>
         <title>引数</title>
@@ -34,6 +37,16 @@
                 <term>node</term>
                 <listitem>
                     <para>データを送信するノード</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>comm=mpi_comm</term>
+                <listitem>
+                    <para>If the optional argument "comm" is given,
+                        this function will use the MPI communicator created by
+                        <link linkend="MPI_Create_comm">MPI_Create_comm</link>.
+                        If not, the default MPI_COMM_WORLD is used.
+                    </para>
                 </listitem>
             </varlistentry>
             <varlistentry>
@@ -55,7 +68,7 @@
     </refsection>
     <refsection>
         <title>例</title>
-        <programlisting role="example"><![CDATA[
+        <programlisting role="no-scilab-exec"><![CDATA[
                 MPI_Init();
                 rnk =    MPI_Comm_rank();
                 sizeNodes =    MPI_Comm_size();

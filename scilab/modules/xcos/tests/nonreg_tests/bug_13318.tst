@@ -1,18 +1,19 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2014 - Scilab Enterprises - Vladislav TRUBKIN
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
 
 // <-- XCOS TEST -->
+// <-- NO CHECK REF -->
 //
 // <-- ENGLISH IMPOSED -->
 //
 // <-- Non-regression test for bug 13318 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=13318
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/13318
 //
 // <-- Short Description -->
 // Output of CONST block is a vector and not a matrix.
@@ -52,9 +53,9 @@ funcprot(prot);
 block = CONST("define");
 block.graphics.exprs = ["[1 1; 1 1]"];
 block = CONST("set", block);
-assert_checkequal(outmsg, "C matrix is not supported, use CONST_m instead");
+assert_checkequal(outmsg, "The input value must be scalar.<br>Please use CONST_m to set a<br>constant input vector or matrix.");
 
 block = CONST("define");
 block.graphics.exprs = ["[1 1 1; -1 -2 -3; 0 0 0]"];
 block = CONST("set", block);
-assert_checkequal(outmsg, "C matrix is not supported, use CONST_m instead");
+assert_checkequal(outmsg, "The input value must be scalar.<br>Please use CONST_m to set a<br>constant input vector or matrix.");

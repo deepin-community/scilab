@@ -17,12 +17,26 @@
             なお,メニューは<link linkend="uimenu">uimenu</link>により
             追加できます.
         </para>
+        <para>
+            The menu appears on the screen each time that an item is created.
+        </para>
+        <para>
+            It is displayed exactly where the mouse pointer is, even if the pointer is out of any
+            Scilab element. If the pointer is out of the computer's screen, the menu is displayed
+            on the screen's edge beyond which the pointer is located.
+        </para>
+        <para>
+            It remains at the top level foreground, in front of any Scilab GUI or any external GUI
+            of external applications, as long as no mouse button is clicked anywhere, on the menu
+            or outside.
+        </para>
     </refsection>
     <refsection>
         <title>例</title>
         <programlisting role="example"><![CDATA[
 // コンテキストメニューを作成
 hMenu = uicontextmenu();
+
 // サブメニューを作成
 hItem1 = uimenu("Label", "Item1", "Parent", hMenu, "Callback", "disp(""Item1 clicked!"")");
 hItem2 = uimenu("Label", "Item2", "Parent", hMenu, "Callback", "disp(""Item2 clicked!"")");
@@ -33,10 +47,13 @@ hItem3 = uimenu("Label", "Item3", "Parent", hMenu, "Callback", "disp(""Item3 cli
         <title>参照</title>
         <simplelist type="inline">
             <member>
-                <link linkend="uicontrol">uicontrol</link>
+                <link linkend="uimenu">uimenu</link>
             </member>
             <member>
-                <link linkend="uimenu">uimenu</link>
+                <link linkend="addmenu">addmenu</link>
+            </member>
+            <member>
+                <link linkend="uicontrol">uicontrol</link>
             </member>
         </simplelist>
     </refsection>

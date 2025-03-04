@@ -1,0 +1,11 @@
+# Excluding s390x from the test architectures as jogl2 fails to find a
+# compatible configuration at runtime.
+
+Tests: graphical-sa
+Depends: scilab, xvfb, xauth
+Architecture: !s390x
+Restrictions: allow-stderr
+
+Tests: cli-ode
+Depends: build-essential, scilab-cli
+Architecture: !s390x

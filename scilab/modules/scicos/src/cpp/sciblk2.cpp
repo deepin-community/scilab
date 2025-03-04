@@ -37,23 +37,48 @@
 
 extern "C"
 {
+#include "machine.h"
 #include "sciblk2.h"
-#include "scicos.h" /* set_block_error() */
+#include "import.h" /* getscicosvarsfromimport */
+#include "scicos.h" /* set_block_error(), get_block_number() */
+#include "Scierror.h"
 }
 
 static double toDouble(const int i)
 {
     return static_cast<double>(i);
-}
+};
 
-static void setErrAndFree(const int flag, types::typed_list out)
+static void setErrAndFree(types::typed_list out)
 {
-    set_block_error(flag);
+    // Set the block error to an internal error
+    set_block_error(-5);
     for (size_t i = 0; i < out.size(); ++i)
     {
         out[i]->killMe();
     }
-}
+};
+
+static std::string reportError(const char* err)
+{
+    // resolve current block
+    int kfun = get_block_number();
+
+    // resolve uid
+    char emptyChar = '0';
+    char* uid = &emptyChar;
+    char** allUID = nullptr;
+    int n_uid = 1, m_uid = 1;
+    if(getscicosvarsfromimport("uid", (void**) &allUID, &n_uid, &m_uid) && n_uid >= kfun)
+    {
+        uid = allUID[kfun - 1];
+    }
+
+    std::string message;
+    message.resize(BUFSIZ);
+    snprintf((char *) message.data(), BUFSIZ - 1, err, kfun, uid);
+    return message;
+};
 
 /*--------------------------------------------------------------------------*/
 void sciblk2(int* flag, int* nevprt, double* t, double xd[], double x[], int* nx, double z[], int* nz, double tvec[], int* ntvec, double rpar[], int* nrpar,
@@ -74,35 +99,17 @@ void sciblk2(int* flag, int* nevprt, double* t, double xd[], double x[], int* nx
     memcpy(X->get(), x, *nx * sizeof(double));
     in[3] = X;
 
-    types::InternalType* Z;
+    types::Double* Z = nullptr;
     if (*nz == 0)
     {
         Z = types::Double::Empty();
     }
     else
     {
-        if (!vec2var(std::vector<double>(z, z + *nz), Z))
-        {
-            setErrAndFree(-1, out);
-            delete in[0];
-            delete in[1];
-            delete in[2];
-            delete in[3];
-            return;
-        }
-        if (!Z->isDouble())
-        {
-            setErrAndFree(-1, out);
-            delete in[0];
-            delete in[1];
-            delete in[2];
-            delete in[3];
-            return;
-        }
-        //types::Double* Z = new types::Double(*nz, 1);
-        //memcpy(Z->get(), z, *nz * sizeof(double));
+        Z = new types::Double(*nz, 1);
+        memcpy(Z->get(), z, *nz * sizeof(double));
     }
-    in[4] = Z->getAs<types::Double>();
+    in[4] = Z;
 
     types::Double* Rpar = new types::Double(*nrpar, 1);
     memcpy(Rpar->get(), rpar, *nrpar * sizeof(double));
@@ -129,7 +136,10 @@ void sciblk2(int* flag, int* nevprt, double* t, double xd[], double x[], int* nx
     ***********************/
     types::Callable* pCall = static_cast<types::Callable*>(scsptr);
 
-    ConfigVariable::increaseRecursion();
+    if(!ConfigVariable::increaseRecursion())
+        throw ast::RecursionException();
+
+    // add line and function name in where
     ConfigVariable::where_begin(1, 1, pCall);
 
     types::optional_list opt;
@@ -138,144 +148,110 @@ void sciblk2(int* flag, int* nevprt, double* t, double xd[], double x[], int* nx
     try
     {
         Ret = pCall->call(in, opt, 5, out);
-        ConfigVariable::where_end();
-        ConfigVariable::decreaseRecursion();
 
         if (Ret != types::Function::OK)
         {
-            setErrAndFree(-1, out);
+            // there has been a Scilab error, it will be reported through the lasterror()
+            setErrAndFree(out);
             return;
         }
 
         if (out.size() != 5)
         {
-            setErrAndFree(-1, out);
-            return;
+            throw ast::InternalError(reportError(_("User-defined function of Block #%d - \"%s\" did not output 5 values.\n")));
         }
+
+        ConfigVariable::where_end();
+        ConfigVariable::decreaseRecursion();
     }
     catch (const ast::InternalError &)
     {
-        std::wostringstream ostr;
-        ConfigVariable::whereErrorToString(ostr);
-
-        bool oldSilentError = ConfigVariable::isSilentError();
-        ConfigVariable::setSilentError(false);
-        scilabErrorW(ostr.str().c_str());
-        ConfigVariable::setSilentError(oldSilentError);
-        ConfigVariable::resetWhereError();
-
-        ConfigVariable::where_end();
-        ConfigVariable::setLastErrorFunction(pCall->getName());
-        ConfigVariable::decreaseRecursion();
-
-        setErrAndFree(-1, out);
+        setErrAndFree(out);
         throw;
     }
 
-    switch (*flag)
+    if (*flag == 0)
     {
-        case 1 :
-        case 2 :
-        case 4 :
-        case 5 :
-        case 6 :
+        /*  x'  computation */
+        if (!out[0]->isDouble())
         {
-            if (!out[2]->isDouble())
-            {
-                setErrAndFree(-1, out);
-                return;
-            }
-            std::vector<double> Zout;
-            if (!var2vec(out[2], Zout))
-            {
-                setErrAndFree(-1, out);
-                return;
-            }
-            memcpy(z, &Zout[0], *nz * sizeof(double));
-
-            if (!out[3]->isDouble())
-            {
-                setErrAndFree(-1, out);
-                return;
-            }
-            types::Double* Xout = out[3]->getAs<types::Double>();
-            memcpy(x, Xout->get(), *nx * sizeof(double));
-
-            if (*flag == 1 || *flag == 6)
-            {
-                if (*nout != 0)
-                {
-                    if (!out[4]->isList())
-                    {
-                        setErrAndFree(-1, out);
-                        return;
-                    }
-                    types::List* Yout = out[4]->getAs<types::List>();
-                    if (Yout->getSize() < *nout)
-                    {
-                        // Consider that 'outptr' has not been defined in the macro: do not update the current 'outptr'
-                        break;
-                    }
-                    for (int k = *nout - 1; k >= 0; --k)
-                    {
-                        if (!Yout->get(k)->isDouble())
-                        {
-                            setErrAndFree(-1, out);
-                            return;
-                        }
-                        types::Double* KthElement = Yout->get(k)->getAs<types::Double>();
-                        double* y = (double*)outptr[k];
-                        int ny = outsz[k];
-                        int ny2 = 1;
-                        if (*flag == 1)
-                        {
-                            ny2 = outsz[*nout + k];
-                        }
-                        if (KthElement->getSize() != ny * ny2)
-                        {
-                            // At initialization (flag 6), the 'y' returned by the macro is not necessarily properly initialized.
-                            // In this case, do nothing to avoid copying corrupt data
-                            break;
-                        }
-                        memcpy(y, KthElement->get(), ny * ny2 * sizeof(double));
-                    }
-                }
-            }
-            break;
-        }
-
-        case 0 :
-            /*  x'  computation */
-        {
-            if (!out[0]->isDouble())
-            {
-                setErrAndFree(-1, out);
-                return;
-            }
-            types::Double* XDout = out[0]->getAs<types::Double>();
-            memcpy(xd, XDout->get(), *nx * sizeof(double));
-            break;
-        }
-
-        case 3 :
-        {
-            if (!out[1]->isDouble())
-            {
-                setErrAndFree(-1, out);
-                return;
-            }
-            types::Double* Tout = out[1]->getAs<types::Double>();
-            memcpy(tvec, Tout->get(), *ntvec * sizeof(double));
-            break;
-        }
-
-        default :
-        {
-            setErrAndFree(-1, out);
+            setErrAndFree(out);
+            Scierror(888, reportError(_("User-defined function of Block #%d - \"%s\" did not output xd as first output argument.\n")).c_str());
             return;
         }
+        types::Double* XDout = out[0]->getAs<types::Double>();
+        memcpy(xd, XDout->get(), std::min(*nx, XDout->getSize()) * sizeof(double));
     }
 
+    if (*flag == 0)
+    {
+        /*  x'  computation */
+        if (!out[0]->isDouble())
+        {
+            setErrAndFree(out);
+            Scierror(888, reportError(_("User-defined function of Block #%d - \"%s\" did not output xd as first output argument.\n")).c_str());
+            return;
+        }
+        types::Double* XDout = out[0]->getAs<types::Double>();
+        memcpy(xd, XDout->get(), std::min(*nx, XDout->getSize()) * sizeof(double));
+    }
+
+    if (*flag == 3)
+    {
+        /* output event */
+        if (!out[1]->isDouble())
+        {
+            setErrAndFree(out);
+            Scierror(888, reportError(_("User-defined function of Block #%d - \"%s\" did not output event as second output argument.\n")).c_str());
+            return;
+        }
+        types::Double* Tout = out[1]->getAs<types::Double>();
+        memcpy(tvec, Tout->get(), std::min(*ntvec, Tout->getSize()) * sizeof(double));
+    }
+
+    /* all flags even though they might not be needed */
+    if (!out[2]->isDouble())
+    {
+        setErrAndFree(out);
+        Scierror(888, reportError(_("User-defined function of Block #%d - \"%s\" did not output discrete states as third output argument.\n")).c_str());
+        return;
+    }
+    types::Double* Zout = out[2]->getAs<types::Double>();
+    memcpy(z, Zout->get(), std::min(*nz, Zout->getSize()) * sizeof(double));
+
+    if (!out[3]->isDouble())
+    {
+        setErrAndFree(out);
+        Scierror(888, reportError(_("User-defined function of Block #%d - \"%s\" did not output continuous states as fourth output argument.\n")).c_str());
+        return;
+    }
+    types::Double* Xout = out[3]->getAs<types::Double>();
+    memcpy(x, Xout->get(), std::min(*nx, Xout->getSize()) * sizeof(double));
+
+    /* match outputs (even if not present) */
+    if (!out[4]->isList())
+    {
+        setErrAndFree(out);
+        Scierror(888, reportError(_("User-defined function of Block #%d - \"%s\" did not output values as fifth output argument.\n")).c_str());
+        return;
+    }
+    types::List* Yout = out[4]->getAs<types::List>();
+    for (int k = 0; k < std::min(*nout, Yout->getSize()); ++k)
+    {
+        if (!Yout->get(k)->isDouble())
+        {
+            setErrAndFree(out);
+            Scierror(888, reportError(_("User-defined function of Block #%d - \"%s\" did not output double values(%%d) as fifth output argument.\n")).c_str(), k);
+            return;
+        }
+        types::Double* KthElement = Yout->get(k)->getAs<types::Double>();
+        double* y = (double*) outptr[k];
+        int ny = outsz[k];
+        int ny2 = outsz[*nout + k];
+        memcpy(y, KthElement->get(), std::min(ny * ny2, KthElement->getSize()) * sizeof(double));
+    }
+
+    // clean all 
     for (size_t i = 0; i < out.size(); ++i)
     {
         out[i]->killMe();

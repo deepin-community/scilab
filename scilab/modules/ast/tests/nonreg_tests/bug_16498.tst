@@ -1,6 +1,6 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
-// Copyright (C) 2020 - Stéphane MOTTELET
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
+// Copyright (C) 2020 - UTC - Stéphane MOTTELET
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
@@ -10,8 +10,8 @@
 //
 // <-- Non-regression test for bug 16498 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/16498
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/16498
 //
 // <-- Short Description -->
 // After esb=sparse([%t %f]); esb(1,:)=[]; , size(esb) answers [0 2] instead of [0 0]

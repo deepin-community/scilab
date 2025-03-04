@@ -1,7 +1,5 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
-// Copyright (C) DIGITEO - 2010 - Allan CORNET
-//
-// Copyright (C) 2012 - 2016 - Scilab Enterprises
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
+// Copyright (C) 3DS - 2023 - Antoine ELIAS
 //
 // This file is hereby licensed under the terms of the GNU GPL v2.0,
 // pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -13,12 +11,5 @@
 //=============================================================================
 function bOK = dlwHaveCompiler()
     bOK = (findmsvccompiler() <> "unknown");
-    if win64() then
-        if bOK & detectmsvc64tools() then
-            bOK = %T;
-        else
-            bOK = %F;
-        end
-    end
 endfunction
-//=============================================================================
+

@@ -78,6 +78,8 @@ c
       double precision  ch
       integer  k
       external fydot2
+cDEC$ ATTRIBUTES DLLIMPORT:: /ierode/
+      COMMON /ierode/ierror
 c
 c      write(6,*) 'inputfelh2:',y(1),y(2)
       call fydot2(neqn,t,y,yp)

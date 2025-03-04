@@ -1,6 +1,6 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
- *  Copyright (C) 2018- Stéphane MOTTELET
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
+ *  Copyright (C) 2018- UTC - Stéphane MOTTELET
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
  * For more information, see the COPYING file which you should have received
@@ -200,7 +200,7 @@ bool fillRange(double* pdblOut, double* pdblMin, double* pdblMax, int iRows, int
             Scierror(999, _("%s: Argument #%d: %%nan and %%inf values are forbidden.\n"), "linspace", indInfOrNan);
             return false;
         }
-        // last column is enforced (http://bugzilla.scilab.org/10966)
+        // last column is enforced (https://gitlab.com/scilab/scilab/-/issues/10966)
         pdblOut[k++] = pdblMax[j];
     }
     // doing the linear range generation

@@ -1,6 +1,6 @@
 //<-- CLI SHELL MODE -->
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ????-2008 - INRIA
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -14,21 +14,21 @@ end
 if or(~isdef(["modelica_libs" "scicos_pal_libs"])) then
     [modelica_libs, scicos_pal_libs, %scicos_with_grid, %scs_wgrid] = initial_scicos_tables()
 end
- modelica_libs  = 
+ modelica_libs = [1x2 string]
          column 1
   "SCI/modules/scicos_blocks/macros/Electrical"
          column 2
   "SCI/modules/scicos_blocks/macros/Hydraulics"
- scicos_pal_libs  = 
+ scicos_pal_libs = [1x13 string]
          column 1 to 6
   "Branching"  "Events"  "Misc"  "Sinks"  "Threshold"  "Linear"
          column 7 to 12
   "MatrixOp"  "NonLinear"  "Sources"  "Electrical"  "Hydraulics"  "PDE"
          column 13
   "IntegerOp"
- %scicos_with_grid  = 
+ %scicos_with_grid = 
   F
- %scs_wgrid  = 
+ %scs_wgrid = [3x1 double]
    10.
    10.
    12.

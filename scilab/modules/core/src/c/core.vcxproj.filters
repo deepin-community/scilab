@@ -68,9 +68,6 @@
     <ClCompile Include="transposeMatrix.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="version.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="DllmainCore.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -144,6 +141,27 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\cpp\hash\crc32.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cpp\hash\md5.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cpp\hash\sha1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cpp\hash\sha256.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cpp\hash\sha3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cpp\md5_file.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="hasHandleType.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="hasUIControlStyle.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -386,13 +404,16 @@
     <ClInclude Include="..\..\includes\InitializePreferences.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\includes\md5.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\includes\pause.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\includes\parsecommand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\includes\hasHandleType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\includes\hasUIControlStyle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

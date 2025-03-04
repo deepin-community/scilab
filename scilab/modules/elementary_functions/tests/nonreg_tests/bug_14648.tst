@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2016 - Samuel GOUGEON
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,8 +9,8 @@
 //
 // <-- Non-regression test for bug 14648 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/14648
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/14648
 //
 // <-- Short Description -->
 //  isinf(complex(%inf,%inf)) and isinf(complex(%nan,%inf)) returned %F

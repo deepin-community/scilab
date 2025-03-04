@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2005 - INRIA - Farid BELAHCENE
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -10,8 +10,8 @@
 
 // <-- Non-regression test for bug 1636 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/1636
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/1636
 //
 // <-- Short Description -->
 //    When processing an m-file with multiple continuation lines in the
@@ -40,7 +40,7 @@ SCIFILECONTENTSREF=[
     "function [A] = bug1636(x,y,z,t,u,v,w,z)"
     ""
     "// Output variables initialisation (not found in input variables)"
-    "A=[];"
+    "A = [];"
     ""
     "a = mtlb_a(mtlb_a(mtlb_a(mtlb_a(mtlb_a(mtlb_a(mtlb_a(x,y),z),t),u),v),w),z);"
     "endfunction"];

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2000 - INRIA - Carlos Klimann
  * Copyright (C) 2012 - Michael Baudin
  *
@@ -207,7 +207,7 @@ show_pca(lambda,facpr)
         <para>
             Analyse en composantes principales,
             Jean-François Delmas et Saad Salam,
-            http://cermics.enpc.fr/scilab_new/site/Tp/Statistique/acp/index.htm
+            https://cermics.enpc.fr/scilab_new/site/Tp/Statistique/acp/index.html
         </para>
 
     </refsection>

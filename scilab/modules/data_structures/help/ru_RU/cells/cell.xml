@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2007-2008 - INRIA
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -92,7 +92,9 @@
                 <term>cell(x)</term>
                 <listitem>
                     <para>
-                        возвращает cell-массив пустых матриц у которого первая размерность равна <literal>x(1)</literal>, вторая размерность равна <literal>x(2)</literal> и так далее.
+                        возвращает cell-массив пустых матриц у которого первая размерность равна 
+                        <literal>x(1)</literal>, вторая размерность равна <literal>x(2)</literal>
+                        и так далее.
                     </para>
                 </listitem>
             </varlistentry>
@@ -171,12 +173,10 @@ size(b)
             <revision>
                 <revnumber>6.0.0</revnumber>
                 <revremark>
-                    <para>
-                        Fields "entries" and "dims" do not exist anymore. To assign or extract an element, use {}.
-                    </para>
+                Полей "entries" и "dims" больше нет.
+                Чтобы назначить или выделить элемент, используйте {}.
                 </revremark>
             </revision>
         </revhistory>
     </refsection>
 </refentry>
-

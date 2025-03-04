@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA - Vincent Couvert
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -20,28 +20,14 @@ function t=etime(t1,t0)
     // in this case ISO_8601_week_number Julian_day Week_Day are ignored
     // t1 and t0 can also be matrices having each line equal to a vector described above
 
-
-    if type(t1)<>1 then
-        error(msprintf(gettext("%s: Wrong type for input argument #%d: Real vector expected.\n"),"etime",1));
-    end
-    if type(t0)<>1 then
-        error(msprintf(gettext("%s: Wrong type for input argument #%d: Real vector expected.\n"),"etime",2));
-    end
-    if and(size(t1,2)<>[6,10]) then
-        error(msprintf(gettext("%s: Wrong size for input argument #%d: Must be between %d and %d.\n"),"etime",1,6,10));
-    end
-    if and(size(t0,2)<>[6,10]) then
-        error(msprintf(gettext("%s: Wrong size for input argument #%d: Must be between %d and %d.\n"),"etime",2,6,10));
+    arguments
+        t1 (:, [6 10]) {mustBeA(t1, "double")}
+        t0 (:, [6 10]) {mustBeA(t0, "double"), mustBeEqualDims(t1, t0)}
     end
 
-    if size(t1,"*")<>size(t0,"*") then
-        error(msprintf(gettext("%s: Wrong size for input arguments #%d and #%d: Same size expected.\n"),"etime"), 1, 2);
-    end
 
     if size(t1,2)==10 then
         t1(:,3:5)=[]
-    end
-    if size(t0,2)==10 then
         t0(:,3:5)=[]
     end
 

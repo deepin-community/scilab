@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2015 - Scilab Enterprises - Calixte DENIZET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -14,6 +14,7 @@
  */
 
 #include "SLintVisitor.hxx"
+#include "all.hxx"
 
 namespace slint
 {
@@ -84,6 +85,11 @@ void SLintVisitor::visit(const ast::SeqExp & e)
     }
     postCheck(e, range);
     seqExpIts.pop();
+}
+
+void SLintVisitor::visit(const ast::ArgumentsExp & e)
+{
+    /* FIXME : Implement SLintVisitor for ArgumentsExp */
 }
 
 void SLintVisitor::visit(const ast::IfExp & e)
@@ -161,6 +167,11 @@ void SLintVisitor::visit(const ast::FunctionDec & e)
     postCheck(e, range);
 
     context.popFn();
+}
+
+void SLintVisitor::visit(const ast::ArgumentDec & e)
+{
+    /* FIXME : Implement SLintVisitor for ArgumentDec */
 }
 
 void SLintVisitor::visit(const ast::CallExp & e)
@@ -403,41 +414,6 @@ void SLintVisitor::visit(const ast::VarDec & e)
 {
     auto range = preCheck(e);
     e.getInit().accept(*this);
-    postCheck(e, range);
-}
-
-void SLintVisitor::visit(const ast::OptimizedExp & e)
-{
-    auto range = preCheck(e);
-    e.getOriginal()->accept(*this);
-    postCheck(e, range);
-}
-
-void SLintVisitor::visit(const ast::DAXPYExp & e)
-{
-    auto range = preCheck(e);
-    e.getOriginal()->accept(*this);
-    postCheck(e, range);
-}
-
-void SLintVisitor::visit(const ast::IntSelectExp & e)
-{
-    auto range = preCheck(e);
-    e.getOriginal()->accept(*this);
-    postCheck(e, range);
-}
-
-void SLintVisitor::visit(const ast::StringSelectExp & e)
-{
-    auto range = preCheck(e);
-    e.getOriginal()->accept(*this);
-    postCheck(e, range);
-}
-
-void SLintVisitor::visit(const ast::MemfillExp & e)
-{
-    auto range = preCheck(e);
-    e.getOriginal()->accept(*this);
     postCheck(e, range);
 }
 }

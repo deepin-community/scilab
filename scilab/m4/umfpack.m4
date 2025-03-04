@@ -1,5 +1,5 @@
 dnl
-dnl Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+dnl Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 dnl Copyright (C) INRIA - 2008 - Sylvestre Ledru
 dnl
 dnl Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -23,13 +23,13 @@ UMFPACK_OK=no
 SUITESPARSE=no
 
 AC_ARG_WITH(umfpack_library,
-		AC_HELP_STRING([--with-umfpack-library=DIR],[Set the path to the UMFPACK libraries]),
+		AS_HELP_STRING([--with-umfpack-library=DIR],[Set the path to the UMFPACK libraries]),
 		[with_umfpack_library=$withval],
 		[with_umfpack_library='yes']
 		)
 
 AC_ARG_WITH(umfpack_include,
-		AC_HELP_STRING([--with-umfpack-include=DIR],[Set the path to the UMFPACK headers]),
+		AS_HELP_STRING([--with-umfpack-include=DIR],[Set the path to the UMFPACK headers]),
 		[with_umfpack_include=$withval],
 		[with_umfpack_include='yes']
 		)
@@ -73,7 +73,7 @@ if test "x$with_umfpack_library" != "xyes"; then
 	# We need -lm because sometimes (ubuntu 7.10 for example) does not link libamd against lib math
 
 	AC_CHECK_LIB([umfpack], [umfpack_di_solve],
-			[UMFPACK_LIB="-L$with_umfpack_library -lumfpack $UMFPACK_LIB"; UMFPACK_OK=yes],
+			[UMFPACK_LIBS="-L$with_umfpack_library -lumfpack $UMFPACK_LIBS"; UMFPACK_OK=yes],
             [AC_MSG_ERROR([libumfpack : Library missing. (Cannot find umfpack_di_solve). Check if libumfpack is installed and if the version is correct (also called lib suitesparse)])]
 			)
 
@@ -85,26 +85,26 @@ fi
 # check in the default path
 if test $UMFPACK_OK = no; then
     if $WITH_DEVTOOLS; then # Scilab thirparties
-        UMFPACK_LIB="-L$DEVTOOLS_LIBDIR -lumfpack -lamd"
+        UMFPACK_LIBS="-L$DEVTOOLS_LIBDIR -lumfpack -lamd"
     else
         save_LIBS="$LIBS"
         LIBS="$BLAS_LIBS $LIBS -lm" # libamd* is mandatory to link umfpack
         # We need -lm because sometimes (ubuntu 7.10 for example) does not link libamd against lib math
 
         AC_CHECK_LIB([amd], [amd_info],
-            [UMFPACK_LIB="-lamd"],
+            [UMFPACK_LIBS="-lamd"],
             [AC_MSG_ERROR([libamd: Library missing (Cannot find symbol amd_info). Check if libamd (sparse matrix minimum degree ordering) is installed and if the version is correct])]
             )
-        LIBS="$UMFPACK_LIB $LIBS"
+        LIBS="$UMFPACK_LIBS $LIBS"
         AC_CHECK_LIB([umfpack], [umfpack_di_solve],
-            [UMFPACK_LIB="-lumfpack $UMFPACK_LIB"; UMFPACK_OK=yes],
+            [UMFPACK_LIBS="-lumfpack $UMFPACK_LIBS"; UMFPACK_OK=yes],
             [AC_MSG_ERROR([libumfpack: Library missing. (Cannot find symbol umfpack_di_solve). Check if libumfpack is installed and if the version is correct (also called lib suitesparse)])]
             )
         LIBS="$save_LIBS"
     fi
 fi
 
-AC_SUBST(UMFPACK_LIB)
+AC_SUBST(UMFPACK_LIBS)
 AC_SUBST(UMFPACK_CFLAGS)
 if test $SUITESPARSE = yes; then
    AC_DEFINE_UNQUOTED([UMFPACK_SUITESPARSE],[] , [If it is UMFPACK/Suitesparse or UMFPACK standalone])

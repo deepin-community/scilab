@@ -1,9 +1,9 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009 - DIGITEO - Bruno JOFRET
  * Copyright (C) 2010 - 2011 - Calixte DENIZET
- *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ * Copyright (C) 2021 - Stéphane MOTTELET
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
  * pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -16,19 +16,16 @@
 
 package org.scilab.modules.scinotes;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.lang.reflect.Constructor;
@@ -37,8 +34,6 @@ import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -48,7 +43,6 @@ import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -57,25 +51,21 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.EditorKit;
 import javax.swing.text.View;
 import javax.swing.undo.UndoManager;
 
-import org.w3c.dom.Document;
-
 import org.flexdock.docking.event.DockingEvent;
 import org.scilab.modules.commons.CommonFileUtils;
-import org.scilab.modules.commons.gui.ScilabKeyStroke;
 import org.scilab.modules.commons.gui.ScilabGUIUtilities;
+import org.scilab.modules.commons.gui.ScilabKeyStroke;
 import org.scilab.modules.commons.xml.ScilabXMLUtilities;
 import org.scilab.modules.commons.xml.XConfiguration;
-import static org.scilab.modules.commons.xml.XConfiguration.XConfAttribute;
 import org.scilab.modules.core.Scilab;
-import org.scilab.modules.gui.bridge.filechooser.SwingScilabFileChooser;
 import org.scilab.modules.gui.bridge.tab.SwingScilabDockablePanel;
 import org.scilab.modules.gui.bridge.window.SwingScilabWindow;
+import org.scilab.modules.gui.filechooser.FileChooser;
 import org.scilab.modules.gui.filechooser.Juigetfile;
 import org.scilab.modules.gui.filechooser.ScilabFileChooser;
 import org.scilab.modules.gui.menubar.MenuBar;
@@ -91,24 +81,17 @@ import org.scilab.modules.gui.textbox.TextBox;
 import org.scilab.modules.gui.toolbar.ToolBar;
 import org.scilab.modules.gui.utils.ClosingOperationsManager;
 import org.scilab.modules.gui.utils.ConfigManager;
-import org.scilab.modules.gui.utils.Position;
-import org.scilab.modules.gui.utils.SciFileFilter;
-import org.scilab.modules.gui.utils.Size;
 import org.scilab.modules.gui.utils.WindowsConfigurationManager;
-
-import org.scilab.modules.scinotes.actions.DoubleQuoteStringAction;
 import org.scilab.modules.scinotes.actions.EncodingAction;
 import org.scilab.modules.scinotes.actions.EndOfLineAction;
 import org.scilab.modules.scinotes.actions.ExitAction;
 import org.scilab.modules.scinotes.actions.FindAction;
 import org.scilab.modules.scinotes.actions.IncrementalSearchAction;
-import org.scilab.modules.scinotes.actions.IndentAction;
 import org.scilab.modules.scinotes.actions.InsertOverwriteAction;
 import org.scilab.modules.scinotes.actions.LineBeautifierAction;
 import org.scilab.modules.scinotes.actions.OpenSourceFileOnKeywordAction;
 import org.scilab.modules.scinotes.actions.RecentFileAction;
 import org.scilab.modules.scinotes.actions.RegisterFavoriteDirsAction;
-import org.scilab.modules.scinotes.actions.RemoveTrailingWhiteAction;
 import org.scilab.modules.scinotes.actions.RestoreOpenedFilesAction;
 import org.scilab.modules.scinotes.actions.SciNotesCompletionAction;
 import org.scilab.modules.scinotes.actions.SearchWordInFilesAction;
@@ -124,6 +107,7 @@ import org.scilab.modules.scinotes.utils.SciNotesContents;
 import org.scilab.modules.scinotes.utils.SciNotesMessages;
 import org.scilab.modules.scinotes.utils.ScilabTabbedPane;
 import org.scilab.modules.scinotes.utils.SearchFile;
+import org.w3c.dom.Document;
 
 /**
  * Main SciNotes class.
@@ -151,7 +135,7 @@ public class SciNotes extends SwingScilabDockablePanel {
     private static final String ALL_SCI_FILES = "*.sci";
     private static final String ALL_SCE_FILES = "*.sce";
     private static final String ALL_DEM_FILES = "*.dem";
-    private static final String ALL_SCX_FILES = "*.sc*";
+    private static final String ALL_SCX_FILES = "*.sci | *.sce";
     private static final String ALL_SCILAB = "all";
     private static final String ALL_FILES = "*.*";
     private static final String DOT = ".";
@@ -545,9 +529,9 @@ public class SciNotes extends SwingScilabDockablePanel {
             try {
                 hasAction = executeAction(filePath, options);
             } catch (FileNotFoundException e) {
-                throw new Exception(String.format(SciNotesMessages.INVALID_FILE, filePath));
+                throw new RuntimeException(String.format(SciNotesMessages.INVALID_FILE, filePath));
             } catch (IOException e) {
-                throw new Exception(String.format(SciNotesMessages.IO_EXCEPTION, e.getLocalizedMessage()));
+                throw new RuntimeException(String.format(SciNotesMessages.IO_EXCEPTION, e.getLocalizedMessage()));
             }
         }
 
@@ -708,7 +692,9 @@ public class SciNotes extends SwingScilabDockablePanel {
             return;
         }
 
-        addRestoreTab();
+        // Restore files from previous version
+        RestoreOpenedFilesAction.forceRestore(this, getUUID().toString());
+
         WindowsConfigurationManager.restorationFinished(SciNotes.this);
         if  (System.getProperty("os.name").toLowerCase().contains("mac")) {
           RestoreOpenedFilesAction.restoreEnabledComponents(this);
@@ -1236,12 +1222,17 @@ public class SciNotes extends SwingScilabDockablePanel {
      */
     public String chooseFileToSave(String title, String path) {
         String extension = "";
-
+        String name = null;
         String initialDirectoryPath = path;
         if (initialDirectoryPath == null) {
-            initialDirectoryPath = getTextPane().getName();
+            name = getTextPane().getName();
+            if (name != null) {
+                File file = new File(name);
+                name = file.getName();
+                initialDirectoryPath = file.getParent();                 
+            }
         }
-        if (initialDirectoryPath == null) {
+        if (name == null) {
             if (firstOpen) {
                 initialDirectoryPath = CommonFileUtils.getCWD();
                 firstOpen = false;
@@ -1250,47 +1241,14 @@ public class SciNotes extends SwingScilabDockablePanel {
             }
         }
 
-        SciFileFilter sceFilter = new SciFileFilter(ALL_SCE_FILES, null, 0);
-        SciFileFilter sciFilter = new SciFileFilter(ALL_SCI_FILES, null, 1);
-        SciFileFilter scxFilter = new SciFileFilter(ALL_SCX_FILES, null, 2);
-        SciFileFilter tstFilter = new SciFileFilter(ALL_TST_FILES, null, 3);
-        SciFileFilter startFilter = new SciFileFilter(ALL_START_FILES, null, 4);
-        SciFileFilter quitFilter = new SciFileFilter(ALL_QUIT_FILES, null, 5);
-        SciFileFilter demFilter = new SciFileFilter(ALL_DEM_FILES, null, 6);
-        SciFileFilter allFilter = new SciFileFilter(ALL_FILES, null, 7);
-        SciFileFilter allScilabFilter = new SciFileFilter(ALL_SCILAB, null, 8);
+        String[] DEFAULT_MASK = {ALL_SCE_FILES,ALL_SCI_FILES,ALL_SCX_FILES,ALL_TST_FILES,ALL_START_FILES,ALL_QUIT_FILES,ALL_DEM_FILES,ALL_FILES,ALL_SCILAB};
 
-        SwingScilabFileChooser fileChooser = ((SwingScilabFileChooser) ScilabFileChooser.createFileChooser().getAsSimpleFileChooser());
-
-        fileChooser.setAcceptAllFileFilterUsed(false);
-        fileChooser.setInitialDirectory(initialDirectoryPath);
-        fileChooser.setUiDialogType(Juigetfile.SAVE_DIALOG);
-
-        // order is also important here
-        fileChooser.addChoosableFileFilter(sceFilter);
-        fileChooser.addChoosableFileFilter(sciFilter);
-        fileChooser.addChoosableFileFilter(scxFilter);
-        fileChooser.addChoosableFileFilter(tstFilter);
-        fileChooser.addChoosableFileFilter(startFilter);
-        fileChooser.addChoosableFileFilter(quitFilter);
-        fileChooser.addChoosableFileFilter(demFilter);
-        fileChooser.addChoosableFileFilter(allFilter);
-        fileChooser.addChoosableFileFilter(allScilabFilter);
-
-        String name = initialDirectoryPath;
-        File tempFile = new File(name);
-
-        // Select default file type
-        SciFileFilter fileFilter = sceFilter;
-        // Look for a supported extension
-        for (FileFilter filter : fileChooser.getChoosableFileFilters()) {
-            if (((SciFileFilter) filter).accept(tempFile)) {
-                fileFilter = (SciFileFilter) filter;
-                break;
-            }
-        }
-        fileChooser.setFileFilter(fileFilter);
-        fileChooser.setTitle(title);
+        FileChooser sfc = ScilabFileChooser.createFileChooser();
+        sfc.addMask(DEFAULT_MASK, null);
+        sfc.setInitialDirectory(initialDirectoryPath);
+        sfc.setTitle(title);
+        sfc.setMultipleSelection(false);
+        sfc.setUiDialogType(Juigetfile.SAVE_DIALOG);
 
         if (name == null) {
             name = ((ScilabDocument) getTextPane().getDocument()).getFirstFunctionName();
@@ -1299,70 +1257,20 @@ public class SciNotes extends SwingScilabDockablePanel {
             }
         }
 
-        if (name != null) {
-            fileChooser.setSelectedFile(new File(name));
-        }
+        sfc.setInitialFileName(name);
+        sfc.displayAndWait();
+        sfc.invalidate();
 
-        int retval = fileChooser.showSaveDialog(this);
-
-        if (retval == JFileChooser.APPROVE_OPTION) {
-            File f = fileToCanonicalFile(fileChooser.getSelectedFile());
-            initialDirectoryPath = f.getPath();
-            if (f.exists()) {
-                if (ScilabModalDialog.show(this, SciNotesMessages.REPLACE_FILE_TITLE, SciNotesMessages.FILE_ALREADY_EXIST, IconType.QUESTION_ICON,
-                                           ButtonType.YES_NO) == AnswerOption.NO_OPTION) {
-                    return chooseFileToSave(SciNotesMessages.SAVE);
-                }
-            }
-
-            /* we test if the file has already a scilab extension */
-            boolean hasNoExtension = true;
-
-            // if the file name is like this : any character , a dot , then
-            // 2,3or 4 characters, then
-            // we consider the file has already an extension
-            // we previously only check for .sci and .sce extension, but what if
-            // the user open a txt file
-            String fileName = f.getName();
-            if (fileName.lastIndexOf(DOT) != -1) {
-                if (fileName.substring(fileName.lastIndexOf(DOT), fileName.length()).length() >= 2
-                        && fileName.substring(fileName.lastIndexOf(DOT), fileName.length()).length() <= 4) {
-                    hasNoExtension = false;
-                }
-            }
-
-            /* if no extension , we add it */
-            if (hasNoExtension) {
-                if (fileChooser.getFileFilter() == sciFilter) {
-                    extension = SCI_EXTENSION;
-                } else if (fileChooser.getFileFilter() == sceFilter) {
-                    extension = SCE_EXTENSION;
-                } else if (fileChooser.getFileFilter() == scxFilter) {
-                    extension = SCE_EXTENSION;
-                } else if (fileChooser.getFileFilter() == tstFilter) {
-                    extension = TST_EXTENSION;
-                } else if (fileChooser.getFileFilter() == startFilter) {
-                    extension = START_EXTENSION;
-                } else if (fileChooser.getFileFilter() == quitFilter) {
-                    extension = QUIT_EXTENSION;
-                } else if (fileChooser.getFileFilter() == demFilter) {
-                    extension = DEM_EXTENSION;
-                } else {
-                    extension = "";
-                }
-                return f.getPath() + extension;
-            }
-
-            if (initialDirectoryPath != null) {
-                ConfigManager.saveLastOpenedDirectory(initialDirectoryPath);
-            }
-
-            return f.getPath();
-        } else if (retval == JFileChooser.CANCEL_OPTION) {
+        String[] selection = sfc.getSelection();
+        if (selection.length>0 && selection[0] != "") {
+            String fileName = selection[0];
+                
+            ConfigManager.saveLastOpenedDirectory(sfc.getSelectionPathName());
+            
+            return fileName;
+        }  else {
             return "";
-        }
-
-        return null;
+        }       
     }
 
     /**
@@ -2630,27 +2538,27 @@ public class SciNotes extends SwingScilabDockablePanel {
      * @param actionsName the actions as an array
      */
     public static boolean executeAction(String fileName, final String[] actionsName) throws IOException {
-        final boolean[] hasAction = new boolean[] { false };
-        ActionOnDocument action = new ActionOnDocument() {
-            public void actionOn(ScilabDocument doc) throws IOException {
-                for (String act : actionsName) {
-                    if (act.equalsIgnoreCase("indent")) {
-                        hasAction[0] = true;
-                        org.scilab.modules.scinotes.actions.IndentAction.getActionOnDocument().actionOn(doc);
-                    } else if (act.equalsIgnoreCase("trailing")) {
-                        hasAction[0] = true;
-                        org.scilab.modules.scinotes.actions.RemoveTrailingWhiteAction.getActionOnDocument().actionOn(doc);
-                    } else if (act.equalsIgnoreCase("quote")) {
-                        hasAction[0] = true;
-                        org.scilab.modules.scinotes.actions.DoubleQuoteStringAction.getActionOnDocument().actionOn(doc);
-                    }
-                }
+        final ArrayList<ActionOnDocument> actions = new ArrayList<>();
+        for (String act : actionsName) {
+            if (act.equalsIgnoreCase("indent")) {
+                actions.add(org.scilab.modules.scinotes.actions.IndentAction.getActionOnDocument());
+            } else if (act.equalsIgnoreCase("trailing")) {
+                actions.add(org.scilab.modules.scinotes.actions.RemoveTrailingWhiteAction.getActionOnDocument());
+            } else if (act.equalsIgnoreCase("quote")) {
+                actions.add(org.scilab.modules.scinotes.actions.DoubleQuoteStringAction.getActionOnDocument());
             }
-        };
+        }
 
-        executeAction(fileName, action);
+        if (actions.size() > 0) {
+            executeAction(fileName, new ActionOnDocument() {
+                public void actionOn(ScilabDocument doc) throws IOException {
+                    for (ActionOnDocument act : actions)
+                        act.actionOn(doc);
+                };
+            });
+        }
 
-        return hasAction[0];
+        return actions.size() > 0;
     }
 
     /**

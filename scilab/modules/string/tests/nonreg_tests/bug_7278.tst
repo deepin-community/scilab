@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010 - DIGITEO - Allan CORNET
 // Copyright (C) 2021 - Samuel GOUGEON
 //
@@ -10,8 +10,8 @@
 // <-- NO CHECK REF -->
 // <-- Non-regression test for bug 7278 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/7278
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/7278
 //
 // <-- Short Description -->
 // strsplit did not work with some particular inputs.

@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2014 - Scilab Enterprises - Charlotte HECQUET
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,8 +9,8 @@
 // <-- TEST WITH GRAPHIC -->
 // <-- INTERACTIVE TEST -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/8646
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/8646
 //
 // <-- Short Description -->
 // The datatips contextual menu opens a selection list which is not ergonomic

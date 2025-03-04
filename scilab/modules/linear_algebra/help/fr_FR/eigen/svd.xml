@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -22,7 +22,6 @@
         <title>Séquence d'appel</title>
         <synopsis>s=svd(X)
             [U,S,V]=svd(X)
-            [U,S,V]=svd(X,0) (obsolete)
             [U,S,V]=svd(X,"e")
             [U,S,V,rk]=svd(X [,tol])
         </synopsis>
@@ -131,5 +130,22 @@ sqrt(spec(X*X'))
             la décomposition svd est basée sur les routines  DGESVD pour les
             matrices réelles et  ZGESVD pour le cas complexe.
         </para>
+    </refsection>
+    <refsection>
+        <title>History</title>
+        <revhistory>
+            <revision>
+                <revnumber>2023.0.0</revnumber>
+                <revdescription>
+                    <para>svd(X, 0) est obsolète, utilisez svd(X, "e") à la place.</para>
+                </revdescription>
+            </revision>
+            <revision>
+                <revnumber>2024.0.0</revnumber>
+                <revdescription>
+                    <para>svd(X, 0) n'est plus supporté, utilisez svd(X, "e") à la place.</para>
+                </revdescription>
+            </revision>
+        </revhistory>
     </refsection>
 </refentry>

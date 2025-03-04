@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ????-2008 - INRIA
 // Copyright (C) 2010 - DIGITEO - Allan CORNET
 // Copyright (C) 2012 - Scilab Enterprises - Adeline CARNIS
@@ -43,7 +43,7 @@ function demo_spectral()
 
     plot2d(fr', log(hf2)');
     xtitle(_("Data spectrum"), _("frequency"), _("magnitude"));
-    halt(_("Press Return to continue ... \n"));
+    messagebox(_("Please click OK to go on..."), _("Spectral estimation demo"), "modal");
 
     if is_handle_valid(my_handle) == %f then
         return
@@ -56,7 +56,7 @@ function demo_spectral()
     clf(my_handle, "reset");
     plot2d(fr', log(sm1)');
     xtitle(_("Spectral estimation"), _("frequency"), _("spectral power"));
-    halt(_("Press Return to continue ... \n"));
+    messagebox(_("Please click OK to go on..."), _("Spectral estimation demo"), "modal");
 
     if is_handle_valid(my_handle) == %f then
         return
@@ -69,7 +69,7 @@ function demo_spectral()
     clf(my_handle, "reset");
     demo_viewCode("spect.dem.sce");
     plot2d(fr', log(sm2)');
-    xtitle(["Spectral estimation ; periodogram method"], " " , " ")
+    xtitle(_("Spectral estimation ; periodogram method"), " " , " ")
 
 
 endfunction

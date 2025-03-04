@@ -81,7 +81,21 @@
         <title>Examples</title>
         <programlisting role="example"><![CDATA[
 scicos_debug(level)
-level=scicos_debug()
+level = scicos_debug()
  ]]></programlisting>
+    </refsection>
+    <refsection role="see also">
+        <title>See also</title>
+        <simplelist type="inline">
+            <member>
+                <link linkend="DEBUG">DEBUG block</link>
+            </member>
+            <member>
+                <link linkend="xcos_debug_gui">xcos_debug_gui</link>
+            </member>
+            <member>
+                <link linkend="scicos_log">scicos_log</link>
+            </member>
+        </simplelist>
     </refsection>
 </refentry>

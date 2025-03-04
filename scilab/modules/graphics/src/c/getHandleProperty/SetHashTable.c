@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2006 - INRIA - Jean-Baptiste Silvy
  * Copyright (C) 2007 - INRIA - Vincent Couvert
  *
@@ -119,6 +119,7 @@ static setHashTableCouple propertySetTable[] =
     {"text", set_text_property},
     {"auto_clear", set_auto_clear_property},
     {"auto_scale", set_auto_scale_property},
+    {"auto_stretch", set_auto_stretch_property},
     {"zoom_box", set_zoom_box_property},
     {"zoom_state", set_zoom_state_property},
     {"clip_box", set_clip_box_property},
@@ -226,7 +227,6 @@ static setHashTableCouple propertySetTable[] =
     {"tooltipstring", SetUicontrolTooltipString},
     {"closerequestfcn", set_figure_closerequestfcn_property},
     {"orientation", set_tip_orientation_property},
-    {"z_component", set_tip_z_component_property},
     {"display_components", set_tip_display_components_property},
     {"datatip_display_mode", set_datatip_display_mode_property},
     {"auto_orientation", set_tip_auto_orientation_property},

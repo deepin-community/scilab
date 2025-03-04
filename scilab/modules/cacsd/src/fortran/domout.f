@@ -1,6 +1,6 @@
       subroutine domout(neq,q,qi,nbout,ti,touti,itol,rtol,atol,itask
 
-c Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+c Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 c Copyright (C) INRIA
 c 
 c Copyright (C) 2012 - 2016 - Scilab Enterprises

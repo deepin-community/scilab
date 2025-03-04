@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 // Copyright (C) DIGITEO - 2012 - Allan CORNET
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -10,7 +10,7 @@
 // For more information, see the COPYING file which you should have received
 // along with this program.
 
-function contourf(x, y, z, nv, style, strf, leg, rect, nax)
+function contourf(x, y, z, nv, style, strf, leg, rect, nax, fpf)
 
     [nout, nin] = argn(0);
 
@@ -21,9 +21,6 @@ function contourf(x, y, z, nv, style, strf, leg, rect, nax)
         return;
     end
 
-    if nin <= 0 then
-        x=1:10;
-    end
     if nin <= 1 then
         y=1:10;
     end
@@ -46,6 +43,9 @@ function contourf(x, y, z, nv, style, strf, leg, rect, nax)
     end
     if nin <= 8 then
         nax=[1,10,1,10];
+    end
+    if nin <= 9 then
+        fpf = ""; // use default format
     end
     if x==[] then
         x=1:size(z,"r");
@@ -83,7 +83,11 @@ function contourf(x, y, z, nv, style, strf, leg, rect, nax)
     end
 
     if type(nax) <> 1 then
-        error(msprintf(gettext("%s: Wrong type for input argument #%d:  Real matrix expected.\n"), "contourf", 9));
+        error(msprintf(gettext("%s: Wrong type for input argument #%d: Real matrix expected.\n"), "contourf", 9));
+    end
+
+    if type(fpf) <> 10 then
+        error(msprintf(gettext("%s: Wrong type for input argument #%d: String expected.\n"), "contourf", 10));
     end
 
 
@@ -210,7 +214,7 @@ function contourf(x, y, z, nv, style, strf, leg, rect, nax)
     end
 
     if style(1)<>-1 then
-        contour2d(xx,yy,zz,nv,style,"000",leg,rect,nax);
+        contour2d(xx,yy,zz,nv,style,"000",leg,rect,nax,fpf);
     end
     ax.foreground = old_foreground;
 

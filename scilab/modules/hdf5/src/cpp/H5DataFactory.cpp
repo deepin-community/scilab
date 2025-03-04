@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2012 - Scilab Enterprises - Calixte DENIZET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -134,7 +134,7 @@ H5Data & H5DataFactory::getObjectData(H5Object & parent, const hsize_t totalSize
         case H5T_TIME:
             return *new H5TimeData(parent, totalSize, dataSize, ndims, dims, (char *)data, stride, offset, dataOwner);
         case H5T_STRING:
-            if (H5Tis_variable_str(type))
+            if (H5Tis_variable_str(type) && ndims > 0)
             {
                 return *new H5StringData(parent, totalSize, dataSize, ndims, dims, (char **)data, stride, offset, dataOwner);
             }

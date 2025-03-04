@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2012 - Gustavo Barbosa Libotte
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -145,8 +145,13 @@ public class DatatipManagerMode {
     }
 
     public boolean hasLast(Integer[] pos) {
-        Integer axes = AxesHandler.clickedAxes(getFigure(), pos);
-        return axes != null && lastDatatips.containsKey(axes) && !lastDatatips.get(axes).isEmpty();
+        Integer[] matchingAxes = AxesHandler.clickedAxes(getFigure(), pos);
+        for (Integer axes : matchingAxes) {
+            if (axes != null && lastDatatips.containsKey(axes) && !lastDatatips.get(axes).isEmpty()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void enableTranslation(boolean enabled) {
@@ -286,11 +291,12 @@ public class DatatipManagerMode {
      * @param enabled to enable or not tuhe interpolation
      */
     private void enableInterpolation(Integer[] pos, boolean enabled) {
-        Integer axes = AxesHandler.clickedAxes(getFigure(), pos);
-        if (axes != null) {
+        Integer[] matchingAxes = AxesHandler.clickedAxes(getFigure(), pos);
+        for (Integer axes : matchingAxes) {
             final Integer curve = (new EntityPicker()).pick(getFigure(), pos[0], pos[1]);
             if (curve != null) {
                 DatatipCreate.datatipSetInterp(curve, enabled);
+                return;
             }
         }
     }
@@ -301,8 +307,8 @@ public class DatatipManagerMode {
      * @param pos the mouse position
      */
     private void editDisplayFunction(Component c, Integer[] pos) {
-        Integer axes = AxesHandler.clickedAxes(getFigure(), pos);
-        if (axes != null) {
+        Integer[] matchingAxes = AxesHandler.clickedAxes(getFigure(), pos);
+        for (Integer axes : matchingAxes) {
             final Integer curve = (new EntityPicker()).pick(getFigure(), pos[0], pos[1]);
             if (curve != null) {
                 String fnc = (String) GraphicController.getController().getProperty(curve, GraphicObjectProperties.__GO_DATATIP_DISPLAY_FNC__);
@@ -374,6 +380,7 @@ public class DatatipManagerMode {
                 dialog.setVisible(true);
 
                 text.requestFocus();
+                return;
             }
         }
     }
@@ -383,8 +390,8 @@ public class DatatipManagerMode {
      * @param pos the mouse position
      */
     private void deleteNearest(Integer[] pos) {
-        Integer axes = AxesHandler.clickedAxes(getFigure(), pos);
-        if (axes != null) {
+        Integer[] matchingAxes = AxesHandler.clickedAxes(getFigure(), pos);
+        for (Integer axes : matchingAxes) {
             Integer[] datatips = (new ObjectSearcher()).search(axes, GraphicObjectProperties.__GO_DATATIP__, true);
             if (datatips != null) {
                 int x = pos[0];
@@ -405,6 +412,7 @@ public class DatatipManagerMode {
                 if (datatip != -1) {
                     DatatipDelete.deleteDatatip(datatip);
                 }
+                return;
             }
         }
     }
@@ -414,8 +422,8 @@ public class DatatipManagerMode {
      * @param pos the mouse position
      */
     private void deleteAllOnCurve(Integer[] pos) {
-        Integer axes = AxesHandler.clickedAxes(getFigure(), pos);
-        if (axes != null) {
+        Integer[] matchingAxes = AxesHandler.clickedAxes(getFigure(), pos);
+        for (Integer axes : matchingAxes) {
             Integer curve = (new EntityPicker()).pick(getFigure(), pos[0], pos[1]);
             if (curve != null) {
                 Integer[] datatips = (Integer[]) GraphicController.getController().getProperty(curve, GraphicObjectProperties.__GO_DATATIPS__);
@@ -424,6 +432,7 @@ public class DatatipManagerMode {
                         DatatipDelete.deleteDatatip(i);
                     }
                 }
+                return;
             }
         }
     }
@@ -433,13 +442,14 @@ public class DatatipManagerMode {
      * @param pos the mouse position
      */
     private void deleteAll(Integer[] pos) {
-        Integer axes = AxesHandler.clickedAxes(getFigure(), pos);
-        if (axes != null) {
+        Integer[] matchingAxes = AxesHandler.clickedAxes(getFigure(), pos);
+        for (Integer axes : matchingAxes) {
             Integer[] datatips = (new ObjectSearcher()).search(axes, GraphicObjectProperties.__GO_DATATIP__, true);
             if (datatips != null) {
                 for (int i : datatips) {
                     DatatipDelete.deleteDatatip(i);
                 }
+                return;
             }
         }
     }
@@ -450,12 +460,14 @@ public class DatatipManagerMode {
      * @return true if the click occurred on a curve
      */
     private boolean onCurve(Integer[] pos) {
-        Integer axes = AxesHandler.clickedAxes(getFigure(), pos);
-        if (axes != null) {
+        Integer[] matchingAxes = AxesHandler.clickedAxes(getFigure(), pos);
+        for (Integer axes : matchingAxes) {
             Integer curve = (new EntityPicker()).pick(getFigure(), pos[0], pos[1]);
-            return curve != null;
+            if (curve != null)
+            {
+                return true;
+            }
         }
-
         return false;
     }
 }

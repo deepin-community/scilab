@@ -1,17 +1,29 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009 - DIGITEO - Pierre MARECHAL <pierre.marechal@scilab.org>
+// Copyright (C) 2023 - Dassault Systemes - Bruno JOFRET <bruno.jofret@3ds.com>
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
 
 // <-- ENGLISH IMPOSED -->
 // <-- CLI SHELL MODE -->
+// <-- NO CHECK REF -->
+
+load("SCI/modules/atoms/macros/atoms_internals/lib");
+exec("SCI/modules/atoms/tests/unit_tests/atomsTestUtils.sce");
+
+// Backup config file
+atomsSaveConfig(%T);
+
+// Override official repository for test purpose
+rep = atomsCreateLocalRepositoryFromDescription(SCI+"/modules/atoms/tests/unit_tests/sample.DESCRIPTION", "sample");
+atomsRepositorySetOfl(rep);
 
 if isempty([ atomsRepositoryList("user") ; atomsRepositoryList("allusers")]) then
 
-    rep1 = "http://scene10.6.0.test.atoms.scilab.org";
-    rep2 = "http://scene11.6.0.test.atoms.scilab.org";
+    rep1 = atomsCreateLocalRepositoryFromDescription(SCI+"/modules/atoms/tests/unit_tests/scene10.DESCRIPTION", "scene10");
+    rep2 = atomsCreateLocalRepositoryFromDescription(SCI+"/modules/atoms/tests/unit_tests/scene11.DESCRIPTION", "scene11");
 
     if atomsRepositoryAdd(rep1,"user")     <> 1 then pause, end
     if atomsRepositoryAdd(rep2,"allusers") <> 1 then pause, end
@@ -32,3 +44,7 @@ if isempty([ atomsRepositoryList("user") ; atomsRepositoryList("allusers")]) the
 
     if ~isempty([ atomsRepositoryList("user") ; atomsRepositoryList("allusers")]) then pause, end
 end
+
+// Restore Config
+atomsRestoreConfig(%T);
+atomsRepositorySetOfl(mgetl(SCI+"/modules/atoms/tests/unit_tests/repositories.orig"));

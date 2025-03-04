@@ -3,7 +3,7 @@
  * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
- * Copyright (C) 2019 - Samuel GOUGEON
+ * Copyright (C) 2019 - 2023 - Samuel GOUGEON
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
  * pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -20,7 +20,8 @@
     <refnamediv>
         <refname>subplot</refname>
         <refpurpose>
-            устанавливает текущие оси для выбора ячейки текущей разграфлённой фигуры
+            устанавливает текущие оси в выбранную ячейку текущего показателя или рамки
+            с привязкой к сетке
         </refpurpose>
     </refnamediv>
     <refsynopsisdiv>
@@ -36,7 +37,10 @@
             <varlistentry>
                 <term>m, n, p</term>
                 <listitem>
-                    <para>положительные целые числа</para>
+                    <para>
+                        целые числа > 0. (m,n) = числа строк и столбцов виртуальной сетки.
+                        р = индекс целевой ячейки.
+                    </para>
                 </listitem>
             </varlistentry>
             <varlistentry>
@@ -52,8 +56,9 @@
     <refsection>
         <title>Описание</title>
         <para>
-            <literal>subplot(m,n,p)</literal> или <literal>subplot(mnp)</literal> виртуально
-            разделяет графическое окно на матрицу подокон размером m-на-n, и выбирает
+            <emphasis role="bold">subplot(m,n,p)</emphasis> или
+            <emphasis role="bold">subplot(mnp)</emphasis> виртуально разделяет графическое
+            окно или uicontrol(frame) на матрицу подокон размером m-на-n, и выбирает
             <varname>p</varname>-тое подокно для получения следующего графика.
         </para>
         <para>
@@ -99,7 +104,8 @@
         </scilab:image>
         <para/>
         <para>
-            <emphasis role="bold">Более сложная компоновка</emphasis>, но по-прежнему разграфлённая:
+            <emphasis role="bold">Более сложная компоновка</emphasis>, но по-прежнему
+            разграфлённая:
         </para>
         <programlisting role="example"><![CDATA[
             clf
@@ -121,18 +127,18 @@
             param3d()
             xtitle("","","","")
  ]]></programlisting>
-        <scilab:image localized="true">
+        <scilab:image>
             clf
             subplot(1,2,2)
             Matplot1()
-            xtitle("Примеры Matplot1()","","")
+            xtitle("Matplot1() example","","")
 
             subplot(2,2,1)
             histplot
             delete(findobj("type","Legend"))
 
             subplot(2,2,3)
-            title("Несколько меньшие графики:", "fontsize",3)
+            title("Smaller plots:", "fontsize",3)
 
             subplot(2,4,5)
             polarplot()
@@ -142,6 +148,95 @@
             xtitle("","","","")
             gcf().axes_size = [670 400];
         </scilab:image>
+        <para/>
+        <para>
+            <emphasis role="bold">Usage on uicontrol frames</emphasis> :
+        </para>
+        <programlisting role="example"><![CDATA[
+x = -4:0.05:4;
+
+f = figure(...
+    "default_axes","off", ...
+    "toolbar","none", ...
+    "name","subplot in frames", ...
+    "backgroundColor",[1 1 1]*0.97);
+
+// Frame #1
+b = createBorder("titled", "Frame #1");
+uicontrol(f, ...
+    "style", "frame", ...
+    "units","normalized", ...
+    "border", b, ...
+    "position", [0.03 0.83 0.94 0.15]);
+
+// Frame #2
+b(2) = "Frame #2";
+fr2 = uicontrol(f, ...
+    "style", "frame", ...
+    "units","normalized", ...
+    "border", b, ...
+    "position", [0.03 0.03 0.60 0.8]);
+
+a2 = newaxes(fr2);
+subplot(1,2,1)
+plot(x, tanh(x)), title("tanh")
+
+subplot(2,2,2)
+plot(x, sinh(x)), title("sinh")
+
+// Frame #3
+b(2) = "Frame #3";
+fr3 = uicontrol(f, ...
+    "style", "frame", ...
+    "units","normalized", ...
+    "border", b, ...
+    "position", [0.65 0.03 0.32 0.8]);
+
+a3 = newaxes(fr3);
+subplot(2,1,1)
+plot(2*x, sinc(2*x)), title("sinc")
+
+subplot(2,1,2)
+plot(2*x, sin(2*x)), title("sin")
+
+// Back to Frame #2
+sca(a2);
+subplot(2,2,4)
+plot(x, cosh(x)), title("cosh")
+     ]]></programlisting>
+        <screen>
+--> gcf().children
+ ans  =
+3 by 1 matrix of handles:
+=========================
+uicontrol
+uicontrol
+uicontrol
+
+--> gcf().children(1).children
+ ans  =
+2 by 1 matrix of handles:
+=========================
+Axes
+Axes
+
+--> gcf().children(2).children
+ ans  =
+3 by 1 matrix of handles:
+=========================
+Axes
+Axes
+Axes
+
+--> gcf().children(3).children
+ ans  =
+    []
+</screen>
+        <inlinemediaobject>
+            <imageobject>
+                <imagedata fileref="../../images/subplot_frame.png"/>
+            </imageobject>
+        </inlinemediaobject>
     </refsection>
     <refsection role="see also">
         <title>Смотрите также</title>
@@ -155,9 +250,17 @@
             <member>
                 <link linkend="axes_properties">axes_properties</link>
             </member>
-            <member>
-                <link linkend="plotframe">plotframe</link>
-            </member>
         </simplelist>
+    </refsection>
+    <refsection>
+        <title>История</title>
+        <revhistory>
+            <revision>
+                <revnumber>2024.0</revnumber>
+                <revdescription>
+                    <literal>subplot(…)</literal> can be used on uicontrol frames.
+                </revdescription>
+            </revision>
+        </revhistory>
     </refsection>
 </refentry>

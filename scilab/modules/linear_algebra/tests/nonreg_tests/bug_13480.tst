@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2018 - Samuel GOUGEON
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,8 +9,8 @@
 //
 // <-- Non-regression test for bug  -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/13480
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/13480
 //
 // <-- Short Description -->
 // eigs(A) failed for full A with size(A,1)<8

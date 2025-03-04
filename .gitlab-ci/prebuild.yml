@@ -1,0 +1,87 @@
+# Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+# Copyright (C) Dassault Systemes - 2022 - Clement DAVID
+# Copyright (C) Dassault Systemes - 2022 - Cedric DELAMARRE
+#
+#
+# This YAML file describe the prebuild stage of the CI. This stage is used to
+# cleanup runners and set them ready to build.
+#
+
+# define x86_64-linux-gnu env variables
+linux_set_env:
+  image: ${DOCKER_LINUX_BUILDER}:${DOCKER_TAG}
+  stage: prebuild
+  tags: [x86_64-linux-gnu, docker, scilab]
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - echo BRANCH=$BRANCH
+    - echo CI_COMMIT_BRANCH=$CI_COMMIT_BRANCH
+    - echo CI_MERGE_REQUEST_TARGET_BRANCH_NAME=$CI_MERGE_REQUEST_TARGET_BRANCH_NAME
+    - echo CI_COMMIT_TAG=$CI_COMMIT_TAG
+    # get current build machine architecture
+    - ARCH=$(cc -print-multiarch)
+    # define NOW as Gitlab display ISO 8601 timestamp
+    - date +"%s" >timestamp
+    - NOW=$(cat timestamp)
+    # export useful variables
+    - |
+      echo ARCH=$ARCH                             >build.env
+      echo SCI_VERSION_TIMESTAMP=$NOW             >>build.env
+      cat build.env
+    - echo SCI_VERSION_STRING=$SCI_VERSION_STRING
+  artifacts:
+    reports:
+      dotenv: build.env
+
+# define x64 windows env
+windows_set_env:
+  stage: prebuild
+  tags: [x64_windows, shell, scilab]
+  needs: []
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - echo BRANCH=$env:BRANCH
+    - echo CI_COMMIT_BRANCH=$env:CI_COMMIT_BRANCH
+    - echo CI_MERGE_REQUEST_TARGET_BRANCH_NAME=$env:CI_MERGE_REQUEST_TARGET_BRANCH_NAME
+    - echo CI_COMMIT_TAG=$env:CI_COMMIT_TAG
+    # define NOW as Gitlab display ISO 8601 timestamp
+    - $env:NOW=(Get-Date(Get-Date).ToUniversalTime() -uformat '%s')
+    # export useful variables
+    - |
+      Set-Content -Path build.env -Value "ARCH=x64","SCI_VERSION_TIMESTAMP=$env:NOW"
+      cat build.env
+    - echo SCI_VERSION_STRING=$env:SCI_VERSION_STRING
+  artifacts:
+    reports:
+      dotenv: build.env
+
+# rebuild linux dependencies
+linux_build_prereq:
+  image: ${DOCKER_LINUX_PREBUILD}:${DOCKER_TAG}
+  stage: prebuild
+  tags: [x86_64-linux-gnu, docker, scilab, build]
+  needs:
+    - linux_set_env
+  before_script: bash .gitlab-ci/prebuild.sh versions
+  script: bash -x -e .gitlab-ci/prebuild.sh fromscratch
+  artifacts:
+    paths:
+      - prerequirements-${SCI_VERSION_STRING}.bin.${ARCH}.tar.xz
+      - $SCI_VERSION_STRING
+    when: always
+  rules:
+    # do not rebuild on scheduled
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    # do not rebuild on tag
+    - if: $CI_COMMIT_TAG
+      when: never
+    # rebuild on demand
+    - changes:
+        paths:
+          - .gitlab-ci/prebuild.yml
+          - .gitlab-ci/prebuild.sh
+          - .gitlab-ci/Dockerfile.linux
+          - .gitlab-ci/Dockerfile.linux.prebuild

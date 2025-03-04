@@ -1,7 +1,8 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 1993 - INRIA - Serge Steer
 // Copyright (C) 1993 - INRIA - Habib Jreij
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
+// Copyright (C) 2017 - 2022 - Samuel GOUGEON - Le Mans Université
 //
 // This file is hereby licensed under the terms of the GNU GPL v2.0,
 // pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -10,249 +11,504 @@
 // For more information, see the COPYING file which you should have received
 // along with this program.
 
-function [x,y,ok,gc] = edit_curv(x,y,job,tit,gc)
-    //   mod_curv  - Edition  de courbe interactive
-    //%Syntaxe
-    //  [x,y,ok]=mod_curv(xd,yd,job,tit)
-    //%Parametres
-    //  xd    :  vecteur des abscisses donnees (eventuellement [])
-    //  yd    :  vecteur des ordonnees donnees (eventuellement [])
-    //  job   :  chaine de 3 caracteres  specifiant les operations
-    //           permises:
-    //            - Si la chaine contient le caractere 'a', il est
-    //              possible d'ajouter des points aux donnees, sinon
-    //              il est seulement possible de les deplacer
-    //            - Si la chaine contient le caractere 'x', il est
-    //              possible de deplacer les points horizontalement
-    //            - Si la chaine contient le caractere 'y', il est
-    //              possible de deplacer les points verticalement
-    //  tit   : liste de trois chaines de caracteres
-    //          tit(1) : titre de la courbe (peut etre un vecteur colonne)
-    //          tit(2) : label de l'axe des abscisses
-    //          tit(3) : label de l'axe des ordonnees
-    //  x     : vecteur des abscisses resultat
-    //  y     : vecteur des ordonnees resultat
-    //  ok    : vaut %t si la sortie as ete demandee par le menu Ok
-    //           et  %f si la sortie as ete demandee par le menu Abort
-    //%menus
-    //  Ok    : sortie de l'editeur et retour de la courbe editee
-    //  Abort : sortie de l'editeur et retour au donnes initiales
-    //  Undo  : annulation de la derniere modification
-    //  Size  : changement des bornes du graphique
-    //  Grids : changement des graduations du graphique
-    //  Clear : effacement de la courbe (x=[] et y=[]) (sans quitter l'editeur)
-    //  Read  : lecture de la courbe a partir d'un fichier d'extension .xy
-    //  Save  : sauvegarde binaire (sur un fichier d'extension .xy) de
-    //          la courbe
-    //!
-    [lhs,rhs]=argn(0)
+function [x, y, ok, gc] = edit_curv(varargin)
+// Modification interactive d'une courbe graphique
+//%Syntaxe
+//  [x, y, ok, gc] = edit_curv(y)
+//  [x, y, ok, gc] = edit_curv(x, y)
+//  [x, y, ok, gc] = edit_curv(x, y, job, tit, gc)
+//  [x, y, ok, gc] = edit_curv(axes, ..)
+//  [x, y, ok, gc] = edit_curv(hcurve)
+//  [x, y, ok, gc] = edit_curv(hcurve, job)
+//  [x, y, ok, gc] = edit_curv(hcurve, job, ..)
+//%Parametres
+//  x    :  vecteur des abscisses donnees (eventuellement [])
+//  y    :  vecteur des ordonnees donnees (eventuellement [])
+//  hcurve :  handle de la courbe polyline à modifier
+//  job   :  mot de 1 à 4 lettres (sans ordre) indiquant les
+//           operations permises :
+//          "a" : ajout de points possible.
+//          "d" : deletion de points possible.
+//          "x" : les points peuvent être déplacés horizontalement.
+//          "y" : les points peuvent être déplacés verticalement.
+//          Par défaut, tout est permis ("adxy").
+//  tit   : liste de trois chaines de caracteres
+//          tit(1) : titre du repère
+//          tit(2) : légende de l'axe des abscisses
+//          tit(3) : légende de l'axe des ordonnees
+//  gc    : list(dataBounds, ticksNumb, lineStyles)
+//          dataBounds = [xmin ymin xmax ymax]
+//          ticksNumb = [nx, Nx, ny, Ny]
+//          lineStyles = [line_style, colorIndex, thickness, mark_style]
+//  x     : vecteur des abscisses resultat
+//  y     : vecteur des ordonnees resultat
+//  ok    : vaut %t si la sortie as ete demandee par le menu Ok
+//           et  %f si la sortie as ete demandee par le menu Abort
+//%menus
+//  Ok    : sortie de l'editeur et retour de la courbe editee
+//  Undo  : annulation de la précédente modification
+//  Redo  : rétablissement de la précédente annulation
+//  Abort : sortie de l'editeur et retour aux données initiales
+//  Read  : lecture de la courbe à partir d'un fichier d'extension .xy
+//  Save  : sauvegarde binaire (sur un fichier d'extension .xy) de la
+//          courbe
+//  Clear : effacement de la courbe (x=[] et y=[]) (sans quitter l'editeur)
+//  Bounds: changement des bornes du graphique
+//  Reframe: set axes bounds to data limits
+//!
+    fname = "edit_curv"
+    [lhs, rhs] = argn(0)
+    ok = %t
+    i = 1; // index of current argument
+    ownFigure = %t;  // %T the figure must be deleted at end
+    hadChildren = %f // If %T, then we'll restore .data_bounds and grids
+                   
 
-    ok = %t;
-    if rhs==0 then x=[]; y=[],end;
-    if rhs==1 then y=x;x=(1:size(y,"*"))',end
-    if rhs<3  then job="axy",end
-    if rhs<4 then tit=[" "," "," "],end
-    if size(tit,"*")<3 then tit(3)=" ",end
-    //
-
-    [mx,nx] = size(x); x=x(:)
-    [my,ny] = size(y); y=y(:)
-    n = min(mx*nx,my*ny)
-    x= x(1:n);y=y(1:n);
-    xsav=x; ysav=y; xs=x; ys=y;
-    //
-    lj = length(job)
-    add=0;modx=0;mody=0
-    for k=1:lj
-        jk = part(job,k)
-        select jk
-        case "a" then add = 1,
-        case "x" then modx= 1
-        case "y" then mody= 1
-        else error(msprintf(gettext("%s: Wrong value for input argument #%d: Must be in the set {%s}.\n"), "edit_curv", 3, "a, x, y"));
+    // CHECHING INPUT ARGUMENTS, DEFAULT INITIALIZATIONS
+    // -------------------------------------------------
+    // x and y, or axes or hcurve
+    // --------------------------
+    if rhs==0 then
+        [x, y] = ([], [])
+        //scf()
+    else
+        // hAxes
+        c = varargin(1)
+        if isdef("c","l") & type(c)==9 & c.type=="Axes"
+            ax = c
+            sca(ax)
+            varargin(1) = null(), i = i+1
+            ownFigure = %f
+            hadChildren = ax.children <> []
+            clear c
         end
-    end
-    eps = 0.03
-    symbsiz = 0.2
-    // bornes initiales du graphique
-    if rhs<5 then
-        if mx<>0 then
-            xmx = max(x); xmn = min(x)
-            ymx = max(y); ymn = min(y)
-            dx = xmx-xmn;  dy = ymx-ymn
-            if dx==0 then dx=max(xmx/2,1),end
-            xmn=xmn-dx/10;xmx=xmx+dx/10
-            if dy==0 then dy=max(ymx/2,1),end;
-            ymn=ymn-dy/10;ymx=ymx+dy/10;
+        // x | hCurve
+        if length(varargin) > 0
+            c = varargin(1)
+            if ~isdef("c","l") // undefined = skipped
+                x = %nan
+            elseif type(c)==9
+                if c.type <> "Polyline"
+                    msg = _("%s: Argument #%d: Graphic handle of type ''%s'' expected.\n")
+                    if i==1
+                        error(msprintf(msg, fname, i, _("Axes or Polyline")))
+                    else // i==2
+                        error(msprintf(msg, fname, i, "Polyline"))
+                    end
+                else
+                    ownFigure = %f
+                    hdl = c(1)
+                    x = c.data(:,1)
+                    y = c.data(:,2)
+                    // Sets as current axes hdl's one:
+                    ax = hdl
+                    while ax.type <> "Axes"
+                        ax = ax.parent
+                    end
+                    sca(ax)
+                end
+            else
+                if type(c)<>1 | ~isreal(c,0)
+                    msg = _("%s: Argument #%d: Real numbers expected.\n")
+                    error(msprintf(msg, fname, i))
+                end
+                x = c(:)
+            end
+            varargin(1) = null(), i = i+1
+        end
+        if ~isdef("x","l") then
+            x = %nan
+        end
+        // y
+        if ~isdef("y","l") then
+            if length(varargin) > 0
+                c = varargin(1)
+                if ~isdef("c","l")   // skipped
+                    [x, y] = ([], [])
+                    varargin(1) = null(), i = i+1
+                elseif type(c)==10
+                    if x <> x // %nan
+                        [x, y] = ([], [])
+                    else
+                        y = x
+                        x = (1:length(y))'
+                    end
+                elseif type(c)==1 & isreal(c,0)
+                    y = c(:)
+                    varargin(1) = null(), i = i+1
+                else
+                    msg = _("%s: Argument #%d: Real numbers expected.\n")
+                    error(msprintf(msg, fname, i))
+                end
+            else
+                if x <> x // %nan
+                    [x, y] = ([], [])
+                else
+                    y = x
+                    x = (1:length(y))'
+                end
+            end
+        end
+        if isnan(x)
+            x = (1:length(y))'
         else
-            xmn=0;ymn=0;xmx=1;ymx=1;dx=1;dy=1
+            Lmin = min(length(x), length(y))
+            x = x(1:Lmin)
+            y = y(1:Lmin)
         end
-        rect=[xmn,ymn,xmx,ymx];
-        axisdata=[2 10 2 10];
-        gc = list(rect,axisdata);
-    else //** rhs=5 as in Scicos ;)
-        [rect,axisdata] = gc(1:2)
-        xmn = rect(1);
-        ymn = rect(2);
-        xmx = rect(3);
-        ymx = rect(4);
-        dx  = xmx-xmn;
-        dy  = ymx-ymn;
     end
 
-    // Set menus and callbacks
-    menu_d = ["Read","Save","Clear"]
-    menu_e = ["Undo","Size","Replot","Ok","Abort"]
-    menus  = list(["Edit","Data"],menu_e,menu_d)
-    w="menus(2)(";rpar=")"
-    Edit=w(ones(menu_e))+string(1:size(menu_e,"*"))+rpar(ones(menu_e))
-    w="menus(3)(";rpar=")"
-    Data=w(ones(menu_d))+string(1:size(menu_d,"*"))+rpar(ones(menu_d))
+    // job
+    // ---
+    if length(varargin) > 0 then
+        if type(varargin(1))==0
+            job = "adxy"
+        else
+            job = varargin(1)
+            if type(job) <> 10
+                msg = _("%s: Argument #%d: String expected.\n")
+                error(msprintf(msg, fname, i))
+            end
+            job = job(1)    // no error if size("*") <> 1
+            job = strsubst(job, "/[^adxy]/", "", "r")
+            if job==""
+                msg = _("%s: Argument #%d: Must be in the set {%s}.\n")
+                error(msprintf(msg, fname, i, "a,d,x,y"));
+            end
+        end
+        varargin(1) = null(), i = i+1
+    else
+        job = "adxy"
+    end
+    add  = grep(job, "a") <> []
+    del  = grep(job, "d") <> []
+    modx = grep(job, "x") <> []
+    mody = grep(job, "y") <> []
 
-    curwin = scf().figure_id
+    // tit
+    // ---
+    if length(varargin) > 0 then
+        tit = varargin(1)
+        if ~isdef("tit","l")
+            tit = []
+        else
+            if type(tit) <> 10
+                msg = _("%s: Argument #%d: String expected.\n")
+                error(msprintf(msg, fname, i))
+            end
+            if size(tit,"*")>3
+                tit = tit(1:3)
+            else
+                tit = [tit(:) ; emptystr(3-size(tit,"*"), 1)]
+            end
+        end
+        varargin(1) = null(), i = i+1
+    else
+        tit = [" ", " ", " "]
+    end
 
-    // Disable the menus and toolbars
-    toolbar(curwin,"off");
-    delmenu(curwin,gettext("File"));
-    delmenu(curwin,gettext("Tools"));
-    delmenu(curwin,gettext("Edit"));;
-    delmenu(curwin,"?");
+    // gc
+    // --
+    if length(varargin) > 0 then
+        gc = varargin(1)
+        if type(gc) <> 15 | length(gc) < 2 then
+            msg = _("%s: Argument #%d: A list expected.\n")
+            error(msprintf(msg, fname, i))
+        end
+        if type(gc(1)) <> 0
+            rect = gc(1)
+            [xmn ymn xmx ymx] = (rect(1), rect(2), rect(3), rect(4));
+            dx  = xmx - xmn;
+            dy  = ymx - ymn;
+        end
+        if type(gc(2)) <> 0
+            ticksNumb = gc(2)
+        end
+        if length(gc) > 2
+            lineStyle  = gc(3)(1)
+            lineColor  = gc(3)(2)
+            lineThickness = gc(3)(3)
+            mark_style = gc(3)(4)
+        else
+            [lineStyle, lineColor, lineThickness, mark_style] = ..
+                                                  (%nan,%nan,%nan,%nan)
+        end
+    end
 
-    execstr("Edit_"+string(curwin)+"=Edit");
-    execstr("Data_"+string(curwin)+"=Data");
-    menubar(curwin,menus)
-    //
+    // OTHER INITIALIZATIONS
+    // ---------------------
+    // Initialisation des bornes initiales du graphique
+    if ~ownFigure then
+        db = gca().data_bounds;
+    else
+        scf()
+        db = [];
+    end
+    // Default gc
+    if ~isdef("rect","l") then
+        if length(x)<>0 then
+            if db==[]
+                [xmn xmx ymn ymx]= (min(x), max(x), min(y), max(y));
+            else
+                [xmn xmx] = (min([x(:); db(1)]), max([x(:); db(2)]));
+                [ymn ymx] = (min([y(:); db(3)]), max([y(:); db(4)]));
+            end
+            dx = xmx - xmn;
+            dy = ymx - ymn;
+            if dx==0 then dx = max(xmx/2,1), end
+            if db==[]
+                xmn = xmn - dx/10;
+                xmx = xmx + dx/10;
+            end
+            if dy==0 then dy = max(ymx/2,1), end
+            if db==[]
+                ymn = ymn - dy/10;
+                ymx = ymx + dy/10;
+            end
+        else
+            if db==[]
+                xmn=0; ymn=0; xmx=1; ymx=1; dx=1; dy=1
+            else
+                [xmn xmx ymn ymx] = (db(1), db(2), db(3), db(4));
+                dx = xmx - xmn;
+                dy = ymx - ymn;
+            end
+        end
+        rect = [xmn,ymn,xmx,ymx];
+    end
+    if ~isdef("ticksNumb","l") then
+        ticksNumb = [2 10 2 10];
+    end
+    if ~isdef("lineStyle","l") then
+        lineStyles = [%nan %nan %nan %nan] // style, color, thickness, markStyle]
+        [lineStyle, lineColor, lineThickness, mark_style] = ..
+                                              (%nan,%nan,%nan,%nan)
+    end
+    if ~isdef("gc", "l") then
+        gc = list(rect, ticksNumb, lineStyles);
+    end
+
+    // Toolbar & Menus:
+    curwin = gcf().figure_id;
+    toolbarIni = gcf().toolbar_visible;
+    gcf().toolbar_visible = "off";
+    shh_old = get(0).showhiddenhandles
+    set(get(0), "showhiddenhandles","on")
+    ch = gcf().children
+    tmp = ch.type=="uimenu"
+    uimenus_visible_old = ch(tmp).visible   // to restore when quitting edit_curv
+    ch(tmp).visible = "off"
+    set(get(0), "showhiddenhandles", shh_old)
+    menu_d = ["Load", "Save", "Clear", "Reframe", "Bounds"]
+    menu_e = ["Ok","Undo (Ctrl-Z)","Redo (Ctrl-Y)","Abort"]
+    menus  = list(["Control","Data"],menu_e,menu_d)
+    [w, rpar] = ("menus(2)(", ")")
+    Control = w(ones(menu_e))+string(1:size(menu_e,"*")) + rpar(ones(menu_e))
+    w = "menus(3)("
+    Data = w(ones(menu_d))+string(1:size(menu_d,"*")) + rpar(ones(menu_d))
+    execstr("Control_" + string(curwin) + "=Control");
+    execstr("Data_" + string(curwin) + "=Data");
+    if ownFigure then
+        menubar(curwin, menus)
+    else
+        names = menus(1)
+        for k = 1:size(names,"*")
+            addmenu(curwin, names(k), menus(k+1), list(0, names(k)))
+        end
+    end
+
+    // Set the current figure and axes
     edit_curv_figure = gcf();
+    figure_name_old = edit_curv_figure.figure_name;
     edit_curv_figure.figure_name = "edit_curv";
 
     edit_curv_axes = gca();
-    edit_curv_axes.data_bounds = [rect(1),rect(2);rect(3),rect(4)]
-    edit_curv_axes.axes_visible="on";
-    edit_curv_axes.grid=[4 4];
-    if x<>[] then
-        xpolys(x*[1 1],y*[1 1],[1,-1])
-        hdl=edit_curv_axes.children.children
-    else
-        hdl=[]
+    axes_old_data_bounds = edit_curv_axes.data_bounds
+    axes_old_axes_visible = edit_curv_axes.axes_visible
+    axes_old_grid = edit_curv_axes.grid
+    axes_old_grid_position = edit_curv_axes.grid_position
+    axes_old_title = edit_curv_axes.title.text
+    axes_old_xlabel = edit_curv_axes.x_label.text
+    axes_old_ylabel = edit_curv_axes.y_label.text
+
+    edit_curv_axes.data_bounds  = [rect(1),rect(2);rect(3),rect(4)]
+    edit_curv_axes.axes_visible = "on";
+    edit_curv_axes.grid = [4 4];
+    edit_curv_axes.grid_position = "foreground";
+    if tit <> [] then
+        xtitle(tit(1),tit(2),tit(3))
     end
+    if ~isdef("hdl","l")
+        xpoly(x, y);    // possibly with []
+        hdl = gce();
+        old_userdata = []
+    else
+        old_thickness  = hdl.thickness
+        old_mark_mode  = hdl.mark_mode
+        old_mark_style = hdl.mark_style
+        old_mark_size  = hdl.mark_size
+        old_userdata   = hdl.userdata
+    end
+//  [lineStyle, lineColor, lineThickness, mark_style] = 
+    if isnan(lineStyle), lineStyle = hdl.line_style, end
+    if isnan(lineColor), lineColor = hdl.foreground, end
+    if isnan(lineThickness), lineThickness = 2, end
+    if isnan(mark_style), mark_style = 1, end     // "+"
+    hdl.line_style = lineStyle
+    hdl.foreground = lineColor
+    hdl.thickness = lineThickness
+    hdl.mark_mode = "on"
+    hdl.mark_style = mark_style
+    hdl.mark_size = 2
 
-    xtitle(tit(1),tit(2),tit(3));
+    // Initialize the historization for undo/redo actions
+    [xInit, yInit] = (x,y);
+    hdl.userdata = list([x y])
+    iHistory = 1;   // index in history of actions
+    
+    eps = 0.01      // accuracy for point clicking detection
+    symbsiz = 0.2
 
-
-    // -- boucle principale
+    // ---------
+    // MAIN LOOP
+    // ---------
     while %t then
         [n1,n2] = size(x);
         npt = n1*n2 ;
 
         [btn,xc,yc,win,Cmenu] = get_click();
 
-        //** disp([btn,xc,yc,win]); //** DEBUG only
-
         c1 = [xc,yc];
-
+        if btn==1025     then Cmenu="Redo (Ctrl-Y)", end
+        if btn==1026     then Cmenu="Undo (Ctrl-Z)", end
         if Cmenu=="Quit" then Cmenu="Abort",end
         if Cmenu==[]     then Cmenu="edit",end
         if Cmenu=="Exit" then Cmenu="Ok",end
 
         select Cmenu
-        case [] then
-            // ce n est pas un menu
-            break
-
         case "Ok" then    //    -- ok menu
             rect = matrix(edit_curv_axes.data_bounds',1,4);
-            gc   = list(rect,axisdata);
-            delete(edit_curv_figure)
-            return;
+            lineStyles = [hdl.line_style, hdl.foreground, ..
+                          hdl.thickness,  hdl.mark_style];
+            gc   = list(rect, ticksNumb, lineStyles);
+            if ownFigure
+                delete(edit_curv_figure)
+            else
+                set("hdl", hdl)
+                restoreFigure()
+            end
+            return
 
         case "Abort" then //    -- abort menu
-            x = xsav
-            y = ysav
-            delete(edit_curv_figure)
+            x = xInit
+            y = yInit
+            if ownFigure
+                delete(edit_curv_figure)
+            else
+                restoreFigure()
+            end
+            ok = %f
+            return
+
+        case "XClose" then //** the user manually closes the win
+            x = xInit
+            y = yInit
             ok = %f;
             return
 
-        case "XClose" then //** the user manually close the win
-            x = xsav
-            y = ysav
-            ok = %f;
-            return
+        case "Undo (Ctrl-Z)" then
+            if iHistory > 1
+                iHistory = iHistory - 1
+                tmp = hdl.userdata(iHistory)
+                [x, y] = (tmp(:,1), tmp(:,2))
+            else
+                [x, y] = (xInit, yInit)
+            end
+            hdl.data = [x y];
 
-        case "Undo" then
-            x=xs;y=ys
-            if x<>[] then hdl.data=[x y]; end
+        case "Redo (Ctrl-Y)" then
+            if iHistory < length(hdl.userdata)
+                iHistory = iHistory + 1
+                tmp = hdl.userdata(iHistory)
+                [x, y] = (tmp(:,1), tmp(:,2))
+                hdl.data = [x y];
+            end
 
-        case "Size" then
+        case "Reframe"
+            replot()
+
+        case "Bounds" then
             while %t
                 [ok,xmn,xmx,ymn,ymx]=getvalue("Please input new limits",..
-                ["xmin";"xmax";"ymin";"ymax"],..
-                list("vec",1,"vec",1,"vec",1,"vec",1),..
-                string([xmn;xmx;ymn;ymx]))
+                ["xmin"; "xmax"; "ymin"; "ymax"],..
+                list("vec",1, "vec",1, "vec",1, "vec",1),..
+                string([xmn; xmx; ymn; ymx]))
                 if ~ok then break,end
-                if xmn>xmx|ymn>ymx then
+                if xmn > xmx | ymn > ymx then
                     messagebox("Limits are not accettable","modal");
                 else
                     break
                 end
             end
             if ok then
-                dx=xmx-xmn;dy=ymx-ymn
-                if dx==0 then dx=max(xmx/2,1),xmn=xmn-dx/10;xmx=xmx+dx/10;end
-                if dy==0 then dy=max(ymx/2,1),ymn=ymn-dy/5;ymx=ymx+dy/10;end
-                rect=[xmn,ymn,xmx,ymx];
-                edit_curv_axes.data_bounds=[rect(1),rect(2);rect(3),rect(4)]
+                dx = xmx - xmn;
+				dy = ymx - ymn
+                if dx==0 then dx = max(xmx/2,1), xmn = xmn-dx/10; xmx = xmx+dx/10; end
+                if dy==0 then dy = max(ymx/2,1), ymn = ymn-dy/5;  ymx = ymx+dy/10; end
+                rect=[xmn, ymn, xmx, ymx];
+                edit_curv_axes.data_bounds=[rect(1), rect(2); rect(3), rect(4)]
             end
 
         case "Clear" then
-            if hdl<>[] then delete(hdl),hdl=[];end
-            x=[];y=[];
+            hdl.data = []
+            [x, y] = ([],[])
+            iHistory = addToHistory(x, y)
 
         case "Read" then
             [x,y]=readxy()
-            mx=min(prod(size(x)),prod(size(y)))
+            mx=min(prod(size(x)), prod(size(y)))
             if mx<>0 then
-                xmx=max(x);xmn=min(x)
-                ymx=max(y);ymn=min(y)
-                dx=xmx-xmn;dy=ymx-ymn
-                if dx==0 then dx=max(xmx/2,1),xmn=xmn-dx/10;xmx=xmx+dx/10;end
-                if dy==0 then dy=max(ymx/2,1),ymn=ymn-dy/5;ymx=ymx+dy/10;end
+                xmx = max(x); xmn = min(x)
+                ymx = max(y); ymn = min(y)
+                dx = xmx - xmn;
+				dy = ymx - ymn
+
+                if dx==0 then dx = max(xmx/2,1), xmn = xmn-dx/10;xmx = xmx+dx/10; end
+                if dy==0 then dy = max(ymx/2,1), ymn = ymn-dy/5; ymx = ymx+dy/10; end
             else
-                xmn=0;ymn=0;xmx=1;ymx=1;dx=1;dy=1
+                xmn = 0; ymn = 0; xmx = 1; ymx = 1; dx = 1; dy = 1
             end
-            rect=[xmn,ymn,xmx,ymx];
+            rect=[xmn, ymn, xmx, ymx];
             edit_curv_axes.data_bounds=[rect(1),rect(2);rect(3),rect(4)]
-            if x<>[]&y<>[] then
-                if hdl==[] then
-                    xpolys(x(1)*[1 1],y(1)*[1 1],[1,-1])
-                    hdl=gce();hdl=hdl.children
-                end
-                hdl.data=[x y];
+            if x <> [] & y <> [] then
+                hdl.data = [x y];
             else
-                if hdl<>[] then delete(hdl),end
-                x=[];y=[];
+                hdl.data = []
+                [x, y] = ([], [])
             end
 
         case "Save" then
             savexy(x,y)
 
-        case "Replot" then
-            // for compatibility only, perform nothing on purpose
-
         case "edit" then
-            npt=prod(size(x))
+            npt = size(x, "*")
             if npt<>0 then
                 dist=((x-ones(npt,1)*c1(1))/dx).^2+((y-ones(npt,1)*c1(2))/dy).^2
-                [m,k]=min(dist);m=sqrt(m)
+                [m,k]=min(dist);
+                m = sqrt(m)
             else
                 m=3*eps
             end
-            if m<eps then                 //on deplace le point
-                xs=x;ys=y
-                [x,y]=movept(x,y)
+            if m < eps then                 //on deplace le point
+                xs=x; ys=y
+                [x,y] = movept(x, y)
+                iHistory = addToHistory(x,y)
             else
-                if add==1 then
-                    xs=x;ys=y                  //on rajoute un point de cassure
-                    [x,y]=addpt(c1,x,y)
+                if add then
+                    xs=x; ys=y                  //on rajoute un point de cassure
+                    [x,y] = addpt(c1,x,y)
+                    hdl.data = [x y];
+                    iHistory = addToHistory(x,y)
                 end
             end
         end
@@ -291,79 +547,104 @@ function [btn,xc,yc,win,Cmenu] = get_click(flag)
     end
 
     Cmenu = [];
-
 endfunction
 
 
 function [x,y] = addpt(c1,x,y)
     // permet de rajouter un point de cassure
+    hdl;
+    // Curve's initialization
+    if x==[] then
+        [x, y] = (c1(1), c1(2))
+        return
+    end
+
+    // Point insertion in existing curve
     npt = prod(size(x))
     c1 = c1'
-    if hdl==[] then
-        x = c1(1);
-        y = c1(2);
-        xpolys(x*[1 1],y*[1 1],[1,-1]);
-        hdl = resume(edit_curv_axes.children(1).children)
+    // recherche des intervalles en x contenant l'abscisse designee
+    kk = []
+    if npt > 1 then
+        kk = find((x(1:npt-1)-c1(1)*ones(x(1:npt-1)))..
+                .*(x(2:npt)-c1(1)*ones(x(2:npt)))<=0)
     end
-    //recherche des intervalles en x contenant l'abscisse designee
-    kk=[]
-    if npt>1 then
-        kk=find((x(1:npt-1)-c1(1)*ones(x(1:npt-1)))..
-        .*(x(2:npt)-c1(1)*ones(x(2:npt)))<=0)
-    end
-    if  kk<>[] then
-        //    recherche du segment sur le quel on a designe un point
-        pp=[];d=[];i=0
-        for k=kk
-            i=i+1
-            pr=projaff(x(k:k+1),y(k:k+1),c1)
-            if (x(k)-pr(1))*(x(k+1)-pr(1))<=0 then
-                pp=[pp pr]
-                d1=rect(3)-rect(1)
-                d2=rect(4)-rect(2)
-                d=[d norm([d1;d2].\(pr-c1))]
+    if  kk <> [] then
+        //    recherche du segment sur lequel on a designé un point
+        [pp, d, i] = ([], [], 0)
+        for k = kk
+            i = i+1
+            pr = projaff(x(k:k+1),y(k:k+1),c1)
+            if (x(k)-pr(1))*(x(k+1)-pr(1)) <= 0 then
+                pp = [pp pr]
+                d1 = rect(3) - rect(1)
+                d2 = rect(4) - rect(2)
+                d = [d norm([d1;d2].\(pr-c1))]
             end
         end
-        if d<>[] then
-            [m,i]=min(d)
-            if m<eps
-                k=kk(i)
-                pp=pp(:,i)
-                x=x([1:k k:npt]);x(k+1)=pp(1);
-                y=y([1:k k:npt]);y(k+1)=pp(2);
-                hdl.data=[x y];
+        if d <> [] then
+            [m,i] = min(d)
+            if m < eps
+                k = kk(i)
+                pp = pp(:,i)
+                x = x([1:k k:npt]);
+                x(k+1) = pp(1);
+                y = y([1:k k:npt]);
+                y(k+1) = pp(2);
                 return
             end
         end
     end
-    d1=rect(3)-rect(1)
-    d2=rect(4)-rect(2)
-    if norm([d1;d2].\([x(1);y(1)]-c1))<norm([d1;d2].\([x(npt);y(npt)]-c1)) then
+    d1 = rect(3) - rect(1)
+    d2 = rect(4) - rect(2)
+    if norm([d1;d2].\([x(1);y(1)]-c1)) < norm([d1;d2].\([x(npt);y(npt)]-c1)) then
         //  -- mise a jour de x et y
-        x(2:npt+1)=x;x(1)=c1(1)
-        y(2:npt+1)=y;y(1)=c1(2)
+        x(2:npt+1) = x
+        x(1) = c1(1)
+        y(2:npt+1) = y
+        y(1) = c1(2)
     else
         //  -- mise a jour de x et y
-        x(npt+1)=c1(1)
-        y(npt+1)=c1(2)
+        x(npt+1) = c1(1)
+        y(npt+1) = c1(2)
     end
-    hdl.data=[x y];
 endfunction
 
-function [x,y]=movept(x,y)
+function [x,y] = movept(x,y)
     //on bouge un point existant
     hdl;
-    rep(3)=-1
+    rep(3) = -1
     while rep(3)==-1 do
         rep = xgetmouse();
-        xc=rep(1);yc=rep(2);c2=[xc;yc]
-        if modx==0 then c2(1)=x(k);end
-        if mody==0 then c2(2)=y(k);end
-        x(k)=c2(1);y(k)=c2(2)
-        hdl.data=[x,y];
+        xc = rep(1);
+        yc = rep(2);
+        if ~modx then xc = x(k); end
+        if ~mody then yc = y(k); end
+        x(k) = xc;
+        y(k) = yc;
+        hdl.data = [x y];
+        c2 = [xc; yc]
+    end
+    // "SUPPR has been pressed => we delete the point
+    if rep(3)==127 & del
+        hdl.data(k,:) = [];
+        x(k) = [];
+        y(k) = [];
+        hdl.data = [x y];
     end
 endfunction
 
+function iHistory = addToHistory(x,y)
+    iHistory = iHistory + 1
+    hdl;
+    hdl.userdata(iHistory) = [x y]
+    L = length(hdl.userdata)
+    if L > iHistory
+        // We cut the tail coming from undo actions
+        for i = iHistory+1:L
+            hdl.userdata(i) = null()
+        end
+    end
+endfunction
 
 function [x,y] = readxy()
 
@@ -384,7 +665,9 @@ function [x,y] = readxy()
         end
     endfunction
 
-    fn=uigetfile(["*.scg";"*.sod";"*.xy"], "", _("Select a file to load"));
+    x = x
+    y = y
+    fn = uigetfile(["*.scg";"*.sod";"*.xy"], "", _("Select a file to load"));
     if fn <> "" then
         [pth, fnm, ext] = fileparts(fn);
         flname = fnm + ext;
@@ -398,48 +681,47 @@ function [x,y] = readxy()
                 xy = findPolyline(loaded_figure.children);
                 delete(loaded_figure);
                 if xy <> [] then
-                    x=xy(:,1);y=xy(:,2);
+                    [x, y] = (xy(:,1), xy(:,2))
                 else
                     msg = _("%s: The file "'%s"' does not contains any "'Polyline"' graphic entity.\n")
-                    messagebox(msprintf(msg, "edit_curve", flname));
+                    messagebox(msprintf(msg, "edit_curve", flname))
                     return
                 end
             else
                 msg = _("%s: Cannot open file "'%s"' for reading.\n")
-                messagebox(msprintf(msg, "edit_curv", flname), "modal");
+                messagebox(msprintf(msg, "edit_curv", flname), "modal")
                 return
             end
         case ".xy" then
             if execstr("xy = read(fn,-1,2)","errcatch") == 0 then
-                x=xy(:,1);y=xy(:,2);
+                [x, y] = (xy(:,1), xy(:,2))
             else
                 msg = _("%s: Cannot open file "'%s"' for reading.\n")
-                messagebox(msprintf(msg, "edit_curv", flname), "modal");
+                messagebox(msprintf(msg, "edit_curv", flname), "modal")
                 return
             end
         case ".sod" then
             if execstr("load(fn)","errcatch") == 0 then
-                x=xy(:,1);y=xy(:,2);
+                [x, y] = (xy(:,1), xy(:,2))
             else
                 msg = _("%s: Cannot open file "'%s"' for reading.\n")
-                messagebox(msprintf(msg, "edit_curv", flname), "modal");
+                messagebox(msprintf(msg, "edit_curv", flname), "modal")
                 return
             end
         else
             messagebox(_("Error in file format."), "modal");
             return
         end
-    else
-        x=x
-        y=y
     end
 endfunction
 
 
 function savexy(x,y)
-    fn=uiputfile(["*.sod";"*.xy"], "", _("Select a file to write"));
+    fn = uiputfile(["*.sod";"*.xy"], "", _("Select a file to write"));
     if fn <> "" then
         [pth, fnm, ext] = fileparts(fn);
+
+
         flname = fnm + ext;
         xy = [x y];
         fil = fn;
@@ -477,4 +759,42 @@ function savexy(x,y)
             end
         end
     end
+endfunction
+
+// ------------------------------------------------------------------
+
+function restoreFigure()
+    gcf().figure_name = figure_name_old;
+    gcf().toolbar_visible = toolbarIni;
+    // Menus
+    set(get(0), "showhiddenhandles","on")
+    tmp = gcf().children
+    tmp = tmp(tmp.type=="uimenu")
+    delete(tmp(1:2))
+    tmp = gcf().children
+    tmp = tmp(tmp.type=="uimenu")
+    tmp.visible = uimenus_visible_old
+    set(get(0), "showhiddenhandles", shh_old)
+    
+    // Axes
+    edit_curv_axes
+    if hadChildren then
+        edit_curv_axes.data_bounds = axes_old_data_bounds
+        edit_curv_axes.axes_visible = axes_old_axes_visible
+        edit_curv_axes.grid = axes_old_grid
+        edit_curv_axes.grid_position = axes_old_grid_position
+    end
+    edit_curv_axes.title.text = axes_old_title
+    edit_curv_axes.x_label.text = axes_old_xlabel
+    edit_curv_axes.y_label.text = axes_old_ylabel
+    
+    // Curve styles
+    hdl
+    if isdef("old_thickness")
+        hdl.thickness  = old_thickness
+        hdl.mark_mode  = old_mark_mode
+        hdl.mark_style = old_mark_style
+        hdl.mark_size  = old_mark_size
+    end
+    hdl.userdata = old_userdata
 endfunction

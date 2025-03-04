@@ -1,7 +1,7 @@
 [Desktop Entry]
 Comment=Hybrid simulator
 Comment[ru]=Гибридный симулятор
-Exec=xcos
+Exec=xcos %F
 GenericName=Scientific Software Package
 GenericName[fr]=Logiciel de calcul numérique
 GenericName[de]=Wissenschaftssoftware

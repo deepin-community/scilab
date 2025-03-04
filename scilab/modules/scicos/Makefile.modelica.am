@@ -1,4 +1,4 @@
-# Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+# Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 # Copyright (C) 2008 - INRIA - Sylvestre Ledru <sylvestre.ledru@inria.fr>
 # Copyright (C) 2010 - DIGITEO - Sylvestre Ledru
 # Copyright (C) 2014 - Scilab Enterprises - Clement DAVID
@@ -30,7 +30,7 @@ OCAMLLIBS=nums.cma
 
 XML2Modelica_SOURCES = \
 	$(srcdir)/src/xml2modelica/xMLTree.ml \
-	$(srcdir)/src/modelica_compiler/linenum.mll \
+	$(srcdir)/src/xml2modelica/linenum.mll \
 	$(srcdir)/src/xml2modelica/stringParser.ml \
 	$(srcdir)/src/xml2modelica/stringLexer.ml \
 	$(srcdir)/src/xml2modelica/xMLParser.ml \
@@ -98,8 +98,6 @@ MLS_modelicac = $(modelicac_SOURCES_mly:.mll=.ml)
 
 BASE_PATH_MODELICAC = $(srcdir)/src/modelica_compiler
 
-INCLUDE = -I $(BASE_PATH_MODELICAC) -I $(BASE_PATH_XML2Modelica)
-
 ########## COMMON
 SUFFIXES += .mll .mly
 
@@ -113,16 +111,16 @@ SUFFIXES += .mll .mly
 # Build the binaries, disabling parallel building as ocamldep ordering seems to fail on some systems
 
 modelicac: $(modelicac_SOURCES) $(MLS_modelicac)
-	/usr/bin/time $(OCAMLOPT) -o $@ $(INCLUDE) $(OCAMLOPTFLAGS) $(OCAMLLIBS:.cma=.cmxa) $(MLS_modelicac)
+	$(OCAMLOPT) -o $@ -I $(BASE_PATH_MODELICAC) $(OCAMLOPTFLAGS) $(OCAMLLIBS:.cma=.cmxa) $(MLS_modelicac)
 
 modelicac.ocamlc: $(modelicac_SOURCES) $(MLS_modelicac)
-	$(OCAMLC) -o $@ $(INCLUDE) $(OCAMLOPTFLAGS) $(OCAMLLIBS) $(MLS_modelicac)
+	$(OCAMLC) -o $@ -I $(BASE_PATH_MODELICAC) $(OCAMLOPTFLAGS) $(OCAMLLIBS) $(MLS_modelicac)
 
 XML2Modelica: $(XML2Modelica_SOURCES) $(MLS_XML2Modelica)
-	$(OCAMLOPT) -o $@ $(INCLUDE) $(OCAMLCFLAGS) $(OCAMLLIBS:.cma=.cmxa) $(MLS_XML2Modelica)
+	$(OCAMLOPT) -o $@ -I $(BASE_PATH_XML2Modelica) $(OCAMLCFLAGS) $(OCAMLLIBS:.cma=.cmxa) $(MLS_XML2Modelica)
 
 XML2Modelica.ocamlc: $(XML2Modelica_SOURCES) $(MLS_XML2Modelica)
-	$(OCAMLC) -o $@ $(INCLUDE) $(OCAMLCFLAGS) $(OCAMLLIBS) $(MLS_XML2Modelica)
+	$(OCAMLC) -o $@ -I $(BASE_PATH_XML2Modelica) $(OCAMLCFLAGS) $(OCAMLLIBS) $(MLS_XML2Modelica)
 
 modelicat: $(modelicat_SOURCES) $(MLS_modelicat)
 	$(OCAMLOPT) -o $@ $(INCLUDE_modelicat) $(OCAMLOPTFLAGS) $(OCAMLLIBS:.cma=.cmxa) $(MLS_modelicat)

@@ -1,5 +1,5 @@
 /*
-*  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+*  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 *  Copyright (C) 2008-2008 - DIGITEO - Antoine ELIAS
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -27,8 +27,7 @@ CPP_GATEWAY_PROTOTYPE_EXPORT(sci_whereis, FUNCTIONS_GW_IMPEXP);
 CPP_GATEWAY_PROTOTYPE_EXPORT(sci_macrovar, FUNCTIONS_GW_IMPEXP);
 CPP_GATEWAY_PROTOTYPE_EXPORT(sci_libraryinfo, FUNCTIONS_GW_IMPEXP);
 CPP_GATEWAY_PROTOTYPE_EXPORT(sci_librarieslist, FUNCTIONS_GW_IMPEXP);
-CPP_GATEWAY_PROTOTYPE_EXPORT(sci_testGVN, FUNCTIONS_GW_IMPEXP);
-CPP_GATEWAY_PROTOTYPE_EXPORT(sci_testAnalysis, FUNCTIONS_GW_IMPEXP);
+CPP_GATEWAY_PROTOTYPE_EXPORT(sci_idempotence, FUNCTIONS_GW_IMPEXP);
 
 #endif /* __FUNCTIONS_GW_HXX__ */
 

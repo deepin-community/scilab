@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA - Farid BELAHCENE
 // Copyright (C) 2018 - Samuel GOUGEON
 //
@@ -21,18 +21,10 @@ function [f, p, m] = factorial(n)
     //  - p: the powers of 10
     //  - m: the mantissae, in [1, 10[
 
-    [lhs, rhs] = argn();
-
     // CHECKING INPUT ARGUMENTS
     // ------------------------
-    if rhs <> 1 then
-        msg = gettext("%s: Wrong number of input argument(s): %d expected.\n")
-        error(msprintf(msg, "factorial", 1));
-    end
-
-    if (type(n) <> 1) | (n~=[] & (or((n-floor(n)<>0)) | or(n<0))) then
-        msg = gettext("%s: Argument #%d: Non-negative integers expected.\n")
-        error(msprintf(msg, "factorial", 1));
+    arguments
+        n {mustBeA(n, "double"), mustBeInteger, mustBeNonnegative}
     end
 
     // TRIVIAL CASE
@@ -53,7 +45,7 @@ function [f, p, m] = factorial(n)
         //f(k) = gamma(n(k)+1)  // slower
     end
 
-    if lhs>1 then
+    if nargout > 1 then
         p = n
         m = n
         p(n==0) = 0

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA
  * Copyright (C) 2011 - DIGITEO - Michael Baudin
  * Copyright (C) 2018 - Samuel GOUGEON
@@ -37,38 +37,30 @@
     </refsynopsisdiv>
     <refsection>
         <title>Arguments</title>
-        <variablelist>
-            <varlistentry>
-                <term>iprint</term>
+        <para>
+            The following definitions are used:
+            <itemizedlist>
                 <listitem>
-                    <para>scalar used to set the trace mode:
-                        <table>
-                            <tr>
-                                <th>Value</th><th>Action</th>
-                            </tr>
-                            <tr>
-                                <td>0</td><td>nothing (except errors) is reported</td>
-                            </tr>
-                            <tr>
-                                <td>1</td><td>initial and final reports</td>
-                            </tr>
-                            <tr>
-                                <td>2</td><td>adds a report per iteration</td>
-                            </tr>
-                            <tr>
-                                <td>>2</td><td>adds reports on linear search</td>
-                            </tr>
-                        </table>
-                        <warning>
-                            Most of the reports are displayed in the Scilab console.
-                        </warning>
-                    </para>
+                    <literal>ng = size(g,1)</literal>: number of fitting criteria (= of
+                    gap definitions).
                 </listitem>
-            </varlistentry>
+                <listitem>
+                    <literal>np = size(p,"*")</literal>: total number of fitting parameters.
+                </listitem>
+                <listitem>
+                    <literal>nd = size(Data,2)</literal>: number of data points.
+                </listitem>
+                <listitem>
+                    <literal>ndc = size(Data,1)</literal>: number of coordinates of each
+                    data point.
+                </listitem>
+            </itemizedlist>
+        </para>
+        <variablelist>
             <varlistentry>
                 <term>p0</term>
                 <listitem>
-                    Matrix of initial guess of the model parameters.
+                    Matrix of initial guess of the model parameters (np elements).
                   <para/>
                 </listitem>
             </varlistentry>
@@ -93,15 +85,15 @@
             <varlistentry>
                 <term>Data</term>
                 <listitem>
-                    (ndc x nd) matrix of experimental data points, where <literal>Data(:,i)</literal>
-                    are the #nzc coordinates of the ith measurement.
+                    (ndc × nd) matrix of experimental data points, where <literal>Data(:,i)</literal>
+                    are the ndc coordinates of the ith measurement.
                     <para/>
                 </listitem>
             </varlistentry>
             <varlistentry>
                 <term>Wd</term>
                 <listitem>
-                    Data weights (optional). Row vector with size(Data,2) elements.
+                    Data weights (optional). Row vector with nd elements.
                     <para/>
                 </listitem>
             </varlistentry>
@@ -114,48 +106,38 @@
                         may be of the first order, not quadratic.
                     </para>
                     <para>
-                        <emphasis role="bold">
-                            If <literal>G()</literal>
-                        </emphasis>
-                        does not need
-                        any input parameters (like constants), only arguments, its syntax must be
+                        <emphasis role="bold">If <literal>G()</literal></emphasis> does not need
+                        any own input parameters (like constants), only arguments, its syntax must be
                         <literal>g = G(p, Data)</literal>.
                     </para>
                     <para>
-                        <emphasis role="bold">
-                            If <literal>G()</literal>
-                        </emphasis>
-                        needs
-                        some input parameters in addition to input arguments, its syntax must be
+                        <emphasis role="bold">If <literal>G()</literal> </emphasis> needs
+                        some own input parameters in addition to input arguments, its syntax must be
                         <literal>g = G(p, Data, param1, param2, .., paramN)</literal>.
                         Then, <literal>list(G, param1, param2, .., paramN)</literal> must be provided
-                        to <literal>datafit()</literal> instead of only <literal>G</literal>.
+                        to <literal>datafit()</literal>, instead of only <literal>G</literal>.
                     </para>
                     <para>
-                        The following definitions will be used:
-                        <itemizedlist>
-                            <listitem>
-                                <literal>ng = size(g,1)</literal>: number of fitting criteria (= of
-                                gap definitions).
-                            </listitem>
-                            <listitem>
-                                <literal>np = size(p,"*")</literal>: total number of fitting parameters.
-                            </listitem>
-                            <listitem>
-                                <literal>nd = size(Data,2)</literal>: number of data points.
-                            </listitem>
-                            <listitem>
-                                <literal>ndc = size(Data,1)</literal>: number of coordinates of each
-                                data point.
-                            </listitem>
-                        </itemizedlist>
-                    </para>
-                    <para>
-                        Then, the sizes of G arguments are the following ones:
+                        The sizes of G arguments are the following ones:
                         <table>
                             <tr valign="top">
+                                <th>p</th>
+                                <td>: fitting parameters to be optimized.</td>
+                            </tr>
+                            <tr valign="top">
+                                <th>Data</th>
+                                <td>: (ndc × nd) matrix, as described above.
+                                    If <literal>G</literal> is defined to compute gaps only for a
+                                    single data point (so is not "vectorized"),
+                                    <literal>datafit()</literal> automatically performs an explicit
+                                    loop over the set of <literal>Data</literal> columns.
+                                    This makes <literal>datafit()</literal> slower.
+                                </td>
+                            </tr>
+                            <tr valign="top">
                                 <th>g</th>
-                                <td>: (ng x nd) matrix
+                                <td>: result: (ng × nd) matrix; or (ng × 1) column if <literal>G</literal>
+                                    accepts only one data point per call (much slower).
                                     <itemizedlist>
                                         <listitem>
                                             Each column is related to a given data point and retuns its
@@ -171,22 +153,6 @@
                                     </itemizedlist>
                                 </td>
                             </tr>
-                            <tr valign="top">
-                                <th>p</th>
-                                <td>: fitting parameters to be optimized.
-                                    <para/>
-                                </td>
-                            </tr>
-                            <tr valign="top">
-                                <th>Data</th>
-                                <td>: (ndc x nd) matrix: Each column provides the
-                                    <literal>#ndc</literal> coordinates of a given data point.
-                                    If <literal>G</literal> computes gaps only for a single
-                                    data point, <literal>datafit()</literal> will automatically
-                                    loop over the set of <literal>Data</literal> columns.
-                                    This makes <literal>datafit()</literal> slower.
-                                </td>
-                            </tr>
                         </table>
                     </para>
                 </listitem>
@@ -197,7 +163,7 @@
                     (optional) Handle of a function in Scilab language or of a compiled external
                     function, computing the partial of <varname>G</varname> wrt <varname>p</varname>.
                     Its syntax must be like <literal>S = DG(p, Data)</literal>. The expected sizes
-                    of the result are (ng x np x 1) (Data-unvectorized) or (ng x np x nd)
+                    of the result are (ng × np × 1) (Data-unvectorized) or (ng × np × nd)
                     (Data-vectorized).
                     <para/>
                 </listitem>
@@ -205,7 +171,7 @@
             <varlistentry>
                 <term>Wg</term>
                 <listitem>
-                    Optional (ng x ng) matrix of weights of gaps definitions. Default = eye().
+                    Optional (ng × ng) matrix of weights of gaps definitions. Default = eye().
                     <varname>G()</varname> defines as many types of gaps as required.
                     Most often, a unique gap will be computed -- most often the vertical one --,
                     but other ones can be computed (horizontal, nearest distance, etc).
@@ -293,6 +259,33 @@
                     <literal>sqrt(fmin/ng/sum(Wd))</literal>, where fmin is the quadratic residue
                     of the cost function <literal>f</literal> (see the description).
                     <para/>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>iprint</term>
+                <listitem>
+                    <para>scalar used to set the trace mode:
+                        <table>
+                            <tr>
+                                <th>Value</th><th>Action</th>
+                            </tr>
+                            <tr>
+                                <td>0</td><td>nothing (except errors) is reported</td>
+                            </tr>
+                            <tr>
+                                <td>1</td><td>initial and final reports</td>
+                            </tr>
+                            <tr>
+                                <td>2</td><td>adds a report per iteration</td>
+                            </tr>
+                            <tr>
+                                <td>>2</td><td>adds reports on linear search</td>
+                            </tr>
+                        </table>
+                        <warning>
+                            Most of the reports are displayed in the Scilab console.
+                        </warning>
+                    </para>
                 </listitem>
             </varlistentry>
             <varlistentry>

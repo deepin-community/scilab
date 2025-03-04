@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -62,7 +62,7 @@
     <refsection>
         <title>Описание</title>
         <para>
-            <literal>[N,D] = rat(X,tol)</literal> возвращает две матрицы целочисленных значений, такие, что отношение <literal>N./D</literal> близко к <literal>X</literal> в том смысле, что <literal>abs(N./D - X) &lt;= tol*norm(X,1)*abs(X)</literal>.
+            <literal>[N,D] = rat(X,tol)</literal> возвращает две матрицы целочисленных значений, такие, что отношение <literal>N./D</literal> близко к <literal>X</literal> в том смысле, что <literal>abs(N./D - X) &lt;= tol*norm(X,1)</literal>.
         </para>
         <para>
             <literal>y=rat(x,tol)</literal> возвращает частное <literal>N./D</literal>

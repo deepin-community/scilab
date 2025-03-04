@@ -1,6 +1,6 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
-// Copyright (C) 2019 - Stéphane MOTTELET
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
+// Copyright (C) 2019 - UTC - Stéphane MOTTELET
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
@@ -10,8 +10,8 @@
 //
 // <-- Non-regression test for bug 16051 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/16051
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/16051
 //
 // <-- Short Description -->
 // undefined list elements can be of 2 distinct typeof "void" or "listundefined" according to the way they are created

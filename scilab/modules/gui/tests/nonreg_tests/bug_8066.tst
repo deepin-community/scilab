@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Author: Ishit Mehta (ibm)
 // Copyright (C) 2015
 //
@@ -10,8 +10,8 @@
 //
 // <-- Non-regression test for bug 8066 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=8066
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/8066
 //
 // <-- Short Description -->
 //  the x_choose gui should change its behavior: - we should add a "OK" button

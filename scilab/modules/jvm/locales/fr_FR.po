@@ -137,7 +137,7 @@ msgid ""
 "bugzilla.scilab.org/.\n"
 msgstr ""
 "Si vous utilisez une version binaire de Scilab, merci de reporter ce "
-"problème sur http://bugzilla.scilab.org/.\n"
+"problème sur https://gitlab.com/scilab/scilab/-/issues.\n"
 
 #, c-format
 msgid ""

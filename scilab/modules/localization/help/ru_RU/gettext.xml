@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2007 - INRIA - Allan CORNET
  * Copyright (C) 2007 - INRIA - Sylvestre LEDRU
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -16,17 +16,11 @@
  -->
 <refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
         xmlns:svg="http://www.w3.org/2000/svg" xmlns:mml="http://www.w3.org/1998/Math/MathML"
-        xmlns:db="http://docbook.org/ns/docbook" xmlns:scilab="http://www.scilab.org"
+        xmlns:db="http://docbook.org/ns/docbook" xmlns:scilab="https://www.scilab.org"
         xml:lang="ru" xml:id="gettext">
     <refnamediv>
         <refname>gettext</refname>
         <refpurpose>индексирует или/и переводит некоторые индексированные сообщения на английском языке</refpurpose>
-    </refnamediv>
-    <refnamediv xml:id="_">
-        <refname>_</refname>
-        <refpurpose>
-            Псевдоним gettext().
-        </refpurpose>
     </refnamediv>
     <refsynopsisdiv>
         <title>Синтаксис</title>
@@ -39,7 +33,7 @@
             .. gettext(domain, ..)
         </synopsis>
     </refsynopsisdiv>
-    <refsection>
+    <refsection id="gettext_arguments">
         <title>Аргументы</title>
         <variablelist>
             <varlistentry>
@@ -64,7 +58,7 @@
                 <term>msgid</term>
                 <listitem>
                     <para>
-                        один или массив идентификаторов сообщений с учетом регистра (на английском)
+                        одиночный идентификатор или массив идентификаторов сообщений с учетом регистра (на английском)
                         для перевода, в переменной.
                     </para>
                     <warning>
@@ -109,7 +103,7 @@
                         Когда <literal>gettext(domain, msgid)</literal> используется для получения
                         переведённой версии, то <varname>domain</varname>
                         используется для получения пути к директории, где хранятся
-                        переводы,  как это заранее записано с помощью
+                        переводы, как это заранее записано с помощью
                         <literal>addlocalizationdomain(domain, path)</literal>.
                     </para>
                 </listitem>
@@ -118,7 +112,7 @@
     </refsection>
     <refsection>
         <title>Описание</title>
-        <refsect3>
+        <refsect3 id="gettext_processing">
         <title>Сбор сообщений и общая обработка</title>
         <para>
             <emphasis role="italic">gettext</emphasis> является свободным и открытым
@@ -147,9 +141,9 @@
                     <para>
                         В качестве входного аргумента <literal>gettext</literal> собираются
                         только <emphasis role="bold">одиночные литеральные сообщения и сообщения
-                        одним куском</emphasis>. Следовательно следующие синтаксисы и случае не
-                        будут индексировать рассматриваемые сообщения и в дальнейшем не будут
-                        доступны версии перевода:
+                        одним куском</emphasis>. Таким образом, некоторые из следующих синтаксисов
+                        и случаев не будут индексировать рассматриваемое сообщение, и для них не будут
+                        доступны дополнительные переведенные версии:
                     </para>
                     <para>
                         <table>
@@ -249,6 +243,21 @@ gettext(["item#1" ;
                                     Также как и #8. Обратите внимание на точку с запятой. Без неё это будет случай ошибки #7.
                                 </td>
                             </tr>
+                            <tr valign="top">
+                                <th>10</th>
+                                <td style="white-space:pre"><screen><![CDATA[
+// gettext("item")
+/* gettext("item #2") */
+/*
+   gettext("item #3")
+*/
+]]></screen>
+                                </td>
+                                <td>OK</td>
+                                <td>
+                                    расположения gettext() в комментариях также индексируются.
+                                </td>
+                            </tr>
                         </table>
                     </para>
                     <important>
@@ -340,7 +349,7 @@ gettext(["item#1" ;
         </warning>
         </refsect3>
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-        <refsect3>
+        <refsect3 id="gettext_msgid">
             <title>msgid сообщения</title>
             <para>
                 Для корректной обработки сообщения на английском должны соответствовать
@@ -401,66 +410,118 @@ gettext(["item#1" ;
             </para>
         </refsect3>
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-        <refsect3>
-            <title>msgstr translated messages</title>
+        <refsect3 id="gettext_msgstr">
+            <title>переведённые сообщения msgstr</title>
             <para>
-                This section will be more useful for translaters than for actual users.
+                Этот раздел будет в основном полезен тем, кто занимается переводом сообщений.
             </para>
             <para>
-                When an english msgid message includes some C-like placeholders,
-                this always means that in the code the <varname>translated</varname> message
-                is processed with msprintf() to replace placeholders with actual values.
-                Hence, <emphasis>the order and type of placeholders indicate the order and
-                types of actual input values when calling msprintf</emphasis>.
-                </para>
-                <para>
-                This is of first importance for translaters, when writing the corresponding
-                <varname>translated</varname> message:
-                <itemizedlist>
+                <emphasis role="bold">Special characters and sequences</emphasis>:
+                <orderedlist>
                     <listitem>
-                        If placeholders are not numbered: they must be in the same order and
-                        types in the <varname>translated</varname> <literal>msgstr</literal>
-                        message than in the <varname>msgid</varname> message. Example (english to french):
-                        <screen>
+                        When a <emphasis role="bold">trailing \n</emphasis> is used in the
+                        <literal>msgid</literal>, it must also end the <literal>msgstr</literal>
+                        translated message.
+                        <para/>
+                    </listitem>
+                    <listitem>
+                        <emphasis role="bold">' single quotes</emphasis> are regular characters in
+                        <literal>msgstr</literal> strings. They do NOT need any special care or
+                        protection.
+                        <para/>
+                    </listitem>
+                    <listitem>
+                        <emphasis role="bold">" double quotes</emphasis> must be protected with \".
+                        <para/>
+                    </listitem>
+                    <listitem>
+                        <emphasis role="bold">
+                        When some C-like placeholders like %s, %d, %f, or some C-like escaped
+                        sequences \n, \r, or \t</emphasis> are used in the <literal>msgid</literal>
+                        string, this means that later in the code the corresponding
+                        <varname>translated</varname>
+                        <literal>msgstr</literal> string is processed with <literal>msprintf()</literal>
+                        to replace placeholders with actual values, and/or to interpret \n as a
+                        new_line character, \r as a carriage-return, \t as a tabulation, etc.
+                        Hence, all the <link linkend="printf_conversion">C-like printf</link> rules
+                        apply on the considered <literal>msgstr</literal>, and translaters must take
+                        a major care to them.
+                        <itemizedlist>
+                            <listitem>
+                                <emphasis>All and Only</emphasis> the placeholders used in the
+                                <literal>msgid</literal> must also appear in the <literal>msgstr</literal>.
+                                <para/>
+                            </listitem>
+                            <listitem>
+                                If placeholders are not numbered: they must appear in the same order
+                                in the <varname>translated</varname> <literal>msgstr</literal>
+                                message than in the <varname>msgid</varname> message.
+                                Example (english to french):
+                                <screen>
 msgid  "%s is %d year old.\n"
 msgstr "%s a %d ans.\n"
-// first %s (a string), second %d (a decimal number), in both strings.
+// первый %s (строка), второй %d (десятичное число), в обоих строках.
 
-Then, from a Scilab session set to french, we will get
+Затем из Scilab-сессии установим французский язык и тогда получим
 gettext("%s is %d year old.\n") // => "%s a %d ans.\n"
-// and                                     first v      v second
+// и                                     первый v      v второй
 t = msprintf(gettext("%s is %d year old.\n"), "Peter", 18)
 // => "Peter a 18 ans."
 </screen>
-                    </listitem>
-                    <listitem>
-                        <para>
-                            Otherwise, <emphasis>All</emphasis> placeholders must be numbered in the
-                            <varname>translated</varname> message. Each numbered placeholder can
-							be used only once in the format (Scilab limitation).
-                            Example (english to japanese):
-                            <screen>
+                                <para/>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                В противном случае, <emphasis>ВСЕ</emphasis> заменители должны быть пронумерованы
+                                в переведённом сообщении <varname>translated</varname>. Каждый пронумерованный
+                                заменитель может быть использован только один раз в формате (ограничение Scilab).
+                                Например (с английского на японский):
+                                <screen>
 msgid "%s: Wrong number of input argument: %d to %d expected.\n"
 msgstr "%1$s: 入力引数で不正な数: %3$d への %2$d を想定します。\n"
 
-Then,
+Тогда,
 msprintf(gettext("%s: Wrong number of input argument: %d to %d expected.\n"), "myFun", 2, 5)
 
-will return in a Scilab session set to english
+вернёт в Scilab-сессию, установленную на английский
 "myFun: Wrong number of input argument: 2 to 5 expected."
 
-while, in a Scilab session set to japanese
+а в Scilab-сессии, установленной на японский
 "myFun: 入力引数で不正な数: 5 への 2 を想定します。"
 </screen>
-                        </para>
+                                </para>
+                            </listitem>
+                        </itemizedlist>
                     </listitem>
-                </itemizedlist>
+                    <listitem>
+                        <emphasis role="bold">\n, \r, \t</emphasis> sequences fortuitously appearing
+                        in a <literal>msgid</literal> ending with "\n" should be considered as prone
+                        to issues, due to a lack of care from the programmer. This can occur for
+                        instance when some literal paths are part of the <literal>msgid</literal>,
+                        like in
+                        <para/>
+                        <literal>msgid "Please use the file C:\users\you\net\record\time.txt instead.\n"</literal>
+                        <para/>
+                        The trailing <literal>\n</literal> suggests that the corresponding
+                        <literal>msgstr</literal>
+                        will be processed by <literal>msprintf()</literal> or so. Being done,
+                        <literal>\n</literal> in <literal>\net</literal>,
+                        <literal>\r</literal> in <literal>\record</literal> and
+                        <literal>\t</literal> in <literal>\time.txt</literal> will be also
+                        -- unexpectedly -- interpreted. These <literal>\</literal> will have
+                        to be protected in the <literal>msgstr</literal>, even in the reference
+                        version (often english):
+                        <para/>
+                        <literal>msgstr "Please use the file C:\users\you\\net\\record\\time.txt instead.\n"</literal>:
+                        <para/>
+                    </listitem>
+                </orderedlist>
             </para>
         </refsect3>
     </refsection>
     <refsection>
         <title>Примеры</title>
-        <programlisting role="example"><![CDATA[
+        <programlisting role="example" id="gettext_example_1"><![CDATA[
 setlanguage("fr");
 
 // Идентификаторы сообщений чувствительны к регистру:
@@ -498,7 +559,7 @@ _("Sunday")
         Использование домена: Здесь "tbx" это предопределённый домен, используемый для
         проверки возможности перевода:
     </para>
-        <programlisting role="example"><![CDATA[
+        <programlisting role="example" id="gettext_example_2"><![CDATA[
 setlanguage("fr");
 msg = "%s: something not in Scilab.\n";  // неизвестный в главном домене для Scilab:
 gettext(msg)          // поэтому он выдаётся как есть.
@@ -544,9 +605,9 @@ msg = "%s: No more memory.\n";
 ]]></screen>
     <para/>
     <para>
-        Messages with numbered C-like placeholders:
+        Сообщения с нумерованными C-подобными заменителями:
     </para>
-        <programlisting role="example"><![CDATA[
+        <programlisting role="example" id="gettext_example_3"><![CDATA[
 in = getlanguage();
 msg = "%s: Unknown value %s for %s option"; // has already some translations
 setlanguage("en");
@@ -616,7 +677,7 @@ setlanguage(in);
             <revision>
                 <revnumber>6.1.0</revnumber>
                 <revdescription>
-                    C-like placeholders in messages can now be numbered.
+                    Теперь C-подобные заменители в сообщениях могут быть нумерованными.
                 </revdescription>
             </revision>
         </revhistory>

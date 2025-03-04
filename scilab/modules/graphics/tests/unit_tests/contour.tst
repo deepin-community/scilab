@@ -1,38 +1,51 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2011 - DIGITEO - Michael Baudin
+// Copyright (C) 2014 - Scilab Enterprises - Anais AUBERT
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
 
 // <-- TEST WITH GRAPHIC -->
+funcprot(0);
+//
+// Test #0: the demo
+h = scf();
+contour ( );
+close(h);
+//
+// Test #1: use a function
+function [ f , g , H ] = rosenbrock ( x )
+    f = 100.0 *( x (2) - x (1)^2)^2 + (1 - x (1))^2;
+endfunction
 
-//
-// Test #1
+function f = rosenbrockC ( x1 , x2 )
+    f = rosenbrock ( [x1 , x2 ]' )
+endfunction
+
+xdata = linspace ( -2 , 2 , 100 );
+ydata = linspace ( -1 , 2 , 100 );
 h = scf();
-contour2d(1:10,1:10,rand(10,10),5,rect=[0,0,11,11]);
+contour ( xdata , ydata , rosenbrockC , [2 10 100 500 1000 2000] );
+close(h);
+//
+// Test #2: use a function
+t=linspace(-%pi,%pi,30);
+function z=my_surface(x, y)
+   z=x*sin(x)^2*cos(y)
+endfunction
+
+h = scf();
+contour(t,t,my_surface,10)
 // changing the format of the printing of the levels
-xset("fpf","%.2f")
 clf()
-contour2d(1:10,1:10,rand(10,10),5,rect=[0,0,11,11]);
+contour(t,t,my_surface,10,fpf="%.1f")
 close(h);
 //
-// Test #2
-// now an example with level numbers drawn in a legend
-// Caution there are a number of tricks...
-x = linspace(0,4*%pi,80);
-z = cos(x')*cos(x);
+// Test #3: use data
 h = scf();
-f=gcf();
-xset("fpf"," ")  // trick 1: this implies that the level numbers are not
-//          drawn on the level curves
-f.color_map=jetcolormap(7);
-// trick 2: to be able to put the legend on the right without
-//          interfering with the level curves use rect with a xmax
-//          value large enough
-contour2d(x,x,z,-0.75:0.25:0.75,frameflag=3,rect=[0,0,5*%pi,4*%pi]);
-// trick 3: use legends (note that the more practical legend function
-//          will not work as soon as one of the level is formed by 2 curves)
-legends(string(-0.75:0.25:0.75),1:7,"lr");
-xtitle("Some level curves of the function cos(x)cos(y)");
+z=feval(t,t,my_surface);
+contour(t,t,z+0.2*abs(z),20,flag=[0 2 4]);
 close(h);
+
+funcprot(1);

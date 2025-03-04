@@ -1,5 +1,5 @@
 ;
-; Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+; Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 ; Copyright (C) INRIA - Allan CORNET
 ; Copyright (C) DIGITEO - 2010 - Allan CORNET
 ;
@@ -38,7 +38,9 @@ Source: modules\{#SPARSE}\macros\cleanmacros.bat; DestDir: {app}\modules\{#SPARS
 Source: modules\{#SPARSE}\macros\lib; DestDir: {app}\modules\{#SPARSE}\macros; Components: {#COMPN_SCILAB}
 Source: modules\{#SPARSE}\macros\*.sci; DestDir: {app}\modules\{#SPARSE}\macros; Components: {#COMPN_SCILAB}
 Source: modules\{#SPARSE}\macros\*.bin; DestDir: {app}\modules\{#SPARSE}\macros; Components: {#COMPN_SCILAB};
-
+;
+Source: modules\{#SPARSE}\demos\*.*; DestDir: {app}\modules\{#SPARSE}\demos; Flags: recursesubdirs; Components: {#COMPN_SCILAB}
+;
 Source: modules\{#SPARSE}\tests\*.*; DestDir: {app}\modules\{#SPARSE}\tests; Flags: recursesubdirs; Components: {#COMPN_SCILAB} and {#COMPN_TESTS}
 ;
 ;--------------------------------------------------------------------------------------------------------------

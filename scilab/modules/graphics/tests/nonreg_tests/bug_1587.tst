@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2006-2008 - INRIA - Jean-Baptiste SILVY <jean-baptiste.silvy@inria.fr>
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -10,8 +10,8 @@
 
 // <-- Non-regression test for bug 1587 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=1587
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/1587
 //
 // <-- Short Description -->
 //    Changing the colormap with the graphic editor of a not selected figure do not
@@ -25,12 +25,12 @@ f1 = gcf() ;
 plot3d ;
 
 f2 = scf() ;
-hc = jetcolormap(21) ;
+hc = jet(21) ;
 f2.color_map = hc ;
 plot3d ;
 
 // change the colormap of the first window
-jc = jetcolormap(45) ;
+jc = jet(45) ;
 f.color_map = jc ;
 
 // check that the colormaps are well copied

@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009 - DIGITEO - Allan CORNET
  * Copyright (C) 2010 - Calixte DENIZET
  *
@@ -155,6 +155,10 @@ public final class SaveFile {
             fOut.createNewFile();
             if (backupOut != null) {
                 backupOut.createNewFile();
+                SciNotesOptions.Autosave as = SciNotesOptions.getSciNotesAutosave();
+                if (as.automaticDelete) {
+                    textPane.addToRemove(backupOut);
+                }
             }
         } catch (IOException e) {
             System.err.println(e);

@@ -99,7 +99,7 @@ function [x,y,typ]=EXPRESSION(job,arg1,arg2)
                             graphics.exprs=exprs;
 
                             // Protecting ^{.} groups for LaTeX after num and den
-                            // have been generated: http://bugzilla.scilab.org/14551
+                            // have been generated: https://gitlab.com/scilab/scilab/-/issues/14551
                             // and other protections and display improvements:
                             lab = expr2LaTeX(exprs(2));
                             tmp = [

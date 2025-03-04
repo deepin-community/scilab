@@ -1,10 +1,11 @@
 #
-# Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+# Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 # Copyright (C) INRIA - 2006-2008 - Sylvestre Ledru
 # Copyright (C) DIGITEO - 2009-2011 - Sylvestre Ledru
 # Copyright (C) DIGITEO - 2009 - Pierre MARECHAL <pierre.marechal@scilab.org>
 # Copyright (C) Scilab Enterprises - 2014 - Clement DAVID <clement.david@scilab-enterprises.com>
 # Copyright (C) ESI Group - 2018 - Clement DAVID <clement.david@scilab-enterprises.com>
+# Copyright (C) Dassault Systèmes - 2023 - Clement DAVID <clement.david@3ds.com>
 #
 # Copyright (C) 2012 - 2016 - Scilab Enterprises
 #
@@ -20,8 +21,8 @@ dnl Process this file with autoconf to produce a configure script.
 
 
 AC_REVISION($Revision$)dnl
-AC_INIT([Scilab],[6],[http://bugzilla.scilab.org/])
-AC_PREREQ(2.69)
+AC_INIT([Scilab],[6],[https://gitlab.com/scilab/scilab/-/issues])
+AC_PREREQ([2.71])
 AC_CONFIG_MACRO_DIR([m4])
 
 SCI_BUILDDIR="`pwd`"
@@ -41,9 +42,10 @@ else
     DEVTOOLS_LIBDIR=
 fi
 
-SCILAB_VERSION_MAJOR=6
+# Change version here, other files will be updated at the end of configure
+SCILAB_VERSION_MAJOR=2024
 SCILAB_VERSION_MINOR=1
-SCILAB_VERSION_MAINTENANCE=1
+SCILAB_VERSION_MAINTENANCE=0
 AC_SUBST(SCILAB_VERSION_MAJOR)
 AC_SUBST(SCILAB_VERSION_MINOR)
 AC_SUBST(SCILAB_VERSION_MAINTENANCE)
@@ -84,7 +86,7 @@ AC_CONFIG_HEADERS([modules/core/includes/machine.h])
 AC_PROG_LN_S
 AM_PROG_AR
 
-AC_CUSTOM_LARGE_FILE
+AC_SYS_LARGEFILE
 
 # In order to be able to change the scilab directory
 # See http://wiki.debian.org/RpathIssue
@@ -169,44 +171,6 @@ AC_ARG_ENABLE(build-parser,
 AC_PROG_CPP
 AC_PROG_GREP
 
-######
-#### Mac OS X set of fink path with provided
-######
-
-AC_ARG_WITH(fink_prefix,
-AS_HELP_STRING([--with-fink-prefix],[Provide a fink prefix. Default: /sw/ ]))
-# Need MacosX Version to specify some path.
-case "$host_os" in
-     *Darwin* | *darwin*)
-               AC_GET_MACOSX_VERSION
-     ;;
-esac
-
-case "$host" in
-    *darwin*)
-        if test -n "$with_fink_prefix"; then
-            # If with-fink-prefix is provided, use the provided path to make sure that we will
-            # use it to detect dependencies (for example, gfortran is not provided in xcode.
-            # Therefor, we use the one in fink)
-            FINK_PREFIX="$with_fink_prefix/"
-
-            # Exec the init script of fink to make sure that the env is set
-            if test -f $with_fink_prefix/bin/init.sh; then
-                echo "source $with_fink_prefix/bin/init.sh executed to set the env"
-                source $with_fink_prefix/bin/init.sh
-            else
-                AC_MSG_WARN([Could not find the fink init.sh script: $with_fink_prefix/bin/init.sh])
-            fi
-        else
-            FINK_PREFIX="/sw/"
-        fi
-
-        #Append to the default flags on Apple machines
-        CPPFLAGS="$CPPFLAGS -I$FINK_PREFIX/include/"
-        LDFLAGS="$LDFLAGS -L$FINK_PREFIX/lib/"
-        ;;
-esac
-
 AC_ARG_WITH(min_macosx_version,
 AS_HELP_STRING([--with-min-macosx-version],[Force compilers to generate binaries compatible with MacOSX minimal version.]))
 case "$host" in
@@ -228,7 +192,13 @@ esac
 #####################################################
 ## Look for pkg-config
 #####################################################
+AC_MSG_CHECKING([if prebuilt binaries are available])
+if $WITH_DEVTOOLS; then
+AC_MSG_RESULT([WITH_DEVTOOLS: $SCI_SRCDIR_FULL/usr])
+else
+AC_MSG_RESULT([no])
 PKG_PROG_PKG_CONFIG
+fi
 
 #####################################################
 ## check if options are correct (or not)
@@ -365,19 +335,19 @@ else
 fi
 
 if test "$enable_debug_fortran" = yes; then
-   FFLAGS="`echo "$FFLAGS"| sed -e 's|-O[0-9+]|-O0|'`"
+   FFLAGS="`echo "$FFLAGS"| sed -e 's|-O[[0-9+]]|-O0|'`"
 else
    enable_debug_fortran=no
 fi
 
 if test "$enable_debug_C" = yes; then
-   CFLAGS="`echo "$CFLAGS"| sed -e 's|-O[0-9+]|-O0|'`"
+   CFLAGS="`echo "$CFLAGS"| sed -e 's|-O[[0-9+]]|-O0|'`"
 else
    enable_debug_C=no
 fi
 
 if test "$enable_debug_CXX" = yes; then
-   CXXFLAGS="`echo "$CXXFLAGS"| sed -e 's|-O[0-9+]|-O0|'`"
+   CXXFLAGS="`echo "$CXXFLAGS"| sed -e 's|-O[[0-9+]]|-O0|'`"
 else
    enable_debug_CXX=no
 fi
@@ -394,10 +364,10 @@ if test "x${prefix}" = "xNONE"; then
 fi
 
 ###############################
-## get the version
+## get the version commited
 ###############################
 
-SCIVERSION=`cat $SCI_SRCDIR/Version.incl | sed -e "s/SCIVERSION=//" `
+SCIVERSION=$(sed -e "s/SCIVERSION=//" $SCI_SRCDIR/Version.incl)
 
 #############################################
 ## Compilers and options according to machine
@@ -537,29 +507,77 @@ if test -z "$CXX"; then
 fi
 
 case "$CXX" in
-    g++-* | g++ | ccache*g++ | ccache*g++-* )
-        ## With GNU C++ Compiler
+g++-* | g++ | ccache*g++ | ccache*g++-* )
+    ## With GNU C++ Compiler
 
-        # enable the code coverage
-        if test "$enable_code_coverage" = yes; then
-            CODECOVERAGE_CXXFLAGS="-fprofile-arcs -ftest-coverage"
-        fi
+    # enable the code coverage
+    if test "$enable_code_coverage" = yes; then
+        CODECOVERAGE_CXXFLAGS="-fprofile-arcs -ftest-coverage"
+    fi
 
-        if test "$enable_debug_CXX" = yes; then
-            DEBUG_CXXFLAGS="-Wall -Wextra -O0 -g3"
-            case "$host" in
-                *-linux-gnu )
-                    # Only doing that under Linux
-                    DEBUG_CXXFLAGS="$DEBUG_CXXFLAGS -fdiagnostics-show-option -Werror=format-security"
-                ;;
-            esac
-        else
-            DEBUG_CXXFLAGS="-DNDEBUG -g1 -O2"
-        fi
-        COMPILER_CXXFLAGS="$COMPILER_CXXFLAGS -fno-stack-protector " # bug 3131
+    if test "$enable_debug_CXX" = yes; then
+        DEBUG_CXXFLAGS="-Wall -Wextra -Wno-unused-parameter -O0 -g3"
+        case "$host" in
+        *-linux-gnu )
+            # Only doing that under Linux
+            DEBUG_CXXFLAGS="$DEBUG_CXXFLAGS -fdiagnostics-show-option -Werror=format-security"
+            ;;
+        esac
+    else
+        DEBUG_CXXFLAGS="-DNDEBUG -g1 -O2"
+    fi
+    COMPILER_CXXFLAGS="$COMPILER_CXXFLAGS -fno-stack-protector " # bug 3131
+    # add the extra filesystem library if needed
+    if test "$($CXX -dumpversion |cut -d\. -f1)" -lt "9" ; then
+        COMPILER_LDFLAGS="$COMPILER_LDFLAGS -lstdc++fs" 
+    fi
     ;;
 
+*clang++ | clang++*)
+    # enable the code coverage
+    if test "$enable_code_coverage" = yes; then
+        CODECOVERAGE_CXXFLAGS="-fprofile-arcs -ftest-coverage"
+    fi
+    if test "$enable_debug_CXX" = yes; then
+        DEBUG_CXXFLAGS="-Wall -Wextra -Wno-unused-parameter -O0 -g3"
+    else
+        DEBUG_CXXFLAGS="-DNDEBUG -g1 -O2"
+    fi
+    COMPILER_CXXFLAGS="$COMPILER_CXXFLAGS -fno-stack-protector " # bug 3131
+    # allow to compile under macOS < Catalina with c++17 enabled clang
+    # or compile under macOS > Catalina with min_macosx_version < 11
+    case "$host_os" in
+         *Darwin* | *darwin*)
+           macosx_version=`sw_vers -productVersion`
+           case $macosx_version in
+               10.*)
+                   macosx_version_minor=`echo $macosx_version | awk -F\. {'print $2'}`
+                   if [[ $macosx_version_minor -lt 15 ]]; then
+                       COMPILER_CXXFLAGS="$COMPILER_CXXFLAGS -D_LIBCPP_DISABLE_AVAILABILITY"
+                   fi
+               ;;
+               *)
+                   if test -n "$with_min_macosx_version"; then
+                        min_macosx_version_major=`echo $with_min_macosx_version | awk -F\. {'print $1'}`
+                        min_macosx_version_minor=`echo $with_min_macosx_version | awk -F\. {'print $2'}`
+                        if [[ $min_macosx_version_major -eq 10 ]]; then
+                            COMPILER_CXXFLAGS="$COMPILER_CXXFLAGS -D_LIBCPP_DISABLE_AVAILABILITY"
+                            if [[ $min_macosx_version_minor -ge 13 ]]; then
+                                # fmemopen() appeared in macos >= 10.13
+                                SYS_FMEMOPEN=1
+                            fi
+                        fi
+                        
+                    fi
+                ;;
+           esac
+           ;;
+    esac    
+    ;;
 esac
+
+AM_CONDITIONAL(IS_SYS_FMEMOPEN, test -n "$SYS_FMEMOPEN")
+
 
 #### 64 bits detection
 IS_64_BITS_CPU=false
@@ -572,139 +590,158 @@ esac
 ##########"
 
 case "$CC" in
-     gcc-* | gcc | ccache*gcc | ccache*gcc-* )
-   ## With GNU Compiler
+gcc-* | gcc | ccache*gcc | ccache*gcc-* )
+    ## With GNU Compiler
 
-   # enable the code coverage
-   if test "$enable_code_coverage" = yes; then
-    CODECOVERAGE_CFLAGS="-fprofile-arcs -ftest-coverage"
-   fi
+    # enable the code coverage
+    if test "$enable_code_coverage" = yes; then
+        CODECOVERAGE_CFLAGS="-fprofile-arcs -ftest-coverage"
+    fi
 
-   if test "$enable_debug_C" = yes; then
-      DEBUG_CFLAGS="-Wall -Wextra -O0 -g3"
-      # used to be -O0
-      case "$host" in
-      *-linux-gnu )
-      # Only doing that under Linux
-        if test "$enable_debug_linker" = yes; then
-            LDFLAGS="$LDFLAGS -Wl,--warn-common,-x"
-        fi
-          DEBUG_CFLAGS="$DEBUG_CFLAGS -fdiagnostics-show-option -Werror=format-security"
-          ;;
-          esac
-   else
-      DEBUG_CFLAGS="-DNDEBUG -g1 -O2"
-   fi
+    if test "$enable_debug_C" = yes; then
+        DEBUG_CFLAGS="-Wall -Wextra -Wno-unused-parameter -O0 -g3"
+        # used to be -O0
+        case "$host" in
+        *-linux-gnu )
+            # Only doing that under Linux
+            if test "$enable_debug_linker" = yes; then
+                LDFLAGS="$LDFLAGS -Wl,--warn-common,-x"
+            fi
+            DEBUG_CFLAGS="$DEBUG_CFLAGS -fdiagnostics-show-option -Werror=format-security"
+            ;;
+        esac
+    else
+        DEBUG_CFLAGS="-DNDEBUG -g1 -O2"
+    fi
 
-   COMPILER_CFLAGS="$COMPILER_CFLAGS -fno-stack-protector " # bug 3131
-   # Explictly disable the as needed. It was disable by default but Ubuntu
-   # activated it by default since release 11.04. See bug #8961.
-   # Once all cyclic dependencies have been dropped, this line could be removed.
-   # Check if linker supports --as-needed and --no-as-needed options
-   if $LD --help 2>/dev/null | grep no-as-needed > /dev/null; then
-      LDFLAGS="$LDFLAGS -Wl,--no-as-needed"
-   fi
+    COMPILER_CFLAGS="$COMPILER_CFLAGS -fno-stack-protector " # bug 3131
+    # Explictly disable the as needed. It was disable by default but Ubuntu
+    # activated it by default since release 11.04. See bug #8961.
+    # Once all cyclic dependencies have been dropped, this line could be removed.
+    # Check if linker supports --as-needed and --no-as-needed options
+    if $LD --help 2>/dev/null | grep no-as-needed > /dev/null; then
+        COMPILER_LDFLAGS="$COMPILER_LDFLAGS -Wl,--no-as-needed"
+    fi
 
-
-   case "$host" in
-     x86_64-*-linux-gnu | x86_64-linux-gnu)
+    case "$host" in
+    x86_64-*-linux-gnu | x86_64-linux-gnu)
         ARCH_CFLAGS="-m64"
-    ;;
-     alpha-*-linux-gnu)
+        ;;
+    alpha-*-linux-gnu)
         ARCH_CFLAGS="-mieee-with-inexact"
         ARCH_LDFLAGS="-mieee-with-inexact"
-    ;;
-     powerpc-*-linux-gnu)
+        ;;
+    powerpc-*-linux-gnu)
         ARCH_CFLAGS="-D_GNU_SOURCE"
-    ;;
-     *-*-solaris*)
+        ;;
+    *-*-solaris*)
         ARCH_CFLAGS="-DSVR4 -DSYSV -Dsolaris"
-    ;;
-   *-*-freebsd*)
-     ARCH_CFLAGS="-Dfreebsd"
-     ARCH_LDFLAGS="-lm"
-     ;;
+        ;;
+    *-*-freebsd*)
+        ARCH_CFLAGS="-Dfreebsd"
+        ARCH_LDFLAGS="-lm"
+        ;;
 
-  alpha-*-netbsd*)
-    ARCH_CFLAGS="-Dnetbsd -mieee"
-    ARCH_FFLAGS="-Dnetbsd -mieee"
-    ;;
+    alpha-*-netbsd*)
+        ARCH_CFLAGS="-Dnetbsd -mieee"
+        ARCH_FFLAGS="-Dnetbsd -mieee"
+        ;;
 
-  *-*-netbsd*)
-    ARCH_CFLAGS="-Dnetbsd"
-    ;;
+    *-*-netbsd*)
+        ARCH_CFLAGS="-Dnetbsd"
+        ;;
 
-  *-*-darwin*)
-    # Flag no more added since :
-    #  - No more supported in recent gcc versions (> 4.6)
-    #  - only needed when compiling with flag -mmacosx-min-version=10.5
-    #ARCH_CFLAGS="$ARCH_CFLAGS -no_compact_linkedit"
-    #ARCH_CXXFLAGS="$ARCH_CXXFLAGS -no_compact_linkedit"
-    #ARCH_LDFLAGS="$ARCH_LDFLAGS -no_compact_linkedit"
-    # We need this to be passed to all linker commands
-    #LDFLAGS="$LDFLAGS -no_compact_linkedit"
+    *-*-darwin*)
+        # Flag no more added since :
+        #  - No more supported in recent gcc versions (> 4.6)
+        #  - only needed when compiling with flag -mmacosx-min-version=10.5
+        #ARCH_CFLAGS="$ARCH_CFLAGS -no_compact_linkedit"
+        #ARCH_CXXFLAGS="$ARCH_CXXFLAGS -no_compact_linkedit"
+        #ARCH_LDFLAGS="$ARCH_LDFLAGS -no_compact_linkedit"
+        # We need this to be passed to all linker commands
+        #LDFLAGS="$LDFLAGS -no_compact_linkedit"
 
-    case "$F77" in
-         gfortran-*|gfortran)
-             # Extract from gfortran -v the version it has been built for
-               MAC_DETECTED_ARCH="`$F77 -v 2>&1|grep "Target:"|sed -e "s/Target: \([[a-z0-9A-Z_]]*\).*/\1/g"`"
-               if test "$MAC_DETECTED_ARCH" == "aarch64"; then
-                   MAC_DETECTED_ARCH=arm64
-               fi
-         ;;
-         *)
-        AC_MSG_WARN([gfortran not used. Could not detect the architecture. Switch to the default case: x86_64])
-        MAC_DETECTED_ARCH="x86_64"
-         ;;
-    esac
-    CC="$CC -arch $MAC_DETECTED_ARCH"
-    CXX="$CXX -arch $MAC_DETECTED_ARCH"
-    ;;
-esac
-;; # end of the gcc case on the $CC
-   *)
+        case "$F77" in
+        gfortran-*|gfortran)
+            # Extract from gfortran -v the version it has been built for
+            MAC_DETECTED_ARCH="`$F77 -v 2>&1|grep "Target:"|sed -e "s/Target: \([[a-z0-9A-Z_]]*\).*/\1/g"`"
+            if test "$MAC_DETECTED_ARCH" == "aarch64"; then
+                MAC_DETECTED_ARCH=arm64
+            fi
+            ;;
+        *)
+            AC_MSG_WARN([gfortran not used. Could not detect the architecture. Switch to the default case: x86_64])
+            MAC_DETECTED_ARCH="x86_64"
+            ;;
+        esac
+        CC="$CC -arch $MAC_DETECTED_ARCH"
+        CXX="$CXX -arch $MAC_DETECTED_ARCH"
+        ;;
+    esac # end of case "$host"
+    ;; # end of the gcc case on the $CC
 
-        ## CC compiler (not GCC)
-        if test "$enable_debug_C" != yes; then
-             ARCH_CFLAGS="-DNDEBUG"
-        fi
-
-case "$host" in
-# Dec Alpha OSF 4
-  alpha*-dec-osf4.*)
-      ARCH_CFLAGS="-std -ieee_with_inexact"
-      ARCH_LDFLAGS="-ieee_with_inexact"
-      ;;
-  alpha*-dec-osf*)
-      ARCH_CFLAGS="-ieee_with_inexact"
-      ARCH_LDFLAGS="-ieee_with_inexact"
-      ;;
-  rs6000-*-*) # IBM AIX RS 6000 (NO LONGER SUPPORTED)
-    ARCH_CFLAGS="-Daix -DSYSV"
-  ;;
-  mips-sgi-irix*) # SGI
-    ARCH_CFLAGS="-DSYSV -DSVR4"
-  ;;
-  *-*-hpux9.*)
-    ARCH_CFLAGS="-DSYSV -Dhpux"
-  ;;
-  *-*-hpux10.*) # HP 10
-    if test "$enable_debug_C" = yes; then
-      ARCH_CFLAGS="-DSYSV -Dhpux"
-    else
-      ARCH_CFLAGS="-DSYSV -Dhpux +Z +DAportable"
+*clang | clang*)
+    # enable the code coverage
+    if test "$enable_code_coverage" = yes; then
+        CODECOVERAGE_CFLAGS="-fprofile-arcs -ftest-coverage"
     fi
-  ;;
+    if test "$enable_debug_C" = yes; then
+        DEBUG_CFLAGS="-Wall -Wextra -Wno-unused-parameter -O0 -g3"
+        # used to be -O0
+    else
+        DEBUG_CFLAGS="-DNDEBUG -g1 -O2"
+    fi
+    COMPILER_CFLAGS="$COMPILER_CFLAGS -fno-stack-protector " # bug 3131
+    # prevent dll optimizations in the final binary
+    case "$host_os" in
+        *Darwin* | *darwin*)
+            LDFLAGS="${LDFLAGS//-Wl,-dead_strip_dylibs/}"
+            ;;            
+    esac    
+    ;;  #  end of the clang case on the $CC
+   
+*)
+    ## CC compiler (not GCC)
+    if test "$enable_debug_C" != yes; then
+        DEBUG_CFLAGS="-DNDEBUG"
+    fi
 
-  *-*-hpux11.*) # HP 11
-    ARCH_CFLAGS="-DSYSV -Dhpux -Dhppa +Z +DAportable"
-  ;;
-  *-*-solaris*) # SUN SOLARIS
-    ARCH_CFLAGS="-DSVR4 -DSYSV -Dsolaris -I/usr/local/include/"
-    ARCH_LDFLAGS="-L/usr/local/lib/"
-  ;;
-esac
-;; # end of not a gcc compiler
+    case "$host" in
+        # Dec Alpha OSF 4
+    alpha*-dec-osf4.*)
+        ARCH_CFLAGS="-std -ieee_with_inexact"
+        ARCH_LDFLAGS="-ieee_with_inexact"
+        ;;
+    alpha*-dec-osf*)
+        ARCH_CFLAGS="-ieee_with_inexact"
+        ARCH_LDFLAGS="-ieee_with_inexact"
+        ;;
+        rs6000-*-*) # IBM AIX RS 6000 (NO LONGER SUPPORTED)
+        ARCH_CFLAGS="-Daix -DSYSV"
+        ;;
+        mips-sgi-irix*) # SGI
+        ARCH_CFLAGS="-DSYSV -DSVR4"
+        ;;
+    *-*-hpux9.*)
+        ARCH_CFLAGS="-DSYSV -Dhpux"
+        ;;
+        *-*-hpux10.*) # HP 10
+        if test "$enable_debug_C" = yes; then
+            ARCH_CFLAGS="-DSYSV -Dhpux"
+        else
+            ARCH_CFLAGS="-DSYSV -Dhpux +Z +DAportable"
+        fi
+        ;;
+
+        *-*-hpux11.*) # HP 11
+        ARCH_CFLAGS="-DSYSV -Dhpux -Dhppa +Z +DAportable"
+        ;;
+        *-*-solaris*) # SUN SOLARIS
+        ARCH_CFLAGS="-DSVR4 -DSYSV -Dsolaris -I/usr/local/include/"
+        ARCH_LDFLAGS="-L/usr/local/lib/"
+        ;;
+    esac
+    ;; # end of not a gcc compiler
 esac
 
 
@@ -727,6 +764,11 @@ AM_CONDITIONAL(ENABLE_DEBUG, test "$enable_debug" = yes)
 SCILIBS_CFLAGS=''
 SCILIBS_CXXFLAGS=''
 SCILIBS_FFLAGS=''
+SCILIBS_LDFLAGS=''
+if $WITH_DEVTOOLS; then
+    # with devtools the needed dependencies are all there, discard private dependencies
+    SCILIBS_LDFLAGS='-Wl,--allow-shlib-undefined'
+fi
 
 if test $IS_64_BITS_CPU = true -o "$MACOSX" = "1"; then
    if test $f90compatible = false; then
@@ -770,7 +812,7 @@ AC_CHECK_UNDERSCORE_FORTRAN()
 
 if test "$enable_build_parser" = yes; then
 
-   AC_PROG_LEX
+   AC_PROG_LEX(noyywrap)
    if test -z "$LEX" -o "$LEX" = ":"; then
 	  AC_MSG_ERROR([No implementation of Lex (flex, lex) detected. Please install it (package flex)])
    fi
@@ -869,12 +911,10 @@ if test "$with_javasci" != no -o "$with_gui" != no -o "$enable_build_help" != no
 
      AC_JAVA_DETECT_JVM
      case "$ac_java_jvm_version" in
-        1.9)
-        ;;
-        1.8)
+        17)
         ;;
         *)
-            AC_MSG_ERROR([Wrong version of Java. Expected at least 1.8. Found $ac_java_jvm_version])
+            AC_MSG_ERROR([Wrong version of Java. Expected at least 17. Found $ac_java_jvm_version])
         ;;
      esac
 
@@ -886,45 +926,54 @@ if test "$with_javasci" != no -o "$with_gui" != no -o "$enable_build_help" != no
         AC_JAVA_JNI_INCLUDE
         JAVA_JNI_INCLUDE=$ac_java_jvm_jni_include_flags
 
-        case "$host_os" in
-             *Darwin* | *darwin*)
-               # Mac OS X does not link against the lib but uses -framework
-               macosx_version=`sw_vers -productVersion`
-               case $macosx_version in
-                   11.*)
-                   JAVA_JNI_LIBS="-framework JavaNativeFoundation"
-                   ;;
-                   10.*)
-                   JAVA_JNI_LIBS="-framework JavaVM"
-                   ;;
-               esac
-               ;;
-             *)
-               AC_JAVA_JNI_LIBS
-               JAVA_JNI_LIBS=$ac_java_jvm_jni_lib_flags
-               JAVA_JNI_LIBS_PRELOAD=$ac_java_jvm_ld_preload
-             ;;
-        esac
+        AC_JAVA_JNI_LIBS
+        JAVA_JNI_LIBS=$ac_java_jvm_jni_lib_flags
+        JAVA_JNI_LIBS_PRELOAD=$ac_java_jvm_ld_preload
 
         AC_JAVA_CLASSPATH
         JAVA_CLASSPATH=$ac_java_classpath
         AC_JAVA_TOOLS
         AC_JAVA_ANT
 
-        case "$host_os" in
-             *Darwin* | *darwin*)
-                  JAVA_HOME=""
-             ;;
-        esac
-
-
         if test "$with_gui" != no; then
+
+                # Jakarta Activation (Run dependency)
+                # Do not look for jakarta.activation.spi.MimeTypeRegistry here since it will detect jakarta.activation-api.jar
+                # Checked before activation.jar to avoid false detection
+                AC_JAVA_CHECK_JAR([jakarta.activation],[com.sun.activation.registries.MimeTypeFile],[Scilab Help - MimeTypes for image conversion])
+                JAKARTA_ACTIVATION=$PACKAGE_JAR_FILE
+                AC_SUBST(JAKARTA_ACTIVATION)
 
                 if test "$with_xcos" != no; then
                    # jgraphx
                    AC_JAVA_CHECK_JAR([jgraphx],[com.mxgraph.view.mxGraph],[Diagram design],[],[VERSION],[2.0.0.1])
                    JGRAPHX=$PACKAGE_JAR_FILE
                    AC_SUBST(JGRAPHX)
+
+                   # Jaxb (Build dependency)
+                   AC_JAVA_CHECK_JAR([jaxb-api],[javax.xml.bind.annotation.XmlElement],[XML file reading/validation])
+                   JAXB_API=$PACKAGE_JAR_FILE
+                   AC_SUBST(JAXB_API)
+
+                   # Jaxb Runtime (Run dependency)
+                   AC_JAVA_CHECK_JAR([jaxb-runtime],[javax.xml.bind.JAXBException],[XML file reading/validation])
+                   JAXB_RUNTIME=$PACKAGE_JAR_FILE
+                   AC_SUBST(JAXB_RUNTIME)
+
+                   # Jaxb Impl
+                   AC_JAVA_CHECK_JAR([jaxb-impl],[com.sun.xml.bind.v2.ContextFactory],[XML file reading/validation])
+                   JAXB_IMPL=$PACKAGE_JAR_FILE
+                   AC_SUBST(JAXB_IMPL)
+
+                   # Activation
+                   AC_JAVA_CHECK_JAR([activation],[javax.activation.DataSource],[XML file reading/validation])
+                   ACTIVATION=$PACKAGE_JAR_FILE
+                   AC_SUBST(ACTIVATION)
+
+                   # Istack Commons Runtime
+                   AC_JAVA_CHECK_JAR([istack-commons-runtime],[com.sun.istack.FinalArrayList],[XML file reading/validation])
+                   ISTACK_COMMONS_RUNTIME=$PACKAGE_JAR_FILE
+                   AC_SUBST(ISTACK_COMMONS_RUNTIME)
                 fi
 
                 if test "$with_external_scirenderer" = yes; then
@@ -941,8 +990,8 @@ if test "$with_javasci" != no -o "$with_gui" != no -o "$enable_build_help" != no
                 AC_SUBST(SCIRENDERER)
                 AC_SUBST(SCIRENDERER_CP)
 
-               # Docking system
-                AC_JAVA_CHECK_JAR([flexdock],[org.flexdock.util.Utilities],[Scilab Gui],[],[VERSION],[1.2.4])
+                # Docking system
+                AC_JAVA_CHECK_JAR([flexdock],[org.flexdock.util.Utilities],[Scilab Gui],[],[VERSION],[1.2.5])
                 FLEXDOCK=$PACKAGE_JAR_FILE
                 AC_SUBST(FLEXDOCK)
 
@@ -962,8 +1011,18 @@ if test "$with_javasci" != no -o "$with_gui" != no -o "$enable_build_help" != no
                 SKINLF=$PACKAGE_JAR_FILE
                 AC_SUBST(SKINLF)
 
+                # Javax Annotation (Build dependency)
+                AC_JAVA_CHECK_JAR([javax.annotation-api],[javax.annotation.Generated],[Scilab Graphics - CSS Validation])
+                JAVAX_ANNOTATION=$PACKAGE_JAR_FILE
+                AC_SUBST(JAVAX_ANNOTATION)
+
+                # Jakarta Activation API (Build dependency)
+                AC_JAVA_CHECK_JAR([jakarta.activation-api],[jakarta.activation.spi.MimeTypeRegistryProvider],[Scilab Help - MimeTypes for image conversion])
+                JAKARTA_ACTIVATION_API=$PACKAGE_JAR_FILE
+                AC_SUBST(JAKARTA_ACTIVATION_API)
+
                 # JOGL 2
-                AC_JAVA_CHECK_JAR([jogl2],[javax.media.opengl.glu.GLUnurbs],[Scilab 3D rendering - Version 2.0], [], [], [2.2])
+                AC_JAVA_CHECK_JAR([jogl],[com.jogamp.opengl.GLAutoDrawable],[Scilab 3D rendering], [], [], 2.5)
                 JOGL2=$PACKAGE_JAR_FILE
                 AC_SUBST(JOGL2)
 
@@ -992,7 +1051,7 @@ interface for JOGL2 - or libGL (OpenGL library) are installed and if the version
                 fi
 
                 # JoGL Native <=> Java connector
-                AC_JAVA_CHECK_JAR([gluegen2-rt],[jogamp.common.os.MachineDescriptionRuntime],[Scilab 3D rendering])
+                AC_JAVA_CHECK_JAR([gluegen],[com.jogamp.common.os.Platform],[Scilab 3D rendering])
                 GLUEGEN2_RT=$PACKAGE_JAR_FILE
                 AC_SUBST(GLUEGEN2_RT)
 
@@ -1006,8 +1065,8 @@ interface for JOGL2 - or libGL (OpenGL library) are installed and if the version
                    LDFLAGS="$LDFLAGS -L/usr/lib/gluegen2 -L/usr/lib64/gluegen2"         # RedHat
                    LDFLAGS="$LDFLAGS -L$SCI_SRCDIR/thirdparty -L$SCI_SRCDIR/lib/thirdparty -L$SCI_SRCDIR/bin"        # Scilab thirdparties
                    symbol="Java_jogamp_common_jvm_JVMUtil_initialize"
-                   AC_CHECK_LIB([gluegen2-rt], [$symbol], [GLUEGEN2_RT_LIBS="-lgluegen2-rt"],
-                   [AC_MSG_ERROR([libgluegen2-rt: Library missing (Cannot find symbol $symbol). Check if libgluegen-rt - C/Java (JNI) interface for GLUEGEN2 - is installed and if the version is correct. Note that you might have to update etc/librarypath.xml to provide the actual path to the JNI libraries.])],
+                   AC_CHECK_LIB([gluegen_rt], [$symbol], [GLUEGEN2_RT_LIBS="-lgluegen_rt"],
+                   [AC_MSG_ERROR([libgluegen_rt: Library missing (Cannot find symbol $symbol). Check if libgluegen_rt - C/Java (JNI) interface for GLUEGEN2 - is installed and if the version is correct. Note that you might have to update etc/librarypath.xml to provide the actual path to the JNI libraries.])],
                    [-ldl])
                    LDFLAGS=$LDFLAGS_save
                 fi
@@ -1056,6 +1115,23 @@ interface for JOGL2 - or libGL (OpenGL library) are installed and if the version
                 JEUCLID_CORE=$PACKAGE_JAR_FILE
                 AC_SUBST(JEUCLID_CORE)
 
+                # JavaFX base
+                # Used in native file chooser
+                AC_JAVA_CHECK_JAR([javafx.base],[javafx.collections.ObservableList],[JavaFX base])
+                JAVAFX_BASE=$PACKAGE_JAR_FILE
+                AC_SUBST(JAVAFX_BASE)
+
+                # JavaFX Swing
+                # Used in native file chooser
+                AC_JAVA_CHECK_JAR([javafx.swing],[javafx.embed.swing.JFXPanel],[JavaFX Swing])
+                JAVAFX_SWING=$PACKAGE_JAR_FILE
+                AC_SUBST(JAVAFX_SWING)
+
+                # JavaFX graphics
+                # Used in native file chooser
+                AC_JAVA_CHECK_JAR([javafx.graphics],[javafx.stage.Stage],[JavaFX graphics])
+                JAVAFX_GRAPHICS=$PACKAGE_JAR_FILE
+                AC_SUBST(JAVAFX_GRAPHICS)
 
                 ################ Mandatory for graphic_export features #####
                 # XML to PDF/other Translator
@@ -1149,6 +1225,11 @@ interface for JOGL2 - or libGL (OpenGL library) are installed and if the version
                 JLATEXMATH_FOP=$PACKAGE_JAR_FILE
                 AC_SUBST(JLATEXMATH_FOP)
 
+                # Saxon 9 HE
+                AC_JAVA_CHECK_JAR([saxon9he],[net.sf.saxon.TransformerFactoryImpl],[Saxon processor for XSLT, XQuery, and XML Schema])
+                SAXON=$PACKAGE_JAR_FILE
+                AC_SUBST(SAXON)
+
                 AC_DEFINE([WITH_GUI],[],[With the JAVA stuff (GUI, Console, JOGL...)])
 
         fi
@@ -1201,7 +1282,7 @@ Unit tests],"yes")
         AC_JAVA_CHECK_JAR([ecj],[org.eclipse.jdt.core.compiler.batch.BatchCompiler],[Eclipse Java compiler],"yes")
         ECJ=$PACKAGE_JAR_FILE
         if test -z "$ECJ"; then
-           ECJ='$SCILAB/thirdparty/ecj.jar'
+           ECJ='$SCILAB/thirdparty/ecj-3.34.0.jar'
         fi
         AC_SUBST(ECJ)
 
@@ -1367,9 +1448,6 @@ AC_CHECK_HEADERS([fcntl.h float.h libintl.h locale.h malloc.h netdb.h netinet/in
 # check header dirent
 AC_HEADER_DIRENT
 
-# static struct timeval defined or not | used in modules/core/src/c/timer.c
-AC_HEADER_TIME
-
 # check if the specific header is available or not | used in modules/core/src/c/link_SYSV.c
 AC_HEADER_SYS_WAIT
 
@@ -1392,9 +1470,6 @@ AM_GNU_GETTEXT_VERSION([0.16])
 # function closedir used in modules/metanet/src/c/files.c
 AC_FUNC_CLOSEDIR_VOID
 
-# Signals used in modules/core/src/c/realmain.c
-AC_TYPE_SIGNAL
-
 # struct tm used in modules/core/src/c/history.c
 AC_STRUCT_TM
 
@@ -1414,8 +1489,6 @@ AC_STRUCT_ST_BLOCKS
 # For now, just check for -lcurses and then -lncurses.  The user control
 # may need to be revisited
 
-TERMCAP_LIB=no
-
 # Various observations:
 #
 #  ncurses
@@ -1428,21 +1501,40 @@ TERMCAP_LIB=no
 #    - need to include termcap.h and link with -ltermcap for tgetent()
 #
 
-AC_CHECK_LIB([curses],[main])
-if test $ac_cv_lib_curses_main = no ; then
-    AC_CHECK_LIB([ncurses],[main])
+if $WITH_DEVTOOLS; then
+    # ncurses includes are in a subdir
+    NCURSES_CFLAGS="-I$DEVTOOLS_INCDIR -I$DEVTOOLS_INCDIR/ncurses"
+    NCURSES_LIBS="-L$DEVTOOLS_LIBDIR/ -lscincurses"
+    
+    saved_LIBS="$LIBS"
+    LIBS="$LIBS $NCURSES_LIBS"
+    AC_CHECK_LIB([scincurses],[tgetent])
+    LIBS="$saved_LIBS"
+    
+    ac_cv_lib_ncurses_tgetent=$ac_cv_lib_scincurses_tgetent
+else
+    NCURSES_CFLAGS=""
+    AC_CHECK_LIB([curses],[tgetent],[NCURSES_LIBS="-lcurses"])
+    if test "x$ac_cv_lib_curses_tgetent" = "xno" ; then
+        AC_CHECK_LIB([ncurses],[tgetent],[NCURSES_LIBS="-lncurses"])
+    fi
+    # make sure we have what we need for tgetent
+    if test "x$ac_cv_lib_ncurses_tgetent" = "xno" ; then
+        AC_CHECK_LIB([termcap],[tgetent])
+    fi
 fi
-
-# make sure we have what we need for tgetent
-AC_SEARCH_LIBS([tgetent],[termcap])
 
 AC_CHECK_HEADERS([ncurses.h curses.h])
 
-if test "x$ac_cv_lib_curses_main" = "xyes" -o "x$ac_cv_lib_ncurses_main" = "xyes" ; then
-  AC_DEFINE([HAVE_TERMCAP],[],[Have Term Cap])
+if test "x$ac_cv_lib_curses_tgetent" = "xyes" -o "x$ac_cv_lib_ncurses_tgetent" = "xyes" -o "x$ac_cv_lib_termcap_tgetent" = "xyes" ; then
+AC_DEFINE([HAVE_TERMCAP],[],[Have Term Cap])
 else
- AC_MSG_ERROR([No termcap library detected. Please install ncurses dev library (or termcap library)])
+AC_MSG_ERROR([No termcap library detected. Please install ncurses dev library (or termcap library)])
 fi
+
+AC_SUBST(NCURSES_CFLAGS)
+AC_SUBST(NCURSES_LIBS)
+
 
 ##################
 ## other libraries
@@ -1591,7 +1683,7 @@ if test "$with_arpack_ng" != no; then
 echo ""
 ACX_ARPACK(
         [AC_MSG_RESULT([ARPACK-NG library found])],
-        AC_MSG_ERROR([Impossible to find the ARPACK library. Please note that arpack was bundled with version prior to 5.4.0 and Scilab requires arpack-ng ( http://forge.scilab.org/index.php/p/arpack-ng/ ).])
+        AC_MSG_ERROR([Impossible to find the ARPACK library. Please note that arpack was bundled with version prior to 5.4.0 and Scilab requires arpack-ng ( https://github.com/opencollab/arpack-ng/ ).])
         )
 
 CHECK_ARPACK_OK(
@@ -1621,11 +1713,32 @@ fi
 AC_SUBST(UMFPACK_ENABLE)
 AM_CONDITIONAL(UMFPACK, test "$with_umfpack" != no)
 
+#################
+## KLU
+#################
+
+AC_ARG_WITH(klu,
+    AS_HELP_STRING([--without-klu],[Disable the interface to the KLU library]))
+
+KLU_ENABLE=no
+if test "$with_klu" != no; then
+   AC_KLU([$BLAS_LIBS])
+   KLU_ENABLE=yes
+fi
+
+AC_SUBST(KLU_ENABLE)
+AM_CONDITIONAL(KLU, test "$with_klu" != no)
+
+
 #######################
 ## Test for PCRE
 #######################
-
-AC_PCRE()
+if $WITH_DEVTOOLS; then # Scilab thirdparties
+    PCRE_CFLAGS="-I$DEVTOOLS_INCDIR"
+    PCRE_LIBS="-L$DEVTOOLS_LIBDIR -lpcre -lpcreposix"
+else
+    AC_PCRE()
+fi
 
 #######################
 ## Test for CURL
@@ -1753,6 +1866,10 @@ fi
 AC_SUBST(MATIO_ENABLE)
 AM_CONDITIONAL(MATIO, test "$with_matio" != no)
 
+##############################################################
+# LIBARCHIVE LIBRARY (reading and writing compressed files)) #
+##############################################################
+AC_LIBARCHIVE()
 
 #############################
 ## Documentation management #
@@ -1764,9 +1881,7 @@ AC_ARG_ENABLE(build-help,
         AS_HELP_STRING([--disable-build-help],[Disable the help build])
         )
 
-if test "$enable_build_help" != no; then
-    AC_DOCBOOK()
-else
+if test "$enable_build_help" == no; then
     HELP_ENABLE=no
 fi
 
@@ -1827,7 +1942,7 @@ if test "$enable_compilation_tests" != no -a "$enable_compilation_tests" != ""; 
 fi
 
 if test COMPILATION_TESTS=yes -a "$JUNIT4" == ""; then
-   AC_MSG_WARN([--enable-compilation-tests deactivated: Could not find Junit4"])
+   AC_MSG_WARN([--enable-compilation-tests deactivated: Could not find Junit4])
    COMPILATION_TESTS=no
 fi
 
@@ -1954,31 +2069,12 @@ AC_DEFINE_UNQUOTED([SHARED_LIB_EXT],["$shrext_cmds"],[Extension of a shared libr
 AC_DEFINE_UNQUOTED([SHARED_LIB_EXTW],[L"$shrext_cmds"],[Extension of a shared library ( wide string )])
 
 
-
-#################
-## Update the years in the various part of the code.
-#################
-
-if test ! -f modules/core/src/cpp/banner.cpp; then
-   AC_MSG_ERROR([Could not find the Scilab banner file.])
-fi
-
-CURRENT_YEAR=`date "+%Y"`
-DETECTED_YEAR=`grep "Copyright (c) 2017-" modules/core/src/cpp/banner.cpp|sed -e "s/.*Copyright (c) 2017-\([[0-9]]*\).*/\1/g"`
-
-if test "$CURRENT_YEAR" != "$DETECTED_YEAR"; then
-   sed -i -e "s| 2017-$DETECTED_YEAR | 2017-$CURRENT_YEAR |g" modules/core/src/cpp/banner.cpp modules/windows_tools/src/c/scilab_windows/console.c
-   sed -i -e "s| 2017-$DETECTED_YEAR ESI Group| 2017-$CURRENT_YEAR ESI Group|g" etc/Info.plist.in
-   sed -i -e "s|VALUE \"LegalCopyright\", \"Copyright (C) $DETECTED_YEAR|VALUE \"LegalCopyright\", \"Copyright (C) $CURRENT_YEAR|" $(find . -iname '*.rc')
-   AC_MSG_WARN([New year ($CURRENT_YEAR) detected. Copyright files updated. Please commit them ASAP.])
-fi
-
-
 #########
 ## Check extra CC / CXX compiler flags to ease runtime behaviors
 #########
 AC_CHECK_STDCPP_STATIC()
 AC_CHECK_ADDRESS_SANTIZER()
+AC_CHECK_ANALYZER()
 
 #################
 ## stop on warning
@@ -1995,7 +2091,6 @@ fi
 
 # SCI_*FLAGS contains all defaults values detected on configure
 SCI_CFLAGS=$(echo                                             \
-             $LARGEFILE_CFLAGS                                \
              $CODECOVERAGE_CFLAGS                             \
              $DEBUG_CFLAGS                                    \
              $ARCH_CFLAGS                                     \
@@ -2006,7 +2101,6 @@ SCI_CFLAGS=$(echo                                             \
              $WARNING_CFLAGS                                  )
 SCI_CXXFLAGS=$(echo                                           \
                $STDCXX_CXXFLAGS                               \
-               $LARGEFILE_CXXFLAGS                            \
                $CODECOVERAGE_CXXFLAGS                         \
                $DEBUG_CXXFLAGS                                \
                $ARCH_CXXFLAGS                                 \
@@ -2016,7 +2110,6 @@ SCI_CXXFLAGS=$(echo                                           \
                $BACKTRACE_CXXFLAGS                            \
                $WARNING_CXXFLAGS                              )
 SCI_FFLAGS=$(echo                                             \
-             $LARGEFILE_FFLAGS                                \
              $CODECOVERAGE_FFLAGS                             \
              $DEBUG_FFLAGS                                    \
              $ARCH_FFLAGS                                     \
@@ -2026,7 +2119,6 @@ SCI_FFLAGS=$(echo                                             \
              $BACKTRACE_FFLAGS                                \
              $WARNING_FFLAGS                                  )
 SCI_LDFLAGS=$(echo                                            \
-              $LARGEFILE_LDFLAGS                              \
               $CODECOVERAGE_LDFLAGS                           \
               $DEBUG_LDFLAGS                                  \
               $ARCH_LDFLAGS                                   \
@@ -2124,6 +2216,7 @@ modules/webtools/Makefile
 modules/Makefile
 Makefile
 scilab.pc
+build.incl.xml
 etc/modules.xml
 etc/classpath.xml
 etc/Info.plist
@@ -2258,6 +2351,12 @@ echo "Eigen3 Configuration:"
 echo "  EIGEN CPPFLAGS ...... = $EIGEN_CPPFLAGS"
 
 echo ""
+echo "libarchive Configuration:"
+echo "  LIBARCHIVE_CFLAGS ... = $LIBARCHIVE_CFLAGS"
+echo "  LIBARCHIVE_LIBS ..... = $LIBARCHIVE_LIBS"
+echo "  LIBARCHIVE_VERSION .. = $LIBARCHIVE_VERSION"
+
+echo ""
 if test $MATIO_ENABLE = yes;  then
    echo "MATIO Configuration:"
    echo "  MATIO LIBS .......... = $MATIO_LIBS"
@@ -2269,7 +2368,7 @@ fi
 echo ""
 if test $UMFPACK_ENABLE = yes;  then
    echo "UMFPACK Configuration:"
-   echo "  UMFPACK LIBS ....... = $UMFPACK_LIB"
+   echo "  UMFPACK LIBS ....... = $UMFPACK_LIBS"
    echo "  UMFPACK CFLAGS ..... = $UMFPACK_CFLAGS"
    if test $SUITESPARSE = yes; then
       echo "  UMFPACK SUITESPARSE  = Yes"
@@ -2280,6 +2379,19 @@ else
    echo "Not using UMFPACK"
 fi
 
+echo ""
+if test $KLU_ENABLE = yes;  then
+   echo "KLU Configuration:"
+   echo "  KLU LIBS ....... = $KLU_LIBS"
+   echo "  KLU CFLAGS ..... = $KLU_CFLAGS"
+   if test "$SUITESPARSE" = "yes"; then
+      echo "  KLU SUITESPARSE  = Yes"
+   else
+      echo "  KLU SUITESPARSE  = No"
+   fi
+else
+   echo "Not using KLU"
+fi
 
 echo ""
 echo "BLAS/LAPACK/ATLAS Configuration:"
@@ -2315,8 +2427,6 @@ fi
 echo ""
 if test $HELP_ENABLE = yes; then
    echo "Documentation building configuration:"
-   echo "  Docbook XSL path ....... = $DOCBOOK_ROOT"
-   echo "  Saxon XSLT ............. = $SAXON"
    echo "  XML commons external ... = $XML_APIS_EXT"
 else
    echo "No documentation generated"
@@ -2498,5 +2608,70 @@ echo "  FFLAGS ......... = $FFLAGS"
 echo "  SCI_FFLAGS ..... = $SCI_FFLAGS"
 echo "  F77_LDFLAGS .... = $F77_LDFLAGS"
 echo "  FLIBS...... .... = $FLIBS"
-echo "  TERMCAP_LIB .... = $TERMCAP_LIB"
 echo ""
+
+#################
+## Update the years in the various part of the code.
+#################
+
+if test ! -f modules/core/src/cpp/banner.cpp; then
+   AC_MSG_ERROR([Could not find the Scilab banner file.])
+fi
+
+CURRENT_YEAR=`date "+%Y"`
+DETECTED_YEAR=`grep "Copyright (c) 2022-" ${SCI_SRCDIR}/modules/core/src/cpp/banner.cpp|sed -e "s/.*Copyright (c) 2022-\([[0-9]]*\).*/\1/g"`
+
+if test "$CURRENT_YEAR" != "$DETECTED_YEAR"; then
+    sed -i -e "s| 2022-$DETECTED_YEAR | 2022-$CURRENT_YEAR |g" ${SCI_SRCDIR}/modules/core/src/cpp/banner.cpp ${SCI_SRCDIR}/modules/windows_tools/src/c/scilab_windows/console.c
+    sed -i -e "s| 2022-$DETECTED_YEAR | 2022-$CURRENT_YEAR |g" ${SCI_SRCDIR}/etc/Info.plist.in
+    sed -i -e "s|VALUE \"LegalCopyright\", \"Copyright (C) $DETECTED_YEAR|VALUE \"LegalCopyright\", \"Copyright (C) $CURRENT_YEAR|" $(find ${SCI_SRCDIR} -iname '*.rc')
+    sed -i -e "s|2017-$DETECTED_YEAR|2017-$CURRENT_YEAR|" $(find ${SCI_SRCDIR} -iname 'banner.xml')
+    
+    sed -i -e "s| 2022-$DETECTED_YEAR | 2022-$CURRENT_YEAR |g" ${SCI_SRCDIR}/modules/gui/images/icons/aboutscilab.svg
+    AC_CHECK_PROG(INKSCAPE, inkscape)
+    if test -n "$INKSCAPE"; then
+        $INKSCAPE -w 600 -h 290 ${SCI_SRCDIR}/modules/gui/images/icons/aboutscilab.svg -o ${SCI_SRCDIR}/modules/gui/images/icons/aboutscilab.png
+    else
+        AC_CHECK_PROG(CAIROSVG, cairosvg)
+        if test -n "$CAIROSVG"; then
+            $CAIROSVG --output-width 600 --output-height 290 ${SCI_SRCDIR}/modules/gui/images/icons/aboutscilab.svg -o ${SCI_SRCDIR}/modules/gui/images/icons/aboutscilab.png
+        fi
+    fi
+
+    AC_MSG_WARN([New year ($CURRENT_YEAR) detected. Source files updated, commit them !])
+fi
+
+#################
+## Update Scilab version based on aboutscilab.svg
+#################
+
+if test ! -f ${SCI_SRCDIR}/modules/gui/images/icons/aboutscilab.svg; then
+    AC_MSG_ERROR([Could not find aboutscilab.svg file.])
+fi
+DETECTED_VERSION=`grep -m 1 ">Scilab" ${SCI_SRCDIR}/modules/gui/images/icons/aboutscilab.svg|sed -e "s/.*>Scilab //g"|sed -e "s/<.*//g"`
+if test "$SCILAB_BINARY_VERSION" != "$DETECTED_VERSION"; then
+    # alert the user
+    AC_MSG_WARN([Migrating from version $DETECTED_VERSION to $SCILAB_BINARY_VERSION])
+    AC_PATH_PROG(INKSCAPE, inkscape)
+    # put the version into Version.incl
+    echo "SCIVERSION=scilab-branch-$SCILAB_VERSION_MAJOR.$SCILAB_VERSION_MINOR" >$SCI_SRCDIR/Version.incl
+    # put the correct text in version.h
+    sed -i  -e "s|SCI_VERSION_STRING \".*\"|SCI_VERSION_STRING \"scilab-branch-$SCILAB_VERSION_MAJOR.$SCILAB_VERSION_MINOR\"|" \
+            -e "s|SCI_VERSION_WIDE_STRING L\".*\"|SCI_VERSION_WIDE_STRING L\"scilab-branch-$SCILAB_VERSION_MAJOR.$SCILAB_VERSION_MINOR\"|" \
+            -e "s|DEFAULT_SCI_VERSION_MESSAGE L\".*\"|DEFAULT_SCI_VERSION_MESSAGE L\"scilab-branch-$SCILAB_VERSION_MAJOR.$SCILAB_VERSION_MINOR\"|" \
+            ${SCI_SRCDIR}/modules/core/includes/version.h ${SCI_SRCDIR}/modules/core/includes/version.h.{in,vc}
+    # update some help pages
+    sed -i -e "s|scilab-[[0-9]]\+\(\.[[0-9]]\+\)\+|scilab-$SCILAB_BINARY_VERSION|" $(find ${SCI_SRCDIR} -iname 'banner.xml')
+    # update rc files
+    sed -i  -e "s|FILEVERSION [[0-9]]\+\(,[[0-9]]\+\)\+|FILEVERSION $SCILAB_VERSION_MAJOR,$SCILAB_VERSION_MINOR,$SCILAB_VERSION_MAINTENANCE,0|" \
+            -e "s|PRODUCTVERSION [[0-9]]\+\(,[[0-9]]\+\)\+|FILEVERSION $SCILAB_VERSION_MAJOR,$SCILAB_VERSION_MINOR,$SCILAB_VERSION_MAINTENANCE,0|" \
+            -e "s|VALUE \"FileVersion\", \"[[0-9]]\+\(, [[0-9]]\+\)\+\"|VALUE \"FileVersion\", \"$SCILAB_VERSION_MAJOR, $SCILAB_VERSION_MINOR, $SCILAB_VERSION_MAINTENANCE, 0\"|" \
+            -e "s|VALUE \"ProductVersion\", \"[[0-9]]\+\(, [[0-9]]\+\)\+\"|VALUE \"ProductVersion\", \"$SCILAB_VERSION_MAJOR, $SCILAB_VERSION_MINOR, $SCILAB_VERSION_MAINTENANCE, 0\"|" \
+            -e "s|Scilab [[0-9]]\+\(\.[[0-9]]\+\)\+|Scilab $SCILAB_BINARY_VERSION|" \
+            $(find ${SCI_SRCDIR} -iname '*.rc')
+    # update banner, inkscape is used to generate png from svg
+    sed -i -e "s|Scilab [[0-9]]\+\(\.[[0-9]]\+\)\+|Scilab $SCILAB_BINARY_VERSION|" ${SCI_SRCDIR}/modules/gui/images/icons/aboutscilab.svg
+    $INKSCAPE -w 600 -h 290 ${SCI_SRCDIR}/modules/gui/images/icons/aboutscilab.svg -o ${SCI_SRCDIR}/modules/gui/images/icons/aboutscilab.png
+    # alert the user
+    AC_MSG_WARN([New version $SCILAB_BINARY_VERSION detected. Source files updated, commit them !])
+fi

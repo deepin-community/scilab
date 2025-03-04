@@ -1,4 +1,4 @@
-# Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+# Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 # Copyright (C) 2009 - DIGITEO - Allan CORNET
 #
 # Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -58,6 +58,7 @@ GATEWAY_CXX_SOURCES = \
     sci_gateway/cpp/sci_hdf5_load_v1.cpp \
     sci_gateway/cpp/sci_hdf5_load_v2.cpp \
     sci_gateway/cpp/sci_hdf5_load_v3.cpp \
+    sci_gateway/cpp/sci_hdf5_load_v4.cpp \
     sci_gateway/cpp/sci_hdf5_is_file.cpp \
     sci_gateway/cpp/sci_hdf5_listvar.cpp \
     sci_gateway/cpp/sci_hdf5_listvar_v2.cpp \
@@ -104,7 +105,7 @@ FORCE_HDF_API = \
     -DH5Tget_array_dims_vers=2 \
     -DH5Acreate_vers=2 \
     -DH5Rdereference_vers=2 \
-    -DNO_DEPRECATED_SYMBOLS
+    -DH5Eset_auto_vers=2
 
 
 libscihdf5_la_CPPFLAGS = \
@@ -118,7 +119,6 @@ libscihdf5_la_CPPFLAGS = \
     -I$(top_srcdir)/modules/ast/includes/symbol/ \
     -I$(top_srcdir)/modules/ast/includes/system_env/ \
     -I$(top_srcdir)/modules/ast/includes/types/ \
-    -I$(top_srcdir)/modules/ast/includes/analysis/ \
     -I$(top_srcdir)/modules/threads/includes/ \
     -I$(top_srcdir)/modules/dynamic_link/includes/ \
     -I$(top_srcdir)/modules/output_stream/includes/ \

@@ -1,10 +1,12 @@
-//<-- CLI SHELL MODE -->
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009 - DIGITEO - Allan CORNET
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
+
+// <-- NO CHECK REF -->
+// <-- CLI SHELL MODE -->
 
 tab_ref = [
 "世界您好",
@@ -59,3 +61,22 @@ assert_checkequal(y, 25);
 filename = TMPDIR + filesep() + "testmclose.sce";
 mputl("mclose(""all"");",filename);
 exec(filename);
+
+
+// errormsg & callstack
+mputl('acosd(''d'');', fullfile(TMPDIR, '/exec.tst'));
+[a b c] = exec(fullfile(TMPDIR, '/exec.tst'), 'errcatch');
+assert_checktrue(a <> 0);
+assert_checktrue(typeof(b) == "string");
+assert_checktrue(length(b) <> 0);
+assert_checktrue(typeof(c) == "string");
+assert_checktrue(length(c) <> 0);
+
+// recursive file execution
+mputl(["exec TMPDIR/subfun.sce"; "function currentfun(), subfun(); end"; "currentfun()"], fullfile(TMPDIR, "/execfile.sce"));
+mputl("function subfun(), cos(); end", fullfile(TMPDIR, "/subfun.sce"));
+[_, _, c] = exec(fullfile(TMPDIR, "/execfile.sce"), "errcatch");
+lines = strsplit(c, ascii(10));
+assert_checktrue(strstr(lines(1), fullfile(TMPDIR, "/subfun.sce")) <> "");
+assert_checktrue(strstr(lines(2), fullfile(TMPDIR, "/execfile.sce")) <> "");
+assert_checktrue(strstr(lines(3), fullfile(TMPDIR, "/execfile.sce")) <> "");

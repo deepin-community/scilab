@@ -4,7 +4,7 @@
 //This source file is licensed as described in the file COPYING, which
 //you should have received as part of this distribution.  The terms
 //are also available at
-//http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt
+//https://www.cecill.info/licences/Licence_CeCILL_V2-en.txt
 function [B,C] = sgolay(k,nf,w)
 // Savitzky-Golay Filter Design.
 //   k : a positive scalar with integer value: the polynomial order

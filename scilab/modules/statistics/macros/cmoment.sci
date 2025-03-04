@@ -1,5 +1,5 @@
 
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 1999 - INRIA - Carlos Klimann
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -35,26 +35,25 @@ function mom= cmoment(x,ord,orien)
     //Statistics, J.Wiley & Sons, 1990.
     //
     //
-    [lhs,rhs]=argn(0)
-    if rhs<2 then error(msprintf(gettext("%s: Wrong number of input arguments: %d to %d expected.\n"),"cmoment",2,3)), end
+    arguments
+        x
+        ord
+        orien (1, 1) {mustBeA(orien, ["double", "string"]), mustBeMember(orien, {1, 2, "r", "c", "*"})} = "*"
+    end
+
     if x==[]|ord==[] then mom=%nan, return, end
-    if rhs==2 then
+    le=size(x,orien)
+    if orien == "*" then
         if ord==1 then mom=0, return, end
-        le=length(x)
         m=sum(x)/le
-        mom=sum((x-m).^ord)/(le)
-        return
-    elseif rhs==3 then
-        le=size(x,orien)
+    else
+        
         m=mean(x,orien)
         if orien=="r"|orien==1 then
             m=m(ones(le,1),:)
         elseif orien=="c"|orien==1 then
             m=m(:,ones(le,1))
-        else error(msprintf(gettext("%s: Wrong value for input argument #%d: ''%s'', ''%s'', %d or %d expected.\n"),"cmoment",3,"r","c",1,2)),
         end
-        mom=sum((x-m).^ord,orien)/(le)
-        return
-    else error(msprintf(gettext("%s: Wrong number of input arguments: %d to %d expected.\n"),"cmoment",2,3)),
     end
+    mom=sum((x-m).^ord,orien)/(le)
 endfunction

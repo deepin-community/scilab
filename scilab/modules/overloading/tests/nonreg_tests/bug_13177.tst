@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2014 - Scilab Enterprises - Calixte DENIZET
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,8 +9,8 @@
 //
 // <-- Non-regression test for bug 13177 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/13177
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/13177
 //
 // <-- Short Description -->
 // Error when changing x_ticks.locations on axe

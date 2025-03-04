@@ -1,5 +1,5 @@
 ;
-; Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+; Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 ; Copyright (C) INRIA - Allan CORNET
 ; Copyright (C) DIGITEO - 2010 - Allan CORNET
 ;
@@ -37,7 +37,7 @@ Source: modules\{#ARNOLDI}\etc\{#ARNOLDI}.start; DestDir: {app}\modules\{#ARNOLD
 Source: modules\{#ARNOLDI}\macros\buildmacros.sce; DestDir: {app}\modules\{#ARNOLDI}\macros; Components: {#COMPN_SCILAB}
 Source: modules\{#ARNOLDI}\macros\buildmacros.bat; DestDir: {app}\modules\{#ARNOLDI}\macros; Components: {#COMPN_SCILAB}
 Source: modules\{#ARNOLDI}\macros\cleanmacros.bat; DestDir: {app}\modules\{#ARNOLDI}\macros; Components: {#COMPN_SCILAB}
-;Source: modules\{#ARNOLDI}\macros\lib; DestDir: {app}\modules\{#ARNOLDI}\macros; Components: {#COMPN_SCILAB}
+Source: modules\{#ARNOLDI}\macros\lib; DestDir: {app}\modules\{#ARNOLDI}\macros; Components: {#COMPN_SCILAB}
 ;
 Source: modules\{#ARNOLDI}\tests\*.*; DestDir: {app}\modules\{#ARNOLDI}\tests; Flags: recursesubdirs; Components: {#COMPN_SCILAB} and {#COMPN_TESTS}
 ;

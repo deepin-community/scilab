@@ -1,5 +1,5 @@
 /*
- * Scilab (http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab (https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009-2009 - DIGITEO - Allan SIMON
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -156,7 +156,7 @@ public class ScilabListCodec extends ScilabObjectCodec {
      * @see com.mxgraph.io.mxObjectCodec#decode(com.mxgraph.io.mxCodec,
      *      org.w3c.dom.Node, java.lang.Object)
      * @see http://www.jgraph.org/bugzilla/show_bug.cgi?id=55
-     * @see http://bugzilla.scilab.org/show_bug.cgi?id=8141
+     * @see https://gitlab.com/scilab/scilab/-/issues/8141
      */
     @Override
     public Object decode(mxCodec dec, Node node, Object into) {

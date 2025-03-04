@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) INRIA - Allan CORNET
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -17,18 +17,21 @@
 #include <Windows.h>
 #include "buildMainWindowTitle_Windows.h"
 #include "sci_malloc.h"
-#include "version.h"
+#include "getversion.h"
 #include "WndThread.h"
 /*--------------------------------------------------------------------------*/
 char *buildMainWindowTitle_Windows(void)
 {
     char *title = NULL;
+    char *scilabVersionString = getScilabVersionAsString();
 
-    title = (char*)MALLOC(sizeof(char) * (strlen("%s (%d)") + strlen(SCI_VERSION_STRING) + 10 + 1));
+    title = (char*)MALLOC(sizeof(char) * (strlen("%s (%d)") + strlen(scilabVersionString) + 10 + 1));
     if (title)
     {
-        wsprintf(title, "%s (%d)", SCI_VERSION_STRING, getCurrentScilabId());
+        wsprintf(title, "%s (%d)", scilabVersionString, getCurrentScilabId());
     }
+
+    free(scilabVersionString);
 
     return title;
 }

@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2011 - DIGITEO - Cedric DELAMARRE
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -44,7 +44,6 @@ CPP_GATEWAY_PROTOTYPE(sci_historymanager);
 CPP_GATEWAY_PROTOTYPE(sci_historysize);
 CPP_GATEWAY_PROTOTYPE(sci_removelinehistory);
 CPP_GATEWAY_PROTOTYPE(sci_resethistory);
-CPP_GATEWAY_PROTOTYPE(sci_saveafterncommands);
 CPP_GATEWAY_PROTOTYPE(sci_saveconsecutivecommands);
 CPP_GATEWAY_PROTOTYPE(sci_savehistory);
 CPP_GATEWAY_PROTOTYPE(sci_sethistoryfile);

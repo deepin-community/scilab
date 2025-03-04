@@ -1,6 +1,6 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
-// Copyright (C) 2018 - Stéphane Mottelet
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
+// Copyright (C) 2018 - UTC - Stéphane MOTTELET
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
@@ -9,8 +9,8 @@
 //
 // <-- Non-regression test for bug 16260 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=16260
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/16260
 //
 // <-- Short Description -->
 // nnz(): please reopen it to overloading (Regression), and extend it to dense boolean and polynomial arrays

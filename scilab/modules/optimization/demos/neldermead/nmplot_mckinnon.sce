@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008-2009 - INRIA - Michael Baudin
 // Copyright (C) 2010 - DIGITEO - Allan CORNET
 // Copyright (C) 2011 - DIGITEO - Michael Baudin
@@ -162,9 +162,8 @@ function demo_mckinnon2()
     f = gcf();
     f.axes_size = [710, 560];
     subplot(2,2,1)
-    xset("fpf"," ")
     drawlater();
-    contour ( xdata , ydata , mckinnon3C , [-0.2 0.0 1.0 2.0 5.0 10.0 20.0] )
+    contour ( xdata , ydata , mckinnon3C , [-0.2 0.0 1.0 2.0 5.0 10.0 20.0] , fpf=" ")
     nmplot_simplexhistory ( nm );
     drawnow();
     subplot(2,2,2)

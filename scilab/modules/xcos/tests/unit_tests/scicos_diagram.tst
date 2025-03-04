@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) Scilab Enterprises - 2011 - Clément DAVID
 //
 // This file is distributed under the same license as the Scilab package.
@@ -94,7 +94,7 @@ function assert_check_options(options)
 endfunction
 
 // assert on a new scicos_diagram
-assert_check_diagram(scicos_diagram());
+assert_check_diagram(scicos_diagram(), "scicos4.4");
 
 // assert on an empty xcos diagram
 assert_checktrue(importXcosDiagram(SCI + "/modules/xcos/tests/unit_tests/empty.zcos"));

@@ -1,5 +1,5 @@
 //
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ENPC
 // Copyright (C) 2008 - INRIA
 // Copyright (C) 2010 - DIGITEO - Allan CORNET
@@ -89,38 +89,21 @@ function []=wheel_show(xx,t,p)
 
     //[5] animation
     [n1,n2] = size(xu);
-    //  get_wheel_rti(%t);
-    if ~isdef("wheel_rti") then wheel_rti=0.03;end
-
+    wheel_rti = 0.03;
+    
     realtimeinit(wheel_rti);realtime(0);
     for i=2:1:n2-1,
-
-        if ~is_handle_valid(curAxe) then
+        realtime(i);
+        if is_handle_valid(curAxe) then
+            drawlater();
+            wheel.data  = [xu(:,i) yu(:,i) zu(:,i)];
+            traj.data   = [traj.data; xu(1,i),yu(1,i),zu(1,i)];
+            rays.data   = [xr(:,i) yr(:,i) zr(:,i)];
+            drawnow()
+        else
             break;
         end
-
-        realtime(i);
-
-        drawlater();
-        if is_handle_valid(wheel) then
-            wheel.data  = [xu(:,i) yu(:,i) zu(:,i)];
-        end
-
-        if is_handle_valid(traj) then
-            traj.data   = [traj.data; xu(1,i),yu(1,i),zu(1,i)];
-        end
-
-        if is_handle_valid(rays) then
-            rays.data   = [xr(:,i) yr(:,i) zr(:,i)];
-        end
-
-        drawnow();
     end
-
-    if ~is_handle_valid(curAxe) then
-        break;
-    end
-    [wheel_rti]=resume(wheel_rti);
 
 endfunction
 
@@ -168,31 +151,4 @@ function []=wheel_build_and_load()
         exec("loader.sce",-1);
         chdir(my_cur_path);
     end
-endfunction
-
-
-function get_wheel_rti(d_mode)
-
-    data_rti  = ["timeunit for realtimeinit","wheel_rti","0.02"];
-    [d_r,d_c] = size(data_rti);
-    for i=1:d_r,
-        if isdef(data_rti(i,2)) then
-            data_rti(i,3)= string(evstr(data_rti(i,2)));
-        else
-            execstr(data_rti(i,2)+"="+data_rti(i,3));
-        end
-    end
-
-    if d_mode then
-        ddd= data_rti(:,1);
-        data_rti_mdial=x_mdialog("time unit for graphics",ddd, data_rti(:,3));
-
-        if data_rti_mdial <> [] then
-            for i=1:d_r,
-                execstr(data_rti(i,2)+"="+data_rti_mdial(i));
-            end
-        end
-    end
-    [wheel_rti]=resume(wheel_rti);
-
 endfunction

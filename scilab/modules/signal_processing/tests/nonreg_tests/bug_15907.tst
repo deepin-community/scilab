@@ -1,6 +1,6 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
-// Copyright (C) 2018 - Stéphane Mottelet
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
+// Copyright (C) 2018 - UTC - Stéphane MOTTELET
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
@@ -10,8 +10,8 @@
 //
 // <-- Non-regression test for bug 15907 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/15907
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/15907
 //
 // <-- Short Description -->
 // filter is corrupting its input state array (Scilab 6 regression)

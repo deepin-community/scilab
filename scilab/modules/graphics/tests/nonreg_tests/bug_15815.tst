@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2018 - Samuel GOUGEON
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -11,8 +11,8 @@
 
 // <-- Non-regression test for bug 15815 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/15815
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/15815
 //
 // <-- Short Description -->
 // After polarplot(), reversing x|y axes shifted all labels
@@ -43,4 +43,4 @@ drawnow
 // TOP ROW    : Before reversing axes
 // BOTTOM ROW : After reversing axes
 // => Check that labels ar enot shifted as they were
-//    as shown there http://bugzilla.scilab.org/attachment.cgi?id=4819
+//    as shown there https://gitlab.com/scilab/scilab/uploads/83ed6f071b0d4a273cf41ee64fd404d8/bug_15815.png

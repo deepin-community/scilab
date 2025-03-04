@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2010-2010 - DIGITEO - Bruno JOFRET
  *  Copyright (C) 2015 - Scilab Enterprises - Anais AUBERT
  *  Copyright (C) 2015 - Scilab Enterprises - Cedric Delamarre
@@ -77,6 +77,14 @@ types::Function::ReturnValue sci_exit(types::typed_list &in, int _iRetCount, typ
         }
     }
 
+    // exit have already been called,
+    // keep the last status if defferent than 0
+    // or exit with the new status.
+    if(ConfigVariable::getExitStatus() != 0)
+    {
+        dExit = ConfigVariable::getExitStatus();
+    }
+
     if (shouldExit)
     {
         ConfigVariable::setExitStatus((int)dExit);
@@ -84,5 +92,6 @@ types::Function::ReturnValue sci_exit(types::typed_list &in, int _iRetCount, typ
         // go out without continue any execution
         throw ast::InternalAbort();
     }
+
     return types::Function::OK;
 }

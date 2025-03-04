@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2008-2008 - DIGITEO - Antoine ELIAS
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -96,7 +96,9 @@ InternalType *GenericRDivide(InternalType *_pLeftOperand, InternalType *_pRightO
         switch (iResult)
         {
             case 1 :
-                throw ast::InternalError(_W("Inconsistent row/column dimensions.\n"));
+                wchar_t pMsg[bsiz];
+                os_swprintf(pMsg, bsiz, _W("Operator %ls: Wrong dimensions for operation [%ls] %ls [%ls], same number of columns expected.\n").c_str(), L"/", _pLeftOperand->getAs<types::GenericType>()->DimToString().c_str(), L"/", _pRightOperand->getAs<types::GenericType>()->DimToString().c_str());
+                throw ast::InternalError(pMsg);
             case 2 :
                 throw ast::InternalError(_W("With NaN or Inf a division by scalar expected.\n"));
             case 3 :
@@ -107,7 +109,6 @@ InternalType *GenericRDivide(InternalType *_pLeftOperand, InternalType *_pRightO
                     sciprint(_("Warning : Division by zero...\n"));
                 }
                 break;
-                //            default : throw ast::InternalError(_W("Operator / : Error %d not yet managed.\n"), iResult);
             default :
                 sciprint(_("Operator / : Error %d not yet managed.\n"), iResult);
         }

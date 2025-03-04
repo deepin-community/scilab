@@ -1,5 +1,5 @@
 
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2012 - Michael Baudin
 // Copyright (C) 2000 - INRIA - Carlos Klimann
 //
@@ -26,8 +26,8 @@ function [f,p]=ftest(samples)
     //References:  Wonacott, T.H. & Wonacott, R.J.; Introductory
     //Statistics, J.Wiley & Sons, 1990.
     //
-    if argn(2) == 0 then
-        error(msprintf(gettext("%s: Wrong number of input arguments: %d expected.\n"),"ftest",1))
+    arguments
+        samples
     end
     [nr nc]=size(samples)
     xbar=mean(samples,"r")

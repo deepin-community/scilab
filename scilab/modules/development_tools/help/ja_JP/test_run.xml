@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA
  * Copyright (C) 2009-2011 - DIGITEO - Michael Baudin
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -49,11 +49,20 @@
                                 ATOMSモジュールの名前("module_lycee", "nisp", ...).
                                 処理を行うには,このモジュールはtest_run()をコールする前に
                                 ロードしておく必要があります.
+                                See <literal>atomsGetLoaded()(:,1)</literal> and
+                                <link linkend="atomsLoad">atomsLoad(…)</link>.
                             </para>
                         </listitem>
                         <listitem>
                             <para>
-                                モジュールの絶対ディレクトリパス.
+                                absolute or relative path to the root directory of an external module
+                                containing test/unit_tests or test/nonreg_tests.
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>
+                                <literal>[]</literal> or <literal>"[]"</literal> to run tests of all
+                                internal Scilab modules.
                             </para>
                         </listitem>
                     </itemizedlist>
@@ -300,9 +309,7 @@
             <listitem>
                 <para>
                     &lt;-- CLI SHELL MODE --&gt;
-                    (was &lt;-- JVM NOT MANDATORY --&gt; and is obsolete)
                     This test will be executed with scilab -nwni.
-                    All tests without this, will not be executed in "mode_mwni".
                 </para>
             </listitem>
             <listitem>
@@ -546,6 +553,9 @@ test_run string *ascii*
         <title>参照</title>
         <simplelist type="inline">
             <member>
+                <link linkend="atomsTest">atomsTest</link>
+            </member>
+            <member>
                 <link linkend="debug">debug</link>
             </member>
             <member>
@@ -610,6 +620,12 @@ test_run string *ascii*
                 <revnumber>6.0.2</revnumber>
                 <revdescription>
                     <para>Tests names with the * wildcard like sin*, *sin, or *sin* are now allowed</para>
+                </revdescription>
+            </revision>
+            <revision>
+                <revnumber>2023.0.0</revnumber>
+                <revdescription>
+                    <para> Tag <literal>JVM NOT MANDATORY</literal> removed.</para>
                 </revdescription>
             </revision>
         </revhistory>

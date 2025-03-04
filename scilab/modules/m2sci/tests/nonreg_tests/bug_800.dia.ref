@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ????-2008 - INRIA - Vincent COUVERT <vincent.couvert@inria.fr>
 // Copyright (C) 2005-2008 - INRIA - Pierre MARECHAL <pierre.marechal@inria.fr>
 //
@@ -9,8 +9,8 @@
 // <-- ENGLISH IMPOSED -->
 // <-- Non-regression test for bug 800 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=800
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/800
 //
 // <-- Short Description -->
 //    mfile2sci can not convert expressions such as

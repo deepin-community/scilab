@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009 - DIGITEO - Allan CORNET
  * Copyright (C) 2010 - Calixte DENIZET
  *
@@ -43,24 +43,6 @@ char **GetVariablesName(void)
         VarsName[returnedArraySize] = NULL;
     }
     return VarsName;
-}
-/*--------------------------------------------------------------------------*/
-char **GetCommandsName(void)
-{
-    /*
-    ** This function is now useless
-    ** will be removed by master-merge
-    ** See http://codereview.scilab.org/#change,1456
-    **
-    */
-    int returnedArraySize = 0;
-    char **CommandKeywords = getcommandkeywords(&returnedArraySize);
-    if (CommandKeywords)
-    {
-        CommandKeywords = (char**)REALLOC(CommandKeywords, sizeof(char*) * (returnedArraySize + 1));
-        CommandKeywords[returnedArraySize] = NULL;
-    }
-    return CommandKeywords;
 }
 /*--------------------------------------------------------------------------*/
 char **GetFunctionsName(void)

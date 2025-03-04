@@ -1,5 +1,5 @@
 /*
-*  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+*  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 *  Copyright (C) 2010-2010 - DIGITEO - Bruno JOFRET
 *  Copyright (C) 2011 - DIGITEO - Antoine ELIAS
 *
@@ -98,7 +98,16 @@ public :
     {
         return true;
     }
-    bool                subMatrixToString(std::wostringstream& ostr, int* _piDims, int _iDims) override;
+
+    bool subMatrixToString(std::wostringstream& ostr, int* _piDims, int _iDims) override
+    {
+        return true;
+    }
+
+    virtual bool hasToString() override
+    {
+        return false;
+    }
 
     bool isTrue() override
     {

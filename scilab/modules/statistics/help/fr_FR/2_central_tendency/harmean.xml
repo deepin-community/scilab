@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2000 - INRIA - Carlos Klimann
  * Copyright (C) 2016 - Samuel GOUGEON
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -22,8 +22,7 @@
         <title>Syntaxe</title>
         <synopsis>
             hm = harmean(x)
-            hm = harmean(x, 'r'|1 )
-            hm = harmean(x, 'c'|2 )
+            hm = harmean(x, orientation)
         </synopsis>
     </refsynopsisdiv>
     <refsection role="arguments">
@@ -36,6 +35,26 @@
                     ou complexes, ou de polynômes à coefficients réels ou
                     complexes. Fractions rationelles non acceptées.
                     </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>orientation</term>
+                <listitem>
+                    <para>
+                    indice de la dimension selon laquelle harmean est calculée.
+                    Il peut être
+                    </para>
+                    <itemizedlist>
+                        <listitem>
+                            un caractère <literal>"*"</literal> (default), <literal>"r"</literal>,
+                          <literal>"c"</literal> or <literal>"m"</literal>. "m" est équivalent à 
+                          <literal>find(size(x)>1,1)</literal>.
+                        </listitem>
+                        <listitem>
+                            un entier positif. 1 est équivalent à "r" et 2 est équivalent à "c".
+                        </listitem>
+                    </itemizedlist>
+                    <para/>
                 </listitem>
             </varlistentry>
             <varlistentry>
@@ -57,6 +76,10 @@
             <function>harmean</function> calcule la moyenne harmonique des
             valeurs d'entrée, c'est à dire l'inverse de la moyenne des inverses
             des valeurs d'entrée non nulles.
+        </para>
+        <para>
+            <literal> hm = harmean(x) </literal> or <literal>hm = harmean(x, '*') </literal> retourne 
+            la moyenne harmonique de tous les éléments de x.
         </para>
         <para>
             <literal>hm = harmean(x,'r')</literal>   (ou
@@ -90,8 +113,7 @@ harmean(x, 2)
 // Hypermatrice
 x = grand(3,4,2, "uin",-10, 10)
 harmean(x)
-harmean(x, "r") // erreur: syntaxe exclue avec les hypermatrices
-harmean(x, 3)   // idem
+// attention: harmean(x, "r") et harmean(x, 3) génère une erreur: syntaxe exclue avec les hypermatrices
 
 harmean([%z 0])
 harmean([%z %z/2])

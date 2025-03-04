@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008 - DIGITEO - Allan CORNET
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -8,8 +8,8 @@
 // <-- Non-regression test for bug 3551 -->
 //
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=3551
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/3551
 //
 // <-- Short Description -->
 // scripts using bvodeS and bvode hang and close Scilab 5.0.1

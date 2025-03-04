@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2006 - INRIA - Jean-Baptiste Silvy
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -85,6 +85,7 @@ GRAPHICS_IMPEXP void* get_text_box_property(void* _pvCtx, int iObjUID);
 GRAPHICS_IMPEXP void* get_text_property(void* _pvCtx, int iObjUID);
 GRAPHICS_IMPEXP void* get_auto_clear_property(void* _pvCtx, int iObjUID);
 GRAPHICS_IMPEXP void* get_auto_scale_property(void* _pvCtx, int iObjUID);
+GRAPHICS_IMPEXP void* get_auto_stretch_property(void* _pvCtx, int iObjUID);
 GRAPHICS_IMPEXP void* get_zoom_box_property(void* _pvCtx, int iObjUID);
 GRAPHICS_IMPEXP void* get_zoom_state_property(void* _pvCtx, int iObjUID);
 GRAPHICS_IMPEXP void* get_clip_box_property(void* _pvCtx, int iObjUID);
@@ -164,7 +165,6 @@ GRAPHICS_IMPEXP void* get_anti_aliasing_property(void* _pvCtx, int iObjUID);
 GRAPHICS_IMPEXP void* get_tag_property(void* _pvCtx, int iObjUID);
 GRAPHICS_IMPEXP void* get_UID(void* _pvCtx, int iObjUID);
 GRAPHICS_IMPEXP void* get_tip_orientation_property(void* _pvCtx, int iObjUID);
-GRAPHICS_IMPEXP void* get_tip_z_component_property(void* _pvCtx, int iObjUID);
 GRAPHICS_IMPEXP void* get_tip_display_components_property(void* _pvCtx, int iObjUID);
 GRAPHICS_IMPEXP void* get_datatip_display_mode_property(void* _pvCtx, int iObjUID);
 GRAPHICS_IMPEXP void* get_tip_auto_orientation_property(void* _pvCtx, int iObjUID);

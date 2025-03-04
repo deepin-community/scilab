@@ -11,27 +11,6 @@ function main_builder()
     TOOLBOX_TITLE = "Toolbox Skeleton";
     toolbox_dir   = get_absolute_file_path();
 
-    // Check Scilab's version
-    // =============================================================================
-
-    try
-        v = getversion("scilab");
-    catch
-        error(gettext("Scilab 5.3 or more is required."));
-    end
-
-    if v(1) < 5 & v(2) < 3 then
-        // new API in scilab 5.3
-        error(gettext("Scilab 5.3 or more is required."));
-    end
-
-    // Check modules_manager module availability
-    // =============================================================================
-
-    if ~isdef("tbx_build_loader") then
-        error(msprintf(gettext("%s module not installed."), "modules_manager"));
-    end
-
     // Action
     // =============================================================================
 

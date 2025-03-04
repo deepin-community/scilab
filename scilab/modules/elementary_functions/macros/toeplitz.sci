@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 // Copyright (C) DIGITEO - 2011 - Allan CORNET
 // Copyright (C) Scilab Enterprises - 2011 - Calixte DENIZET
@@ -19,13 +19,9 @@ function a = toeplitz(c, r)
 
     // Checking input arguments
     // ------------------------
-    rhs = argn(2);
-    if rhs < 1 then
-        msg = _("%s: Wrong number of input argument(s): %d to %d expected.\n");
-        error(msprintf(msg, "toeplitz", 1, 2));
-    end
-    if rhs == 1 then
-        r = c;
+    arguments
+        c
+        r = c
     end
     
     if isempty(c) | isempty(r) then

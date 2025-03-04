@@ -1,6 +1,6 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 //
-// Copyright (C) 2019 - Stéphane MOTTELET
+// Copyright (C) 2019 - UTC - Stéphane MOTTELET
 //
 // This file is hereby licensed under the terms of the GNU GPL v2.0,
 

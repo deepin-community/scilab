@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 // Copyright (C) DIGITEO - 2010 - Allan CORNET
 // Copyright (C) 2016, 2017, 2018 - Samuel GOUGEON
@@ -44,7 +44,7 @@ function [%val, %ierr] = evstr(%str)
             %str(k) = strsubst(%str(k), "_(?<!\:|"")?//.*$_" , "", "r");
         end
 
-        // Bracketing expressions: http://bugzilla.scilab.org/15308
+        // Bracketing expressions: https://gitlab.com/scilab/scilab/-/issues/15308
         comm = grep(%str, "_(^|[^:])//_", "r");
         tmp = 1:size(%str,"*");
         if comm~=[]

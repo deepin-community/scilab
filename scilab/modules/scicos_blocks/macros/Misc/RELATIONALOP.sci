@@ -78,7 +78,7 @@ function [x,y,typ] = RELATIONALOP(job,arg1,arg2)
             end
             if ok then
                 if rule == 0 then
-                    label = "==";
+                    label = "$\Large=$";
                 elseif rule == 1 then
                     label = "$\Large\ne$";
                 elseif rule == 2 then
@@ -91,7 +91,7 @@ function [x,y,typ] = RELATIONALOP(job,arg1,arg2)
                     label = "$\Large\ge$"; // >=
                 end
                 graphics.exprs=exprs;
-                graphics.style=["fontSize=13;fontStyle=1;displayedLabel="+label];
+                graphics.style=["blockWithLabel;displayedLabel="+label];
                 model.ipar=[rule],
                 model.nzcross=zcr,
                 model.nmode=zcr,
@@ -113,6 +113,6 @@ function [x,y,typ] = RELATIONALOP(job,arg1,arg2)
         exprs=[string(ipar);string(0)]
         gr_i=[]
         x=standard_define([2 2],model,exprs,gr_i)
-        x.graphics.style=["displayedLabel="+label];
+        x.graphics.style=["blockWithLabel;displayedLabel="+label];
     end
 endfunction

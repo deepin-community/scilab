@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA - 1989 - G. Le Vey
 // Copyright (C) 2012 - Scilab Enterprises - Adeline CARNIS
 //

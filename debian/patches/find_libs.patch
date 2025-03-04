@@ -2,9 +2,9 @@ Description: get around the complex and failing detection
 Author: Julien Puydt
 Forwarded: Debian-specific
 
---- scilab.orig/scilab/bin/scilab
-+++ scilab/scilab/bin/scilab
-@@ -847,8 +847,7 @@
+--- a/scilab/bin/scilab
++++ b/scilab/bin/scilab
+@@ -830,8 +830,7 @@
      esac
  }
  

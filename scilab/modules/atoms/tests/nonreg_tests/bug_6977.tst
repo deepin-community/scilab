@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010 - DIGITEO - Pierre MARECHAL
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -10,8 +10,8 @@
 //
 // <-- Non-regression test for bug 6977 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=6977
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/6977
 //
 // <-- Short Description -->
 // In the presentation frame: Make http entries hyperlinked (with target="_blank").

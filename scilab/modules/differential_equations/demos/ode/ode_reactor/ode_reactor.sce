@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010 - Jakub Kopac <kopac.jakub@gmail.com>
 //
 // This file is released under the 3-clause BSD license. See COPYING-BSD.
@@ -49,14 +49,14 @@ function nonisothermal_reactor()
     T  = solution(3,:);
     Tc = solution(4,:);
 
-    f = scf(1); //create new figure, figure_id=1
+    f = scf(100001); //create new figure, figure_id=100001
     clf;    //clear previous graph
     plot(z',[cA; cB]')
     legend("Concentration of compound A","Concentration of compound B"); //make legend for lines
     xlabel("z [m]")  //tag x axis
     ylabel("Concentrations [mol/m3]")  //tag y axis
 
-    g = scf(2); //figure_id=2
+    g = scf(100002); //figure_id=100002
     g.figure_position(1) = g.figure_position(1)+f.figure_size(1); // So the windows don't overlay
     clf;
     plot(z',[T; Tc]')

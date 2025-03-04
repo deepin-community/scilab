@@ -1,6 +1,6 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 //
-// Copyright (C) 2017 - Samuel GOUGEON : cat() rewritten: http://bugzilla.scilab.org/8297
+// Copyright (C) 2017 - Samuel GOUGEON : cat() rewritten: https://gitlab.com/scilab/scilab/-/issues/8297
 //
 // This file is hereby licensed under the terms of the GNU GPL v2.0,
 // pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -63,15 +63,9 @@ function  y = cat(dim, varargin)
             error(msprintf(msg, "cat"));
         end
     end
-    // They must be all of the same type: cell, struct, or other
-    T = typeof(v)
-    for i = 2:size(varargin)
-        v = varargin(i)
-        if typeof(v)~=T
-            msg = gettext("%s: Wrong type for input arguments: Same types expected.\n");
-            error(msprintf(msg, "cat"));
-        end
-    end
+
+    // Most of compatibility issues between input types are handled at the
+    // [,], [;] or insertion levels.
 
     // PROCESSING
     // ----------
@@ -96,10 +90,20 @@ function  y = cat(dim, varargin)
         st = emptystr(1,nd) + ":";
         st(dim) = "%d:%d";
         st = strcat(st,",");
-        Cmd = "y("+st+") = varargin(i);"
+        Cmd = "y("+st+") = v;"
         sy = size(y,dim);
         for i = 2:length(varargin)
-            s = size(varargin(i), dim);
+            v = varargin(i)
+            if typeof(y)=="boolean"
+                if or(type(v)==[2 8])
+                    y = bool2s(y)
+                end
+            elseif or(type(y)==[2 8]) & typeof(v)=="boolean"
+                v = bool2s(v)
+            elseif or(type(y)==[1 5]) & ~isreal(y) & type(v)==8
+                v = double(v)
+            end
+            s = size(v, dim);
             cmd = msprintf(Cmd,sy+1,sy+s);
             execstr(cmd);
             sy = sy + s;

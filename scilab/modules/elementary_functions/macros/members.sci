@@ -1,8 +1,6 @@
 // Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
-// Copyright (C) 2013 - Samuel GOUGEON
-// Copyright (C) 2009 - Université du Maine - Samuel GOUGEON
-//
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
+// Copyright (C) 2009, 2013, 2022 - Université du Maine - Samuel GOUGEON
 //
 // This file is hereby licensed under the terms of the GNU GPL v2.0,
 // pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -235,7 +233,7 @@ function [nb, loc] = members(A, S, varargin)
                 loc = I;
                 loc(k) = kS(I(k));
                 if last then
-                    if ~isempty(k)
+                    if k <> []
                         loc(k) = length(S)-loc(k)+1;
                     end
                 end
@@ -247,93 +245,34 @@ function [nb, loc] = members(A, S, varargin)
             // ==========================================
             LA = size(A, "*");
             LS = size(S, "*");
-            A = A(:);
-            if ~last then
+            if last then
                 S = S($:-1:1);
             end
 
-            // Slices may be needed in case of memory overflow
-            //
-            // Function returning the memory space in [bytes] occupied by each
-            //  querried variable. If a variable exists in several contexts,
-            //  only the last created one is considered
-            function varargout = varspace(varargin)
-                [Ln, Ls] = who("local");
-                vs = list();
-                for vn = varargin
-                    i = find(Ln==vn);
-                    if i ~= [] then
-                        vs($+1) = Ls(i(1))*8;
-                    else
-                        vs($+1) = 0;
+            nb = zeros(A);
+            loc = nb;
+            // Loop over needles
+            for i = 1:LA
+                tmp = S==A(i)
+                nb(i) = sum(tmp)
+                if lhs > 1
+                    p = find(tmp,1)
+                    if p <> []
+                        loc(i) = p
                     end
                 end
-                varargout = vs;
-            endfunction
-            // -----------------------------------
-            // Memory space needed to process a i:j slice of A:
-            //   nb  : j doubles (occupied at the end)
-            //   loc : j doubles (occupied at the end)
-            //   tmp : LS * (j-i+1) doubles needed
-            //   A2  : LS * mem(A(i:j)) needed
-            //   S2  : mem(S)*(j-i+1) needed
-
-            // Function setting the thickness of the slice, according to the
-            //    available and needed memory
-            function j = set_j(i, LS, memS, rA)
-                // rA : remaining unprocessed part of A
-                e = size(rA, "*");
-                Vtest = rA(1:e);
-                memrA = varspace("Vtest");   // [bytes]
-                j = i+e-1;
-            endfunction
-
-            memS = varspace("S");  // [bytes]
-
-            // Starting and ending indices in A for the current slice
-            i = 1;   // Starting index: initialization
-            j = 0;   // Ending index: initialization
-            while j<LA      // Slicing loop
-                // Setting next j (=> thickness of the slice = j-i+1)
-                j = set_j(i, LS, memS, A(i:$))
-
-                // Progression bar
-                if j < LA then
-                    if isdef("waitH") then
-                        waitbar(j/LA, waitH);
-                    elseif j/LA < 0.4   // Else: too few steps => not worthwhile
-                        waitH = waitbar(j/LA);
-                    end
-                end
-
-                A2 = repmat(A(i:j), 1, LS);
-                S2 = repmat(S(:).', j-i+1, 1);
-
-                tmp = bool2s(A2==S2);
-                nb(i:j) = sum(tmp, "c");
-                if lhs > 1 then
-                    tmp = tmp.* ( (1:LS) .*. ones(j-i+1, 1) );
-                    loc(i:j) = max(tmp, "c");
-                end
-                i = j+1;
-                // End of slice processing
-            end
-            // Deleting the waitbar (if any) and clearing transient variables
-            clear A2 S2 tmp
-            if isdef("waitH") then
-                delete(waitH);
             end
 
             // Final operations on the overall result(s)
             nb = matrix(nb, sA);
             if lhs > 1
-                if ~last
-                    k = loc~=0;
-                    if ~isempty(loc(k))
-                        loc(k) = LS - loc(k) + 1;
+                loc = matrix(loc, sA);
+                if last
+                    k = loc<>0
+                    if or(k)
+                        loc(k) = LS - loc(k) + 1
                     end
                 end
-                loc = matrix(loc, sA);
             end
         end
         // ========================================================================

@@ -1,5 +1,5 @@
 //
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009-2009 - DIGITEO - Bruno JOFRET
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -25,5 +25,5 @@ function [] = %_plot3d()
     e=gce();
     e.color_flag = 1;
     f = gcf();
-    f.color_map = jetcolormap(32);
+    f.color_map = jet(32);
 endfunction

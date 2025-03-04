@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008-2009 - INRIA - Michael Baudin
 // Copyright (C) 2009-2011 - DIGITEO - Michael Baudin
 //
@@ -95,24 +95,10 @@ function [x,fval,exitflag,output] = fminsearch ( varargin )
             if type ( fmsdata.OutputFcn ) == 13 then
                 // The output function is a macro
                 stop = fmsdata.OutputFcn ( data.x , optimValues , state );
-                //
-                // Backward-compatibility: define the stop variable
-                //
-                if ( exists("stop")==0 ) then
-                    fms_warnheaderobsolete ( "outputfun(x,optimValues , state )" , "stop=outputfun(x,optimValues , state )", "5.4.1" )
-                    stop = %f
-                end
             elseif ( type ( fmsdata.OutputFcn ) == 15 ) then
                 // The output function is a list of macros
                 for i = 1:length(fmsdata.OutputFcn)
                     stop = fmsdata.OutputFcn(i) ( data.x , optimValues , state );
-                end
-                //
-                // Backward-compatibility: define the stop variable
-                //
-                if ( exists("stop")==0 ) then
-                    fms_warnheaderobsolete ( "outputfun(x,optimValues , state )" , "stop=outputfun(x,optimValues , state )", "5.4.1" )
-                    stop = %f
                 end
             else
                 // The user did something wrong...
@@ -153,19 +139,6 @@ function [x,fval,exitflag,output] = fminsearch ( varargin )
         end
         f = __fminsearch_f__ ( x , __fminsearch_args__(:))
     endfunction
-
-    function fms_warnheaderobsolete ( oldheader , newheader , removedVersion )
-        warnMessage = msprintf(_("Syntax %s is obsolete."),oldheader)
-        warnMessage = [warnMessage, msprintf(_("Please use %s instead."),newheader)]
-        warnMessage = [warnMessage, msprintf(_("This feature will be permanently removed in Scilab %s"), removedVersion)]
-        warning(warnMessage);
-    endfunction
-
-    function errMessage = fms_errheaderobsolete (oldheader, newheader)
-        errMessage = msprintf(_("Calling sequence %s is obsolete."),oldheader)
-        errMessage = [errMessage, msprintf(_("Please use %s instead."),newheader)]
-    endfunction
-
 
     function assert_typecallable ( var , varname , ivar )
         // Check that var is a function or a list
@@ -246,7 +219,6 @@ function [x,fval,exitflag,output] = fminsearch ( varargin )
     if type(OutputFcn) == 13 then
         macroInfo = macrovar(OutputFcn);
         if size(macroInfo(2), "*") <> 1 then
-            errMessage = fms_errheaderobsolete("outputfun(x,optimValues , state )", "stop=outputfun(x,optimValues , state )");
             error(errMessage);
         end
     elseif type(OutputFcn) == 15 then
@@ -254,7 +226,6 @@ function [x,fval,exitflag,output] = fminsearch ( varargin )
             if type(OutputFcn(i)) == 13 then
                 macroInfo = macrovar(OutputFcn(i));
                 if size(macroInfo(2), "*") <> 1 then
-                    errMessage = fms_errheaderobsolete("outputfun(x,optimValues , state )", "stop=outputfun(x,optimValues , state )");
                     error(errMessage);
                 end
             end

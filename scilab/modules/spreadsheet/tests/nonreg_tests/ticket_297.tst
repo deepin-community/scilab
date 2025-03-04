@@ -2,11 +2,9 @@
 // Copyright (C) 2010 - 2012 - INRIA - Michael BAUDIN
 // =============================================================================
 // <-- CLI SHELL MODE -->
+// <-- NO CHECK REF -->
 // =============================================================================
 // <-- Non-regression test for bug 297 -->
-//
-// <-- URL -->
-//  http://forge.scilab.org/index.php/p/csv-readwrite/issues/297/
 //
 // <-- Short Description -->
 // The csvTextScan function does not take range as a row matrix.
@@ -24,7 +22,7 @@ Astr = [
 "6,13,20,27,34,41,48,55"
 "+0,-0,Inf,-Inf,Nan,1.D+308,1.e-308,1.e-323"
 ];
-A = csvTextScan ( Astr,[],[],"double",[2 3 5 6] )
+A = csvTextScan ( Astr,[],[],"double",[2 3 5 6] );
 expected = [
  16 23 30 37
  17 6  31 38

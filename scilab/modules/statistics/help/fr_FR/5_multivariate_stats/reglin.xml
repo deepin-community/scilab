@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2014 - Scilab Enterprises - Paul Bignier
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -85,29 +85,6 @@ plot(x, a*x+b)
             x = -30:30;
             y = x.^3;
             [a, b] = reglin(x, y);
-            plot(x, y, "red")
-            plot(x, a*x+b)
-        </scilab:image>
-        <para>
-            Exemple avec un NaN :
-        </para>
-        <programlisting role="example"><![CDATA[
-// Mêmes valeurs que dans l'exemple précédent, mais avec un NaN
-x = -30:30;
-y = x.^3;
-y(10) = %nan;
-
-// Extraction de la moyenne des moindres carrés de cette fonction et affichage
-[a, b] = reglin(x, y);
-plot(x, y, "red")
-plot(x, a*x+b)
-// Le point [x(10), y(10)] a été ignoré, résultant en une valeur non-nulle pour b.
- ]]></programlisting>
-        <scilab:image>
-            x = -30:30;
-            y = x.^3;
-            y(10) = %nan;
-            [a, b] = nanreglin(x, y);
             plot(x, y, "red")
             plot(x, a*x+b)
         </scilab:image>

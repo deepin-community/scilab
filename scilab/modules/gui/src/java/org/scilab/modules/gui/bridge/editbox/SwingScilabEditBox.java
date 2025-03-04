@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2007-2008 - INRIA - Vincent Couvert
  * Copyright (C) 2007 - INRIA - Marouane BEN JELLOUL
  * Copyright (C) 2011 - DIGITEO - Vincent COUVERT
@@ -431,6 +431,14 @@ public class SwingScilabEditBox extends JScrollPane implements SwingViewObject, 
         textPane.setBorder(ScilabRelief.getBorderFromRelief(reliefType, defaultBorder));
     }
 
+    /**
+     * Set the tootip text of the EditBox
+     * @param tooltipText the tooltip text
+     */
+    public void setToolTipText(String tooltipText) {
+    	textPane.setToolTipText(tooltipText);
+    }
+    
     /**
      * Destroy the EditBox
      */

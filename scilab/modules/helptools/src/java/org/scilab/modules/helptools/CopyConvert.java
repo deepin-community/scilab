@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA - Hussein SHAFIE
  * Copyright (C) 2010 - DIGITEO - Sylvestre LEDRU
  *
@@ -920,7 +920,7 @@ public class CopyConvert extends DefaultHandler implements ErrorHandler {
                 generatePNG(loc);
                 return;
             }
-            out.write("latex" + attribs  + " xmlns=\"http://forge.scilab.org/p/jlatexmath\"><![CDATA[" + LaTeX + "]]></latex>");
+            out.write("latex" + attribs  + " xmlns=\"http://github.com/opencollab/jlatexmath\"><![CDATA[" + LaTeX + "]]></latex>");
         }
 
         protected void generatePNG(Locator loc) throws SAXParseException {

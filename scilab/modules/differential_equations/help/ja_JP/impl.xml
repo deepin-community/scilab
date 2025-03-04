@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA
  * ...
  *
@@ -176,7 +176,7 @@ y = impl([1;0;0], [-0.04;0.04;0], 0, 0.4, 'resid', 'aplusp');
         <title>参照</title>
         <simplelist type="inline">
             <member>
-                <link linkend="dassl">dassl</link>
+                <link linkend="dae">dae</link>
             </member>
             <member>
                 <link linkend="ode">ode</link>

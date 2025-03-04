@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2011-2014 - INRIA - Serge Steer
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -723,7 +723,7 @@ function wfirSetFilterView()
         if nwin==0 then win=1;else win=max(winsid())+1;end
         fig=scf(win)
         a=gca();
-        a.x_label.text=_("frequency (Hz)")
+        a.x_label.text=_("Normalized frequency (Hz)")
         a.y_label.text=_("Magnitude (dB)")
         a.axes_visible="on"
         a.grid=ones(1,2)*color("gray");

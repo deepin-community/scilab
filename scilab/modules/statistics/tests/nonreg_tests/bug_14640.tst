@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2016 - Samuel GOUGEON
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -7,8 +7,8 @@
 // <-- CLI SHELL MODE -->
 // <-- Non-regression test for bug 14640 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/14640
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/14640
 //
 // <-- Short Description -->
 // median(int8([10 60 80 100])) returned -58 instead of 70 due to (60+80)>128 overflow
@@ -44,7 +44,7 @@ expected = int8([
 assert_checkequal(median(x,3), expected);
 
 //
-//see http://bugzilla.scilab.org/14647
+//see https://gitlab.com/scilab/scilab/-/issues/14647
 //b = int64(2)^62;
 //x = b + ..
 //    int64([10    60   80  100

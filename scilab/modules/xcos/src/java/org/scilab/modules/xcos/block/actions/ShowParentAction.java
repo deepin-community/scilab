@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009 - DIGITEO - Vincent COUVERT
  * Copyright (C) 2010 - DIGITEO - Clement DAVID
  * Copyright (C) 2011-2015 - Scilab Enterprises - Clement DAVID
@@ -20,6 +20,9 @@ package org.scilab.modules.xcos.block.actions;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.util.Optional;
 
 import org.scilab.modules.graph.ScilabGraph;
 import org.scilab.modules.graph.actions.base.DefaultAction;
@@ -29,9 +32,9 @@ import org.scilab.modules.xcos.Kind;
 import org.scilab.modules.xcos.ObjectProperties;
 import org.scilab.modules.xcos.Xcos;
 import org.scilab.modules.xcos.XcosTab;
-import org.scilab.modules.xcos.XcosView;
+import org.scilab.modules.xcos.configuration.ConfigurationManager;
+import org.scilab.modules.xcos.configuration.model.DocumentType;
 import org.scilab.modules.xcos.graph.XcosDiagram;
-import org.scilab.modules.xcos.graph.model.ScicosObjectOwner;
 import org.scilab.modules.xcos.graph.model.XcosCell;
 import org.scilab.modules.xcos.graph.model.XcosCellFactory;
 import org.scilab.modules.xcos.utils.XcosMessages;
@@ -100,7 +103,39 @@ public class ShowParentAction extends DefaultAction {
 
                 parentGraph = new XcosDiagram(controller, parent[0], parentKind, "");
                 XcosCellFactory.insertChildren(controller, parentGraph);
+                parentGraph.setModified(graph.isModified());
                 parentGraph.installListeners();
+
+                // set the associated tab
+                if (parentKind == Kind.DIAGRAM) {
+                    final String[] absolutePath = {""};
+                    controller.getObjectProperty(parent[0], parentKind, ObjectProperties.PATH, absolutePath);
+
+                    // retrieve the associated file
+                    final String url;
+                    String temp;
+                    try {
+                        temp = new File(absolutePath[0]).toURI().toURL().toExternalForm();  
+                    } catch (MalformedURLException exc) {
+                        temp = null;
+                    }
+                    url = temp;
+                    
+                    Optional<DocumentType> tab = ConfigurationManager.getInstance().streamTab()
+                        .filter(d -> url.equals(d.getUrl()) && (d.getPath() == null || d.getPath().isEmpty()))
+                        .findFirst();
+                    if (tab.isPresent())
+                        parentGraph.setGraphTab(tab.get().getUuid());
+                } else {
+                    // set window position from a previously closed tab
+                    String[] blockUID = {""};
+                    controller.getObjectProperty(parent[0], Kind.BLOCK, ObjectProperties.UID, blockUID);
+                    Optional<DocumentType> tab = ConfigurationManager.getInstance().streamTab()
+                        .filter(d -> blockUID[0].equals(d.getPath()))
+                        .findFirst();
+                    if (tab.isPresent())
+                        parentGraph.setGraphTab(tab.get().getUuid());
+                }
 
                 Xcos.getInstance().addDiagram(Xcos.findRoot(controller, graph), parentGraph);
             }

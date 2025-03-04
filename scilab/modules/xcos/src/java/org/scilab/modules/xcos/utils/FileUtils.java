@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2010 - DIGITEO - Clement DAVID
  * Copyright (C) 2011-2014 Scilab Enterprises - Clement DAVID
  *
@@ -238,8 +238,11 @@ public final class FileUtils {
                     } else
 
                         // Specific chars
-                        if (ch == '_' || ch == ' ') {
-                            cFunctionName.append('_');
+                        if (ch == '_' || ch == ' ' || ch == '-') {
+                            // do not append consecutive _
+                            if (cFunctionName.length() > 0 && cFunctionName.charAt(cFunctionName.length() - 1) != '_') {
+                                cFunctionName.append('_');
+                            }
                         }
         }
         return cFunctionName.toString();

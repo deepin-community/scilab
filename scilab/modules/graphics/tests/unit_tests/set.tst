@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2018 - Samuel GOUGEON
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -47,13 +47,13 @@ f.axes_size = [650 550]; sleep(200)
 assert_checkequal(f.axes_size, [650 550]);
 
 // Matrix property value
-cm = jetcolormap(50);
+cm = jet(50);
 set(f, "color_map", cm);
 assert_checkequal(f.color_map, cm);
-cm = jetcolormap(51);
+cm = jet(51);
 f.color_map = cm;
 assert_checkequal(f.color_map, cm);
-cm = jetcolormap(52);
+cm = jet(52);
 f.color_map = cm;
 assert_checkequal(f.color_map, cm);
 
@@ -70,8 +70,8 @@ assert_checkequal(e.display_function_data, []);
 
 // Scalar property value (curve.thickness): repeated assignment
 L = list(e(1:3) , 2, [2 2 2]', ..
-         e(1:3)', 3, [3 3 3]', ..
-         matrix(e(1:6),2,3), 2, [2 2 2 2 2 2]');
+         e(1:3)', 3, [3 3 3], ..
+         matrix(e(1:6),2,3), 2, [2 2 2; 2 2 2]);
 for i = 0:(size(L)/3-1)
     h = L(1+3*i);
     v = L(2+3*i);
@@ -85,10 +85,10 @@ for i = 0:(size(L)/3-1)
 end
 // Scalar property value (curve.thickness): distributive assignment
 L = list(e(1:3) , [2 3 4]', [2 3 4]', ..
-         e(1:3)', [1 2 3],  [1 2 3]', ..
-         matrix(e(1:6),2,3), [2 4 6; 3 5 7], (2:7)', ..
-         matrix(e(1:6),2,3), 1:6, (1:6)', ..
-         matrix(e(1:6),2,3), (1:6)', (1:6)', ..
+         e(1:3)', [1 2 3],  [1 2 3], ..
+         matrix(e(1:6),2,3), [2 4 6; 3 5 7], [2 4 6; 3 5 7], ..
+         matrix(e(1:6),2,3), 1:6, [1 3 5;2 4 6], ..
+         matrix(e(1:6),2,3), (1:6)', [1 3 5;2 4 6], ..
          );
 for i = 0:(size(L)/3-1)
     h = L(1+3*i);
@@ -154,7 +154,7 @@ end
 // Matrix property value (axes.data_bounds): rowed-wise assignments
 L = list(a , [1 1.5 0 0.5 ; 1.5 2.2 -0.5 1], [1 0 ; 1.5 0.5 ; 1.5 -0.5 ; 2.2 1], ..
          a', [1 1.5 0 0.5 ; 1.5 2.2 -0.5 1], [1 0 ; 1.5 0.5 ; 1.5 -0.5 ; 2.2 1], ..
-        );  // beware about http://bugzilla.scilab.org/15079 for vref
+        );  // beware about https://gitlab.com/scilab/scilab/-/issues/15079 for vref
 for i = 0:(size(L)/3-1)
     h = L(1+3*i);
     v = L(2+3*i);

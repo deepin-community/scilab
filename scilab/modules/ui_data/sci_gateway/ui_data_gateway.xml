@@ -2,7 +2,7 @@
 <!DOCTYPE module SYSTEM "../../functions/xml/gateway.dtd">
 <!--
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2011 - DIGITEO - Antoine ELIAS
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -26,5 +26,4 @@
     <gateway name="sci_editvar"         function="editvar"          type="0" />
     <gateway name="sci_filebrowser"     function="filebrowser"      type="1" />
     <gateway name="sci_updatebrowsevar" function="updatebrowsevar"  type="1" />
-    <gateway name="sci_closeEditvar"    function="closeEditvar"     type="1" />
 </module>

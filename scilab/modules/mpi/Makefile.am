@@ -1,4 +1,4 @@
-# Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+# Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 # Copyright (C) 2011 - DIGITEO - Sylvestre LEDRU
 #
 # Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -46,7 +46,6 @@ libscimpi_la_CPPFLAGS=  -Iincludes/ \
     -I$(top_srcdir)/modules/ast/includes/symbol/ \
     -I$(top_srcdir)/modules/ast/includes/system_env/ \
     -I$(top_srcdir)/modules/ast/includes/types/ \
-    -I$(top_srcdir)/modules/ast/includes/analysis/ \
     -I$(top_srcdir)/modules/string/includes \
     -I$(top_srcdir)/modules/dynamic_link/includes \
     -I$(top_srcdir)/modules/output_stream/includes \
@@ -74,15 +73,15 @@ modulename=mpi
 libscimpi_la_rootdir = $(mydatadir)
 libscimpi_la_root_DATA = readme.txt
 
-#### mpi : init scripts ####
+####ï¿½mpi : init scripts ####
 libscimpi_la_etcdir = $(mydatadir)/etc
 libscimpi_la_etc_DATA = etc/mpi.quit etc/mpi.start
 
-#### mpi : gateway declaration ####
+####ï¿½mpi : gateway declaration ####
 libscimpi_la_sci_gatewaydir = $(mydatadir)/sci_gateway
 libscimpi_la_sci_gateway_DATA = sci_gateway/mpi_gateway.xml
 
-#### mpi : include files ####
+####ï¿½mpi : include files ####
 libscimpi_la_includedir=$(pkgincludedir)/mpi
 libscimpi_la_include_HEADERS = includes/gw_mpi.h \
                                includes/dynlib_mpi.h \

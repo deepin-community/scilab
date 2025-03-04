@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Bruno JOFRET
 // Copyright (C) 2017, 2018 - Samuel GOUGEON
 //
@@ -24,7 +24,7 @@ assert_checkequal(clean(fact-R), [0 0 0]*%s);
 
 // With negative integers
 // ----------------------
-// http://bugzilla.scilab.org/15058
+// https://gitlab.com/scilab/scilab/-/issues/15058
 v = int16([-2*3*5*7  7*11  -13*17]);
 LCMref = 2*3*5*7*11*13*17;
 factRef = [-11*13*17, 2*3*5*13*17, -2*3*5*7*11];

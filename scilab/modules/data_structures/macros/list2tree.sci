@@ -1,5 +1,5 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
-// Copyright (C) 2019 - 2020 - Samuel GOUGEON
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
+// Copyright (C) 2019 - 2023 - Samuel GOUGEON
 //
 // This file is hereby licensed under the terms of the GNU GPL v2.0,
 // pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -154,11 +154,8 @@ function tree = list2tree_inc(x, Path, tree, styles, arrayByFields)
         end
         tree($).label = tree($).label + tmp
 
-    elseif type(x)==128 & or(typeof(x)==["diagram" "Block"])
-        tmp = _(" [Xcos diagram]")
-        if typeof(x)=="Block" then
-            tmp = _(" [Xcos block]")
-        end
+    elseif type(x)==128
+        tmp = " [" + typeof(x) + " object]";
         struct_array = %f
         v = ["" ; fieldnames(x)]
         II = 2:size(v,"*")  // fields indices
@@ -202,7 +199,7 @@ function tree = list2tree_inc(x, Path, tree, styles, arrayByFields)
 
         // Reads the object
         clear o
-        if typeof(x)=="st" | (type(x)==128 & or(typeof(x)==["diagram" "Block"])) then
+        if typeof(x)=="st" | type(x)==128 then
             if ~struct_array
                 o = x(v(i))
             else
@@ -249,37 +246,39 @@ function tree = list2tree_inc(x, Path, tree, styles, arrayByFields)
         else
             tp = typeof(o)
             try
-                if size(o, "*") > 40 then
-                    tts = tp + " of size " + sci2exp(size(o))
-                else
-                    tts = sci2exp(o)
-                    if or(type(o)==(1:8))
-                        tts = strsubst(tts, ",", ", ");
-                        tts = strsubst(tts, ";", " ; ");
-                    elseif type(o)==10
-                        tts = strsubst(tts, """,""", """, """);
-                        tts = strsubst(tts, """;""", """ ; """);
-                    end
-                    if type(o)==2 | typeof(o)=="rational"
-                        vn = varn(o)
-                        if or(vn==["s" "z"])
-                            tts = strsubst(tts, "%"+vn, vn)
-                            tts = strsubst(tts, "*", "")
-                        end
-                    end
-                    if (or(type(o)==[1 2 5]) | typeof(o)=="rational")
-                        tts = strsubst(tts, "%inf","Inf")
-                        tts = strsubst(tts, "%nan","Nan")
-                        tts = strsubst(tts, "%i","i")
-                    end
-                    if or(type(o)==[4 6])
-                        tts = strsubst(tts, "%t", "T")
-                        tts = strsubst(tts, "%f", "F")
-                        tts = strsubst(tts, "],", "]]")
-                        tts = strsubst(tts, ",", "")
-                        tts = strsubst(tts, "]]", "],")
+                tts = sci2exp(o)
+                if or(type(o)==(1:8))
+                    tts = strsubst(tts, ",", ", ");
+                    tts = strsubst(tts, ";", " ; ");
+                elseif type(o)==10
+                    tts = strsubst(tts, """,""", """, """);
+                    tts = strsubst(tts, """;""", """ ; """);
+                end
+                if type(o)==2 | typeof(o)=="rational"
+                    vn = varn(o)
+                    if or(vn==["s" "z"])
+                        tts = strsubst(tts, "%"+vn, vn)
+                        tts = strsubst(tts, "*", "")
                     end
                 end
+                if (or(type(o)==[1 2 5]) | typeof(o)=="rational")
+                    tts = strsubst(tts, "%inf","Inf")
+                    tts = strsubst(tts, "%nan","Nan")
+                    tts = strsubst(tts, "%i","i")
+                end
+                if or(type(o)==[4 6])
+                    tts = strsubst(tts, "%t", "T")
+                    tts = strsubst(tts, "%f", "F")
+                    tts = strsubst(tts, "],", "]]")
+                    tts = strsubst(tts, ",", "")
+                    tts = strsubst(tts, "]]", "],")
+                end
+                head = ""
+                if length(tts) > 150
+                    head = "<font color=""gray"">(" + strcat(msprintf("%d\n", size(o)'),"×") + ") </font> "
+                    tts = part(tts, 1:70) + " … " + part(tts, $-70:$)
+                end
+                tts = head + tts
             catch
                 tts = tp;
             end

@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2006 - INRIA - Antoine ELIAS
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -50,6 +50,8 @@ types::Function::ReturnValue sci_execstr(types::typed_list &in, int _iRetCount, 
     wchar_t *pstCommand = NULL;
     bool bSilentError   = ConfigVariable::isSilentError();
     Parser parser;
+    std::wstring stack;
+    std::wstring error;
 
     if (in.size() < 1 || in.size() > 3)
     {
@@ -105,11 +107,34 @@ types::Function::ReturnValue sci_execstr(types::typed_list &in, int _iRetCount, 
         }
     }
 
+    if (bErrCatch == false && _iRetCount > 1)
+    {
+        Scierror(999, _("%s: Wrong number of output arguments: %d expected.\n"), "execstr", 1);
+        return types::Function::Error;
+    }
+
+    if (bErrCatch && _iRetCount > 3)
+    {
+        Scierror(999, _("%s: Wrong number of output arguments: At most %d expected.\n"), "execstr", 3);
+        return types::Function::Error;
+    }
+
+
     //1st argument
     if (in[0]->isDouble() && in[0]->getAs<types::Double>()->getSize() == 0)
     {
         // execstr([])
         out.push_back(types::Double::Empty());
+        if (_iRetCount > 1)
+        {
+            out.push_back(new types::String(L""));
+        }
+
+        if (_iRetCount > 2)
+        {
+            out.push_back(new types::String(L""));
+        }
+
         return types::Function::OK;
     }
 
@@ -148,7 +173,19 @@ types::Function::ReturnValue sci_execstr(types::typed_list &in, int _iRetCount, 
         if (bErrCatch)
         {
             out.push_back(new types::Double(999));
-            //to lock last error information
+            if (_iRetCount > 1)
+            {
+                out.push_back(new types::String(parser.getErrorMessage()));
+            }
+
+            if (_iRetCount > 2)
+            {
+                std::wostringstream ostr;
+                ConfigVariable::whereErrorToString(ostr);
+                out.push_back(new types::String(ostr.str().c_str()));
+            }
+
+            // to lock last error information
             ConfigVariable::setLastErrorCall();
             ConfigVariable::setLastErrorMessage(parser.getErrorMessage());
             ConfigVariable::setLastErrorNumber(999);
@@ -256,6 +293,12 @@ types::Function::ReturnValue sci_execstr(types::typed_list &in, int _iRetCount, 
             scilabForcedWriteW(ie.GetErrorMessage().c_str());
         }
 
+        std::wostringstream ostr;
+        ConfigVariable::whereErrorToString(ostr);
+        stack = ostr.str();
+
+        error = ie.GetErrorMessage();
+
         ConfigVariable::resetWhereError();
         iErr = ConfigVariable::getLastErrorNumber();
     }
@@ -263,7 +306,31 @@ types::Function::ReturnValue sci_execstr(types::typed_list &in, int _iRetCount, 
     if (bErrCatch)
     {
         out.push_back(new types::Double(iErr));
-        //to lock last error information
+        if (_iRetCount > 1)
+        {
+            if (iErr)
+            {
+                out.push_back(new types::String(error.c_str()));
+            }
+            else
+            {
+                out.push_back(new types::String(L""));
+            }
+        }
+
+        if (_iRetCount > 2)
+        {
+            if (iErr)
+            {
+                out.push_back(new types::String(stack.c_str()));
+            }
+            else
+            {
+                out.push_back(new types::String(L""));
+            }
+        }
+
+        // to lock last error information
         ConfigVariable::setLastErrorCall();
         // allow print
         ConfigVariable::resetError();

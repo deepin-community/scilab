@@ -6,7 +6,7 @@
     <!-- File menu -->
     <menu label="&amp;File" enabled="true">
         <submenu label="&amp;Execute..." accelerator="OSSCKEY E">
-            <callback instruction="%fileToExec = uigetfile(&quot;*.sc*&quot;, &quot;&quot;, gettext(&quot;Select a file to execute&quot;)); if ~(%fileToExec == &quot;&quot;) then exec(%fileToExec); disp(msprintf(gettext(&quot;Execution done.\n&quot;))); end; clear(&quot;%fileToExec&quot;);" type="0"/>
+            <callback instruction="%fileToExec = uigetfile(&quot;*.sc*&quot;, &quot;&quot;, gettext(&quot;Select a file to execute&quot;)); if ~(%fileToExec == &quot;&quot;) then exec(%fileToExec,-1); disp(msprintf(gettext(&quot;Execution done.\n&quot;))); end; clear(&quot;%fileToExec&quot;);" type="0"/>
         </submenu>
         <separator/>
         <submenu label="&amp;Open a file..." accelerator="OSSCKEY O" icon="document-open-sci">
@@ -128,6 +128,10 @@
         <submenu label="&amp;File Browser">
             <callback instruction="filebrowser()" type="0"/>
         </submenu>
+        <separator/>
+        <submenu label="&amp;Import Data">
+            <callback instruction="uiimport()" type="0"/>
+        </submenu>
     </menu>
     <!-- Help menu -->
     <menu label="&amp;?" enabled="true">
@@ -135,7 +139,7 @@
             <callback instruction="help();" type="10"/>
         </submenu>
         <separator/>
-        <submenu label="Scilab &amp;Demonstrations" icon="applications-system">
+        <submenu label="Scilab &amp;Demonstrations" icon="x-office-presentation">
             <callback instruction="demo_gui();" type="10"/>
         </submenu>
         <separator/>
@@ -161,11 +165,11 @@
             <submenu label="&amp;File Exchange">
                 <callback instruction="org.scilab.modules.gui.bridge.CallScilabBridge.openFileExchange" type="3"/>
             </submenu>
+            <submenu label="&amp;Discourse">
+                <callback instruction="org.scilab.modules.gui.bridge.CallScilabBridge.openDiscourse" type="3"/>
+            </submenu>
             <submenu label="&amp;Mailing Lists">
                 <callback instruction="org.scilab.modules.gui.bridge.CallScilabBridge.openMailingList" type="3"/>
-            </submenu>
-            <submenu label="Mailing Lists &amp;Archives">
-                <callback instruction="org.scilab.modules.gui.bridge.CallScilabBridge.openMailingListArchives" type="3"/>
             </submenu>
             <separator/>
             <submenu label="&amp;Forge">
@@ -176,13 +180,12 @@
             </submenu>
         </submenu>
         <separator/>
-        <submenu label="&amp;Scilab Enterprises">
-            <callback instruction="org.scilab.modules.gui.bridge.CallScilabBridge.openSE" type="3"/>
+        <submenu label="&amp;Dassault Systèmes">
+            <callback instruction="org.scilab.modules.gui.bridge.CallScilabBridge.open3DS" type="3"/>
         </submenu>
         <separator/>
-        <submenu label="&amp;About Scilab..." accelerator="shift F1">
+        <submenu label="&amp;About Scilab..." accelerator="shift F1" macosx="false">
             <callback instruction="about()" type="0"/>
         </submenu>
     </menu>
 </menubar>
-

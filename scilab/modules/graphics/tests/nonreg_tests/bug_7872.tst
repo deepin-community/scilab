@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010 - DIGITEO - Allan CORNET
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -11,8 +11,8 @@
 //
 // <-- Non-regression test for bug 7872 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=782
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/782
 //
 // <-- Short Description -->
 // Riemann Surface demo returned a error if window was closed by the cross button.

@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2012 - Samuel GOUGEON
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -30,7 +30,7 @@ function %_Matplot1()
     f = gcf();
     my_plot_desc  = _("Classical Matplot1");
     f.figure_name = my_plot_desc;
-    f.color_map = hsvcolormap(nc);
+    f.color_map = hsv(nc);
 
     a = gca()
     a.data_bounds=[xmin ymin ; xmax ymax];

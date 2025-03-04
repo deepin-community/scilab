@@ -1,5 +1,5 @@
 // ===================================================================
-// Scilab ( http://wwwscilaborg/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009 - DIGITEO - Allan CORNET
 // Copyright (C) 2018 - 2020 - Samuel GOUGEON - Le Mans Université
 //
@@ -82,7 +82,7 @@ for fun = list(double, string)
         if ndims(o)>2
             [var,kar] = unique(matrix(permute(o,[2 1 3]),6,-1)', "r");
         else
-            [var,kar] = unique(o, "r")
+            [var,kar] = unique(o, "r");
         end
         [va, ka] = setdiff(o, [], "r");
         assert_checkequal(va, var);
@@ -91,7 +91,7 @@ for fun = list(double, string)
         if ndims(o)>2
             [var,kar] = unique(matrix(o,2,-1), "c");
         else
-            [var,kar] = unique(o, "c")
+            [var,kar] = unique(o, "c");
         end
         assert_checkequal(va, var);
         assert_checkequal(ka, kar);
@@ -102,11 +102,11 @@ end
 // -------------------
 for f = list(string, double, int8, uint8, int16, uint16, int32, uint32, int64, uint64)
     if f==string then
-        vref = ["12" "14" "17" "4" "8"]
-        kvref = [ 10    1    8   3   5]
+        vref = ["12" "14" "17" "4" "8"];
+        kvref = [ 10    1    8   3   5];
     else
-        vref = [4  8  12  14  17]
-        kvref = [3  5  10   1   8]
+        vref = [4  8  12  14  17];
+        kvref = [3  5  10   1   8];
     end
     // With row vectors
     [rr,k] = setdiff(f(r), f([r2 0 2]), "r");
@@ -150,5 +150,5 @@ end
 
 // ===================================================================
 // Error messages
-msg = "%s: Wrong number of input argument(s): %d or %d expected.\n";
+msg = "%s: Wrong number of input arguments: %d to %d expected.\n";
 assert_checkerror("setdiff()", msg , [], "setdiff", 2, 3);

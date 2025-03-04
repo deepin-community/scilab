@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2007-2008 - INRIA
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -21,11 +21,11 @@
     <refsynopsisdiv>
         <title>Seqüência de Chamamento</title>
         <synopsis>
-            c=cell()
-            c=cell(m1)
-            c=cell(m1, m2)
-            c=cell(m1, m2, ..., mn)
-            c=cell(x)
+            c = cell()
+            c = cell(m1)
+            c = cell(m1, m2)
+            c = cell(m1, m2, ..., mn)
+            c = cell(x)
         </synopsis>
     </refsynopsisdiv>
     <refsection>
@@ -165,14 +165,13 @@ size(b)
         </simplelist>
     </refsection>
     <refsection>
-        <title>History</title>
+        <title>Histórico</title>
         <revhistory>
             <revision>
                 <revnumber>6.0.0</revnumber>
                 <revremark>
-                    <para>
-                        Fields "entries" and "dims" do not exist anymore. To assign or extract an element, use {}.
-                    </para>
+                    Fields "entries" and "dims" do not exist anymore.
+                    To assign or extract an element, use {}.
                 </revremark>
             </revision>
         </revhistory>

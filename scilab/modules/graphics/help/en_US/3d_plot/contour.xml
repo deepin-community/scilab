@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) ENPC - Jean-Philippe Chancelier
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -20,8 +20,8 @@
     </refnamediv>
     <refsynopsisdiv>
         <title>Syntax</title>
-        <synopsis>contour(x,y,z,nz,[theta,alpha,leg,flag,ebox,zlev])
-            contour(x,y,z,nz,&lt;opt_args&gt;)
+        <synopsis>contour(x, y, z, nz, [theta, alpha, leg, flag, ebox, zlev, fpf])
+            contour(x, y, z, nz, &lt;opt_args&gt;)
         </synopsis>
     </refsynopsisdiv>
     <refsection>
@@ -272,6 +272,18 @@ plot2d(x(im)',y(jm)',-9,"000")
                     <para>real number.</para>
                 </listitem>
             </varlistentry>
+            <varlistentry>
+                <term>fpf</term>
+                <listitem>
+                    <para>
+                        You can change the format of the floating point number printed on
+                        the levels where <varname>fpf</varname> is the format in C format syntax 
+                        (for example <code>fpf="%.3f"</code>).
+                        Set <varname>fpf</varname> to " " implies that the level are not drawn on the level curves.
+                        If not given, the default format is <literal>"%.2g"</literal>.
+                    </para>
+                </listitem>
+            </varlistentry>
         </variablelist>
     </refsection>
     <refsection>
@@ -306,13 +318,6 @@ plot2d(x(im)',y(jm)',-9,"000")
             </varlistentry>
         </variablelist>
         <para>
-            You can change the format of the floating point number printed on the levels
-            by using <literal>xset("fpf",string)</literal> where <literal>string</literal> gives the
-            format in C format syntax (for example <literal>string="%.3f"</literal>). Use
-            <literal>string=""</literal> to switch back to default format and Use
-            <literal>string=" "</literal> to suppress printing.
-        </para>
-        <para>
             Usually we use <literal>contour2d</literal> to draw levels curves on a 2D plot.
         </para>
         <para>
@@ -333,19 +338,17 @@ contour(t,t,my_surface,10)
         </scilab:image>
         <programlisting role="example"><![CDATA[
 t=linspace(-%pi,%pi,30);
-// changing the format of the printing of the levels
-xset("fpf","%.1f")
 clf()
 function z=my_surface(x,y),z=x*sin(x)^2*cos(y),endfunction
-contour(t,t,my_surface,10)
+// changing the format of the printing of the levels
+contour(t,t,my_surface,10, fpf="%.1f")
  ]]></programlisting>
         <scilab:image>
             t=linspace(-%pi,%pi,30);
-            // changing the format of the printing of the levels
-            xset("fpf","%.1f")
             clf()
             function z=my_surface(x,y),z=x*sin(x)^2*cos(y),endfunction
-            contour(t,t,my_surface,10)
+            // changing the format of the printing of the levels
+            contour(t,t,my_surface,10, fpf="%.1f")
         </scilab:image>
         <programlisting role="example"><![CDATA[
 // 3D

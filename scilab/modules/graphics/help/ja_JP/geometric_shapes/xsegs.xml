@@ -2,7 +2,7 @@
 
 <!--
 
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 
  * Copyright (C) ENPC - Jean-Philippe Chancelier
 
@@ -226,7 +226,7 @@ a.view="3d";
 
 f=gcf();
 
-f.color_map=rainbowcolormap(120);
+f.color_map=rainbow(120);
 
 alpha=2*%pi*(0:119)/40;
 
@@ -264,7 +264,7 @@ e.arrow_size = 0.4;
 
             f=gcf();
 
-            f.color_map=rainbowcolormap(120);
+            f.color_map=rainbow(120);
 
             alpha=2*%pi*(0:119)/40;
 

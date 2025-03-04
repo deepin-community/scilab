@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2014 - Scilab Enterprises - Clement DAVID
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -21,6 +21,7 @@ import java.util.LinkedList;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
 
 import org.scilab.modules.xcos.explorer.BrowserTreeNodeData;
 
@@ -253,12 +254,13 @@ public class BrowserView extends View {
      * @param uid the uid to look for
      * @return the found {@link DefaultMutableTreeNode} or <code>null</code> if not found
      */
-    private DefaultMutableTreeNode lookupForUID(final long uid) {
+    public DefaultMutableTreeNode lookupForUID(final long uid) {
         final DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
 
         DefaultMutableTreeNode node;
-        for (Enumeration<DefaultMutableTreeNode> e = root.depthFirstEnumeration(); e.hasMoreElements();) {
-            node = e.nextElement();
+        Enumeration<TreeNode> e = root.depthFirstEnumeration();
+        while (e.hasMoreElements()) {
+        	node = (DefaultMutableTreeNode) e.nextElement();
             BrowserTreeNodeData data = (BrowserTreeNodeData) node.getUserObject();
             if (data.getId() == uid) {
                 return node;

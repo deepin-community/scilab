@@ -2,6 +2,7 @@
 # Prerequirements
 #
 bin/xml2-config
+version.txt
 
 #
 # Linux objects files
@@ -202,3 +203,8 @@ modules/pvm/
 # call_scilab examples
 call_scilab_*
 
+#
+# Ignore all localization files
+#
+locale/*/*/*.mo
+locale/*/*/*.po

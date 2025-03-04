@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 // Copyright (C) ENPC
 // Copyright (C) 2016, 2017 - Samuel GOUGEON
@@ -48,7 +48,7 @@ function getd(path,option)
         return ;
     end
 
-    // Bug http://bugzilla.scilab.org/13583 : some scripts loaded through the
+    // Bug https://gitlab.com/scilab/scilab/-/issues/13583 : some scripts loaded through the
     //  loop may contain "clear" instructions deleting a) the list of files to
     //  be processed, and b) the reference list of internal getd() variables not
     //  to be returned.

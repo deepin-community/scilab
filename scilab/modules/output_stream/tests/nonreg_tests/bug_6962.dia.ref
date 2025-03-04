@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010 - DIGITEO - Allan CORNET
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -15,8 +15,8 @@
 // bvode generated a error: forrtl: severe (38): error during write, unit 6, file CONOUT$
 // on windows
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=6962
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/6962
 //
 //
 //reactor agitat G-L ODE, v no-pel·lícula

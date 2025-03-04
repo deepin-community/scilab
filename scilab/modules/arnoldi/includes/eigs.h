@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2011 - Scilab Enterprises - Adeline CARNIS
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -17,6 +17,7 @@
 #define __EIGS_H__
 #include "doublecomplex.h"
 
+#include "dynlib_arnoldi.h"
 
 /**
  * @TODO add comment
@@ -48,7 +49,7 @@
  * @param RVEC
  * @return <ReturnValue>
  */
-int eigs(double *AR, doublecomplex *AC, int N, int Acomplex, int Asym,
+ARNOLDI_IMPEXP int eigs(double* AR, doublecomplex* AC, int N, int Acomplex, int Asym,
          double* B,  doublecomplex* BC, int Bcomplex, int matB, int nev,
          doublecomplex SIGMA, char* which, double* maxiter, double* tol,
          double* NCV, double* RESID, doublecomplex* RESIDC, int* INFO,

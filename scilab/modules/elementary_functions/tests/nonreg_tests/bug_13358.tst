@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2014 - Scilab Enterprises - Pierre-Aime Agnel
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -7,13 +7,14 @@
 //
 // <-- Non-regression test for bug 13358-->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/13358
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/13358
 //
 // <-- Short Description -->
 // intersect and unique are slower due to gsort behaving in o(n^2) on sorted arrays
 //
 // <-- INTERACTIVE TEST -->
+// <-- NO CHECK REF -->
 // <-- CLI SHELL MODE -->
 
 err = 0.15
@@ -30,16 +31,16 @@ delta_s = [];
 for i = 1:nb_test
     A_rand = rand(1, 1E5);
     B_rand = rand(1, 1E5);
-    tic(); intersect(A, B); t_elapsed_sorted = toc();
-    tic(); intersect(A_rand, B_rand); t_elapsed_rand = toc();
+    timer(); intersect(A, B); t_elapsed_sorted = timer()
+    timer(); intersect(A_rand, B_rand); t_elapsed_rand = timer()
     delta_i = [delta_i, abs(t_elapsed_rand - t_elapsed_sorted) / (t_elapsed_rand + t_elapsed_sorted)];
 
-    tic(); unique(A); t_elapsed_sorted = toc();
-    tic(); unique(A_rand); t_elapsed_rand = toc();
+    timer(); unique(A); t_elapsed_sorted = timer()
+    timer(); unique(A_rand); t_elapsed_rand = timer()
     delta_u = [delta_u, abs(t_elapsed_rand - t_elapsed_sorted) / (t_elapsed_rand + t_elapsed_sorted)];
 
-    tic(); gsort(1:1E6); t_elapsed_sorted = toc()
-    tic(); gsort(rand(1,1E6)); t_elapsed_rand = toc()
+    timer(); gsort(1:1E6); t_elapsed_sorted = timer()
+    timer(); gsort(rand(1,1E6)); t_elapsed_rand = timer()
     delta_s = [delta_s, abs(t_elapsed_rand - t_elapsed_sorted) / (t_elapsed_rand + t_elapsed_sorted)];
 end
 

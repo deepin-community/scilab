@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2011 - DIGITEO - Sylvestre Ledru
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -136,10 +136,10 @@
             受信された値はMPI_Waitにより取得されます.
         </para>
         <para>以下の例では, "42"という名前のリクエストがこのデータ構造体に保存されます.
-            <programlisting role="example"><![CDATA[
+            <programlisting role="no-scilab-exec"><![CDATA[
                 MPI_Init();
-                rnk =    MPI_Comm_rank();
-                sizeNodes =    MPI_Comm_size();
+                rnk = MPI_Comm_rank();
+                sizeNodes = MPI_Comm_size();
                 SLV = rnk;
                 Master = ~ SLV;
                 assert_checkequal(MPI_Comm_size(), 2);
@@ -149,11 +149,11 @@
                      MPI_Isend(value, slaveId, 42);
                    end
                 else
-                    rankSource=0;
-                    tag=0;
+                    rankSource = 0;
+                    tag = 0;
                     MPI_Irecv(rankSource, tag, 42); // MPI_Irecv は値を返しません
-                    value=MPI_Wait(42) // 値は MPI_Waitにより返されます
-                    assert_checkequal(value,2);
+                    value = MPI_Wait(42)            // 値は MPI_Waitにより返されます
+                    assert_checkequal(value, 2);
                 end
                 MPI_Finalize();
                 exit()

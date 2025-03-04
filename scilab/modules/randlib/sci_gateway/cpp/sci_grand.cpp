@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2011 - DIGITEO - Cedric DELAMARRE
 * Copyright (C) 2014 - Scilab Enterprises - Sylvain GENIN
 *
@@ -101,7 +101,7 @@ types::Function::ReturnValue sci_grand(types::typed_list &in, int _iRetCount, ty
             }
         }
 
-        Scierror(999, _("%s: Wrong type for input argument #%d: A string expected.\n"), "grand", in.size() + 1);
+        Scierror(999, _("%s: Wrong type for input argument #%d: A string expected.\n"), "grand", (int) in.size() + 1);
         return types::Function::Error;
     }
 
@@ -1409,7 +1409,7 @@ types::Function::ReturnValue sci_grand(types::typed_list &in, int _iRetCount, ty
 
             if (ierr == 0)
             {
-                Scierror(999, _("%s: Wrong value for the last %d input argument(s).\n"), "grand", in.size() - 1);
+                Scierror(999, _("%s: Wrong value for the last %d input argument(s).\n"), "grand", (int) in.size() - 1);
                 return types::Function::Error;
             }
 

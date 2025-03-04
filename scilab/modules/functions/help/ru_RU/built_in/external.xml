@@ -75,7 +75,7 @@ optim(list(costfunc,a1,b1,c1),....
                 <link linkend="impl">impl</link>
             </member>
             <member>
-                <link linkend="dassl">dassl</link>
+                <link linkend="dae">dae</link>
             </member>
             <member>
                 <link linkend="intg">intg</link>

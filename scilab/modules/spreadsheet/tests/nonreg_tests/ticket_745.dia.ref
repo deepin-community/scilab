@@ -4,9 +4,6 @@
 // =============================================================================
 // <-- Non-regression test for bug 745 -->
 //
-// <-- URL -->
-//  http://forge.scilab.org/index.php/p/csv-readwrite/issues/745/
-//
 // <-- Short Description -->
 // csvTextScan did no convert "1,1" into double.
 // =============================================================================

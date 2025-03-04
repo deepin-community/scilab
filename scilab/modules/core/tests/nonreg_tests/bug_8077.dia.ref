@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010 - DIGITEO - Allan CORNET
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,8 +9,8 @@
 //
 // <-- CLI SHELL MODE -->
 // 
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=8077
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/8077
 //
 // <-- Short Description -->
 // browsevar, scinotes, xcos functions were not disabled in -nwni mode on Linux and MacOS X.

@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2010-2010 - DIGITEO - Antoine ELIAS
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -117,24 +117,22 @@ bool MList::invoke(typed_list & in, optional_list & /*opt*/, int _iRetCount, typ
 
     std::wstring wstrFuncName = L"%" + getShortTypeStr() + L"_e";
 
-    try
+    ret = Overload::call(wstrFuncName, in, _iRetCount, out, false, false, e.getLocation());
+    if(ret == types::Callable::OK_NoResult)
     {
-        ret = Overload::call(wstrFuncName, in, _iRetCount, out);
+        // overload not defined, try with the short name.
+        // to compatibility with scilab 5 code.
+        // tlist/mlist name are truncated to 8 first character
+        std::wstring stType = getShortTypeStr();
+        wstrFuncName = L"%" + stType.substr(0, 8) + L"_e";
+        ret = Overload::call(wstrFuncName, in, _iRetCount, out, false, false, e.getLocation());
     }
-    catch (const ast::InternalError& ie)
+
+    if(ret == types::Callable::OK_NoResult)
     {
-        // last error is not empty when the error have been
-        // setted by the overload itself.
-        if (ConfigVariable::getLastErrorFunction().empty())
-        {
-            wstrFuncName = L"%l_e";
-            ret = Overload::call(wstrFuncName, in, _iRetCount, out);
-        }
-        else
-        {
-            // throw the exception in case where the overload have not been defined.
-            throw ie;
-        }
+        // last try that will throw an error if it not exists
+        wstrFuncName = L"%l_e";
+        ret = Overload::call(wstrFuncName, in, _iRetCount, out, false, true, e.getLocation());
     }
 
     // Remove this from "in" for keep "in" unchanged.
@@ -150,9 +148,7 @@ bool MList::invoke(typed_list & in, optional_list & /*opt*/, int _iRetCount, typ
     if(out.empty())
     {
         wchar_t wcstrError[512];
-        char* strFuncName = wide_string_to_UTF8(wstrFuncName.c_str());
-        os_swprintf(wcstrError, 512, _W("%s: Extraction must have at least one output.\n").c_str(), strFuncName);
-        FREE(strFuncName);
+        os_swprintf(wcstrError, 512, _W("%ls: Extraction must have at least one output.\n").c_str(), wstrFuncName.c_str());
         throw ast::InternalError(wcstrError, 999, e.getLocation());
     }
 

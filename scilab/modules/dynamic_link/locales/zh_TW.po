@@ -434,7 +434,7 @@ msgstr "須要 Fortran  或 C 編譯器."
 #, c-format
 msgid ""
 "%s: Warning: Scilab has not been able to find where the Scilab sources are. "
-"Please submit a bug report on http://bugzilla.scilab.org/\n"
+"Please submit a bug report on https://gitlab.com/scilab/scilab/-/issues\n"
 msgstr ""
 "%s: 注意: Scilab 還沒發現Scilab 的源碼所在. 請提交 bug report on http://"
 "bugzilla.scilab.org/\n"

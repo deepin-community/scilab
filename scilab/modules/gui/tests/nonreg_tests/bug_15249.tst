@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2017 - Samuel GOUGEON
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -10,11 +10,12 @@
 //
 // <-- Non-regression test for bug 15249 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/15249
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/15249
 //
 // <-- Short Description -->
-// findobj("toto") yielded an error instead of returning []
+// findobj("toto") yields an error after https://gitlab.com/scilab/scilab/-/issues/7117
 
 clf
-assert_checkequal(findobj("toto"), []);
+refMsg = msprintf(_("%s: Wrong number of input argument(s): At least %d expected.\n"), "findobj", 2);
+assert_checkerror("findobj(""toto"")", refMsg);

@@ -1,6 +1,6 @@
 //<-- CLI SHELL MODE -->
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2015 - Scilab Enterprises - Sylvain GENIN
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -48,13 +48,10 @@ mdelete(path_int);
 
 write(path_double,A);
 check_file(path_double, path_double_ref);
-
-refMsg = msprintf(_("File ""%s"" already exists or directory write access denied.\n"), path_double);
-assert_checkerror("write(path_double,rand(5,7));", refMsg);
-
+write(path_double,rand(5,7));
 mdelete(path_double);
 
-refMsg = msprintf(_("%s: Wrong type for input argument #%d : string expected.\n"), "write", 2);
+refMsg = msprintf(_("%s: Wrong type for input argument #%d: string expected.\n"), "write", 2);
 assert_checkerror("write(path_logic,[%t, %f; %f, %f]);", refMsg);
 
 mdelete(path_logic);

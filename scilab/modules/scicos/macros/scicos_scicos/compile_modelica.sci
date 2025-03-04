@@ -72,6 +72,7 @@ function [ok,name,nipar,nrpar,nopar,nz,nx,nx_der,nx_ns,nin,nout,nm,ng,dep_u]=com
                 overwrite=%t;//Yes
             else
                 overwrite=messagebox([_("The initialization file already exists!");
+                xmlfile ;
                 _("Do you want to overwrite it?") ],..
                 "","question",[_("Yes"),_("No")],"modal")==1
             end
@@ -129,7 +130,7 @@ function [ok,name,nipar,nrpar,nopar,nz,nx,nx_der,nx_ns,nin,nout,nm,ng,dep_u]=com
     msprintf(_("Generated files path: %s"),outpath)
     ""];
 
-    if getscilabmode() <> "NWNI" then
+    if getscilabmode() == "STD" then
         messagebox(txt, "info");
     else
         disp(txt);

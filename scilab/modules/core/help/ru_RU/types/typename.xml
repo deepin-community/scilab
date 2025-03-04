@@ -57,7 +57,6 @@ Type index:   2  overloading code: "p"
 Type index:   4  overloading code: "b"
 Type index:   5  overloading code: "sp"
 Type index:   6  overloading code: "spb"
-Type index:   7  overloading code: "msp"
 Type index:   8  overloading code: "i"
 Type index:   9  overloading code: "h"
 Type index:  10  overloading code: "c"
@@ -92,4 +91,3 @@ Type index: 130  overloading code: "fptr"
         </simplelist>
     </refsection>
 </refentry>
-

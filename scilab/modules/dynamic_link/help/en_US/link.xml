@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA -
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -86,7 +86,7 @@
             function <literal>call</literal>. Linked routines can also be used as
             "external" for e.g. non linear problem solvers (<literal>ode</literal>,
             <literal>optim</literal>, <literal>intg</literal>,
-            <literal>dassl</literal>...).
+            <literal>dae</literal>...).
         </para>
         <para>
             <literal>link()</literal> returns a string matrix with linked

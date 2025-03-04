@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009 - DIGITEO - Pierre MARECHAL <pierre.marechal@scilab.org>
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -46,8 +46,7 @@ function atomsRepositorySetOfl(url)
     if(ATOMSALLUSERSWRITEACCESS) then
         mputl(url,pathconvert(SCI+"/modules/atoms/etc/repositories",%F));
     else
-        mkdir(pathconvert(SCIHOME+"/atoms",%F));
-        mputl(url,pathconvert(SCIHOME+"/atoms/repositories",%F));
+        error(msprintf(gettext("%s: Admin rights are needed to change ATOMS official repository.\n"), "atomsRepositorySetOfl"));
     end
 
     // Update the toolbox list

@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2007-2008 - INRIA - Serge STEER <serge.steer@inria.fr>
 // Copyright (C) 2012 - Scilab Enterprises - Adeline CARNIS
 //
@@ -10,8 +10,8 @@
 
 // <-- Non-regression test for bug 3348 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=3348
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/3348
 //
 // <-- Short Description -->
 //    Missing tests in lsqrsolve

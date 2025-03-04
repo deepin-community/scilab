@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009 - DIGITEO - Pierre MARECHAL <pierre.marechal@scilab.org>
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -7,11 +7,16 @@
 
 // <-- ENGLISH IMPOSED -->
 // <-- CLI SHELL MODE -->
+// <-- NO CHECK REF -->
+
+load("SCI/modules/atoms/macros/atoms_internals/lib");
+exec("SCI/modules/atoms/tests/unit_tests/atomsTestUtils.sce");
+atomsRepositoryReset();
 
 if isempty([ atomsRepositoryList("user") ; atomsRepositoryList("allusers")]) then
 
-    rep1 = "http://scene10.6.0.test.atoms.scilab.org";
-    rep2 = "http://scene11.6.0.test.atoms.scilab.org";
+    rep1 = atomsCreateLocalRepositoryFromDescription(SCI+"/modules/atoms/tests/unit_tests/scene10.DESCRIPTION", "scene10");
+    rep2 = atomsCreateLocalRepositoryFromDescription(SCI+"/modules/atoms/tests/unit_tests/scene11.DESCRIPTION", "scene11");
 
     if atomsRepositoryAdd(rep1,"user")     <> 1 then pause, end
     if atomsRepositoryAdd(rep2,"allusers") <> 1 then pause, end

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) XXXX-2008 - INRIA
  * Copyright (C) 2018 - Samuel GOUGEON
  *
@@ -38,8 +38,14 @@
             <varlistentry>
                 <term>commands</term>
                 <listitem>
-                    <para>texte unique constitué d'instructions à soumettre à l'interpréteur de
+                    <para>
+                        texte unique constitué d'instructions à soumettre à l'interpréteur de
                         commandes du système d'exploitation (Windows, Linux, ou MacOS) pour exécution.
+                    </para>
+                    <para>
+                        Sous Windows, <varname>commands</varname> doit avoir au maximum 8191
+                        caractères (après expansion des éventuelles variables d'environnement
+                        incluses).
                     </para>
                 </listitem>
             </varlistentry>

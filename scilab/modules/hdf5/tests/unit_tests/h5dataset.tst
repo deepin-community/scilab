@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2012 - SCILAB ENTERPRISES - Simon GARESTE
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -45,7 +45,7 @@ z(1:5,1) = uint32([1;21;41;61;81]);
 h5dataset(a, "D_set2", [5 20 ; 1 1 ; 1 1 ; 1 1 ; 5 1], y, [9 12 ; 9 14 ; 1 1 ; 1 1 ; 1 1 ; 5 1]);
 assert_checkequal(a.root.D_set2.Data,z');
 
-msgerr = msprintf(gettext("%s: %s\n") + "%s: %s\n", "h5dataset", gettext("Cannot write data in the dataset."), gettext("HDF5 description"), "src and dest data spaces have different sizes.");
+msgerr = msprintf(gettext("%s: %s\n") + "%s: %s\n", "h5dataset", gettext("Cannot write data in the dataset."), gettext("HDF5 description"), "src and dest dataspaces have different number of elements selected.");
 assert_checkerror("h5dataset(a, ""Dset_3"", [10 10 ; 2 1 ; 4 1 ; 2 1 ; 1 9], x, [10 10 ; 11 14 ; 3 3 ; 1 1 ; 1 1 ; 1 1])",msgerr,999);
 msgerr = msprintf(gettext("%s: %s\n"), "h5dataset", gettext("Invalid target dataspace."));
 assert_checkerror("h5dataset(a, ""D_set4"", [10 10 ; 2 1 ; 4 1 ; 2 1 ; 1 9], x, [7 12 ; 6 11 ; 3 3 ; 1 1 ; 1 1 ; 4 9])",msgerr,999);

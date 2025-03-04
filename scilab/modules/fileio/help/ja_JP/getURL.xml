@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) - S/E - Sylvestre Ledru
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -29,7 +29,7 @@
         <refname>getURL</refname>
 
         <refpurpose>URL (HTTP, HTTPS, FTP...) をダウンロード</refpurpose>
-
+        <refpurpose>Obsolete, please use <link linkend="http_get">http_get</link> instead.</refpurpose>
     </refnamediv>
 
     <refsynopsisdiv>
@@ -154,7 +154,7 @@
 
             getURLはURLで指定するものと同じ名前を使用します.
 
-            しかし,いくつかの習慣に基づき(例えば,<emphasis role="italic">http://www.scilab.org/</emphasis>)
+            しかし,いくつかの習慣に基づき(例えば,<emphasis role="italic">https://www.scilab.org/</emphasis>)
 
             ファイル名がURLで指定されない場合に,
 
@@ -222,15 +222,15 @@
 
             // URLをダウンロードし, ファイル maths_simulation に保存します
 
-            getURL("http://www.scilab.org/products/scilab/features/maths_simulation");
+            getURL("https://www.scilab.org/products/scilab/features/maths_simulation");
 
             // Scilabホームページをカレントディレクトリに保存します (そしてファイルにリネーム)
 
-            getURL("http://www.scilab.org","scilab_homepage.html");
+            getURL("https://www.scilab.org","scilab_homepage.html");
 
             // Scilabの例をダウンロードし, 実行します
 
-            myFile = getURL("http://fileexchange.scilab.org/toolboxes/contour3d/10.03/files/contour3d.sci",TMPDIR)
+            myFile = getURL("https://fileexchange.scilab.org/toolboxes/contour3d/10.03/files/contour3d.sci",TMPDIR)
 
             exec(myFile);
 
@@ -246,7 +246,7 @@
 
             // 内容を取得
 
-            [myFile, content] = getURL("http://fileexchange.scilab.org/toolboxes/contour3d/10.03/files/contour3d.sci",TMPDIR)
+            [myFile, content] = getURL("https://fileexchange.scilab.org/toolboxes/contour3d/10.03/files/contour3d.sci",TMPDIR)
 
         </programlisting>
 
@@ -281,10 +281,14 @@
                 <revremark>この関数はScilab 5.5.0で追加されました</revremark>
 
             </revision>
-
+            <revision>
+                <revnumber>2023.1.0</revnumber>
+                <revremark>
+                    Tagged obsolete and will be removed in Scilab 2025.0.0.
+                </revremark>
+            </revision>
         </revhistory>
 
     </refsection>
 
 </refentry>
-

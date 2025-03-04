@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -10,29 +10,20 @@
 // For more information, see the COPYING file which you should have received
 // along with this program.
 
-function x=coshm(a)
+function x=coshm(x)
     // hyperbolic cosine of square matrix x
 
-    rhs = argn(2);
-
-    if rhs <> 1 then
-        error(msprintf(gettext("%s: Wrong number of input argument(s): %d expected.\n"),"coshm",1));
+    arguments
+        x {mustBeA(x, "double")}
     end
 
-    if type(a)<>1 then
-        error(msprintf(gettext("%s: Wrong type for input argument #%d: Real or complex matrix expected.\n"),"coshm",1));
-    end
-
-    [m,n]=size(a)
-    if m<>n then
+    [m, n] = size(x)
+    if m <> n then
         error(msprintf(gettext("%s: Wrong size for input argument #%d: A square matrix expected.\n"),"coshm",1));
     end
 
-    if a==[] then
-        x=[];
-        return;
+    if x <> [] then
+        x=(expm(x)+expm(-x))/2;
     end
-
-    x=(expm(a)+expm(-a))/2;
 
 endfunction

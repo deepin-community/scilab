@@ -193,10 +193,6 @@ function Info = scicos_simulate(scs_m, Info, updated_vars, flag, Ignb)
         end
     end
 
-    //** prepare from and to workspace stuff
-    //-------------------------------------
-    scicos_workspace_init()
-
     if flag == "nw" then
         Ignore = [Ignore,Ignoreb]
     end
@@ -299,37 +295,28 @@ function Info = scicos_simulate(scs_m, Info, updated_vars, flag, Ignb)
         if tf*tolerances == [] then
             error(_("Simulation parameters not set:"));
         end
-        ierr = execstr("[state, t] = scicosim(%cpr.state, %tcur, tf, %cpr.sim," + ..
-        "''start'', tolerances)","errcatch")
-        if ierr <> 0 then
-            error([_("Initialization problem:");lasterror()])
-        end
+        [state, t] = scicosim(%cpr.state, %tcur, tf, %cpr.sim, 'start', tolerances);
         %cpr.state = state
     end
 
-    ierr = execstr("[state, t] = scicosim(%cpr.state, %tcur, tf, %cpr.sim," + ..
-    "''run'', tolerances)","errcatch")
-    if ierr == 0 then
-        %cpr.state = state
-        alreadyran = %t
-        if (tf - t) < tolerances(3) then
-            needstart = %t
-            [alreadyran, %cpr, Resume_line, TOWS_vals, Names] = do_terminate1(scs_m, %cpr)
-            for i=1:size(Names, "c")
-                ierr = execstr(Names(i)+" = TOWS_vals("+string(i)+");", "errcatch");
-                if ierr <> 0 then
-                    str_err = split_lasterror(lasterror());
-                    message(["Simulation problem" ; "Unable to find To Workspace Variable {"+Names(i)+"}:" ; str_err]);
-                    break;
-                end
+    [state, t] = scicosim(%cpr.state, %tcur, tf, %cpr.sim, 'run', tolerances);
+    %cpr.state = state
+    alreadyran = %t
+    if (tf - t) < tolerances(3) then
+        needstart = %t
+        [alreadyran, %cpr, Resume_line, TOWS_vals, Names] = do_terminate1(scs_m, %cpr)
+        for i=1:size(Names, "c")
+            ierr = execstr(Names(i)+" = TOWS_vals("+string(i)+");", "errcatch");
+            if ierr <> 0 then
+                str_err = split_lasterror(lasterror());
+                message(["Simulation problem" ; "Unable to find To Workspace Variable {"+Names(i)+"}:" ; str_err]);
+                break;
             end
-        else
-            %tcur = t
         end
     else
-        error([_("Simulation problem: ");lasterror()])
+        %tcur = t
     end
-
+    
     Info = list(%tcur, %cpr, alreadyran, needstart, needcompile, %state0)
 
     // Executing the resume() function at the end, because it does not return control
@@ -355,13 +342,9 @@ function [alreadyran, %cpr, Resume_line, TOWS_vals, Names] = do_terminate1(scs_m
 
     if alreadyran then
         alreadyran = %f
-        // terminate current simulation
-        ierr = execstr("[state, t] = scicosim(%cpr.state, par.tf, par.tf, %cpr.sim, ''finish'', par.tol)", "errcatch")
-
+        // terminate current simulation in the current scope to let TOWS blocks output values.
+        [state, t] = scicosim(%cpr.state, par.tf, par.tf, %cpr.sim, 'finish', par.tol);
         %cpr.state = state
-        if ierr <> 0 then
-            error([_("End problem: ");lasterror()])
-        end
 
         // Restore saved variables in Scilab environment ("To workspace" block)
 

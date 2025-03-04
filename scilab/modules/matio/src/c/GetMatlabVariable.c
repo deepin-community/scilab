@@ -1,10 +1,10 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA - Vincent COUVERT
  * Copyright (C) 2010 - DIGITEO - Yann COLLETTE
  * Copyright (C) 2011 - DIGITEO - Vincent COUVERT
- *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ * Copyright (C) 2023 - 3DS - Vincent COUVERT
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
  * pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -61,6 +61,9 @@ matvar_t *GetMatlabVariable(void *pvApiCtx, int iVar, const char *name, int matf
     {
         case sci_matrix:
             tmp_res = GetDoubleVariable(pvApiCtx, iVar, name, matfile_version, parent, item_position);
+            break;
+        case sci_boolean:
+            tmp_res = GetBooleanVariable(pvApiCtx, iVar, name, parent, item_position);
             break;
         case sci_strings:
             tmp_res = GetCharVariable(pvApiCtx, iVar, name, parent, item_position);

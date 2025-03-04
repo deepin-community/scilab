@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA - 2010 - Sylvestre Ledru
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -234,6 +234,20 @@ char* getScilabVersionAsString();
    */
 public";
 int setRecursionLimit(int);
+/* JavaDoc */
+%javamethodmodifiers setPolynomialDisplay() "
+ /**
+   * set the polynomials exponent display style
+   */
+public";
+void setPolynomialDisplay(int);
+/* JavaDoc */
+%javamethodmodifiers getPolynomialDisplay() "
+ /**
+   * returns the polynomials exponent display style
+   */
+public";
+int getPolynomialDisplay();
 /* JavaDoc */
 %javamethodmodifiers getStartProcessing() "
  /**

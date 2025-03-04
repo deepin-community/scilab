@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Paul Bignier
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -11,8 +11,8 @@
 //
 // <-- Non-regression test for bug 9697 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=9697
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/9697
 //
 // <-- Short Description -->
 // The optim/"qn" /"gc" with bounds and iprint=1 did not print the basic information of the problem.

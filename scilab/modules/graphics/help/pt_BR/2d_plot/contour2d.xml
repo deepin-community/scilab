@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) ENPC - Jean-Philippe Chancelier
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -20,8 +20,8 @@
     </refnamediv>
     <refsynopsisdiv>
         <title>Seqüência de Chamamento</title>
-        <synopsis>contour2d(x,y,z,nz,[style,strf,leg,rect,nax])
-            contour2d(x,y,z,nz,&lt;opt_args&gt;)
+        <synopsis>contour2d(x, y, z, nz, [style, strf, leg, rect, nax, fpf])
+            contour2d(x, y, z, nz, &lt;opt_args&gt;)
         </synopsis>
     </refsynopsisdiv>
     <refsection>
@@ -104,6 +104,18 @@ plot2d(x(im)',y(jm)',-9,"000") ]]></programlisting>
                     </para>
                 </listitem>
             </varlistentry>
+            <varlistentry>
+                <term>fpf</term>
+                <listitem>
+                    <para>
+                        You can change the format of the floating point number printed on
+                        the levels where <varname>fpf</varname> is the format in C format syntax 
+                        (for example <code>fpf="%.3f"</code>).
+                        Set <varname>fpf</varname> to " " implies that the level are not drawn on the level curves.
+                        If not given, the default format is <literal>"%.3g"</literal>.
+                    </para>
+                </listitem>
+            </varlistentry>
         </variablelist>
     </refsection>
     <refsection>
@@ -114,16 +126,6 @@ plot2d(x(im)',y(jm)',-9,"000") ]]></programlisting>
             <literal>f(x,y)</literal> são dados pela matriz <literal>z</literal> nos
             pontos de grid definidos por por <literal>x</literal> e
             <literal>y</literal>.
-        </para>
-        <para>Você pode modificar o formato dos pontos flutuantes impressos sobre
-            os níveis utilizando <literal>xset("fpf",string)</literal> onde
-            <literal>string</literal> fornece o formato em na sintaxe de formato C
-            (por exemplo <literal>string="%.3f"</literal>). Use
-            <literal>string=""</literal> para voltar ao formato padrão e use
-            <literal>string=" "</literal> para suprimir a impressão. Este último
-            recurso é útil em conjunção com <link linkend="legends">legends</link>
-            para exibir os números de nível em uma legenda e não diretamente em curvas
-            de nível como de uso (ver Exemplos).
         </para>
         <para>
             Os argumentos opcionais <literal>style,strf,leg,rect,nax</literal>,
@@ -142,22 +144,21 @@ plot2d(x(im)',y(jm)',-9,"000") ]]></programlisting>
         <programlisting role="example"><![CDATA[
 contour2d(1:10,1:10,rand(10,10),5,rect=[0,0,11,11])
 // mudando o formato de impressão dos níveis
-xset("fpf","%.2f")
 clf()
-contour2d(1:10,1:10,rand(10,10),5,rect=[0,0,11,11])
+contour2d(1:10,1:10,rand(10,10),5,rect=[0,0,11,11],fpf="%.2f")
 
 // agora, um exemplo com números de níveis desenhados em uma legenda
 // Cuidado, há alguns truques aqui...
 x = linspace(0,4*%pi,80);
 z = cos(x')*cos(x);
 clf(); f=gcf();
-xset("fpf"," ")  // truque 1: isto faz com que alguns números de níveis não sejam
-                 //          impressos sobre as curvas de nível
-f.color_map=jetcolormap(7);
+// truque 1: fpf=" " isto faz com que alguns números de níveis não sejam
+//          impressos sobre as curvas de nível
+f.color_map=jet(7);
 // truque 2: para fazer com que se possa colocar a legenda à direita sem
 //          sem interferir com as curvas de nível use rect com um valor xmax
 //          grande o suficiente
-contour2d(x,x,z,-0.75:0.25:0.75,frameflag=3,rect=[0,0,5*%pi,4*%pi])
+contour2d(x,x,z,-0.75:0.25:0.75,frameflag=3,rect=[0,0,5*%pi,4*%pi],fpf=" ")
 // truque 3: use legends (note que a função mais prática legend
 //          não funcionará quando um dos níveis for formado por duas curvas)
 legends(string(-0.75:0.25:0.75),1:7,"lr");

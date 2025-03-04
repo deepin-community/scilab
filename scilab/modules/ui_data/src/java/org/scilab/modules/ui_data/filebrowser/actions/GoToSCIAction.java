@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2011 - DIGITEO - Calixte DENIZET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -46,7 +46,7 @@ public class GoToSCIAction extends CommonCallBack {
     public void callBack() {
         File f = new File(System.getenv("SCI"));
         if (f.exists() && f.isDirectory() && f.canRead()) {
-            InterpreterManagement.requestScilabExec("chdir('" + f.getAbsolutePath() + "')");
+            InterpreterManagement.requestScilabExec("chdir('" + f.getAbsolutePath() + "');");
             FileBrowser.setBaseDir(f.getAbsolutePath());
         }
     }

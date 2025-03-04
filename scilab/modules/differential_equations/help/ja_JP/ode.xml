@@ -586,7 +586,7 @@ y = ode(y0, t0, t, 'myode');
                 <link linkend="ode_discrete">ode_discrete</link>
             </member>
             <member>
-                <link linkend="dassl">dassl</link>
+                <link linkend="dae">dae</link>
             </member>
             <member>
                 <link linkend="impl">impl</link>

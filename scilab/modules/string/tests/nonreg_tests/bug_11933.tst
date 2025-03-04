@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2017 - Samuel GOUGEON
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -10,8 +10,8 @@
 //
 // <-- Non-regression test for bug 11933 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/11933
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/11933
 //
 // <-- Short Description -->
 // For any polynomial p -- noticeably in s or z --, evaluating sci2exp(p)

@@ -1,0 +1,12 @@
+#!/bin/sh
+# autopkgtest check: Run the simulated annealing example with graphics and see
+# if it reached the expected minimum.
+# (C) 2023 Pierre Gruet.
+# Author: Pierre Gruet <pgt@debian.org>
+
+set -e
+
+# Run the example
+xvfb-run --auto-servernum --server-args="-screen 0 1024x768x24" scilab -scihome $(mktemp -d) -f debian/tests/test_sa.sce -quit || true
+# Check if we found (approximately) the solution.
+grep '0\.00.*0\.00' sa_solution.txt

@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2014-2016 - Scilab Enterprises - Clement DAVID
  * Copyright (C) 2017-2018 - ESI Group - Clement DAVID
  *
@@ -209,15 +209,12 @@ void Controller::deleteBaseObject(model::BaseObject* initial)
     // disconnect / remove references of weak connected objects and decrement the reference count of all strongly connected objects.
     if (k == ANNOTATION)
     {
-        unlinkVector(initial, PARENT_DIAGRAM, CHILDREN);
         unlinkVector(initial, PARENT_BLOCK, CHILDREN);
+        unlinkVector(initial, PARENT_DIAGRAM, CHILDREN);
         // RELATED_TO is not referenced back
     }
     else if (k == BLOCK)
     {
-        unlinkVector(initial, PARENT_DIAGRAM, CHILDREN);
-        unlinkVector(initial, PARENT_BLOCK, CHILDREN);
-
         deleteOwnedReference(initial, LABEL);
 
         deleteVector(initial, INPUTS);
@@ -227,6 +224,8 @@ void Controller::deleteBaseObject(model::BaseObject* initial)
 
         deleteVector(initial, CHILDREN);
         // FIXME what about REFERENCED_PORT ?
+        unlinkVector(initial, PARENT_BLOCK, CHILDREN);
+        unlinkVector(initial, PARENT_DIAGRAM, CHILDREN);
     }
     else if (k == DIAGRAM)
     {
@@ -235,13 +234,13 @@ void Controller::deleteBaseObject(model::BaseObject* initial)
     }
     else if (k == LINK)
     {
-        unlinkVector(initial, PARENT_DIAGRAM, CHILDREN);
-        unlinkVector(initial, PARENT_BLOCK, CHILDREN);
-
         deleteOwnedReference(initial, LABEL);
 
         unlinkVector(initial, SOURCE_PORT, CONNECTED_SIGNALS);
         unlinkVector(initial, DESTINATION_PORT, CONNECTED_SIGNALS);
+
+        unlinkVector(initial, PARENT_BLOCK, CHILDREN);
+        unlinkVector(initial, PARENT_DIAGRAM, CHILDREN);
     }
     else if (k == PORT)
     {
@@ -308,7 +307,7 @@ void Controller::unlink(model::BaseObject* initial, object_properties_t uid_prop
             }
 
             // Find which end of the link is connected to the port
-            ScicosID oppositeRef;
+            ScicosID oppositeRef = ScicosID();
             getObjectProperty(o->id(), o->kind(), ref_prop, oppositeRef);
             if (oppositeRef == initial->id())
             {
@@ -396,26 +395,40 @@ model::BaseObject* Controller::cloneBaseObject(cloned_t& mapped, model::BaseObje
     // deep copy children, manage ScicosID and std::vector<ScicosID>
     if (k == ANNOTATION)
     {
-        deepClone(mapped, initial, cloned, PARENT_DIAGRAM, false);
-        deepClone(mapped, initial, cloned, PARENT_BLOCK, false);
-        deepClone(mapped, initial, cloned, RELATED_TO, true);
+        mapProperty(mapped, initial, cloned, PARENT_DIAGRAM, false);
+        mapProperty(mapped, initial, cloned, PARENT_BLOCK, false);
+        mapProperty(mapped, initial, cloned, RELATED_TO, true);
     }
     else if (k == BLOCK)
     {
-        deepClone(mapped, initial, cloned, PARENT_DIAGRAM, false);
+        mapProperty(mapped, initial, cloned, PARENT_DIAGRAM, false);
         if (clonePorts)
         {
             // copy the block and all its ports
-            deepCloneVector(mapped, initial, cloned, INPUTS, true);
-            deepCloneVector(mapped, initial, cloned, OUTPUTS, true);
-            deepCloneVector(mapped, initial, cloned, EVENT_INPUTS, true);
-            deepCloneVector(mapped, initial, cloned, EVENT_OUTPUTS, true);
+            mapVectorProperty(mapped, initial, cloned, INPUTS, true);
+            mapVectorProperty(mapped, initial, cloned, OUTPUTS, true);
+            mapVectorProperty(mapped, initial, cloned, EVENT_INPUTS, true);
+            mapVectorProperty(mapped, initial, cloned, EVENT_OUTPUTS, true);
         }
 
-        deepClone(mapped, initial, cloned, PARENT_BLOCK, false);
+        mapProperty(mapped, initial, cloned, PARENT_BLOCK, false);
         if (cloneChildren)
         {
-            deepCloneVector(mapped, initial, cloned, CHILDREN, true);
+            ScicosID parentDiagramInitial = ScicosID();
+            getObjectProperty(initial, PARENT_DIAGRAM, parentDiagramInitial);
+            ScicosID parentDiagramCloned = ScicosID();
+            getObjectProperty(cloned, PARENT_DIAGRAM, parentDiagramCloned);
+
+            cloned_t mappedLayer;
+            if (parentDiagramInitial != ScicosID() && parentDiagramCloned != ScicosID())
+            {
+                mappedLayer.insert(std::make_pair(parentDiagramInitial, cloned_pair_t(getBaseObject(parentDiagramInitial), getBaseObject(parentDiagramCloned))));
+            }
+            mappedLayer.insert(std::make_pair(initial->id(), cloned_pair_t(initial, cloned)));
+
+            std::vector<ScicosID> children = mappedVector(mappedLayer, initial, CHILDREN, true);
+            updateChildrenRelatedPropertiesAfterClone(mappedLayer);
+            setObjectProperty(cloned, CHILDREN, children);
         }
         // FIXME what about REFERENCED_PORT ?
     }
@@ -423,25 +436,30 @@ model::BaseObject* Controller::cloneBaseObject(cloned_t& mapped, model::BaseObje
     {
         if (cloneChildren)
         {
-            deepCloneVector(mapped, initial, cloned, CHILDREN, true);
+            cloned_t mappedLayer;
+            mappedLayer.insert(std::make_pair(initial->id(), cloned_pair_t(initial, cloned)));
+
+            std::vector<ScicosID> children = mappedVector(mappedLayer, initial, CHILDREN, true);
+            updateChildrenRelatedPropertiesAfterClone(mappedLayer);
+            setObjectProperty(cloned, CHILDREN, children);
         }
     }
     else if (k == LINK)
     {
-        deepClone(mapped, initial, cloned, PARENT_DIAGRAM, false);
-        deepClone(mapped, initial, cloned, PARENT_BLOCK, false);
-        deepClone(mapped, initial, cloned, SOURCE_PORT, false);
-        deepClone(mapped, initial, cloned, DESTINATION_PORT, false);
+        mapProperty(mapped, initial, cloned, PARENT_DIAGRAM, false);
+        mapProperty(mapped, initial, cloned, PARENT_BLOCK, false);
+        mapProperty(mapped, initial, cloned, SOURCE_PORT, false);
+        mapProperty(mapped, initial, cloned, DESTINATION_PORT, false);
     }
     else if (k == PORT)
     {
-        deepClone(mapped, initial, cloned, SOURCE_BLOCK, false);
-        deepCloneVector(mapped, initial, cloned, CONNECTED_SIGNALS, false);
+        mapProperty(mapped, initial, cloned, SOURCE_BLOCK, false);
+        mapVectorProperty(mapped, initial, cloned, CONNECTED_SIGNALS, false);
     }
     return cloned;
 }
 
-void Controller::deepClone(cloned_t& mapped, model::BaseObject* initial, model::BaseObject* clone, object_properties_t p, bool cloneIfNotFound)
+void Controller::mapProperty(cloned_t& mapped, model::BaseObject* initial, model::BaseObject* clone, object_properties_t p, bool cloneIfNotFound)
 {
     ScicosID v;
     getObjectProperty(initial, p, v);
@@ -475,14 +493,12 @@ void Controller::deepClone(cloned_t& mapped, model::BaseObject* initial, model::
     setObjectProperty(clone, p, cloned);
 }
 
-void Controller::deepCloneVector(cloned_t &mapped, model::BaseObject *initial,
-                                 model::BaseObject *clone,
-                                 object_properties_t p, bool cloneIfNotFound)
+std::vector<ScicosID> Controller::mappedVector(cloned_t &mapped, model::BaseObject *initial, object_properties_t p, bool cloneIfNotFound)
 {
     std::vector<ScicosID> v;
     getObjectProperty(initial, p, v);
 
-    std::vector<model::BaseObject *> cloned;
+    std::vector<ScicosID> cloned;
     cloned.reserve(v.size());
 
     for (const ScicosID &id : v)
@@ -490,7 +506,7 @@ void Controller::deepCloneVector(cloned_t &mapped, model::BaseObject *initial,
         if (id == ScicosID())
         {
             // Deleted Block, the cloning is done at Adapter level
-            cloned.push_back(nullptr);
+            cloned.push_back(ScicosID());
             continue;
         }
 
@@ -498,7 +514,7 @@ void Controller::deepCloneVector(cloned_t &mapped, model::BaseObject *initial,
         cloned_t::iterator it = mapped.find(id);
         if (it != mapped.end())
         {
-            cloned.push_back(it->second.cloned);
+            cloned.push_back(it->second.cloned->id());
         }
         else
         {
@@ -508,45 +524,25 @@ void Controller::deepCloneVector(cloned_t &mapped, model::BaseObject *initial,
                 {
                     model::BaseObject *clone =
                         cloneBaseObject(mapped, opposite, true, true);
-                    cloned.push_back(clone);
+                    cloned.push_back(clone->id());
                 }
                 else
                 {
-                    cloned.push_back(nullptr);
+                    cloned.push_back(ScicosID());
                 }
             }
             else
             {
-                cloned.push_back(nullptr);
+                cloned.push_back(ScicosID());
             }
         }
     }
 
-    // update the ScicosID related properties after cloning all the objects
-    if (p == CHILDREN)
-    {
-        updateChildrenRelatedPropertiesAfterClone(mapped);
-    }
-
     // set the main object vector property
-    std::vector<ScicosID> clonedUIDs(cloned.size());
-    std::transform(cloned.begin(), cloned.end(), clonedUIDs.begin(),
-                   [](model::BaseObject * o)
-    {
-        if (o == nullptr)
-        {
-            return ScicosID();
-        }
-        else
-        {
-            return o->id();
-        }
-    });
-
-    setObjectProperty(clone, p, clonedUIDs);
+    return cloned;
 }
 
-void Controller::updateChildrenRelatedPropertiesAfterClone(cloned_t &mapped)
+void Controller::updateChildrenRelatedPropertiesAfterClone(cloned_t& mapped)
 {
     for (auto const &it : mapped)
     {
@@ -556,11 +552,11 @@ void Controller::updateChildrenRelatedPropertiesAfterClone(cloned_t &mapped)
         switch (initial->kind())
         {
             case PORT:
-                deepCloneVector(mapped, initial, cloned, CONNECTED_SIGNALS, false);
+                mapVectorProperty(mapped, initial, cloned, CONNECTED_SIGNALS, false);
                 break;
             case LINK:
-                deepClone(mapped, initial, cloned, SOURCE_PORT, false);
-                deepClone(mapped, initial, cloned, DESTINATION_PORT, false);
+                mapProperty(mapped, initial, cloned, SOURCE_PORT, false);
+                mapProperty(mapped, initial, cloned, DESTINATION_PORT, false);
                 break;
             default:
                 break;
@@ -573,6 +569,7 @@ ScicosID Controller::cloneObject(ScicosID uid, bool cloneChildren, bool clonePor
     cloned_t mapped;
     model::BaseObject *clone =
         cloneBaseObject(mapped, getBaseObject(uid), cloneChildren, clonePorts);
+    updateChildrenRelatedPropertiesAfterClone(mapped);
 
     return clone->id();
 }
@@ -648,7 +645,7 @@ void Controller::sortAndFillKind(std::vector<ScicosID>& uids, std::vector<int>& 
 }
 
 template<typename T>
-bool Controller::getObjectProperty(ScicosID uid, kind_t k, object_properties_t p, T& v) const
+bool Controller::getObjectProperty(ScicosID uid, kind_t, object_properties_t p, T& v) const
 {
     return getObjectProperty(getBaseObject(uid), p, v);
 }
@@ -695,7 +692,7 @@ bool Controller::getObjectProperty(ScicosID uid, kind_t k, object_properties_t p
 }
 
 template<typename T>
-update_status_t Controller::setObjectProperty(ScicosID uid, kind_t k, object_properties_t p, T v)
+update_status_t Controller::setObjectProperty(ScicosID uid, kind_t, object_properties_t p, T v)
 {
     return setObjectProperty(getBaseObject(uid), p, v);
 }

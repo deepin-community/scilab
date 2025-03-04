@@ -1,5 +1,5 @@
 
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ????-2008 - INRIA
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -34,9 +34,15 @@ function F=randpencil(eps,infi,fin,eta)
     end
     select type(fin)
     case 1
-        if diag(fin)<>[] then Fin=%s*eye()-diag(fin);else Fin=[];end
+        if diag(fin)<>[] then 
+            d = diag(fin);
+            Fin = %s * eye(d) -d;
+        else 
+            Fin = [];
+        end
     case 2
-        Fin=%s*eye()-companion(fin);
+        c = companion(fin);
+        Fin = %s * eye(c) - c;
     end
     deff("j=%jdrn(n)","j=zeros(n,n);for k=1:n-1;j(k,k+1)=1;end")
     deff("Lk=%eta(k)","Lk=zeros(k+1,k);if k==0 then return;end;for j=1:k;Lk(j,j)=%s;Lk(j+1,j)=-1;end");

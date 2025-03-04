@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -19,18 +19,20 @@
         <refpurpose>ключевое слово выбора</refpurpose>
     </refnamediv>
     <refsynopsisdiv>
-        <title>Синтаксис</title>
+        <title>Syntax</title>
         <synopsis>
             select variable
             case value1 then
-                instructions 1
+                instructions 1
             case value2 then
-                instructions 2
-                ...
+                instructions 2
+                ...
             case valuen then
-                instructions n
-            [else
-                instructions]
+                instructions n
+            case {valueC1 valueC2 valueCN}
+                intructions C
+           [else
+                instructions]
             end
         </synopsis>
     </refsynopsisdiv>
@@ -55,6 +57,15 @@
                 </listitem>
             </varlistentry>
             <varlistentry>
+                <term>valueC1, ..., valueCN</term>
+                <listitem>
+                    <para>
+                        like <literal>value1, ..., valuen</literal> but an OR is applied on each <literal>variable == valueCx</literal>.
+                        It is useful to group cases with same instruction.
+                    </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
                 <term>instructions</term>
                 <listitem>
                     <para>
@@ -65,90 +76,28 @@
         </variablelist>
     </refsection>
     <refsection>
-        <title>Описание</title>
-        <para>
-            Управляющая инструкция выбора действий по значению переменной <literal>variable</literal>.
-        </para>
-        <para>
-            Примечания:
-        </para>
-        <itemizedlist>
-            <listitem>
-                <para>
-                    Единственное ограничение в том, что каждое ключевое слово <literal>"then"</literal> должно быть на
-                    той же строке, что и соответствующее ключевое слово <literal>"case"</literal> (либо используйте
-                    обозначение продолжения, см <link linkend="dot">точка</link>).
-                </para>
-            </listitem>
-            <listitem>
-                <para>
-                    Ключевое слово <literal>"then"</literal> можно заменить на перевод каретки или запятую.
-                    Инструкции <literal>instructions1</literal> исполняются, если <literal>expr1=expr</literal>,
-                    и т. д.
-                </para>
-            </listitem>
-        </itemizedlist>
-        <para>
-            В соответствии с договорённостями по написанию кода  в Scilab рекомендуется:
-        </para>
-        <itemizedlist>
-            <listitem>
-                <para>
-                    начинать новую инструкцию на новой строке;
-                </para>
-            </listitem>
-            <listitem>
-                <para>
-                    писать не более одной простой инструкции на одной строке;
-                </para>
-            </listitem>
-            <listitem>
-                <para>
-                    разбивать составные инструкции на множество строк.
-                </para>
-            </listitem>
-        </itemizedlist>
-        <para>
-            Например, используйте:
-        </para>
-        <programlisting role=""><![CDATA[
-A = 2
-select A
-case 1 then
-    disp(1)
-case 2 then
-    disp(2)
-else
-    disp(3)
-end
-]]></programlisting>
-        <para>
-            а не:
-        </para>
-        <programlisting role=""><![CDATA[
-A = 2;select A case 1 then disp(1); case 2 then disp(2); else  disp(3); end
-]]></programlisting>
-        <para>
-            Предупреждение: число символов, используемых для определения тела любой инструкции условия
-            (<literal>if while for</literal> или <literal>select/case</literal>) должно быть ограничено
-            16К.
-        </para>
-    </refsection>
-    <refsection>
-        <title>Примеры</title>
+        <title>Examples</title>
         <programlisting role="example"><![CDATA[
-while %t do
-  n=round(10*rand(1,1))
-  select n
-  case 0 then
-    disp(0)
-  case 1 then
-    disp(1)
-  else
-    break
-  end
-end
- ]]></programlisting>
+            function select_example(n)
+                select n
+                case 0 then
+                    disp(0)
+                case 1 then
+                    disp(1)
+                case {2 3}
+                    disp({2 3})
+                else
+                    disp("default")
+                end
+            endfunction
+
+            select_example(0); // 0
+            select_example(1); // 1
+            select_example(2); // {2 3}
+            select_example(3); // {2 3}
+            select_example(4); // "default"
+
+        ]]></programlisting>
     </refsection>
     <refsection role="see also">
         <title>Смотрите также</title>
@@ -170,8 +119,25 @@ end
             <revision>
                 <revnumber>6.0.0</revnumber>
                 <revdescription>
-                  <literal>select</literal> is now protected:
-                  Assignments like <literal>select=1</literal> are no longer possible.
+                    <itemizedlist>
+                        <listitem>
+                            <literal>select</literal> is now protected:
+                            Assignments like <literal>select=1</literal> are no longer possible.
+                        </listitem>
+                        <listitem>
+                            The number of characters used to define the body of any conditional instruction (<literal>if</literal>, <literal>while</literal>, <literal>for</literal>, or <literal>select/case</literal>) is no more limited to 16k.
+                        </listitem>
+                    </itemizedlist>
+                </revdescription>
+            </revision>
+            <revision>
+                <revnumber>2024.0</revnumber>
+                <revdescription>
+                    <itemizedlist>
+                        <listitem>
+                            Add grouped case with cell representation <literal>case {2 3}</literal> to match either 2 or 3
+                        </listitem>
+                    </itemizedlist>
                 </revdescription>
             </revision>
         </revhistory>

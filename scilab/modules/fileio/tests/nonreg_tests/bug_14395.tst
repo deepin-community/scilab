@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2016 - Scilab Enterprises - Pierre-Aimé AGNEL
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -7,8 +7,8 @@
 
 // <-- Non-regression test for bug 14395 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=14395
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/14395
 //
 // <-- Short Description -->
 //    %dir_p on a directory with no subdir yielded a warning operation +

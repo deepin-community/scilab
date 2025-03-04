@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2003 - INRIA - Carlos Klimann
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -40,19 +40,15 @@ function s = samplef(n, X, f, orient)
     //with replacement, from the columns  of X.  The length of f
     //must be equal to the number of columns of X.
     //
-    [lhs, rhs] = argn(0)
-    if rhs < 3 | rhs > 4 then error(msprintf(gettext("%s: Wrong number of input arguments: %d to %d expected.\n"), "samplef", 3, 4)), end
+
+    arguments
+        n {mustBeA(n, "double"), mustBeNonnegative}
+        X
+        f {mustBeA(f, "double"), mustBeNonnegative}
+        orient (1,1) {mustBeA(orient, ["double", "string"]), mustBeMember(orient, {1, 2, "r", "c", "*"})}= "*"
+    end
+
     if X == [] then s = []; return; end
-
-    // Frequencies cannot be negative
-    if ~and(f >= 0)
-        error(msprintf(_("%s: Wrong value for input argument #%d: Non-negative values expected.\n"), fname, 3))
-    end
-
-    // Setting default value for 4th argument
-    if rhs == 3 then
-        orient = "*"
-    end
 
     sizx = size(X)
 
@@ -100,6 +96,5 @@ function s = samplef(n, X, f, orient)
         return
     end
 
-    error(msprintf(gettext("%s: Wrong value for input argument #%d: ''%s'', ''%s'', ''%s'', %d or %d expected.\n"), "orient", 4, "*", "r", "c", 1, 2))
 endfunction
 

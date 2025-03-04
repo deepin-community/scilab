@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ????-2008 - INRIA Michael Baudin
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -28,12 +28,6 @@ clear sel
 function t=sel(R),t=real(R)<0 ,endfunction
 //Empty matrix
 A=[];
-if schur(A)<>[] then bugmes();quit;end
-if schur(A,"real")<>[] then bugmes();quit;end
-if schur(A,"complex")<>[] then bugmes();quit;end
-if schur(A,"c")<>[] then bugmes();quit;end
-if schur(A,"d")<>[] then bugmes();quit;end
-if schur(A,sel)<>[] then bugmes();quit;end
 [U,S]=schur(A);
 if U<>[]|S<>[] then bugmes();quit;end
 [U,S]=schur(A,"real");

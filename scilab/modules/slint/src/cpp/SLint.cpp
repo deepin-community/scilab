@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2015 - Scilab Enterprises - Calixte DENIZET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -108,7 +108,7 @@ void SLint::setFiles(const std::vector<std::wstring> & files)
             {
                 collectInDirectory(full);
             }
-            else if (hasSuffix(full, L".sci"))
+            else /* if (hasSuffix(full, L".sci") || hasSuffix(full, L".sce") || hasSuffix(full, L".start") || hasSuffix(full, L".quit") || hasSuffix(full, L".tst"))*/
             {
                 SciFilePtr sf = parseFile(full);
                 if (sf.get())

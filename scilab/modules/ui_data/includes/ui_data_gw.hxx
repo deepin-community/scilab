@@ -1,5 +1,5 @@
 /*
-*  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+*  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 *  Copyright (C) 2015 - Scilab Enterprises - Antoine ELIAS
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -28,6 +28,5 @@ extern "C" {
 CPP_GATEWAY_PROTOTYPE_EXPORT(sci_browsevar, UI_DATA_IMPEXP);
 CPP_GATEWAY_PROTOTYPE_EXPORT(sci_filebrowser, UI_DATA_IMPEXP);
 CPP_GATEWAY_PROTOTYPE_EXPORT(sci_updatebrowsevar, UI_DATA_IMPEXP);
-CPP_GATEWAY_PROTOTYPE_EXPORT(sci_closeEditvar, UI_DATA_IMPEXP);
 
 #endif /* __UI_DATA_GW_HXX__ */

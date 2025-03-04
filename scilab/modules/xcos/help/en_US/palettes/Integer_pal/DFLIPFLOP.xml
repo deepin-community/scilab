@@ -51,7 +51,7 @@
             <listitem>
                 <xref linkend="Defaultproperties_DFLIPFLOP">Default properties</xref>
             </listitem>
-            <!--      TODO wait for the bug 8900 resolution http://bugzilla.scilab.org/show_bug.cgi?id=8900
+            <!--      TODO wait for the bug 8900 resolution https://gitlab.com/scilab/scilab/-/issues/8900
   <listitem>
     <xref linkend="Example_DFLIPFLOP">Example</xref>
   </listitem>
@@ -261,7 +261,7 @@
             </listitem>
         </itemizedlist>
     </refsection>
-    <!-- TODO wait for the bug 8900 resolution http://bugzilla.scilab.org/show_bug.cgi?id=8900
+    <!-- TODO wait for the bug 8900 resolution https://gitlab.com/scilab/scilab/-/issues/8900
   <refsection id="Example_DFLIPFLOP">
     <title>Example</title>
     <para>

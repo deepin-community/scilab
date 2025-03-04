@@ -16,4 +16,5 @@ pipeSpawnErr
 CreateOuput
 spawncommand
 DetectDetachProcessInCommandLine
+DetectStartInCommandLine
 timeout_process_after

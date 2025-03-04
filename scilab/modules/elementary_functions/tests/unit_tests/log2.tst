@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010 - DIGITEO - Allan CORNET
 // Copyright (C) 2019 - Samuel GOUGEON
 //
@@ -23,7 +23,8 @@ if or(e <> [1.    2.    2.  -51.]) then pause, end
 // Checking error messages
 msg = gettext("%s: Wrong number of input argument(s): %d expected.\n");
 assert_checkerror("[f, e] = log2();", msprintf(msg, "log2", 1));
-msg = gettext("%s: Argument #%d: Decimal numbers expected.\n");
-assert_checkerror("[f, e] = log2(""a"");", msprintf(msg, "log2", 1));
-msg = gettext("%s: Argument #%d: Complex numbers not supported.\n");
+errarg = sci2exp(["double"]);
+msg = gettext("%s: Wrong type for input argument #%d: Must be in %s.\n");
+assert_checkerror("[f, e] = log2(""a"");", msprintf(msg, "log2", 1, errarg));
+msg = gettext("%s: Wrong value for input argument #%d: Real numbers expected.\n");
 assert_checkerror("[f, e] = log2(%i);", msprintf(msg, "log2", 1));

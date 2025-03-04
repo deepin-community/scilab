@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Paul Bignier
 // Copyright (C) 2017 - Samuel GOUGEON
 //
@@ -12,7 +12,7 @@ function demo_milk_drop()
     demo_viewCode("milkdrop.sce");
     my_plot_desc          = "milk drop";
     my_handle.figure_name = my_plot_desc;
-    my_handle.color_map = jetcolormap(256);
+    my_handle.color_map = jet(256);
 
     x = -15:0.1:15;
     y = x;

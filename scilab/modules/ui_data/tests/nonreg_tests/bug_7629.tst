@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010 - DIGITEO - Pierre MARECHAL
 // Copyright (C) 2019 - Samuel GOUGEON
 //
@@ -10,8 +10,8 @@
 //
 // <-- Non-regression test for bug 7629 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/7629
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/7629
 //
 // <-- Short Description -->
 // Browsevar is not live-updated when a variable is cleared.

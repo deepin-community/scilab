@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008-2008 - INRIA - Jean-Baptiste Silvy
 // Copyright (C) 2013 - Scilab Enterprises - Adeline CARNIS
 //
@@ -10,8 +10,8 @@
 
 // <-- Non-regression test for bug 366 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=366
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/366
 //
 // <-- Short Description -->
 // The error message of plot2d is sort of understandable

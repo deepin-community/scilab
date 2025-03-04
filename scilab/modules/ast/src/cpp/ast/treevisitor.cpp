@@ -1,5 +1,5 @@
 /*
-*  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+*  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 *  Copyright (C) 2015 - Scilab Enterprises - Antoine ELIAS
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -45,6 +45,11 @@ void TreeVisitor::visit(const SeqExp  &e)
         last_line = it->getLocation().last_line;
 
         it->accept(*this);
+        if (it->isArgumentsExp())
+        {
+            continue;
+        }
+
         if (it->isAssignExp() ||
                 it->isCommentExp() ||
                 it->isForExp() ||
@@ -172,6 +177,23 @@ void TreeVisitor::visit(const CellExp &e)
     {
         lines.front()->accept(*this);
         types::List* pL = getList();
+
+        // in case of scalar cell: a = {42}
+        // accept() will create a constant as it's done for: a = [42]
+        // create operation "crc" to keep a cell on scalar
+        if (pL->getSize() == 2)
+        {
+            types::List* sub = createOperation();
+            types::List* ope = new types::List();
+            ope->append(pL);
+            pL->killMe();
+            sub->append(ope);
+            ope->killMe();
+            sub->append(new types::String(L"crc"));
+            l = sub;
+            return;
+        }
+
         pL->get(pL->getSize() - 1)->getAs<types::String>()->set(0, L"crc");
         return;
     }
@@ -601,49 +623,87 @@ void TreeVisitor::visit(const AssignExp &e)
 
 void TreeVisitor::visit(const CallExp &e)
 {
-    const ast::SimpleVar & var = static_cast<const ast::SimpleVar &>(e.getName());
-    types::TList* call = new types::TList();
+    const Exp& head = e.getName();
+    if(head.isSimpleVar())
+    {
+        const ast::SimpleVar & var = static_cast<const ast::SimpleVar &>(e.getName());
+        // read in the context if the var name
+        // to get if this is a Callable or not.
+        // if collable funcall else extaction.
+        symbol::Context* ctx = symbol::Context::getInstance();
+        symbol::Variable* vvar = ((SimpleVar&)var).getStack();
+        types::InternalType* pIT = ctx->get(vvar);
+        const std::wstring& name = var.getSymbol().getName();
 
-    //header
-    types::String* varstr = new types::String(1, 4);
-    varstr->set(0, L"funcall");
-    varstr->set(1, L"rhs");
-    varstr->set(2, L"name");
-    varstr->set(3, L"lhsnb");
-    call->append(varstr);
+        // Function call
+        if (pIT && pIT->isCallable())
+        {
+            types::TList* call = new types::TList();
 
-    //rhs
-    types::List* rhs = new types::List();
+            // header
+            types::String* varstr = new types::String(1, 4);
+            varstr->set(0, L"funcall");
+            varstr->set(1, L"rhs");
+            varstr->set(2, L"name");
+            varstr->set(3, L"lhsnb");
+            call->append(varstr);
+
+            // rhs
+            types::List* rhs = new types::List();
+            ast::exps_t args = e.getArgs();
+            for (auto arg : args)
+            {
+                arg->accept(*this);
+                types::List* tmp = getList();
+                rhs->append(tmp);
+                tmp->killMe();
+            }
+
+            call->append(rhs);
+            rhs->killMe();
+
+            // name
+            const std::wstring& name = var.getSymbol().getName();
+            call->append(new types::String(name.c_str()));
+
+            // lhsnb
+            // use default value 1
+            // parent exp like assign can adapt it.
+            call->append(new types::Double(1));
+
+            l = call;
+            return;
+        }
+    }
+
+    // extraction
+    types::InternalType* tmp;
+    types::List* ext = new types::List();
+
+    // varname
+    e.getName().accept(*this);
+    tmp = getList();
+    ext->append(tmp);
+    tmp->killMe();
+
+    // indexes
     ast::exps_t args = e.getArgs();
     for (auto arg : args)
     {
         arg->accept(*this);
-        types::List* tmp = getList();
-        rhs->append(tmp);
+        tmp = getList();
+        ext->append(tmp);
         tmp->killMe();
     }
 
-    call->append(rhs);
-    rhs->killMe();
+    types::List* operation = createOperation();
+    operation->append(ext);
+    ext->killMe();
 
-    if (e.getName().isSimpleVar())
-    {
-        // name
-        const std::wstring & name = var.getSymbol().getName();
-        call->append(new types::String(name.c_str()));
-    }
-    else
-    {
-        // ie: a()()
-        call->append(new types::String(L""));
-    }
+    // operator
+    operation->append(new types::String(L"ext"));
 
-    //lhsnb
-    //use default value 1
-    //parent exp like assign can adapt it.
-    call->append(new types::Double(1));
-
-    l = call;
+    l = operation;
 }
 
 void TreeVisitor::visit(const ForExp &e)
@@ -938,7 +998,17 @@ void TreeVisitor::visit(const TransposeExp  &e)
     //operator
     ext->append(ope);
     ope->killMe();
-    ext->append(new types::String(L"'"));
+    switch(e.getConjugate())
+    {
+        case ast::TransposeExp::_Conjugate_:
+            ext->append(new types::String(L"'"));
+            break;
+        case ast::TransposeExp::_NonConjugate_:
+            ext->append(new types::String(L".'"));
+            break;
+        default:
+            break;    
+    }
     l = ext;
 }
 
@@ -1087,33 +1157,32 @@ types::List* TreeVisitor::matrixOrCellExp(const exps_t& lines, TreeVisitor& me, 
 {
     types::List* sub = createOperation();
     types::List* ope = new types::List();
-
+    ast::exps_t::const_iterator	i, j;
+    
     int idx = 0;
-    for (auto it : lines)
+    for (i = lines.begin() ; i != lines.end() ; )
     {
-        it->accept(me);
-
+        (*i)->accept(me);
+        
         if (idx >= 2)
         {
             sub->append(ope);
             ope->killMe();
             sub->append(new types::String(what.data()));
-
-            //create a new operation
-            //put previous stage in lhs and
-            //result in rhs
-            types::List* subcolcatOperation = createOperation();
-            types::List* subcolcatOperands = new types::List();
-            subcolcatOperands->append(sub);
+            // create a new operation
+            // put previous stage in lhs and
+            // result in rhs
+            types::List* lst = createOperation();
+            types::List* l2 = new types::List();
+            l2->append(sub);
             sub->killMe();
-            //add EOL
-            //subcolcatOperands->append(getEOL());
             types::InternalType* tmp = me.getList();
-            subcolcatOperands->append(tmp);
+            l2->append(tmp);
             tmp->killMe();
 
-            ope = subcolcatOperands;
-            sub = subcolcatOperation;
+            // lst->append(tmp);
+            ope = l2;
+            sub = lst;
         }
         else
         {
@@ -1121,9 +1190,15 @@ types::List* TreeVisitor::matrixOrCellExp(const exps_t& lines, TreeVisitor& me, 
             ope->append(tmp);
             tmp->killMe();
         }
-
+        j = i;
+        ++i;
+        if (i != lines.end() && (*i)->getLocation().first_line != (*j)->getLocation().first_line)
+        {
+            ope->append(me.getEOL());
+        }
         ++idx;
     }
+
     sub->append(ope);
     ope->killMe();
     sub->append(new types::String(what.data()));

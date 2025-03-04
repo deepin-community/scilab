@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA
  * Copyright (C) 2009-2011 - DIGITEO - Michael Baudin
  * Copyright (C) 2013 - Scilab Enterprises - Paul Bignier: added 32/64bits separation
@@ -22,7 +22,7 @@
     <refnamediv>
         <refname>test_run</refname>
         <refpurpose>
-            runs unit tests and non-regression tests of a module or in a directory
+            runs unit and non-regression tests of a Scilab or external module, or in a directory
         </refpurpose>
     </refnamediv>
     <refsynopsisdiv>
@@ -41,22 +41,34 @@
                 <term>module</term>
                 <listitem>
                     <para>
-                        A String array or <literal>[]</literal> (or equivalently <literal>"[]"</literal>). Name of the modules or directory for the tests, all internal modules if <literal>[]</literal>
+                        A String array providing the name of the modules whose tests must be run,
+                        or directory path where test files are stored:
                     </para>
                     <itemizedlist>
                         <listitem>
                             <para>
-                                the name of an internal Scilab module ("core", "time", ...), a sub-module (e.g. "optimization|neldermead").
+                                name of an internal Scilab module ("core", "time", ...), a
+                                sub-module (e.g. "optimization|neldermead").
                             </para>
                         </listitem>
                         <listitem>
                             <para>
-                                the name of an ATOMS module ("module_lycee", "nisp", ...). To be taken into account, the module must be loaded when test_run() is called.
+                                name of an ATOMS module ("module_lycee", "nisp", ...). To be taken
+                                into account, the module must be loaded when test_run() is called.
+                                See <literal>atomsGetLoaded()(:,1)</literal> and
+                                <link linkend="atomsLoad">atomsLoad(…)</link>.
                             </para>
                         </listitem>
                         <listitem>
                             <para>
-                                the absolute directory path of a module containing test/unit_tests or test/nonreg_tests.
+                                absolute or relative path to the root directory of an external module
+                                containing test/unit_tests or test/nonreg_tests.
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>
+                                <literal>[]</literal> or <literal>"[]"</literal> to run tests of all
+                                internal Scilab modules.
                             </para>
                         </listitem>
                     </itemizedlist>
@@ -67,8 +79,9 @@
                 <listitem>
                     <para>
                         A string array or <literal>[]</literal> or <literal>"[]"</literal>:
-                        The names of the tests to execute during this run. If <varname>test_name</varname>
-                        is <literal>[]</literal>, all tests found in the module or in the directory are executed.
+                        The names of the tests to execute during this run.
+                        If <varname>test_name</varname> is <literal>[]</literal>,
+                        all tests found in the module or in the directory are executed.
                     </para>
                     <para>
                         The wildcard * can be used, like in <literal>*sin</literal>,
@@ -80,7 +93,9 @@
                 <term>options</term>
                 <listitem>
                     <para>
-                        A string array or <literal>[]</literal> or <literal>"[]"</literal>. The options for the tests during this run, default options if <literal>[]</literal> or <literal>"[]"</literal>.
+                        A string array or <literal>[]</literal> or <literal>"[]"</literal>.
+                        The options for the tests during this run, default options if
+                        <literal>[]</literal> or <literal>"[]"</literal>.
                     </para>
                     <variablelist> or
                         <varlistentry>
@@ -92,7 +107,10 @@
                         <varlistentry>
                             <term>"no_check_error_output"</term>
                             <listitem>
-                                <para>The error output stream is not checked. This option can be used when Scilab complains about the localization being not available.</para>
+                                <para>
+                                    The error output stream is not checked. This option can be used
+                                    when Scilab complains about the localization being not available.
+                                </para>
                             </listitem>
                         </varlistentry>
                         <varlistentry>
@@ -114,14 +132,17 @@
                             <term>"show_diff"</term>
                             <listitem>
                                 <para>
-                                    If a difference is found, shows the result of the command <literal>diff -u</literal>
+                                    If a difference is found, shows the result of the command
+                                    <literal>diff -u</literal>
                                 </para>
                             </listitem>
                         </varlistentry>
                         <varlistentry>
                             <term>"list"</term>
                             <listitem>
-                                <para>Does not perform the tests but displays a list of available tests</para>
+                                <para>
+                                    Does not perform the tests but displays a list of available tests.
+                                </para>
                             </listitem>
                         </varlistentry>
                         <varlistentry>
@@ -145,7 +166,10 @@
                         <varlistentry>
                             <term>"mode_nwni_profiling"</term>
                             <listitem>
-                                <para>Add the "-nwni -profiling" option to the launch for detect valgrind error (Linux only)</para>
+                                <para>
+                                    Add the "-nwni -profiling" option to the launch for detect
+                                    valgrind error (Linux only).
+                                </para>
                             </listitem>
                         </varlistentry>
                         <varlistentry>
@@ -177,7 +201,11 @@
                         <varlistentry>
                             <term>"short_summary"</term>
                             <listitem>
-                                <para>Does not display statistics nor execution time after execution (only number of executed, passed, failed and skipped tests will be displayed on a single line).</para>
+                                <para>
+                                    Does not display statistics nor execution time after execution
+                                    (only number of executed, passed, failed and skipped tests will
+                                    be displayed on a single line).
+                                </para>
                             </listitem>
                         </varlistentry>
                     </variablelist>
@@ -187,8 +215,10 @@
                 <term>exportToFile</term>
                 <listitem>
                     <para>
-                        Export to a XML file the result of the test. This file follows the specification of the XUnit format.
-                        Note that the usage of this option enables <literal>show_diff</literal> and <literal>show_error</literal>.
+                        Export to a XML file the result of the test. This file follows the
+                        specification of the XUnit format.
+                        Note that the usage of this option enables <literal>show_diff</literal> and
+                        <literal>show_error</literal>.
                     </para>
                     <para>
                         If the file pointed by <varname>exportToFile</varname> already exists,
@@ -262,6 +292,12 @@
             </listitem>
             <listitem>
                 <para>
+                    &lt;-- NO ASSERT FAILURE --&gt;
+                    The assert_check function will report errors instead of failures.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
                     &lt;-- NO TRY CATCH --&gt;
                 </para>
             </listitem>
@@ -292,9 +328,7 @@
             <listitem>
                 <para>
                     &lt;-- CLI SHELL MODE --&gt;
-                    (was &lt;-- JVM NOT MANDATORY --&gt; and is obsolete)
                     This test will be executed with scilab -nwni.
-                    All tests without this, will not be executed in "mode_mwni".
                 </para>
             </listitem>
             <listitem>
@@ -346,7 +380,8 @@
             file for each platform.
         </para>
         <para>
-            The various platform-specific <literal>.ref</literal> files must have one of the following extensions.
+            The various platform-specific <literal>.ref</literal> files must have one of the
+            following extensions.
         </para>
         <itemizedlist>
             <listitem>
@@ -383,7 +418,8 @@
         <para>
             The algorithm is the following.
             First, the <literal>.ref</literal> is considered. If this file does not exist,
-            the platform-specific <literal>platform.ref</literal> file is examined depending on the current platform.
+            the platform-specific <literal>platform.ref</literal> file is examined depending on the
+            current platform.
         </para>
         <itemizedlist>
             <listitem>
@@ -530,7 +566,7 @@ test_run string *ascii*
         <title>Internal Design</title>
         <para>
             The tests are performed in the temporary directory, not in the directory
-            which originally contain the tests files.
+            which contains the original tests files.
         </para>
         <para>
             The .tst script is not run as is. Instead, a header and a footer are
@@ -549,6 +585,9 @@ test_run string *ascii*
     <refsection role="see also">
         <title>See Also</title>
         <simplelist type="inline">
+            <member>
+                <link linkend="atomsTest">atomsTest</link>
+            </member>
             <member>
                 <link linkend="debug">debug</link>
             </member>
@@ -613,6 +652,12 @@ test_run string *ascii*
                 <revnumber>6.0.2</revnumber>
                 <revdescription>
                     <para>Tests names with the * wildcard like sin*, *sin, or *sin* are now allowed</para>
+                </revdescription>
+            </revision>
+            <revision>
+                <revnumber>2023.0.0</revnumber>
+                <revdescription>
+                    <para> Tag <literal>JVM NOT MANDATORY</literal> removed.</para>
                 </revdescription>
             </revision>
         </revhistory>

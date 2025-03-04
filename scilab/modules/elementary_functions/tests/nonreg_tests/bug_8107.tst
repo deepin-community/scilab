@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010 - INRIA - Serge Steer
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,9 +9,9 @@
 
 // <-- Non-regression test for bug 8107 and 8136 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=8107
-// http://bugzilla.scilab.org/show_bug.cgi?id=8136
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/8107
+// https://gitlab.com/scilab/scilab/-/issues/8136
 //
 // <-- Short Description -->
 // sum(a,1) or cumsum(a,1) may  make Scilab 5.0.3-beta-4 crash in  particular context.

@@ -15,7 +15,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Revision-Date: 2021-07-09 17:35+0100\n"
+"Revision-Date: 2023-02-16 15:29+0100\n"
 
 #
 # File: modules/statistics/sci_gateway/cpp/sci_percent_cov.cpp, line: 35
@@ -194,7 +194,6 @@ msgstr ""
 
 #
 # File: modules/statistics/macros/correl.sci, line: 55
-# File: modules/statistics/macros/cov.sci, line: 158
 #, c-format
 msgid "%s: Incompatible input arguments #%d and #%d: Same sizes expected"
 msgstr ""
@@ -249,6 +248,12 @@ msgstr ""
 # File: modules/statistics/macros/cov.sci, line: 148
 #, c-format
 msgid "%s: Wrong type for input argument #%d: an integer expected.\n"
+msgstr ""
+
+#
+# File: modules/statistics/macros/cov.sci, line: 158
+#, c-format
+msgid "%s: Incompatible input arguments #%d and #%d: Same sizes expected.\n"
 msgstr ""
 
 #

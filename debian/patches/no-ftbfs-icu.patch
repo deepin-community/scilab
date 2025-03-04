@@ -2,27 +2,29 @@ Description: fix compilation issue with new libicu (Closes: #962555)
 Author: Boyuan Yang?
 Forwarded: comes from ubuntu
 
---- scilab-6.1.0+dfsg1.orig/scilab/modules/functions_manager/src/cpp/dynamic_modules.cpp
-+++ scilab-6.1.0+dfsg1/scilab/modules/functions_manager/src/cpp/dynamic_modules.cpp
-@@ -18,14 +18,14 @@
+--- a/scilab/modules/functions_manager/src/cpp/dynamic_modules.cpp
++++ b/scilab/modules/functions_manager/src/cpp/dynamic_modules.cpp
+@@ -17,15 +17,15 @@
+ #include "context.hxx"
  #include "configvariable.hxx"
  
- 
++    //XML API
 +#include <libxml/xpath.h>
 +#include <libxml/xmlreader.h>
+ 
  extern "C"
  {
  #include "loadOnUseClassPath.h"
  #include "Scierror.h"
- 
-     //XML API
+ }
+-    //XML API
 -#include <libxml/xpath.h>
 -#include <libxml/xmlreader.h>
- #include "sci_malloc.h"
- #include "configvariable_interface.h"
- }
---- scilab-6.1.0+dfsg1.orig/scilab/modules/io/src/cpp/loadlib.cpp
-+++ scilab-6.1.0+dfsg1/scilab/modules/io/src/cpp/loadlib.cpp
+ 
+ extern "C"
+ {
+--- a/scilab/modules/io/src/cpp/loadlib.cpp
++++ b/scilab/modules/io/src/cpp/loadlib.cpp
 @@ -17,6 +17,8 @@
  #include "context.hxx"
  #include "loadlib.hxx"
@@ -32,30 +34,17 @@ Forwarded: comes from ubuntu
  extern "C"
  {
  #include "FileExist.h"
-@@ -26,8 +28,6 @@ extern "C"
- #include "fullpath.h"
+@@ -27,8 +29,6 @@
  #include "PATH_MAX.h"
  #include "pathconvert.h"
+ }
 -#include <libxml/xpath.h>
 -#include <libxml/xmlreader.h>
- }
  
  #define DEFAULT_ENCODING "UTF-8"
---- scilab-6.1.0+dfsg1.orig/scilab/modules/scicos/includes/XMIResource.hxx
-+++ scilab-6.1.0+dfsg1/scilab/modules/scicos/includes/XMIResource.hxx
-@@ -22,10 +22,8 @@
- #include <string>
- #include <vector>
  
--extern "C" {
- #include <libxml/xmlwriter.h>
- #include <libxml/xmlreader.h>
--}
- 
- namespace org_scilab_modules_scicos
- {
---- scilab-6.1.0+dfsg1.orig/scilab/modules/scicos/src/cpp/XMIResource.cpp
-+++ scilab-6.1.0+dfsg1/scilab/modules/scicos/src/cpp/XMIResource.cpp
+--- a/scilab/modules/scicos/src/cpp/XMIResource.cpp
++++ b/scilab/modules/scicos/src/cpp/XMIResource.cpp
 @@ -12,9 +12,7 @@
  
  #include "XMIResource.hxx"
@@ -66,8 +55,8 @@ Forwarded: comes from ubuntu
  
  namespace org_scilab_modules_scicos
  {
---- scilab-6.1.0+dfsg1.orig/scilab/modules/scicos/src/cpp/XMIResource_load.cpp
-+++ scilab-6.1.0+dfsg1/scilab/modules/scicos/src/cpp/XMIResource_load.cpp
+--- a/scilab/modules/scicos/src/cpp/XMIResource_load.cpp
++++ b/scilab/modules/scicos/src/cpp/XMIResource_load.cpp
 @@ -21,13 +21,12 @@
  #include <cstdlib> // for atoi and atof
  #include <cstring> // for strcmp and strchr
@@ -84,8 +73,8 @@ Forwarded: comes from ubuntu
  #include "sci_types.h"
  #include "sciprint.h"
  }
---- scilab-6.1.0+dfsg1.orig/scilab/modules/scicos/src/cpp/XMIResource_save.cpp
-+++ scilab-6.1.0+dfsg1/scilab/modules/scicos/src/cpp/XMIResource_save.cpp
+--- a/scilab/modules/scicos/src/cpp/XMIResource_save.cpp
++++ b/scilab/modules/scicos/src/cpp/XMIResource_save.cpp
 @@ -19,10 +19,9 @@
  #include <vector>
  #include <cmath> // for trunc
@@ -98,8 +87,8 @@ Forwarded: comes from ubuntu
  }
  
  namespace org_scilab_modules_scicos
---- scilab-6.1.0+dfsg1.orig/scilab/modules/xml/sci_gateway/cpp/sci_htmlWrite.cpp
-+++ scilab-6.1.0+dfsg1/scilab/modules/xml/sci_gateway/cpp/sci_htmlWrite.cpp
+--- a/scilab/modules/xml/sci_gateway/cpp/sci_htmlWrite.cpp
++++ b/scilab/modules/xml/sci_gateway/cpp/sci_htmlWrite.cpp
 @@ -17,6 +17,7 @@
  #include "XMLDocument.hxx"
  #include "XMLElement.hxx"
@@ -108,7 +97,7 @@ Forwarded: comes from ubuntu
  extern "C"
  {
  #include <string.h>
-@@ -24,7 +25,6 @@ extern "C"
+@@ -24,7 +25,6 @@
  #include "Scierror.h"
  #include "api_scilab.h"
  #include "xml_mlist.h"
@@ -116,8 +105,8 @@ Forwarded: comes from ubuntu
  #include "expandPathVariable.h"
  #include "sci_malloc.h"
  #include "localization.h"
---- scilab-6.1.0+dfsg1.orig/scilab/modules/xml/sci_gateway/cpp/sci_xmlAppend.cpp
-+++ scilab-6.1.0+dfsg1/scilab/modules/xml/sci_gateway/cpp/sci_xmlAppend.cpp
+--- a/scilab/modules/xml/sci_gateway/cpp/sci_xmlAppend.cpp
++++ b/scilab/modules/xml/sci_gateway/cpp/sci_xmlAppend.cpp
 @@ -17,13 +17,13 @@
  #include "XMLDocument.hxx"
  #include "XMLElement.hxx"
@@ -133,8 +122,8 @@ Forwarded: comes from ubuntu
  #include "localization.h"
  }
  
---- scilab-6.1.0+dfsg1.orig/scilab/modules/xml/sci_gateway/cpp/sci_xmlElement.cpp
-+++ scilab-6.1.0+dfsg1/scilab/modules/xml/sci_gateway/cpp/sci_xmlElement.cpp
+--- a/scilab/modules/xml/sci_gateway/cpp/sci_xmlElement.cpp
++++ b/scilab/modules/xml/sci_gateway/cpp/sci_xmlElement.cpp
 @@ -17,13 +17,13 @@
  #include "XMLDocument.hxx"
  #include "XMLElement.hxx"
@@ -150,8 +139,8 @@ Forwarded: comes from ubuntu
  #include "localization.h"
  }
  
---- scilab-6.1.0+dfsg1.orig/scilab/modules/xml/sci_gateway/cpp/sci_xmlWrite.cpp
-+++ scilab-6.1.0+dfsg1/scilab/modules/xml/sci_gateway/cpp/sci_xmlWrite.cpp
+--- a/scilab/modules/xml/sci_gateway/cpp/sci_xmlWrite.cpp
++++ b/scilab/modules/xml/sci_gateway/cpp/sci_xmlWrite.cpp
 @@ -17,6 +17,7 @@
  #include "XMLDocument.hxx"
  #include "XMLElement.hxx"
@@ -160,7 +149,7 @@ Forwarded: comes from ubuntu
  extern "C"
  {
  #include <string.h>
-@@ -24,7 +25,6 @@ extern "C"
+@@ -24,7 +25,6 @@
  #include "Scierror.h"
  #include "api_scilab.h"
  #include "xml_mlist.h"
@@ -168,15 +157,14 @@ Forwarded: comes from ubuntu
  #include "expandPathVariable.h"
  #include "sci_malloc.h"
  #include "localization.h"
---- scilab-6.1.0+dfsg1.orig/scilab/modules/xml/src/cpp/XMLDocument.hxx
-+++ scilab-6.1.0+dfsg1/scilab/modules/xml/src/cpp/XMLDocument.hxx
-@@ -23,13 +23,10 @@
- 
+--- a/scilab/modules/xml/src/cpp/XMLDocument.hxx
++++ b/scilab/modules/xml/src/cpp/XMLDocument.hxx
+@@ -24,12 +24,9 @@
  #include "dynlib_xml_scilab.h"
  
+ #include "xml.h"
 -extern "C"
 -{
- #include "xml.h"
  #ifndef XML_XPATH_CHECKNS
  #define XML_XPATH_CHECKNS
  #endif

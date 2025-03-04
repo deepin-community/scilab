@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA -
  * Copyright (C) DIGITEO - 2011 - Allan CORNET
  *
@@ -14,16 +14,20 @@
  * along with this program.
  *
  -->
-<refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svg="http://www.w3.org/2000/svg" xmlns:ns4="http://www.w3.org/1999/xhtml" xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:db="http://docbook.org/ns/docbook" xmlns:scilab="http://www.scilab.org" xml:id="c_link" xml:lang="en">
+<refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg" xmlns:ns4="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:db="http://docbook.org/ns/docbook"
+          xmlns:scilab="http://www.scilab.org" xml:id="c_link" xml:lang="en">
     <refnamediv>
         <refname>c_link</refname>
         <refpurpose>check if symbol loaded with dynamic link</refpurpose>
     </refnamediv>
     <refsynopsisdiv>
         <title>Syntax</title>
-        <synopsis>c_link(routine_name)
+        <synopsis>
+            c_link(routine_name)
             [test, ilib] = c_link(routine_name)
-            test = c_link(routine_name,num)
+            test = c_link(routine_name, num)
         </synopsis>
     </refsynopsisdiv>
     <refsection>
@@ -75,30 +79,31 @@
     </refsection>
     <refsection>
         <title>Examples (C code)</title>
-        <programlisting role="example">if haveacompiler() then
-            chdir(TMPDIR)
-            f1=['int ext1c(int *n, double *a, double *b, double *c)'
-            '{int k;'
-            '  for (k = 0; k &lt; *n; ++k) '
-            '      c[k] = a[k] + b[k];'
-            '  return(0);}'];
+        <programlisting role="example"><![CDATA[
+if haveacompiler() then
+    chdir(TMPDIR)
+    f1 = ['int ext1c(int *n, double *a, double *b, double *c)'
+    '{int k;'
+    '  for (k = 0; k < *n; ++k) '
+    '      c[k] = a[k] + b[k];'
+    '  return(0);}'];
 
-            mputl(f1, TMPDIR + '/fun1.c');
-            //creating the shared library (a gateway, a Makefile and a loader are
-            //generated.
-            ilib_for_link('ext1c','fun1.c',[],"c");
-            // load the shared library
-            exec loader.sce;
-            // show link
-            link('show')
+    mputl(f1, TMPDIR + '/fun1.c');
+    // creating the shared library: A gateway, a Makefile and a loader are generated.
+    ilib_for_link('ext1c','fun1.c',[],"c");
 
-            [test, ilib] = c_link('ext1c') // check if 'ext1c' symbol is linked in scilab (it returns %T, ilib equals to 0)
-            c_link('ext1c', -1) // check if 'ext1c' linked in scilab in current library (last used) (it returns %T)
-            c_link('ext1c', 0) // check in library (id eqs 0) if 'ext1c' is linked (it returns %T)
-            c_link('ext1c', 1) // 'ext1c' not in library with id = 1 (it returns %F)
-            c_link('toto') // returns %F  'toto' not linked to scilab (it returns %F)
-            end
-        </programlisting>
+    // load the shared library
+    exec loader.sce;
+    // show link
+    link('show')
+
+    [test, ilib] = c_link('ext1c') // check if 'ext1c' symbol is linked in scilab (it returns %T, ilib equals to 0)
+    c_link('ext1c', -1) // check if 'ext1c' linked in scilab in current library (last used) (it returns %T)
+    c_link('ext1c', 0)  // check in library (id eqs 0) if 'ext1c' is linked (it returns %T)
+    c_link('ext1c', 1)  // 'ext1c' not in library with id = 1 (it returns %F)
+    c_link('toto')      // returns %F  'toto' not linked to scilab (it returns %F)
+end
+     ]]></programlisting>
     </refsection>
     <refsection role="see also">
         <title>See also</title>

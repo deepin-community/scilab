@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2010-2011 - Calixte DENIZET
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -16,6 +16,7 @@
 #include "context.hxx"
 #include "struct.hxx"
 #include "tlist.hxx"
+#include "user.hxx"
 
 extern "C"
 {
@@ -88,50 +89,63 @@ char **getfieldsdictionary(char *lineBeforeCaret, char *pattern, int *size)
         return NULL;
     }
 
-    //cells are containers but there are no fields
-    if (pIT->isContainer() == false || pIT->isCell())
-    {
-        return NULL;
-    }
-
-    if (pIT->isHandle())
-    {
-        return completionOnHandleGraphicsProperties(pattern, size);
-    }
-
-    types::String* pFields = NULL;
     int iSize = 0;
-    if (pIT->isStruct())
+    types::String* pFields = nullptr;
+    switch (pIT->getType())
     {
-        types::Struct* pStr = pIT->getAs<types::Struct>();
-        pFields = pStr->getFieldNames();
-        if (pFields == 0)
+        case types::InternalType::ScilabHandle:
+            return completionOnHandleGraphicsProperties(pattern, size);
+        case types::InternalType::ScilabStruct:
         {
-            return NULL;
+            types::Struct* pStr = pIT->getAs<types::Struct>();
+            pFields = pStr->getFieldNames();
+            if (pFields == 0)
+            {
+                return NULL;
+            }
+
+            iSize = pFields->getSize();
+            pstData = pFields->get();
+            break;
         }
-
-        iSize = pFields->getSize();
-
-        pstData = pFields->get();
-    }
-    else if (pIT->isTList() || pIT->isMList())
-    {
-        types::TList* pL = pIT->getAs<types::TList>();
-        pFields = pL->getFieldNames();
-
-        //bypass the value, is the (t/m)list type
-        iSize = pFields->getSize() - 1;
-        if (iSize == 0)
+        case types::InternalType::ScilabTList:
+        case types::InternalType::ScilabMList:
         {
-            return NULL;
-        }
+            types::TList* pL = pIT->getAs<types::TList>();
+            pFields = pL->getFieldNames();
 
-        pstData = pFields->get();
-        iXlist = 1;
-    }
-    else
-    {
-        return NULL;
+            // bypass the value, is the (t/m)list type
+            iSize = pFields->getSize() - 1;
+            if (iSize == 0)
+            {
+                return NULL;
+            }
+
+            pstData = pFields->get();
+            iXlist = 1;
+            break;
+        }
+        case types::InternalType::ScilabUserType:
+        {
+            types::UserType* pUT = pIT->getAs<types::UserType>();
+            if (pUT->hasGetFields() == false)
+            {
+                return NULL;
+            }
+
+            pFields = pIT->getAs<types::UserType>()->getFields();
+            if (pFields == NULL)
+            {
+                return NULL;
+            }
+
+            iSize = pFields->getSize();
+
+            pstData = pFields->get();
+            break;
+        }
+        default:
+            return NULL;
     }
 
     int iLast = 0;
@@ -152,6 +166,7 @@ char **getfieldsdictionary(char *lineBeforeCaret, char *pattern, int *size)
     *size = iLast;
     qsort(_fields, *size, sizeof(char*), cmpNames);
 
+    pFields->killMe();
     return _fields;
 }
 /*--------------------------------------------------------------------------*/

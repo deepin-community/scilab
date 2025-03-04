@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2007-2008 - DIGITEO - Bruno JOFRET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -99,6 +99,10 @@
 #define SCI_OPEN_CALL		        SCI_LPAREN
 #define SCI_CLOSE_CALL		        SCI_RPAREN
 #define SCI_ARGS_SEPARATOR	        SCI_COMMA
+
+// Syntax to have arguments control structure
+#define SCI_ARGUMENTS               L"arguments"
+#define SCI_ARGUMENTS_END           L"end"
 
 // Syntax to have if control structure
 #define SCI_IF			            L"if"

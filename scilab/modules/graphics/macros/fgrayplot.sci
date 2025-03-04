@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
 //
@@ -29,7 +29,7 @@ function []=fgrayplot(x,y,f,strf,rect,nax,void)
         deff("[z]=Surf(x,y)","z=cos(x).^2+sin(y).^2");
         fgrayplot(-%pi:0.1:%pi,-%pi:0.1:%pi, Surf);
         f = gcf();
-        f.color_map = coolcolormap(100);
+        f.color_map = cool(100);
         return
     end
 

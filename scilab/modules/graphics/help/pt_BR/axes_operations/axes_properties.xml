@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA - Djalel Abdemouche
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
  * Copyright (C) 2013, 2018 - Samuel GOUGEON
@@ -340,6 +340,62 @@
                             </listitem>
                         </varlistentry>
                         <varlistentry>
+                            <term>ticks_format: </term>
+                            <listitem>
+                                <para>
+                                    This property specifies the format to use for each axes.
+                                    It is a row vector with at most 3 columns containing strings
+                                    format (as specified for <link linkend="mprintf">mprintf</link>).
+                                    Each ticks position will be used to format the string used as label.
+                                </para>
+                                <para>
+                                    So, for example ticks_format="%.2e" will print ticks positions
+                                    in using scientific notation with two decimals.
+                                </para>
+                                <warning>
+                                   Labels are actually updated according to the newly set
+                                   <literal>.ticks_format(i)</literal> only if the
+                                   <literal>.auto_ticks(i)</literal> status of the axis #i is
+                                   <literal>"on"</literal>. Otherwise,
+                                   <literal>.ticks_format(i)</literal> is recorded without being
+                                   immediately used.
+                                </warning>
+                            </listitem>
+                        </varlistentry>
+                        <varlistentry>
+                            <term>ticks_st: </term>
+                            <listitem>
+                                <para>
+                                  This property specifies scale-translate factors to apply to each
+                                  ticks position before to use it in the formatted string used as
+                                  label. So if the factors are
+                                  <literal>[x_s y_s z_s ; x_t y_t z_t]</literal> and if a x_tick is
+                                  positioned at X, the value used to format the label will be
+                                  <literal>x_s*(X-x_t)</literal>. It could be particularly useful
+                                  when the axes bounds are too closed.
+                                    <para>
+                                        It is a matrix with 2 rows and at most 3 columns.
+                                    </para>
+                                </para>
+                                <para>
+                                    So, for example <literal>base=B</literal>, labels could be
+                                    printed with <literal>ticks_format=string(base)+"%+.2e"</literal>
+                                    and <literal>ticks_st=[1 base]</literal>
+                                </para>
+                            </listitem>
+                        </varlistentry>
+                        <varlistentry>
+                            <term>sub_ticks:</term>
+                            <listitem>
+                                <para>esta propriedade determina o número de subtiques a serem
+                                    desenhados entre dois tiques principais. O valor de campo é o
+                                    vetor <literal>[nx,ny]</literal> onde <literal>nx</literal> é
+                                    o número de subtiques para o eixo x e <literal>ny</literal> é
+                                    o correspondente para o eixo y.
+                                </para>
+                            </listitem>
+                        </varlistentry>
+                        <varlistentry>
                             <term>box:</term>
                             <listitem>
                                 <para>esta propriedade especifica se os eixos devem ser
@@ -378,17 +434,6 @@
                                     for <literal>"on"</literal> , o plano de fundo é desenhado
                                     utilizando-se a cor especificada pela propriedade
                                     <literal>background</literal>.
-                                </para>
-                            </listitem>
-                        </varlistentry>
-                        <varlistentry>
-                            <term>sub_ticks:</term>
-                            <listitem>
-                                <para>esta propriedade determina o número de subtiques a serem
-                                    desenhados entre dois tiques principais. O valor de campo é o
-                                    vetor <literal>[nx,ny]</literal> onde <literal>nx</literal> é
-                                    o número de subtiques para o eixo x e <literal>ny</literal> é
-                                    o correspondente para o eixo y.
                                 </para>
                             </listitem>
                         </varlistentry>
@@ -1191,6 +1236,12 @@ gcf().axes_size = [420 320];
                 <revremark>
                     Default .x|y|z_label.font_size=2, instead of 1.
                     Default .title.font_size=3, instead of 1.
+                </revremark>
+            </revision>
+            <revision>
+                <revnumber>2023.0.0</revnumber>
+                <revremark>
+                    <literal>.auto_stretch</literal> property added.
                 </revremark>
             </revision>
         </revhistory>

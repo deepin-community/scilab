@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2014-2014 - Scilab Enterprises - Clement DAVID
  *  Copyright (C) 2017 - ESI Group - Clement DAVID
  *
@@ -21,9 +21,21 @@
 #include <unordered_map>
 #include <vector>
 
+#include "utilities.hxx"
+
 typedef std::vector<unsigned int> link_indices_t;
 template<typename K, typename T>
 using partials_map_t = std::unordered_map<K, T>;
+
+/* 0-based index of id in content, -1 if not found */
+inline int indexOf(ScicosID id, const std::vector<ScicosID>& content)
+{
+    const auto& it = std::find(content.begin(), content.end(), id);
+    if (it == content.end())
+        return -1;
+    return (int) std::distance(content.begin(), it);
+};
+
 
 /*
  * Partial information used on LinkAdapter

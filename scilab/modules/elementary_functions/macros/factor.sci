@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA - Farid BELAHCENE
 // Copyright (C) DIGITEO - 2011 - Allan CORNET
 //
@@ -23,18 +23,11 @@ function y=factor(x)
     // output :
     // y : a vector of primes numbers
 
-    rhs = argn(2);
-    if rhs <> 1 then
-        error(msprintf(gettext("%s: Wrong number of input argument(s): %d expected.\n"),"factor", 1));
+    arguments
+        x (1, 1) {mustBeA(x, "double"), mustBeNonnegative, mustBeInteger}
     end
 
-    if prod(size(x,"*"))<>1 then
-        error(msprintf(gettext("%s: Wrong size for input argument #%d: An integer expected.\n"),"factor",1));
-    elseif(type(x)<>1) then
-        error(msprintf(gettext("%s: Wrong type for input argument #%d: An integer expected.\n"),"factor",1));
-    elseif x<0 | x-floor(x)<>0
-        error(msprintf(gettext("%s: Wrong value for input argument #%d: Scalar positive integer expected.\n"),"factor",1));
-    elseif or(x==[0 1 2 3])
+    if or(x==[0 1 2 3])
         y=x
     else
         xprimefact = primes(sqrt(x))

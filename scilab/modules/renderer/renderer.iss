@@ -1,5 +1,5 @@
 ;
-; Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+; Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 ; Copyright (C) INRIA - Allan CORNET
 ; Copyright (C) DIGITEO - 2010 - Allan CORNET
 ;
@@ -22,17 +22,16 @@
 #define RENDERER "renderer"
 ;
 Source: bin\jogl_desktop.dll; DestDir: {app}\bin; Components: {#COMPN_GRAPHICS}
-Source: bin\jogl_cg.dll; DestDir: {app}\bin; Components: {#COMPN_GRAPHICS}
-Source: bin\gluegen2-rt.dll; DestDir: {app}\bin; Components: {#COMPN_GRAPHICS}
+Source: bin\gluegen_rt.dll; DestDir: {app}\bin; Components: {#COMPN_GRAPHICS}
 Source: bin\nativewindow_awt.dll; DestDir: {app}\bin; Components: {#COMPN_GRAPHICS}
 Source: bin\nativewindow_win32.dll; DestDir: {app}\bin; Components: {#COMPN_GRAPHICS}
-Source: bin\newt.dll; DestDir: {app}\bin; Components: {#COMPN_GRAPHICS}
+Source: bin\newt_head.dll; DestDir: {app}\bin; Components: {#COMPN_GRAPHICS}
 
 Source: bin\sci{#RENDERER}.dll; DestDir: {app}\bin; Components: {#COMPN_GRAPHICS}
 ;Source: bin\no{#RENDERER}.dll; DestDir: {app}\bin; DestName: scirenderer.dll; Components: not ({#COMPN_GRAPHICS})
 ;
-Source: thirdparty\gluegen2-rt.jar; DestDir: {app}\thirdparty; Components: {#COMPN_GRAPHICS}
-Source: thirdparty\jogl2.jar;DestDir: {app}\thirdparty; Components: {#COMPN_GRAPHICS}
+Source: thirdparty\gluegen-rt.jar; DestDir: {app}\thirdparty; Components: {#COMPN_GRAPHICS}
+Source: thirdparty\jogl-all.jar;DestDir: {app}\thirdparty; Components: {#COMPN_GRAPHICS}
 Source: modules\scirenderer\jar\scirenderer.jar;DestDir: {app}\modules\scirenderer\jar; Components: {#COMPN_GRAPHICS}
 ;
 Source: thirdparty\fonts\scilabsymbols.ttf;DestDir: {app}\thirdparty\fonts; Components: {#COMPN_GRAPHICS}

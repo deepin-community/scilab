@@ -1,5 +1,5 @@
 // ===================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008 - INRIA - Pierre MARECHAL <pierre.marechal@inria.fr>
 // Copyright (C) 2017 - Samuel GOUGEON
 //
@@ -120,7 +120,7 @@ assert_checktrue(and(isnan(bitget(2^70 , 1:17))));
 assert_checkequal(bitget(1+2.^[51 53 ; 54 5], [2 1 ; 2 1]), [0 %nan ; %nan 1]);
 
 // We build a random integer with known bits #0-99
-// Beware of the bug http://bugzilla.scilab.org/15276
+// Beware of the bug https://gitlab.com/scilab/scilab/-/issues/15276
 i = matrix(1:100, 10, 10);
 bv = grand(10, 10, "uin", 0, 1)  // Bits values
 bp = bv.*(i-1);                  // Related powers

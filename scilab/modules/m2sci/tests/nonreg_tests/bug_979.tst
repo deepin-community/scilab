@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ????-2008 - INRIA - Vincent COUVERT <vincent.couvert@inria.fr>
 // Copyright (C) 2005-2008 - INRIA - Pierre MARECHAL <pierre.marechal@inria.fr>
 //
@@ -12,8 +12,8 @@
 //
 // <-- Non-regression test for bug 979 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=979
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/979
 //
 // <-- Short Description -->
 //    Matlab comments like %blabla are translated to

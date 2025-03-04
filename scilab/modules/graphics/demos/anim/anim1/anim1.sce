@@ -1,5 +1,5 @@
 //
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 // Copyright (C) DIGITEO - 2010 - Allan CORNET
 //
@@ -18,7 +18,7 @@ function demo_anim1()
     // set a new colormap
     //-------------------
     cmap= curFig.color_map; //preserve old setting
-    curFig.color_map = hotcolormap(64);
+    curFig.color_map = hot(64);
 
     //The surface definition
     //----------------------
@@ -34,6 +34,7 @@ function demo_anim1()
     s.color_flag=1; //assign facet color according to Z value
     title("rotation of a 3d surface","fontsize",3);
     curAxe = gca(); //handle on the currents axes
+    curAxe.auto_stretch = "off";
 
     //Set the evolution of the view angles Theta and Alpha
     //---------------------------------------------------

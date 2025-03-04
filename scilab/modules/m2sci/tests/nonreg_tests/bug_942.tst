@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ????-2008 - INRIA - Vincent COUVERT <vincent.couvert@inria.fr>
 // Copyright (C) 2005-2008 - INRIA - Pierre MARECHAL <pierre.marechal@inria.fr>
 //
@@ -12,8 +12,8 @@
 
 // <-- Non-regression test for bug 942 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=942
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/942
 //
 // <-- Short Description -->
 //    Adding a comment character '%' at the end of a function
@@ -41,7 +41,7 @@ SCIFILECONTENTSREF=[
         "function [a] = bug942(x) // bug942";
         "";
         "// Output variables initialisation (not found in input variables)";
-        "a=[];";
+        "a = [];";
         "";
         "// help line";
         "// help line";

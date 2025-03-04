@@ -1,64 +1,15 @@
-//  Scicos
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
+// Copyright (C) 2024 - UTC - Stéphane MOTTELET
 //
-//  Copyright (C) INRIA - METALAU Project <scicos@inria.fr>
-//
-// This program is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation; either version 2 of the License, or
-// (at your option) any later version.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-//
-// See the file ../license.txt
-//
+// This file is hereby licensed under the terms of the GNU GPL v2.0,
+// pursuant to article 5.3.4 of the CeCILL v.2.1.
+// This file was originally licensed under the terms of the CeCILL v2.1,
+// and continues to be available under such terms.
+// For more information, see the COPYING file which you should have received
+// along with this program.
 
-function %Block_p(block)
-    mprintf("GUI     : " + block.gui + "\n")
-    mprintf("Graphics: \n")
-    txt = graphics2txt(block.graphics);
-    for i = 1:size(txt, "r")
-        mprintf("          %s\n", txt(i))
-    end
-    mprintf("Model   : " + "\n")
-    txt = model2txt(block.model);
-    for i = 1:size(txt, "r")
-        mprintf("          %s\n", txt(i))
-    end
-endfunction
 
-function txt=graphics2txt(graphics)
-    fn=getfield(1,graphics)
-
-    txt=[]
-    for k=2:size(fn,"*")
-        txt=[txt
-        sci2exp(evstr("graphics."+fn(k)),fn(k))]
-    end
-endfunction
-
-function txt=model2txt(model)
-    sim=model.sim
-    if type(sim)==15 then
-        txt=sim(1)+" type: "+string(sim(2))
-    else
-        txt=sim+" type: 0"
-    end
-
-    fn=getfield(1,model)
-
-    for k=3:size(fn,"*")
-        if fn(k)=="rpar" & (typeof(model(fn(k)))=="list" | typeof(model(fn(k)))=="diagram") then
-            txt=[txt;fn(k)+" : SuperBlock"];
-        else
-            txt=[txt
-            sci2exp(evstr("model."+fn(k)),fn(k))];
-        end
-    end
+function %Block_p(x)
+    t =  %l_string_inc(x);
+    mprintf("  %s\n",t);
 endfunction

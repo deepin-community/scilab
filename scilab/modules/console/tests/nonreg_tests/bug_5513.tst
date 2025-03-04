@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009 - DIGITEO - Allan CORNET
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -7,21 +7,15 @@
 //
 // <-- Non-regression test for bug 5513 -->
 // <-- INTERACTIVE TEST -->
-// <-- NOT FIXED -->  6.0.2 -> 6.0.2
+// <-- NOT FIXED -->  6.0.2 -> 6.1.1
 //
 // <-- Short Description -->
-// input("message") did not restore the original prompt after the input job is done.
+// input("message") interrupted with CTRL-C + resume did not restore
+// the original prompt after resuming
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=5513
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/5513
 //
-
-a = rand(2,2)
-
-// type a string example:  This is a test
-// check that you have good prompt
-
-b = input("Give a string : ","string")
 
 
 c = input("Give a string : ","string")
@@ -35,11 +29,3 @@ d = input("Give a value : ")
 // type resume
 // and put a value
 // d must be correct
-
-e = input("Give a string : ","string")
-// and press enter
-// e must be equal to ''
-
-f = input("Give a value : ")
-// and press enter
-// f must be equal to []

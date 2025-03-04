@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA - Cong WU
  * Copyright (C) INRIA - 2008 - Allan CORNET
  * Copyright (C) Digiteo - 2011 - Cedric DELAMARRE

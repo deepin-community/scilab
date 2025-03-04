@@ -1,8 +1,9 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2010 - Calixte DENIZET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ * Copyright (C) 2022 - Stéphane MOTTELET
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
  * pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -23,7 +24,8 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.KeyStroke;
 
-import org.scilab.modules.gui.bridge.filechooser.SwingScilabFileChooser;
+import org.scilab.modules.gui.filechooser.Juigetfile;
+import org.scilab.modules.gui.filechooser.FileChooser;
 import org.scilab.modules.gui.filechooser.ScilabFileChooser;
 import org.scilab.modules.gui.menuitem.MenuItem;
 import org.scilab.modules.gui.messagebox.ScilabModalDialog;
@@ -41,7 +43,7 @@ import org.scilab.modules.scinotes.utils.SciNotesMessages;
 
 /**
  * Class Export action for SciNotes
- * @author Calixte DENIZET
+ * @author Calixte DENIZET, Stéphane MOTTELET
  */
 public class ExportAction extends DefaultAction {
 
@@ -67,7 +69,7 @@ public class ExportAction extends DefaultAction {
     public void doAction() {
         String extension = null;
         String title = "Export";
-        String path = "";
+        String path = null;
 
         String initialDirectoryPath = path;
         if (initialDirectoryPath == null) {
@@ -77,154 +79,64 @@ public class ExportAction extends DefaultAction {
             initialDirectoryPath =  ConfigManager.getLastOpenedDirectory();
         }
 
-        SciFileFilter htmlFilter = new SciFileFilter("*.html", null, 0);
-        SciFileFilter pdfFilter = new SciFileFilter("*.pdf", null, 1);
-        SciFileFilter psFilter = new SciFileFilter("*.ps", null, 2);
-        SciFileFilter epsFilter = new SciFileFilter("*.eps", null, 3);
-        SciFileFilter rtfFilter = new SciFileFilter("*.rtf", null, 4);
+        FileChooser sfc = ScilabFileChooser.createFileChooser();
+        sfc.setUiDialogType(Juigetfile.SAVE_DIALOG);
+        sfc.setInitialDirectory(initialDirectoryPath);
+        sfc.setTitle(Messages.gettext(title));
 
-        final SwingScilabFileChooser fileChooser = ((SwingScilabFileChooser) ScilabFileChooser.createFileChooser().getAsSimpleFileChooser());
-
-        fileChooser.setInitialDirectory(ConfigManager.getLastOpenedDirectory());
-        fileChooser.setAcceptAllFileFilterUsed(false);
-        fileChooser.setInitialDirectory(initialDirectoryPath);
-        fileChooser.setDialogTitle(Messages.gettext(title));
-        fileChooser.setApproveButtonText(Messages.gettext(title));
-
-        // order is also important here
-        fileChooser.addChoosableFileFilter(htmlFilter);
-        fileChooser.addChoosableFileFilter(pdfFilter);
-        fileChooser.addChoosableFileFilter(psFilter);
-        fileChooser.addChoosableFileFilter(epsFilter);
-        fileChooser.addChoosableFileFilter(rtfFilter);
-
-        //select default file type
-        fileChooser.setFileFilter(htmlFilter);
-        fileChooser.setTitle(title);
-
-        fileChooser.addPropertyChangeListener(JFileChooser.FILE_FILTER_CHANGED_PROPERTY, new PropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent e) {
-                Object val = e.getNewValue();
-                if (val != null && (val instanceof SciFileFilter)) {
-                    String filter = ((SciFileFilter) val).getDescription();
-                    String file = currentFile.getName();
-                    int dotpos = file.lastIndexOf(".");
-                    if (dotpos != -1) {
-                        file = file.substring(0, dotpos);
-                    }
-                    dotpos = filter.lastIndexOf(".");
-                    if (dotpos != -1) {
-                        filter = filter.substring(dotpos, filter.length() - 1);
-                    }
-                    fileChooser.setSelectedFile(new File(file + filter));
-                }
-            }
-        });
-
-        fileChooser.addPropertyChangeListener(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY , new PropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent e) {
-                Object val = e.getNewValue();
-                if (val != null && (val instanceof File)) {
-                    currentFile = (File) val;
-                }
-            }
-        });
+        String[] mask={"*.html","*.pdf","*.ps","*.eps","*.rtf"};
+        sfc.addMask(mask,null);
 
         String name = getEditor().getTextPane().getName();
+
         if (name == null) {
             name = ((ScilabDocument) getEditor().getTextPane().getDocument()).getFirstFunctionName();
             if (name == null) {
                 name = "";
             }
         }
-        int dotpos = name.lastIndexOf(".");
-        if (dotpos != -1) {
-            name = name.substring(0, dotpos);
+
+        name = (new File(name)).getName();
+        if (name.lastIndexOf('.') > 0) {
+            name = name.substring(0, name.lastIndexOf('.'));            
         }
-        if (name != null) {
-            name += ".pdf";
-            fileChooser.setSelectedFile(new File(name));
-        }
+        sfc.setInitialFileName(name);
 
-        int retval = fileChooser.showSaveDialog(getEditor());
+        sfc.displayAndWait();
 
-        String fileName = null;
-        String type = null;
-
-        if (retval == JFileChooser.APPROVE_OPTION) {
-            File f = SciNotes.fileToCanonicalFile(fileChooser.getSelectedFile());
-            initialDirectoryPath = f.getPath();
-            if (f.exists()) {
-                if (ScilabModalDialog.show(getEditor(), SciNotesMessages.REPLACE_FILE_TITLE,
-                                           SciNotesMessages.FILE_ALREADY_EXIST, IconType.QUESTION_ICON,
-                                           ButtonType.YES_NO) == AnswerOption.NO_OPTION) {
-                    return;
-                }
+        String[] selection = sfc.getSelection();
+        if (selection.length>0 && selection[0] != "") {
+            File f = new File(selection[0]);            
+            String fileName = f.getAbsolutePath();
+            String type = null;
+            int index = fileName.lastIndexOf('.');
+            if(index > 0) {
+                extension = fileName.substring(index+1);
             }
 
-            boolean hasNoExtension = true;
-            fileName = f.getName();
-            if (fileName.lastIndexOf(DOT) != -1) {
-                int len = fileName.substring(fileName.lastIndexOf(DOT), fileName.length()).length();
-                if (len >= 2 && len <= 4) {
-                    hasNoExtension = false;
-                    extension = fileName.substring(fileName.lastIndexOf(DOT) + 1, fileName.length());
-                }
+            if (extension.equalsIgnoreCase("html")) {
+                type = "text/html";
+            } else if (extension.equalsIgnoreCase("pdf")) {
+                type = CodeExporter.PDF;
+            } else if (extension.equalsIgnoreCase("ps")) {
+                type = CodeExporter.PS;
+            } else if (extension.equalsIgnoreCase("eps")) {
+                type = CodeExporter.EPS;
+            } else if (extension.equalsIgnoreCase("rtf")) {
+                type = CodeExporter.RTF;
             }
 
-            if (extension == null) {
-                if (fileChooser.getFileFilter() == htmlFilter) {
-                    extension = "html";
-                    type = "text/html";
-                } else if (fileChooser.getFileFilter() == pdfFilter) {
-                    extension = "pdf";
-                    type = CodeExporter.PDF;
-                } else if (fileChooser.getFileFilter() == psFilter) {
-                    extension = "ps";
-                    type = CodeExporter.PS;
-                } else if (fileChooser.getFileFilter() == epsFilter) {
-                    extension = "eps";
-                    type = CodeExporter.EPS;
-                } else if (fileChooser.getFileFilter() == rtfFilter) {
-                    extension = "rtf";
-                    type = CodeExporter.RTF;
-                } else {
-                    extension = "";
-                    type = null;
-                }
-            } else {
-                if (extension.equalsIgnoreCase("html")) {
-                    type = "text/html";
-                } else if (extension.equalsIgnoreCase("pdf")) {
-                    type = CodeExporter.PDF;
-                } else if (extension.equalsIgnoreCase("ps")) {
-                    type = CodeExporter.PS;
-                } else if (extension.equalsIgnoreCase("eps")) {
-                    type = CodeExporter.EPS;
-                } else if (extension.equalsIgnoreCase("rtf")) {
-                    type = CodeExporter.RTF;
-                }
+            if (!codeConverterLoaded) {
+                LoadClassPath.loadOnUse("copyAsHTMLinScinotes");
+                LoadClassPath.loadOnUse("pdf_ps_eps_graphic_export");
+                codeConverterLoaded = true;
             }
 
-            if (hasNoExtension) {
-                fileName = f.getPath() + DOT + extension;
-            } else {
-                fileName = f.getPath();
+            if (fileName != null && type != null) {
+                getEditor().getTextPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                CodeExporter.convert(getEditor().getTextPane(), fileName, type, PageSetupAction.getPageFormat());
+                getEditor().getTextPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             }
-        } else if (retval == JFileChooser.CANCEL_OPTION) {
-            fileName = null;
-        }
-
-        if (!codeConverterLoaded) {
-            LoadClassPath.loadOnUse("copyAsHTMLinScinotes");
-            LoadClassPath.loadOnUse("pdf_ps_eps_graphic_export");
-            codeConverterLoaded = true;
-        }
-
-        if (fileName != null && type != null) {
-            getEditor().getTextPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            CodeExporter.convert(getEditor().getTextPane(), fileName, type, PageSetupAction.getPageFormat());
-            getEditor().getTextPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         }
     }
 

@@ -1,5 +1,5 @@
 /*
-*  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+*  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 *  Copyright (C) 2011 - DIGITEO - Antoine ELIAS
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -553,28 +553,22 @@ int checkIndexesArguments(InternalType* _pRef, typed_list* _pArgsIn, typed_list*
             ImplicitList* pIL = pIT->getAs<ImplicitList>()->clone()->getAs<ImplicitList>();
             if (pIL->isComputable() == false)
             {
-                //: or $
-                if (_pRef == NULL)
+                // : on new variable
+                if(!_pRef && pIT->isColon())
                 {
-                    if (pIL->getStep()->isDouble() &&
-                            ((getIndex(pIL->getStep()) > 0 && pIL->getStart()->isDouble() && getIndex(pIL->getStart()) < 1) ||
-                             (getIndex(pIL->getStep()) < 0 && pIL->getEnd()->isDouble() && getIndex(pIL->getEnd()) < 1)))
-                    {
-                        pCurrentArg = NULL;
-                    }
-                    else
-                    {
-                        //not enough information to compute indexes.
-                        _pArgsOut->push_back(NULL);
-                        bUndefine = true;
-                        pIL->killMe();
-                        continue;
-                    }
+                    bUndefine = true;
+                    // compute size using RHS variable
+                    _pArgsOut->push_back(NULL);
+                    continue;
                 }
-                else
+
+                // $ on new variable (pRef == NULL)
+                // replace $ by 0, to allow a(1:$+1)
+                int iMaxDim = 0;
+
+                // : or $ on existing variable
+                if (_pRef)
                 {
-                    //evalute polynom with "MaxDim"
-                    int iMaxDim = 0;
                     if(_pRef->isImplicitList())
                     {
                         ImplicitList* pIL = _pRef->getAs<ImplicitList>();
@@ -584,46 +578,47 @@ int checkIndexesArguments(InternalType* _pRef, typed_list* _pArgsIn, typed_list*
                     {
                         iMaxDim = _pRef->getAs<GenericType>()->getVarMaxDim(i, iDims);
                     }
+                }
 
 #if defined(_SCILAB_DEBUGREF_)
-                    Double* pdbl = new Double(iMaxDim);
+                Double* pdbl = new Double(iMaxDim);
 #else
-                    Double dbl(iMaxDim);
+                Double dbl(iMaxDim);
 #endif
-                    if (pIL->getStart()->isPoly())
-                    {
-                        Polynom *poPoly = pIL->getStart()->getAs<types::Polynom>();
+                if (pIL->getStart()->isPoly())
+                {
+                    Polynom *poPoly = pIL->getStart()->getAs<types::Polynom>();
 #if defined(_SCILAB_DEBUGREF_)
-                        pIL->setStart(poPoly->evaluate(pdbl));
+                    pIL->setStart(poPoly->evaluate(pdbl));
 #else
-                        pIL->setStart(poPoly->evaluate(&dbl));
-#endif
-                    }
-                    if (pIL->getStep()->isPoly())
-                    {
-                        Polynom *poPoly = pIL->getStep()->getAs<types::Polynom>();
-#if defined(_SCILAB_DEBUGREF_)
-                        pIL->setStep(poPoly->evaluate(pdbl));
-#else
-                        pIL->setStep(poPoly->evaluate(&dbl));
-#endif
-                    }
-                    if (pIL->getEnd()->isPoly())
-                    {
-                        Polynom *poPoly = pIL->getEnd()->getAs<types::Polynom>();
-#if defined(_SCILAB_DEBUGREF_)
-                        pIL->setEnd(poPoly->evaluate(pdbl));
-#else
-                        pIL->setEnd(poPoly->evaluate(&dbl));
-#endif
-                    }
-
-#if defined(_SCILAB_DEBUGREF_)
-                    pdbl->killMe();
+                    pIL->setStart(poPoly->evaluate(&dbl));
 #endif
                 }
+                if (pIL->getStep()->isPoly())
+                {
+                    Polynom *poPoly = pIL->getStep()->getAs<types::Polynom>();
+#if defined(_SCILAB_DEBUGREF_)
+                    pIL->setStep(poPoly->evaluate(pdbl));
+#else
+                    pIL->setStep(poPoly->evaluate(&dbl));
+#endif
+                }
+                if (pIL->getEnd()->isPoly())
+                {
+                    Polynom *poPoly = pIL->getEnd()->getAs<types::Polynom>();
+#if defined(_SCILAB_DEBUGREF_)
+                    pIL->setEnd(poPoly->evaluate(pdbl));
+#else
+                    pIL->setEnd(poPoly->evaluate(&dbl));
+#endif
+                }
+
+#if defined(_SCILAB_DEBUGREF_)
+                pdbl->killMe();
+#endif
             }
-            if (_pRef != NULL || pIL->isComputable() == true)
+
+            if (pIL->isComputable())
             {
                 double start = getIndex(pIL->getStart());
                 double step = getIndex(pIL->getStep());
@@ -696,7 +691,7 @@ int checkIndexesArguments(InternalType* _pRef, typed_list* _pArgsIn, typed_list*
             //$
             Polynom* pMP = pIT->getAs<types::Polynom>();
             int iMaxDim = 0;
-            //if pRef == NULL, use 0 insteadof, to allow a($+1) on new variable
+            //if pRef == NULL, use 0 insteadof, to allow a($+1) on new variable or []
             if (_pRef && _pRef->isGenericType())
             {
                 iMaxDim = _pRef->getAs<GenericType>()->getVarMaxDim(i, iDims);
@@ -869,12 +864,6 @@ int checkIndexesArguments(InternalType* _pRef, typed_list* _pArgsIn, typed_list*
         _pArgsOut->push_back(pCurrentArg);
     }
 
-    //return 0 to force extract to create an empty matrix
-    if (_pRef && (_pRef->isDouble() && _pRef->getAs<Double>()->isEmpty()))
-    {
-        return 0;
-    }
-
     //returns a negative value if at least one parameter is undefined
     //case with : or $ for creation by insertion
     return (!bUndefine ? iSeqCount : -iSeqCount);
@@ -951,7 +940,7 @@ int getIndexWithDims(int* _piIndexes, const int* _piDims, int _iDims)
 }
 
 types::Function::ReturnValue VariableToString(types::InternalType* pIT, const wchar_t* wcsVarName)
-{
+{    
     if (pIT->hasToString() == false)
     {
         types::Function::ReturnValue ret = types::Function::Error;
@@ -964,7 +953,7 @@ types::Function::ReturnValue VariableToString(types::InternalType* pIT, const wc
 
         try
         {
-            ret = Overload::generateNameAndCall(L"p", in, 1, out);
+            ret = Overload::generateNameAndCall(L"p", in, 0, out);
             pIT->DecreaseRef();
             return ret;
         }

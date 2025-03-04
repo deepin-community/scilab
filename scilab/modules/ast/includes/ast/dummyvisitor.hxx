@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2010-2010 - DIGITEO - Bruno JOFRET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -160,6 +160,10 @@ protected:
         }
     }
 
+    virtual void visit (const ArgumentsExp  &e)
+    {
+    }
+
     virtual void visit (const IfExp  &e)
     {
         e.getTest().accept(*this);
@@ -280,6 +284,15 @@ protected:
         e.getReturns().accept(*this);
         e.getBody().accept(*this);
     }
+
+    virtual void visit (const ArgumentDec  &e)
+    {
+        exps_t args = e.getExps();
+        for (auto&& arg : args)
+        {
+            arg->accept(*this);
+        }
+    }
     /** \} */
 
     /** \name Visit Type dedicated Expressions related node.
@@ -291,33 +304,6 @@ protected:
         e.getEnd().accept(*this);
     }
     /** \} */
-
-    /* optimized */
-    virtual void visit(const OptimizedExp &e)
-    {
-        e.getOriginal()->accept(*this);
-    }
-
-    virtual void visit (const DAXPYExp &e)
-    {
-        e.getOriginal()->accept(*this);
-    }
-
-    virtual void visit(const IntSelectExp &e)
-    {
-        e.getOriginal()->accept(*this);
-    }
-
-    virtual void visit(const StringSelectExp &e)
-    {
-        e.getOriginal()->accept(*this);
-    }
-
-    virtual void visit(const MemfillExp &e)
-    {
-        e.getOriginal()->accept(*this);
-    }
-
 };
 }
 

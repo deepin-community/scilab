@@ -11,6 +11,7 @@
 
 
 // <-- CLI SHELL MODE -->
+// <-- NO ASSERT FAILURE -->
 // <-- ENGLISH IMPOSED -->
 
 function flag = MY_assert_equal ( computed , expected )

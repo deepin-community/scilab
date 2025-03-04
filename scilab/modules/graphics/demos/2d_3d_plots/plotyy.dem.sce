@@ -1,10 +1,10 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010 Samuel GOUGEON
 // Copyright (C) 2010 - DIGITEO - Allan CORNET
 //
 // This file is released under the 3-clause BSD license. See COPYING-BSD.
 
-// See http://bugzilla.scilab.org/show_bug.cgi?id=6070
+// See https://gitlab.com/scilab/scilab/-/issues/6070
 
 function demo_plotyy()
 

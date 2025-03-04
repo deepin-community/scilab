@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2018 - Samuel GOUGEON
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,14 +9,14 @@
 // <-- NO CHECK REF -->
 //
 // <-- Non-regression test for bug 6548 -->
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/6548
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/6548
 // <-- Short Description -->
 // gamma() could not accept an hypermatrix
 //
 // <-- Non-regression test for bug 10450 (complement) -->
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/10450
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/10450
 // <-- Short Description -->
 // gamma() could not be overloaded for complex numbers
 

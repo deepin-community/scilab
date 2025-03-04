@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2014 - Scilab Enterprises - Paul Bignier
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -17,13 +17,12 @@ function [a, b] = nanreglin(x, y, dflag)
     // dflag is optional if 1 a display of the result is done
     //!
 
-    [lhs, rhs] = argn(0);
-    if rhs < 2 then
-        error(msprintf(_("%s: Wrong number of input arguments: %d to %d expected.\n"),"nanreglin",2,3))
+    arguments
+        x
+        y
+        dflag = 0
     end
-    if rhs <= 2 then
-        dflag = 0;
-    end
+
     [n1, n2] = size(x);
     [p1, p2] = size(y);
     if n2 <> p2 then
@@ -38,14 +37,16 @@ function [a, b] = nanreglin(x, y, dflag)
     for i=1:p1
         // A column of x defines an element of y, but each line of y defines an independent problem.
         // If x2(:, j) or y2(i, j) contains a %nan, then both x2(:, j) and y2(j) are removed.
-        y2 = y(i, find(~isnan(y(i,:))));
-        x2 = x(:, find(~isnan(y(i,:))));
-        nanX = isnan(x);
-        if or(isnan(x)) then // At least one NaN is x or y.
-            columns = floor((find(nanX==%t)-1)./(n1+1)+1);
-            x2(:, columns) = [];
-            y2(1, columns) = [];
+
+        // filter columns that contain Nan to remove them in x and y.
+        columns = and(~isnan([y(i,:); x]), "r");
+        y2 = y(i, columns);
+        x2 = x(:, columns);
+
+        if x2 == [] then
+            continue;
         end
+
         [a(i, :), b(i)] = reglin(x2, y2, dflag);
     end
 

@@ -1,0 +1,3 @@
+# These txt files are here to describe precisely the contents of the
+# directory they belong to.
+package-contains-documentation-outside-usr-share-doc [usr/share/scilab/*.txt]

@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008-2009 - INRIA - Michael Baudin
 // Copyright (C) 2010-2011 - DIGITEO - Michael Baudin
 //
@@ -22,7 +22,7 @@ nm = neldermead_destroy(nm);
 //
 nm = neldermead_new ();
 str = string(nm)
- str  = 
+ str = [57x1 string]
   "Nelder-Mead Object:"                                                
   "======================"                                             
   ""                                                                   
@@ -81,10 +81,10 @@ str = string(nm)
   "simplex0: <TSIMPLEX Object>"                                        
   "simplexopt: <constant Object>"                                      
 assert_checkequal ( typeof(str) , "string" )
- ans  =
+ ans = 
   T
 nm
- nm  = 
+ nm = (TNELDER tlist) with fields:
 Nelder-Mead Object:
 ======================
 Simplex0 Method : axes
@@ -179,7 +179,7 @@ nm = neldermead_configure(nm,"-method","box");
 nm = neldermead_configure(nm,"-nbineqconst",3);
 nm = neldermead_configure(nm,"-simplex0length",20.0);
 str = string(nm)
- str  = 
+ str = [57x1 string]
   "Nelder-Mead Object:"                                                
   "======================"                                             
   ""                                                                   
@@ -238,10 +238,10 @@ str = string(nm)
   "simplex0: <TSIMPLEX Object>"                                        
   "simplexopt: <constant Object>"                                      
 assert_checkequal ( typeof(str) , "string" )
- ans  =
+ ans = 
   T
 nm
- nm  = 
+ nm = (TNELDER tlist) with fields:
 Nelder-Mead Object:
 ======================
 Simplex0 Method : axes

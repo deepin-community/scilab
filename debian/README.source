@@ -1,0 +1,10 @@
+Preparing the debian/copyright file is a nightmare, given the huge number of
+copyright holders. I have prepared the shell script debian/prepare_copyright.sh
+which can gather all the information scan-copyrights can gather, afterwards it
+would need a manual treatment. Still the resulting file has tens of thousands
+of lines.
+
+For the moment, I will wtick to the practive of preceding maintainers and write
+a very light file.
+
+ -- Pierre Gruet <pgt@debian.org>  Sat, 18 Nov 2023 22:06:47 +0100

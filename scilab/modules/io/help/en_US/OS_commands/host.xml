@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) XXXX-2008 - INRIA
  * Copyright (C) 2018 - Samuel GOUGEON
  *
@@ -41,6 +41,10 @@
                     <para>
                         Single text containing Windows, Linux, or MacOS instructions sent to the
                         OS command interpreter.
+                    </para>
+                    <para>
+                        On Windows, <varname>commands</varname> must have less than 8191 characters
+                        (after expansion of possibly included environment variables).
                     </para>
                 </listitem>
             </varlistentry>

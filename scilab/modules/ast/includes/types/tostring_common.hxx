@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2009 - DIGITEO - Antoine ELIAS
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -68,8 +68,9 @@ EXTERN_AST void getComplexFormat(double _dblR, double _dblI, int *_piTotalWidth,
 //addDoubleValue(int _iWidth, int _iPrec, bool _bExp, bool _bPrintPoint = true, bool _bPrintPlusSign = false, bool _bPrintOne = true, bool _bPaddSign = true, int _iSignLen = 2);
 EXTERN_AST void addDoubleValue(std::wostringstream *_postr, double _dblVal, DoubleFormat* _pDF);
 EXTERN_AST void addDoubleComplexValue(std::wostringstream *_postr, double _dblR, double _dblI, int _iTotalLen, DoubleFormat* _pDFR, DoubleFormat* _pDFI);
+EXTERN_AST void DoubleComplexMatrix2String(std::wostringstream* _postr, double _dblR, double _dblI);
 
-/*Common*/
+    /*Common*/
 EXTERN_AST void configureStream(std::wostringstream *_postr, int _iWidth, int _iPrec, char _cFill);
 EXTERN_AST void addSpaces(std::wostringstream *_postr, int _iSpace);
 void addColumnString(std::wostringstream& ostr, int _iFrom, int _iTo);

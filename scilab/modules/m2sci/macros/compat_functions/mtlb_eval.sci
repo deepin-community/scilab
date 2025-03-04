@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2002-2004 - INRIA - Vincent COUVERT
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -33,6 +33,7 @@ function r=mtlb_eval(%s1,%s2)
 
     // Scilab variable types
     Double=1;
+    Polynomial = 2;
     Boolean=4; // Boolean type can also be 6
     Sparse=5;
     Int=8;
@@ -40,12 +41,15 @@ function r=mtlb_eval(%s1,%s2)
     String=10;
     Cell=17;
     Struct=16;
-    Void=0;
+    Function = 12;  // Pseudo-type, gathering property = Macro | Builtin
+    Macro    = 13;
+    Builtin  = 130;
     Unknown=-1; // Unknown type or dimension
     SupToOne=-2; // Dimension >1
     NotNull=-3; // Dimension >0
     Complex=1 //"Complex"
     Real=0 //"Real"
+    Char     = 11;  // Property for String type
     Units=["pixels","centimeters","points","inches","normalized"]
 
     margin="  "

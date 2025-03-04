@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA - Francois DELEBECQUE
- *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ * Copyright (C) 2022 - Samuel GOUGEON
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
  * pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -13,14 +13,21 @@
  * along with this program.
  *
  -->
-<refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svg="http://www.w3.org/2000/svg" xmlns:ns5="http://www.w3.org/1999/xhtml" xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:db="http://docbook.org/ns/docbook" xmlns:scilab="http://www.scilab.org" xml:id="intl" xml:lang="ru">
+<refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg" xmlns:ns5="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:db="http://docbook.org/ns/docbook"
+          xmlns:scilab="http://www.scilab.org" xml:id="intl" xml:lang="ru">
     <refnamediv>
         <refname>intl</refname>
-        <refpurpose>интеграл Коши</refpurpose>
+        <refpurpose>Интеграл Коши по дуге окружности Интеграл</refpurpose>
     </refnamediv>
     <refsynopsisdiv>
         <title>Синтаксис</title>
-        <synopsis>y = intl(a, b, z0, r, f)</synopsis>
+        <synopsis>
+            y = intl(a, b, z0, r, f)
+            y = intl(a, b, z0, r, f, abserr)
+            y = intl(a, b, z0, r, f, abserr, relerr)
+        </synopsis>
     </refsynopsisdiv>
     <refsection>
         <title>Аргументы</title>
@@ -28,25 +35,34 @@
             <varlistentry>
                 <term>z0</term>
                 <listitem>
-                    <para>комплексное число</para>
+                    комплексное число<para/>
                 </listitem>
             </varlistentry>
             <varlistentry>
                 <term>a, b</term>
                 <listitem>
-                    <para>два вещественных числа</para>
+                    два вещественных числа<para/>
                 </listitem>
             </varlistentry>
             <varlistentry>
                 <term>r</term>
                 <listitem>
-                    <para>положительное вещественное число</para>
+                    положительное вещественное число<para/>
                 </listitem>
             </varlistentry>
             <varlistentry>
                 <term>f</term>
                 <listitem>
-                    <para>"внешняя" функция</para>
+                    идентификатор числовой функции, подлежащей интеграции (тип 13 или 130).
+                    <para/>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>abserr, relerr</term>
+                <listitem>
+                    вещественные скаляры, абсолютная и относительная ошибки.
+                    Значения по умолчанию: <literal>1.d-13</literal> и <literal>1d-8</literal>.
+                    <para/>
                 </listitem>
             </varlistentry>
         </variablelist>
@@ -74,7 +90,7 @@ function y = f(z)
 endfunction
 
 intl(1,2,1+%i, 3, f)
- ]]></programlisting>
+     ]]></programlisting>
     </refsection>
     <refsection role="see also">
         <title>Смотрите также</title>
@@ -82,6 +98,22 @@ intl(1,2,1+%i, 3, f)
             <member>
                 <link linkend="intc">intc</link>
             </member>
+            <member>
+                <link linkend="integrate">integrate</link>
+            </member>
         </simplelist>
+    </refsection>
+    <refsection role="history">
+        <title>История</title>
+        <revhistory>
+           <revision>
+                <revnumber>2024.0.0</revnumber>
+                <revdescription>
+                    Default <varname>abserr</varname> and <literal>relerr</literal> values
+                    standardized: <literal>1d-13</literal> and <literal>1d-8</literal> instead of
+                    <literal>%eps</literal> and <literal>1d-12</literal>.
+                </revdescription>
+            </revision>
+        </revhistory>
     </refsection>
 </refentry>

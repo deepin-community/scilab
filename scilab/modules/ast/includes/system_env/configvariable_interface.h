@@ -1,7 +1,7 @@
 /*
-*  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
-*  Copyright (C) 2014 - Scilab Enterprises - Antoine ELIAS
-*
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
+ *  Copyright (C) 2014 - Scilab Enterprises - Antoine ELIAS
+ *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
@@ -10,24 +10,24 @@
  * and continues to be available under such terms.
  * For more information, see the COPYING file which you should have received
  * along with this program.
-*
-*/
+ *
+ */
 
 #ifndef __CONFIGVARIABLE_INTERFACE_H__
 #define __CONFIGVARIABLE_INTERFACE_H__
 
+#include "dynlib_ast.h"
 #include <string.h>
 #include <wchar.h>
-#include "dynlib_ast.h"
 
-#define VERBOSE_ERROR       0
+#define VERBOSE_ERROR 0
 
 typedef enum
 {
     SCILAB_API = 1, /* Scilab is launch as an API */
-    SCILAB_STD, /* The standard Scilab (gui, plot ...) */
-    SCILAB_NW, /* Scilab in command line with the plots */
-    SCILAB_NWNI /* Scilab in command line without any graphics. What not mandataroy here */
+    SCILAB_STD,     /* The standard Scilab (gui, plot ...) */
+    SCILAB_NW,      /* Scilab in command line with the plots */
+    SCILAB_NWNI     /* Scilab in command line without any graphics. What not mandataroy here */
 } scilabMode;
 
 EXTERN_AST int getSimpMode(void);
@@ -62,7 +62,7 @@ EXTERN_AST void setieee(int);
 
 EXTERN_AST scilabMode getScilabMode(void);
 EXTERN_AST void setScilabMode(scilabMode newmode);
-EXTERN_AST const char * getScilabModeString(void);
+EXTERN_AST const char* getScilabModeString(void);
 
 EXTERN_AST int getWarningMode(void);
 EXTERN_AST void setWarningMode(int _iMode);
@@ -74,9 +74,10 @@ EXTERN_AST void addReferenceModule(const wchar_t* _module);
 EXTERN_AST void removeReferenceModule(const wchar_t* _module);
 
 EXTERN_AST int getForceQuit();
+EXTERN_AST void setForceQuit(int force);
 
 EXTERN_AST int getEntryPointPosition(wchar_t* _pwstEntryPointName);
-typedef void(*dynlib_ptr)();
+typedef void (*dynlib_ptr)();
 EXTERN_AST dynlib_ptr getEntryPointFromPosition(int position);
 
 EXTERN_AST int isEnableDebug();
@@ -89,6 +90,9 @@ EXTERN_AST void resetExecutionBreak();
 
 EXTERN_AST int setRecursionLimit(int);
 
-EXTERN_AST int getWebMode();
-#endif /* !__CONFIGVARIABLE_INTERFACE_H__ */
+EXTERN_AST void setPolynomialDisplay(int);
+EXTERN_AST int getPolynomialDisplay();
 
+EXTERN_AST int getWebMode();
+
+#endif /* !__CONFIGVARIABLE_INTERFACE_H__ */

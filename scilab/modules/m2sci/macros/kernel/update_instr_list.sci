@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2002-2004 - INRIA - Vincent COUVERT
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -32,7 +32,7 @@ function [instr_list]=update_instr_list(instr_list,instr)
     m2sci_to_insert_b=list()
 
     // Insert converted instruction
-    // instr can be an empty list if a call to 'm2scideclare' or convertion made in m2sci_to_insert_b
+    // instr can be an empty list if a call to 'm2scideclare' or conversion made in m2sci_to_insert_b
     if instr<>list() then
         instr_list($+1)=instr
     end

@@ -1,5 +1,5 @@
 ;
-; Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+; Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 ; Copyright (C) INRIA - Allan CORNET
 ; Copyright (C) DIGITEO - 2010 - Allan CORNET
 ;
@@ -22,6 +22,7 @@
 #define M2SCI "m2sci"
 ;
 Source: modules\{#M2SCI}\license.txt; DestDir: {app}\modules\{#M2SCI}; Components: {#COMPN_SCILAB}
+Source: modules\{#M2SCI}\Mtbxfun_db.txt; DestDir: {app}\modules\{#M2SCI}; Components: {#COMPN_SCILAB}
 ;
 Source: modules\{#M2SCI}\etc\{#M2SCI}.quit; DestDir: {app}\modules\{#M2SCI}\etc; Components: {#COMPN_SCILAB}
 Source: modules\{#M2SCI}\etc\{#M2SCI}.start; DestDir: {app}\modules\{#M2SCI}\etc; Components: {#COMPN_SCILAB}

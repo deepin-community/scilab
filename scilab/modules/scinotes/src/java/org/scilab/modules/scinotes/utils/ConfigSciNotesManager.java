@@ -1,5 +1,5 @@
 /*
- * Scilab (http://www.scilab.org/) - This file is part of Scilab
+ * Scilab (https://www.scilab.org/) - This file is part of Scilab
  * Copyright (C) 2009 - INRIA - Allan SIMON
  * Copyright (C) 2010 - Calixte DENIZET
  *
@@ -17,58 +17,30 @@
 package org.scilab.modules.scinotes.utils;
 
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.Toolkit;
 import java.awt.print.Paper;
-
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Hashtable;
-import java.util.Properties;
-import java.util.Enumeration;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactoryConfigurationError;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
-import org.scilab.modules.commons.ScilabCommons;
-import org.scilab.modules.commons.ScilabConstants;
 import org.scilab.modules.commons.ScilabCommonsUtils;
-import org.scilab.modules.commons.xml.ScilabXMLUtilities;
+import org.scilab.modules.commons.ScilabConstants;
 import org.scilab.modules.commons.xml.ScilabDocumentBuilderFactory;
-import org.scilab.modules.commons.xml.ScilabTransformerFactory;
+import org.scilab.modules.commons.xml.ScilabXMLUtilities;
 import org.scilab.modules.gui.messagebox.ScilabModalDialog;
 import org.scilab.modules.gui.messagebox.ScilabModalDialog.IconType;
-import org.scilab.modules.gui.utils.Position;
-import org.scilab.modules.gui.utils.Size;
-
-import org.scilab.modules.scinotes.ScilabView;
-import org.scilab.modules.scinotes.ScilabEditorPane;
 import org.scilab.modules.scinotes.SciNotes;
-import org.scilab.modules.scinotes.TabManager;
-import org.scilab.modules.scinotes.MatchingBlockManager;
-
+import org.scilab.modules.scinotes.ScilabEditorPane;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
 /**

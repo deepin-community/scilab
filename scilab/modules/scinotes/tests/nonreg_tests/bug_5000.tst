@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009 - Digiteo - Yann COLLETTE
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,8 +9,8 @@
 
 // <-- Non-regression test for bug 5000 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=5000
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/5000
 //
 // <-- Short Description -->
 // The size of the edit lines in the search and replace dialog is too small.

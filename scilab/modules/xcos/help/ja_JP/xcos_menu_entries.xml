@@ -1233,7 +1233,7 @@
 
                     <emphasis role="bold">このようなケースが見つかった場合には,報告してください.</emphasis>
 
-                    <ulink url="http://bugzilla.scilab.org/">
+                    <ulink url="https://gitlab.com/scilab/scilab/-/issues">
 
                         <emphasis>Scilab</emphasis>に関するバグと希望をレポートしてください.
 
@@ -1869,7 +1869,7 @@
 
             <listitem>
 
-                <link linkend="dassl">dassl</link>
+                <link linkend="dae">dae</link>
 
             </listitem>
 
@@ -1878,4 +1878,3 @@
     </refsection>
 
 </refentry>
-

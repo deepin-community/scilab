@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2015 - Scilab Enterprises - Calixte DENIZET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -17,9 +17,7 @@
 #define __CODE_PRINTER_VISITOR_HXX__
 
 #include "visitor.hxx"
-#include "allexp.hxx"
-#include "allvar.hxx"
-#include "alldec.hxx"
+#include "decls.hxx"
 #include "token.hxx"
 #include "CodePrinter.hxx"
 
@@ -58,6 +56,7 @@ public:
     virtual void visit(const ast::AssignExp & e);
     virtual void visit(const ast::CellCallExp & e);
     virtual void visit(const ast::CallExp & e);
+    virtual void visit(const ast::ArgumentsExp & e);
     virtual void visit(const ast::IfExp & e);
     virtual void visit(const ast::TryCatchExp & e);
     virtual void visit(const ast::WhileExp & e);
@@ -74,13 +73,8 @@ public:
     virtual void visit(const ast::TransposeExp & e);
     virtual void visit(const ast::VarDec & e);
     virtual void visit(const ast::FunctionDec & e);
+    virtual void visit(const ast::ArgumentDec & e);
     virtual void visit(const ast::ListExp & e);
-    virtual void visit(const ast::OptimizedExp & e);
-    virtual void visit(const ast::DAXPYExp & e);
-    virtual void visit(const ast::MemfillExp & e);
-    virtual void visit(const ast::IntSelectExp & e);
-    virtual void visit(const ast::StringSelectExp & e);
-
 };
 
 } // namespace coverage

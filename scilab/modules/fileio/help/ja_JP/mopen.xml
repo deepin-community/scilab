@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA
  * ...
  *
@@ -157,7 +157,7 @@
                         </tr>
 
                     </informaltable>
-
+                    <warning>When this output argument is given, no error will be raised by the function.</warning>
                 </listitem>
 
             </varlistentry>
@@ -632,4 +632,3 @@ mclose(fd_rb)
     </refsection>
 
 </refentry>
-

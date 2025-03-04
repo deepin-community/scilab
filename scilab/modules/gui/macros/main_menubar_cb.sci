@@ -56,17 +56,26 @@ function main_menubar_cb(key)
             tagPath = "//Profile/favoriteDirectories/Directory";
             r = xmlGetValues(tagPath, "path", prefFile);
         catch
+            // clear last error in case where no value is found
+            errclear()
             r = []
         end
+
         try
             tagPath = "//Profile/recentFiles/document";
             r2 = xmlGetValues(tagPath, "path", prefFile);
         catch
+            // clear last error in case where no value is found
+            errclear()
             r2 = []
         end
+
         try
             tagPath = "//Profile/openFiles/document";
             r2 = [r2 ; xmlGetValues(tagPath, "path", prefFile)];
+        catch
+            // clear last error in case where no value is found
+            errclear()
         end
 
         if isempty([r;r2]) then
@@ -80,10 +89,11 @@ function main_menubar_cb(key)
         r = getlongpathname([r ; r2])
 
         // Shortening paths with aliases when possible
+        fs = filesep()
         if getos() == "Windows" then
-            r = strsubst(r, WSCI, "SCI");
+            r = strsubst(r, WSCI+fs, "SCI"+fs);
         else
-            r = strsubst(r, SCI, "SCI");
+            r = strsubst(r, SCI+fs, "SCI"+fs);
         end
         r = strsubst(r, SCIHOME, "SCIHOME");
         r = strsubst(r, TMPDIR, "TMPDIR");

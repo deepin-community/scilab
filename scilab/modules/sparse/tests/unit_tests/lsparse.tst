@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ????-2008 - INRIA
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -362,7 +362,7 @@ v1=v;v1(1)=[];V=full(v);V(1)=[];
 if or(full(v1)<>V) then pause,end
 //test des comparaisons
 a=sparse([1 6;1 5;1 3;2 4;2 1;4 4;4 3;5 1;6 6],1:9,[6 6])<>0;
-b=sparse([1 6;1 2;6 5],[10;-1;-1],[6 6])<>0;;
+b=sparse([1 6;1 2;6 5],[10;-1;-1],[6 6])<>0;
 if full(a==a)<>full(a)==full(a) then pause,end
 if full(a<>a)<>(full(a)<>full(a)) then pause,end
 if full(a==full(a))<>full(a)==full(a) then pause,end

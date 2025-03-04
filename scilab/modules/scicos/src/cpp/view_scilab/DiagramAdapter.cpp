@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2014-2016 - Scilab Enterprises - Clement DAVID
  *  Copyright (C) 2017-2018 - ESI Group - Clement DAVID
  *
@@ -402,13 +402,14 @@ struct objs
                 }
             }
         }
+        controller.updateChildrenRelatedPropertiesAfterClone(mapped);
 
         // We don't need old children information anymore: reduce children size
         if (deletion)
         {
             children.resize(argumentList->getSize());
         }
-
+        
         /*
          * Update partial linking information
          */
@@ -418,7 +419,7 @@ struct objs
             {
                 model::Block* adaptee = static_cast<model::Block*>(it->adaptee);
                 GraphicsAdapter::relink(controller, adaptee, children);
-                LinkAdapter::reverse_relink(controller, adaptee, it->index, children);
+                LinkAdapter::reverse_relink(controller, adaptee, children);
             }
         }
         for (auto it = childrenToUpdate.begin(); it != childrenToUpdate.end(); ++it)
@@ -431,7 +432,7 @@ struct objs
             }
         }
 
-        // set the children after update
+        // set the children after resolving the links update
         controller.setObjectProperty(adaptee, CHILDREN, children);
 
         return true;
@@ -475,6 +476,7 @@ struct version
             if (adaptor.getAdaptee()->kind() != DIAGRAM)
             {
                 // version field is not present on the model for non-diagram ; let's pass it !
+                get_or_allocate_logger()->log(LOG_ERROR, _("Wrong dimension for field %s: %d-by-%d expected.\n"), "version", 1, 1);
                 return true;
             }
             model::Diagram* adaptee = static_cast<model::Diagram*>(adaptor.getAdaptee());

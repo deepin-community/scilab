@@ -1,5 +1,5 @@
 ;
-; Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+; Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 ; Copyright (C) 2008 - DIGITEO - Allan CORNET
 ;
 ; Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -25,6 +25,7 @@ Source: bin\msvcr71.dll; DestDir: {app}\bin; Components: {#COMPN_SCILAB}
 ;Visual C++ 2017 redist libraries
 Source: bin\msvcp140.dll; DestDir: {app}\bin; Components: {#COMPN_SCILAB}
 Source: bin\vcruntime140.dll; DestDir: {app}\bin; Components: {#COMPN_SCILAB}
+Source: bin\vcruntime140_1.dll; DestDir: {app}\bin; Components: {#COMPN_SCILAB}
 Source: bin\vccorlib140.dll; DestDir: {app}\bin; Components: {#COMPN_SCILAB}
 Source: bin\concrt140.dll; DestDir: {app}\bin; Components: {#COMPN_SCILAB}
 
@@ -88,6 +89,14 @@ Source: bin\hdf5_hl.dll ; DestDir: {app}\bin; Components: {#COMPN_SCILAB}
 Source: bin\hdf5_hl.lib ; DestDir: {app}\bin; Components: {#COMPN_SCILAB}
 Source: bin\hdf5_hl_cpp.dll ; DestDir: {app}\bin; Components: {#COMPN_SCILAB}
 Source: bin\hdf5_hl_cpp.lib ; DestDir: {app}\bin; Components: {#COMPN_SCILAB}
+;
+; libarchive libraries
+Source: bin\archive.dll; DestDir: {app}\bin; Components: {#COMPN_SCILAB}
+Source: bin\bz2.dll; DestDir: {app}\bin; Components: {#COMPN_SCILAB}
+Source: bin\liblzma.dll; DestDir: {app}\bin; Components: {#COMPN_SCILAB}
+Source: bin\lz4.dll; DestDir: {app}\bin; Components: {#COMPN_SCILAB}
+Source: bin\zstd.dll; DestDir: {app}\bin; Components: {#COMPN_SCILAB}
+Source: bin\libcrypto-3-x64.dll; DestDir: {app}\bin; Components: {#COMPN_SCILAB}
 
 ;
 ; batch files

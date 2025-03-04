@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2015 - Scilab Enterprises - Antoine ELIAS
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -56,7 +56,7 @@ extern "C"
 }
 /*--------------------------------------------------------------------------*/
 static bool import_variable(hid_t file, std::string& name);
-types::InternalType* import_data(hid_t dataset);
+static types::InternalType* import_data(hid_t dataset);
 static types::InternalType* import_double(hid_t dataset);
 static types::InternalType* import_string(hid_t dataset);
 static types::InternalType* import_boolean(hid_t dataset);
@@ -102,17 +102,6 @@ types::Function::ReturnValue sci_hdf5_load_v3(types::typed_list &in, int _iRetCo
     if (iFile < 0)
     {
         Scierror(999, _("%s: Unable to open file: %s\n"), fname.data(), filename.data());
-        return types::Function::Error;
-    }
-
-    //manage version information
-    int iVersion = getSODFormatAttribute(iFile);
-    if (iVersion != SOD_FILE_VERSION)
-    {
-        //close the file
-        closeHDF5File(iFile);
-        //can't read file with version newer that me !
-        Scierror(999, _("%s: Wrong SOD file format version. Expected: %d Found: %d\n"), fname.data(), SOD_FILE_VERSION, iVersion);
         return types::Function::Error;
     }
 
@@ -196,7 +185,7 @@ static bool import_variable(hid_t file, std::string& name)
     return false;
 }
 
-types::InternalType* import_data(hid_t dataset)
+static types::InternalType* import_data(hid_t dataset)
 {
     //get var type
     char* ctype = getScilabTypeFromDataSet6(dataset);
@@ -558,6 +547,7 @@ static int getDimsNode(hid_t dataset, int* complex, std::vector<int>& dims)
     int size = getDatasetInfo(id, complex, &dim, d.data());
     if (size < 0)
     {
+        closeDataSet(id);
         return 0;
     }
 
@@ -987,7 +977,7 @@ static types::InternalType* import_handles(hid_t dataset)
     {
         //%h_copy
         hid_t ref = getDataSetIdFromName(refs, std::to_string(0).data());
-        int val = add_current_entity(ref);
+        int val = add_current_entity(ref, 3);
         if (val < 0)
         {
             handles->killMe();
@@ -1001,7 +991,7 @@ static types::InternalType* import_handles(hid_t dataset)
         for (int i = 0; i < size; ++i)
         {
             hid_t ref = getDataSetIdFromName(refs, std::to_string(i).data());
-            int val = import_handle(ref, -1);
+            int val = import_handle(ref, -1, 3);
             if (val < 0)
             {
                 handles->killMe();
@@ -1036,8 +1026,8 @@ static types::InternalType* import_macro(hid_t dataset)
     int size = 0;
     std::vector<int> d(2);
 
-    std::list<symbol::Variable*>* inputList = new std::list<symbol::Variable*>();
-    std::list<symbol::Variable*>* outputList = new std::list<symbol::Variable*>();
+    std::vector<symbol::Variable*>* inputList = new std::vector<symbol::Variable*>();
+    std::vector<symbol::Variable*>* outputList = new std::vector<symbol::Variable*>();
     ast::Exp* body = nullptr;
 
     symbol::Context* ctx = symbol::Context::getInstance();

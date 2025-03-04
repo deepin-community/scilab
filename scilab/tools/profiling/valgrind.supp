@@ -66,3 +66,26 @@
    fun:gotoblas_init
    ...
 }
+{
+   suppress wmemcmp_avx2_movbe error
+   Memcheck:Addr32
+   fun:__wmemcmp_avx2_movbe
+   ...
+}
+{
+   suppress dlopen leak
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   ...
+   fun:_dlerror_run
+   ...
+}
+{
+   suppress libtinfo leak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:tgetnum_sp
+   ...
+}

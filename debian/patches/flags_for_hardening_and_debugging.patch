@@ -1,0 +1,62 @@
+Description: altering build flags so that they are consistent with Debian
+ practices for hardening and generating debug information
+Author: Pierre Gruet <pgt@debian.org>
+Forwarded: not-needed
+Last-Update: 2023-11-17
+
+--- a/scilab/configure.ac
++++ b/scilab/configure.ac
+@@ -423,7 +423,7 @@
+     done
+     AC_LANG_POP([Fortran 77])
+    else
+-      DEBUG_FFLAGS="-DNDEBUG -g1 -O2"
++      DEBUG_FFLAGS="-DNDEBUG -g -O2"
+    fi
+       case "$host" in
+          x86_64-*-linux*)
+@@ -524,9 +524,8 @@
+             ;;
+         esac
+     else
+-        DEBUG_CXXFLAGS="-DNDEBUG -g1 -O2"
++        DEBUG_CXXFLAGS="-DNDEBUG -g -O2"
+     fi
+-    COMPILER_CXXFLAGS="$COMPILER_CXXFLAGS -fno-stack-protector " # bug 3131
+     # add the extra filesystem library if needed
+     if test "$($CXX -dumpversion |cut -d\. -f1)" -lt "9" ; then
+         COMPILER_LDFLAGS="$COMPILER_LDFLAGS -lstdc++fs" 
+@@ -541,9 +540,8 @@
+     if test "$enable_debug_CXX" = yes; then
+         DEBUG_CXXFLAGS="-Wall -Wextra -Wno-unused-parameter -O0 -g3"
+     else
+-        DEBUG_CXXFLAGS="-DNDEBUG -g1 -O2"
++        DEBUG_CXXFLAGS="-DNDEBUG -g -O2"
+     fi
+-    COMPILER_CXXFLAGS="$COMPILER_CXXFLAGS -fno-stack-protector " # bug 3131
+     # allow to compile under macOS < Catalina with c++17 enabled clang
+     # or compile under macOS > Catalina with min_macosx_version < 11
+     case "$host_os" in
+@@ -611,10 +609,9 @@
+             ;;
+         esac
+     else
+-        DEBUG_CFLAGS="-DNDEBUG -g1 -O2"
++        DEBUG_CFLAGS="-DNDEBUG -g -O2"
+     fi
+ 
+-    COMPILER_CFLAGS="$COMPILER_CFLAGS -fno-stack-protector " # bug 3131
+     # Explictly disable the as needed. It was disable by default but Ubuntu
+     # activated it by default since release 11.04. See bug #8961.
+     # Once all cyclic dependencies have been dropped, this line could be removed.
+@@ -689,9 +686,8 @@
+         DEBUG_CFLAGS="-Wall -Wextra -Wno-unused-parameter -O0 -g3"
+         # used to be -O0
+     else
+-        DEBUG_CFLAGS="-DNDEBUG -g1 -O2"
++        DEBUG_CFLAGS="-DNDEBUG -g -O2"
+     fi
+-    COMPILER_CFLAGS="$COMPILER_CFLAGS -fno-stack-protector " # bug 3131
+     # prevent dll optimizations in the final binary
+     case "$host_os" in
+         *Darwin* | *darwin*)

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2006-2008 - INRIA
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
  * Copyright (C) 2018 - Samuel GOUGEON
@@ -54,8 +54,8 @@
         <para>
             この関数は,
             多項式(もしくは多項式行列または有理行列)において
-            絶対値&lt; <literal>epsa</literal>または
-            相対値&lt; <literal>epsr</literal>の係数を全て消去(すなわち,ゼロに設定)します.
+            絶対値&lt;=<literal>epsa</literal>または
+            相対値&lt;=<literal>epsr</literal>の係数を全て消去(すなわち,ゼロに設定)します.
             (相対とは係数の1次ノルムに関する相対値を意味します)
         </para>
         <para>

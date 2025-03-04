@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA, Serge Steer
 // Copyright (C) - 2010 - DIGITEO - Michael Baudin
 // Copyright (C) DIGITEO - 2011 - Allan CORNET
@@ -15,13 +15,9 @@
 function y = acscd(x)
     //Inverse cosecant, result in degrees.
 
-    rhs = argn(2);
-    if rhs <> 1 then
-        error(msprintf(gettext("%s: Wrong number of input argument(s): %d expected.\n"),"acscd", 1));
+    arguments
+        x {mustBeA(x, ["double", "sparse"]), mustBeReal}
     end
 
-    if and(type(x) <> [1 5]) | ~isreal(x) then
-        error(msprintf(gettext("%s: Wrong type for input argument #%d: Real sparse or full matrix expected.\n"),"acscd",1));
-    end
     y = 180/%pi*asin(ones(x)./x);
 endfunction

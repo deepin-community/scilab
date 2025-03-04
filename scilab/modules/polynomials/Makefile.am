@@ -1,4 +1,4 @@
-# Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+# Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 # Copyright (C) 2006 - INRIA - Sylvestre LEDRU
 #
 # This file is distributed under the same license as the Scilab package.
@@ -75,6 +75,7 @@ GATEWAY_CXX_SOURCES = \
     sci_gateway/cpp/sci_coeff.cpp \
     sci_gateway/cpp/sci_pppdiv.cpp \
     sci_gateway/cpp/sci_simpMode.cpp \
+    sci_gateway/cpp/sci_polyDisplay.cpp \
     sci_gateway/cpp/sci_simp.cpp \
     sci_gateway/cpp/sci_sfact.cpp \
     sci_gateway/cpp/sci_bezout.cpp
@@ -89,7 +90,6 @@ libscipolynomials_la_CPPFLAGS = \
     -I$(top_srcdir)/modules/ast/includes/symbol/ \
     -I$(top_srcdir)/modules/ast/includes/system_env/ \
     -I$(top_srcdir)/modules/ast/includes/types/ \
-    -I$(top_srcdir)/modules/ast/includes/analysis/ \
     -I$(top_srcdir)/modules/dynamic_link/includes \
     -I$(top_srcdir)/modules/output_stream/includes \
     -I$(top_srcdir)/modules/api_scilab/includes \

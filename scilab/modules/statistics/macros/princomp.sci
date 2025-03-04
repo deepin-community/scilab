@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2000 - INRIA - Carlos Klimann
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -11,7 +11,7 @@
 // along with this program.
 //
 
-function [facpr,comprinc,lambda,tsquare]=princomp(x,eco)
+function [facpr, comprinc, lambda, tsquare, explainedvar, mu]=princomp(x,eco)
     //
     //This  function performs  several  computations known  as
     //"principal component  analysis".
@@ -35,14 +35,9 @@ function [facpr,comprinc,lambda,tsquare]=princomp(x,eco)
     //derived from pca,
     //  author: carlos klimann
     //
-
-    [lhs, rhs] = argn(0);
-    if rhs == 0 then
-        error(msprintf(gettext("%s: Wrong number of input arguments: %d or %d expected.\n"),"princomp",1,2))
-    end
-    if rhs<2 then eco=%f,end
-    if type(eco)<>4 then
-        error(msprintf(_("%s: Wrong type for input argument #%d: Boolean expected."),"princomp",2))
+    arguments
+        x
+        eco {mustBeA(eco, "boolean")} = %f
     end
 
     if x==[] then
@@ -79,4 +74,13 @@ function [facpr,comprinc,lambda,tsquare]=princomp(x,eco)
     q=find(lambda<=max(rowx,colx)*%eps*lambda(1),1)
     if q==[] then q=size(lambda,"*"),end
     tsquare=(rowx-1)*sum(U(:,1:q).^2,2)
+
+    if nargout > 4 then
+        // percentage of variance explained by each principal component
+        explainedvar = 100 * lambda / sum(lambda);
+    end
+
+    if nargout > 5 then
+        mu = mean(x, 1);
+    end
 endfunction

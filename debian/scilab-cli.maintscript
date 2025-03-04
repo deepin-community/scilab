@@ -1,0 +1,2 @@
+# Removing the conffiles in /etc/bash_completion.d
+rm_conffile /etc/bash_completion.d/scilab 6.0.0-1~exp1~

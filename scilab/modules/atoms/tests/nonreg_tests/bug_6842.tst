@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010 - DIGITEO - Pierre MARECHAL
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -10,8 +10,8 @@
 //
 // <-- Non-regression test for bug 6842 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=6842
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/6842
 //
 // <-- Short Description -->
 // When an ATOMS module has several versions and that, e.g. the oldest is
@@ -20,7 +20,7 @@
 
 load("SCI/modules/atoms/macros/atoms_internals/lib");
 
-atomsRepositorySetOfl("http://scene11.test.atoms.scilab.org");
+atomsRepositorySetOfl("https://scene11.test.atoms.scilab.org");
 atomsSystemUpdate();
 atomsInstall(["toolbox_4","1.0-1"]);
 if ~atomsIsInstalled("toolbox_4") then pause, end

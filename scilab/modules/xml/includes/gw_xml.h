@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2012 - Scilab Enterprises - Calixte DENIZET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -29,8 +29,6 @@ XML_SCILAB_IMPEXP STACK_GATEWAY_PROTOTYPE (sci_percent_XMLElem_e);
 XML_SCILAB_IMPEXP STACK_GATEWAY_PROTOTYPE (sci_percent_XMLNs_e);
 XML_SCILAB_IMPEXP STACK_GATEWAY_PROTOTYPE (sci_percent_XMLAttr_e);
 XML_SCILAB_IMPEXP STACK_GATEWAY_PROTOTYPE (sci_percent_XMLList_e);
-XML_SCILAB_IMPEXP STACK_GATEWAY_PROTOTYPE (sci_percent_XMLDoc_p);
-XML_SCILAB_IMPEXP STACK_GATEWAY_PROTOTYPE (sci_percent_XMLElem_p);
 XML_SCILAB_IMPEXP STACK_GATEWAY_PROTOTYPE (sci_percent_XMLNs_p);
 XML_SCILAB_IMPEXP STACK_GATEWAY_PROTOTYPE (sci_percent_XMLList_p);
 XML_SCILAB_IMPEXP STACK_GATEWAY_PROTOTYPE (sci_percent_XMLAttr_p);

@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2016 - Scilab Enterprises - Cedric Delamarre
 * Copyright (C) 2012 - 2016 - Scilab Enterprises
 *
@@ -17,6 +17,7 @@
 #include "os_string.h"
 #include "machine.h" // bsiz
 #include "getpipeline.h"
+#include "configvariable_interface.h"
 
 char* getPipeLine(void)
 {
@@ -27,8 +28,8 @@ char* getPipeLine(void)
     int eof = (fgets(buffer, bsiz, stdin) == NULL);
     if (eof)
     {
-        //send command to quit to Scilab
-        return os_strdup("quit");
+        //send command to quit Scilab
+        return os_strdup("[_,__err__]=lasterror();exit(__err__);");
     }
 
     //remove trailing \n

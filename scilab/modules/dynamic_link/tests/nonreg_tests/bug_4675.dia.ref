@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008 - INRIA - Serge STEER
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -8,8 +8,8 @@
 // <-- CLI SHELL MODE -->
 // <-- Non-regression test for bug 4675 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=4675
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/4675
 //
 // <-- Short Description -->
 // An interface cannot have more than 99 functions. If you create the functions fun1, ...,fun100, then fun1, ...,fun99 are

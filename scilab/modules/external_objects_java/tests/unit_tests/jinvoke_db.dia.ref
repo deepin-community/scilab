@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Sylvestre Ledru
 // Copyright (C) 2013 - Scilab Enterprises - Calixte Denizet
 //
@@ -11,7 +11,7 @@ c = jcompile("TestDirectBuffer",["import java.nio.DoubleBuffer;";
 "for (int i = 0; i < x.capacity(); i++) x.put(i, x.get(i) + 1);";
 "}";
 "}"])
- c  = 
+ c = (Java Class)
 class TestDirectBuffer
 a = 1:10000;
 b = a + 1; // only used to compare with the following...

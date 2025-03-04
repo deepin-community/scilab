@@ -81,10 +81,6 @@ function [%state0,state,sim,ok]=modipar(newparameters,%state0,state,sim,scs_m,co
             [fun,statek,dstatek,odstatek,rpark,ipark,opark]=...
             (om.sim,om.state,om.dstate,om.odstate,om.rpar,om.ipar,om.opar);
             if type(fun)==15 then
-                if (fun(2)==3 | fun(2)==5 |  fun(2)==10005) then
-                    if rpark<>[] then rpark=var2vec(rpark); end
-                    if dstatek<>[] then dstatek=var2vec(dstatek),end
-                end
                 if fun(2)>10000 then
                     statekd=statek($/2+1:$)
                     statek=statek(1:$/2)

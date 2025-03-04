@@ -1,15 +1,15 @@
 //<-- CLI SHELL MODE -->
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2012 - INRIA - Serge Steer
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
 //
 ny=1,nu=1,sig=0.01;
- ny  = 
+ ny = 
    1.
- nu  = 
+ nu = 
    1.
 ar=armac(1,[0,0.2],[0,1],ny,nu,sig);
 [S,Sn]=arma2ss(ar);
@@ -25,7 +25,7 @@ assert_checkequal(Sn.C,C);
 assert_checkequal(Sn.D,D);
 //
 ny=1,nu=1;
- ny  = 
+ ny = 
    1.
 ar=armac([1,-0.8,0.2],0.001,0,ny,nu,0);
 [S,Sn]=arma2ss(ar);

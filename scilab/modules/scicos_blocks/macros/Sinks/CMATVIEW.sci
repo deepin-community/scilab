@@ -66,7 +66,7 @@ function [x,y,typ]=CMATVIEW(job,arg1,arg2)
         cmin = 0;
         cmax = 100;
         size_c = 25;
-        colormap = jetcolormap(size_c);
+        colormap = jet(size_c);
         alpha_c = 0.24
         beta_c = 1
 
@@ -81,7 +81,7 @@ function [x,y,typ]=CMATVIEW(job,arg1,arg2)
         model.blocktype="c"
         model.dep_ut=[%t %f]
 
-        exprs=[string("jetcolormap(25)");
+        exprs=[string("jet(25)");
         string(cmin);
         string(cmax)];
         gr_i=[]

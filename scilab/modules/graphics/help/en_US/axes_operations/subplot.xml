@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
- * Copyright (C) 2019 - Samuel GOUGEON
+ * Copyright (C) 2019 - 2023 - Samuel GOUGEON
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
  * pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -19,7 +19,9 @@
           xml:lang="en" xml:id="subplot">
     <refnamediv>
         <refname>subplot</refname>
-        <refpurpose>sets the current axes to a chosen cell of the current gridded figure</refpurpose>
+        <refpurpose>
+            grids the current figure or frame, and sets the current axes to a chosen cell
+        </refpurpose>
     </refnamediv>
     <refsynopsisdiv>
         <title>Syntax</title>
@@ -34,15 +36,16 @@
             <varlistentry>
                 <term>m, n, p</term>
                 <listitem>
-                    <para>positive integers</para>
+                    integers > 0. (m,n) = numbers of rows and columns of the virtual grid.
+                    p = index of the targeted cell.
+                    <para/>
                 </listitem>
             </varlistentry>
             <varlistentry>
                 <term>mnp</term>
                 <listitem>
-                    <para>
-                        an integer with decimal notation <literal>mnp</literal>
-                    </para>
+                    an integer with decimal notation <literal>mnp</literal>
+                    <para/>
                 </listitem>
             </varlistentry>
         </variablelist>
@@ -50,21 +53,22 @@
     <refsection>
         <title>Description</title>
         <para>
-            subplot(m,n,p) or subplot(mnp) virtually grids the graphics window into an m-by-n
-            matrix of sub-windows, and selects the p<superscript>th</superscript> sub-window
-            for receiving the forthcoming drawings.
+            <emphasis role="bold">subplot(m,n,p)</emphasis> or <emphasis role="bold">subplot(mnp)</emphasis>
+            virtually grids the current graphic window or uicontrol frame into a m-by-n
+            matrix of rectangular sub-areas (cells), and selects the p<superscript>th</superscript>
+            cell for receiving the forthcoming drawings.
         </para>
         <para>
             Into the grid, cells are indexed along each row, starting from the top row.
-            Hence, for instance the last cell of the first row is the p = n<superscript>th</superscript>
+            Hence, the last cell of the first row is the p = n<superscript>th</superscript>
             one. The cell on the row #i and the column #j has the index <literal>p=(i-1)*n+j</literal>.
         </para>
         <para>
-            When the selected area matches exactly an existing axes, <literal>subplot(…)</literal>
+            When the selected cell matches exactly an existing axes, <literal>subplot(…)</literal>
             just sets it as the current axes, and returns.
         </para>
         <para>
-            Otherwise, <literal>subplot(…)</literal> creates an empty axes covering the selected area,
+            Otherwise, <literal>subplot(…)</literal> creates an empty axes covering the selected cell,
             ready to receive forthcoming plotting contents.
         </para>
     </refsection>
@@ -139,6 +143,95 @@
             xtitle("","","","")
             gcf().axes_size = [670 400];
         </scilab:image>
+        <para/>
+        <para>
+            <emphasis role="bold">Usage on uicontrol frames</emphasis> :
+        </para>
+        <programlisting role="example"><![CDATA[
+x = -4:0.05:4;
+
+f = figure(...
+    "default_axes","off", ...
+    "toolbar","none", ...
+    "name","subplot in frames", ...
+    "backgroundColor",[1 1 1]*0.97);
+
+// Frame #1
+b = createBorder("titled", "Frame #1");
+uicontrol(f, ...
+    "style", "frame", ...
+    "units","normalized", ...
+    "border", b, ...
+    "position", [0.03 0.83 0.94 0.15]);
+
+// Frame #2
+b(2) = "Frame #2";
+fr2 = uicontrol(f, ...
+    "style", "frame", ...
+    "units","normalized", ...
+    "border", b, ...
+    "position", [0.03 0.03 0.60 0.8]);
+
+a2 = newaxes(fr2);
+subplot(1,2,1)
+plot(x, tanh(x)), title("tanh")
+
+subplot(2,2,2)
+plot(x, sinh(x)), title("sinh")
+
+// Frame #3
+b(2) = "Frame #3";
+fr3 = uicontrol(f, ...
+    "style", "frame", ...
+    "units","normalized", ...
+    "border", b, ...
+    "position", [0.65 0.03 0.32 0.8]);
+
+a3 = newaxes(fr3);
+subplot(2,1,1)
+plot(2*x, sinc(2*x)), title("sinc")
+
+subplot(2,1,2)
+plot(2*x, sin(2*x)), title("sin")
+
+// Back to Frame #2
+sca(a2);
+subplot(2,2,4)
+plot(x, cosh(x)), title("cosh")
+     ]]></programlisting>
+        <screen>
+--> gcf().children
+ ans  =
+3 by 1 matrix of handles:
+=========================
+uicontrol
+uicontrol
+uicontrol
+
+--> gcf().children(1).children
+ ans  =
+2 by 1 matrix of handles:
+=========================
+Axes
+Axes
+
+--> gcf().children(2).children
+ ans  =
+3 by 1 matrix of handles:
+=========================
+Axes
+Axes
+Axes
+
+--> gcf().children(3).children
+ ans  =
+    []
+</screen>
+        <inlinemediaobject>
+            <imageobject>
+                <imagedata fileref="../../images/subplot_frame.png"/>
+            </imageobject>
+        </inlinemediaobject>
     </refsection>
     <refsection role="see also">
         <title>See also</title>
@@ -152,9 +245,17 @@
             <member>
                 <link linkend="axes_properties">axes_properties</link>
             </member>
-            <member>
-                <link linkend="plotframe">plotframe</link>
-            </member>
         </simplelist>
+    </refsection>
+    <refsection>
+        <title>History</title>
+        <revhistory>
+            <revision>
+                <revnumber>2024.0</revnumber>
+                <revdescription>
+                    <literal>subplot(…)</literal> can be used on uicontrol frames.
+                </revdescription>
+            </revision>
+        </revhistory>
     </refsection>
 </refentry>

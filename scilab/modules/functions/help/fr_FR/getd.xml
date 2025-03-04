@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) ????-2008 - INRIA
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -47,6 +47,12 @@
         </para>
     </refsection>
     <refsection>
+        <title>Remarques</title>
+        <warning>
+            <para>Les fonctions sont chargées dans le scope courant, veuillez utiliser <link linkend="resume">resume</link> pour les rendre disponibles dans le scope appelant.</para>
+        </warning>
+    </refsection>
+    <refsection>
         <title>Exemples</title>
         <programlisting role="example"><![CDATA[
 getd('SCI/modules/cacsd/macros')
@@ -66,6 +72,9 @@ getd('SCI/modules/cacsd/macros')
             </member>
             <member>
                 <link linkend="chdir">chdir</link>
+            </member>
+            <member>
+                <link linkend="resume">resume</link>
             </member>
         </simplelist>
     </refsection>

@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) Bruno Pincon
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
 // Copyright (C) 2018 - Samuel GOUGEON
@@ -29,7 +29,7 @@ function Sfgrayplot(x, y, f, strf, rect, nax, zminmax, colminmax, mesh, colout)
     if rhs == 0 then   // demo
         deff("[z]=Surf(x,y)","z=x.^3+y");
         f=gcf();
-        f.color_map = jetcolormap(64);
+        f.color_map = jet(64);
         f.immediate_drawing = "off";
         colorbar(-2,2);
         Sfgrayplot(-1:0.1:1,-1:0.1:1,Surf,strf="031",rect=[-1,-1,1,1]);
@@ -55,7 +55,7 @@ function Sfgrayplot(x, y, f, strf, rect, nax, zminmax, colminmax, mesh, colout)
     q = length(y);
     z = feval(x,y,f);
 
-    // http://bugzilla.scilab.org/15638 :
+    // https://gitlab.com/scilab/scilab/-/issues/15638 :
     if ~isdef("colminmax","l")
         colminmax = [1, size(gcf().color_map,1)]
     end

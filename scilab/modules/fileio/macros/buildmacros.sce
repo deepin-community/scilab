@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2006 - INRIA - Allan Cornet
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -11,4 +11,3 @@
 // along with this program.
 
 genlib("fileiolib","SCI/modules/fileio/macros",%f,%t);
-genlib("fileioguilib","SCI/modules/fileio/macros/importgui",%f,%t);

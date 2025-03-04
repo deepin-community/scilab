@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2011-2012 - DIGITEO - Manuel Juliachs
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -22,134 +22,109 @@ void Triangulator::fillPoints(void)
 {
     points.resize(numPoints, Vector3d(0., 0., 0.));
 
-    //If any coordinate is constant project on the corresponding plane
-    if (xmin == xmax)
+    // find the plane that best fit the data and rotate it to the xy plane
+    
+    //m covariance matrix
+    //q autovector matrix
+    //d diagonal matrix
+    double m[3][3] = {{0., 0., 0.}, {0., 0., 0.}, {0., 0., 0.}};
+    //'q' and 'd' are not needed to be initialized
+    // since they are output paraments, but zero-initialize
+    // to follow coverity
+    double q[3][3] = {{0., 0., 0.}, {0., 0., 0.}, {0., 0., 0.}};
+    double d[3][3] = {{0., 0., 0.}, {0., 0., 0.}, {0., 0., 0.}};
+    Vector3d middle(0., 0., 0.);
+    Vector3d approxNormal(0., 0., 0.);
+
+    for (int i = 0; i < numPoints; i++)
     {
-        for (int i = 0; i < numPoints; i++)
-        {
-            points[i].x = inputPoints[i].z;
-            points[i].y = inputPoints[i].y;
-        }
+        middle.x += inputPoints[i].x;
+        middle.y += inputPoints[i].y;
+        middle.z += inputPoints[i].z;
+        Vector3d tmp = cross(minus(inputPoints[(i + 1) % numPoints], inputPoints[i]), minus(inputPoints[(i + 1) % numPoints], inputPoints[(i + 2) % numPoints]));
+        approxNormal = plus(approxNormal, tmp);
     }
-    else if (ymin == ymax)
+
+    double den = sqrt(approxNormal.x * approxNormal.x + approxNormal.y * approxNormal.y + approxNormal.z * approxNormal.z);
+
+    approxNormal.x /= den;
+    approxNormal.y /= den;
+    approxNormal.z /= den;
+
+    middle.x /= numPoints;
+    middle.y /= numPoints;
+    middle.z /= numPoints;
+
+    for (int i = 0; i < numPoints; ++i)
     {
-        for (int i = 0; i < numPoints; i++)
-        {
-            points[i].x = inputPoints[i].x;
-            points[i].y = inputPoints[i].z;
-        }
+        points[i].x = inputPoints[i].x - middle.x;
+        points[i].y = inputPoints[i].y - middle.y;
+        points[i].z = inputPoints[i].z - middle.z;
+
+        m[0][0] += points[i].x * points[i].x;
+        m[0][1] += points[i].x * points[i].y;
+        m[0][2] += points[i].x * points[i].z;
+        m[1][1] += points[i].y * points[i].y;
+        m[1][2] += points[i].y * points[i].z;
+        m[2][2] += points[i].z * points[i].z;
     }
-    else if (zmin == zmax)
+
+
+    m[1][0] = m[0][1];
+    m[2][0] = m[0][2];
+    m[2][1] = m[1][2];
+
+    diagonalize(m, q, d);
+
+    int col = d[0][0] < d[1][1] ? (d[0][0] < d[2][2] ? 0 : 2) : (d[1][1] < d[2][2] ? 1 : 2);
+
+    Vector3d normal(q[0][col], q[1][col], q[2][col]);
+
+    // if the angle between approxNormal and normal is
+    // larger than +/- pi/2, we invert the normal and keep the
+    // triangle orientation correct
+    double sign = dot(approxNormal, normal) < 0. ? -1. : 1.;
+
+    normal.x *= sign;
+    normal.y *= sign;
+    normal.z *= sign;
+
+    double c, s, nxy = sqrt(normal.x * normal.x + normal.y * normal.y);
+
+    c = fabs(nxy) < EPSILON ? 1. : normal.y / nxy; // bug #15995 fix
+    s = sqrt(1. - c * c);
+    s = normal.x < 0. ? -s : s;
+
+    double rotz[3][3] = {{c, -s, 0.}, {s, c, 0.}, {0., 0., 1.}};
+
+    matrixVectorMul(rotz, normal);
+
+    double nyz = sqrt(normal.y * normal.y + normal.z * normal.z);
+
+    c = fabs(nyz) < EPSILON ? 1. : normal.z / nyz;
+    s = sqrt(1. - c * c);
+    s = normal.y < 0. ? s : -s;
+
+    double rotx[3][3] = {{1., 0., 0.}, {0., c, s}, {0., -s, c}};
+    double composedRot[3][3] = {{0., 0., 0.}, {0., 0., 0.}, {0., 0., 0.}};
+    matrixMatrixMul(rotx, rotz, composedRot);
+
+    xmin = ymin = zmin = std::numeric_limits<double>::max();
+    xmax = ymax = zmax = std::numeric_limits<double>::lowest();
+
+    for (int i = 0; i < numPoints; ++i)
     {
-        for (int i = 0; i < numPoints; i++)
-        {
-            points[i].x = inputPoints[i].x;
-            points[i].y = inputPoints[i].y;
-        }
-    }
-    //Otherwise, find the plane that best fit the data and rotate it to the xy plane
-    else
-    {
-        //m covariance matrix
-        //q autovector matrix
-        //d diagonal matrix
-        double m[3][3] = {{0., 0., 0.}, {0., 0., 0.}, {0., 0., 0.}};
-        //'q' and 'd' are not needed to be initialized
-        // since they are output paraments, but zero-initialize
-        // to follow coverity
-        double q[3][3] = {{0., 0., 0.}, {0., 0., 0.}, {0., 0., 0.}};
-        double d[3][3] = {{0., 0., 0.}, {0., 0., 0.}, {0., 0., 0.}};
-        Vector3d middle(0., 0., 0.);
-        Vector3d approxNormal(0., 0., 0.);
+        matrixVectorMul(composedRot, inputPoints[i], points[i]);
 
-        for (int i = 0; i < numPoints; i++)
-        {
-            middle.x += inputPoints[i].x;
-            middle.y += inputPoints[i].y;
-            middle.z += inputPoints[i].z;
-            Vector3d tmp = cross(minus(inputPoints[(i + 1) % numPoints], inputPoints[i]), minus(inputPoints[(i + 1) % numPoints], inputPoints[(i + 2) % numPoints]));
-            approxNormal = plus(approxNormal, tmp);
-        }
+        xmin = xmin < points[i].x ? xmin : points[i].x;
+        ymin = ymin < points[i].y ? ymin : points[i].y;
+        zmin = zmin < points[i].z ? zmin : points[i].z;
 
-        double den = sqrt(approxNormal.x * approxNormal.x + approxNormal.y * approxNormal.y + approxNormal.z * approxNormal.z);
+        xmax = xmax > points[i].x ? xmax : points[i].x;
+        ymax = ymax > points[i].y ? ymax : points[i].y;
+        zmax = zmax > points[i].z ? zmax : points[i].z;
 
-        approxNormal.x /= den;
-        approxNormal.y /= den;
-        approxNormal.z /= den;
-
-        middle.x /= numPoints;
-        middle.y /= numPoints;
-        middle.z /= numPoints;
-
-        for (int i = 0; i < numPoints; ++i)
-        {
-            points[i].x = inputPoints[i].x - middle.x;
-            points[i].y = inputPoints[i].y - middle.y;
-            points[i].z = inputPoints[i].z - middle.z;
-
-            m[0][0] += points[i].x * points[i].x;
-            m[0][1] += points[i].x * points[i].y;
-            m[0][2] += points[i].x * points[i].z;
-            m[1][1] += points[i].y * points[i].y;
-            m[1][2] += points[i].y * points[i].z;
-            m[2][2] += points[i].z * points[i].z;
-        }
-
-
-        m[1][0] = m[0][1];
-        m[2][0] = m[0][2];
-        m[2][1] = m[1][2];
-
-        diagonalize(m, q, d);
-
-        int col = d[0][0] < d[1][1] ? (d[0][0] < d[2][2] ? 0 : 2) : (d[1][1] < d[2][2] ? 1 : 2);
-
-        Vector3d normal(q[0][col], q[1][col], q[2][col]);
-
-        // if the angle between approxNomal and normal is
-        // larger than +/- pi/2, we invert the normal and keep the
-        // triangle orientation correct
-        double sign = dot(approxNormal, normal) < 0. ? -1. : 1.;
-
-        normal.x *= sign;
-        normal.y *= sign;
-        normal.z *= sign;
-
-        double c, s, nxy = sqrt(normal.x * normal.x + normal.y * normal.y);
-
-        c = nxy == 0. ? 1. : normal.y / nxy; // bug #15995 fix
-        s = sqrt(1. - c * c);
-        s = normal.x < 0. ? -s : s;
-
-        double rotz[3][3] = {{c, -s, 0.}, {s, c, 0.}, {0., 0., 1.}};
-
-        matrixVectorMul(rotz, normal);
-
-        c = normal.z / sqrt(normal.y * normal.y + normal.z * normal.z);
-        s = sqrt(1. - c * c);
-        s = normal.y < 0. ? s : -s;
-
-        double rotx[3][3] = {{1., 0., 0.}, {0., c, s}, {0., -s, c}};
-        double composedRot[3][3] = {{0., 0., 0.}, {0., 0., 0.}, {0., 0., 0.}};
-        matrixMatrixMul(rotx, rotz, composedRot);
-
-        xmin = ymin = zmin = std::numeric_limits<double>::max();
-        xmax = ymax = zmax = std::numeric_limits<double>::lowest();
-
-        for (int i = 0; i < numPoints; ++i)
-        {
-            matrixVectorMul(composedRot, inputPoints[i], points[i]);
-
-            xmin = xmin < points[i].x ? xmin : points[i].x;
-            ymin = ymin < points[i].y ? ymin : points[i].y;
-            zmin = zmin < points[i].z ? zmin : points[i].z;
-
-            xmax = xmax > points[i].x ? xmax : points[i].x;
-            ymax = ymax > points[i].y ? ymax : points[i].y;
-            zmax = zmax > points[i].z ? zmax : points[i].z;
-
-            points[i].z = 0.;
-        }
+        points[i].z = 0.;
     }
 }
 

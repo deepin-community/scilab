@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ???? - INRIA - Scilab
 // Copyright (C) ???? - ENPC
 //
@@ -25,6 +25,9 @@ function []=sound(y,fs,bits,aplay)
     //   possible.  Most platforms support BITS=8 or 16.
     //
     //   See also SOUNDSC.
+
+    warnobsolete("playsnd()", "2025.0")
+
     [nargout,nargin] = argn(0)
     if nargin<1 then
         error(msprintf(gettext("%s: Wrong number of input argument(s): At least %d expected.\n"),"sound",1));

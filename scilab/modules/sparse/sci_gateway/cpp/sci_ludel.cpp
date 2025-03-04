@@ -1,6 +1,7 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2014 - Scilab Enterprises - Anais AUBERT
+ * Copyright (C) 2023 - Dassault Systèmes - Clément DAVID
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
  *
@@ -31,9 +32,9 @@ types::Function::ReturnValue sci_ludel(types::typed_list &in, int _iRetCount, ty
     const void *pData = NULL;
 
     //check input parameters
-    if (in.size() != 1 )
+    if (in.size() > 1 )
     {
-        Scierror(999, _("%s: Wrong number of input argument(s): %d  expected.\n"), "ludel", 1);
+        Scierror(999, _("%s: Wrong number of input argument(s): %d or %d expected.\n"), "ludel", 0, 1);
         return types::Function::Error;
     }
 
@@ -43,24 +44,31 @@ types::Function::ReturnValue sci_ludel(types::typed_list &in, int _iRetCount, ty
         return types::Function::Error;
     }
 
-    if (in[0]->isPointer() == false)
+    if (in.size() == 1)
     {
-        Scierror(999, _("%s: Wrong type for argument %d:  Handle to sparse lu factors expected.\n"), "ludel", 1);
-        return types::Function::Error;
+        if (in[0]->isPointer() == false)
+        {
+            Scierror(999, _("%s: Wrong type for argument %d:  Handle to sparse lu factors expected.\n"), "ludel", 1);
+            return types::Function::Error;
+        }
+
+        types::Pointer *pPointerIn = in[0]->getAs<types::Pointer>();
+        pData = pPointerIn->get();
+        fmatindex = (int*)pData;
+
+        C2F(ludel1)(fmatindex, &ierr);
+        if (ierr != 0)
+        {
+            Scierror(999, _("Wrong value for argument #%d: the lu handle is no more valid.\n"), 1);
+            return types::Function::Error;
+        }
+
+        delete[] fmatindex;
     }
-
-    types::Pointer *pPointerIn = in[0]->getAs<types::Pointer>();
-    pData = pPointerIn->get();
-    fmatindex = (int*)pData;
-
-    C2F(ludel1)(fmatindex, &ierr);
-    if (ierr != 0)
+    else if (in.size() == 0)
     {
-        Scierror(999, _("Wrong value for argument #%d: the lu handle is no more valid.\n"), 1);
-        return types::Function::Error;
+        resetluptr();
     }
-
-    delete[] fmatindex;
 
     return types::Function::OK;
 }

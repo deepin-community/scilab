@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA - Vincent COUVERT
  * Copyright (C) 2010 - INRIA - Vincent COUVERT
  *
@@ -343,7 +343,7 @@ int CreateIntegerVariable(void *pvApiCtx, int iVar, int integerType, matvar_t *m
         piDims = (int*) MALLOC(matVariable->rank * sizeof(int));
         if (piDims == NULL)
         {
-            Scierror(999, _("%s: No more memory.\n"), "CreateBooleanVariable");
+            Scierror(999, _("%s: No more memory.\n"), "CreateIntegerVariable");
             return FALSE;
         }
         for (i = 0; i < matVariable->rank; i++)

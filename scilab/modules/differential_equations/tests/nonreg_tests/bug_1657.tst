@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2007-2008 - INRIA - Serge STEER <serge.steer@inria.fr>
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -8,8 +8,8 @@
 // <-- Non-regression test for bug 1657 -->
 // NOT FIXED
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=1657
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/1657
 //
 // <-- Short Description -->
 // 'ode' is not reenterable

@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ???? - 2016 - INRIA -  Serge Steer
 //
 // This file is hereby licensed under the terms of the GNU GPL v2.0,
@@ -26,7 +26,7 @@ function [gm,fr] = g_margin(h)
     end
 
     if typeof(h)=="state-space" then
-        h=ss2tf(h)
+        h=clean(ss2tf(h))
     elseif typeof(h)=="zpk" then
         h=zpk2tf(h)
     end

@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2004-2006 - INRIA - Fabrice Leray
  * Copyright (C) 2006 - INRIA - Allan Cornet
  * Copyright (C) 2006 - INRIA - Jean-Baptiste Silvy
@@ -45,11 +45,10 @@ int set_line_style_property(void* _pvCtx, int iObjUID, void* _pvData, int valueT
 
     iLineStyle = (int)((double*)_pvData)[0];
 
-    if (iLineStyle == 0 && getWarningMode())
+    if (iLineStyle < 1 || iLineStyle > 10)
     {
-        sciprint(_("WARNING: %s\n"), _("{0,1} values are equivalent for line_style property."));
-        sciprint(_("WARNING: %s\n"), _("0 will be removed after Scilab 5.4.0."));
-        Sciwarning(_("WARNING: %s\n"), _("Please use 1 instead."));
+        Scierror(999, _("Wrong value for '%s' property: Integer between %d and %d expected.\n"), "line_style", 1, 10);
+        return SET_PROPERTY_ERROR;
     }
 
     return sciSetLineStyle(iObjUID, iLineStyle);

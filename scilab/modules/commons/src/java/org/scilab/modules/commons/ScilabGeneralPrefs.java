@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2012 - Scilab Enterprises - Calixte DENIZET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -60,6 +60,7 @@ public class ScilabGeneralPrefs implements XConfigurationListener {
             ScilabCommons.setieee(ge.code);
             ScilabCommons.setformat(ge.format, ge.width);
             ScilabCommons.setRecursionLimit(ge.recursionLimit);
+            ScilabCommons.setPolynomialDisplay(ge.PolynomialDisplay);
         }
 
         if (e.getModifiedPaths().contains(LANG_PATH)) {
@@ -116,15 +117,17 @@ public class ScilabGeneralPrefs implements XConfigurationListener {
         public String format;
         public int width;
         public int recursionLimit;
+        public int PolynomialDisplay;
 
         private GeneralEnvironment() { }
 
-        @XConfAttribute(attributes = {"fpe", "printing-format", "width", "recursion-limit"})
-        private void set(int fpe, String format, int width, int recursionLimit) {
+        @XConfAttribute(attributes = {"fpe", "printing-format", "width", "recursion-limit","polynomial-display"})
+        private void set(int fpe, String format, int width, int recursionLimit, int PolynomialDisplay) {
             this.code = fpe;
             this.format = format;
             this.width = Math.min(Math.max(0, width), 25);
             this.recursionLimit = recursionLimit;
+            this.PolynomialDisplay = PolynomialDisplay;
         }
     }
 

@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008 - INRIA - Simon LIPP <simon.lipp@scilab.org>
 // Copyright (C) 2010-2011 - DIGITEO - Allan CORNET
 // Copyright (C) 2010 - DIGITEO - Pierre MARECHAL
@@ -15,7 +15,6 @@
 // Simple wrapper around xmltojar
 
 function tbx_build_help(moduletitle, path)
-
     rhs = argn(2);
 
     // Number of input arguments
@@ -64,6 +63,30 @@ function tbx_build_help(moduletitle, path)
     directory_language = basename(path);
     default_language = "en_US"
 
-    xmltojar(path, moduletitle, directory_language, default_language);
+    //try to build help in an other scilab by loading the prebuild tbx
+    tbx_path = fullpath(fullfile(path, "..", ".."));
+    f = listfiles(fullfile(tbx_path, "etc/*.start"));
+    if f <> [] then
+        tmp = tempname();
+        code = [
+            "funcprot(0);"
+            "function ok = add_help_chapter(helptitle,path,modulemode), ok = %t; end"
+            sprintf("exec(""%s"", -1);", f)
+            sprintf("xmltojar(""%s"", ""%s"", ""%s"", ""%s"");", path, moduletitle, directory_language, default_language)
+        ]
 
+        mputl(code, tmp);
+
+        [status, out, err] = scilab(file=tmp);
+        if ~isempty(out) then
+            printf("%s\n", out)
+        end
+
+        if status <> 0 & ~isempty(err) then
+            printf("%s\n", err)
+        end
+    else
+        warning(_(".start file was not found, build of help pages using <scilab:image> tag may failed."));
+        xmltojar(path, moduletitle, directory_language, default_language);
+    end
 endfunction

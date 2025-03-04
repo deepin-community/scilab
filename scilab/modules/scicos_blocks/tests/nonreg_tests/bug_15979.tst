@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2019 - Samuel GOUGEON
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -10,8 +10,8 @@
 //
 // <-- Non-regression test for bug 15979 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/15979
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/15979
 //
 // <-- Short Description -->
 //  * EXPRESSION block: for multi-character powers, only the first character was displayed in
@@ -27,7 +27,7 @@ xcos("SCI/modules/scicos_blocks/tests/nonreg_tests/bug_15979.zcos");
 //  * Double-click on the block to open its parameters interface.
 //  * Press "OK" to validate the existing inputs.
 //  * Check that the display of exponents on its icon is still correct.
-//    Reference display: http://bugzilla.scilab.org/attachment.cgi?id=4905
+//    Reference display: https://gitlab.com/scilab/scilab/uploads/0ddc5b8ef547865f6636e429b3a85542/bug_15979.png
 //    All the multi-char exponents must be correctly displayed on the blocks icons
 //     - literal numbers: "1.5", "2.3", "+10", "10"
 //     - "ab" or "%eps" variable

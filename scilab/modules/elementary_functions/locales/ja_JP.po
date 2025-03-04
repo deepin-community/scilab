@@ -60,12 +60,12 @@ msgid "Invalid index.\n"
 msgstr "添字が間違っています.\n"
 
 #, c-format
-msgid "%s: Wrong value for input argument #%d : Singularity of the function.\n"
+msgid "%s: Wrong value for input argument #%d: Singularity of the function.\n"
 msgstr "%s: 入力引数 #%d の値が間違っています: 関数の特異点.\n"
 
 #, c-format
 msgid ""
-"%s: Warning: Wrong value for input argument #%d : Singularity of the "
+"%s: Warning: Wrong value for input argument #%d: Singularity of the "
 "function.\n"
 msgstr "%s: 警告: 入力引数 #%d の値が間違っています: 関数の特異点.\n"
 
@@ -240,7 +240,7 @@ msgstr ""
 
 #, c-format
 msgid ""
-"%ls: Warning: Wrong value for input argument #%d : Singularity of the "
+"%ls: Warning: Wrong value for input argument #%d: Singularity of the "
 "function.\n"
 msgstr "%ls: 警告: 入力引数 #%d の値が間違っています: 関数の特異点.\n"
 

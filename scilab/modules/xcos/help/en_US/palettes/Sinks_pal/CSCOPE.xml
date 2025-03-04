@@ -28,7 +28,7 @@
             xml:id="CSCOPE" xml:lang="en_US">
     <refnamediv>
         <refname>CSCOPE</refname>
-        <refpurpose>Single Display Scope</refpurpose>
+        <refpurpose>Scope displaying a unique simple or multiplexed input in a single axes</refpurpose>
     </refnamediv>
     <refsection>
         <title>Block Screenshot</title>
@@ -69,10 +69,15 @@
     <refsection id="Description_CSCOPE">
         <title>Description</title>
         <para>
-            The Scope block displays its input with respect to simulation
-            time. Both axes have a common range.  The Scope allows you to adjust
-            the amount of time and the range of input values displayed.
-
+            This scope block displays its input with respect to the simulation  time, in a single
+            graphical axes.
+        </para>
+        <para>
+            If the single input is multiplexed as a matrix, each column is a channel plotted
+            as an independent curve. All curves are plotted in the same axes.
+        </para>
+        <para>
+            The Scope allows you to adjust the amount of time and the range of input values displayed.
         </para>
     </refsection>
 

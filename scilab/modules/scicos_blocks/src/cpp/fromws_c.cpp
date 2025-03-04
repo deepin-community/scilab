@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2015 - Scilab Enterprises - Paul Bignier
  *  Copyright (C) INRIA - METALAU Project <scicos@inria.fr>
  *
@@ -18,18 +18,19 @@
 
 #include "Helpers.hxx"
 
+#include "context.hxx"
+#include "types.hxx"
+#include "double.hxx"
+#include "int.hxx"
+
 extern "C"
 {
-#include "api_scilab.h"
 #include "dynlib_scicos_blocks.h"
 #include "expandPathVariable.h"
 #include "scicos_block4.h"
 #include "scicos_evalhermite.h"
 #include "scicos.h"
 #include "sci_malloc.h"
-#include "h5_fileManagement.h"
-#include "h5_readDataFromFile.h"
-#include "h5_attributeConstants.h"
 
 #include "localization.h"
 
@@ -42,8 +43,6 @@ typedef struct
 {
     int nPoints;
     int Hmat;
-    int Yt;
-    int Yst;
     int cnt1;
     int cnt2;
     int EVindex;
@@ -108,200 +107,104 @@ SCICOS_BLOCKS_IMPEXP void fromws_c(scicos_block* block, int flag)
             /* Init */
 
             /* Convert Scilab code of the variable name to C string */
-
-            /* Path to "TMPDIR/Workspace/" */
-            const char* filePrefix = "TMPDIR/Workspace/";
-            const int prefixSize = static_cast<int>(strlen(filePrefix));
-
-            char FName[100];
+            wchar_t FName[100];
             for (int i = 0; i < Fnlength; ++i)
             {
-                FName[i] = static_cast<char>(block->ipar[1 + i]);
+                FName[i] = static_cast<wchar_t>(block->ipar[1 + i]);
             }
             FName[Fnlength] = '\0';
 
-            char* env = new char[prefixSize + Fnlength + 1];
-            strcpy(env, filePrefix);
-            strcpy(env + prefixSize, FName);
-            env[prefixSize + Fnlength] = '\0';
-
-            char* filename = expandPathVariable(env);
-            delete[] env;
-            hid_t fd = 0, ierr = 0;
-            if (filename)
-            {
-                /* Open tmp file */
-                fd = openHDF5File(filename, 0);
-            }
-            FREE(filename);
-            filename = nullptr;
-
-            if (fd < 0)
+            auto* pIT = symbol::Context::getInstance()->get(symbol::Symbol(FName));
+            if (pIT == nullptr)
             {
                 Coserror(_("The '%s' variable does not exist.\n"), FName);
                 return;
             }
 
-            // Manage version information
-            int iVersion = getSODFormatAttribute(fd);
-            if (iVersion != SOD_FILE_VERSION)
+            if (!pIT->isGenericType())
             {
-                if (iVersion > SOD_FILE_VERSION)
-                {
-                    // Cannot read file with version more recent that me!
-                    Coserror(_("%s: Wrong SOD file format version. Max Expected: %d Found: %d\n"), "fromws_c", SOD_FILE_VERSION, iVersion);
-                    return;
-                }
-            }
-
-            /* Read the variables contained in the file */
-            char* pstNameList[2];
-            int nbVar = getVariableNames(fd, pstNameList);
-            if (nbVar != 2)
-            {
-                Coserror(_("Erroneous saved file.\n"));
+                Coserror(_("The '%s' variable does not have fields.\n"), FName);
                 return;
             }
-            if (strcmp(pstNameList[0], "t") != 0 || strcmp(pstNameList[1], "x") != 0)
+            auto* pGT = pIT->getAs<types::GenericType>();
+
+            types::InternalType* pITTime = nullptr;
+            if(!pGT->extract(L"time", pITTime))
             {
-                Coserror(_("Erroneous saved file.\n"));
+                Coserror(_("The '%s.time' field does not exist.\n"), FName);
+                return;
+            }
+            types::InternalType* pITValues = nullptr;
+            if (!pGT->extract(L"values", pITValues))
+            {
+                Coserror(_("The '%s.values' field does not exist.\n"), FName);
                 return;
             }
 
-            /* Read x */
-            int xSetId = getDataSetIdFromName(fd, pstNameList[1]);
-            int xType = getScilabTypeFromDataSet(xSetId);
-
-            int nPoints, mX, nX = 1;
-            int xDims, xSubType;
-            if ((xType == 1) || (xType == 8))
+            if(!pITTime->isDouble())
             {
-                int* pxDims = nullptr;
-                getDatasetInfo(xSetId, &xSubType, &xDims, pxDims);
-                pxDims = new int[xDims];
-                getDatasetInfo(xSetId, &xSubType, &xDims, pxDims);
-                nPoints = pxDims[0]; /* Number of data  */
-                mX = pxDims[1];      /* First dimension  */
-                if (xDims > 3)
-                {
-                    nX = pxDims[2];  /* Second dimension */
-                }
-                delete[] pxDims;
-                if (xType == 8)
-                {
-                    getDatasetPrecision(xSetId, &xSubType); /* For the integer case, overwrite xSubType */
-                }
+                Coserror(_("The '%s.time' field should be of double type.\n"));
+                return;
             }
-            else
+            auto* pdblTime = pITTime->getAs<types::Double>();
+            if (pdblTime->isComplex())
             {
-                Coserror(_("Invalid variable type.\n"));
-                /*scicos_print(_("Invalid variable type.\n"));
-                set_block_error(-3);*/
-                closeHDF5File(fd);
+                Coserror(_("The '%s.time' field should not be complex.\n"));
+                return;
+            }
+            int nPoints = pdblTime->getSize(); 
+
+            if((ytype == SCSREAL_N || ytype == SCSCOMPLEX_N) && !pITValues->isDouble())
+            {
+                Coserror(_("The '%s.values' field should have double type.\n"));
+                return;
+            }
+            else if (ytype == SCSINT8_N && !pITValues->isInt8())
+            {
+                Coserror(_("The '%s.values' field should have int8 type.\n"));
+                return;
+            }
+            else if (ytype == SCSINT16_N && !pITValues->isInt16())
+            {
+                Coserror(_("The '%s.values' field should have int16 type.\n"));
+                return;
+            }
+            else if (ytype == SCSINT32_N && !pITValues->isInt32())
+            {
+                Coserror(_("The '%s.values' field should have int32 type.\n"));
+                return;
+            }
+            else if (ytype == SCSUINT8_N && !pITValues->isUInt8())
+            {
+                Coserror(_("The '%s.values' field should have uint8 type.\n"));
+                return;
+            }
+            else if (ytype == SCSUINT16_N && !pITValues->isUInt16())
+            {
+                Coserror(_("The '%s.values' field should have uint16 type.\n"));
+                return;
+            }
+            else if (ytype == SCSUINT32_N && !pITValues->isUInt32())
+            {
+                Coserror(_("The '%s.values' field should have uint32 type.\n"));
                 return;
             }
 
-            /* Check dimension for output port and variable */
-            if ((mX != my) || (nX != ny))
+            auto* pGTValues = pITValues->getAs<types::GenericType>();
+            int* dims = pGTValues->getDimsArray();
+            if (nPoints != dims[0])
             {
-                Coserror(_("Data dimensions are inconsistent:\n Variable size=[%d,%d] \nBlock output size=[%d,%d].\n"), mX, nX, my, ny);
-                /*set_block_error(-3);*/
-                closeHDF5File(fd);
+                Coserror(_("The '%s.time' and '%s.values' fields does not have the same first dimension (resp. %d and %d length).\n"), nPoints, dims[0]);
                 return;
             }
-
-            /* Check variable data type and output block data type */
-            if (xType == 1)
+            int mX = dims[1];
+            int nX = 1;
+            if (pGTValues->getDims() > 2)
+                nX = dims[2];
+            if (my != mX || ny != nX)
             {
-                /* real/complex cases */
-                switch (xSubType)
-                {
-                    case 0:
-                        if (ytype != 10)
-                        {
-                            Coserror(_("Output should be of Real type.\n"));
-                            /*set_block_error(-3);*/
-                            closeHDF5File(fd);
-                            return;
-                        }
-                        break;
-
-                    case 1:
-                        if (ytype != 11)
-                        {
-                            Coserror(_("Output should be of complex type.\n"));
-                            /*set_block_error(-3);*/
-                            closeHDF5File(fd);
-                            return;
-                        }
-                        break;
-                }
-            }
-            else if (xType == 8)
-            {
-                /* int cases */
-                switch (xSubType)
-                {
-                    case SCI_INT8:
-                        if (ytype != 81)
-                        {
-                            Coserror(_("Output should be of int8 type.\n"));
-                            set_block_error(-3);
-                            closeHDF5File(fd);
-                            return;
-                        }
-                        break;
-
-                    case SCI_INT16:
-                        if (ytype != 82)
-                        {
-                            Coserror(_("Output should be of int16 type.\n"));
-                            /*set_block_error(-3);*/
-                            closeHDF5File(fd);
-                            return;
-                        }
-                        break;
-
-                    case SCI_INT32:
-                        if (ytype != 84)
-                        {
-                            Coserror(_("Output should be of int32 type.\n"));
-                            /*set_block_error(-3);*/
-                            closeHDF5File(fd);
-                            return;
-                        }
-                        break;
-
-                    case SCI_UINT8:
-                        if (ytype != 811)
-                        {
-                            Coserror(_("Output should be of uint8 type.\n"));
-                            /*set_block_error(-3);*/
-                            closeHDF5File(fd);
-                            return;
-                        }
-                        break;
-
-                    case SCI_UINT16:
-                        if (ytype != 812)
-                        {
-                            Coserror(_("Output should be of uint16 type.\n"));
-                            /*set_block_error(-3);*/
-                            closeHDF5File(fd);
-                            return;
-                        }
-                        break;
-
-                    case SCI_UINT32:
-                        if (ytype != 814)
-                        {
-                            Coserror(_("Output should be of uint32 type.\n"));
-                            /*set_block_error(-3);*/
-                            closeHDF5File(fd);
-                            return;
-                        }
-                        break;
-                }
+                Coserror(_("Data dimensions are inconsistent:\n Variable size=[%d,%d] \n Block output size=[%d,%d].\n"), mX, nX, my, ny);
+                return;
             }
 
             /* Allocation of the work structure of that block */
@@ -312,71 +215,88 @@ SCICOS_BLOCKS_IMPEXP void fromws_c(scicos_block* block, int flag)
             ptr->workt = nullptr;
             ptr->work = nullptr;
 
-            if (xType == 1)
+            if (ytype == SCSREAL_N)
             {
-                /* real/complex case */
-                switch (xSubType)
-                {
-                    case 0 : /* Real */
-                        ptr->work = CALLOC((nPoints + 1) * mX * nX, sizeof(double));
-                        ptr_d = (double*) ptr->work;
-                        ierr = readDoubleMatrix(xSetId, ptr_d);
-                        break;
-                    case 1 :  /* Complex */
-                        ptr->work = CALLOC((nPoints + 1) * mX * nX * 2, sizeof(double));
-                        ptr_d = (double*) ptr->work;
-                        ierr = readDoubleComplexMatrix(xSetId, ptr_d, ptr_d + nPoints * mX * nX);
-                        break;
-                }
+                /* Real */
+                types::Double* pdblValues = pGTValues->getAs<types::Double>();
+
+                ptr->work = MALLOC((nPoints + 1) * mX * nX * sizeof(double));
+                ptr_d = (double*) ptr->work;
+                double* pDataReal = pdblValues->getReal();
+                for (size_t j = 0; j < size_t(nPoints) * size_t(mX) * size_t(nX); ++j)
+                    ptr_d[j] = pDataReal[j];
+                ptr_d[nPoints * mX * nX] = 0;
             }
-            else if (xType == 8)
+            else if (ytype == SCSCOMPLEX_N)
             {
-                /* int case */
-                switch (xSubType)
+                /* Complex */
+                auto* pdblValues = pGTValues->getAs<types::Double>();
+                
+                ptr->work = MALLOC((nPoints + 1) * mX * nX * 2 * sizeof(double));
+                ptr_d = (double*) ptr->work;
+                std::memcpy(ptr_d, pdblValues->getReal(), nPoints * mX * nX * sizeof(double));
+                ptr_d[nPoints * mX * nX] = 0;
+                if (pdblValues->isComplex())
                 {
-                    case SCI_INT8 :
-                        ptr->work = CALLOC((nPoints + 1) * mX * nX, sizeof(char));
-                        ptr_c = (char*)ptr->work;
-                        ierr = readInteger8Matrix(xSetId, ptr_c);
-                        break;
-                    case SCI_INT16 :
-                        ptr->work = CALLOC((nPoints + 1) * mX * nX, sizeof(short int));
-                        ptr_s = (short int*) ptr->work;
-                        ierr = readInteger16Matrix(xSetId, ptr_s);
-                        break;
-                    case SCI_INT32 :
-                        ptr->work = CALLOC((nPoints + 1) * mX * nX, sizeof(int));
-                        ptr_l = (int*) ptr->work;
-                        ierr = readInteger32Matrix(xSetId, ptr_l);
-                        break;
-                    case SCI_UINT8 :
-                        ptr->work = CALLOC((nPoints + 1) * mX * nX, sizeof(unsigned char));
-                        ptr_uc = (unsigned char*) ptr->work;
-                        ierr = readUnsignedInteger8Matrix(xSetId, ptr_uc);
-                        break;
-                    case SCI_UINT16 :
-                        ptr->work = CALLOC((nPoints + 1) * mX * nX, sizeof(unsigned short int));
-                        ptr_us = (unsigned short int*) ptr->work;
-                        ierr = readUnsignedInteger16Matrix(xSetId, ptr_us);
-                        break;
-                    case SCI_UINT32 :
-                        ptr->work = CALLOC((nPoints + 1) * mX * nX, sizeof(unsigned int));
-                        ptr_ul = (unsigned int*) ptr->work;
-                        ierr = readUnsignedInteger32Matrix(xSetId, ptr_ul);
-                        break;
+                    std::memcpy(ptr_d + nPoints * mX * nX + 1, pdblValues->getImg(), nPoints * mX * nX * sizeof(double));
                 }
+                else
+                {
+                    std::memset(ptr_d + nPoints * mX * nX + 1, 0, nPoints * mX * nX * sizeof(double));
+                }
+                ptr_d[nPoints * mX * nX * 2 + 1] = 0;
             }
-            if (ierr != 0)
+            else if (ytype == SCSINT8_N)
             {
-                Coserror(_("Cannot read the values field.\n"));
-                FREE(ptr->work);
-                delete[] ptr;
-                closeHDF5File(fd);
-                return;
+                /* int8 case */
+                ptr->work = CALLOC((nPoints + 1) * mX * nX, sizeof(char));
+                ptr_c = (char*)ptr->work;
+                std::memcpy(ptr_c, pGTValues->getAs<types::Int8>(), nPoints * mX * nX * sizeof(char));
+                ptr_c[nPoints * mX * nX] = 0;
+            }
+            else if (ytype == SCSINT16_N)
+            {
+                /* int16 case */
+                ptr->work = CALLOC((nPoints + 1) * mX * nX, sizeof(short int));
+                ptr_s = (short int*) ptr->work;
+                std::memcpy(ptr_s, pGTValues->getAs<types::Int16>(), nPoints * mX * nX * sizeof(short int));
+                ptr_s[nPoints * mX * nX] = 0;
+            }
+            else if (ytype == SCSINT32_N)
+            {
+                /* int32 case */
+                ptr->work = CALLOC((nPoints + 1) * mX * nX, sizeof(int));
+                ptr_l = (int*) ptr->work;
+                std::memcpy(ptr_l, pGTValues->getAs<types::Int32>(), nPoints * mX * nX * sizeof(int));
+                ptr_l[nPoints * mX * nX] = 0;
+            }
+            else if (ytype == SCSUINT8_N)
+            {
+                /* uint8 case */
+                ptr->work = CALLOC((nPoints + 1) * mX * nX, sizeof(unsigned char));
+                ptr_uc = (unsigned char*) ptr->work;
+                std::memcpy(ptr_uc, pGTValues->getAs<types::UInt8>(), nPoints * mX * nX * sizeof(unsigned char));
+                ptr_uc[nPoints * mX * nX] = 0;
+            }
+            else if (ytype == SCSUINT16_N)
+            {
+                /* uint16 case */
+                ptr->work = CALLOC((nPoints + 1) * mX * nX, sizeof(unsigned short int));
+                ptr_us = (unsigned short int*) ptr->work;
+                std::memcpy(ptr_us, pGTValues->getAs<types::UInt16>(), nPoints * mX * nX * sizeof(unsigned short int));
+                ptr_us[nPoints * mX * nX] = 0;
+            }
+            else if (ytype == SCSUINT32_N)
+            {
+                /* uint32 case */
+                ptr->work = CALLOC((nPoints + 1) * mX * nX, sizeof(unsigned int));
+                ptr_ul = (unsigned int*) ptr->work;
+                std::memcpy(ptr_ul, pGTValues->getAs<types::UInt32>(), nPoints * mX * nX * sizeof(unsigned short int));
+                ptr_ul[nPoints * mX * nX] = 0;
             }
 
             /* Check Hmat */
-            if (xDims > 2)
+            if (nX > 1)
             {
                 ptr->Hmat = 1;
             }
@@ -385,63 +305,12 @@ SCICOS_BLOCKS_IMPEXP void fromws_c(scicos_block* block, int flag)
                 ptr->Hmat = 0;
             }
 
-            /* Read t */
-            int tSetId = getDataSetIdFromName(fd, pstNameList[0]);
-            int tType = getScilabTypeFromDataSet(tSetId);
-            if (tType != 1)
-            {
-                Coserror(_("The Time vector type is not ""double"".\n"));
-                set_block_error(-3);
-                *work = nullptr;
-                FREE(ptr->work);
-                delete[] ptr;
-                closeHDF5File(fd);
-                return;
-            }
-
-            int tDims, tComplex, *ptDims = nullptr;
-            getDatasetInfo(tSetId, &tComplex, &tDims, ptDims);
-            ptDims = new int[tDims];
-            getDatasetInfo(tSetId, &tComplex, &tDims, ptDims);
-            if (tComplex != 0)
-            {
-                Coserror(_("The Time vector type is complex.\n"));
-                set_block_error(-3);
-                *work = nullptr;
-                FREE(ptr->work);
-                delete[] ptr;
-                delete[] ptDims;
-                closeHDF5File(fd);
-                return;
-            }
-            if (nPoints != ptDims[0])
-            {
-                Coserror(_("The Time vector has a wrong size, expecting [%d, %d] and getting [%d, %d].\n"), nPoints, 1, ptDims[0], ptDims[1]);
-                /*set_block_error(-3);*/
-                *work = nullptr;
-                FREE(ptr->work);
-                delete[] ptr;
-                delete[] ptDims;
-                closeHDF5File(fd);
-                return;
-            }
-            delete[] ptDims;
-
             ptr->workt = new double[nPoints + 1];
             ptr_T = (double*) ptr->workt;
-            ierr = readDoubleMatrix(tSetId, ptr_T); /* Read t data */
-            if (ierr != 0)
-            {
-                Coserror(_("Cannot read the time field.\n"));
-                delete[] ptr->workt;
-                FREE(ptr->work);
-                delete[] ptr;
-                closeHDF5File(fd);
-                return;
-            }
-
-            /* Close the file */
-            closeHDF5File(fd);
+            double* pTimeReal = pITTime->getAs<types::Double>()->getReal();
+            for (size_t j = 0; j < size_t(nPoints); ++j)
+                ptr_T[j] = pTimeReal[j];
+            ptr_T[nPoints] = 0;
 
             /*================================*/
             /* Check for an increasing time data */
@@ -450,7 +319,6 @@ SCICOS_BLOCKS_IMPEXP void fromws_c(scicos_block* block, int flag)
                 if (ptr_T[j] > ptr_T[j + 1])
                 {
                     Coserror(_("The time vector should be an increasing vector.\n"));
-                    /*set_block_error(-3);*/
                     *work = nullptr;
                     delete[] ptr->workt;
                     FREE(ptr->work);
@@ -459,10 +327,10 @@ SCICOS_BLOCKS_IMPEXP void fromws_c(scicos_block* block, int flag)
                 }
             }
             /*=================================*/
-            if ((Method > 1) && (xType == 1) && (!ptr->Hmat))
+            if ((Method > 1) && (ytype == SCSREAL_N || ytype == SCSCOMPLEX_N) && (!ptr->Hmat))
             {
                 /* double or complex */
-                if (xSubType == 0) /* real */
+                if (ytype == SCSREAL_N) /* real */
                 {
                     ptr->D = new double[nPoints * mX];
                 }
@@ -517,7 +385,7 @@ SCICOS_BLOCKS_IMPEXP void fromws_c(scicos_block* block, int flag)
                     }
                 }
 
-                if (xSubType == 1)
+                if (ytype == SCSCOMPLEX_N)
                 {
                     /* imag part */
                     for (int j = 0; j < mX; ++j)
@@ -576,8 +444,6 @@ SCICOS_BLOCKS_IMPEXP void fromws_c(scicos_block* block, int flag)
                 }
             }
             ptr->nPoints = nPoints;
-            ptr->Yt = xType;
-            ptr->Yst = xSubType;
             ptr->cnt1 = cnt1;
             ptr->cnt2 = cnt2;
             ptr->EVindex = 0;
@@ -699,243 +565,235 @@ SCICOS_BLOCKS_IMPEXP void fromws_c(scicos_block* block, int flag)
             {
                 for (int j = 0; j < my * ny; ++j)
                 {
-                    if (ptr->Yt == 1)
+                    if (ytype == SCSREAL_N)
                     {
-                        if (ptr->Yst == 0)
-                        {
-                            /* real case */
-                            y_d = GetRealOutPortPtrs(block, 1);
-                            ptr_d = (double*) ptr->work;
+                        /* real case */
+                        y_d = GetRealOutPortPtrs(block, 1);
+                        ptr_d = (double*) ptr->work;
 
-                            if (inow > nPoints)
+                        if (inow > nPoints)
+                        {
+                            if (OutEnd == 0)
                             {
-                                if (OutEnd == 0)
-                                {
-                                    y_d[j] = 0; /* Outputs set to zero */
-                                }
-                                else if (OutEnd == 1)
-                                {
-                                    y_d[j] = ptr_d[(nPoints - 1) * ny * my + j]; /* Hold outputs at the end */
-                                }
+                                y_d[j] = 0; /* Outputs set to zero */
                             }
-                            else
+                            else if (OutEnd == 1)
                             {
-                                if (inow < 0)
-                                {
-                                    y_d[j] = 0;
-                                }
-                                else
-                                {
-                                    y_d[j] = ptr_d[inow * ny * my + j];
-                                }
+                                y_d[j] = ptr_d[(nPoints - 1) * ny * my + j]; /* Hold outputs at the end */
                             }
                         }
                         else
                         {
-                            /* complexe case */
-                            y_d = GetRealOutPortPtrs(block, 1);
-                            y_cd = GetImagOutPortPtrs(block, 1);
-                            ptr_d = (double*) ptr->work;
-
-                            if (inow > nPoints)
+                            if (inow < 0)
                             {
-                                if (OutEnd == 0)
-                                {
-                                    y_d[j] = 0; /* Outputs set to zero */
-                                    y_cd[j] = 0; /* Outputs set to zero */
-                                }
-                                else if (OutEnd == 1)
-                                {
-                                    y_d[j] = ptr_d[(nPoints - 1) * ny * my + j]; /* Hold outputs at the end */
-                                    y_cd[j] = ptr_d[nPoints * my * ny + (nPoints - 1) * ny * my + j]; /* Hold outputs at the end */
-                                }
+                                y_d[j] = 0;
                             }
                             else
                             {
-                                if (inow < 0)
-                                {
-                                    y_d[j] = 0; /* Outputs set to zero */
-                                    y_cd[j] = 0; /* Outputs set to zero */
-                                }
-                                else
-                                {
-                                    y_d[j] = ptr_d[inow * ny * my + j];
-                                    y_cd[j] = ptr_d[nPoints * my * ny + inow * ny * my + j];
-                                }
+                                y_d[j] = ptr_d[inow * ny * my + j];
                             }
                         }
                     }
-                    else if (ptr->Yt == 8)
+                    else if (ytype == SCSCOMPLEX_N)
                     {
-                        switch (ptr->Yst)
+                        /* complex case */
+                        y_d = GetRealOutPortPtrs(block, 1);
+                        y_cd = GetImagOutPortPtrs(block, 1);
+                        ptr_d = (double*) ptr->work;
+
+                        if (inow > nPoints)
                         {
-                            case 1:
-                                /* --------------------- int8 char  ----------------------------*/
-                                y_c = Getint8OutPortPtrs(block, 1);
-                                ptr_c = (char*) ptr->work;
-                                if (inow > nPoints)
-                                {
-                                    if (OutEnd == 0)
-                                    {
-                                        y_c[j] = 0; /* Outputs set to zero */
-                                    }
-                                    else if (OutEnd == 1)
-                                    {
-                                        y_c[j] = ptr_c[(nPoints - 1) * ny * my + j]; /* Hold outputs at the end */
-                                    }
-                                }
-                                else
-                                {
-                                    if (inow < 0)
-                                    {
-                                        y_c[j] = 0;
-                                    }
-                                    else
-                                    {
-                                        y_c[j] = ptr_c[inow * ny * my + j];
-                                    }
-                                }
-                                break;
-
-                            case 2:
-                                /* --------------------- int16 short int ---------------------*/
-                                y_s = Getint16OutPortPtrs(block, 1);
-                                ptr_s = (short int*) ptr->work;
-                                if (inow > nPoints)
-                                {
-                                    if (OutEnd == 0)
-                                    {
-                                        y_s[j] = 0; /* Outputs set to zero */
-                                    }
-                                    else if (OutEnd == 1)
-                                    {
-                                        y_s[j] = ptr_s[(nPoints - 1) * ny * my + j]; /* Hold outputs at the end */
-                                    }
-                                }
-                                else
-                                {
-                                    if (inow < 0)
-                                    {
-                                        y_s[j] = 0;
-                                    }
-                                    else
-                                    {
-                                        y_s[j] = ptr_s[inow * ny * my + j];
-                                    }
-                                }
-                                break;
-
-                            case 4:
-                                /* --------------------- int32 long ---------------------*/
-                                y_l = Getint32OutPortPtrs(block, 1);
-                                ptr_l = (int*) ptr->work;
-                                if (inow > nPoints)
-                                {
-                                    if (OutEnd == 0)
-                                    {
-                                        y_l[j] = 0; /* Outputs set to zero */
-                                    }
-                                    else if (OutEnd == 1)
-                                    {
-                                        y_l[j] = ptr_l[(nPoints - 1) * ny * my + j]; /* Hold outputs at the end */
-                                    }
-                                }
-                                else
-                                {
-                                    if (inow < 0)
-                                    {
-                                        y_l[j] = 0;
-                                    }
-                                    else
-                                    {
-                                        y_l[j] = ptr_l[inow * ny * my + j];
-                                    }
-                                }
-                                break;
-
-                            case 11:
-                                /*--------------------- uint8 uchar ---------------------*/
-                                y_uc = Getuint8OutPortPtrs(block, 1);
-                                ptr_uc = (unsigned char*) ptr->work;
-                                if (inow > nPoints)
-                                {
-                                    if (OutEnd == 0)
-                                    {
-                                        y_uc[j] = 0; /* Outputs set to zero */
-                                    }
-                                    else if (OutEnd == 1)
-                                    {
-                                        y_uc[j] = ptr_uc[(nPoints - 1) * ny * my + j]; /* Hold outputs at the end */
-                                    }
-                                }
-                                else
-                                {
-                                    if (inow < 0)
-                                    {
-                                        y_uc[j] = 0;
-                                    }
-                                    else
-                                    {
-                                        y_uc[j] = ptr_uc[inow * ny * my + j];
-                                    }
-                                }
-                                break;
-
-                            case 12:
-                                /* --------------------- uint16 ushort ---------------------*/
-                                y_us = Getuint16OutPortPtrs(block, 1);
-                                ptr_us = (unsigned short int*) ptr->work;
-                                if (inow > nPoints)
-                                {
-                                    if (OutEnd == 0)
-                                    {
-                                        y_us[j] = 0; /* Outputs set to zero */
-                                    }
-                                    else if (OutEnd == 1)
-                                    {
-                                        y_us[j] = ptr_us[(nPoints - 1) * ny * my + j]; /* Hold outputs at the end */
-                                    }
-                                }
-                                else
-                                {
-                                    if (inow < 0)
-                                    {
-                                        y_us[j] = 0;
-                                    }
-                                    else
-                                    {
-                                        y_us[j] = ptr_us[inow * ny * my + j];
-                                    }
-                                }
-                                break;
-
-                            case 14:
-                                /* --------------------- uint32 ulong ---------------------*/
-                                y_ul = Getuint32OutPortPtrs(block, 1);
-                                ptr_ul = (unsigned int*) ptr->work;
-                                if (inow > nPoints)
-                                {
-                                    if (OutEnd == 0)
-                                    {
-                                        y_ul[j] = 0; /* Outputs set to zero */
-                                    }
-                                    else if (OutEnd == 1)
-                                    {
-                                        y_ul[j] = ptr_ul[(nPoints - 1) * ny * my + j]; /* Hold outputs at the end */
-                                    }
-                                }
-                                else
-                                {
-                                    if (inow < 0)
-                                    {
-                                        y_ul[j] = 0;
-                                    }
-                                    else
-                                    {
-                                        y_ul[j] = ptr_ul[inow * ny * my + j];
-                                    }
-                                }
-                                break;
+                            if (OutEnd == 0)
+                            {
+                                y_d[j] = 0; /* Outputs set to zero */
+                                y_cd[j] = 0; /* Outputs set to zero */
+                            }
+                            else if (OutEnd == 1)
+                            {
+                                y_d[j] = ptr_d[(nPoints - 1) * ny * my + j]; /* Hold outputs at the end */
+                                y_cd[j] = ptr_d[nPoints * my * ny + (nPoints - 1) * ny * my + j]; /* Hold outputs at the end */
+                            }
+                        }
+                        else
+                        {
+                            if (inow < 0)
+                            {
+                                y_d[j] = 0; /* Outputs set to zero */
+                                y_cd[j] = 0; /* Outputs set to zero */
+                            }
+                            else
+                            {
+                                y_d[j] = ptr_d[inow * ny * my + j];
+                                y_cd[j] = ptr_d[nPoints * my * ny + inow * ny * my + j];
+                            }
+                        }
+                    }
+                    else if (ytype == SCSINT8_N)
+                    {
+                        /* --------------------- int8 char  ----------------------------*/
+                        y_c = Getint8OutPortPtrs(block, 1);
+                        ptr_c = (char*) ptr->work;
+                        if (inow > nPoints)
+                        {
+                            if (OutEnd == 0)
+                            {
+                                y_c[j] = 0; /* Outputs set to zero */
+                            }
+                            else if (OutEnd == 1)
+                            {
+                                y_c[j] = ptr_c[(nPoints - 1) * ny * my + j]; /* Hold outputs at the end */
+                            }
+                        }
+                        else
+                        {
+                            if (inow < 0)
+                            {
+                                y_c[j] = 0;
+                            }
+                            else
+                            {
+                                y_c[j] = ptr_c[inow * ny * my + j];
+                            }
+                        }
+                    }
+                    else if (ytype == SCSINT16_N)
+                    {
+                        /* --------------------- int16 short int ---------------------*/
+                        y_s = Getint16OutPortPtrs(block, 1);
+                        ptr_s = (short int*) ptr->work;
+                        if (inow > nPoints)
+                        {
+                            if (OutEnd == 0)
+                            {
+                                y_s[j] = 0; /* Outputs set to zero */
+                            }
+                            else if (OutEnd == 1)
+                            {
+                                y_s[j] = ptr_s[(nPoints - 1) * ny * my + j]; /* Hold outputs at the end */
+                            }
+                        }
+                        else
+                        {
+                            if (inow < 0)
+                            {
+                                y_s[j] = 0;
+                            }
+                            else
+                            {
+                                y_s[j] = ptr_s[inow * ny * my + j];
+                            }
+                        }
+                    }
+                    else if (ytype == SCSINT32_N)
+                    {
+                        /* --------------------- int32 long ---------------------*/
+                        y_l = Getint32OutPortPtrs(block, 1);
+                        ptr_l = (int*) ptr->work;
+                        if (inow > nPoints)
+                        {
+                            if (OutEnd == 0)
+                            {
+                                y_l[j] = 0; /* Outputs set to zero */
+                            }
+                            else if (OutEnd == 1)
+                            {
+                                y_l[j] = ptr_l[(nPoints - 1) * ny * my + j]; /* Hold outputs at the end */
+                            }
+                        }
+                        else
+                        {
+                            if (inow < 0)
+                            {
+                                y_l[j] = 0;
+                            }
+                            else
+                            {
+                                y_l[j] = ptr_l[inow * ny * my + j];
+                            }
+                        }
+                    }
+                    else if (ytype == SCSUINT8_N)
+                    {
+                        /*--------------------- uint8 uchar ---------------------*/
+                        y_uc = Getuint8OutPortPtrs(block, 1);
+                        ptr_uc = (unsigned char*) ptr->work;
+                        if (inow > nPoints)
+                        {
+                            if (OutEnd == 0)
+                            {
+                                y_uc[j] = 0; /* Outputs set to zero */
+                            }
+                            else if (OutEnd == 1)
+                            {
+                                y_uc[j] = ptr_uc[(nPoints - 1) * ny * my + j]; /* Hold outputs at the end */
+                            }
+                        }
+                        else
+                        {
+                            if (inow < 0)
+                            {
+                                y_uc[j] = 0;
+                            }
+                            else
+                            {
+                                y_uc[j] = ptr_uc[inow * ny * my + j];
+                            }
+                        }
+                    }
+                    else if (ytype == SCSUINT16_N)
+                    {
+                        /* --------------------- uint16 ushort ---------------------*/
+                        y_us = Getuint16OutPortPtrs(block, 1);
+                        ptr_us = (unsigned short int*) ptr->work;
+                        if (inow > nPoints)
+                        {
+                            if (OutEnd == 0)
+                            {
+                                y_us[j] = 0; /* Outputs set to zero */
+                            }
+                            else if (OutEnd == 1)
+                            {
+                                y_us[j] = ptr_us[(nPoints - 1) * ny * my + j]; /* Hold outputs at the end */
+                            }
+                        }
+                        else
+                        {
+                            if (inow < 0)
+                            {
+                                y_us[j] = 0;
+                            }
+                            else
+                            {
+                                y_us[j] = ptr_us[inow * ny * my + j];
+                            }
+                        }
+                    }
+                    else if (ytype == SCSINT32_N)
+                    {
+                        /* --------------------- uint32 ulong ---------------------*/
+                        y_ul = Getuint32OutPortPtrs(block, 1);
+                        ptr_ul = (unsigned int*) ptr->work;
+                        if (inow > nPoints)
+                        {
+                            if (OutEnd == 0)
+                            {
+                                y_ul[j] = 0; /* Outputs set to zero */
+                            }
+                            else if (OutEnd == 1)
+                            {
+                                y_ul[j] = ptr_ul[(nPoints - 1) * ny * my + j]; /* Hold outputs at the end */
+                            }
+                        }
+                        else
+                        {
+                            if (inow < 0)
+                            {
+                                y_ul[j] = 0;
+                            }
+                            else
+                            {
+                                y_ul[j] = ptr_ul[inow * ny * my + j];
+                            }
                         }
                     }
                 } /* for j loop */
@@ -947,347 +805,346 @@ SCICOS_BLOCKS_IMPEXP void fromws_c(scicos_block* block, int flag)
                 for (int j = 0; j < my; ++j)
                 {
                     double y1, y2, d1, d2, h, dh, ddh, dddh;
-                    if (ptr->Yt == 1)
+                    if (ytype == SCSREAL_N || ytype == SCSCOMPLEX_N)
                     {
-                        if ((ptr->Yst == 0) || (ptr->Yst == 1))
-                        {
-                            /*  If real or complex*/
-                            y_d = GetRealOutPortPtrs(block, 1);
-                            ptr_d = (double*) ptr->work;
-                            ptr_D = (double*) ptr->D;
+                        /*  If real or complex*/
+                        y_d = GetRealOutPortPtrs(block, 1);
+                        ptr_d = (double*) ptr->work;
+                        ptr_D = (double*) ptr->D;
 
-                            if (inow > nPoints)
+                        if (inow > nPoints)
+                        {
+                            if (OutEnd == 0)
                             {
-                                if (OutEnd == 0)
-                                {
-                                    y_d[j] = 0.0; /* Outputs set to zero */
-                                }
-                                else if (OutEnd == 1)
-                                {
-                                    y_d[j] = ptr_d[nPoints - 1 + (j) * nPoints]; /* Hold outputs at the end */
-                                }
+                                y_d[j] = 0.0; /* Outputs set to zero */
                             }
-                            else if (Method == 0)
+                            else if (OutEnd == 1)
                             {
-                                if (inow < 0)
-                                {
-                                    y_d[j] = 0.0;
-                                }
-                                else
-                                {
-                                    y_d[j] = ptr_d[inow + (j) * nPoints];
-                                }
-                            }
-                            else if (Method == 1)
-                            {
-                                if (inow < 0)
-                                {
-                                    inow = 0;
-                                }
-                                t1 = ptr->workt[inow];
-                                t2 = ptr->workt[inow + 1];
-                                y1 = ptr_d[inow + j * nPoints];
-                                y2 = ptr_d[inow + 1 + j * nPoints];
-                                y_d[j] = (y2 - y1) * (t - t1) / (t2 - t1) + y1;
-                            }
-                            else if (Method >= 2)
-                            {
-                                if (inow < 0)
-                                {
-                                    inow = 0;
-                                }
-                                t1 = ptr->workt[inow];
-                                t2 = ptr->workt[inow + 1];
-                                y1 = ptr_d[inow + j * nPoints];
-                                y2 = ptr_d[inow + 1 + j * nPoints];
-                                d1 = ptr_D[inow + j * nPoints];
-                                d2 = ptr_D[inow + 1 + j * nPoints];
-                                scicos_evalhermite(&t, &t1, &t2, &y1, &y2, &d1, &d2, &h, &dh, &ddh, &dddh, &inow);
-                                y_d[j] = h;
+                                y_d[j] = ptr_d[nPoints - 1 + (j) * nPoints]; /* Hold outputs at the end */
                             }
                         }
-                        if (ptr->Yst == 1)
+                        else if (Method == 0)
                         {
-                            /*  -------------- complex ----------------------*/
-                            y_cd = GetImagOutPortPtrs(block, 1);
-                            if (inow > nPoints)
+                            if (inow < 0)
                             {
-                                if (OutEnd == 0)
-                                {
-                                    y_cd[j] = 0.0; /* Outputs set to zero*/
-                                }
-                                else if (OutEnd == 1)
-                                {
-                                    y_cd[j] = ptr_d[nPoints * my + nPoints - 1 + (j) * nPoints]; // Hold outputs at the end
-                                }
+                                y_d[j] = 0.0;
                             }
-                            else if (Method == 0)
+                            else
                             {
-                                if (inow < 0)
-                                {
-                                    y_cd[j] = 0.0; /* Outputs set to zero */
-                                }
-                                else
-                                {
-                                    y_cd[j] = ptr_d[nPoints * my + inow + (j) * nPoints];
-                                }
+                                y_d[j] = ptr_d[inow + (j) * nPoints];
                             }
-                            else if (Method == 1)
+                        }
+                        else if (Method == 1)
+                        {
+                            if (inow < 0)
                             {
-                                if (inow < 0)
-                                {
-                                    inow = 0;
-                                }
-                                /* Extrapolation for 0<t<X(0) */
-                                t1 = ptr->workt[inow];
-                                t2 = ptr->workt[inow + 1];
-                                y1 = ptr_d[nPoints * my + inow + j * nPoints];
-                                y2 = ptr_d[nPoints * my + inow + 1 + j * nPoints];
-                                y_cd[j] = (y2 - y1) * (t - t1) / (t2 - t1) + y1;
+                                inow = 0;
                             }
-                            else if (Method >= 2)
+                            t1 = ptr->workt[inow];
+                            t2 = ptr->workt[inow + 1];
+                            y1 = ptr_d[inow + j * nPoints];
+                            y2 = ptr_d[inow + 1 + j * nPoints];
+                            y_d[j] = (y2 - y1) * (t - t1) / (t2 - t1) + y1;
+                        }
+                        else if (Method >= 2)
+                        {
+                            if (inow < 0)
                             {
-                                if (inow < 0)
-                                {
-                                    inow = 0;
-                                }
-                                t1 = ptr->workt[inow];
-                                t2 = ptr->workt[inow + 1];
-                                y1 = ptr_d[inow + j * nPoints + nPoints];
-                                y2 = ptr_d[inow + 1 + j * nPoints + nPoints];
-                                d1 = ptr_D[inow + j * nPoints + nPoints];
-                                d2 = ptr_D[inow + 1 + j * nPoints + nPoints];
-                                scicos_evalhermite(&t, &t1, &t2, &y1, &y2, &d1, &d2, &h, &dh, &ddh, &dddh, &inow);
-                                y_cd[j] = h;
+                                inow = 0;
                             }
+                            t1 = ptr->workt[inow];
+                            t2 = ptr->workt[inow + 1];
+                            y1 = ptr_d[inow + j * nPoints];
+                            y2 = ptr_d[inow + 1 + j * nPoints];
+                            d1 = ptr_D[inow + j * nPoints];
+                            d2 = ptr_D[inow + 1 + j * nPoints];
+                            scicos_evalhermite(&t, &t1, &t2, &y1, &y2, &d1, &d2, &h, &dh, &ddh, &dddh, &inow);
+                            y_d[j] = h;
                         }
                     }
-                    else if (ptr->Yt == 8)
+                    if (ytype == SCSCOMPLEX_N)
                     {
-                        switch (ptr->Yst)
+                        /*  -------------- complex ----------------------*/
+                        y_cd = GetImagOutPortPtrs(block, 1);
+                        if (inow > nPoints)
                         {
-                            case 1: /* --------------------- int8 char  ----------------------------*/
-                                y_c = Getint8OutPortPtrs(block, 1);
-                                ptr_c = (char*) ptr->work;
-                                /* y_c[j]=ptr_c[inow+(j)*nPoints]; */
-                                if (inow > nPoints)
-                                {
-                                    if (OutEnd == 0)
-                                    {
-                                        y_c[j] = 0; /* Outputs set to zero */
-                                    }
-                                    else if (OutEnd == 1)
-                                    {
-                                        y_c[j] = ptr_c[nPoints - 1 + (j) * nPoints]; /* Hold outputs at the end */
-                                    }
-                                }
-                                else if (Method == 0)
-                                {
-                                    if (inow < 0)
-                                    {
-                                        y_c[j] = 0;
-                                    }
-                                    else
-                                    {
-                                        y_c[j] = ptr_c[inow + (j) * nPoints];
-                                    }
-                                }
-                                else if (Method >= 1)
-                                {
-                                    if (inow < 0)
-                                    {
-                                        inow = 0;
-                                    }
-                                    t1 = ptr->workt[inow];
-                                    t2 = ptr->workt[inow + 1];
-                                    y1 = (double)ptr_c[inow + j * nPoints];
-                                    y2 = (double)ptr_c[inow + 1 + j * nPoints];
-                                    y_c[j] = (char)((y2 - y1) * (t - t1) / (t2 - t1) + y1);
-                                }
-                                break;
-                            case 2:
-                                /* --------------------- int16 short ---------------------*/
-                                y_s = Getint16OutPortPtrs(block, 1);
-                                ptr_s = (short int*) ptr->work;
-                                /* y_s[j]=ptr_s[inow+(j)*nPoints]; */
-                                if (inow > nPoints)
-                                {
-                                    if (OutEnd == 0)
-                                    {
-                                        y_s[j] = 0; /* Outputs set to zero */
-                                    }
-                                    else if (OutEnd == 1)
-                                    {
-                                        y_s[j] = ptr_s[nPoints - 1 + (j) * nPoints]; // Hold outputs at the end
-                                    }
-                                }
-                                else if (Method == 0)
-                                {
-                                    if (inow < 0)
-                                    {
-                                        y_s[j] = 0;
-                                    }
-                                    else
-                                    {
-                                        y_s[j] = ptr_s[inow + (j) * nPoints];
-                                    }
-                                }
-                                else if (Method >= 1)
-                                {
-                                    if (inow < 0)
-                                    {
-                                        inow = 0;
-                                    }
-                                    t1 = ptr->workt[inow];
-                                    t2 = ptr->workt[inow + 1];
-                                    y1 = (double)ptr_s[inow + j * nPoints];
-                                    y2 = (double)ptr_s[inow + 1 + j * nPoints];
-                                    y_s[j] = (short int)((y2 - y1) * (t - t1) / (t2 - t1) + y1);
-                                }
-                                break;
-                            case 4:
-                                /* --------------------- int32 long ---------------------*/
-                                y_l = Getint32OutPortPtrs(block, 1);
-                                ptr_l = (int*) ptr->work;
-                                /* y_l[j]=ptr_l[inow+(j)*nPoints]; */
-                                if (inow > nPoints)
-                                {
-                                    if (OutEnd == 0)
-                                    {
-                                        y_l[j] = 0; /* Outputs set to zero */
-                                    }
-                                    else if (OutEnd == 1)
-                                    {
-                                        y_l[j] = ptr_l[nPoints - 1 + (j) * nPoints]; /* Hold outputs at the end */
-                                    }
-                                }
-                                else if (Method == 0)
-                                {
-                                    if (inow < 0)
-                                    {
-                                        y_l[j] = 0;
-                                    }
-                                    else
-                                    {
-                                        y_l[j] = ptr_l[inow + (j) * nPoints];
-                                    }
-                                }
-                                else if (Method >= 1)
-                                {
-                                    t1 = ptr->workt[inow];
-                                    t2 = ptr->workt[inow + 1];
-                                    y1 = (double)ptr_l[inow + j * nPoints];
-                                    y2 = (double)ptr_l[inow + 1 + j * nPoints];
-                                    y_l[j] = (int)((y2 - y1) * (t - t1) / (t2 - t1) + y1);
-                                }
-                                break;
-                            case 11: /*--------------------- uint8 uchar ---------------------*/
-                                y_uc = Getuint8OutPortPtrs(block, 1);
-                                ptr_uc = (unsigned char*) ptr->work;
-                                /* y_uc[j]=ptr_uc[inow+(j)*nPoints]; */
-                                if (inow > nPoints)
-                                {
-                                    if (OutEnd == 0)
-                                    {
-                                        y_uc[j] = 0; /* Outputs set to zero */
-                                    }
-                                    else if (OutEnd == 1)
-                                    {
-                                        y_uc[j] = ptr_uc[nPoints - 1 + (j) * nPoints]; /* Hold outputs at the end */
-                                    }
-                                }
-                                else if (Method == 0)
-                                {
-                                    if (inow < 0)
-                                    {
-                                        y_uc[j] = 0;
-                                    }
-                                    else
-                                    {
-                                        y_uc[j] = ptr_uc[inow + (j) * nPoints];
-                                    }
-                                }
-                                else if (Method >= 1)
-                                {
-                                    t1 = ptr->workt[inow];
-                                    t2 = ptr->workt[inow + 1];
-                                    y1 = (double)ptr_uc[inow + j * nPoints];
-                                    y2 = (double)ptr_uc[inow + 1 + j * nPoints];
-                                    y_uc[j] = (unsigned char)((y2 - y1) * (t - t1) / (t2 - t1) + y1);
-                                }
-                                break;
-                            case 12:
-                                /* --------------------- uint16 ushort int ---------------------*/
-                                y_us = Getuint16OutPortPtrs(block, 1);
-                                ptr_us = (unsigned short int*) ptr->work;
-                                /* y_us[j]=ptr_us[inow+(j)*nPoints]; */
-                                if (inow > nPoints)
-                                {
-                                    if (OutEnd == 0)
-                                    {
-                                        y_us[j] = 0; /* Outputs set to zero */
-                                    }
-                                    else if (OutEnd == 1)
-                                    {
-                                        y_us[j] = ptr_us[nPoints - 1 + (j) * nPoints]; /* Hold outputs at the end */
-                                    }
-                                }
-                                else if (Method == 0)
-                                {
-                                    if (inow < 0)
-                                    {
-                                        y_us[j] = 0;
-                                    }
-                                    else
-                                    {
-                                        y_us[j] = ptr_us[inow + (j) * nPoints];
-                                    }
-                                }
-                                else if (Method >= 1)
-                                {
-                                    t1 = ptr->workt[inow];
-                                    t2 = ptr->workt[inow + 1];
-                                    y1 = (double)ptr_us[inow + j * nPoints];
-                                    y2 = (double)ptr_us[inow + 1 + j * nPoints];
-                                    y_us[j] = (unsigned short int)((y2 - y1) * (t - t1) / (t2 - t1) + y1);
-                                }
-                                break;
-                            case 14:
-                                /* --------------------- uint32 ulong ---------------------*/
-                                y_ul = Getuint32OutPortPtrs(block, 1);
-                                ptr_ul = (unsigned int*) ptr->work;
-                                /* y_ul[j]=ptr_ul[inow+(j)*nPoints]; */
-                                if (inow > nPoints)
-                                {
-                                    if (OutEnd == 0)
-                                    {
-                                        y_ul[j] = 0; /* Outputs set to zero */
-                                    }
-                                    else if (OutEnd == 1)
-                                    {
-                                        y_ul[j] = ptr_ul[nPoints - 1 + (j) * nPoints]; /* Hold outputs at the end */
-                                    }
-                                }
-                                else if (Method == 0)
-                                {
-                                    if (inow < 0)
-                                    {
-                                        y_ul[j] = 0;
-                                    }
-                                    else
-                                    {
-                                        y_ul[j] = ptr_ul[inow + (j) * nPoints];
-                                    }
-                                }
-                                else if (Method >= 1)
-                                {
-                                    t1 = ptr->workt[inow];
-                                    t2 = ptr->workt[inow + 1];
-                                    y1 = (double)ptr_ul[inow + j * nPoints];
-                                    y2 = (double)ptr_ul[inow + 1 + j * nPoints];
-                                    y_ul[j] = (unsigned int)((y2 - y1) * (t - t1) / (t2 - t1) + y1);
-                                }
-                                break;
+                            if (OutEnd == 0)
+                            {
+                                y_cd[j] = 0.0; /* Outputs set to zero*/
+                            }
+                            else if (OutEnd == 1)
+                            {
+                                y_cd[j] = ptr_d[nPoints * my + nPoints - 1 + (j) * nPoints]; // Hold outputs at the end
+                            }
+                        }
+                        else if (Method == 0)
+                        {
+                            if (inow < 0)
+                            {
+                                y_cd[j] = 0.0; /* Outputs set to zero */
+                            }
+                            else
+                            {
+                                y_cd[j] = ptr_d[nPoints * my + inow + (j) * nPoints];
+                            }
+                        }
+                        else if (Method == 1)
+                        {
+                            if (inow < 0)
+                            {
+                                inow = 0;
+                            }
+                            /* Extrapolation for 0<t<X(0) */
+                            t1 = ptr->workt[inow];
+                            t2 = ptr->workt[inow + 1];
+                            y1 = ptr_d[nPoints * my + inow + j * nPoints];
+                            y2 = ptr_d[nPoints * my + inow + 1 + j * nPoints];
+                            y_cd[j] = (y2 - y1) * (t - t1) / (t2 - t1) + y1;
+                        }
+                        else if (Method >= 2)
+                        {
+                            if (inow < 0)
+                            {
+                                inow = 0;
+                            }
+                            t1 = ptr->workt[inow];
+                            t2 = ptr->workt[inow + 1];
+                            y1 = ptr_d[inow + j * nPoints + nPoints];
+                            y2 = ptr_d[inow + 1 + j * nPoints + nPoints];
+                            d1 = ptr_D[inow + j * nPoints + nPoints];
+                            d2 = ptr_D[inow + 1 + j * nPoints + nPoints];
+                            scicos_evalhermite(&t, &t1, &t2, &y1, &y2, &d1, &d2, &h, &dh, &ddh, &dddh, &inow);
+                            y_cd[j] = h;
+                        }
+                    }
+                    else if (ytype == SCSINT8_N)
+                    {
+                        /* --------------------- int8 char  ----------------------------*/
+                        y_c = Getint8OutPortPtrs(block, 1);
+                        ptr_c = (char*) ptr->work;
+                        /* y_c[j]=ptr_c[inow+(j)*nPoints]; */
+                        if (inow > nPoints)
+                        {
+                            if (OutEnd == 0)
+                            {
+                                y_c[j] = 0; /* Outputs set to zero */
+                            }
+                            else if (OutEnd == 1)
+                            {
+                                y_c[j] = ptr_c[nPoints - 1 + (j) * nPoints]; /* Hold outputs at the end */
+                            }
+                        }
+                        else if (Method == 0)
+                        {
+                            if (inow < 0)
+                            {
+                                y_c[j] = 0;
+                            }
+                            else
+                            {
+                                y_c[j] = ptr_c[inow + (j) * nPoints];
+                            }
+                        }
+                        else if (Method >= 1)
+                        {
+                            if (inow < 0)
+                            {
+                                inow = 0;
+                            }
+                            t1 = ptr->workt[inow];
+                            t2 = ptr->workt[inow + 1];
+                            y1 = (double)ptr_c[inow + j * nPoints];
+                            y2 = (double)ptr_c[inow + 1 + j * nPoints];
+                            y_c[j] = (char)((y2 - y1) * (t - t1) / (t2 - t1) + y1);
+                        }
+                    }       
+                    else if (ytype == SCSINT16_N)
+                    {
+                        /* --------------------- int16 short ---------------------*/
+                        y_s = Getint16OutPortPtrs(block, 1);
+                        ptr_s = (short int*) ptr->work;
+                        /* y_s[j]=ptr_s[inow+(j)*nPoints]; */
+                        if (inow > nPoints)
+                        {
+                            if (OutEnd == 0)
+                            {
+                                y_s[j] = 0; /* Outputs set to zero */
+                            }
+                            else if (OutEnd == 1)
+                            {
+                                y_s[j] = ptr_s[nPoints - 1 + (j) * nPoints]; // Hold outputs at the end
+                            }
+                        }
+                        else if (Method == 0)
+                        {
+                            if (inow < 0)
+                            {
+                                y_s[j] = 0;
+                            }
+                            else
+                            {
+                                y_s[j] = ptr_s[inow + (j) * nPoints];
+                            }
+                        }
+                        else if (Method >= 1)
+                        {
+                            if (inow < 0)
+                            {
+                                inow = 0;
+                            }
+                            t1 = ptr->workt[inow];
+                            t2 = ptr->workt[inow + 1];
+                            y1 = (double)ptr_s[inow + j * nPoints];
+                            y2 = (double)ptr_s[inow + 1 + j * nPoints];
+                            y_s[j] = (short int)((y2 - y1) * (t - t1) / (t2 - t1) + y1);
+                        }
+                    }       
+                    else if (ytype == SCSINT32_N)
+                    {
+                        /* --------------------- int32 long ---------------------*/
+                        y_l = Getint32OutPortPtrs(block, 1);
+                        ptr_l = (int*) ptr->work;
+                        /* y_l[j]=ptr_l[inow+(j)*nPoints]; */
+                        if (inow > nPoints)
+                        {
+                            if (OutEnd == 0)
+                            {
+                                y_l[j] = 0; /* Outputs set to zero */
+                            }
+                            else if (OutEnd == 1)
+                            {
+                                y_l[j] = ptr_l[nPoints - 1 + (j) * nPoints]; /* Hold outputs at the end */
+                            }
+                        }
+                        else if (Method == 0)
+                        {
+                            if (inow < 0)
+                            {
+                                y_l[j] = 0;
+                            }
+                            else
+                            {
+                                y_l[j] = ptr_l[inow + (j) * nPoints];
+                            }
+                        }
+                        else if (Method >= 1)
+                        {
+                            t1 = ptr->workt[inow];
+                            t2 = ptr->workt[inow + 1];
+                            y1 = (double)ptr_l[inow + j * nPoints];
+                            y2 = (double)ptr_l[inow + 1 + j * nPoints];
+                            y_l[j] = (int)((y2 - y1) * (t - t1) / (t2 - t1) + y1);
+                        }
+                    }       
+                    else if (ytype == SCSUINT8_N)
+                    {
+                        /*--------------------- uint8 uchar ---------------------*/
+                        y_uc = Getuint8OutPortPtrs(block, 1);
+                        ptr_uc = (unsigned char*) ptr->work;
+                        /* y_uc[j]=ptr_uc[inow+(j)*nPoints]; */
+                        if (inow > nPoints)
+                        {
+                            if (OutEnd == 0)
+                            {
+                                y_uc[j] = 0; /* Outputs set to zero */
+                            }
+                            else if (OutEnd == 1)
+                            {
+                                y_uc[j] = ptr_uc[nPoints - 1 + (j) * nPoints]; /* Hold outputs at the end */
+                            }
+                        }
+                        else if (Method == 0)
+                        {
+                            if (inow < 0)
+                            {
+                                y_uc[j] = 0;
+                            }
+                            else
+                            {
+                                y_uc[j] = ptr_uc[inow + (j) * nPoints];
+                            }
+                        }
+                        else if (Method >= 1)
+                        {
+                            t1 = ptr->workt[inow];
+                            t2 = ptr->workt[inow + 1];
+                            y1 = (double)ptr_uc[inow + j * nPoints];
+                            y2 = (double)ptr_uc[inow + 1 + j * nPoints];
+                            y_uc[j] = (unsigned char)((y2 - y1) * (t - t1) / (t2 - t1) + y1);
+                        }
+                    }       
+                    else if (ytype == SCSUINT16_N)
+                    {
+                        /* --------------------- uint16 ushort int ---------------------*/
+                        y_us = Getuint16OutPortPtrs(block, 1);
+                        ptr_us = (unsigned short int*) ptr->work;
+                        /* y_us[j]=ptr_us[inow+(j)*nPoints]; */
+                        if (inow > nPoints)
+                        {
+                            if (OutEnd == 0)
+                            {
+                                y_us[j] = 0; /* Outputs set to zero */
+                            }
+                            else if (OutEnd == 1)
+                            {
+                                y_us[j] = ptr_us[nPoints - 1 + (j) * nPoints]; /* Hold outputs at the end */
+                            }
+                        }
+                        else if (Method == 0)
+                        {
+                            if (inow < 0)
+                            {
+                                y_us[j] = 0;
+                            }
+                            else
+                            {
+                                y_us[j] = ptr_us[inow + (j) * nPoints];
+                            }
+                        }
+                        else if (Method >= 1)
+                        {
+                            t1 = ptr->workt[inow];
+                            t2 = ptr->workt[inow + 1];
+                            y1 = (double)ptr_us[inow + j * nPoints];
+                            y2 = (double)ptr_us[inow + 1 + j * nPoints];
+                            y_us[j] = (unsigned short int)((y2 - y1) * (t - t1) / (t2 - t1) + y1);
+                        }
+                    }       
+                    else if (ytype == SCSUINT32_N)
+                    {
+                        /* --------------------- uint32 ulong ---------------------*/
+                        y_ul = Getuint32OutPortPtrs(block, 1);
+                        ptr_ul = (unsigned int*) ptr->work;
+                        /* y_ul[j]=ptr_ul[inow+(j)*nPoints]; */
+                        if (inow > nPoints)
+                        {
+                            if (OutEnd == 0)
+                            {
+                                y_ul[j] = 0; /* Outputs set to zero */
+                            }
+                            else if (OutEnd == 1)
+                            {
+                                y_ul[j] = ptr_ul[nPoints - 1 + (j) * nPoints]; /* Hold outputs at the end */
+                            }
+                        }
+                        else if (Method == 0)
+                        {
+                            if (inow < 0)
+                            {
+                                y_ul[j] = 0;
+                            }
+                            else
+                            {
+                                y_ul[j] = ptr_ul[inow + (j) * nPoints];
+                            }
+                        }
+                        else if (Method >= 1)
+                        {
+                            t1 = ptr->workt[inow];
+                            t2 = ptr->workt[inow + 1];
+                            y1 = (double)ptr_ul[inow + j * nPoints];
+                            y2 = (double)ptr_ul[inow + 1 + j * nPoints];
+                            y_ul[j] = (unsigned int)((y2 - y1) * (t - t1) / (t2 - t1) + y1);
                         }
                     }
                 } /* for j loop */

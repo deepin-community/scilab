@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2007 - INRIA - Vincent COUVERT
  * Copyright (C) 2008 - DIGITEO - Sylvestre KOUMAR
  *
@@ -84,6 +84,14 @@ public class ScilabFileChooser implements FileChooser {
     }
 
     /**
+     * Set the initial file name
+     * @param path the default file name
+     */
+    public void setInitialFileName(String path) {
+        ScilabBridge.setInitialFileName(this, path);
+    }
+
+    /**
      * Display this chooser and wait for user selection
      */
     public void displayAndWait() {
@@ -143,5 +151,30 @@ public class ScilabFileChooser implements FileChooser {
      */
     public void setUiDialogType(int dialogType) {
         ScilabBridge.setUiDialogType(this, dialogType);
+    }
+
+    /**
+     * Add a file type extension mask to select files of given type
+     * @param theMask the mask strings
+     * @param theFileMaskDescription the description strings for each mask
+     */
+    public void addMask(String[] theMask, String[] theFileMaskDescription) {
+        ScilabBridge.addMask(this, theMask, theFileMaskDescription);
+    }
+
+    /**
+     * Set accept all file types filter
+     * @param flag enable  all file type
+     */
+    public void setAcceptAllFileFilterUsed(boolean flag) {
+        ScilabBridge.setAcceptAllFileFilterUsed(this, flag);
+    }
+    
+    /**
+     * Invalidate filechooser
+     * @param fileChooser the file chooser to invalidate
+     */
+    public void invalidate() {
+        ScilabBridge.invalidate(this);
     }
 }

@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2012 - SCILAB ENTERPRISES - Simon GARESTE
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -34,7 +34,7 @@ assert_checkerror("h5mount(a,""/test"",c)",msgerr,999);
 msgerr = msprintf(gettext("%s: Error in retrieving field content:\n%s\n"), "%H5Object_e", msprintf(gettext("Invalid field: %s"), "Group_1"));
 assert_checkerror("h5write(a.root.mnt.Group_1, ""Dataset_1"", uint32([10 11;12 13]))",msgerr,999);
 msgerr = msprintf(gettext("%s: %s\n"), "h5write", gettext("Cannot write data in the dataset."));
-msgerr($+1) = gettext("HDF5 description") + ": " + "src and dest data spaces have different sizes.";
+msgerr($+1) = gettext("HDF5 description") + ": " + "src and dest dataspaces have different number of elements selected.";
 assert_checkerror("h5write(a.root.mnt.Group_2, ""Dataset_2"", uint32([10 11;12 13]))",msgerr,999);
 h5write(a.root.mnt.Group_2, "Dataset_2", uint32([10 11 2;12 13 9]));
 h5umount(a, "/mnt");

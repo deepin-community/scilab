@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2012 - Samuel GOUGEON
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -24,7 +24,7 @@ function %_Matplot()
     f = gcf();
     my_plot_desc  = _("Classical Matplot");
     f.figure_name = my_plot_desc;
-    f.color_map = coolcolormap(nx);
+    f.color_map = cool(nx);
 
     a = gca();
     a.tight_limits = "on";

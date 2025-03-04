@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2011 - INRIA - Serge Steer <serge.steer@inria.fr>
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
 // Copyright (C) 2018 - 2019 - Samuel GOUGEON
@@ -156,6 +156,7 @@ function comet3d(varargin)
         max(axes.data_bounds(2,:), [max(x) max(y) max(z)])];
     end
     //create the head, body and tail polylines
+    tail=[];body=[];head=[];
     drawlater()
     for l = 1:m
         xpoly([],[]);
@@ -166,6 +167,7 @@ function comet3d(varargin)
         body(l) = gce();
         body(l).foreground = c(l);
         body(l).thickness = 2;
+
         xpoly([], [], "marks");
         head(l) = gce();
         head(l).mark_size_unit = "point";

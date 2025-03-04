@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2014 - Scilab Enterprises - Calixte DENIZET
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -12,8 +12,8 @@
 //
 // <-- Non-regression test for bug 12945 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/12945
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/12945
 //
 // <-- Short Description -->
 // Datatips could not correctly dragged in zoomed axes

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -67,14 +67,7 @@
             est que chaque mot-clé <literal>then</literal> doit être sur la même ligne que le <literal>if</literal> ou <literal>elseif</literal> correspondant .
         </para>
         <para>
-        </para>
-        <para>
             Le mot-clé <literal>then</literal> peut être remplacé par un passage à la ligne ou une virgule.
-        </para>
-          <warning>
-             Le nombre de caractères constituant le corps d'une instruction conditionnelle (if while for ou select/case) est limité à 16k.
-          </warning>
-        <para>
         </para>
     </refsection>
     <refsection>
@@ -132,8 +125,15 @@ end
             <revision>
                 <revnumber>6.0.0</revnumber>
                 <revdescription>
-                  <literal>if</literal> est désormais protégé. Les affectations telles que
-                  <literal>if=1</literal> ne sont plus possibles.
+                    <itemizedlist>
+                        <listitem>
+                            <literal>if</literal> est désormais protégé. Les affectations telles que
+                            <literal>if=1</literal> ne sont plus possibles.
+                        </listitem>
+                        <listitem>
+                            Le nombre de caractères constituant le corps d'une instruction conditionnelle (<literal>if</literal>, <literal>while</literal>, <literal>for</literal>, ou <literal>select/case</literal>) n'est plus limité à 16k.
+                        </listitem>
+                   </itemizedlist>
                 </revdescription>
             </revision>
         </revhistory>

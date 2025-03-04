@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008-2008 - DIGITEO - Jean-Baptiste Silvy
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -10,8 +10,8 @@
 // <-- NO CHECK REF -->
 // <-- Non-regression test for bug 3572 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=3572
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/3572
 //
 // <-- Short Description -->
 // When using grayplot, you cannot have different dimensions in entry.

@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2018 - 2020 - Samuel Gougeon
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -19,7 +19,7 @@ esb = sparse(%t); esb(1) = [];
 m = int(sprand(3,20,0.5)*4);
 n = size(m,"*");
 k = grand(1,n/5,"uin",1,n);
-//m(k) = %nan;    // Requires fixing http://bugzilla.scilab.org/16472
+//m(k) = %nan;    // Requires fixing https://gitlab.com/scilab/scilab/-/issues/16472
 mc = m + imult(m(:,$:-1:1));
 b = m > 1;
 objects = list(..

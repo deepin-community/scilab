@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008 - INRIA - Serge STEER
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -8,8 +8,8 @@
 // <-- CLI SHELL MODE -->
 // <-- Non-regression test for bug 2119 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=2119
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/2119
 //
 // <-- Short Description -->
 // There is problem in the scilab fortran interface provided by

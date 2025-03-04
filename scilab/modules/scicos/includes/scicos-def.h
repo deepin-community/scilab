@@ -48,7 +48,7 @@ typedef struct
 
 typedef struct
 {
-    int ptr;
+    void* ptr;
 }  SCSPTR_struct;
 
 

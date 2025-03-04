@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Author: Ishit Mehta (ibm)
 // Copyright (C) 2015
 //
@@ -10,8 +10,8 @@
 
 // <-- Non-regression test for bug 13733 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=13733
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/13733
 //
 // <-- Short Description -->
 // Optional arguments did not work properly. e.g colorbar(1,10,fmt="%d").

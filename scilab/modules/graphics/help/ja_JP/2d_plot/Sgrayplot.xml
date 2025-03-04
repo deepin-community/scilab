@@ -2,7 +2,7 @@
 
 <!--
 
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 
  * Copyright (C) ENPC - Jean-Philippe Chancelier
 
@@ -554,7 +554,7 @@ x=-10:10; y=-10:10;m =rand(21,21);
 
 clf()
 
-gcf().color_map = hotcolormap(64);
+gcf().color_map = hot(64);
 
 Sgrayplot(x,y,m, strf="011", rect=[-20,-20,20,20])
 
@@ -566,7 +566,7 @@ Sgrayplot(x,y,m, strf="011", rect=[-20,-20,20,20])
 
             clf()
             
-            gcf().color_map = hotcolormap(64);
+            gcf().color_map = hot(64);
             
             Sgrayplot(x,y,m, strf="011", rect=[-20,-20,20,20])
 
@@ -580,7 +580,7 @@ t=-%pi:0.1:%pi; m=sin(t)'*cos(t);
 
 clf()
 
-gcf().color_map = jetcolormap(64);
+gcf().color_map = jet(64);
 
 colorbar(-1,1)
 
@@ -594,7 +594,7 @@ Sgrayplot(t,t,m, strf="041")
 
             clf()
             
-            gcf().color_map = jetcolormap(64);
+            gcf().color_map = jet(64);
             
             colorbar(-1,1)
 
@@ -622,7 +622,7 @@ show_window(); clf()
 
 f=gcf();
 
-f.color_map=jetcolormap(64);
+f.color_map=jet(64);
 
 colorbar(-1,1)
 
@@ -658,7 +658,7 @@ end
 
             f=gcf();
 
-            f.color_map=jetcolormap(64);
+            f.color_map=jet(64);
 
             colorbar(-1,1)
 

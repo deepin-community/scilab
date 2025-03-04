@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2017 - ESI - Antoine ELIAS
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -10,8 +10,8 @@
 //
 // <-- Non-regression test for bug 15057 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/15057
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/15057
 //
 // <-- Short Description -->
 // update of data of matplot does not take care of dimension >2

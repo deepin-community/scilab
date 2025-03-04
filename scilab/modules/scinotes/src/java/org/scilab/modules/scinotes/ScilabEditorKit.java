@@ -1,5 +1,5 @@
 /*
- * Scilab (http://www.scilab.org/) - This file is part of Scilab
+ * Scilab (https://www.scilab.org/) - This file is part of Scilab
  * Copyright (C) 2010 - Calixte DENIZET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -162,6 +162,8 @@ public class ScilabEditorKit extends DefaultEditorKit {
                 ;
             }
             return true;
+        } catch (IOException e) {
+            throw e;
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009 - DIGITEO - Bernard HUGUENEY
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -16,7 +16,7 @@
 #define __SVD_H__
 #include "dynlib_linear_algebra.h"
 /*
- * perform singular value decomposition (cf. http://www.scilab.org/product/man/svd.html ), MALLOCating temporary buffers as needed.
+ * perform singular value decomposition (cf. https://www.scilab.org/product/man/svd.html ), MALLOCating temporary buffers as needed.
  *
  * in  :
  *

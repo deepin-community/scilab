@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2010 - 2011 - Calixte DENIZET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -43,6 +43,8 @@ import java.util.UUID;
 import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.JEditorPane;
 import javax.swing.JScrollBar;
@@ -149,6 +151,7 @@ public class ScilabEditorPane extends JEditorPane implements Highlighter.Highlig
 
     private EventListenerList kwListeners = new EventListenerList();
     private Map<Integer, Object> highlightedWords = new HashMap<Integer, Object>();
+    private Set<File> toRemove = new HashSet<File>();
 
     //private List<Object> highlightedWords = new ArrayList<Object>();
     //private List<Integer> highlightedWordsBegin = new ArrayList<Integer>();
@@ -581,6 +584,22 @@ public class ScilabEditorPane extends JEditorPane implements Highlighter.Highlig
                 matcherTimer = null;
             }
         }
+        for (File f : toRemove) {
+            if (f.exists()) {
+                try {
+                    f.delete();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+        }
+    }
+
+    /**
+     * add to the list backup files to remove
+     */
+    public void addToRemove(File file) {
+        toRemove.add(file);
     }
 
     /**

@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 //
 // This file is released under the 3-clause BSD license. See COPYING-BSD.
@@ -26,11 +26,11 @@ function demo_pendg1()
     t0   = 0;
     T    = t0:0.05:20;
 
-    info = list([],0,[],[],[],0,0);
+    %DAEOPTIONS = list([],0,[],[],[],0,0);
     atol = [0.0001;0.0001;0.0001;0.0001;0.0001;0.0001;0.001];
     rtol = atol;
 
-    sol  = dassl([y0,yd0],t0,T,rtol,atol,pendg,info);
+    sol  = dae([y0, yd0], t0, T, rtol, atol, pendg);
 
     H    = build_sliding_pendulum ()
     draw_sliding_pendulum(H,y0(1:3))
@@ -40,7 +40,7 @@ function demo_pendg1()
     for i=1:size(sol,2)
         realtime(i);
         if is_handle_valid(H) then
-            draw_sliding_pendulum(H,sol(2:4,i))
+            draw_sliding_pendulum(H,sol(1:3,i))
         end
     end
 

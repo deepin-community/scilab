@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA -
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -23,7 +23,7 @@
     </refnamediv>
     <refsynopsisdiv>
         <title>Seqüência de Chamamento</title>
-        <synopsis>res = strncpy(str1,num)</synopsis>
+        <synopsis>res = strncpy(str1, num)</synopsis>
     </refsynopsisdiv>
     <refsection>
         <title>Parâmetros</title>

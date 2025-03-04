@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2007-2008 - INRIA
 // Copyright (C) 2009 - DIGITEO - Allan CORNET
 // Copyright (C) 2014 - Scilab Enterprises - Anais AUBERT
@@ -149,7 +149,7 @@ assert_checkequal(ref_2, r_2);
 assert_checkequal(r_1, r_3);
 assert_checkequal(r_2, r_4);
 //-------------------------------
-// http://bugzilla.scilab.org/16686
+// https://gitlab.com/scilab/scilab/-/issues/16686
 r = strsplit("c","c")
 assert_checkequal(r, ["";""]);
 r = strsplit("cd","cd")

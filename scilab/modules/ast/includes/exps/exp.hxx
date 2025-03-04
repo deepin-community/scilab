@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2007-2008 - DIGITEO - Bruno JOFRET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -238,6 +238,7 @@ public:
         OPEXP,
         LOGICALOPEXP,
         ASSIGNEXP,
+        ARGUMENTSEXP,
         IFEXP,
         WHILEEXP,
         FOREXP,
@@ -258,14 +259,8 @@ public:
         ASSIGNLISTEXP,
         VARDEC,
         FUNCTIONDEC,
-        LISTEXP,
-        OPTIMIZEDEXP,
-        MEMFILLEXP,
-        DAXPYEXP,
-        STRINGSELECTEXP,
-        TABLEINTSELECTEXP,
-        MAPINTSELECTEXP,
-        SMALLINTSELECTEXP,
+        ARGUMENTDEC,
+        LISTEXP
     };
 
     const std::wstring getTypeString() const
@@ -302,6 +297,8 @@ public:
                 return L"LogicalOpExp";
             case ASSIGNEXP:
                 return L"AssignExp";
+            case ARGUMENTSEXP:
+                return L"ArgumentsExp";
             case IFEXP:
                 return L"IfExp";
             case WHILEEXP:
@@ -342,22 +339,10 @@ public:
                 return L"VarDec";
             case FUNCTIONDEC:
                 return L"FunctionDec";
+            case ARGUMENTDEC:
+                return L"ArgumentDec";
             case LISTEXP:
                 return L"ListExp";
-            case OPTIMIZEDEXP:
-                return L"OptimizedExp";
-            case MEMFILLEXP:
-                return L"MemfillExp";
-            case DAXPYEXP:
-                return L"DAXPYExp";
-            case STRINGSELECTEXP:
-                return L"StringSelectExp";
-            case TABLEINTSELECTEXP:
-                return L"TableIntSelectExp";
-            case MAPINTSELECTEXP:
-                return L"MapIntSelectExp";
-            case SMALLINTSELECTEXP:
-                return L"SmallIntSelectExp";
             default:
                 return L"????Exp";
         }
@@ -598,6 +583,16 @@ public:
     }
 
     inline virtual bool isSmallIntSelectExp() const
+    {
+        return false;
+    }
+
+    inline virtual bool isArgumentDec() const
+    {
+        return false;
+    }
+
+    inline virtual bool isArgumentsExp() const
     {
         return false;
     }

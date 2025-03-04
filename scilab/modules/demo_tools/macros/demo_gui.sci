@@ -1,5 +1,5 @@
 //
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008 - INRIA - Pierre MARECHAL
 // Copyright (C) 2012 - DIGITEO - Vincent COUVERT
 // Copyright (C) 2014 - Scilab Enterprises - Anais AUBERT
@@ -71,7 +71,7 @@ function demo_gui()
     // We load the preset GUI
     demo_fig = loadGui(File);
     demo_fig.figure_name = _("Demonstrations");
-
+    demo_fig.icon = "x-office-presentation";
 
     // Parameters
     // =========================================================================

@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2015 - Scilab Enterprises - Antoine ELIAS
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -24,6 +24,7 @@ extern "C" {
 #endif
 
 #define scilab_getVar           API_PROTO(getVar)
+#define scilab_setVar           API_PROTO(setVar)
 #define scilab_getClone         API_PROTO(getClone)
 #define scilab_getType          API_PROTO(getType)
 #define scilab_isDouble         API_PROTO(isDouble)
@@ -59,7 +60,7 @@ extern "C" {
 //var
 /*this function should be call out of gateway so do not need scilabEnv argument*/
 scilabVar API_PROTO(getVar)(const wchar_t* name);
-
+void API_PROTO(setVar)(const wchar_t* name, scilabVar var);
 scilabVar API_PROTO(getClone)(scilabEnv env, scilabVar var);
 
 //type

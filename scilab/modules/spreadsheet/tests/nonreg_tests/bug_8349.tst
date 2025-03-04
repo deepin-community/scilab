@@ -1,17 +1,17 @@
 //<-- CLI SHELL MODE -->
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2012 - S/E - Sylvestre Ledru
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
 //
-// <-- JAVA NOT MANDATORY -->
-//
+// <-- CLI SHELL MODE -->
+// <-- NO CHECK REF -->
 // <-- Non-regression test for bug 8349 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=8349
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/8349
 //
 // <-- Short Description -->
 // write_csv() failed to support writting complexes with %nan or %inf parts
@@ -50,8 +50,8 @@ assert_checkequal(b,"1.1000000000000001,Inf+Infi");
 b=csvRead(filename);
 assert_checkequal(b, [1.1  %inf*(1+%i)]);
 
-write_csv([ 1.1  1+%i*%inf],filename)
+write_csv([ 1.1  complex(1, %inf)],filename)
 b=mgetl(filename);
 assert_checkequal(b,"1.1000000000000001,1+Infi");
 b=csvRead(filename);
-assert_checkequal(b, [ 1.1  1+%i*%inf]);
+assert_checkequal(b, [ 1.1  complex(1, %inf)]);

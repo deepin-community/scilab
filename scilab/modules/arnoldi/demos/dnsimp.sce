@@ -144,7 +144,7 @@ while(iter<maxiter)
     // Repeatedly call the routine DNAUPD and take actions indicated by parameter IDO until
     // either convergence is indicated or maxitr has been exceeded.
 
-    [ido,resid,v,iparam,ipntr,workd,workl,info_dnaupd] = dnaupd(ido,bmat,nx,which,nev,tol,resid,ncv,v,iparam,ipntr,workd,workl,info_dnaupd);
+    [ido,resid,v,iparam,ipntr,workd,workl,info_dnaupd] = %_dnaupd(ido,bmat,nx,which,nev,tol,resid,ncv,v,iparam,ipntr,workd,workl,info_dnaupd);
 
     if (ido==99) then
         // BE CAREFUL: DON'T CALL dneupd IF ido == 99 !!

@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2012 - DIGITEO - Cedric DELAMARRE
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -77,14 +77,14 @@ types::Function::ReturnValue sci_atanh(types::typed_list &in, int _iRetCount, ty
                             delete[] pInI;
                         }
 
-                        Scierror(78, _("%s: Warning: Wrong value for input argument #%d : Singularity of the function.\n"), "atanh", 1);
+                        Scierror(78, _("%s: Warning: Wrong value for input argument #%d: Singularity of the function.\n"), "atanh", 1);
                         return types::Function::Error;
                     }
 
                     if (ConfigVariable::getIeee() == 1 && ConfigVariable::getWarningMode() && bAlreadyDisp == false)
                     {
                         bAlreadyDisp = true;
-                        sciprint(_("%s: Warning: Wrong value for input argument #%d : Singularity of the function.\n"), "atanh", 1);
+                        sciprint(_("%s: Warning: Wrong value for input argument #%d: Singularity of the function.\n"), "atanh", 1);
                     }
                 }
                 else if (dAbsIn > 1 && bComplex == false)

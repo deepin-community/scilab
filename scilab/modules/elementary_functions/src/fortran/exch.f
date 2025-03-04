@@ -1,4 +1,4 @@
-c Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+c Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 c Copyright (C) INRIA - Serge STEER
 c Copyright (C) INRIA - Francois DELEBECQUE
 c 

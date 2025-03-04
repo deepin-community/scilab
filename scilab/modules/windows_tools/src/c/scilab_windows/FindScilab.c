@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) INRIA - Allan CORNET
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -16,7 +16,7 @@
 #include <windows.h>
 #include <string.h>
 #include "FindScilab.h"
-#include "version.h"
+#include "getversion.h"
 #include "sci_malloc.h"
 #include "WndThread.h"
 #include "os_string.h"
@@ -35,7 +35,9 @@ BOOL HaveAnotherWindowScilab(void)
     BOOL Retour = FALSE;
     HWND CurrenthWnd = NULL;
 
-    wsprintf(BeginningHiddenScilabWindow, FORMAT_TITLE_HIDDEN_WINDOWS, SCI_VERSION_STRING, 0);
+    char *scilabVersionString = getScilabVersionAsString();
+    wsprintf(BeginningHiddenScilabWindow, FORMAT_TITLE_HIDDEN_WINDOWS, scilabVersionString, 0);
+    free(scilabVersionString);
     /* scilab-5.0 hidden window */
     BeginningHiddenScilabWindow[strlen(BeginningHiddenScilabWindow) - 4] = '\0';
 

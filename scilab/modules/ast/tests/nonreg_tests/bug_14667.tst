@@ -1,5 +1,5 @@
 // ============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2016 - Scilab Enterprises - Pierre-Aime AGNEL
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -8,8 +8,8 @@
 // <-- CLI SHELL MODE -->
 // <-- Non-regression test for bug 14667 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=14667
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/14667
 //
 // <-- Short Description -->
 // Multi line string in a matrix without line feed generated a non terminal parser state

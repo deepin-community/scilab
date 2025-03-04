@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -22,7 +22,6 @@
         <title> Seqüência de Chamamento </title>
         <synopsis>s=svd(X)
             [U,S,V]=svd(X)
-            [U,S,V]=svd(X,0) (obsolete)
             [U,S,V]=svd(X,"e")
             [U,S,V,rk]=svd(X [,tol])
         </synopsis>
@@ -76,7 +75,7 @@
             .
         </para>
         <para>
-            <literal>[U,S,V] = svd(X,0)</literal> produz a decomposição com
+            <literal>[U,S,V] = svd(X,"e")</literal> produz a decomposição com
             "economia de tamanho". Se <literal>X</literal> é m-por-n com m &gt; n,
             então apenas as primeiras n colunas de <literal>U</literal> são computadas
             e <literal>S</literal> é n-por-n.
@@ -131,5 +130,22 @@ sqrt(spec(X*X'))
         <para>Decomposições svd são baseadas nas rotinas Lapack DGESVD para
             matrizes de reais e ZGESVD no caso de matrizes de complexos.
         </para>
+    </refsection>
+    <refsection>
+        <title>History</title>
+        <revhistory>
+            <revision>
+                <revnumber>2023.0.0</revnumber>
+                <revdescription>
+                    <para>svd(X, 0) is obsolete, use svd(X, "e") instead.</para>
+                </revdescription>
+            </revision>
+            <revision>
+                <revnumber>2024.0.0</revnumber>
+                <revdescription>
+                    <para>svd(X, 0) is no more supported, use svd(X, "e") instead.</para>
+                </revdescription>
+            </revision>
+        </revhistory>
     </refsection>
 </refentry>

@@ -50,10 +50,10 @@
         <para>
             <literal>[N,D] = rat(X,tol)</literal> renvoie deux matrices entières
             telles que <literal>N./D</literal> est proche de <literal>X</literal> au
-            sens où <literal>abs(N./D - X) &lt;= tol*norm(X,1)*abs(X)</literal>.
+            sens où <literal>abs(N./D - X) &lt;= tol * norm(X,1)</literal>.
         </para>
         <para>
-            <literal>y= rat(x,tol)</literal> renvoie le quotient
+            <literal>y = rat(x, tol)</literal> renvoie le quotient
             <literal>N./D</literal>
         </para>
         <para>Les approximations rationnelles sont obtenues par troncature

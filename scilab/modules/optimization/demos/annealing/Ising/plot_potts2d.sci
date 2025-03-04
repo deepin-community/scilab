@@ -2,7 +2,7 @@ function plot_potts2d(Var, Level)
     Size = size(Var,1);
     drawlater;
     f=gcf();
-    f.color_map = graycolormap(2*Level+1);
+    f.color_map = gray(2*Level+1);
     a = gca();
     a.data_bounds = [0,0;Size+1,Size+1];
     Z = zeros(Size*Size,3);

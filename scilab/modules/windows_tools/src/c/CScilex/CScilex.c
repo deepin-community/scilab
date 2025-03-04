@@ -1,5 +1,5 @@
 /*
-*  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+*  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 *  Copyright (C) INRIA - Allan CORNET
 *  Copyright (C) 2010 - DIGITEO - Allan CORNET
 *
@@ -36,7 +36,7 @@
 typedef int (*MYPROC1) (int , char **);
 /*--------------------------------------------------------------------------*/
 /* BUG 6934 */
-/* http://bugzilla.scilab.org/show_bug.cgi?id=6934 */
+/* https://gitlab.com/scilab/scilab/-/issues/6934 */
 /* http://msdn.microsoft.com/en-us/library/chh3fb0k(VS.80).aspx */
 #ifdef __INTEL_COMPILER
 #pragma optimize("g", off)

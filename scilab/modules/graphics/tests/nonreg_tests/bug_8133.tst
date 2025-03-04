@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Calixte DENIZET
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,8 +9,8 @@
 
 // <-- Non-regression test for bug 8133 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/8133
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/8133
 //
 // <-- Short Description -->
 // Ticks disappeared in planar 3D view

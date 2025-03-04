@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) ????-2009 - INRIA
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -17,7 +17,7 @@
 
 #include "dynlib_linear_algebra.h"
 /*
- * Linear least square problems. cf. http://www.scilab.org/product/man/lsq.html
+ * Linear least square problems. cf. https://www.scilab.org/product/man/lsq.html
  * Calls Lapack [d|z]gelsy routines after performing memory allocations
  *
  * @param pMatrix double[complex]* in/out : input real or complex (in 'z' format) input matrix data, output complete orthogonal factorization

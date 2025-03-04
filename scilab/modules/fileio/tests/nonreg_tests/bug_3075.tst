@@ -1,6 +1,6 @@
 //<-- CLI SHELL MODE -->
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008 - INRIA - Allan CORNET
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -12,8 +12,8 @@
 //    get_absolute_file_path() doesn't return error message when the input 
 //    argument hasn't the right size or a correct value.
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=3075
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/3075
 //
 
 a = mopen(TMPDIR + "/test.sce", "wt");

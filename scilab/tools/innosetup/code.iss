@@ -1,5 +1,5 @@
 //
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) DIGITEO - 2010-2012 - Allan CORNET
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -23,7 +23,6 @@ function GetModuleHandle(lpModuleName: LongInt): LongInt;
 external 'GetModuleHandleA@kernel32.dll stdcall';
 
 var
-    AboutModulesButton: TButton;
     OriginalOnTypesComboChange: TNotifyEvent;
 
 //------------------------------------------------------------------------------
@@ -105,28 +104,9 @@ end;
     Result := bJREVersion;
   end;
 //------------------------------------------------------------------------------
-procedure ButtonAboutModulesOnClick(Sender: TObject);
-var
-  ErrorCode: Integer;
-
-begin
-    if not ShellExec('', ExpandConstant('{#MODULES_LIST_WEB_PAGE}'),
-             '', '', SW_SHOW, ewNoWait, ErrorCode) then
-    begin
-      // handle failure if necessary
-      SuppressibleMsgBox( CustomMessage('MsgBoxWebOpen'),mbError, MB_OK, MB_OK );
-    end;
-end;
-//------------------------------------------------------------------------------
  function BackButtonClick(CurPageID: Integer): Boolean;
   begin
     Result := true;
-    if (CurPageId = wpSelectProgramGroup) then
-      begin
-        AboutModulesButton.Visible := true;
-      end else begin
-        AboutModulesButton.Visible := false;
-      end;
   end;
 //------------------------------------------------------------------------------
 function NextButtonClick(CurPageID: Integer): Boolean;
@@ -152,13 +132,6 @@ function NextButtonClick(CurPageID: Integer): Boolean;
             SuppressibleMsgBox(CustomMessage('MsgBoxSSERequired'), mbError, MB_OK, MB_OK );
             Result := false;
           end;
-      end;
-
-    if (CurPageId = wpSelectDir) then
-      begin
-        AboutModulesButton.Visible := true;
-      end else begin
-        AboutModulesButton.Visible := false;
       end;
 
     if (CurPageId = wpSelectComponents) then
@@ -258,19 +231,6 @@ var
   CancelButton: TButton;
 begin
   CancelButton := WizardForm.CancelButton;
-
-  AboutModulesButton := TButton.Create(WizardForm);
-  AboutModulesButton.Left := WizardForm.ClientWidth - CancelButton.Left - CancelButton.Width;
-  AboutModulesButton.Top := CancelButton.Top;
-  AboutModulesButton.Width := CancelButton.Width * 2;
-
-  AboutModulesButton.Caption := CustomMessage('ButtonAboutModules');
-
-  AboutModulesButton.Height := CancelButton.Height;
-
-  AboutModulesButton.OnClick := @ButtonAboutModulesOnClick;
-  AboutModulesButton.Parent := CancelButton.Parent;
-  AboutModulesButton.Visible := false;
 
   OriginalOnTypesComboChange := WizardForm.TypesCombo.OnChange;
   WizardForm.TypesCombo.OnChange := @OnTypesComboChange;

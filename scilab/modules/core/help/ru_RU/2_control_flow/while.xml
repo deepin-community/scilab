@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -96,11 +96,6 @@ end
         <programlisting role=""><![CDATA[
 i = 0; while i<5, disp(i), i = i + 1; end
 ]]></programlisting>
-        <warning>
-            число символов, используемых для определения тела любой инструкции условия
-            (<literal>if while for</literal> или <literal>select/case</literal>) должно быть ограничено
-            16К.
-        </warning>
     </refsection>
     <refsection>
         <title>Примеры</title>

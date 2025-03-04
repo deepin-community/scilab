@@ -1,5 +1,5 @@
 //
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008 - INRIA - Serge STEER
 // Copyright (C) 2008 - INRIA - Pierre MARECHAL
 // Copyright (C) 2014 - Scilab Enterprises - Pierre-Aime Agnel

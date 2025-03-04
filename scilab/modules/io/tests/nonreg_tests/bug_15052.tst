@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2017 - Scilab Enterprises - Paul Bignier
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -8,8 +8,8 @@
 // <-- CLI SHELL MODE -->
 // <-- NO CHECK REF -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/15052
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/15052
 //
 // <-- Short Description -->
 // getpid wasn't available

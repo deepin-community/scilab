@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009 - DIGITEO - pierre.lando@scilab.org
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -10,8 +10,8 @@
 //
 // <-- Non-regression test for bug 4639 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=4639
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/4639
 //
 // <-- Short Description -->
 //    Some graphics demos does not contain the menu item "show code"

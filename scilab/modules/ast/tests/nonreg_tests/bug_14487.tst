@@ -1,6 +1,6 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
-// Copyright (C) 2018 - Stéphane MOTTELET
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
+// Copyright (C) 2018 - UTC - Stéphane MOTTELET
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
@@ -10,8 +10,8 @@
 //
 // <-- Non-regression test for bug 14487 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/14487
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/14487
 //
 // <-- Short Description -->
 // Matrix indexing is not coherent with MATLAB convention

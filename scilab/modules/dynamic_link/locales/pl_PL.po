@@ -418,10 +418,10 @@ msgstr "Wymagany jest kompilator jezyka C lub Frotran."
 #, c-format
 msgid ""
 "%s: Warning: Scilab has not been able to find where the Scilab sources are. "
-"Please submit a bug report on http://bugzilla.scilab.org/\n"
+"Please submit a bug report on https://gitlab.com/scilab/scilab/-/issues\n"
 msgstr ""
 "%s: Ostrzeżenie: Nie znaleziono kodu źródłowego Scilab. Proszę zgłosić "
-"raport błędu na stronie http://bugzilla.scilab.org/\n"
+"raport błędu na stronie https://gitlab.com/scilab/scilab/-/issues\n"
 
 #, c-format
 msgid "%s: Build command: %s\n"

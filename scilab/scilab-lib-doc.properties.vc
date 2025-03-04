@@ -6,7 +6,7 @@ xml_apis_ext.jar =${thirdparty.dir}/xml_apis_ext.jar
 batik.jar=${thirdparty.dir}/batik-all.jar
 
 ; The Saxon XSLT Processor
-saxon.jar=${thirdparty.dir}/saxon.jar
+saxon.jar=${thirdparty.dir}/saxon9he.jar
 
 ; Reusable components used by Batik and FOP
 fop.jar=${thirdparty.dir}/fop.jar

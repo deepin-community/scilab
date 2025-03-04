@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2018 - Samuel GOUGEON
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -84,8 +84,8 @@ assert_checkequal(gce().mark_background, ma);
 
 // Testing Fixed Extended global properties (bug 15404)
 // ----------------------------------------------------
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/15404
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/15404
 // <-- Short Description -->
 //  surf() (adn so mesh() that calls it) did not accept extended color names
 //  out of a restricted list of 10 basic colors, nor color "RRGGBB" hexa codes,

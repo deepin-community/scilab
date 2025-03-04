@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2017 - ESI Group - Clement DAVID
 //
 // This file is distributed under the same license as the Scilab package.
@@ -11,14 +11,16 @@
 //
 // <-- Non-regression test for bug 15149 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=15149
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/15149
 //
 // <-- Short Description -->
 // Some schema file were corrupted on save and reload
 //
 
 loadXcosLibs();
+
+H = 1 / (1 + %s);
 
 // load and save
 scs_m1 = xcosDiagramToScilab("SCI/modules/xcos/tests/nonreg_tests/bug_15149.zcos");
@@ -64,7 +66,6 @@ end
 
 
 // simulate scs_m1 and scs_m2
-// warnings are possible but scs_m2 simulation should pass and should not
 // destroy scs_m1 nor scs_m3 objects
 
 scicos_simulate(scs_m1, "nw");

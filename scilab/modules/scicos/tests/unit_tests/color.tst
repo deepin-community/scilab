@@ -18,7 +18,7 @@
 //
 // See the file ../license.txt
 //
-// <-- TEST WITH GRAPHICS -->
+// <-- TEST WITH GRAPHIC -->
 
 loadXcosLibs();
 

@@ -1,5 +1,5 @@
 ;
-; Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+; Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 ; Copyright (C) DIGITEO - 2015 - Antoine ELIAS
 ;
 ; Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -28,6 +28,7 @@ Source: modules\{#SLINT}\sci_gateway\{#SLINT}_gateway.xml; DestDir: {app}\module
 Source: modules\{#SLINT}\etc\{#SLINT}.quit; DestDir: {app}\modules\{#SLINT}\etc; Components: {#COMPN_SCILAB}
 Source: modules\{#SLINT}\etc\{#SLINT}.start; DestDir: {app}\modules\{#SLINT}\etc; Components: {#COMPN_SCILAB}
 Source: modules\{#SLINT}\etc\{#SLINT}.xml; DestDir: {app}\modules\{#SLINT}\etc; Components: {#COMPN_SCILAB}
+Source: modules\{#SLINT}\etc\{#SLINT}_all.xml; DestDir: {app}\modules\{#SLINT}\etc; Components: {#COMPN_SCILAB}
 Source: modules\{#SLINT}\etc\cnes_tool_conf.xml; DestDir: {app}\modules\{#SLINT}\etc; Components: {#COMPN_SCILAB}
 Source: modules\{#SLINT}\etc\cnes_analysis_conf.xml; DestDir: {app}\modules\{#SLINT}\etc; Components: {#COMPN_SCILAB}
 ;

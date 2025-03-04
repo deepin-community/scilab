@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009 - DIGITEO - Sylvestre KOUMAR
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -20,12 +20,14 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Vector;
 
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -40,6 +42,7 @@ import org.scilab.modules.gui.textbox.TextBox;
 import org.scilab.modules.gui.toolbar.ToolBar;
 import org.scilab.modules.gui.tree.SimpleTree;
 import org.scilab.modules.gui.tree.Tree;
+import org.scilab.modules.gui.utils.ClosingOperationsManager;
 import org.scilab.modules.gui.utils.Position;
 import org.scilab.modules.gui.utils.PositionConverter;
 import org.scilab.modules.gui.utils.Size;
@@ -186,24 +189,39 @@ public class SwingScilabTree extends DefaultMutableTreeNode implements SimpleTre
      * Display the tree
      * @param tree a tree
      */
-    public static void  showTree(Tree tree) {
-
+    public static void  showTree(final Tree tree) {
+        
         // Scilab tree
-        SwingScilabTree swingScilabTree = new SwingScilabTree(tree);
+        Runnable r = () -> {
+            SwingScilabTree swingScilabTree = new SwingScilabTree(tree);
 
-        SwingScilabWindow window = SwingScilabWindow.createWindow(true);
-        final SwingScilabDockablePanel tab = new SwingScilabDockablePanel(Messages.gettext("Tree Overview"));
-        tab.setCallback(new CommonCallBack("", CallBack.UNTYPED) {
-            private static final long serialVersionUID = 8418506008885202932L;
+            SwingScilabWindow window = SwingScilabWindow.createWindow(true);
+            final SwingScilabDockablePanel tab = new SwingScilabDockablePanel(Messages.gettext("Tree Overview"));
+            ClosingOperationsManager.addDependencyWithRoot(tab);
+            tab.setCallback(new CommonCallBack("", CallBack.UNTYPED) {
+                private static final long serialVersionUID = 8418506008885202932L;
 
-            public void callBack() {
-                tab.close();
+                public void callBack() {
+                    tab.close();
+                }
+            });
+            tab.addTree(swingScilabTree);
+            window.addTab(tab);
+            tab.setVisible(true);
+            window.setVisible(true);
+        };
+
+        // execute on EDT
+        if (SwingUtilities.isEventDispatchThread()) {
+            r.run();
+        } else {
+            try {
+                SwingUtilities.invokeAndWait(r);
+            } catch (InvocationTargetException | InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
-        });
-        tab.addTree(swingScilabTree);
-        window.addTab(tab);
-        tab.setVisible(true);
-        window.setVisible(true);
+        }
     }
 
     public void destroy() {

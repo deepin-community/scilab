@@ -1,4 +1,4 @@
-c     Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+c     Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 c     Copyright (C) 1985-2008 - INRIA - Carlos KLIMANN
 c     Copyright (C) {date_debut_2}-{date_fin_2} - {organisme 2} -
 c     {auteur 2}

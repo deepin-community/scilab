@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -13,20 +13,13 @@
 function x=tanm(a)
     //Matrix wise Tangent
 
-    rhs = argn(2);
-
-    if rhs <> 1 then
-        error(msprintf(gettext("%s: Wrong number of input argument(s): %d expected.\n"),"tanm",1));
-    end
-    
-    if type(a) <> 1 then
-        error(msprintf(gettext("%s: Wrong type for input argument #%d: Real or complex matrix expected.\n"), "tanm", 1));
+    arguments
+        a {mustBeA(a, "double")}
     end
 
     if a==[] then x=[],return,end
 
-    [m,n]=size(a);
-    if m<>n then
+    if ~issquare(a) then
         error(msprintf(gettext("%s: Wrong size for input argument #%d: Square matrix expected.\n"),"tanm",1));
     end
 

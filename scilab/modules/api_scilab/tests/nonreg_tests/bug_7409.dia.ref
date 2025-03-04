@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010 - Artem GLEBOV
 // Copyright (C) 2011 - DIGITEO - Sylvestre Ledru
 //
@@ -12,8 +12,8 @@
 //
 // <-- Non-regression test for bug 7409 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/7409
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/7409
 //
 // <-- Short Description -->
 //

@@ -40,7 +40,7 @@ acx_blas_ok=no
 acx_blas_save_LIBS="$LIBS"
 
 AC_ARG_WITH(blas-library,
-            AC_HELP_STRING([--with-blas-library=DIR], [set the path to the BLAS (refblas, Atlas, MKL...) library]))
+            AS_HELP_STRING([--with-blas-library=DIR], [set the path to the BLAS (refblas, Atlas, MKL...) library]))
 saved_ldflags="$LDFLAGS"
 
 
@@ -211,7 +211,7 @@ AC_REQUIRE([ACX_BLAS])
 acx_lapack_ok=no
 
 AC_ARG_WITH(lapack-library,
-            AC_HELP_STRING([--with-lapack-library=DIR], [set the path to the LAPACK library]))
+            AS_HELP_STRING([--with-lapack-library=DIR], [set the path to the LAPACK library]))
 saved_ldflags="$LDFLAGS"
 
 if test "$with_lapack_library" != no -a "$with_lapack_library" != ""; then
@@ -284,7 +284,7 @@ dnl @synopsis ACX_ARPACK([ACTION-IF-FOUND[, ACTION-IF-NOT-FOUND]])
 dnl
 dnl This macro looks for a library that implements the ARPACK
 dnl collection of Fortran77 subroutines designed to solve large 
-dnl scale eigenvalue problems (http://forge.scilab.org/index.php/p/arpack-ng/).
+dnl scale eigenvalue problems (https://github.com/opencollab/arpack-ng/).
 dnl On success, it sets the ARPACK_LIBS output variable to
 dnl hold the requisite library linkages.
 dnl
@@ -320,7 +320,7 @@ AC_REQUIRE([ACX_LAPACK])
 acx_arpack_ok=no
 
 AC_ARG_WITH(arpack-library,
-            AC_HELP_STRING([--with-arpack-library=DIR], [set the path to the ARPACK library]))
+            AS_HELP_STRING([--with-arpack-library=DIR], [set the path to the ARPACK library]))
 saved_ldflags="$LDFLAGS"
 
 if test "$with_arpack_library" != no -a "$with_arpack_library" != ""; then
@@ -487,6 +487,13 @@ doit (void)
         {
           if (info < 0)
             {
+              delete[] m;
+              delete[] resid;
+              delete[] ip;
+              delete[] ipntr;
+              delete[] v;
+              delete[] workl;
+              delete[] workd;
               return;  // Error
             }
 
@@ -517,6 +524,19 @@ doit (void)
                              sigmai, workev, "I", n, "LM", k, tol,
                              resid, p, v, n, ip, ipntr, workd,
                              workl, lwork, info, 1L, 1L, 2L);
+  delete[] m;
+  delete[] resid;
+  delete[] ip;
+  delete[] ipntr;
+  delete[] v;
+  delete[] workl;
+  delete[] workd;
+  delete[] sel;
+  delete[] dr;
+  delete[] di;
+  delete[] workev;
+  delete[] z;
+
 }
 ]], [[
   for (int i = 0; i < 10; i++)

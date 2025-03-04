@@ -1,17 +1,17 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
-// Copyright (C) 2018 - Stéphane MOTTELET
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
+// Copyright (C) 2018 - UTC - Stéphane MOTTELET
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
 //
 // <-- NO CHECK REF -->
-// <-- TEST WITH GRAPHICS -->
+// <-- TEST WITH GRAPHIC -->
 //
 // <-- Non-regression test for bug 14904 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/14902
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/14902
 //
 // <-- Short Description -->
 // "array[k] = []" does not work for handles (Regression)

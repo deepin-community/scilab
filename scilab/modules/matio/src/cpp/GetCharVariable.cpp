@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA - Vincent COUVERT
  * Copyright (C) 2010 - DIGITEO - Yann COLLETTE
  * Copyright (C) 2010 - DIGITEO - Vincent COUVERT
@@ -73,7 +73,9 @@ matvar_t* GetCharMatVar(types::String* pStr, const char* name)
 
 
     char* pcName = NULL;
-    iLen = wcslen(pStr->get(0));
+    char* first = wide_string_to_UTF8(pStr->get(0));
+    iLen = strlen(first);
+    FREE(first);
 
     for (int i = 1; i < pStr->getSize(); ++i)
     {

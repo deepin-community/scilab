@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008-2009 - INRIA - Michael Baudin
 // Copyright (C) 2011 - DIGITEO - Michael Baudin
 //
@@ -12,6 +12,7 @@
 // along with this program.
 
 // <-- CLI SHELL MODE -->
+// <-- NO CHECK REF -->
 
 function y = rosenbrock (x)
     y = 100*(x(2)-x(1)^2)^2 + (1-x(1))^2;
@@ -28,7 +29,7 @@ expected = [
 24.19999999999999573674   -1.1999999999999999555911    1.
 3347.7382596240795464837  -2.8867513453587889671326    2.5604385416954755783081
 71189.511402687028748915  -4.9977886537089943885803  -1.69672908261418342590
-]
+];
 assert_checkalmostequal ( computed , expected , %eps );
 s1 = optimsimplex_destroy ( s1 );
 
@@ -73,7 +74,7 @@ expected = [
 71189.511402687028748915  -4.9977886537089943885803  -1.69672908261418342590
 211.01779965627284241236    1.6538110421970486640930    1.2839178834110498428345
 10770.01508687966997968     3.497452358715236186981     1.857310198247432708740
-]
+];
 assert_checkequal ( mydude.nb , 5 );
 s1 = optimsimplex_destroy ( s1 );
 

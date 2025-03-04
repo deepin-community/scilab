@@ -245,15 +245,15 @@ Les niveaux de couleur sont indiqués par la fonction
 xset('colormap', cmap) 
 où cmap est une matrice de trois colonnes dont chaque ligne contient la couleur associée à un niveau, sous la forme RVB (les éléments de la matrice allant de 0 à 1). La première ligne de la matrice correspond au plus bas niveau, la dernière ligne au plus haut. Cette matrice peut être générée de manière automatique par les fonctions colormap :
 
-graycolormap(n), où n est un entier, génère n niveaux de gris entre le noir et le blanc ; 
-jetcolormap(n), où n est un entier, génère n niveaux de couleur entre le bleu et le rouge ; 
-hotcolormap(n), où n est un entier, génère n niveaux de couleur entre le rouge et le jaune. 
-On peut par exemple utiliser xset('colormap',graycolormap(32)) pour avoir 32 niveaux de gris. On peut réaliser un dégradé du noir vers le rouge avec
+gray(n), où n est un entier, génère n niveaux de gris entre le noir et le blanc ; 
+jet(n), où n est un entier, génère n niveaux de couleur entre le bleu et le rouge ; 
+hot(n), où n est un entier, génère n niveaux de couleur entre le rouge et le jaune. 
+On peut par exemple utiliser xset('colormap',gray(32)) pour avoir 32 niveaux de gris. On peut réaliser un dégradé du noir vers le rouge avec
 
-cmap = graycolormap(32); cmap(:, 2:3) = 0 ou avec r = [0:32 / 31:32]' / 32; cmap = [r zeros(32, 2)] 
+cmap = gray(32); cmap(:, 2:3) = 0 ou avec r = [0:32 / 31:32]' / 32; cmap = [r zeros(32, 2)] 
 et un dégradé du bleu vers le blanc avec
 
-cmap = graycolormap(32); cmap(:, 2:3) = 1 ou avec r = [0:32 / 31:32]' / 32; cmap = [r ones(32, 2)] 
+cmap = gray(32); cmap(:, 2:3) = 1 ou avec r = [0:32 / 31:32]' / 32; cmap = [r ones(32, 2)] 
 Les niveaux de couleur sont également utilisés lorsque l’on trace plusieurs courbes sur le même graphique. Dans ce cas-là, des dégradés ne fournissent pas un contraste permettant de distinguer facilement des courbes voisines ; on peut obtenir les niveaux de couleur par défaut avec get(sdf(), 'color_map').
 
 On peut tracer une courbe de niveaux avec la fonction
@@ -368,7 +368,7 @@ clear; clf;
  
 deff('[z] = f(x, y)', 'z = sin(x) * cos(y)')
  
-xset('colormap', jetcolormap(32))
+xset('colormap', jet(32))
  
 x = %pi * [-1:0.05:1]';
 y = x;

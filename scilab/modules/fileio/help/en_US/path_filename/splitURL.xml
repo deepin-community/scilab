@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) - S/E - Sylvestre Ledru
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -26,6 +26,7 @@
         <refname>splitURL</refname>
 
         <refpurpose>Split an URL (HTTP, HTTPS, FTP...) </refpurpose>
+        <refpurpose>This function is obsolete, please use <link linkend="url_split">url_split</link> instead.</refpurpose>
     </refnamediv>
 
     <refsynopsisdiv>
@@ -128,17 +129,9 @@
 
             [proto, server, path] = splitURL("ftp://ftp.free.fr/pub/Distributions_Linux/debian/README")
 
-            [a,b,c,d]=splitURL("http://www.scilab.org/content/search?SearchText=plot")
+            [a,b,c,d]=splitURL("https://www.scilab.org/content/search?SearchText=plot")
 
         </programlisting>
-        <!--
-// This example fails for now (probably a bug on evstr)
-// Retrieve the content and execute it
-[f,content]=getURL("http://fileexchange.scilab.org/toolboxes/161000/1.0/files/cshift.sci")
-evstr(content);
-M = grand(3,4,"uin",0,9);
-cshift(M,1);
--->
 
     </refsection>
 
@@ -146,7 +139,7 @@ cshift(M,1);
         <title>See also</title>
         <simplelist type="inline">
             <member>
-                <link linkend="getURL">getURL</link>
+                <link linkend="http_get">http_get</link>
             </member>
         </simplelist>
     </refsection>

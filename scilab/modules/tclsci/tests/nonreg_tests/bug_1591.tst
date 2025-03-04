@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008-2008 - INRIA - Bruno JOFRET
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -7,8 +7,10 @@
 
 // <-- Non-regression test for bug 1591 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=1591
+// <-- NO CHECK REF -->
+//
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/1591
 //
 // <-- Short Description -->
 //    Function TCL_GetVar has strange behaviour with matrixes
@@ -29,9 +31,8 @@ TCL_EvalStr("set ta(deux,deux) four");
 if and(size(TCL_GetVar("ta")) == [4 1]) == %F then pause,end
 
 
-a = [1 2 3;4 5 6; 7 8 9]
-
-TCL_SetVar("tcl_a", a)
+a = [1 2 3;4 5 6; 7 8 9];
+TCL_SetVar("tcl_a", a);
 
 // a is a 3x3 matrix
 if and(size(TCL_GetVar("tcl_a")) == [3 3]) == %F then pause,end

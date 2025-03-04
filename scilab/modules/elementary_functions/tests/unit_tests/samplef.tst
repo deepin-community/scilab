@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2014 - Scilab Enterprises - Pierre-Aime Agnel
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -15,7 +15,7 @@
 //==============================================================================
 fname = "samplef";
 
-err_msg_negative = msprintf(_("%s: Wrong value for input argument #%d: Non-negative values expected.\n"), fname, 3);
+err_msg_negative = msprintf(_("%s: Wrong value for input argument #%d: Non negative numbers expected.\n"), fname, 3);
 
 err_msg_size_glob = msprintf(_("%s: Wrong size for input argument #%d and #%d: Same size expected.\n"), fname, 2, 3);
 

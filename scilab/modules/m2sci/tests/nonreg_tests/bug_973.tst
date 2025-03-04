@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ????-2008 - INRIA - Vincent COUVERT <vincent.couvert@inria.fr>
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -11,8 +11,8 @@
 
 // <-- Non-regression test for bug 973 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/973
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/973
 //
 // <-- Short Description -->
 //    matlab file conversion problem (apparently: Extraction of

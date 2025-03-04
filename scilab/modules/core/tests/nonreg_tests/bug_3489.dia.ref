@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2005-2009 - INRIA - Serge STEER <serge.steer@inria.fr>
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -7,8 +7,8 @@
 // <-- CLI SHELL MODE -->
 // <-- Non-regression test for bug 3489 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=3489
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/3489
 //
 // <-- Short Description -->
 //catching protected variable redefinition

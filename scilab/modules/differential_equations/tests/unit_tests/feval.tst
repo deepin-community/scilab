@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ????-2008 - INRIA
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -34,8 +34,6 @@ end
 if res<>res1 then pause,end
 
 
-// An other example from :
-// http://numerics.tinabargs.com/2008/07/scilab-functions-as-input-for-other-scilab-functions/
 // Thanks to Ma. Cristina R. Bargo for the authorization to include this test 
 // into Scilab
 function y = plop(x)

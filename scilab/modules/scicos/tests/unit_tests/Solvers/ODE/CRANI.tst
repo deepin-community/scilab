@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2016 - Scilab Enterprises - Paul Bignier
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -24,12 +24,12 @@ for i=2:4  // 'max step size' = 10^-i, precision
     scs_m.props.tol(7) = 5*10^-i; // 'max step size'
     scs_m.props.tol(6) = 8;       // Solver
     scs_m.props.tol(2) = 1d-12;   // reltol
-    try scicos_simulate(scs_m, Info); catch disp(lasterror()); end  // CRANI
+    try scicos_simulate(scs_m, Info); catch disp(lasterror()); exit(1); end  // CRANI
     rkval = res.values;   // Results
 
     // Modify solver and reltol + run CVode + save results
     scs_m.props.tol(6) = 4; scs_m.props.tol(2) = 1d-15;
-    try scicos_simulate(scs_m, Info); catch disp(lasterror()); end
+    try scicos_simulate(scs_m, Info); catch disp(lasterror()); exit(1); end
     cvval = res.values;
 
     // Compare results

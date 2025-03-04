@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Antoine ELIAS
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -8,8 +8,8 @@
 //
 // <-- Non-regression test for bug 14313 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/14313
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/14313
 //
 // <-- Short Description -->
 // Parser did not interpret a space before ... as a column separator in matrices

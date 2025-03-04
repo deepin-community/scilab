@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2015 - Scilab Enterprises - Calixte DENIZET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -22,8 +22,6 @@
 
 #include "visitor.hxx"
 #include "execvisitor.hxx"
-#include "allexp.hxx"
-#include "allvar.hxx"
 
 namespace coverage
 {
@@ -81,6 +79,7 @@ public:
     }
 
     void visit(ast::SeqExp & e);
+    void visit(ast::ArgumentsExp & e);
     void visit(ast::IfExp & e);
     void visit(ast::WhileExp & e);
     void visit(ast::ForExp & e);
@@ -88,6 +87,7 @@ public:
     void visit(ast::SelectExp & e);
     void visit(ast::CaseExp & e);
     void visit(ast::FunctionDec & e);
+    void visit(ast::ArgumentDec & e);
 
     void visit(ast::CallExp & e)
     {
@@ -194,26 +194,6 @@ public:
     }
 
     void visit(ast::VarDec & e)
-    {
-    }
-
-    void visit(ast::OptimizedExp & e)
-    {
-    }
-
-    void visit(ast::DAXPYExp & e)
-    {
-    }
-
-    void visit(ast::MemfillExp& e)
-    {
-    }
-
-    void visit(ast::IntSelectExp& e)
-    {
-    }
-
-    void visit(ast::StringSelectExp& e)
     {
     }
 };

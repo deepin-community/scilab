@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -23,17 +23,7 @@ function f=%p_p_s(p,s)
     [m,n]=size(p)
     [ms,ns]=size(s)
     if ms==1&ns==1 then
-        if m==1|n==1 then //Element wise exponentiation p.^s with p vector
-            if s<0 then
-                if or(abs(coeff(p(:)))*ones(max(0,max(degree(p)))+1,1)==0) then
-                    msg = _("%s: Division by zero...")
-                    error(msprintf(msg, fname))
-                end
-                f = rlist(ones(p),p.^(-s),[])
-            else // this case is in fact hard coded
-                f=p.^s
-            end
-        elseif m==n then //square matrix exponentiation p^s
+        if m==n then //square matrix exponentiation p^s
             if s<0 then
                 f=invr(p),
                 s=-s;

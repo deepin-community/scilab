@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA -
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -19,8 +19,8 @@
           xml:id="regexp" xml:lang="pt">
     <refnamediv>
         <refname>regexp</refname>
-        <refpurpose>acha um string que corresponde ao string de expressão
-            regular
+        <refpurpose>
+            em uma string, localize (e extraia) substrings correspondentes a uma expressão regular
         </refpurpose>
     </refnamediv>
     <refsynopsisdiv>

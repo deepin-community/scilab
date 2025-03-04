@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
 //
@@ -18,7 +18,10 @@ function out_vect = %h_get(varargin)
         for i=1:size(hdl,"*")
             out_vect = [out_vect ; get(hdl(i),str)]
         end
-
+        if (size(hdl,"*") == size(out_vect,"*"))
+            // preserve the shape of the input argument
+            out_vect = matrix(out_vect, size(hdl));
+        end
     elseif (size(varargin) == 1)
         str = varargin(1)
         out_vect = get(str)

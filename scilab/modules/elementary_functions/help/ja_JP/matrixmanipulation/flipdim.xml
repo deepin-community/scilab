@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA - Farid BELAHCENE
  * Copyright (C) 2013, 2016 - Samuel GOUGEON : 5.5.0 extensions, page overhauled
  *
@@ -125,6 +125,7 @@ flipdim(x, 1)
 // 有理数:
 n = inv_coeff(grand(3, 9, "uin", 0, 3), 2);
 d = inv_coeff(grand(3, 9, "uin", 0, 3), 2);
+d(d == 0) = 1;
 r = n./d
 flipdim(r, 2)
  ]]></programlisting>
@@ -137,8 +138,6 @@ flipdim(X, 2, 2) // => [10 11   8 9   6 7   4 5   2 3   0 1] // ブロックサ�
 flipdim(X, 2, 3) // => [9 10 11   6 7 8   3 4 5   0 1 2]
 flipdim(X, 2, 4) // => [8 9 10 11   4 5 6 7   0 1 2 3]
 flipdim(X, 2, 6) // => [6 7 8 9 10 11   0 1 2 3 4 5]
-// blockSizeがxの指定した次元を分割しない場合はエラー.
-y = flipdim(x, 2, 5); // size(X) = [1 12] および blockSize=5 は 12を割り切れない.
  ]]></programlisting>
     <para>Example of results:</para>
     <screen><![CDATA[

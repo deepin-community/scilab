@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009 - DIGITEO - Pierre MARECHAL <pierre.marechal@scilab.org>
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -7,8 +7,10 @@
 
 // <-- ENGLISH IMPOSED -->
 // <-- CLI SHELL MODE -->
+// <-- NO CHECK REF -->
 
 load("SCI/modules/atoms/macros/atoms_internals/lib");
+exec("SCI/modules/atoms/tests/unit_tests/atomsTestUtils.sce");
 
 // If previous test did not end properly, restore, else backup config file
 atomsRestoreConfig(%T);
@@ -20,7 +22,7 @@ atomsSetConfig("Verbose" ,"False");
 
 // Load the 2nd scenario : See scene11.test.atoms.scilab.org.txt
 // =============================================================================
-atomsRepositorySetOfl("http://scene11.6.0.test.atoms.scilab.org");
+atomsLoadTestScene("scene11");
 
 // Install toolbox N°2
 atomsInstall(["toolbox_2V6","2.0";"toolbox_2V6","2.1"],"user");

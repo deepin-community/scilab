@@ -1,12 +1,22 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2012 - Digiteo - Vincent Couvert
 //
 // This file is released under the 3-clause BSD license. See COPYING-BSD.
 
-demo_plot3d = scf(100002);
+if get("uicontrol_image") <> [] then
+    f = get("uicontrol_image");
+    delete(f.children);
+else
+    close(100002);
+    // Create a figure
+    f = figure( ...
+    "figure_id", 100002, ...
+    "background", -2, ...
+    "figure_name", gettext("Show images with uicontrols"), ...
+    "tag", "uicontrol_image");
+end
 
 // Display image with default size (centered in figure)
-f = gcf();
 figSize = f.axes_size;
 imageWidth = 181;
 imageHeight = 144;

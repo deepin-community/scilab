@@ -2,15 +2,15 @@ Description: make the build reproducible
 Author: Chris Lamb
 Forwarded: Debian-specific
 
---- scilab.orig/scilab/configure.ac
-+++ scilab/scilab/configure.ac
-@@ -1964,6 +1964,9 @@
+--- a/scilab/configure.ac
++++ b/scilab/configure.ac
+@@ -2619,6 +2619,9 @@
  fi
  
  CURRENT_YEAR=`date "+%Y"`
 +if test -n "$SOURCE_DATE_EPOCH"; then
 +   CURRENT_YEAR=`date --utc --date="@$SOURCE_DATE_EPOCH" "+%Y"`
 +fi
- DETECTED_YEAR=`grep "Copyright (c) 2017-" modules/core/src/cpp/banner.cpp|sed -e "s/.*Copyright (c) 2017-\([[0-9]]*\).*/\1/g"`
+ DETECTED_YEAR=`grep "Copyright (c) 2022-" ${SCI_SRCDIR}/modules/core/src/cpp/banner.cpp|sed -e "s/.*Copyright (c) 2022-\([[0-9]]*\).*/\1/g"`
  
  if test "$CURRENT_YEAR" != "$DETECTED_YEAR"; then

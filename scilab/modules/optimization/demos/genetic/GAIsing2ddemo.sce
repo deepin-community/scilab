@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) DIGITEO - Yann COLLETTE
 // Copyright (C) 2012 - DIGITEO - Allan CORNET
 //
@@ -19,6 +19,9 @@ function demo_ising()
 
     // Load the crossover and mutation operators for the Ising 2D problem
     getd(path + "/.");
+
+    rand("seed", 0);
+    rand("uniform")
 
     J     = 1.1;
     H     = 0.7;

@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009-2009 - Digiteo - Jean-Baptiste Silvy
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,8 +9,8 @@
 
 // <-- Non-regression test for bug 2134-->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=2134
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/2134
 //
 // <-- Short Description -->
 // drawlater causes wrong placement of subplot titles for logarithmic plot2d

@@ -5,7 +5,7 @@
           xml:lang="en" xml:id="covWrite">
     <refnamediv>
         <refname>covWrite</refname>
-        <refpurpose>Exports runtime information to files</refpurpose>
+        <refpurpose>Exports runtime performance results to HTML and binary files</refpurpose>
     </refnamediv>
     <refsynopsisdiv>
         <title>Syntax</title>
@@ -21,25 +21,29 @@
             <varlistentry>
                 <term>"html"</term>
                 <listitem>
-                    <para>exports the coverage data as HTML files</para>
+                    exports the performance results as HTML files.
+                    <para/>
                 </listitem>
             </varlistentry>
             <varlistentry>
                 <term>"binary"</term>
                 <listitem>
-                    <para>store the coverage data as binary for later use</para>
+                    stores the performance results as binary, for later use.
+                    <para/>
                 </listitem>
             </varlistentry>
             <varlistentry>
                 <term>dir</term>
                 <listitem>
-                    <para>output directory as a string</para>
+                  Path of the output directory for HTML files.
+                    <para/>
                 </listitem>
             </varlistentry>
             <varlistentry>
                 <term>binaryFile</term>
                 <listitem>
-                    <para>stored binary filename as a string</para>
+                    Path and filename of the binary file.
+                    <para/>
                 </listitem>
             </varlistentry>
         </variablelist>
@@ -47,37 +51,60 @@
     <refsection>
         <title>Description</title>
         <para>
-            This command is used to export, store or "load and export" runtime instrumentation data to the file system. The major usage is to export the current runtime information to HTML files on a directory using <literal>covWrite("html", "TMPDIR/coverage")</literal>.
+            <emphasis role="bold">covWrite("html", dir)</emphasis> exports and nicely presents
+            into HTML files the performance results of functions currently activated.
+            Files are stored in the given <varname>dir</varname> directory.
         </para>
         <para>
-            This command is used to export, store or "load and export" runtime instrumentation data to the file system.
+            A separate HTML file is generated for each activated function.
+            For instance, if the macro <literal>members</literal> is activated,
+            <literal>covWrite(…)</literal> will generate the file
+            <literal>members.html</literal>.
         </para>
+        <para>
+            <emphasis role="bold">covWrite("binary", binaryFile)</emphasis> records in the
+            indicated binary file the performance results of activated functions.
+        </para>
+        <para>
+            <emphasis role="bold">covWrite("html", binaryFile, dir)</emphasis> loads former
+            results stored in the <varname>binaryFile</varname> and exports them into HTML
+            files.
+        </para>
+        <note>
+            Paths prefixed with the predefined constants <literal>SCI</literal>,
+            <literal>SCIHOME</literal>, <literal>SCI</literal>.. are  automatically expanded.
+        </note>
     </refsection>
     <refsection>
-        <title>Basic example</title>
-        <programlisting role="example"><![CDATA[
-covStart(isempty)                      // instrument isempty by macro value
-for i=1:1e5; isempty(i); end           // run
-covWrite("html", "TMPDIR/coverage")    // write runtime information to a directory
-covStop();                             // remove any instrumentation
-    ]]></programlisting>
-    </refsection>
-    <refsection>
-        <title>Binary exemple</title>
-        <programlisting role="example"><![CDATA[
+      <title>Examples</title>
+        <refsect3>
+            <title>Basic example</title>
+            <programlisting role="example"><![CDATA[
+covStart(isempty)                      // activate isempty for performance measurement
+for i = 1:1e5; isempty(i); end         // run it
+covWrite("html", "TMPDIR/coverage")    // write runtime performance results to a directory
+covStop();                             // deactivate runtime measurement mode for all functions
+
+winopen(fullfile(TMPDIR, "coverage/isempty.html"))   // Displays results (For Windows users)
+        ]]></programlisting>
+        </refsect3>
+        <refsect3>
+        <title>Create two binaries, merge them, and export merged results into HTML</title>
+            <programlisting role="example"><![CDATA[
 covStart(isempty)
 for i=1:1e5; isempty(i); end
-covWrite("binary", "TMPDIR/isempty1")  // write runtime information
-covStop();                             // clear instrumentation
+covWrite("binary", "TMPDIR/isempty1")  // write the 1st binary
+covStop();                             // stop the measurement mode
 
 covStart(isempty)
 for i=1:1e5; isempty(string(i)); end
-covWrite("binary", "TMPDIR/isempty2")  // write other runtime information
+covWrite("binary", "TMPDIR/isempty2")  // write other runtime results
 covStop();
 
 covMerge(["TMPDIR/isempty1" "TMPDIR/isempty2"], "TMPDIR/isempty") // merge them
-covWrite("html", "TMPDIR/isempty", "TMPDIR/coverage") // render the information as HTML
-    ]]></programlisting>
+covWrite("html", "TMPDIR/isempty", "TMPDIR/coverage") // render the results as HTML
+        ]]></programlisting>
+        </refsect3>
     </refsection>
     <refsection role="see also">
         <title>See also</title>
@@ -92,6 +119,17 @@ covWrite("html", "TMPDIR/isempty", "TMPDIR/coverage") // render the information 
                 <link linkend="covMerge">covMerge</link>
             </member>
         </simplelist>
+    </refsection>
+    <refsection role="history">
+        <title>History</title>
+        <revhistory>
+            <revision>
+                <revnumber>2023.0.0</revnumber>
+                <revdescription>
+                    Formating of <literal>covWrite("html")</literal> results improved.
+                </revdescription>
+            </revision>
+        </revhistory>
     </refsection>
 </refentry>
 

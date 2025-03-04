@@ -1,5 +1,5 @@
 #
-# Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+# Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 # Copyright (C) INRIA   - 2006-2008 - Sylvestre Ledru
 # Copyright (C) INRIA   - 2007 - Vincent COUVERT
 # Copyright (C) DIGITEO - 2009 - Sylvestre Ledru
@@ -118,7 +118,6 @@ libsciconsole_minimal_la_CPPFLAGS = \
     -I$(top_srcdir)/modules/ast/includes/symbol/ \
     -I$(top_srcdir)/modules/ast/includes/system_env/ \
     -I$(top_srcdir)/modules/ast/includes/types/ \
-    -I$(top_srcdir)/modules/ast/includes/analysis/ \
     -I$(top_srcdir)/modules/fileio/includes/ \
     -I$(top_srcdir)/modules/output_stream/includes/ \
     -I$(top_srcdir)/modules/history_manager/includes/ \
@@ -135,6 +134,7 @@ libsciconsole_minimal_la_CPPFLAGS = \
     -I$(top_srcdir)/modules/threads/includes \
     -I$(top_srcdir)/modules/string/includes \
     -I$(top_srcdir)/modules/dynamic_link/includes \
+    $(NCURSES_CFLAGS) \
     $(AM_CPPFLAGS)
 
 # Includes need for the compilation
@@ -174,6 +174,7 @@ if GUI
 pkglib_LTLIBRARIES += libsciconsole.la
 endif
 
+libsciconsole_minimal_la_LIBADD = $(NCURSES_LIBS)
 libsciconsole_la_LIBADD = libsciconsole-minimal.la
 
 # All the sources needed by libsciconsole.la

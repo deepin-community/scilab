@@ -1,0 +1,108 @@
+# Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+# Copyright (C) Dassault Systemes - 2022 - Clement DAVID
+# Copyright (C) Dassault Systemes - 2022 - Cedric DELAMARRE
+#
+#
+# This YAML file describe the build stage of the CI. This stage delegates the
+# build action to shell scripts, it creates job per platform and handle Merge
+# Request as well as nightly/release build.
+#
+
+# build scilab using a windows runner
+.windows_build:
+  stage: build
+  tags: [x64_windows, scilab, shell, build]
+  before_script:
+    # The first time create base folders
+    - New-Item -ItemType Directory -Force -Path "$SCILAB_COMMON_PATH"
+    - New-Item -ItemType Directory -Force -Path "$SCILAB_COMMON_PATH\$SCI_VERSION_STRING\"
+    - New-Item -ItemType Directory -Force -Path "$SCILAB_COMMON_PATH\$SCI_VERSION_STRING\scihome\"
+    - New-Item -ItemType Directory -Force -Path "$SCILAB_COMMON_PATH\$SCI_VERSION_STRING\log\"
+    - New-Item -ItemType Directory -Force -Path "$SCILAB_COMMON_PATH\$SCI_VERSION_STRING\test\"
+
+    # $null is used to reset the command status $?
+    - echo "cleaning $CI_PROJECT_DIR"
+    # kill all Scilab older than 4 hours (CI job fails before)
+    - $scilab_to_kill=(Get-Process *scilex* | Where StartTime -lt (Get-Date).AddHours(-4))
+    - if($scilab_to_kill.length) { $scilab_to_kill.kill() }
+    # Uninstall Scilab older than 2 day
+    - Get-ChildItem -Path "$SCILAB_COMMON_PATH\*\install\unins000.exe" -Erroraction 'Continue' | Where-Object {($_.LastWriteTime -lt (Get-Date).AddHours(-48))} | foreach { Start-Process $_ -ArgumentList /VERYSILENT,SP-,/SUPPRESSMSGBOXES,/FORCECLOSEAPPLICATIONS  -NoNewWindow -Wait -Erroraction 'Continue'} ; $null
+    # Remove folder older than 3 day
+    - Get-ChildItem -Path "$SCILAB_COMMON_PATH\*" -Erroraction 'Continue' | Where-Object {($_.LastWriteTime -lt (Get-Date).AddHours(-72))} | Remove-Item -Recurse -Erroraction 'Continue'; $null
+    # Remove TMPDIR older than 3 day
+    - Get-ChildItem -Path "$env:TEMP/SCI_TMP*" -ErrorAction 'Continue' | Where-Object {($_.LastWriteTime -lt (Get-Date).AddHours(-72))} | Remove-Item -Recurse -ErrorAction 'Continue'; $null
+
+  script:
+    - cmd /C "call .gitlab-ci\build.bat"
+  artifacts:
+    paths:
+      - $SCI_VERSION_STRING
+      - $SCI_VERSION_STRING.bin.$ARCH.exe
+    when: always
+# build an MR version
+windows_build_mr:
+  extends: .windows_build
+  needs:
+    - windows_set_env
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+# build a nightly version
+windows_build_nightly:
+  extends: .windows_build
+  needs:
+    - windows_set_env
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+# build a release version
+windows_build_release:
+  extends: .windows_build
+  needs:
+    - windows_set_env
+  rules:
+    - if: $CI_COMMIT_TAG
+
+# build scilab using a linux runner
+.linux_build:
+  stage: build
+  image: ${DOCKER_LINUX_BUILDER}:${DOCKER_TAG}
+  tags: [x86_64-linux-gnu, docker, scilab, build]
+  before_script:
+    - echo -e "\e[0Ksection_start:$(date +%s):cleanup\r\e[0KCleaning $CI_PROJECT_DIR"
+    # Remove logs older than 3 days
+    - find logs_*  -mtime +3 -delete || true
+    # Remove installer older than 3 days
+    - find ../../scilab-* -mtime +3 -delete || true
+    - echo -e "\e[0Ksection_end:$(date +%s):cleanup\r\e[0K"
+  script: bash -x -e .gitlab-ci/build.sh
+  artifacts:
+    paths:
+      - $SCI_VERSION_STRING
+      - $SCI_VERSION_STRING.bin.$ARCH.tar.xz
+    when: always
+# build an MR version
+linux_build_mr:
+  extends: .linux_build
+  needs:
+    - linux_set_env
+    - job: linux_build_prereq
+      optional: true
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+# build a nightly
+linux_build_nightly:
+  extends: .linux_build
+  needs:
+    - linux_set_env
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+# build a release
+linux_build_release:
+  extends: .linux_build
+  needs:
+    - linux_set_env
+  rules:
+    - if: $CI_COMMIT_TAG

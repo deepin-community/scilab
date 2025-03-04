@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009 - DIGITEO - Bruno JOFRET
  * Copyright (C) 2010 - DIGITEO - Clement DAVID
  * Copyright (C) 2011-2017 - Scilab Enterprises - Clement DAVID
@@ -29,14 +29,17 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 
 import org.scilab.modules.action_binding.InterpreterManagement;
+import org.scilab.modules.commons.ScilabCommons;
 import org.scilab.modules.commons.gui.FindIconHelper;
 import org.scilab.modules.commons.xml.XConfiguration;
 import org.scilab.modules.core.Scilab;
@@ -56,10 +59,15 @@ import org.scilab.modules.gui.utils.ClosingOperationsManager;
 import org.scilab.modules.gui.utils.WindowsConfigurationManager;
 import org.scilab.modules.xcos.actions.ExternalAction;
 import org.scilab.modules.xcos.actions.StopAction;
+import org.scilab.modules.xcos.block.AfficheBlock;
 import org.scilab.modules.xcos.configuration.ConfigurationManager;
 import org.scilab.modules.xcos.configuration.model.DocumentType;
+import org.scilab.modules.xcos.explorer.BrowserTab;
 import org.scilab.modules.xcos.graph.DiagramComparator;
 import org.scilab.modules.xcos.graph.XcosDiagram;
+import org.scilab.modules.xcos.graph.model.ScicosObjectOwner;
+import org.scilab.modules.xcos.graph.model.XcosCell;
+import org.scilab.modules.xcos.graph.model.XcosGraphModel;
 import org.scilab.modules.xcos.io.XcosFileType;
 import org.scilab.modules.xcos.palette.PaletteManager;
 import org.scilab.modules.xcos.palette.view.PaletteManagerView;
@@ -71,11 +79,6 @@ import com.mxgraph.model.mxCell;
 import com.mxgraph.util.mxEvent;
 import com.mxgraph.util.mxEventObject;
 import com.mxgraph.view.mxStylesheet;
-import javax.swing.Timer;
-import org.scilab.modules.commons.ScilabCommons;
-import org.scilab.modules.xcos.graph.model.ScicosObjectOwner;
-import org.scilab.modules.xcos.graph.model.XcosCell;
-import org.scilab.modules.xcos.graph.model.XcosGraphModel;
 
 /**
  * Xcos entry point class
@@ -106,9 +109,10 @@ public final class Xcos {
             // wait the Scilab startup termination
             final Timer t = new Timer(500, null);
             t.addActionListener((e) -> {
+                t.stop();
+                
                 if (ScilabCommons.getStartProcessing() == 1)
                     return;
-                t.stop();
 
                 /* load scicos libraries (macros) */
                 InterpreterManagement.requestScilabExec(LOAD_XCOS_LIBS_LOAD_SCICOS);
@@ -274,22 +278,25 @@ public final class Xcos {
         return diagrams.getOrDefault(root, Collections.emptyList());
     }
 
-    public ScicosObjectOwner openedDiagram(File f) {
-        ScicosObjectOwner opened = null;
+    public Optional<ScicosObjectOwner> openedDiagram(JavaController controller, File f) {
+        final String storedPath;
         if (f == null) {
-            return opened;
+            storedPath = "";
+        } else {
+            storedPath = f.getAbsolutePath();
         }
 
         for (ScicosObjectOwner root : diagrams.keySet()) {
-            List<XcosDiagram> diags = diagrams.getOrDefault(root, Collections.emptyList());
+            // retrieve the path from the root
+            String[] path = {""};
+            controller.getObjectProperty(root.getUID(), Kind.DIAGRAM, ObjectProperties.PATH, path);
 
-            if (!diags.isEmpty() && f.equals(diags.get(0).getSavedFile())) {
-                opened = root;
-                break;
+            if (storedPath.equals(path[0])) {
+                return Optional.of(root);
             }
         }
 
-        return opened;
+        return Optional.empty();
     }
 
     /**
@@ -300,7 +307,7 @@ public final class Xcos {
      * @return is modified
      */
     public boolean isModified(ScicosObjectOwner root) {
-        for (XcosDiagram d : diagrams.get(root)) {
+        for (XcosDiagram d : diagrams.getOrDefault(root, Collections.emptyList())) {
             if (d.isModified()) {
                 return true;
             }
@@ -387,7 +394,7 @@ public final class Xcos {
         /*
          * looking for an already opened diagram
          */
-        ScicosObjectOwner root = openedDiagram(f);
+        ScicosObjectOwner root = openedDiagram(controller, f).orElse(null);
         if (root != null) {
             diag = diagrams.get(root).iterator().next();
         }
@@ -396,22 +403,6 @@ public final class Xcos {
             diag = null;
         }
 
-        // looking for an empty, unsaved diagram to use if opening a new file
-        // if not found an already open instance of the file
-        if (diag == null) {
-            // traverse through the key set of all the opened diagrams
-            for (Map.Entry<ScicosObjectOwner, List<XcosDiagram>> entry : diagrams.entrySet()) {
-                List<XcosDiagram> diagramsWithKey = entry.getValue();
-                XcosDiagram diagramWithKey = diagramsWithKey.get(0); // get the diagram that maps to that key
-                int childCount = diagramWithKey.countChildren(); //count the number of children in the diagram
-                // if empty, unsaved and unused
-                if (childCount == 0 && diagramWithKey.getSavedFile() == null && !diagramWithKey.isModified()) {
-                    // use that open diagram
-                    diag = diagramWithKey;
-                    diag.transformAndLoadFile(controller, file);
-                }
-            }
-        }
         // if reuse then request focus
         if (diag != null) {
             XcosTab tab = XcosTab.get(diag);
@@ -461,6 +452,7 @@ public final class Xcos {
             }
 
             diag = new XcosDiagram(controller, currentId, currentKind, "");
+            diag.setSavedFile(f);
             diag.installListeners();
 
             root = findRoot(controller, diag);
@@ -483,22 +475,23 @@ public final class Xcos {
                 }
             }
 
-
-            /*
-             * Create a visible window before loading
-             */
-            if (XcosTab.get(diag) == null) {
-                XcosTab.restore(diag);
-
-            }
-            if (openThePalette) {
-                PaletteManager.setVisible(true);
-            }
-
             /*
              * Load the file
              */
-            diag.transformAndLoadFile(controller, file);
+            if (file != null)
+            {
+                diag.transformAndLoadFile(controller, file);
+            }
+        }
+
+        /*
+         * Create a visible window before loading
+         */
+        if (openThePalette) {
+            PaletteManager.setVisible(true);
+        }
+        if (XcosTab.get(diag) == null) {
+            XcosTab.restore(diag);
         }
     }
 
@@ -581,7 +574,8 @@ public final class Xcos {
         }
 
         // insert the diagram
-        diags.add(diag);
+        if (!diags.contains(diag))
+            diags.add(diag);
     }
 
     /**
@@ -658,9 +652,9 @@ public final class Xcos {
          * Update configuration before the destroy call to validate the uuid
          */
         if (canClose) {
-            configuration.addToRecentTabs(graph);
             configuration.saveConfig();
         }
+
         return canClose;
     }
 
@@ -673,6 +667,7 @@ public final class Xcos {
      *            the diagram to close
      */
     public void destroy(XcosDiagram graph) {
+        // perform extra cleanup in case of last opened diagram
         ScicosObjectOwner root = findRoot(graph);
 
         final boolean wasLastOpenedForFile = openedDiagrams(root).size() <= 1;
@@ -758,12 +753,12 @@ public final class Xcos {
          */
         final Xcos instance = sharedInstance;
 
-        // get all tabs
+        // get all visible tabs
         final List<SwingScilabDockablePanel> tabs = new ArrayList<SwingScilabDockablePanel>();
         for (final Collection<XcosDiagram> diags : instance.diagrams.values()) {
             for (final XcosDiagram diag : diags) {
                 final SwingScilabDockablePanel tab = XcosTab.get(diag);
-                if (tab != null) {
+                if (tab != null && tab.isVisible()) {
                     tabs.add(tab);
                 }
             }
@@ -879,6 +874,8 @@ public final class Xcos {
                 public void run() {
                     closeSession(false);
                     clearInstance();
+
+                    AfficheBlock.forceClose();
                 }
             });
         } catch (final InterruptedException e) {
@@ -1150,11 +1147,18 @@ public final class Xcos {
 
             SwingScilabDockablePanel tab = ScilabTabFactory.getInstance().getFromCache(uuid);
 
-            // Palette manager restore
+            // Palette restore
             if (tab == null) {
                 if (PaletteManagerView.DEFAULT_TAB_UUID.equals(uuid)) {
-                    PaletteManagerView.restore(null, false);
+                    PaletteManagerView.restore(false);
                     tab = PaletteManagerView.get();
+                }
+            }
+
+            // Browser restore
+            if (tab == null) {
+                if (BrowserTab.DEFAULT_TAB_UUID.equals(uuid)) {
+                    tab = BrowserTab.allocate();
                 }
             }
 
@@ -1168,17 +1172,17 @@ public final class Xcos {
                 final boolean isTab = uuid.equals(cachedDocumentType.getUuid());
                 final boolean isViewport = uuid.equals(cachedDocumentType.getViewport());
 
-                final XcosDiagram graph = getDiagram(isTab, isViewport);
+                JavaController controller = new JavaController();
+                final XcosDiagram graph = getDiagram(controller, isTab, isViewport);
                 if (graph != null && isTab) {
-                    XcosTab.restore(graph, false);
-                    graph.fireEvent(new mxEventObject(mxEvent.ROOT));
-                    tab = XcosTab.get(graph);
-                } else if (graph != null && isViewport) {
-                    ViewPortTab.restore(graph, false);
-                    tab = ViewPortTab.get(graph);
+                    graph.setGraphTab(uuid);
 
-                    ClosingOperationsManager.addDependency(XcosTab.get(graph), tab);
-                    WindowsConfigurationManager.makeDependency(graph.getGraphTab(), tab.getPersistentId());
+                    tab = XcosTab.allocate(graph);
+                    graph.fireEvent(new mxEventObject(mxEvent.ROOT));
+                } else if (graph != null && isViewport) {
+                    graph.setViewPortTab(uuid);
+
+                    tab = ViewPortTab.allocate(graph);
                 } else {
                     return null;
                 }
@@ -1190,17 +1194,17 @@ public final class Xcos {
             return tab;
         }
 
-        private XcosDiagram getDiagram(boolean isTab, boolean isViewport) {
+        private XcosDiagram getDiagram(JavaController controller, boolean isTab, boolean isViewport) {
             final Xcos instance = getInstance();
             XcosDiagram graph = null;
 
             if (isTab) {
                 // load a new diagram
-                graph = getInstance().configuration.loadDiagram(cachedDocumentType);
+                graph = getInstance().configuration.loadDiagram(controller, cachedDocumentType);
             } else if (isViewport) {
                 // get the cached diagram
                 final File f = instance.configuration.getFile(cachedDocumentType);
-                final ScicosObjectOwner root = getInstance().openedDiagram(f);
+                final ScicosObjectOwner root = getInstance().openedDiagram(controller, f).orElse(null);
 
                 Collection<XcosDiagram> diags = instance.diagrams.getOrDefault(root, Collections.emptyList());
                 for (XcosDiagram d : diags) {
@@ -1219,6 +1223,10 @@ public final class Xcos {
         public synchronized boolean isAValidUUID(String uuid) {
             // check the Palette manager view (static uuid)
             if (PaletteManagerView.DEFAULT_TAB_UUID.equals(uuid)) {
+                return true;
+            }
+            // check the Browser (static uuid)
+            if (BrowserTab.DEFAULT_TAB_UUID.equals(uuid)) {
                 return true;
             }
 
@@ -1253,17 +1261,10 @@ public final class Xcos {
             /*
              * Invalid cache, look for the right one
              */
-            final ConfigurationManager config = getInstance().configuration;
-            final List<DocumentType> docs = config.getSettings().getTab();
-            for (DocumentType d : docs) {
-                final boolean isTab = uuid.equals(d.getUuid());
-                final boolean isViewport = uuid.equals(d.getViewport());
-
-                if (isTab || isViewport) {
-                    cachedDocumentType = d;
-                    break;
-                }
-            }
+            cachedDocumentType = ConfigurationManager.getInstance().streamTab()
+                .filter(d -> uuid.equals(d.getUuid()) || uuid.equals(d.getViewport()))
+                .findFirst()
+                .orElse(null);
         }
 
         @Override

@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008 - INRIA
 // Copyright (C) 2020 - Samuel GOUGEON - Le Mans Université
 //
@@ -164,7 +164,7 @@ b = [%T ; %F];
 for f = ["d" "i" "u" "o" "x" "X" "g" "G"]
     mprintf("%"+f+"\n", b);
     mprintf("%"+f+" %d\n", b, n);
-    if and(f <> ["u" "o" "x" "X"])  // http://bugzilla.scilab.org/16563
+    if and(f <> ["u" "o" "x" "X"])  // https://gitlab.com/scilab/scilab/-/issues/16563
         mprintf("%2$"+f+" %1$d\n", n, b);
     end
 end

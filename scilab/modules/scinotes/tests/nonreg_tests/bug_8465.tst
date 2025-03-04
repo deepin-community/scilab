@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010 - Calixte DENIZET
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -10,8 +10,8 @@
 //
 // <-- Non-regression test for bug 8465 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/8465
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/8465
 //
 // <-- Short Description -->
 // Under GNU/Linux, it was not possible to paste with the middle click.

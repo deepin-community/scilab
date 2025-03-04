@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2011 - DIGITEO - Cedric Delamarre
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -36,11 +36,7 @@ types::InternalType *GenericKrontimes(types::InternalType *_pLeftOperand, types:
             return NULL;
         }
 
-        int iResult = KroneckerMultiplyDoubleByDouble(pL, pR, &pResult);
-        if (iResult)
-        {
-            throw ast::InternalError(_W("Inconsistent row/column dimensions.\n"));
-        }
+        KroneckerMultiplyDoubleByDouble(pL, pR, &pResult);
 
         return pResult;
     }

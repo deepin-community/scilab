@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2015 - Scilab Enterprises
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -15,13 +15,17 @@
 
 package org.scilab.modules.ui_data.newsfeed;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+
 import org.w3c.dom.Node;
 
 import java.util.Date;
@@ -29,7 +33,6 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import java.util.List;
-import java.util.ArrayList;
 import javax.swing.SwingWorker;
 
 /**
@@ -55,13 +58,42 @@ public class NewsFetcher {
 
         @Override
         protected void done() {
-            controller.nextNews();
+            controller.fireNewsFeedEvent(NewsFeedEvent.NEWS_CHANGED);
         }
 
         @Override
         protected Object doInBackground() throws Exception {
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            Document doc = builder.parse(rssURL.openStream());
+            
+            // connect and resolve Location (http redirection)
+            URLConnection con = rssURL.openConnection();
+            if (con instanceof HttpURLConnection)
+            {
+                HttpURLConnection connection = (HttpURLConnection) con;
+                String relocation = connection.getHeaderField("Location");
+
+                // resolve until we do not get Location
+                while (relocation != null) {
+                    con = new URL(relocation).openConnection();
+                    if (con instanceof HttpURLConnection) {
+                        connection =  (HttpURLConnection) con;
+                        relocation = connection.getHeaderField("Location");
+                    } else {
+                        relocation = null; // success
+                    }
+                }
+            }
+
+            // fetch the content and parse it
+            Document doc = builder.newDocument();
+            try
+            {
+                doc = builder.parse(con.getInputStream());
+            }
+            catch (IOException ex)
+            {
+                System.out.println("RSS URL is invalid: " + ex.getMessage());
+            }
 
             NodeList items = doc.getElementsByTagName("item");
             if ((items == null) || (items.getLength() == 0)) {

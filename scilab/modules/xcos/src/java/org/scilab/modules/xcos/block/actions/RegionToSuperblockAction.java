@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2010 - DIGITEO - Clement DAVID
  * Copyright (C) 2011-2016 - Scilab Enterprises - Clement DAVID
  * Copyright (C) 2017 - ESI Group - Clement DAVID
@@ -308,22 +308,6 @@ public class RegionToSuperblockAction extends VertexSelectionDependantAction {
             }
 
             return childBlock;
-        }
-
-        /**
-         * Set the ordering on the I/O block and port
-
-         * @param ordering
-         *            the ordering to set
-         */
-        public void setOrdering(JavaController controller, int ordering) {
-            // update the child ordering
-            VectorOfInt ipar = new VectorOfInt(1);
-            ipar.set(0, ordering);
-            controller.setObjectProperty(getChildBlock().getUID(), getChildBlock().getKind(), ObjectProperties.IPAR, ipar);
-
-            VectorOfDouble exprs = new ScilabTypeCoder().var2vec(new ScilabString(Integer.toString(ordering)));
-            controller.setObjectProperty(getChildBlock().getUID(), getChildBlock().getKind(), ObjectProperties.EXPRS, exprs);
         }
 
         /**
@@ -659,13 +643,13 @@ public class RegionToSuperblockAction extends VertexSelectionDependantAction {
     // CSOFF: MagicNumber
     private void incrementOrdering(JavaController controller, final int[] ordering, Broken broken) {
         if (broken.getTerminal() instanceof InputPort) {
-            broken.setOrdering(controller, ++ordering[0]);
+            broken.getChildBlock().setOrdering(controller, ++ordering[0]);
         } else if (broken.getTerminal() instanceof OutputPort) {
-            broken.setOrdering(controller, ++ordering[1]);
+            broken.getChildBlock().setOrdering(controller, ++ordering[1]);
         } else if (broken.getTerminal() instanceof ControlPort) {
-            broken.setOrdering(controller, ++ordering[2]);
+            broken.getChildBlock().setOrdering(controller, ++ordering[2]);
         } else { // if (broken.getTerminal() instanceof CommandPort)
-            broken.setOrdering(controller, ++ordering[3]);
+            broken.getChildBlock().setOrdering(controller, ++ordering[3]);
         }
     }
 

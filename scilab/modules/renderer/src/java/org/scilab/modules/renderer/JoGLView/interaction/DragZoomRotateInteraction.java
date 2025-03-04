@@ -1,8 +1,8 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009-2012 - DIGITEO - Pierre Lando
  * Copyright (C) 2013 - Scilab Enterprises - Calixte DENIZET
- * Copyright (C) 2018 - Stéphane MOTTELET
+ * Copyright (C) 2018 - UTC - Stéphane MOTTELET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
  *
@@ -196,8 +196,8 @@ public class DragZoomRotateInteraction extends FigureInteraction {
                 allAxes = getAllUnderlyingAxes(e.getPoint());
             }
             double scale = Math.pow(ZOOM_FACTOR, e.getUnitsToScroll());
-            double[] position = null;
             for (Axes axes : allAxes) {
+	            double[] position = null;
                 // beware: components of axes.getDisplayedBounds() are log10 of bounds
                 // when axes.get[X,Y or Z]AxisLogFlag() is true
                 Double[] bounds = axes.getDisplayedBounds();

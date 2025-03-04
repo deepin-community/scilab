@@ -1,6 +1,6 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
-// Copyright (C) 2018 - Stéphane MOTTELET
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
+// Copyright (C) 2018 - UTC - Stéphane MOTTELET
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
@@ -10,8 +10,8 @@
 //
 // <-- Non-regression test for bug 15024 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/15024
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/15024
 //
 // <-- Short Description -->
 // After A=10;  A{1}=2  corrupts A and silently fails

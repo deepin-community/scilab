@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2010-2010 - DIGITEO - Antoine ELIAS
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -138,14 +138,17 @@ types::Function::ReturnValue sci_mopen(types::typed_list &in, int _iRetCount, ty
                         char* pst = wide_string_to_UTF8(pstFilename);
                         Scierror(999, _("%s: Cannot open file %s.\n"), "mopen", pst);
                         FREE(pst);
+                        break;
                     }
                     case MOPEN_INVALID_FILENAME:
                     {
                         Scierror(999, _("%s: invalid filename.\n"), "mopen");
+                        break;
                     }
                     case MOPEN_INVALID_STATUS:
                     {
                         Scierror(999, _("%s: invalid status.\n"), "mopen");
+                        break;
                     }
                 }
                 FREE(pstFilename);

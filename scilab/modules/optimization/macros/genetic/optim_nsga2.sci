@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008 - Yann COLLETTE <yann.collette@renault.com>
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -231,7 +231,7 @@ endfunction
 
 // =================================================================
 
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2011 - INRIA - Serge STEER
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises

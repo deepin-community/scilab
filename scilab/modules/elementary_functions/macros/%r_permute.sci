@@ -1,6 +1,6 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013, 2016 - Samuel GOUGEON
-// Copyright (C) 2018 - Stéphane MOTTELET
+// Copyright (C) 2018 - UTC - Stéphane MOTTELET
 //
 // This file is hereby licensed under the terms of the GNU GPL v2.0,
 // pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -18,20 +18,19 @@ function y = %r_permute(x, dims)
     // Output :
     // -y the result of the x permutation
     // History:
-    // 2013 - S. GOUGEON  : processing rewritten, fixing http://bugzilla.scilab.org/5205
+    // 2013 - S. GOUGEON  : processing rewritten, fixing https://gitlab.com/scilab/scilab/-/issues/5205
     // 2016 - S. GOUGEON  : extension to rationals
     // 2018 - S. MOTTELET : restrict to rationals as permute() is now a native function
 
     // CHECKING ARGUMENTS
     // ------------------
-    if argn(2) <> 2 then
-        msg = gettext("%s: Wrong number of input argument(s): %d expected.\n")
-        error(msprintf(msg, "permute", 2));
+    arguments
+        x
+        dims {mustBeA(dims, ["double", "int"]), mustBeInteger}
     end
 
     // Verify if the size of dims corresponds to dimension of x
-    if ~(or(type(dims)==[1 8]) && and(int(dims)==dims) && ..
-        and(gsort(dims(:)',"g","i")==(1:max(length(dims),ndims(x))))) then
+    if ~(and(gsort(dims(:)',"g","i")==(1:max(length(dims),ndims(x))))) then
         msg = _("%s: Wrong value for input argument #%d: Must be a valid permutation of [1..n>%d] integers.\n")
         error(msprintf(msg, "permute", 2, ndims(x)-1));
     end

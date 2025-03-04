@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Adeline CARNIS
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -8,7 +8,7 @@
 // unit tests for meanf function
 // =============================================================================
 assert_checkfalse(execstr("meanf()"   ,"errcatch") == 0);
-refMsg = msprintf(_("%s: Wrong number of input argument: %d to %d expected.\n"), "meanf", 2, 3);
+refMsg = msprintf(_("%s: Wrong number of input arguments: %d to %d expected.\n"), "meanf", 2, 3);
 assert_checkerror("meanf()", refMsg);
 assert_checkequal(meanf([], 1), %nan);
 assert_checkequal(meanf(%nan, 1), %nan);
@@ -18,7 +18,7 @@ x = 1:10;
 assert_checkequal(meanf(x, 5), 55);
 assert_checkequal(meanf(x', 5), 55);
 assert_checkfalse(execstr("meanf(x, ''r'')"   ,"errcatch") == 0);
-refMsg = msprintf(_("%s: Wrong type for input argument #%d: A full or sparse matrix, or an integer matrix, or an hypermat expected.\n"), "meanf", 2);
+refMsg = msprintf(_("%s: Wrong type for input argument #%d: Must be in %s.\n"), "meanf", 2, sci2exp(["double", "sparse", "int"]));
 assert_checkerror("meanf(x, ''r'')", refMsg);
 assert_checkequal(meanf(x, x), 7);
 assert_checkequal(meanf(x', x'), 7);
@@ -31,10 +31,10 @@ assert_checkequal(meanf(x', x', "r"), 7);
 assert_checkequal(meanf(x', x', 1), 7);
 assert_checkequal(meanf(x', x', "*"), 7);
 assert_checkfalse(execstr("meanf(x, x, ''t'')"   ,"errcatch") == 0);
-refMsg = msprintf(gettext("%s: Wrong value for input argument #%d: ''%s'', ''%s'', %d or %d expected.\n"),"meanf",3,"r","c",1,2);
+refMsg = msprintf(gettext("%s: Wrong value for input argument #%d: Must be in %s.\n"),"meanf", 3, sci2exp({1, 2,"r", "c", "*"}));
 assert_checkerror("meanf(x, x, ''t'')", refMsg);
 assert_checkfalse(execstr("meanf(x, x, 4)"   ,"errcatch") == 0);
-refMsg = msprintf(gettext("%s: Wrong value for input argument #%d: ''%s'', ''%s'', %d or %d expected.\n"),"meanf",3,"r","c",1,2);
+refMsg = msprintf(gettext("%s: Wrong value for input argument #%d: Must be in %s.\n"),"meanf", 3, sci2exp({1, 2,"r", "c", "*"}));
 assert_checkerror("meanf(x, x, 4)", refMsg);
 // Matrix
 A=[1,2,10;7,7.1,7.01];

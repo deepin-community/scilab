@@ -24,6 +24,7 @@
 #define __CREATEBLKLIST_HXX__
 
 #include "internal.hxx"
+#include "list.hxx"
 
 extern "C"
 {
@@ -60,8 +61,8 @@ extern "C"
 *
 */
 
-types::InternalType* createblklist(const scicos_block* const Blocks, const int flag_imp, const int funtyp);
-types::InternalType* refreshblklist(types::InternalType* pIT, const scicos_block* const Blocks, const int flag_imp, const int funtyp);
+types::List* createblklist(const scicos_block* const Blocks, const int flag_imp, const int funtyp);
+types::List* refreshblklist(types::List* pIT, const scicos_block* const Blocks, const int flag_imp, const int funtyp, const int flag);
 
 #endif /* __CREATEBLKLIST_HXX__ */
 /*--------------------------------------------------------------------------*/

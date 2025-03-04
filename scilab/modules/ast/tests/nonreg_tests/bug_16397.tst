@@ -1,26 +1,26 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
-// Copyright (C) 2020 - Stéphane MOTTELET
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
+// Copyright (C) 2020 - UTC - Stéphane MOTTELET
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
 // <-- CLI SHELL MODE -->
 // <-- NO CHECK REF -->
 //
-// <-- Non-regression test for bug 13936 -->
+// <-- Non-regression test for bug 16397 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/16397
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/16397
 //
 // <-- Short Description -->
 // display of long real vectors in the console is slow
 
 x=rand(1e4,1);
-tic;
+timer();
 disp(x)
-t1 = toc();
-tic;
-disp([x,x])
-t2 = toc();
+t1 = timer()
 
-assert_checktrue(t2/t1 > 8);
+disp([x,x])
+t2 = timer()
+
+assert_checktrue(t2 > t1);

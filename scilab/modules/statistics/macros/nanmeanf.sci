@@ -1,5 +1,5 @@
 
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 1999 - INRIA - Carlos Klimann
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -13,7 +13,7 @@
 //
 
 
-function [m]=nanmeanf(val,fre,orient)
+function [m] = nanmeanf(val, fre, orient)
     //
     //This function returns in scalar m the mean of the values (ignoring the
     //NANs) of  a  vector  or  matrix  val, each counted  with   a frequency
@@ -36,18 +36,15 @@ function [m]=nanmeanf(val,fre,orient)
     //with the multiplicity indicated by the corresponding value of fre.
     //
     //
-    [lhs,rhs]=argn(0)
-    if rhs<2|rhs>3 then error(msprintf(gettext("%s: Wrong number of input arguments: %d to %d expected.\n"),"nanmeanf",2,3)), end
-    if val==[]|fre==0 then m=[], return,end
+    arguments
+        val
+        fre
+        orient (1, 1) {mustBeA(orient, ["double", "string"]), mustBeMember(orient, {1, 2, "r", "c", "*"})} = "*"
+    end
+
+    if val == [] | fre == 0 then m = [], return,end
     isn=isnan(val)
     fre(isn)=0
     val(isn)=0
-    if rhs==2 then
-        m=sum(val.*fre)/sum(fre)
-    elseif orient=="*" then
-        m=sum(val.*fre)/sum(fre)
-    elseif orient=="r"|orient=="c"|orient==1|orient==2 then
-        m=sum(val.*fre,orient)./sum(fre,orient)
-    else error(msprintf(gettext("%s: Wrong value for input argument #%d: ''%s'', ''%s'', ''%s'', %d or %d expected.\n"),"nanmeanf",3,"*","r","c",1,2)),
-    end
+    m = sum(val .* fre, orient) ./ sum(fre, orient)
 endfunction

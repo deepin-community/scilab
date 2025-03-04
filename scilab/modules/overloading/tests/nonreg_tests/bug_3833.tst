@@ -1,6 +1,6 @@
 //<-- CLI SHELL MODE -->
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009 - DIGITEO - Vincent COUVERT
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -8,8 +8,8 @@
 
 // <-- Non-regression test for bug 3833 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=3833
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/3833
 //
 // <-- Short Description -->
 // Assignment operator for cell structs storing matrices for indices greater than 1 overwrites all previous values and reinitialises the entries instead.

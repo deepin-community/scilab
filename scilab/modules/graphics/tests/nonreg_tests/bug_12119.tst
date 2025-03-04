@@ -1,11 +1,13 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2012 - Michael Baudin
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
 
 // <-- TEST WITH GRAPHIC -->
+// <-- NO CHECK REF -->
+
 H = [
     0.    0.1007
     1.    0.0965
@@ -17,7 +19,8 @@ H = [
     7.    0.1055
     8.    0.1006
     9.    0.0982
-]
+];
+
 scf();
 bar(H(:,1),H(:,2));
 

@@ -25,6 +25,8 @@ cDEC$ ATTRIBUTES DLLIMPORT:: /ls0001/
 cDEC$ ATTRIBUTES DLLIMPORT:: /lsr001/
       common /lsr001/ rownr3(2), t0, tlast, toutc,
      1   iownd3(3), iownr3(2), irfnd, itaskc, ngc, nge
+cDEC$ ATTRIBUTES DLLIMPORT:: /ierode/
+      COMMON /ierode/ierror
 c     ------------------ masking ----------------
       integer IWORK
       dimension IWORK(*)

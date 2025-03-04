@@ -2,7 +2,7 @@
 #define __CALLJXCLICK_HXX__
 
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2007 - INRIA - Vincent COUVERT
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises

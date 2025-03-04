@@ -14,6 +14,7 @@
 // <-- CLI SHELL MODE -->
 // <-- ENGLISH IMPOSED -->
 // <-- NO CHECK REF -->
+// <-- NO ASSERT FAILURE -->
 
 function flag = MY_assert_equal ( computed , expected )
   if computed==expected then

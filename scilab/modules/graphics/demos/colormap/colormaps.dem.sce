@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008 - INRIA - Pierre MARECHAL
 // Copyright (C) 2016 - Scilab Enterprises - Paul Bignier
 // Copyright (C) 2017 - Samuel GOUGEON
@@ -9,6 +9,12 @@ prot = funcprot();
 funcprot(0);
 
 function demo_colormaps()
+
+    if get("colormap_frame") <> [] then
+        h = get("colormap_frame");
+        f = h.parent.parent;
+        delete(f)
+    end
 
     // Parameters
     // =========================================================================
@@ -31,17 +37,25 @@ function demo_colormaps()
     axes_w       = 3*margin_x + frame_w + plot_w;    // axes width
     axes_h       = 2*margin_y + max(frame_h,plot_h); // axes height
 
-    fig_handle = figure( ...
-    "infobar_visible", "off", ...
-    "toolbar_visible", "off", ...
-    "toolbar", "none", ...
-    "default_axes", "on", ...
-    "layout", "gridbag", ...
-    "visible", "off", ...
-    "background", -2, ...
-    "figure_position", [0 0], ...
-    "axes_size", [axes_w axes_h], ...
-    "figure_name", _("Misc"));
+    if get("colormaps_figure") <> [] then
+        fig_handle = get("colormaps_figure");
+        delete(fig_handle.children);
+    else
+        close(100002)
+        // Create a figure
+        fig_handle = figure( ...
+        "figure_id", 100002, ...
+        "infobar_visible", "off", ...
+        "toolbar_visible", "off", ...
+        "toolbar", "none", ...
+        "default_axes", "on", ...
+        "layout", "gridbag", ...
+        "visible", "off", ...
+        "background", -2, ...
+        "figure_position", [0 0], ...
+        "tag", "colormaps_figure", ...
+        "axes_size", [axes_w axes_h]);
+    end    
 
     c = createConstraints("gridbag", [2 1 1 1], [1 1], "vertical", "right");
     // Create an empty panel on the right to occupy the 3/4 of the screen (figure plot)
@@ -74,7 +88,7 @@ function demo_colormaps()
 
     demo_viewCode("colormaps.dem.sce");
 
-    fig_handle.color_map = jetcolormap(128);
+    fig_handle.color_map = jet(128);
 
     // Radio buttons
     // =========================================================================
@@ -96,7 +110,7 @@ function demo_colormaps()
         "callback"     , "demo_update_misc", ...
         "groupname"    , "colormap_demo", ..
         "constraints"  , c, ...
-        "tag"          , mapname+"colormap_radio");
+        "tag"          , mapname+"_radio");
     end
 
     // Plots creation
@@ -183,7 +197,7 @@ function demo_colormaps()
 
     // define colormap
     f = gcf();
-    f.color_map = jetcolormap(128);
+    f.color_map = jet(128);
 
     my_plot_2_axes.background = color(240,240,240);
     my_plot_4_axes.background = color(240,240,240);
@@ -191,7 +205,7 @@ function demo_colormaps()
     // Color bar
     colorbar(0,128, [0 128], "%d");
     gcf().children(1).axes_bounds = [0.14 0.1 0.1 0.8];
-    gcf().figure_name = "Jetcolormap";
+    gcf().figure_name = "Jet Colormap";
     drawnow();
 
     fig_handle.visible = "on";

@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 // Copyright (C) DIGITEO - 2011 - Allan CORNET
 //
@@ -21,15 +21,8 @@ function x=logm(a)
     //%DESCRIPTION
     //computes X=logm(A), matrix log of A
 
-    rhs = argn(2);
-    if rhs <> 1 then
-        error(msprintf(gettext("%s: Wrong number of input argument(s): %d expected.\n"),"logm", 1));
-    end
-
-    [m ,n] = size(a);
-
-    if m <> n then
-        error(msprintf(gettext("%s: Wrong size for input argument #%d: Square matrix expected.\n"),"logm",1));
+    arguments
+        a {mustBeA(a, "double"), mustBeSquare}
     end
 
     flag = or(a<>a');

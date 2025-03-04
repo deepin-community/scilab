@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA - Sylvestre Koumar
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -22,7 +22,7 @@
         <title>Syntax</title>
         <synopsis>
             xs2jpg(win_num, file_name [, compression_quality])
-            xs2jpg(fig, file_name [, compression_quality])
+            xs2jpg(hdl, file_name [, compression_quality])
         </synopsis>
     </refsynopsisdiv>
     <refsection>
@@ -32,14 +32,14 @@
                 <term>win_num</term>
                 <listitem>
                     <para>
-                        an integer, ID of the figure to export.
+                        an integer, ID of the Figure to export.
                     </para>
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term>fig</term>
+                <term>hdl</term>
                 <listitem>
-                    <para>handle of the figure to export.</para>
+                    <para>handle of the Figure or Frame to export.</para>
                 </listitem>
             </varlistentry>
             <varlistentry>
@@ -64,7 +64,7 @@
     <refsection>
         <title>Description</title>
         <para>
-            <function>xs2jpg</function> exports the display of a graphic window into a JPG file.
+            <function>xs2jpg</function>exports the display of a Figure or a Frame into a JPG file.
         </para>
     </refsection>
     <refsection>

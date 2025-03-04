@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA - Djalel Abdemouche
  * Copyright (C) 2009 - DIGITEO - Pierre Lando
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -399,6 +399,16 @@
                             </listitem>
                         </varlistentry>
                         <varlistentry>
+                            <term>sub_ticks: </term>
+                            <listitem>
+                                <para>このフィールドは主目盛の間に描画される目盛の数を設定します.
+                                    このフィールドの値はベクトル <literal>[nx,ny]</literal>で,
+                                    <literal>nx</literal>はx軸の副目盛の数,
+                                    <literal>ny</literal>はy軸の副目盛の数となります.
+                                </para>
+                            </listitem>
+                        </varlistentry>
+                        <varlistentry>
                             <term>box: </term>
                             <listitem>
                                 <para>このプロパティは軸を箱で囲うかどうかを指定します.
@@ -435,16 +445,6 @@
                                     このプロパティが <literal>"off"</literal>の場合,
                                     <literal>background</literal>プロパティで指定された色により
                                     背景が描画されます.
-                                </para>
-                            </listitem>
-                        </varlistentry>
-                        <varlistentry>
-                            <term>sub_ticks: </term>
-                            <listitem>
-                                <para>このフィールドは主目盛の間に描画される目盛の数を設定します.
-                                    このフィールドの値はベクトル <literal>[nx,ny]</literal>で,
-                                    <literal>nx</literal>はx軸の副目盛の数,
-                                    <literal>ny</literal>はy軸の副目盛の数となります.
                                 </para>
                             </listitem>
                         </varlistentry>
@@ -1292,6 +1292,12 @@ gcf().axes_size = [420 320];
                 <revremark>
                     Default .x|y|z_label.font_size=2, instead of 1.
                     Default .title.font_size=3, instead of 1.
+                </revremark>
+            </revision>
+            <revision>
+                <revnumber>2023.0.0</revnumber>
+                <revremark>
+                    <literal>.auto_stretch</literal> property added.
                 </revremark>
             </revision>
         </revhistory>

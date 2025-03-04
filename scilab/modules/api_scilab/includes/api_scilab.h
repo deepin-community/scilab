@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009 - DIGITEO - Antoine ELIAS
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -58,9 +58,9 @@
 #define API_EXPORT_PROTO(x) scilab_##x
 #endif
 
-typedef void* scilabEnv;
-typedef int* scilabVar;
-typedef int* scilabOpt;
+typedef struct scilabEnv_t *scilabEnv;
+typedef struct scilabVar_t *scilabVar;
+typedef struct scilabOpt_t *scilabOpt;
 
 
 #include "api_error.h"

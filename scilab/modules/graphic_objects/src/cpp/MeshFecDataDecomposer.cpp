@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2011 - DIGITEO - Manuel Juliachs
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -168,7 +168,7 @@ void MeshFecDataDecomposer::fillTextureCoordinates(int id, float* buffer, int bu
     }
     else
     {
-        /* fix min and max value to respect position of strips https://bugzilla.scilab.org/show_bug.cgi?id=16407 */
+        /* fix min and max value to respect position of strips https://gitlab.com/scilab/scilab/-/issues/16407 */
         double a = maxValue-minValue;
         minValue += a/2.0/(double)colorsNumber;
         maxValue -= a/2.0/(double)colorsNumber;

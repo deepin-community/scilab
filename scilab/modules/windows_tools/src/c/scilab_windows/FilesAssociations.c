@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) INRIA - Allan CORNET
 * Copyright (C) DIGITEO - 2009-2010 - Allan CORNET
 *
@@ -23,7 +23,6 @@
 #include <windows.h>
 #include <Winuser.h>
 #include <shlwapi.h>
-#include "version.h"
 #include "FilesAssociations.h"
 #include "sci_malloc.h"
 #include "FindScilab.h"

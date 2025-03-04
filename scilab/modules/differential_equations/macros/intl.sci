@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA - Farid BELAHCENE
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -19,10 +19,10 @@ function r = intl(a, b, z0, r, f, ea, er)
     //!
 
     if ~isdef("ea","l") | ea==[] then
-        ea = %eps;  // could be 1d-13 as with intg, integrate and intc
+        ea = 1d-13;  // as with intg, integrate and intc
     end
     if ~isdef("er","l") | er==[] then
-        er = 1d-12;  // could be 1d-8 as with intg, integrate and intc
+        er = 1d-8;   // as with intg, integrate and intc
     end
 
     //Define two functions for the real part and

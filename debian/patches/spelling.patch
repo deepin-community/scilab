@@ -1,0 +1,27 @@
+Description: fixing various minor spelling mistakes
+Author: Pierre Gruet <pgt@debian.org>
+Forwarded: https://gitlab.com/scilab/scilab/-/issues/17163
+Last-Update: 2023-11-17
+
+--- a/scilab/CHANGES.md
++++ b/scilab/CHANGES.md
+@@ -316,7 +316,7 @@
+ - [#16317](https://gitlab.com/scilab/scilab/-/issues/16317): `sci2exp(complex([1 1], [%nan %inf]))` was not correctly evaluable.
+ - [#16333](https://gitlab.com/scilab/scilab/-/issues/16333): `tree_show(Xcos_diagram)` crashed Scilab.
+ - [#16367](https://gitlab.com/scilab/scilab/-/issues/16367): `http_get()` did not work with long filenames.
+-- [#16533](https://gitlab.com/scilab/scilab/-/issues/16533): A `javax.media.opengl.GLException: Caught GLException: Not a GL2 implementation` exception sometimes occured in Xcos.
++- [#16533](https://gitlab.com/scilab/scilab/-/issues/16533): A `javax.media.opengl.GLException: Caught GLException: Not a GL2 implementation` exception sometimes occurred in Xcos.
+ - [#16544](https://gitlab.com/scilab/scilab/-/issues/16544): On some platforms, plotting failed with Java messages.
+ - [#16595](https://gitlab.com/scilab/scilab/-/issues/16595): `string(macro)` and `tree2code()` returned wrong code for multiline arrays including some comments.
+ - [#16642](https://gitlab.com/scilab/scilab/-/issues/16642): `$` failed when defining an empty variable using `x=[], x(1:$)=1` and left `x` unchanged.
+--- a/scilab/modules/helptools/data/pages/CHANGES.html
++++ b/scilab/modules/helptools/data/pages/CHANGES.html
+@@ -324,7 +324,7 @@
+ <li><a href="https://gitlab.com/scilab/scilab/-/issues/16317">#16317</a>: <code>sci2exp(complex([1 1], [%nan %inf]))</code> was not correctly evaluable.</li>
+ <li><a href="https://gitlab.com/scilab/scilab/-/issues/16333">#16333</a>: <code>tree_show(Xcos_diagram)</code> crashed Scilab.</li>
+ <li><a href="https://gitlab.com/scilab/scilab/-/issues/16367">#16367</a>: <code>http_get()</code> did not work with long filenames.</li>
+-<li><a href="https://gitlab.com/scilab/scilab/-/issues/16533">#16533</a>: A <code>javax.media.opengl.GLException: Caught GLException: Not a GL2 implementation</code> exception sometimes occured in Xcos.</li>
++<li><a href="https://gitlab.com/scilab/scilab/-/issues/16533">#16533</a>: A <code>javax.media.opengl.GLException: Caught GLException: Not a GL2 implementation</code> exception sometimes occurred in Xcos.</li>
+ <li><a href="https://gitlab.com/scilab/scilab/-/issues/16544">#16544</a>: On some platforms, plotting failed with Java messages.</li>
+ <li><a href="https://gitlab.com/scilab/scilab/-/issues/16595">#16595</a>: <code>string(macro)</code> and <code>tree2code()</code> returned wrong code for multiline arrays including some comments.</li>
+ <li><a href="https://gitlab.com/scilab/scilab/-/issues/16642">#16642</a>: <code>$</code> failed when defining an empty variable using <code>x=[], x(1:$)=1</code> and left <code>x</code> unchanged.</li>

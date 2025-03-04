@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2011 - DIGITEO - Cedric DELAMARRE
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -30,7 +30,6 @@ int HistoryManagerModule::Load()
     symbol::Context::getInstance()->addFunction(types::Function::createFunction(L"historysize",   &sci_historysize, MODULE_NAME));
     symbol::Context::getInstance()->addFunction(types::Function::createFunction(L"removelinehistory",   &sci_removelinehistory, MODULE_NAME));
     symbol::Context::getInstance()->addFunction(types::Function::createFunction(L"resethistory", &sci_resethistory, MODULE_NAME));
-    symbol::Context::getInstance()->addFunction(types::Function::createFunction(L"saveafterncommands",   &sci_saveafterncommands, MODULE_NAME));
     symbol::Context::getInstance()->addFunction(types::Function::createFunction(L"saveconsecutivecommands",   &sci_saveconsecutivecommands, MODULE_NAME));
     symbol::Context::getInstance()->addFunction(types::Function::createFunction(L"savehistory", &sci_savehistory, MODULE_NAME));
     symbol::Context::getInstance()->addFunction(types::Function::createFunction(L"sethistoryfile",   &sci_sethistoryfile, MODULE_NAME));

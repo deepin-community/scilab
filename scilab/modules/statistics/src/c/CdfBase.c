@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2006-2008 - INRIA
  * Copyright (C) 2009 - Digiteo - Vincent LIARD
  * Copyright (C) 2009 - DIGITEO - Antoine ELIAS
@@ -32,7 +32,10 @@ int mod(int a, int b);
 int rotate(int i, int step, int length);
 char *cdf_options(struct cdf_descriptor const * const desc);
 void cdf_error(char const * const fname, int status, double bound);
-int CdfBase(char const * const fname, void* pvApiCtx, int inarg, int oarg, int shift, int which, int (*fun)(int *, ...));
+int CdfBase(char const * const fname, void* pvApiCtx, int inarg, int oarg, int shift, int which, cdf_fptr fun);
+typedef int (*cdf_fun4)(int *, double *, double *, double *, double *, int *, double *);
+typedef int (*cdf_fun5)(int *, double *, double *, double *, double *, double *, int *, double *);
+typedef int (*cdf_fun6)(int *, double *, double *, double *, double *, double *, double *, int *, double *);
 
 int cdf_generic(char *fname, void* pvApiCtx, struct cdf_descriptor *cdf)
 {
@@ -212,7 +215,7 @@ int CdfBase(char const * const fname, void* pvApiCtx, int inarg, int oarg, int s
     int pos = 0;
     int pos1 = 0;
 
-    char *option = create_string(pvApiCtx, 1);
+    char *option = NULL;
 
     if ( Rhs != inarg + 1 )
     {
@@ -242,6 +245,7 @@ int CdfBase(char const * const fname, void* pvApiCtx, int inarg, int oarg, int s
     }
 
     //check which scilab function is called
+    option = create_string(pvApiCtx, 1);
     switch (siz)
     {
         case 4:
@@ -375,6 +379,8 @@ int CdfBase(char const * const fname, void* pvApiCtx, int inarg, int oarg, int s
             break;
     }
 
+    destroy_string(option);
+
     if (pos != 0)
     {
         getVarAddressFromPosition(pvApiCtx, pos, &df);
@@ -401,13 +407,13 @@ int CdfBase(char const * const fname, void* pvApiCtx, int inarg, int oarg, int s
         switch (inarg + oarg)
         {
             case 4: /* cdfchi, cdfpoi, cdft */
-                (*fun)(&which, &(data[callpos(0)][i]), &(data[callpos(1)][i]), &(data[callpos(2)][i]), &(data[callpos(3)][i]), &errlevel, &bound);
+                ((cdf_fun4)(*fun))(&which, &(data[callpos(0)][i]), &(data[callpos(1)][i]), &(data[callpos(2)][i]), &(data[callpos(3)][i]), &errlevel, &bound);
                 break;
             case 5: /* cdfchn, cdff, cdfgam, cdfnor */
-                (*fun)(&which, &(data[callpos(0)][i]), &(data[callpos(1)][i]), &(data[callpos(2)][i]), &(data[callpos(3)][i]), &(data[callpos(4)][i]), &errlevel, &bound);
+                ((cdf_fun5)(*fun))(&which, &(data[callpos(0)][i]), &(data[callpos(1)][i]), &(data[callpos(2)][i]), &(data[callpos(3)][i]), &(data[callpos(4)][i]), &errlevel, &bound);
                 break;
             case 6: /* cdfbet, cdfbin, cdffnc, cdfnbn, */
-                (*fun)(&which, &(data[callpos(0)][i]), &(data[callpos(1)][i]), &(data[callpos(2)][i]), &(data[callpos(3)][i]), &(data[callpos(4)][i]), &(data[callpos(5)][i]), &errlevel, &bound);
+                ((cdf_fun6)(*fun))(&which, &(data[callpos(0)][i]), &(data[callpos(1)][i]), &(data[callpos(2)][i]), &(data[callpos(3)][i]), &(data[callpos(4)][i]), &(data[callpos(5)][i]), &errlevel, &bound);
                 break;
         }
         if (errlevel != 0)

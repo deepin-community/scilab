@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2011 - DIGITEO - Sylvestre LEDRU
 // Copyright (C) 2019 - Samuel GOUGEON
 //
@@ -9,8 +9,8 @@
 //
 // <-- Non-regression test for bug 7954 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/7954
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/7954
 //
 // <-- Short Description -->
 //

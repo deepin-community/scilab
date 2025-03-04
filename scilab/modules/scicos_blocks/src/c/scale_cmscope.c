@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2011-2012 - Scilab Enterprises - Clement DAVID
  *  Copyright (C) 2016-2017 - FOSSEE IIT Bombay - Dipti Ghosalkar
  *  Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -14,6 +14,7 @@
  */
 
 #include <string.h>
+#include <float.h>
 
 #include "dynlib_scicos_blocks.h"
 #include "scoUtils.h"
@@ -49,6 +50,8 @@
 
 
 #define HISTORY_POINTS_THRESHOLD 4096
+#define SCOPE_INITIAL_MIN_Y DBL_MAX
+#define SCOPE_INITIAL_MAX_Y -DBL_MAX
 
 /*****************************************************************************
  * Internal container structure
@@ -70,6 +73,9 @@ typedef struct
     struct
     {
         int *periodCounter;
+
+        double* minY;
+        double* maxY;
 
         BOOL *disableBufferUpdate;
         int *historyUpdateCounter;
@@ -374,6 +380,26 @@ static sco_data *getScoData(scicos_block * block)
             goto error_handler_periodCounter;
         }
 
+        sco->scope.minY = (int *) CALLOC(block->nin, sizeof(double));
+        if (sco->scope.minY == NULL)
+        {
+            goto error_handler_minY;
+        }
+        for (int i = 0; i < block->nin; ++i)
+        {
+            sco->scope.minY[i] = SCOPE_INITIAL_MIN_Y;
+        }
+
+        sco->scope.maxY = (int *) CALLOC(block->nin, sizeof(double));
+        if (sco->scope.maxY == NULL)
+        {
+            goto error_handler_maxY;
+        }
+        for (i = 0; i < block->nin; ++i)
+        {
+            sco->scope.maxY[i] = SCOPE_INITIAL_MAX_Y;
+        }
+
         sco->scope.disableBufferUpdate = (BOOL *) CALLOC(block->nin, sizeof(BOOL));
         if (sco->scope.disableBufferUpdate == NULL)
         {
@@ -408,6 +434,10 @@ static sco_data *getScoData(scicos_block * block)
 error_handler_historyUpdateCounter:
     FREE(sco->scope.disableBufferUpdate);
 error_handler_disableBufferUpdate:
+    FREE(sco->scope.maxY);
+error_handler_maxY:
+    FREE(sco->scope.minY);
+error_handler_minY:
     FREE(sco->scope.periodCounter);
 error_handler_periodCounter:
     i = block->nin;
@@ -473,6 +503,8 @@ static void freeScoData(scicos_block * block)
         FREE(sco->internal.bufferCoordinates);
 
         FREE(sco->scope.periodCounter);
+        FREE(sco->scope.minY);
+        FREE(sco->scope.maxY);
 
         FREE(sco->scope.disableBufferUpdate);
         FREE(sco->scope.historyUpdateCounter);
@@ -679,33 +711,26 @@ static void appendData(scicos_block * block, int input, double t, double *data)
             {
                 double max_curr_val, prev_max_curr_val, min_curr_val, prev_min_curr_val;
                 //Get the current maximum value of the axes
-                max_curr_val = block->rpar[block->nrpar - 2 * (block->nin) + 2 * input + 1];
+                max_curr_val = sco->scope.maxY[input];
                 prev_max_curr_val = max_curr_val;
 
 
                 //Get the current minimum value of the axes
-                min_curr_val = block->rpar[block->nrpar - 2 * (block->nin) + 2 * input];
+                min_curr_val = sco->scope.maxY[input];
                 prev_min_curr_val = min_curr_val;
-
-                /* If the value to be plotted exceeds the current range, then we update the range
-                 * We could update the range from current value to the new value i.e. (value + R)
-                 *where R varies from 0 to approx 150. So we have used (value + 100.0) to give the graph good feature.
-                 *
-                 * However, the auto-scaling feature implemented is general
-                */
 
                 //If the value to be plotted is greater than or equal to the current max, then update the current max
                 if (value >= max_curr_val)
                 {
-                    max_curr_val = value + 10.0;
-                    block->rpar[block->nrpar - 2 * (block->nin) + 2 * input + 1] = max_curr_val;
+                    max_curr_val = value;
+                    sco->scope.maxY[input] = max_curr_val;
                 }
 
                 //If the value to be plotted is smaller than or equal to the current min, then update the current min
                 if (value <= min_curr_val)
                 {
-                    min_curr_val = value - 10.0;
-                    block->rpar[block->nrpar - 2 * (block->nin) + 2 * input] = min_curr_val;
+                    min_curr_val = value;
+                    sco->scope.minY[input] = min_curr_val;
                 }
 
                 //If value has changed, call the setPolylinesBounds function to update the ranges
@@ -1140,14 +1165,25 @@ static BOOL pushHistory(scicos_block * block, int input, int maxNumberOfPoints)
 
 static BOOL setPolylinesBounds(scicos_block * block, int iAxeUID, int input, int periodCounter)
 {
+    sco_data *sco;
     double dataBounds[6];
     int nin = block->nin;
     double period = block->rpar[block->nrpar - 3 * nin + input];
 
     dataBounds[0] = periodCounter * period; // xMin
     dataBounds[1] = (periodCounter + 1) * period;   // xMax
-    dataBounds[2] = block->rpar[block->nrpar - 2 * nin + 2 * input];    // yMin
-    dataBounds[3] = block->rpar[block->nrpar - 2 * nin + 2 * input + 1];    // yMax
+    
+    sco = getScoData(block);
+    if (block->rpar[0] && sco->scope.minY[input] != SCOPE_INITIAL_MIN_Y && sco->scope.maxY[input] != SCOPE_INITIAL_MAX_Y)
+    {
+        dataBounds[2] = sco->scope.minY[input]; // yMin
+        dataBounds[3] = sco->scope.maxY[input]; // yMax
+    }
+    else
+    {
+        dataBounds[2] = block->rpar[block->nrpar - 2 * nin + 2 * input];     // yMin
+        dataBounds[3] = block->rpar[block->nrpar - 2 * nin + 2 * input + 1]; // yMax
+    }
     dataBounds[4] = -1.0;       // zMin
     dataBounds[5] = 1.0;        // zMax
 

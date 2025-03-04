@@ -5,9 +5,6 @@
 // =============================================================================
 // <-- Non-regression test for bug 298 -->
 //
-// <-- URL -->
-//  http://forge.scilab.org/index.php/p/csv-readwrite/issues/281/
-//
 // <-- Short Description -->
 // The text_scan function does not extract the correct range.
 // =============================================================================

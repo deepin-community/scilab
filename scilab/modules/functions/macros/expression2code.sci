@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA - Vincent COUVERT
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
 // Copyright (C) 2020 - Samuel GOUGEON
@@ -109,26 +109,20 @@ function C = expression2code(e)
                         opi($) = part(opi($),1:length(opi($))-1)
                     end
                 end
-                if i==1 then
-                    if size(opi,"*")>1 then
-                        C = [C+opi(1);opi(2:$)]
-                    elseif opi=="(EOL)" then
-                        C = [C;""];
-                    else
-                        C = C+opi
-                    end
-                    C($) = C($)+";"
+                if opi == "(EOL)" then
+                    C = [C ; ""]
                 else
                     if size(opi,"*")>1 then
                         C = [C(1:$-1);C($)+opi(1);opi(2:$)]
-                    elseif opi=="(EOL)" then
-                        C = [C;""]
                     else
                         C = [C(1:$-1);C($)+opi]
                     end
+                    if i <> nb_op & isempty(stripblanks(C($))) == %f then
+                        C($) = C($) +";"
+                    end
                 end
             end
-            C($) = C($)+bracket(2)
+            C($) = C($) + bracket(2)
             // Extraction
         elseif operator=="ext" then
             if size(e.operands)==1 then

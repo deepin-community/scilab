@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA - Farid BELAHCENE
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
- * Copyright (C) 2018 - Samuel GOUGEON
+ * Copyright (C) 2018, 2022 - Samuel GOUGEON
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
  * pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -19,7 +19,9 @@
           xmlns:scilab="http://www.scilab.org" xml:id="cat" xml:lang="pt">
     <refnamediv>
         <refname>cat</refname>
-        <refpurpose>concatena vários arrays</refpurpose>
+        <refpurpose>
+            empilha matrizes ou arrays vectoriais numa hipermatriz ou hiperarray
+        </refpurpose>
     </refnamediv>
     <refsynopsisdiv>
         <title>Seqüência de Chamamento</title>
@@ -31,13 +33,18 @@
             <varlistentry>
                 <term>dim</term>
                 <listitem>
-                    <para>um escalar real positivo </para>
+                    <para>
+                        número inteiro > 0 : índice da dimensão ao longo da qual as matrizes de
+                        entrada devem ser empilhadas.
+                    </para>
                 </listitem>
             </varlistentry>
             <varlistentry>
                 <term>A1,A2,..An</term>
                 <listitem>
-                    <para>escalares, vetores, matrizes, multi-arrays ou cell arrays. A1,
+                    <para>
+                        escalares, vetores, matrizes, multi-arrays ou cell arrays,
+                        de tipos de dados compatíveis. A1,
                         A2, ..., An, devem ter o mesmo tamanho (excluindo o número de
                         dimensão dim). size(A1,i)=size(A2,i)=...=size(An,i) para i
                         diferente de dim e size(A1,dim), size(A2,dim),...,size(An,dim)
@@ -48,8 +55,7 @@
             <varlistentry>
                 <term>y</term>
                 <listitem>
-                    <para>um escalar, vetor, matriz ou multi-array, y tem o mesmo tipo
-                        de A1,A2,...,An
+                    <para>um escalar, vetor, matriz ou multi-array.
                     </para>
                 </listitem>
             </varlistentry>
@@ -68,6 +74,11 @@
             <literal>cat(1, A1, A2, A3)</literal> is equivalent to <literal>[A1 ; A2 ; A3]</literal>.
             <literal>cat(2, A1, A2, A3)</literal> is equivalent to <literal>[A1 A2 A3]</literal>.
             Brackets are faster and must be preferred in both cases.
+        </para>
+        <para>
+            When input arrays have not all the same data type, automatical conversion rules similar
+            to the <literal>[,]</literal> and <literal>[;]</literal> ones are applied, as described
+            in the <link linkend="brackets_Types_conversions">[brackets]</link> page.
         </para>
         <para>
             <literal>cat()</literal> is useful mainly for <literal>dim > 2</literal>, to build an
@@ -184,5 +195,16 @@ cat(3, A1, A2)
                 <link linkend="matrix">matrix</link>
             </member>
         </simplelist>
+    </refsection>
+    <refsection role="history">
+        <title>Histórico</title>
+        <revhistory>
+            <revision>
+                <revnumber>2023.1</revnumber>
+                <revdescription>
+                    Arrays of compatible types accepted, according to [,] and [;] transtyping rules.
+                </revdescription>
+            </revision>
+        </revhistory>
     </refsection>
 </refentry>

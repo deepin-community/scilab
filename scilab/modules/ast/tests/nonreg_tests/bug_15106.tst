@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2015 - Scilab Enterprises - Antoine ELIAS
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -10,8 +10,8 @@
 //
 // <-- Non-regression test for bug 15106 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/15106
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/15106
 //
 // <-- Short Description -->
 // Operation with null operand crashs Scilab

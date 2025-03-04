@@ -1,5 +1,5 @@
 //
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 //
 // This file is distributed under the same license as the Scilab package.
@@ -31,7 +31,7 @@ function torus
     my_handle.immediate_drawing = "off";
     plot3d2(X,Y,Z);
     my_plot                     = my_axe.children;
-    my_handle.color_map         = jetcolormap(128);
+    my_handle.color_map         = jet(128);
     my_plot.color_flag          = 1;
     my_axe.rotation_angles      = [68,95];
     my_handle.immediate_drawing = "on";

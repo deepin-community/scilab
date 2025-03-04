@@ -1,5 +1,5 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
-// Copyright (C) 2020 Stéphane Mottelet
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
+// Copyright (C) 2020 UTC - Stéphane MOTTELET
 //
 // This file is hereby licensed under the terms of the GNU GPL v2.0,
 // For more information, see the COPYING file which you should have received
@@ -7,15 +7,15 @@
 //
 // A brickout game without bricks
 // Idea from Philipp Muehlmann
-// Code by Stéphane Mottelet
+// Code by Stéphane MOTTELET
 //
 
 function pong()
 
     jimport java.awt.MouseInfo;
 
-    clf
-    f = gcf();
+    f = scf(100001);
+    clf(f, "reset");
     f.resize = "off";
     f.toolbar_visible=%f;
 

@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Paul Bignier
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -7,8 +7,8 @@
 
 // <-- Non-regression test for bug 12657 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=12657
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/12657
 //
 // <-- Short Description -->
 // Computation of v1.^v2 was not done in place,

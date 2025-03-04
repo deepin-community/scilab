@@ -2,7 +2,7 @@
 <!DOCTYPE module SYSTEM "../../functions/xml/gateway.dtd">
 <!--
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2011 - DIGITEO - Antoine ELIAS
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -29,6 +29,5 @@
     <gateway name="sci_macrovar"            function="macrovar"             type="1" />
     <gateway name="sci_libraryinfo"         function="libraryinfo"          type="1" />
     <gateway name="sci_librarieslist"       function="librarieslist"        type="1" />
-    <gateway name="sci_testGVN"             function="testGVN"              type="1" />
-    <gateway name="sci_testAnalysis"        function="testAnalysis"         type="1" />
+    <gateway name="sci_idempotence"         function="parser_idempotence"   type="1" />
 </module>

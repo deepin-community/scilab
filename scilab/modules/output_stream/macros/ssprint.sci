@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) XXXX-2008 INRIA
 // Copyright (C) 2012 - DIGITE0 - Allan CORNET
 //

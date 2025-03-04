@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2014 - Scilab Enterprises - Calixte DENIZET
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -12,8 +12,8 @@
 //
 // <-- Non-regression test for bug 8379 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/8379
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/8379
 //
 // <-- Short Description -->
 // It was not possible to delete the selected datatip with DELETE or BACK_SPACE

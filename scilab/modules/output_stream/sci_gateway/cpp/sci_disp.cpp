@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2010-2010 - DIGITEO - ELIAS Antoine
  *  Copyright (C) 2014 - Scilab Enterprises - Cedric Delamarre
  *
@@ -18,6 +18,8 @@
 #include "function.hxx"
 #include "scilabWrite.hxx"
 #include "types_tools.hxx"
+#include "visitor_common.hxx"
+#include "configvariable.hxx"
 
 extern "C"
 {
@@ -27,6 +29,8 @@ extern "C"
 
 types::Function::ReturnValue sci_disp(types::typed_list &in, int _iRetCount, types::typed_list &out)
 {
+    std::wostringstream ostr;
+
     if (in.empty())
     {
         Scierror(999, _("%s: Wrong number of input arguments: At least %d expected.\n"), "disp", 1);
@@ -35,7 +39,29 @@ types::Function::ReturnValue sci_disp(types::typed_list &in, int _iRetCount, typ
 
     for (auto it : in)
     {
-        scilabForcedWriteW(L"\n");
+        if (ConfigVariable::isPrintCompact() == false)
+        {
+            ostr << std::endl;
+        }
+        
+        //show more information that only data
+        std::vector<std::wstring> whitelist = {L"handle", L"struct", L"sparse", L"boolean sparse", L"XMLDoc", L"_EObj", L"lss", L"zpk"};
+
+        std::wstring type = it->getTypeStr();
+        if (std::find(whitelist.begin(), whitelist.end(), type) != whitelist.end())
+        {
+            std::wstring wStrOutline = printTypeDimsInfo(it);
+            if (wStrOutline != L"")
+            {
+                ostr << L"  " << wStrOutline.c_str() << std::endl;
+                if (ConfigVariable::isPrintCompact() == false)
+                {
+                    ostr << std::endl;
+                }
+            }
+        }
+
+        scilabForcedWriteW(ostr.str().c_str());
         if (VariableToString(it, SPACES_LIST) == types::Function::Error)
         {
             return types::Function::Error;

@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2012 - Scilab Enterprises - Calixte DENIZET
  * Copyright (C) 2014 - Scilab Enterprises - Cedric Delamarre
  *
@@ -930,11 +930,6 @@ void HDF5Scilab::getScilabData(hid_t * type, unsigned int * ndims, hsize_t ** di
 
 void HDF5Scilab::getScilabData(hid_t * type, unsigned int * ndims, hsize_t ** dims, void ** data, bool * mustDelete, bool * mustDeleteContent, const bool flip, int * addr, int rhsPosition, void * pvApiCtx)
 {
-    SciErr err;
-    int row;
-    int col;
-    int _type;
-
     *mustDelete = false;
     *mustDeleteContent = false;
 

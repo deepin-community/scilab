@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) ????-2008 - INRIA
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -20,13 +20,15 @@
     </refnamediv>
     <refsection>
         <title>Description</title>
-        <para>Functions are Scilab procedures ("macro", "function" and "procedure"
+        <para>
+            Functions are Scilab procedures ("macro", "function" and "procedure"
             have the save meaning).
         </para>
     </refsection>
     <refsection>
         <title>Function definition</title>
-        <para>Usually, they are defined in files with an editor and loaded into
+        <para>
+            Usually, they are defined in files with an editor and loaded into
             Scilab using the  <link linkend="exec">exec</link> function or through a library (see
             <link linkend="lib">lib</link> or <link linkend="genlib">genlib</link>). But they can also be
             defined on-line (see  <link linkend="deff">deff</link> or <link linkend="function">function</link>.
@@ -35,16 +37,19 @@
         <itemizedlist>
             <listitem>
                 <para>a "syntax definition" part  as follows:</para>
-                <programlisting role='no-scilab-exec'><![CDATA[
+                <programlisting role='no-scilab-exec'>
+                    <![CDATA[
 function [y1,...,yn]=foo(x1,...,xm)
 function [y1,...,yn,varargout]=foo(x1,...,xm,varargin)
- ]]></programlisting>
+ ]]>
+                </programlisting>
             </listitem>
             <listitem>
                 <para>a sequence of Scilab instructions.</para>
             </listitem>
         </itemizedlist>
-        <para>The "syntax definition" line gives the "full" calling syntax of
+        <para>
+            The "syntax definition" line gives the "full" calling syntax of
             this function. The <literal>yi</literal> are output variables
             calculated as functions of input variables <literal>xi</literal>
             and variables existing in Scilab when the function is
@@ -55,18 +60,25 @@ function [y1,...,yn,varargout]=foo(x1,...,xm,varargin)
         <title>Calling function</title>
         <itemizedlist>
             <listitem>
-                <para>Usually function calling syntax is
+                <para>
+                    Usually function calling syntax is
                     <literal>[y1,...,yn]=foo(x1,...,xm)</literal>. Shorter input or
                     output argument list than definition ones may be used. In such
                     cases, only the first variables from the left are used or set.
                 </para>
                 <para>
-                    The <link linkend="argn">argn</link> function may be used to get
-                    the actual number of calling arguments.
+                    The <literal>nargin</literal> and <literal>nargout</literal> variables can be used to obtain the actual number of input and output arguments.
+                </para>
+                <para>
+                    <literal>_</literal> can be used to ignore output argument(s).
+                </para>
+                <para>
+                    <code>[_, b, _, d] = regexp(...");</code> in this case, only the 2nd and 4th parameters will be assign to output variables
                 </para>
             </listitem>
             <listitem>
-                <para>It is possible to define function with indeterminate
+                <para>
+                    It is possible to define function with indeterminate
                     number of input or output maximum number of arguments. This
                     can be done using the <link linkend="varargin">varargin</link>
                     and <link linkend="varargout">varargout</link>
@@ -74,7 +86,8 @@ function [y1,...,yn,varargout]=foo(x1,...,xm,varargin)
                 </para>
             </listitem>
             <listitem>
-                <para>It is also possible to use "named argument" to specify input
+                <para>
+                    It is also possible to use "named argument" to specify input
                     arguments: suppose function <function>fun1</function> defined as
                     <code>function y1 = fun1(x1, x2, x3)</code> then it can be
                     called with a syntax like
@@ -82,7 +95,8 @@ function [y1,...,yn,varargout]=foo(x1,...,xm,varargin)
                     within <function>fun1</function> <varname>x2</varname> will be
                     undefined.
                 </para>
-                <para> It can also be called with a syntax like
+                <para>
+                    It can also be called with a syntax like
                     <code>y = fun1(x1=33, y='foo')</code>. In such a case the
                     <varname>y</varname> variable will be available in the context
                     of the function <function>fun1</function>.
@@ -103,13 +117,17 @@ function [y1,...,yn,varargout]=foo(x1,...,xm,varargin)
                     is called only with character string arguments, the
                     calling syntax may be simplified:
                 </para>
-                <programlisting role='no-scilab-exec'><![CDATA[
+                <programlisting role='no-scilab-exec'>
+                    <![CDATA[
 fun('a','toto','a string')
- ]]></programlisting>
+ ]]>
+                </programlisting>
                 <para>is equivalent to: </para>
-                <programlisting role='no-scilab-exec'><![CDATA[
+                <programlisting role='no-scilab-exec'>
+                    <![CDATA[
 fun a toto 'a string'
- ]]></programlisting>
+ ]]>
+                </programlisting>
             </listitem>
         </itemizedlist>
     </refsection>
@@ -119,7 +137,8 @@ fun a toto 'a string'
             Functions are Scilab objects (with type numbers 13 or 11). And they can be manipulated (built, saved, loaded, passed as
             arguments,...) as other variable types.
         </para>
-        <para>Collections of functions can be collected in libraries.  Functions
+        <para>
+            Collections of functions can be collected in libraries.  Functions
             which begin with <literal>%</literal> sign
             (e.g. <literal>%foo</literal>) are often used to overload (see <link linkend="overloading">overloading</link>) operations or functions for new data type.
         </para>
@@ -129,7 +148,8 @@ fun a toto 'a string'
     </refsection>
     <refsection>
         <title>Examples</title>
-        <programlisting role="example"><![CDATA[
+        <programlisting role="example">
+            <![CDATA[
 //inline definition (see function)
 function [x,y]=myfct(a,b)
   x=a+b
@@ -143,7 +163,8 @@ deff('[x,y]=myfct(a,b)',['x=a+b';
                          'y=a-b'])
 // definition in an ascii file (see exec)
 exec SCI/modules/elementary_functions/macros/asinh.sci;
- ]]></programlisting>
+ ]]>
+        </programlisting>
     </refsection>
     <refsection role="see also">
         <title>See also</title>

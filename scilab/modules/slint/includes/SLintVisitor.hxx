@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2015 - Scilab Enterprises - Calixte DENIZET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -19,9 +19,6 @@
 #include <stack>
 
 #include "visitor.hxx"
-#include "allexp.hxx"
-#include "allvar.hxx"
-#include "alldec.hxx"
 
 #include "SLintContext.hxx"
 #include "SLintOptions.hxx"
@@ -77,6 +74,7 @@ private:
     }
 
     void visit(const ast::SeqExp & e);
+    void visit(const ast::ArgumentsExp & e);
     void visit(const ast::IfExp & e);
     void visit(const ast::WhileExp & e);
     void visit(const ast::ForExp & e);
@@ -111,11 +109,7 @@ private:
     void visit(const ast::ArrayListExp & e);
     void visit(const ast::AssignListExp & e);
     void visit(const ast::VarDec & e);
-    void visit(const ast::OptimizedExp & e);
-    void visit(const ast::DAXPYExp & e);
-    void visit(const ast::IntSelectExp &e);
-    void visit(const ast::StringSelectExp &e);
-    void visit(const ast::MemfillExp &e);
+    void visit(const ast::ArgumentDec & e);
 };
 
 } // namespace slint

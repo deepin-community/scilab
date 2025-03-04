@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008-2009 - INRIA - Michael Baudin
 // Copyright (C) 2009-2011 - DIGITEO - Michael Baudin
 //
@@ -69,11 +69,6 @@ function newobj = neldermead_new ()
     "variancesimplex0"
     "mymethod"
     "greedy"
-    //
-    // Obsolete options
-    //
-    "myterminate"
-    "myterminateflag"
     ]);
 
     newobj.optbase = optimbase_new();
@@ -192,13 +187,5 @@ function newobj = neldermead_new ()
     newobj.mymethod = []
     // Set to %t to enable greedy Nelder-Mead
     newobj.greedy = %f;
-    //
-    // Obsolete options
-    //
-    // User-defined terimination criteria
-    newobj.myterminate = []
-    // Flag to enable the user-defined terimination criteria
-    newobj.myterminateflag = %f
-
 endfunction
 

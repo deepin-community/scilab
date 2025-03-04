@@ -33,63 +33,53 @@
     </refsynopsisdiv>
     <refsection id="Parameters_vec2var">
         <title>Arguments</title>
-        <itemizedlist>
-            <listitem>
-                <para>
-                    <emphasis role="bold">vec:</emphasis> input parameter. A vector of real numbers.
-                </para>
-            </listitem>
-            <listitem>
-                <para>
-                    <emphasis role="bold">var:</emphasis> output parameter. Can be any types of Scilab objects.
-                </para>
-            </listitem>
-        </itemizedlist>
+        <variablelist>
+            <varlistentry>
+                <term>vec</term>
+                <listitem>
+                    A vector of real numbers.
+                    <para/>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>var</term>
+                <listitem>
+                    Can be a Double, Integer, Boolean, String or List <link linkend="typeof">Scilab object</link>.
+                    <para/>
+                </listitem>
+            </varlistentry>
+        </variablelist>
     </refsection>
     <refsection id="Description_vec2var">
         <title>Description</title>
         <para>
-            var2vec / vec2var functions are used inside the interfacing functions of Scilab blocks to give the possibility to the user to handle Scilab objects with the register of real parameters (rpar) and with the discrete state register (z).
+            var2vec / vec2var functions are used inside the interfacing functions of Scilab blocks
+            to give the possibility to the user to handle Scilab objects with the register of real
+            parameters (rpar) and with the discrete state register (z).
         </para>
-        <para>
-        </para>
-        <programlisting role="example"><![CDATA[
-var = vec2var(vec)
- ]]></programlisting>
     </refsection>
     <refsection id="Example_vec2var">
-        <title>Example</title>
+        <title>Examples</title>
         <programlisting role="example"><![CDATA[
--->a = list("cos", [1.1 2])
-a  =
-a(1)
-cos
-a(2)
-1.1    2.
--->b = var2vec(a)
-b  =
-15.
-2.
-10.
-2.
-1.
-1.
-1.
-0.
-1.
-2.
-1.
-2.
-0.
-1.1
-2.
--->c = vec2var(b)
-c  =
-c(1)
-cos
-c(2)
-1.1    2.
- ]]></programlisting>
+a = list("cos", [1.1 2])
+b = var2vec(a); b'
+c = vec2var(b)
+     ]]></programlisting>
+        <screen><![CDATA[
+--> a = list("cos", [1.1 2])
+ a  =
+  (1) = "cos"
+  (2) = [1.1,2]
+
+--> b = var2vec(a); b'
+ ans  =
+   15.   2.   10.   2.   1.   1.   1.   0.   1.   2.   1.   2.   0.   1.1   2.
+
+--> c = vec2var(b)
+ c  =
+  (1) = "cos"
+  (2) = [1.1,2]
+ ]]></screen>
     </refsection>
     <refsection id="SeeAlso_vec2var" role="see also">
         <title>See also</title>

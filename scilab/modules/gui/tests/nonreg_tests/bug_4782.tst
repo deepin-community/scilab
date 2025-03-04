@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009 - DIGITEO - Vincent COUVERT
 // Copyright (C) 2012 - Scilab Enterprises - Vincent COUVERT
 //
@@ -11,8 +11,8 @@
 //
 // <-- Non-regression test for bug 4782 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=4782
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/4782
 //
 // <-- Short Description -->
 //    Can not save/display uicontextmenu

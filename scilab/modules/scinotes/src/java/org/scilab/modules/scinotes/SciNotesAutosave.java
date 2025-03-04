@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2012 - Scilab Enterprises -Calixte DENIZET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -41,20 +41,6 @@ public class SciNotesAutosave implements ActionListener {
     private static Set<File> toRemove = new HashSet<File>();
     private boolean isChecking = false;
     private Object lock = new Object();
-
-    static {
-        Scilab.registerFinalHook(new Runnable() {
-            public void run() {
-                for (File f : toRemove) {
-                    if (f.exists()) {
-                        try {
-                            f.delete();
-                        } catch (Exception e) { }
-                    }
-                }
-            }
-        });
-    }
 
     private Timer timer;
 
@@ -141,25 +127,26 @@ public class SciNotesAutosave implements ActionListener {
         return true;
     }
 
-    public static File getBackupFile(String name) {
+    public static File getBackupFile(String originalName) {
         SciNotesOptions.Autosave as = SciNotesOptions.getSciNotesAutosave();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HHmmss");
+        String backupName = originalName;
         if (as.appendFilename) {
-            name += as.appendWith.replaceAll("%date", dateFormat.format(new Date()));
+            backupName += as.appendWith.replaceAll("%date", dateFormat.format(new Date()));
         } else {
-            int dotpos = name.lastIndexOf('.');
+            int dotpos = backupName.lastIndexOf('.');
             if (dotpos != -1) {
-                name = name.substring(0, dotpos + 1) + as.replaceWith;
+                backupName = backupName.substring(0, dotpos + 1) + as.replaceWith;
             }
         }
 
-        File file = new File(name);
+        File file = new File(backupName);
         String filename = file.getName();
         if (!as.sourceFlag) {
             file = new File(as.singleDirectory, filename);
         }
 
-        boolean identic = new File(name).equals(file);
+        boolean identic = new File(originalName).equals(file);
 
         if (identic) {
             return null;
@@ -200,7 +187,7 @@ public class SciNotesAutosave implements ActionListener {
                                 sep.setLastModified(file.lastModified());
                             } else {
                                 if (as.automaticDelete) {
-                                    toRemove.add(file);
+                                    sep.addToRemove(file);
                                 }
                             }
                         }

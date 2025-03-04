@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2011 - Scilab Enterprises - Sylvestre LEDRU
  * Copyright (C) 2012 - Scilab Enterprises - Clément DAVID
  *
@@ -34,10 +34,7 @@ The main idea is to build at once all the var files
         <condition property="thirdparty.dir" value="../../thirdparty">
             <os family="windows"/>
         </condition>
-        <ant antfile="../scirenderer/build.xml" target="noversion" inheritRefs="false" inheritAll="false">
-            <property name="thirdparty.dir" value="${thirdparty.dir}"/>
-            <property name="fromScilab" value="yes"/>
-        </ant>
+        <ant antfile="../scirenderer/build.xml" target="${target-jar}" inheritRefs="false" inheritAll="false" />
     </target>
 
     <target name="action_binding">

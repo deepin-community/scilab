@@ -67,6 +67,7 @@ C
       DOUBLE PRECISION
      *   CJ, DAMP, DELNRM, IERR, OLDNRM, R, RATE, S, XOLD, YNORM
       LOGICAL  CONVGD
+      COMMON /ierdassl/ierror
 C
       PARAMETER (LNRE=12)
       PARAMETER (LNJE=13)
@@ -115,12 +116,10 @@ C
 C     CORRECTOR LOOP.
 300   IWM(LNRE)=IWM(LNRE)+1
       IRES=0
-      ierror = 0
 C
       CALL RES(X,Y,YPRIME,DELTA,IRES,RPAR,IPAR)
-      if(ierror.ne.0) return
 C     IERROR indicates if RES had the right prototype
-      if(IERROR.ne.0) then
+      if(ierror.ne.0) then
          IDID=-12
          return
       endif
@@ -334,6 +333,7 @@ C
      *   LML, LMTYPE, LMU, MBA, MBAND, MEB1, MEBAND, MSAVE, MTYPE, N,
      *   NPD, NPDM1, NROW
       DOUBLE PRECISION  DEL, DELINV, SQUR, YPSAVE, YSAVE
+      COMMON /ierdassl/ierror
 C
       PARAMETER (NPD=1)
       PARAMETER (LML=1)
@@ -1499,7 +1499,7 @@ C
      *   LJCALC, LK, LKOLD, LIWM, LML, LMTYPE, LMU, LMXORD, LNJE, LNPD,
      *   LNRE, LNS, LNST, LNSTL, LPD, LPHASE, LPHI, LPSI, LROUND, LS,
      *   LSIGMA, LTN, LTSTOP, LWM, LWT, MBAND, MSAVE, MXORD, NPD, NTEMP,
-     *   NZFLG
+     *   NZFLG, ierror
       DOUBLE PRECISION
      *   ATOLI, H, HMAX, HMIN, HO, R, RH, RTOLI, TDIST, TN, TNEXT,
      *   TSTOP, UROUND, YPNORM
@@ -1524,7 +1524,11 @@ C     SET POINTERS INTO RWORK
      *  LALPHA=11, LBETA=17, LGAMMA=23,
      *  LPSI=29, LSIGMA=35, LDELTA=41)
 C
+cDEC$ ATTRIBUTES DLLIMPORT:: /ierdassl/
+      COMMON /ierdassl/ierror
+C
 C***FIRST EXECUTABLE STATEMENT  DDASSL
+      ierror = 0
       IF(INFO(1).NE.0)GO TO 100
 C
 C-----------------------------------------------------------------------
@@ -1699,7 +1703,6 @@ C     COMPUTE TSTOP, IF APPLICABLE
 C
 C     COMPUTE INITIAL DERIVATIVE, UPDATING TN AND Y, IF APPLICABLE
 340   IF (INFO(11) .EQ. 0) GO TO 350
-      ierror=0
       CALL DDAINI(TN,Y,YPRIME,NEQ,
      *  RES,JAC,HO,RWORK(LWT),IDID,RPAR,IPAR,
      *  RWORK(LPHI),RWORK(LDELTA),RWORK(LE),
@@ -1863,7 +1866,6 @@ C     TEST H VS. HMAX
          IF (RH .GT. 1.0D0) H = H/RH
 526   CONTINUE
 C
-      ierror=0
       CALL DDASTP(TN,Y,YPRIME,NEQ,
      *   RES,JAC,H,RWORK(LWT),INFO(1),IDID,RPAR,IPAR,
      *   RWORK(LPHI),RWORK(LDELTA),RWORK(LE),
@@ -2272,6 +2274,7 @@ C
      *   ERKM2, ERKP1, IERR, EST, HNEW, OLDNRM, PNORM, R, RATE, TEMP1,
      *   TEMP2, TERK, TERKM1, TERKM2, TERKP1, XOLD, XRATE
       LOGICAL  CONVGD
+      COMMON /ierdassl/ierror
 C
       PARAMETER (LMXORD=3)
       PARAMETER (LNST=11)
@@ -2420,14 +2423,12 @@ C     MODIFIED NEWTON SCHEME.
       M=0
       IWM(LNRE)=IWM(LNRE)+1
       IRES = 0
-      ierror = 0
       CALL RES(X,Y,YPRIME,DELTA,IRES,RPAR,IPAR)
 C     IERROR indicates if RES had the right prototype
-      if(IERROR.ne.0) then
+      if(ierror.ne.0) then
          IDID=-11
          return
       endif
-      if(ierror.ne.0) return
       IF (IRES .LT. 0) GO TO 380
 C
 C

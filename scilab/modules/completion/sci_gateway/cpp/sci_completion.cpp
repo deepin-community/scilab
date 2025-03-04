@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2013 - Scilab Enterprises - Cedric Delamarre
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -17,6 +17,8 @@
 #include "function.hxx"
 #include "string.hxx"
 #include "double.hxx"
+#include <map>
+#include <functional>
 
 extern "C"
 {
@@ -26,8 +28,20 @@ extern "C"
 #include "Scierror.h"
 #include "toolsdictionary.h"
 }
+
+std::map<std::wstring, std::function<char**(const char* somechars, int* sizeArrayReturned)>> helpers = 
+{
+    {L"functions", completionOnFunctions},
+    {L"commands", completionOnCommandWords},
+    {L"variables", completionOnVariables},
+    {L"macros", completionOnMacros},
+    {L"graphic_properties", completionOnHandleGraphicsProperties},
+    {L"files", completionOnFiles},
+    {L"mustBe", completionOnMustBe}
+};
+
 /*--------------------------------------------------------------------------*/
-static types::InternalType* doCompletion(const char* _pcSomechars, char** (*pvFunction)(const char*, int*));
+static types::InternalType* doCompletion(const char*, std::function<char**(const char* somechars, int* sizeArrayReturned)>);
 /*--------------------------------------------------------------------------*/
 types::Function::ReturnValue sci_completion(types::typed_list &in, int _iRetCount, types::typed_list &out)
 {
@@ -114,34 +128,14 @@ types::Function::ReturnValue sci_completion(types::typed_list &in, int _iRetCoun
         }
 
         wchar_t* wcsDictionary = pStrDictionary->get(0);
-        if ( wcscmp(wcsDictionary, L"functions") == 0 )
+        if (helpers.find(wcsDictionary) != helpers.end())
         {
-            out.push_back(doCompletion(pcSomechars, &completionOnFunctions));
-        }
-        else if ( wcscmp(wcsDictionary, L"commands") == 0 )
-        {
-            out.push_back(doCompletion(pcSomechars, &completionOnCommandWords));
-        }
-        else if ( wcscmp(wcsDictionary, L"variables") == 0 )
-        {
-            out.push_back(doCompletion(pcSomechars, &completionOnVariables));
-        }
-        else if ( wcscmp(wcsDictionary, L"macros") == 0 )
-        {
-            out.push_back(doCompletion(pcSomechars, &completionOnMacros));
-        }
-        else if ( wcscmp(wcsDictionary, L"graphic_properties") == 0 )
-        {
-            out.push_back(doCompletion(pcSomechars, &completionOnHandleGraphicsProperties));
-        }
-        else if ( wcscmp(wcsDictionary, L"files") == 0 )
-        {
-            out.push_back(doCompletion(pcSomechars, &completionOnFiles));
+            out.push_back(doCompletion(pcSomechars, helpers[wcsDictionary]));
         }
         else
         {
-            Scierror(999, _("%s: Wrong value for input argument: '%s', '%s', '%s', '%s', '%s' or '%s' expected.\n"),
-                     "completion", "functions", "commands", "variables", "macros", "graphic_properties", "files");
+            Scierror(999, _("%s: Wrong value for input argument: %s expected.\n"), "completion", 
+                     "'functions', 'commands', 'variables', 'macros', 'graphic_properties', 'files' or 'mustBe'");
             FREE(pcSomechars);
             return types::Function::Error;
         }
@@ -151,12 +145,12 @@ types::Function::ReturnValue sci_completion(types::typed_list &in, int _iRetCoun
     return types::Function::OK;
 }
 /*--------------------------------------------------------------------------*/
-static types::InternalType* doCompletion(const char* _pcSomechars, char** (*pvFunction)(const char*, int*))
+static types::InternalType* doCompletion(const char* _pcSomechars, std::function<char**(const char* somechars, int* sizeArrayReturned)> func)
 {
     char** pstrResults  = NULL;
     int iSizeResults    = 0;
 
-    pstrResults = (*pvFunction)(_pcSomechars, &iSizeResults);
+    pstrResults = func(_pcSomechars, &iSizeResults);
 
     if (iSizeResults)
     {

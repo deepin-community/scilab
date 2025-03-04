@@ -1,4 +1,4 @@
-# Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+# Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 # Copyright (C) 2006-2007 - INRIA - Sylvestre LEDRU
 # Copyright (C) 2009 - DIGITEO - Vincent LIARD
 #
@@ -87,7 +87,10 @@ GATEWAY_C_SOURCES = \
 	sci_gateway/c/sci_cdfnor.c
 	
 GATEWAY_CPP_SOURCES = \
-	sci_gateway/cpp/sci_percent_cov.cpp
+	sci_gateway/cpp/sci_percent_cov.cpp \
+	sci_gateway/cpp/sci_nansum.cpp \
+	sci_gateway/cpp/sci_mean.cpp \
+	sci_gateway/cpp/sci_nanmean.cpp
 
 libscistatistics_la_CPPFLAGS = \
     -I$(srcdir)/includes/ \
@@ -99,7 +102,6 @@ libscistatistics_la_CPPFLAGS = \
     -I$(top_srcdir)/modules/ast/includes/symbol/ \
     -I$(top_srcdir)/modules/ast/includes/system_env/ \
     -I$(top_srcdir)/modules/ast/includes/types/ \
-    -I$(top_srcdir)/modules/ast/includes/analysis/ \
     -I$(top_srcdir)/modules/api_scilab/includes/ \
     -I$(top_srcdir)/modules/output_stream/includes/ \
     -I$(top_srcdir)/modules/localization/includes/ \
@@ -133,11 +135,11 @@ libscistatistics_la_rootdir = $(mydatadir)
 libscistatistics_la_root_DATA =  license.txt 
 
 
-#### statistics : init scripts ####
+####ï¿½statistics : init scripts ####
 libscistatistics_la_etcdir = $(mydatadir)/etc
 libscistatistics_la_etc_DATA = etc/statistics.quit etc/statistics.start
 
-#### statistics : gateway declaration ####
+####ï¿½statistics : gateway declaration ####
 libscistatistics_la_sci_gatewaydir = $(mydatadir)/sci_gateway
 libscistatistics_la_sci_gateway_DATA = sci_gateway/statistics_gateway.xml
 

@@ -1,7 +1,8 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2014-2016 - Scilab Enterprises - Clement DAVID
  * Copyright (C) 2017-2018 - ESI Group - Clement DAVID
+ * Copyright (C) 2022-2023 - Dassault Systèmes - Clement DAVID
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
  *
@@ -319,141 +320,134 @@ static link_t getLinkEnd(model::Link* adaptee, const Controller& controller,
         ret.kind = End;
     }
 
-    ScicosID endID;
-    controller.getObjectProperty(adaptee, end, endID);
-    if (endID != ScicosID())
-    {
-        ScicosID sourceBlock;
-        controller.getObjectProperty(endID, PORT, SOURCE_BLOCK, sourceBlock);
-        model::Block* sourceBlockObject =
-            controller.getBaseObject<model::Block>(sourceBlock);
+    std::string linkUID;
+    controller.getObjectProperty(adaptee, UID, linkUID);
 
-        // Looking for the block number among the block IDs
-        ScicosID parent;
-        kind_t parentKind = BLOCK;
-        controller.getObjectProperty(adaptee, PARENT_BLOCK, parent);
-        std::vector<ScicosID> children;
+    // Looking for the block number among the block IDs
+    ScicosID parent = ScicosID();
+    kind_t parentKind = BLOCK;
+    controller.getObjectProperty(adaptee, PARENT_BLOCK, parent);
+    std::vector<ScicosID> children;
+    // Added to a superblock
+    if (parent == ScicosID())
+    {
+        // Added to a diagram
+        controller.getObjectProperty(adaptee, PARENT_DIAGRAM, parent);
+        parentKind = DIAGRAM;
+    }
+    if (parent == ScicosID())
+    {
+        return ret;
+    }
+    controller.getObjectProperty(parent, parentKind, CHILDREN, children);
+    
+    // resolve the connection
+    ScicosID endID = ScicosID();
+    controller.getObjectProperty(adaptee, end, endID);
+    if (endID == ScicosID())
+    {
+        //DEBUG std::cerr << "Wrong field value for Link #" << index <<  " - \"" << linkUID << "\" : undefined port.\n";
+        return ret;
+    }
+
+    ScicosID sourceBlock = ScicosID();
+    controller.getObjectProperty(endID, PORT, SOURCE_BLOCK, sourceBlock);
+    if (sourceBlock == ScicosID())
+    {
+        //DEBUG std::cerr << "Wrong field value for Link #" << index <<  " - \"" << linkUID << "\" : undefined matched Block.\n";
+        return ret;
+    }
+    model::Block* sourceBlockObject = controller.getBaseObject<model::Block>(sourceBlock);
+    std::string blockUID;
+    controller.getObjectProperty(sourceBlock, BLOCK, UID, blockUID);
+
+    // check that link and block share the same layer
+    {
+        ScicosID sourceParent = ScicosID();
+        kind_t sourceParentKind = BLOCK;
+        controller.getObjectProperty(sourceBlock, BLOCK, PARENT_BLOCK, sourceParent);
         // Added to a superblock
-        if (parent == ScicosID())
+        if (sourceParent == ScicosID())
         {
             // Added to a diagram
-            controller.getObjectProperty(adaptee, PARENT_DIAGRAM, parent);
-            parentKind = DIAGRAM;
-            if (parent == ScicosID())
-            {
-                return ret;
-            }
+            controller.getObjectProperty(sourceBlock, BLOCK, PARENT_DIAGRAM, sourceParent);
+            sourceParentKind = DIAGRAM;
         }
-        controller.getObjectProperty(parent, parentKind, CHILDREN, children);
-
-        ret.block =
-            static_cast<int>(std::distance(children.begin(),
-                                           std::find(children.begin(),
-                                                   children.end(), sourceBlock)) +
-                             1);
-
-        // To find the port index from its 'endID' ID, search through all the
-        // block's ports lists
-        std::vector<ScicosID> sourceBlockPorts;
-        controller.getObjectProperty(sourceBlockObject, INPUTS, sourceBlockPorts);
-
-        std::vector<ScicosID>::iterator found =
-            std::find(sourceBlockPorts.begin(), sourceBlockPorts.end(), endID);
-        if (found == sourceBlockPorts.end()) // Not found in the data inputs
+        if (sourceParent != ScicosID() && sourceParent != parent)
         {
-            sourceBlockPorts.clear();
-            controller.getObjectProperty(sourceBlockObject, OUTPUTS,
-                                         sourceBlockPorts);
-            found =
-                std::find(sourceBlockPorts.begin(), sourceBlockPorts.end(), endID);
-            if (found == sourceBlockPorts.end()) // Not found in the data outputs
-            {
-                sourceBlockPorts.clear();
-                controller.getObjectProperty(sourceBlockObject, EVENT_INPUTS,
-                                             sourceBlockPorts);
-                found =
-                    std::find(sourceBlockPorts.begin(), sourceBlockPorts.end(), endID);
-                if (found == sourceBlockPorts.end()) // Not found in the event inputs
-                {
-                    sourceBlockPorts.clear();
-                    controller.getObjectProperty(sourceBlockObject, EVENT_OUTPUTS,
-                                                 sourceBlockPorts);
-                    found = std::find(sourceBlockPorts.begin(), sourceBlockPorts.end(),
-                                      endID);
-                    if (found == sourceBlockPorts.end()) // Not found in the event outputs
-                    {
-                        return ret;
-                    }
-                }
-            }
-        }
-        ret.port =
-            static_cast<int>(std::distance(sourceBlockPorts.begin(), found) + 1);
-
-        int kind;
-        controller.getObjectProperty(endID, PORT, PORT_KIND, kind);
-        if (kind == PORT_IN || kind == PORT_EIN)
-        {
-            ret.kind = End;
-        }
-        else
-        {
-            ret.kind = Start;
+            // the layers does not match, we should not create anything else but rather alert the user.
+            std::vector<ScicosID> sourceChildren;
+            controller.getObjectProperty(sourceParent, sourceParentKind, CHILDREN, sourceChildren);
+            
+            //DEBUG std::cerr << "Wrong field value for Link #" << index << " - \"" << linkUID << "\" : does not match Block #" << indexOf(sourceBlock, sourceChildren)+1 << " - \"" << blockUID << "\" defined ports.\n";
+            return ret;
         }
     }
+
+    ret.block = indexOf(sourceBlock, children) + 1;
+    if (ret.block == 0)
+    {
+        //DEBUG std::cerr << "Wrong field value for Link #" << index << " - \"" << linkUID << "\" : unable to match Block \"" << blockUID << "\" index.\n";
+    }
+
+    // To find the port index from its 'endID' ID, search through all the
+    // block's ports lists
+    std::vector<ScicosID> sourceBlockPorts;
+    int portIndex;
+    object_properties_t port;
+    for (object_properties_t p : { INPUTS, OUTPUTS, EVENT_INPUTS, EVENT_OUTPUTS })
+    {
+        controller.getObjectProperty(sourceBlockObject, p, sourceBlockPorts);
+        portIndex = indexOf(endID, sourceBlockPorts) + 1;
+        port = p;
+        if (portIndex > 0)
+            break;
+    }
+    ret.port = portIndex;
+    
+    // this is unlikely to be simpified
+    if (port == INPUTS && end == SOURCE_PORT)
+        ret.kind = End;
+    else if (port == INPUTS && end == DESTINATION_PORT)
+        ret.kind = End;
+    else if (port == EVENT_INPUTS && end == SOURCE_PORT)
+        ret.kind = End;
+    else if (port == EVENT_INPUTS && end == DESTINATION_PORT)
+        ret.kind = End;
+    else if (port == OUTPUTS && end == SOURCE_PORT)
+        ret.kind = Start;
+    else if (port == OUTPUTS && end == DESTINATION_PORT)
+        ret.kind = Start;
+    else if (port == EVENT_OUTPUTS && end == SOURCE_PORT)
+        ret.kind = Start;
+    else if (port == EVENT_OUTPUTS && end == DESTINATION_PORT)
+        ret.kind = Start;
+    
     // Default case, the property was initialized at [].
     return ret;
 }
 
-/*
- * Connectivity is ensured if 'port' is of the desired type or if either of the concerned blocks is a split block,
- * because they are connectable to anything
- */
-bool checkConnectivity(const int neededType, const ScicosID port, model::Block* blk1, Controller& controller)
-{
-    int portKind;
-    controller.getObjectProperty(port, PORT, PORT_KIND, portKind);
-
-    if (portKind != neededType)
-    {
-        // Last chance if one of the connecting blocks is just a split block
-        std::string name1;
-        controller.getObjectProperty(blk1, SIM_FUNCTION_NAME, name1);
-        if (name1 != split && name1 != lsplit && name1 != limpsplit)
-        {
-            ScicosID blk2;
-            controller.getObjectProperty(port, PORT, SOURCE_BLOCK, blk2);
-            std::string name2;
-            controller.getObjectProperty(blk2, BLOCK, SIM_FUNCTION_NAME, name2);
-            if (name2 != split && name2 != lsplit && name2 != limpsplit)
-            {
-                return false;
-            }
-        }
-    }
-    return true;
-}
-
 void setLinkEnd(model::Link* linkObject, Controller& controller, const object_properties_t end, const link_t& v, const std::vector<ScicosID>& children)
 {
-    ScicosID from;
-    controller.getObjectProperty(linkObject, SOURCE_PORT, from);
-    ScicosID to;
-    controller.getObjectProperty(linkObject, DESTINATION_PORT, to);
+    ScicosID srcPort = ScicosID();
+    controller.getObjectProperty(linkObject, SOURCE_PORT, srcPort);
+    ScicosID destPort = ScicosID();
+    controller.getObjectProperty(linkObject, DESTINATION_PORT, destPort);
     ScicosID concernedPort;
-    ScicosID otherPort;
-    switch (end)
+
+    if (v.kind != Start && v.kind != End)
     {
-        case SOURCE_PORT:
-            concernedPort = from;
-            otherPort = to;
-            break;
-        case DESTINATION_PORT:
-            concernedPort = to;
-            otherPort = from;
-            break;
-        default:
-            return;
+        return;
+    }
+    // kind == 0: trying to set the start of the link (output port)
+    // kind == 1: trying to set the end of the link (input port)
+    if (end == DESTINATION_PORT)
+    {
+        concernedPort = destPort;
+    }
+    else
+    {
+        concernedPort = srcPort;
     }
 
     if (v.block == 0 || v.port == 0)
@@ -473,21 +467,11 @@ void setLinkEnd(model::Link* linkObject, Controller& controller, const object_pr
         return;
     }
 
-    // Connect the new one
-
-    if (v.kind != Start && v.kind != End)
-    {
-        return;
-    }
-    // kind == 0: trying to set the start of the link (output port)
-    // kind == 1: trying to set the end of the link (input port)
-
     if (v.block < 0 || v.block > static_cast<int>(children.size()))
     {
         return; // Trying to link to a non-existing block
     }
     ScicosID blkID = children[v.block - 1];
-
     if (blkID == ScicosID())
     {
         // Deleted Block
@@ -501,151 +485,53 @@ void setLinkEnd(model::Link* linkObject, Controller& controller, const object_pr
         return;
     }
 
-    // v.port may be decremented locally to square with the port indexes
-    int portIndex = v.port;
+    int linkType = 0;
+    controller.getObjectProperty(linkObject, KIND, linkType);
+    
+    // map the ports-containers depending on the link kind 
+    object_properties_t oppositePorts[] = {MAX_OBJECT_PROPERTIES, MAX_OBJECT_PROPERTIES};
+    switch (linkType)
+    {
+        case model::activation:
+            oppositePorts[Start] = EVENT_OUTPUTS;
+            oppositePorts[End] = EVENT_INPUTS;
+            break;
+        case model::regular:
+            oppositePorts[Start] = OUTPUTS;
+            oppositePorts[End] = INPUTS;
+            break;
+        case model::implicit:
+            oppositePorts[Start] = OUTPUTS;
+            oppositePorts[End] = INPUTS;
+            break;
+    }
 
     std::vector<ScicosID> sourceBlockPorts;
-    bool newPortIsImplicit = false;
-    enum portKind newPortKind = PORT_UNDEF;
-    int linkType;
-    controller.getObjectProperty(linkObject, KIND, linkType);
-    if (linkType == model::activation)
-    {
-        std::vector<ScicosID> evtin;
-        std::vector<ScicosID> evtout;
-        controller.getObjectProperty(blkObject, EVENT_INPUTS, evtin);
-        controller.getObjectProperty(blkObject, EVENT_OUTPUTS, evtout);
+    controller.getObjectProperty(blkObject, oppositePorts[v.kind], sourceBlockPorts);
 
-        if (v.kind == Start)
-        {
-            if (otherPort != ScicosID())
-            {
-                if (!checkConnectivity(PORT_EIN, otherPort, blkObject, controller))
-                {
-                    return;
-                }
-            }
-            newPortKind = PORT_EOUT;
-            sourceBlockPorts = evtout;
-        }
-        else
-        {
-            if (otherPort != ScicosID())
-            {
-                if (!checkConnectivity(PORT_EOUT, otherPort, blkObject, controller))
-                {
-                    return;
-                }
-            }
-            newPortKind = PORT_EIN;
-            sourceBlockPorts = evtin;
-        }
-    }
-    else if (linkType == model::regular || linkType == model::implicit)
-    {
-        std::vector<ScicosID> in;
-        std::vector<ScicosID> out;
-        controller.getObjectProperty(blkObject, INPUTS, in);
-        controller.getObjectProperty(blkObject, OUTPUTS, out);
-
-        if (linkType == model::regular)
-        {
-            if (v.kind == Start)
-            {
-                if (otherPort != ScicosID())
-                {
-                    if (!checkConnectivity(PORT_IN, otherPort, blkObject, controller))
-                    {
-                        return;
-                    }
-                }
-                newPortKind = PORT_OUT;
-                sourceBlockPorts = out;
-            }
-            else
-            {
-                if (otherPort != ScicosID())
-                {
-                    if (!checkConnectivity(PORT_OUT, otherPort, blkObject, controller))
-                    {
-                        return;
-                    }
-                }
-                newPortKind = PORT_IN;
-                sourceBlockPorts = in;
-            }
-
-            // Rule out the implicit ports
-            for (int i = 0; i < static_cast<int>(sourceBlockPorts.size()); ++i)
-            {
-                bool isImplicit;
-                controller.getObjectProperty(sourceBlockPorts[i], PORT, IMPLICIT, isImplicit);
-                if (isImplicit == true)
-                {
-                    sourceBlockPorts.erase(sourceBlockPorts.begin() + i);
-                    if (portIndex > i + 1)
-                    {
-                        portIndex--; // Keep portIndex consistent with the port indexes
-                    }
-                }
-            }
-        }
-        else // model::implicit
-        {
-            newPortIsImplicit = true;
-            if (v.kind == Start)
-            {
-                sourceBlockPorts = out;
-            }
-            else // End
-            {
-                sourceBlockPorts = in;
-            }
-
-            // Rule out the explicit ports
-            for (size_t i = 0; i < sourceBlockPorts.size(); ++i)
-            {
-                bool isImplicit;
-                controller.getObjectProperty(sourceBlockPorts[i], PORT, IMPLICIT, isImplicit);
-                if (isImplicit == false)
-                {
-                    sourceBlockPorts.erase(sourceBlockPorts.begin() + i);
-                    if (portIndex > static_cast<int>(i + 1))
-                    {
-                        portIndex--; // Keep portIndex consistent with the port indexes
-                    }
-                }
-            }
-        }
-    }
-
-
-
-    model::Port* concernedPortObject = nullptr;
-    int nBlockPorts = static_cast<int>(sourceBlockPorts.size());
-    if (nBlockPorts >= portIndex)
-    {
-        concernedPort = sourceBlockPorts[portIndex - 1];
-        concernedPortObject = controller.getBaseObject<model::Port>(concernedPort);
-    }
-    else
+    if (v.port < 1 || (int) sourceBlockPorts.size() < v.port)
     {
         // the interface does not match, we should not create anything else but rather alert the user that he is not matching the block interface.
+        int index = indexOf(linkObject->id(), children) + 1;
+        std::string linkUID;
+        controller.getObjectProperty(linkObject, UID, linkUID);
+        std::string blockUID;
+        controller.getObjectProperty(blkObject, UID, blockUID);
+        get_or_allocate_logger()->log(LOG_WARNING, _("Wrong field value for Link #%d - \"%s\" : does not match Block #%d - \"%s\" defined ports.\n"), index, linkUID.c_str(), v.block, blockUID.c_str());
         return;
     }
+    size_t portIndex = v.port - 1;
 
-    // Disconnect the old port if it was connected. After that, concernedPort will be reused to designate the new port
-    if (concernedPort != ScicosID())
-    {
-        controller.setObjectProperty(concernedPort, PORT, CONNECTED_SIGNALS, ScicosID());
-    }
+    // Connect the new one
+    concernedPort = sourceBlockPorts[portIndex];
+    model::Port* concernedPortObject = controller.getBaseObject<model::Port>(concernedPort);
 
     ScicosID oldLink = ScicosID();
     controller.getObjectProperty(concernedPortObject, CONNECTED_SIGNALS, oldLink);
-    if (oldLink != ScicosID())
+    if (oldLink != ScicosID() && oldLink != linkObject->id())
     {
         // Disconnect the old link if it was indeed connected to the concerned port
-        ScicosID oldPort;
+        ScicosID oldPort = ScicosID();
         controller.getObjectProperty(oldLink, LINK, end, oldPort);
         if (concernedPort == oldPort)
         {
@@ -672,6 +558,8 @@ bool is_valid(types::Double* o)
         {
             return false; // Block and Port numbers must be integer values
         }
+
+        // Block number can be positive (regular indexing) or negative for fictiuous blocks on scicos_flat.sci 
         if (o->get(1) < 0)
         {
             return false; // Port number must be positive
@@ -704,11 +592,20 @@ struct from
         auto it = partial_links.find(adaptor.getAdaptee()->id());
         if (it == partial_links.end())
         {
+            //DEBUG std::cerr << "from " << adaptor.getAdaptee()->id() << " getLinkEnd\n";
+
             // if not found use the connected value
             from_content = getLinkEnd(adaptor.getAdaptee(), controller, SOURCE_PORT);
+            
+            ScicosID p = ScicosID();
+            ScicosID b = ScicosID();
+            controller.getObjectProperty(adaptor.getAdaptee(), SOURCE_PORT, p);
+            controller.getObjectProperty(p, PORT, SOURCE_BLOCK, b);    
         }
         else
         {
+            //DEBUG std::cerr << "from " << adaptor.getAdaptee()->id() << " partials\n";
+
             // if found, use the partial value
             from_content = it->second.from;
         }
@@ -737,6 +634,7 @@ struct from
         }
 
         link_t from_content{0, 0, Start};
+        //double (*c)[3]= (double(*)[3]) current->get();
         if (current->getSize() >= 2)
         {
             from_content.block = static_cast<int>(current->get(0));
@@ -756,10 +654,39 @@ struct from
             partial_link_t l;
             l.from = from_content;
             l.to = getLinkEnd(adaptor.getAdaptee(), controller, DESTINATION_PORT);
+
+            //DEBUG std::cerr << "store " << adaptor.getAdaptee()->id() << " partials to " << to_string(l) << "\n";
+            
             partial_links.insert({adaptor.getAdaptee()->id(), l});
         }
         else
         {
+            // warning if there is an invalid from/to connection
+            int linkKind;
+            controller.getObjectProperty(adaptor.getAdaptee(), KIND, linkKind);
+            if (it->second.from.block == from_content.block &&
+                it->second.from.port == from_content.port && 
+                it->second.from.kind != from_content.kind && 
+                linkKind != model::implicit)
+            {
+                std::vector<ScicosID> children;
+                ScicosID parent;
+                controller.getObjectProperty(adaptor.getAdaptee(), PARENT_BLOCK, parent);
+                if (parent == ScicosID())
+                {
+                    controller.getObjectProperty(adaptor.getAdaptee(), PARENT_DIAGRAM, parent);
+                    controller.getObjectProperty(parent, DIAGRAM, CHILDREN, children);
+                }
+                else
+                {
+                    controller.getObjectProperty(parent, BLOCK, CHILDREN, children);
+                }
+                int index = indexOf(adaptor.getAdaptee()->id(), children) + 1;
+                if (index > 0)
+                {
+                    get_or_allocate_logger()->log(LOG_WARNING, _("Wrong field value for Link #%d: \"from(3)\" changed its kind from %d to %d.\n"), index, it->second.from.kind, from_content.kind);
+                }
+            }
             it->second.from = from_content;
         }
         return true;
@@ -776,11 +703,18 @@ struct to
 
         if (it == partial_links.end())
         {
+            //DEBUG std::cerr << "to " << adaptor.getAdaptee()->id() << " getLinkEnd\n";
             // if not found use the connected value
             to_content = getLinkEnd(adaptor.getAdaptee(), controller, DESTINATION_PORT);
+            
+            ScicosID p = ScicosID();
+            ScicosID b = ScicosID();
+            controller.getObjectProperty(adaptor.getAdaptee(), DESTINATION_PORT, p);
+            controller.getObjectProperty(p, PORT, SOURCE_BLOCK, b);
         }
         else
         {
+            //DEBUG std::cerr << "to " << adaptor.getAdaptee()->id() << " partials\n";
             // if found, use the partial value
             to_content = it->second.to;
         }
@@ -814,6 +748,7 @@ struct to
         }
 
         link_t to_content{0, 0, End};
+        //double (*c)[3]= (double(*)[3]) current->get();
         if (current->getSize() >= 2)
         {
             to_content.block = static_cast<int>(current->get(0));
@@ -833,10 +768,37 @@ struct to
             partial_link_t l;
             l.from = getLinkEnd(adaptor.getAdaptee(), controller, SOURCE_PORT);
             l.to = to_content;
+            //DEBUG std::cerr << "store " << adaptor.getAdaptee()->id() << " partials from " << to_string(l) << "\n";
             partial_links.insert({adaptor.getAdaptee()->id(), l});
         }
         else
         {
+            // warning if there is an invalid from/to connection
+            int linkKind;
+            controller.getObjectProperty(adaptor.getAdaptee(), KIND, linkKind);
+            if (it->second.to.block == to_content.block &&
+                it->second.to.port == to_content.port && 
+                it->second.to.kind != to_content.kind && 
+                linkKind != model::implicit)
+            {
+                std::vector<ScicosID> children;
+                ScicosID parent;
+                controller.getObjectProperty(adaptor.getAdaptee(), PARENT_BLOCK, parent);
+                if (parent == ScicosID())
+                {
+                    controller.getObjectProperty(adaptor.getAdaptee(), PARENT_DIAGRAM, parent);
+                    controller.getObjectProperty(parent, DIAGRAM, CHILDREN, children);
+                }
+                else
+                {
+                    controller.getObjectProperty(parent, BLOCK, CHILDREN, children);
+                }
+                int index = indexOf(adaptor.getAdaptee()->id(), children) + 1;
+                if (index > 0)
+                {
+                    get_or_allocate_logger()->log(LOG_WARNING, _("Wrong field value for Link #%d: \"to(3)\" changed its kind from %d to %d.\n"), index, it->second.to.kind, to_content.kind);
+                }
+            }
             it->second.to = to_content;
         }
         return true;
@@ -883,19 +845,90 @@ std::wstring LinkAdapter::getShortTypeStr() const
     return getSharedTypeStr();
 }
 
-void refresh_shared_values(Controller& controller, model::Link* adaptee, partials_links_t::iterator& it)
+// used to debug a link connection, will be compiled out
+static inline void displayConnection(Controller& controller, model::Link* adaptee)
 {
-    ScicosID from;
+    if (adaptee == nullptr || (adaptee->id() != 147 && adaptee->id() != 80))
+        return;
+
+    std::vector<ScicosID> path;
+    path.push_back(ScicosID());
+    ScicosID last = path.back();
+    controller.getObjectProperty(adaptee, PARENT_BLOCK, path.back());
+    while (path.back() != ScicosID())
+    {
+        last = path.back();
+        path.push_back(ScicosID());
+        controller.getObjectProperty(last, BLOCK, PARENT_BLOCK, path.back());
+    }
+    path.pop_back();
+
+    ScicosID diagram = ScicosID();
+    controller.getObjectProperty(last, BLOCK, PARENT_DIAGRAM, diagram);
+
+    // display path
+    std::vector<ScicosID> children;
+    controller.getObjectProperty(diagram, DIAGRAM, CHILDREN, children);
+    
+    for (auto it = path.rbegin(); it != path.rend(); ++it)
+    {
+        controller.getObjectProperty(*it, BLOCK, CHILDREN, children);
+    }
+    
+    // display connection
+    std::cerr << " = scicos_link(";
+    std::cerr << " from=" << to_string(getLinkEnd(adaptee, controller, SOURCE_PORT));
+    std::cerr << ",";
+    std::cerr << " to=" << to_string(getLinkEnd(adaptee, controller, DESTINATION_PORT));
+    std::cerr << ")";
+
+    ScicosID p = ScicosID();
+    ScicosID b = ScicosID();
+    controller.getObjectProperty(adaptee, SOURCE_PORT, p);
+    controller.getObjectProperty(p, PORT, SOURCE_BLOCK, b);
+    std::cerr << "\tconnected ";
+    std::cerr << "from ( " << p << ", PORT ) ( " << b << " , BLOCK ) ";
+    controller.getObjectProperty(adaptee, DESTINATION_PORT, p);
+    controller.getObjectProperty(p, PORT, SOURCE_BLOCK, b);
+    std::cerr << "to ( " << p << ", PORT ) ( " << b << " , BLOCK )";
+    std::cerr << '\n';
+}
+
+void refresh_shared_values(Controller& controller, model::Link* adaptee, partials_links_t::iterator& it, const std::vector<ScicosID>& children)
+{
+    ScicosID from = ScicosID();
+    ScicosID fromBlock = ScicosID();
     controller.getObjectProperty(adaptee, SOURCE_PORT, from);
-    ScicosID to;
+    
+    ScicosID to = ScicosID();
+    ScicosID toBlock = ScicosID();
     controller.getObjectProperty(adaptee, DESTINATION_PORT, to);
 
     bool isConnected = from != ScicosID() && to != ScicosID();
     if (isConnected)
     {
-        partial_links.erase(it);
+        controller.getObjectProperty(from, PORT, SOURCE_BLOCK, fromBlock);
+        controller.getObjectProperty(to, PORT, SOURCE_BLOCK, toBlock);
     }
-}
+
+    bool hasAssociatedBlock = fromBlock != ScicosID() && toBlock != ScicosID();
+    
+    bool associatedBlocksAreInChildren = false;
+    if (hasAssociatedBlock)
+    {
+        associatedBlocksAreInChildren = std::find(children.begin(), children.end(), fromBlock) != children.end() && \
+                                        std::find(children.begin(), children.end(), toBlock) != children.end();
+    }
+    
+    if (isConnected && hasAssociatedBlock && associatedBlocksAreInChildren)
+    {
+        partial_links.erase(it);
+       //DEBUG std::cerr << "partials erased Link " << adaptee->id();
+       //DEBUG std::cerr << " from: (" << from << " , PORT) (" << fromBlock << " , BLOCK)";
+       //DEBUG std::cerr << " to: (" << to << " , PORT) (" << toBlock << " , BLOCK)";
+       //DEBUG std::cerr << '\n';
+    }
+};
 
 void LinkAdapter::relink(Controller& controller, model::Link* adaptee, const std::vector<ScicosID>& children)
 {
@@ -906,11 +939,20 @@ void LinkAdapter::relink(Controller& controller, model::Link* adaptee, const std
         return;
     }
     const partial_link_t& l = it->second;
-
+    
+    if (l.from.block <= 0 || l.to.block <= 0)
+    {
+        // never reconnect a temporary link
+        
+        //DEBUG std::cerr << "unable to relink  " << to_string(l) << " " << to_string(l) << "\n";
+        return;
+    }
+    
     setLinkEnd(adaptee, controller, SOURCE_PORT, l.from, children);
     setLinkEnd(adaptee, controller, DESTINATION_PORT, l.to, children);
 
-    refresh_shared_values(controller, adaptee, it);
+    refresh_shared_values(controller, adaptee, it, children);
+    //DEBUG displayConnection(controller, adaptee);
 }
 
 std::vector<model::Port*> getPorts(Controller& controller, model::Block* adaptee, object_properties_t port_kind)
@@ -928,13 +970,8 @@ std::vector<model::Port*> getPorts(Controller& controller, model::Block* adaptee
     return ports;
 }
 
-void LinkAdapter::reverse_relink(Controller& controller, model::Block* adaptee, int index, const std::vector<ScicosID>& children)
+void LinkAdapter::reverse_relink(Controller& controller, model::Block* adaptee, const std::vector<ScicosID>& children)
 {
-    if (adaptee->id() != children[index])
-    {
-        return;
-    }
-
     for (object_properties_t p :
             {
                 INPUTS, OUTPUTS, EVENT_INPUTS, EVENT_OUTPUTS
@@ -946,28 +983,62 @@ void LinkAdapter::reverse_relink(Controller& controller, model::Block* adaptee, 
         {
             ScicosID signal = ScicosID();
             controller.getObjectProperty(ports[i], CONNECTED_SIGNALS, signal);
+            if (signal == ScicosID())
+                continue;
             model::Link* link = controller.getBaseObject<model::Link>(signal);
+            //DEBUG displayConnection(controller, link);            
 
-            auto opposite = partial_links.find(signal);
-            if (opposite != partial_links.end())
+            auto it = partial_links.find(signal);
+            if (it != partial_links.end())
             {
-                auto& from = opposite->second.from;
-                auto& to = opposite->second.to;
+                const partial_link_t& l = it->second;
 
-                if (from.block == index + 1 && from.port == i)
+                if (l.from.block <= 0 || l.to.block <= 0)
                 {
-                    controller.setObjectProperty(link, SOURCE_PORT, ports[i]->id());
-                    from.kind = Start;
+                    // never reconnect a temporary link
+                    
+                    //DEBUG std::cerr << "unable to relink  " << to_string(l) << " " << to_string(l) << "\n";
+                    return;
                 }
-                else if (to.block == index + 1 && to.port == i)
-                {
-                    controller.setObjectProperty(link, DESTINATION_PORT, ports[i]->id());
-                    to.kind = End;
-                }
+                
+                setLinkEnd(link, controller, SOURCE_PORT, l.from, children);
+                setLinkEnd(link, controller, DESTINATION_PORT, l.to, children);
 
-                refresh_shared_values(controller, link, opposite);
+                refresh_shared_values(controller, link, it, children);
             }
         }
+    }
+}
+
+void LinkAdapter::cleanup_relink(Controller& controller, model::Link* adaptee, const std::vector<ScicosID>& children)
+{
+    auto link = partial_links.find(adaptee->id());
+    if (link != partial_links.end())
+    {
+        refresh_shared_values(controller, adaptee, link, children);
+    }
+}
+
+void LinkAdapter::add_partial_links_information(Controller& controller, ScicosID port)
+{
+    ScicosID opposite = ScicosID();
+    controller.getObjectProperty(port, PORT, CONNECTED_SIGNALS, opposite);
+    if (opposite == ScicosID())
+        return;
+
+    auto it = partial_links.find(opposite);
+    if (it == partial_links.end())
+    {
+        model::Link* link = controller.getBaseObject<model::Link>(opposite);
+        //DEBUG displayConnection(controller, link);
+
+        partial_link_t l;
+        l.from = getLinkEnd(link, controller, SOURCE_PORT);
+        l.to = getLinkEnd(link, controller, DESTINATION_PORT);
+        
+        //DEBUG std::cerr << "add " << opposite << " partials from " << to_string(l) << "\n";
+        partial_links.insert({opposite, l});
+        //DEBUG displayConnection(controller, controller.getBaseObject<model::Link>(opposite));
     }
 }
 
@@ -976,16 +1047,21 @@ void LinkAdapter::add_partial_links_information(Controller& controller, ScicosID
     auto it = partial_links.find(original);
     if (it != partial_links.end())
     {
+        //DEBUG std::cerr << "copy " << original << " to " << cloned << " partials from " << to_string(it->second) << "\n";
         partial_links.insert({cloned, it->second});
     }
     else
     {
         model::Link* link = controller.getBaseObject<model::Link>(original);
+        //DEBUG displayConnection(controller, link);
 
         partial_link_t l;
         l.from = getLinkEnd(link, controller, SOURCE_PORT);
         l.to = getLinkEnd(link, controller, DESTINATION_PORT);
+        
+        //DEBUG std::cerr << "add " << cloned << " partials from " << to_string(l) << "\n";
         partial_links.insert({cloned, l});
+        //DEBUG displayConnection(controller, controller.getBaseObject<model::Link>(cloned));
     }
 }
 
@@ -1001,6 +1077,7 @@ void reverse_store(Controller& controller, model::Block* removed, object_propert
             continue;
         }
         model::Link* link = controller.getBaseObject<model::Link>(signal);
+        //DEBUG displayConnection(controller, link);
 
         auto it = partial_links.find(link->id());
         if (it == partial_links.end())
@@ -1008,6 +1085,8 @@ void reverse_store(Controller& controller, model::Block* removed, object_propert
             partial_link_t l;
             l.from = getLinkEnd(link, controller, SOURCE_PORT);
             l.to = getLinkEnd(link, controller, DESTINATION_PORT);
+
+            //DEBUG std::cerr << "reverse_store " << link->id() << " partials from " << to_string(l) << "\n";
             partial_links.insert({link->id(), l});
         }
     }
@@ -1025,11 +1104,23 @@ void LinkAdapter::store_partial_links_information(Controller& controller, model:
     if (removed->kind() == LINK && added->kind() == LINK)
     {
         model::Link* link = static_cast<model::Link*>(added);
+        //DEBUG displayConnection(controller, link);
 
-        partial_link_t l;
-        l.from = getLinkEnd(link, controller, SOURCE_PORT);
-        l.to = getLinkEnd(link, controller, DESTINATION_PORT);
-        partial_links.insert({link->id(), l});
+        ScicosID parent = ScicosID();
+        controller.getObjectProperty(link, PARENT_BLOCK, parent);
+        if (parent == ScicosID())
+        {
+            controller.getObjectProperty(link, PARENT_DIAGRAM, parent);
+        }
+        if (parent != ScicosID())
+        {
+            partial_link_t l;
+            l.from = getLinkEnd(link, controller, SOURCE_PORT);
+            l.to = getLinkEnd(link, controller, DESTINATION_PORT);
+            
+            //DEBUG std::cerr << "store " << link->id() << " partials from " << to_string(l) << "\n";
+            partial_links.insert({link->id(), l});
+        }
     }
     else if (removed->kind() == BLOCK && added->kind() == BLOCK)
     {
@@ -1045,6 +1136,9 @@ void LinkAdapter::store_partial_links_information(Controller& controller, model:
 // delete all information related to the block
 void LinkAdapter::remove_partial_links_information(ScicosID uid)
 {
+    auto it = partial_links.find(uid);
+    if (it != partial_links.end())
+       //DEBUG std::cerr << "erase " << uid << " partials " << to_string(it->second) << "\n";
     partial_links.erase(uid);
 }
 

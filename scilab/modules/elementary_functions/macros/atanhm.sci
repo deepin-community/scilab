@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -13,14 +13,8 @@
 function t=atanhm(x)
     //Matrix wise Hyperbolic tangent inverse
 
-    rhs = argn(2);
-
-    if rhs <> 1 then
-        error(msprintf(gettext("%s: Wrong number of input argument(s): %d expected.\n"),"atanhm",1));
-    end
-
-    if type(x)<>1 then
-        error(msprintf(gettext("%s: Wrong type for input argument #%d: Real or complex matrix expected.\n"),"atanhm",1));
+    arguments
+        x {mustBeA(x, "double")}
     end
 
     if x==[] then t=[],end

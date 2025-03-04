@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2010 - Calixte DENIZET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -66,6 +66,8 @@ public class TemplateHandler {
                         str = filler.makeTitle(id);
                     } else if (array[i + 1].equals("subtitle")) {
                         str = filler.makeSubtitle(id);
+                    } else if (array[i + 1].equals("origin")) {
+                        str = filler.makeOrigin(id);
                     } else if (array[i + 1].equals("toclist")) {
                         str = filler.makeTocList(id);
                     } else if (array[i + 1].equals("lastmodified")) {

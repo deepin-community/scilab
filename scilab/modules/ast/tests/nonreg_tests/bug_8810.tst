@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2018 - Samuel GOUGEON
 //
 // This file is hereby licensed under the terms of the GNU GPL v2.0,
@@ -14,8 +14,8 @@
 //
 // <-- Non-regression test for bug 8810 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/8810
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/8810
 //
 // <-- Short Description -->
 // Insertions with an hypermatrix of indices failed

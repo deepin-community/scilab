@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA
  * Copyright (C) 2009-2011 - DIGITEO - Michael Baudin
  * Copyright (C) 2013 - Scilab Enterprises - Paul Bignier: added 32/64bits separation
@@ -41,22 +41,36 @@
                 <term>module</term>
                 <listitem>
                     <para>
-                        Un tableau de chaînes de caractères ou <literal>[]</literal> (ou <literal>"[]"</literal>). Nom des modules ou répertoires à tester, tous les modules internes de scilab si <literal>[]</literal>
+                        Un tableau de chaînes de caractères : références des modules dont les tests
+                        doivent être lancés :
                     </para>
                     <itemizedlist>
                         <listitem>
                             <para>
-                                le nom d'un module interne de Scilab ("core", "time", ...) ou d'un sous-module ("optimization|neldermead").
+                                nom d'un module interne de Scilab ("core", "time", ...)
+                                ou d'un sous-module ("optimization|neldermead").
                             </para>
                         </listitem>
                         <listitem>
                             <para>
-                                le nom d'un module ATOMS ("module_lycee", "nisp", ...). Pour être pris en compte le module doit être chargé à l'appel de test_run().
+                                nom d'un module ATOMS ("module_lycee", "nisp", ...). Le module
+                                doit être chargé dans la session Scilab avant de lancer test_run().
+                                Voir <literal>atomsGetLoaded()(:,1)</literal> et
+                                <link linkend="atomsLoad">atomsLoad(…)</link>.
                             </para>
                         </listitem>
                         <listitem>
                             <para>
-                                le chemin absolu vers le répertoire d'un module.
+                                chemin absolu ou relatif du dossier principal d'un module externe
+                                ayant une structure standard. Les fichiers de tests .tst sont
+                                attendus dans les sous-dossiers ./test/unit_tests et/ou
+                                ./test/nonreg_tests.
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>
+                                <literal>[]</literal> ou <literal>"[]"</literal> : tous les tests
+                                des modules internes de Scilab sont lancés.
                             </para>
                         </listitem>
                     </itemizedlist>
@@ -288,7 +302,6 @@
             <listitem>
                 <para>
                     &lt;-- CLI SHELL MODE --&gt;
-                    (anciennement &lt;-- JVM NOT MANDATORY --&gt; maintenant obsolète)
                     Le test est exécuté avec l'option de lancement <literal>-nwni</literal>.
                 </para>
             </listitem>
@@ -514,16 +527,18 @@ test_run string *ascii*
 ]]></screen>
     </refsection>
     <refsection>
-        <title>Design interne</title>
+        <title>Fonctionnement</title>
         <para>
-            Les tests sont exécutés dans un répertoire temporaire, non pas dans le repertoire les contenant.
+            Les scripts de tests .tst originaux sont copiés et exécutés dans un répertoire temporaire
+            contenant également les résultats d'exécution.
         </para>
         <para>
-            Les scripts de tests ne sont pas exécutés tels qu'écrit, un en-tête et un pied de page spécifiques sont rajoutés à chaque test.
-            Le but est d'instrumenter le fichier de tests afin de rediriger les sorties dans un fichier de log spécique au test.
+            Avant exécution, un en-tête et un pied de page spécifiques sont rajoutés à chaque script
+            <literal>.tst</literal> copié. Ces ajouts permettent de rediriger les sorties d'exécution
+            dans un journal spécifique au test créé dans le même répertoire.
         </para>
         <para>
-            La durée d'exécution pour chaque test est fixé à 5 minutes. Pour
+            La durée d'exécution pour chaque test est fixée à 5 minutes. Pour
             désactiver la terminaison du test après ce délai, utilisez le tag
             <literal>LONG TIME EXECUTION</literal>.
         </para>
@@ -531,6 +546,9 @@ test_run string *ascii*
     <refsection role="see also">
         <title>Voir aussi</title>
         <simplelist type="inline">
+            <member>
+                <link linkend="atomsTest">atomsTest</link>
+            </member>
             <member>
                 <link linkend="debug">debug</link>
             </member>
@@ -596,6 +614,12 @@ test_run string *ascii*
                     <para>Les noms de tests avec joker * sont désormais utilisables,
                         tels que sin*, *sin, ou *sin*
                     </para>
+                </revdescription>
+            </revision>
+            <revision>
+                <revnumber>2023.0.0</revnumber>
+                <revdescription>
+                    <para> Tag <literal>JVM NOT MANDATORY</literal> supprimé.</para>
                 </revdescription>
             </revision>
         </revhistory>

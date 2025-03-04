@@ -260,7 +260,8 @@ along with this program.
 
         <refsection>
             <title>例</title>
-            <programlisting role="example">t = linspace(0, 100, 2000);
+            <programlisting role="example"><![CDATA[
+                t = linspace(0, 100, 2000);
 
                 y = 0.8 * sin(t) + 0.8 * sin(2 * t);
 
@@ -268,7 +269,7 @@ along with this program.
 
                 plot(ind, c)
 
-            </programlisting>
+                ]]></programlisting>
 
             <scilab:image>
 
@@ -332,4 +333,3 @@ along with this program.
     </refsection>
 
 </refentry>
-

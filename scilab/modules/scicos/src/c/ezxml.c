@@ -303,6 +303,11 @@ char *ezxml_decode(char *s, char **ent, char t)
 
                 if (e)
                 {
+                    if(c > strlen(s) || strlen(e) > strlen(s + c)) {
+                        fprintf(stderr, "Error: ezxml_decode(): memmove() past end of buffer!");
+                        exit(-1);
+                    }
+
                     memmove(s + c, e + 1, strlen(e)); // shift rest of string
                     strncpy(s, ent[b], c); // copy in replacement text
                 }

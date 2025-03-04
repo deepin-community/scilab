@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) - INRIA
- * Copyright (C) 2018 - Samuel GOUGEON
- *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ * Copyright (C) 2018, 2023 - Samuel GOUGEON
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
  * pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -20,66 +19,68 @@
         xmlns:scilab="http://www.scilab.org" xml:id="for" xml:lang="pt">
     <refnamediv>
         <refname>for</refname>
-        <refpurpose>palavra-chave de linguagem para laços ("loops") (significa
-            "para...")
+        <refpurpose>palavra-chave de linguagem para laços ("loops") (significa "para...")
         </refpurpose>
     </refnamediv>
+    <refsynopsisdiv>
+        <title>Seqüência de Chamamento</title>
+        <synopsis>
+            for variable = expression, instruction ; .. ; instruction; end
+
+            for variable = expression
+                instruction
+                ..
+                instruction
+            end
+
+            for variable = expression do
+                instruction,
+                ..
+                instruction
+            end
+        </synopsis>
+    </refsynopsisdiv>
     <refsection>
         <title>Descrição</title>
         <para>
-            Usado para definir laços ("loops"). sua sintaxe é: <literal> for
-                variável=expressão ,instrução, ... ,instrução,end
-            </literal>
+            Se <literal>expression</literal> for um array (homogêneo ou não), <literal>variable</literal>
+            é definido para cada uma de suas colunas (para uma hipermatriz, como em
+            <literal>matrix(expression, size(expression ,1), -1))</literal>), um por um.
         </para>
         <para>
-            <literal> for variável= expressão do instrução, ...
-                ,instrução,end
-            </literal>
+            Um caso particular utiliza o operador <link linkend="colon">colon</link> para criar
+            vetores linhas regularmente espaçados, e remonta a formas de laço "for" tradicionais : 
+            <literal>for variable = n1:step:n2, ..., end</literal>
         </para>
         <para>
-            Se <literal>expressão</literal> é uma matriz ou um vetor linha,
-            <literal>variável</literal> toma como valores os valores de cada coluna da
-            matriz.
+            Se <literal>expression</literal> é uma lista, <literal>variable</literal> toma como valores
+            as entradas sucessivas da lista.
         </para>
-        <para>
-            Um caso particular utiliza o operador <link linkend="colon">colon</link> para criar vetores linhas regularmente
-            espaçados, e remonta a formas de laço "for" tradicionais : <literal>for
-                variable=n1:step:n2, ...,end
-            </literal>
-        </para>
-        <para>
-            Se <literal>expressão </literal>é uma lista,
-            <literal>variável</literal> toma como valores as entradas sucessivas da
-            lista.
-        </para>
-        <para>Aviso: o número de caracteres usados para definir o corpo de
-            qualquer instrução condicional (if, while, for ou select/case) deve ser
-            limitado a 16k.
-        </para>
+        <warning>
+            o número de caracteres usados para definir o corpo de qualquer instrução condicional
+            (if, while, for ou select/case) deve ser limitado a 16 kB.
+        </warning>
     </refsection>
     <refsection>
         <title>Exemplos</title>
-        <para>Lacetes iterativos comum :</para>
+        <para>Iterações triviais (sobre colunas de um vetor linha):</para>
         <programlisting role="example"><![CDATA[
-// laços "for" tradicionais
-n=5;
-for i = 1:n
-    for j = 1:n
-        a(i,j) = 1/(i+j-1);
-    end;
+for i = [2 4 5]
+    factorial(i)
 end
-for j = 2:n-1
-    a(j,j) = j;
-end;
-a
-]]></programlisting>
+
+// Iterações sobre valores decrescentes:
+for j = 4:-1:1
+    j
+end
+ ]]></programlisting>
         <para>Laço "decrescente" :</para>
         <programlisting role="example"><![CDATA[
 for j = 4:-1:1
     j
 end
  ]]></programlisting>
-        <para>Laço implícito sobre as colunas de uma linha ou de uma matriz :</para>
+        <para>Laço implícito sobre as colunas de uma matriz :</para>
         <programlisting role="example"><![CDATA[
 M = [1 2 ; 3 4 ; 5 6]'
 for  c = M, c, end
@@ -103,10 +104,27 @@ for  c = M, c, end
    5.
    6.
 ]]></screen>
+        <para>Iterate on the columns of a cells array:</para>
         <programlisting role="example"><![CDATA[
-for v = a, write(%io(2),v), end
-for j = 1:n, v = a(:,j), write(%io(2),v), end
+C = {%pi, "This is πι" ; %z^2, %t}
+for  c = C, c, end
  ]]></programlisting>
+    <screen><![CDATA[
+--> C = {%pi, "This is πι" ; %z^2, %t}
+ C  =
+  [1x1 constant  ]  [1x1 string ]
+  [1x1 polynomial]  [1x1 boolean]
+
+
+--> for  c = C, c, end
+ c  =
+  [1x1 constant  ]
+  [1x1 polynomial]
+
+ c  =
+  [1x1 string ]
+  [1x1 boolean]
+]]></screen>
         <para>Laço em listas de entradas :</para>
         <programlisting role="example"><![CDATA[
 for l = list([1 2;3 4], (1+%z)^3, 'example', [%F %T]); l, end
@@ -127,6 +145,24 @@ for l = list([1 2;3 4], (1+%z)^3, 'example', [%F %T]); l, end
  l  =
   F T
 ]]></screen>
+
+        <para>Lacetes iterativos comum :</para>
+        <programlisting role="example"><![CDATA[
+// laços "for" tradicionais
+n=5;
+for i = 1:n
+    for j = 1:n
+        a(i,j) = 1/(i+j-1);
+    end;
+end
+for j = 2:n-1
+    a(j,j) = j;
+end;
+a
+
+for v = a, write(%io(2),v), end
+for j = 1:n, v = a(:,j), write(%io(2),v), end
+]]></programlisting>
     </refsection>
     <refsection role="see also">
         <title>Ver Também</title>
@@ -151,6 +187,13 @@ for l = list([1 2;3 4], (1+%z)^3, 'example', [%F %T]); l, end
                     The for <literal>expression</literal> can now be a vector of graphic handles.
                     <literal>for</literal> is now protected:
                     Assignments like <literal>for=1</literal> are no longer possible.
+                </revdescription>
+            </revision>
+            <revision>
+                <revnumber>2023.0.0</revnumber>
+                <revdescription>
+                    The <literal>expression</literal> can be a hypermatrix. It is then processed
+                    by column as <literal>matrix(expression, size(expression,1), -1)</literal>.
                 </revdescription>
             </revision>
         </revhistory>

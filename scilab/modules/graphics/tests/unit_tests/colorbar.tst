@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2018 - 2020 - Samuel GOUGEON
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -38,7 +38,7 @@ colorbar(1,7,-1)  // [1 7] graduations covered by colors #[1 7].
 // 1.2)
 clf
 Matplot([1 2 3;4 5 7]);
-colorbar(,,-1,"%6.1f")                // http://bugzilla.scilab.org/14790
+colorbar(,,-1,"%6.1f")                // https://gitlab.com/scilab/scilab/-/issues/14790
 assert_checkequal(gcf().children(1).ticks_format(2), "%6.1f");
 // Same as above
 
@@ -67,7 +67,7 @@ z = cos(2*%pi*x)'*sin(2*%pi*x);
 // 2.0) Default umin = minU, umax = maxU, colminmax = [1 Nc]
 n = 4;
 clf
-gcf().color_map = jetcolormap(n);
+gcf().color_map = jet(n);
 Sgrayplot(x, x, z);
 contour(x,x,z,[-0.5 0 0.5]);
 gce().children.children(1:2:$-1).foreground=-1; // contours in black
@@ -81,7 +81,7 @@ colorbar;
 // 2.1) Default umin = minU, umax = maxU, colminmax = [1 Nc] (same as above)
 n = 10;
 clf
-gcf().color_map = jetcolormap(n);
+gcf().color_map = jet(n);
 Sgrayplot(x, x, z);
 contour(x,x,z,[-0.8 -0.6 -0.4 -0.2 0 0.2 0.4 0.6 0.8]);
 gce().children.children(1:2:$-1).foreground=-1; // contours in black
@@ -93,7 +93,7 @@ colorbar;  // Same as above, with n = 10
 // 2.2) umin=minU and umax=maxU, covered by a subrange of colors
 n = 8;
 clf
-gcf().color_map = jetcolormap(20);
+gcf().color_map = jet(20);
 Sgrayplot(x, x, z,colminmax=[3 n+2]);
 contour(x,x,z,[-0.75 -0.5 -0.25 0 0.25 0.5 0.75]);
 colorbar(-%inf,%inf,[3 n+2]);
@@ -101,7 +101,7 @@ colorbar(-%inf,%inf,[3 n+2]);
 
 // 2.3) Explicit umin and umax, with saturation for z values out of [umin, umax]:
 clf
-gcf().color_map = jetcolormap(20);
+gcf().color_map = jet(20);
 Sgrayplot(x, x, z, zminmax = [-0.6 0.8], colminmax = [5 11]);
 contour(x,x,z,[-0.6 -0.4 -0.2 0.2 0.4 0.6]);
 colorbar(-0.6, 0.8,[5 11]);
@@ -123,7 +123,7 @@ function [zz, zz1] = plotSphere()
     cc1 = (xx1-orig(1)+zz1/r+2)*32;
     clf
     plot3d1([xx xx1],[yy yy1],list([zz,zz1],[cc cc1]),theta=70,alpha=80,flag=[5,6,3])
-    gcf().color_map = hotcolormap(128);
+    gcf().color_map = hot(128);
 endfunction
 
 // 3.0) Implicit min(u), max(u), on the whole color map
@@ -158,7 +158,7 @@ colorbar
 function plotSample()
     t=[-4:0.04:4];
     clf
-    gcf().color_map = jetcolormap(200);
+    gcf().color_map = jet(200);
     plot3d(t,t,sin(t)'*cos(t));
     e = gce();
     e.color_flag = 1;
@@ -203,10 +203,10 @@ x = -4:6;
 X = ndgrid(x);
 [fx, fy] =  (rand(X)-0.5, rand(X)-0.5);
 clf
-gcf().color_map = jetcolormap(50);
+gcf().color_map = jet(50);
 champ(x, x, fx, fy)
 gce().colored = "on";
-colorbar  // http://bugzilla.scilab.org/16445 :
+colorbar  // https://gitlab.com/scilab/scilab/-/issues/16445 :
           //   umin >= 0 & umax <= sqrt(0.5)=0.71 should have been guessed
           //   without error (min and max lengths of vectors)
 

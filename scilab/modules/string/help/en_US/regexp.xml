@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) INRIA -
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -20,7 +20,7 @@
     <refnamediv>
         <refname>regexp</refname>
         <refpurpose>
-            find a substring that matches the regular expression string
+            in a string, locate (and extract) substrings matching a regular expression
         </refpurpose>
     </refnamediv>
     <refsynopsisdiv>
@@ -130,7 +130,7 @@ disp(piStringSplit(2))
 size(d)
 
 // get host name from URL
-myURL="http://www.scilab.org/download/";
+myURL="https://www.scilab.org/download/";
 [a,b,c,d]=regexp(myURL,'@^(?:http://)?([^/]+)@i')
 
 str='foobar: 2012';

@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2008-2008 - DIGITEO - Antoine ELIAS
  *  Copyright (C) 2010-2010 - DIGITEO - Bruno JOFRET
  *
@@ -18,6 +18,7 @@
 #include "double.hxx"
 #include "sparse.hxx"
 #include "int.hxx"
+#include "operations.hxx"
 
 extern "C"
 {
@@ -27,7 +28,7 @@ extern "C"
 
 using namespace types;
 
-InternalType *GenericLess(InternalType *_pLeftOperand, InternalType *_pRightOperand)
+InternalType *GenericLess(InternalType *_pLeftOperand, InternalType *_pRightOperand, const std::wstring& op)
 {
     InternalType *pResult = NULL;
 
@@ -58,7 +59,7 @@ InternalType *GenericLess(InternalType *_pLeftOperand, InternalType *_pRightOper
         int iResult = DoubleLessDouble(pL, pR, (Bool**)&pResult);
         if (iResult)
         {
-            throw ast::InternalError(_W("Inconsistent row/column dimensions.\n"));
+            throw ast::InternalError(errorSameSize(pL, pR, op));
         }
 
         return pResult;
@@ -75,7 +76,7 @@ InternalType *GenericLess(InternalType *_pLeftOperand, InternalType *_pRightOper
         int iResult = SparseLessSparse(pL, pR, (SparseBool**)&pResult);
         if (iResult)
         {
-            throw ast::InternalError(_W("Inconsistent row/column dimensions.\n"));
+            throw ast::InternalError(errorSameSize(pL, pR, op));
         }
 
         return pResult;
@@ -92,7 +93,7 @@ InternalType *GenericLess(InternalType *_pLeftOperand, InternalType *_pRightOper
         int iResult = DoubleLessSparse(pL, pR, (SparseBool**)&pResult);
         if (iResult)
         {
-            throw ast::InternalError(_W("Inconsistent row/column dimensions.\n"));
+            throw ast::InternalError(errorSameSize(pL, pR, op));
         }
 
         return pResult;
@@ -109,12 +110,11 @@ InternalType *GenericLess(InternalType *_pLeftOperand, InternalType *_pRightOper
         int iResult = SparseLessDouble(pL, pR, (SparseBool**)&pResult);
         if (iResult)
         {
-            throw ast::InternalError(_W("Inconsistent row/column dimensions.\n"));
+            throw ast::InternalError(errorSameSize(pL, pR, op));
         }
 
         return pResult;
     }
-
 
     /*
     ** INT < INT
@@ -130,7 +130,7 @@ InternalType *GenericLess(InternalType *_pLeftOperand, InternalType *_pRightOper
         int iResult = IntLessInt(_pLeftOperand, _pRightOperand, (GenericType**)&pResult);
         if (iResult)
         {
-            throw ast::InternalError(_W("Inconsistent row/column dimensions.\n"));
+            throw ast::InternalError(errorSameSize(_pLeftOperand->getAs<types::GenericType>(), _pRightOperand->getAs<types::GenericType>(), op));
         }
 
         return pResult;
@@ -176,21 +176,11 @@ int DoubleLessDouble(Double* _pDouble1, Double* _pDouble2, Bool** _pOut)
         return 0;
     }
 
-    if (_pDouble1->getDims() != _pDouble2->getDims())
-    {
-        return 1;
-    }
-
     //D < D
-    int* piDims1 = _pDouble1->getDimsArray();
-    int* piDims2 = _pDouble2->getDimsArray();
-
-    for (int i = 0 ; i < _pDouble1->getDims() ; i++)
+    std::wstring error = checkSameSize(_pDouble1, _pDouble2, L"<");
+    if (error.empty() == false)
     {
-        if (piDims1[i] != piDims2[i])
-        {
-            return 1;
-        }
+        throw ast::InternalError(error);
     }
 
     pB = new Bool(_pDouble1->getDims(), _pDouble1->getDimsArray());
@@ -240,7 +230,7 @@ int SparseLessDouble(Sparse* _pSparse, Double* _pDouble, SparseBool** _pOut)
 }
 
 
-InternalType *GenericLessEqual(InternalType *_pLeftOperand, InternalType *_pRightOperand)
+InternalType *GenericLessEqual(InternalType *_pLeftOperand, InternalType *_pRightOperand, const std::wstring& op)
 {
     InternalType *pResult = NULL;
 
@@ -271,7 +261,7 @@ InternalType *GenericLessEqual(InternalType *_pLeftOperand, InternalType *_pRigh
         int iResult = DoubleLessEqualDouble(pL, pR, (Bool**)&pResult);
         if (iResult)
         {
-            throw ast::InternalError(_W("Inconsistent row/column dimensions.\n"));
+            throw ast::InternalError(errorSameSize(pL, pR, op));
         }
 
         return pResult;
@@ -288,7 +278,7 @@ InternalType *GenericLessEqual(InternalType *_pLeftOperand, InternalType *_pRigh
         int iResult = SparseLessEqualSparse(pL, pR, (SparseBool**)&pResult);
         if (iResult)
         {
-            throw ast::InternalError(_W("Inconsistent row/column dimensions.\n"));
+            throw ast::InternalError(errorSameSize(pL, pR, op));
         }
 
         return pResult;
@@ -305,7 +295,7 @@ InternalType *GenericLessEqual(InternalType *_pLeftOperand, InternalType *_pRigh
         int iResult = DoubleLessEqualSparse(pL, pR, (SparseBool**)&pResult);
         if (iResult)
         {
-            throw ast::InternalError(_W("Inconsistent row/column dimensions.\n"));
+            throw ast::InternalError(errorSameSize(pL, pR, op));
         }
 
         return pResult;
@@ -322,7 +312,7 @@ InternalType *GenericLessEqual(InternalType *_pLeftOperand, InternalType *_pRigh
         int iResult = SparseLessEqualDouble(pL, pR, (SparseBool**)&pResult);
         if (iResult)
         {
-            throw ast::InternalError(_W("Inconsistent row/column dimensions.\n"));
+            throw ast::InternalError(errorSameSize(pL, pR, op));
         }
 
         return pResult;
@@ -342,7 +332,7 @@ InternalType *GenericLessEqual(InternalType *_pLeftOperand, InternalType *_pRigh
         int iResult = IntLessEqualInt(_pLeftOperand, _pRightOperand, (GenericType**)&pResult);
         if (iResult)
         {
-            throw ast::InternalError(_W("Inconsistent row/column dimensions.\n"));
+            throw ast::InternalError(errorSameSize(_pLeftOperand->getAs<types::GenericType>(), _pRightOperand->getAs<types::GenericType>(), op));
         }
 
         return pResult;
@@ -453,12 +443,12 @@ int SparseLessEqualDouble(Sparse* _pSparse, Double* _pDouble, SparseBool** _pOut
 
 InternalType *GenericGreater(InternalType *_pLeftOperand, InternalType *_pRightOperand)
 {
-    return GenericLess(_pRightOperand, _pLeftOperand);
+    return GenericLess(_pRightOperand, _pLeftOperand, L">");
 }
 
 InternalType *GenericGreaterEqual(InternalType *_pLeftOperand, InternalType *_pRightOperand)
 {
-    return GenericLessEqual(_pRightOperand, _pLeftOperand);
+    return GenericLessEqual(_pRightOperand, _pLeftOperand, L">=");
 }
 
 template <class T>

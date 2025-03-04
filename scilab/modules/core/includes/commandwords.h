@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2007 - INRIA - Allan CORNET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -21,7 +21,8 @@
 * @param[out] size of returned array
 * @return array of strings
 */
-char **getcommandkeywords(int *sizearray);
+char** getcommandkeywords(int* sizearray);
+char** getmustbekeywords(int* sizearray);
 
 #endif /* __COMMANDWORDS_H__ */
 /*--------------------------------------------------------------------------*/

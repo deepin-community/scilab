@@ -1,7 +1,7 @@
 /*--------------------------------------------------------------------------*/
 
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) INRIA - Allan CORNET
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -37,7 +37,7 @@ typedef enum
 /**
 * download a file by http (uses wininet library)
 * http://msdn2.microsoft.com/en-us/library/aa385473(VS.85).aspx
-* example httpDownloadFile("http://www.scilab.org/download/4.1.2/scilab-4.1.2.exe","d:/scilab-4.1.2.exe");
+* example httpDownloadFile("https://www.scilab.org/download/4.1.2/scilab-4.1.2.exe","d:/scilab-4.1.2.exe");
 * @param[in] szURL string url file to download
 * @param[in] szSaveFilePath string filename destination
 */

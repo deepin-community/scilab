@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2010 - DIGITEO - Allan CORNET
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -18,6 +18,11 @@
 
 #include <wchar.h>
 #include "BOOL.h"
+
+/**
+* display Scilab version
+*/
+void disp_scilab_version(void);
 
 /**
 * get Scilab Version as a int array

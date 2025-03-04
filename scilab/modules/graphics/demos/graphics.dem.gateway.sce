@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008 - INRIA
 // Copyright (C) 2009 - DIGITEO
 // Copyright (C) 2011 - DIGITEO - Allan CORNET
@@ -25,7 +25,7 @@ function subdemolist = demo_gateway()
     _("Datatips")                    , "datatips/datatips.dem.gateway.sce"
     _("LaTeX/MathML")                , "textrendering/textrendering.dem.gateway.sce"
     _("Lighting")                    , "lighting/lighting.dem.gateway.sce"
-    _("Colormap")                    , "colormap/colormaps.dem.sce"
+    _("Colormap")                    , "colormap/colormap.dem.gateway.sce"
     _("Matplot")                     , "matplot/matplot.dem.gateway.sce"
     ];
     subdemolist(:,2) = demopath + subdemolist(:,2);

@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2014-2016 - Scilab Enterprises - Clement DAVID
  * Copyright (C) 2017 - ESI Group - Clement DAVID
  *
@@ -115,6 +115,45 @@ struct title
         return o;
     }
 
+    static size_t toValidCIdentifier(char* title)
+    {
+        char* in = title;
+        char* out = title;
+        while (*in) {
+			char ch = *in++;
+			
+			// Adding upper case chars
+			if (ch >= 'A' && ch <= 'Z') {
+				*out++ = ch;
+			} else
+			
+			// Adding lower case chars
+			if (ch >= 'a' && ch <= 'z') {
+				*out++ = ch;
+			} else
+				
+			// Adding number chars
+			if (ch >= '0' && ch <= '9') {
+                // do not append any first number
+                if (out != title)
+                {
+				    *out++ = ch;
+                }
+			} else
+			
+			// Specific chars
+			if (ch == '_' || ch == ' ' || ch == '-') {
+                // do not append consecutive _
+                if (out > title && *(out - 1) != '_')
+                {
+				    *out++ = '_';
+                }
+			}
+		}
+        *out = '\0';
+        return out - title; 
+    }
+
     static bool set(ParamsAdapter& adaptor, types::InternalType* v, Controller& controller)
     {
         if (v->getType() != types::InternalType::ScilabString)
@@ -145,7 +184,8 @@ struct title
         }
 
         char* Title = wide_string_to_UTF8(current->get(0));
-        title = std::string(Title);
+        size_t len = toValidCIdentifier(Title);
+        title = std::string(Title, len);
         FREE(Title);
 
 

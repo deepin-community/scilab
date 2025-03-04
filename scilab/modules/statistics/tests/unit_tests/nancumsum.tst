@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Adeline CARNIS
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -11,19 +11,19 @@
 // =============================================================================
 
 assert_checkfalse(execstr("nancumsum()"   ,"errcatch") == 0);
-refMsg = msprintf(_("%s: Wrong number of input argument(s): %d to %d expected.\n"), "nancumsum", 1, 2);
+refMsg = msprintf(_("%s: Wrong number of input arguments: %d to %d expected.\n"), "nancumsum", 1, 2);
 assert_checkerror("nancumsum()", refMsg);
 
 assert_checkfalse(execstr("nancumsum(""s"")"   ,"errcatch") == 0);
-refMsg = msprintf(_("%s: Wrong type for input argument #%d: Real or complex, boolean, polynomial matrix expected.\n"), "nancumsum", 1);
+refMsg = msprintf(_("%s: Wrong type for input argument #%d: Must be in %s.\n"), "nancumsum", 1, sci2exp(["double", "polynomial", "boolean", "sparse", "int"]));
 assert_checkerror("nancumsum(""s"")", refMsg);
 
 assert_checkfalse(execstr("nancumsum(1, ""p"")"   ,"errcatch") == 0);
-refMsg = msprintf(_("%s: Wrong value for input argument #%d: Must be in the set {%s}.\n"), "nancumsum", 2, """r"", ""c"", ""*"", 1, 2");
+refMsg = msprintf(_("%s: Wrong value for input argument #%d: Must be in %s.\n"), "nancumsum", 2, sci2exp({1, 2,"r", "c", "*"}));
 assert_checkerror("nancumsum(1, ""p"")", refMsg);
 
 assert_checkfalse(execstr("nancumsum(1, %s)"   ,"errcatch") == 0);
-refMsg = msprintf(_("%s: Wrong type for input argument #%d: string or scalar expected.\n"), "nancumsum", 2);
+refMsg = msprintf(_("%s: Wrong type for input argument #%d: Must be in %s.\n"), "nancumsum", 2, sci2exp(["double", "string"]));
 assert_checkerror("nancumsum(1, %s)", refMsg);
 
 assert_checkequal(nancumsum([]), []);

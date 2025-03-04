@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA - Vincent COUVERT
  * Copyright (C) 2010 - DIGITEO - Yann COLLETTE
  *
@@ -17,6 +17,9 @@
 #include "CreateMatlabVariable.h"
 #include "api_scilab.h"
 #include "sci_malloc.h"
+#include "localization.h"
+#include "Sciwarning.h"
+#include "configvariable_interface.h"
 
 int CreateDoubleVariable(void *pvApiCtx, int iVar, matvar_t *matVariable, int * parent, int item_position)
 {
@@ -76,6 +79,96 @@ int CreateDoubleVariable(void *pvApiCtx, int iVar, matvar_t *matVariable, int * 
 
         CreateHyperMatrixVariable(pvApiCtx, iVar, matVariable->class_type, &matVariable->isComplex, &matVariable->rank,
                                   piDims, matVariable, parent, item_position);
+
+        FREE(piDims);
+    }
+    return TRUE;
+}
+
+int CreateFloatVariable(void* pvApiCtx, int iVar, matvar_t* matVariable, int* parent, int item_position)
+{
+    int nbRow = 0, nbCol = 0;
+    mat_complex_split_t* mat5ComplexData = NULL;
+    SciErr sciErr;
+    int* piDims = NULL;
+    int i = 0;
+
+    if (getWarningMode())
+    {
+        Sciwarning(_("%s: single-precision variable named '%s' will be loaded as double-precision.\n"), "loadmatfile", matVariable->name);
+    }
+
+    if (matVariable->rank == 2) /* 2-D array */
+    {
+        nbRow = (int)matVariable->dims[0];
+        nbCol = (int)matVariable->dims[1];
+        if (matVariable->isComplex == 0)
+        {
+            double* pdblReal = NULL;
+            if (parent == NULL)
+            {
+                SciErr sciErr = allocMatrixOfDouble(pvApiCtx, iVar, nbRow, nbCol, &pdblReal);
+                if (sciErr.iErr)
+                {
+                    printError(&sciErr, 0);
+                    return 0;
+                }
+            }
+            else
+            {
+                sciErr = allocMatrixOfDoubleInList(pvApiCtx, iVar, parent, item_position, nbRow, nbCol, &pdblReal);
+                if (sciErr.iErr)
+                {
+                    printError(&sciErr, 0);
+                    return 0;
+                }
+            }
+
+            if (pdblReal)
+            {
+                for (int i = 0; i < nbRow * nbCol; ++i)
+                {
+                    pdblReal[i] = (double)((float*)matVariable->data)[i];
+                }
+            }
+        }
+        else
+        {
+            double* pdblReal = NULL;
+            double* pdblImg = NULL;
+            /* Since MATIO 1.3.2 data is a ComplexSplit for MAT4 and MAT5 formats */
+            mat5ComplexData = matVariable->data;
+            if (parent == NULL)
+            {
+                allocComplexMatrixOfDouble(pvApiCtx, iVar, nbRow, nbCol, &pdblReal, &pdblImg);
+            }
+            else
+            {
+                allocComplexMatrixOfDoubleInList(pvApiCtx, iVar, parent, item_position, nbRow, nbCol, &pdblReal, &pdblImg);
+            }
+
+
+            if (pdblReal && pdblImg)
+            {
+                for (int i = 0; i < nbRow * nbCol; ++i)
+                {
+                    pdblReal[i] = (double)((float*)mat5ComplexData->Re)[i];
+                    pdblImg[i] = (double)((float*)mat5ComplexData->Im)[i];
+                }
+            }
+        }
+    }
+    else /* Multi-dimension array -> Scilab HyperMatrix */
+    {
+        piDims = (int*)MALLOC(matVariable->rank * sizeof(int));
+        for (i = 0; i < matVariable->rank; ++i)
+        {
+            piDims[i] = (int)matVariable->dims[i];
+        }
+
+        CreateHyperMatrixVariable(pvApiCtx, iVar, matVariable->class_type,
+            &matVariable->isComplex, &matVariable->rank,
+            piDims, matVariable, parent, item_position);
 
         FREE(piDims);
     }

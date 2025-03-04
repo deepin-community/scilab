@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009 - DIGITEO - Vincent COUVERT
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -39,15 +39,14 @@ save
                 </td>
                 <td>
                     <programlisting role="no-scilab-exec"><![CDATA[
-mtlb_save
+savematfile
 ]]></programlisting>
                 </td>
             </tr>
         </informaltable>
         <warning>
             <para>
-                Scilab <emphasis role="bold">mtlb_save</emphasis> does not handle options
-                <emphasis role="bold">-v4</emphasis> <emphasis role="bold">-mat</emphasis> and
+                Scilab <emphasis role="bold">savematfile</emphasis> does not handle option
                 <emphasis role="bold">-append</emphasis> yet.
             </para>
         </warning>

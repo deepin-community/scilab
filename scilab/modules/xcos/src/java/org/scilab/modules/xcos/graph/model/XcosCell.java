@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2015-2017 - Scilab Enterprises - Clement DAVID
  * Copyright (C) 2017 - ESI Group - Clement DAVID
  *
@@ -60,15 +60,18 @@ public class XcosCell extends mxCell {
      * @param kind
      *            the associated MVC kind
      */
-    public XcosCell(final JavaController controller, long uid, Kind kind, Object value, mxGeometry geometry, String style, String id) {
+    public XcosCell(final JavaController controller, final long uid, final Kind kind, Object value, mxGeometry geometry, String style, String id) {
+        this(controller, new ScicosObjectOwner(controller, uid, kind), value, geometry, style, id);
+    }
+    public XcosCell(final JavaController controller, ScicosObjectOwner owner, Object value, mxGeometry geometry, String style, String id) {
         super();
 
         // defensive programming
-        if (uid == 0l) {
+        if (owner.getUID() == 0l) {
             throw new IllegalArgumentException();
         }
 
-        owner = new ScicosObjectOwner(controller, uid, kind);
+        this.owner = owner;
         setValue(controller, value);
         setGeometry(controller, geometry);
         setStyle(controller, style);

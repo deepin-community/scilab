@@ -1,3 +1,13 @@
+/*
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
+ *  Copyright (C) 2018 - UTC - Stéphane MOTTELET
+ *
+ * This file is hereby licensed under the terms of the GNU GPL v2.0,
+ * For more information, see the COPYING file which you should have received
+ * along with this program.
+ *
+ */
+
 #include <bitset>
 #include "double.hxx"
 #include "function.hxx"

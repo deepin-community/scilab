@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - S/E - Sylvestre Ledru
 // Copyright (C) 2013 - LASS - Antoine Monmayrant
 //
@@ -19,7 +19,7 @@ function resonator_demo()
 
     surf(eps);
     h=gcf();
-    h.color_map=hotcolormap(64);
+    h.color_map=hot(64);
     f=gcf();f.background=60;
     e=gce();
     a=gca();

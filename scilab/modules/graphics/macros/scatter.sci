@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) Scilab Enterprises - 2015 - 2012 - Juergen Koch <juergen.koch@hs-esslingen.de>
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
 // Copyright (C) 2018 - 2020 - Samuel GOUGEON
@@ -28,7 +28,7 @@ function varargout = scatter(varargin)
         return
     end
 
-    // Minimal arguments checking to call scatter3(), and call it.
+    // Minimal arguments checking to call scatter3d(), and call it.
     msg = _("%s: Wrong number of input arguments: At least %d expected.\n");
     if type(varargin(1))==9 then    // graphic handle
         if rhs < 3

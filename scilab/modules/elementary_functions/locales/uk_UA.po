@@ -64,13 +64,13 @@ msgid "Invalid index.\n"
 msgstr "Некоректний індекс.\n"
 
 #, c-format
-msgid "%s: Wrong value for input argument #%d : Singularity of the function.\n"
+msgid "%s: Wrong value for input argument #%d: Singularity of the function.\n"
 msgstr ""
 "%s: помилкове значення вхідного параметра №%d: точка сингулярності функції.\n"
 
 #, c-format
 msgid ""
-"%s: Warning: Wrong value for input argument #%d : Singularity of the "
+"%s: Warning: Wrong value for input argument #%d: Singularity of the "
 "function.\n"
 msgstr ""
 "%s: попередження: помилкове значення вхідного параметра №%d: точка "
@@ -281,7 +281,7 @@ msgstr ""
 
 #, c-format
 msgid ""
-"%ls: Warning: Wrong value for input argument #%d : Singularity of the "
+"%ls: Warning: Wrong value for input argument #%d: Singularity of the "
 "function.\n"
 msgstr ""
 "%ls: попередження: помилкове значення вхідного параметра №%d: точка "

@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2014-2016 - Scilab Enterprises - Clement DAVID
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -31,13 +31,12 @@ namespace model
 class Annotation: public BaseObject
 {
 public:
-    Annotation(): BaseObject(ANNOTATION), m_parentDiagram(ScicosID()), m_parentBlock(ScicosID()),
+    Annotation(): BaseObject(ANNOTATION), m_parentDiagram(ScicosID()), m_parentBlock(ScicosID()), m_geometry{0, 0, 2, 1},
         m_description("Text"), m_font("2"), m_font_size("1"), m_style(""), m_relatedTo(ScicosID()), m_uid()
-    {
-        m_geometry = {0, 0, 2, 1};
-    };
+    {};
     Annotation(const Annotation& o) : BaseObject(ANNOTATION), m_parentDiagram(o.m_parentDiagram), m_parentBlock(o.m_parentBlock), m_geometry(o.m_geometry),
-        m_description(o.m_description), m_font(o.m_font), m_font_size(o.m_font_size), m_style(o.m_style), m_relatedTo(o.m_relatedTo), m_uid(o.m_uid) {};
+        m_description(o.m_description), m_font(o.m_font), m_font_size(o.m_font_size), m_style(o.m_style), m_relatedTo(o.m_relatedTo), m_uid(o.m_uid)
+    {};
 
 private:
     friend class ::org_scilab_modules_scicos::Model;

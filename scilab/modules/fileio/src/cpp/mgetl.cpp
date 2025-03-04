@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2010 - DIGITEO - Allan CORNET
 * Copyright (C) 2010 - DIGITEO - Antoine ELIAS
 * Copyright (C) 2019 - ESI - Antoine ELIAS
@@ -14,7 +14,6 @@
 * along with this program.
 *
 */
-
 #include <fstream>
 #include <iostream>
 
@@ -68,22 +67,6 @@ int mgetl(int iFileID, int iLineCount, wchar_t*** pwstLines)
         return 0;
     }
 
-    // check file is not empty
-    if (ftell(fd) == 0)
-    {
-        char cValues[4] = {0x00, 0x00, 0x00, 0x00};
-        if (fgets(cValues, 4 * sizeof(char), fd) != NULL)
-        {
-            // skip BOM
-            if (strcmp(cValues, (const char*)UTF8_BOM) != 0)
-            {
-                rewind(fd);
-            }
-        }
-    }
-
-    int orig = ftell(fd);
-
     std::string str;
     std::vector<std::string> lst;
 
@@ -94,9 +77,25 @@ int mgetl(int iFileID, int iLineCount, wchar_t*** pwstLines)
         {
             lst.push_back(str);
         }
+        
     }
     else
     {
+        // check file is not empty
+        if (ftell(fd) == 0)
+        {
+            char cValues[4] = {0x00, 0x00, 0x00, 0x00};
+            if (fgets(cValues, 4 * sizeof(char), fd) != NULL)
+            {
+                // skip BOM
+                if (strcmp(cValues, (const char*)UTF8_BOM) != 0)
+                {
+                    rewind(fd);
+                }
+            }
+        }
+
+        int orig = ftell(fd);
 #ifndef _MSC_VER
         //must reopen the file
         std::wstring wname = pFile->getFilename();
@@ -117,6 +116,7 @@ int mgetl(int iFileID, int iLineCount, wchar_t*** pwstLines)
         if (pos == -1)
         {
             fseek(fd, 0, SEEK_END);
+            fgetc(fd);//force stream state to end-of-file
         }
         else
         {

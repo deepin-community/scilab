@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
  * Copyright (C) 2017 - Samuel GOUGEON
  *
@@ -35,8 +35,7 @@
                 <term>function</term>
                 <listitem>
                     <para>
-                    Name (text) or handle of a Scilab "macro" or builtin function. Both
-                    kinds of input are equivalent.
+                    Name (text) or handle of a Scilab "macro" or builtin function.
                     </para>
                 </listitem>
             </varlistentry>
@@ -155,15 +154,6 @@
                 </varlistentry>
             </variablelist>
         </para>
-        <para>
-        <warning>
-            In the case that the function name is simultaneously defined as a unregistered function
-            ("script"), and as a registered one in a library and as a builtin,
-            <literal>whereis</literal> returns only one kind of answer with the likely priorities:
-            <literal>builtin's module > macro's library > "script" for unregistered macro</literal>.
-            However, the actual result may vary (and be []).
-        </warning>
-        </para>
     </refsection>
     <refsection>
         <title>Examples</title>
@@ -192,8 +182,9 @@ clear ls lslib
 whereis ls                      // "fileiolib" : OK
 function ls(),  disp("my local ls()"), endfunction
 ls                              // => "my local ls()"
-whereis ls                      // => "fileiolib", still
+whereis ls                      // => ["script"; fileiolib"]
 clear ls                        // (cleaning up)
+whereis ls                      // "fileiolib" : OK
 
 // Dependencies are ignored:
 // chfact() has some private dependency functions blkfc1(), inpnv(), etc:
@@ -207,7 +198,7 @@ whereis blkfc1                  // => []
 // CLR() is a public function related to the CLR Xcos block belonging to the
 //  Linear palette and declared in the Linearlib library.
 // But this sublibrary is loaded only after a first call to xcos():
-whereis xcos         // => "xcoslib"
+whereis xcos         // => "xcos"
 whereis CLR          // => [], if you never called xcos() in the session yet.
 xcos()               // => loads all its sublibraries. Please ignore the interfaces.
                      //    You may even close them.
@@ -250,6 +241,16 @@ whereis CLR          // => "Linearlib" non-empty answer, now
                         <listitem>
                             For unregistered user-defined macros, <literal>whereis</literal>
                             now returns <literal>"script"</literal> instead of <literal>[]</literal>.
+                        </listitem>
+                    </itemizedlist>
+                </revdescription>
+            </revision>
+            <revision>
+                <revnumber>2023.0.0</revnumber>
+                <revdescription>
+                    <itemizedlist>
+                        <listitem>
+                            <literal>whereis("function")</literal> now returns several libraries names.
                         </listitem>
                     </itemizedlist>
                 </revdescription>

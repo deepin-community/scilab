@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2011 - DIGITEO - Allan CORNET
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,8 +9,8 @@
 //
 // <-- Non-regression test for bug 10295 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=10295
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/10295
 //
 // <-- Short Description -->
 //  Due to a bug in libxml2, an internal error could lead to a segfault in vsprintf_chk

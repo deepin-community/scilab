@@ -1,5 +1,5 @@
 ;
-; Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+; Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 ; Copyright (C) SCilab Enterprises - 2012 - Antoine ELIAS
 ;
 ; Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -23,7 +23,7 @@
 Source: bin\{#EXTERNAL_OBJECTS_JAVA}.dll; DestDir: {app}\bin; Components: {#COMPN_SCILAB} and {#COMPN_JVM_MODULE}
 Source: bin\{#EXTERNAL_OBJECTS_JAVA}.lib; DestDir: {app}\bin; Components: {#COMPN_SCILAB} and {#COMPN_JVM_MODULE}
 ;
-Source: thirdparty\ecj.jar; DestDir: {app}\thirdparty; Components: {#COMPN_SCILAB} and {#COMPN_JVM_MODULE}
+Source: thirdparty\ecj-3.34.0.jar; DestDir: {app}\thirdparty; Components: {#COMPN_SCILAB} and {#COMPN_JVM_MODULE}
 ;
 Source: modules\{#EXTERNAL_OBJECTS_JAVA}\jar\org.scilab.modules.{#EXTERNAL_OBJECTS_JAVA}.jar;DestDir: {app}\modules\{#EXTERNAL_OBJECTS_JAVA}\jar; Components: {#COMPN_SCILAB} and {#COMPN_JVM_MODULE}
 ;

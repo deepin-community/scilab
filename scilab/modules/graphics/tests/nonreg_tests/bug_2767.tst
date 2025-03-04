@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009-2009 - Digiteo - Allan CORNET
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,8 +9,8 @@
 // <-- INTERACTIVE TEST -->
 // <-- Non-regression test for bug 2767-->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=2767
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/2767
 //
 // <-- Short Description -->
 // By default graphic windows are opened one above each others whereas they should be tiled.

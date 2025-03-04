@@ -112,7 +112,8 @@
 
         <title>例</title>
 
-        <programlisting role="example">//Example of how to use the hank macro for
+        <programlisting role="example"><![CDATA[
+            //Example of how to use the hank macro for
 
             //building a Hankel matrix from multidimensional
 
@@ -142,7 +143,7 @@
 
 
 
-            c = rand(2, 2 * 64)
+            c = rand(2, 2 * 64);
 
 
 
@@ -152,9 +153,9 @@
 
 
 
-            H = hank(4, 5, c);
+            H = hank(4, 5, c)
 
-        </programlisting>
+            ]]></programlisting>
 
     </refsection>
 
@@ -175,4 +176,3 @@
     </refsection>
 
 </refentry>
-

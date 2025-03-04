@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA - Fabrice Leray
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -292,31 +292,67 @@
                             <td>
                                 <literal>^</literal>
                             </td>
-                            <td>Upward-pointing triangle</td>
+                            <td>Upward-pointing centered triangle</td>
                         </tr>
                         <tr>
                             <td>
                                 <literal>v</literal>
                             </td>
-                            <td>Downward-pointing triangle</td>
+                            <td>Downward-pointing centered triangle</td>
                         </tr>
                         <tr>
                             <td>
                                 <literal>&gt;</literal>
                             </td>
-                            <td>Right-pointing triangle</td>
+                            <td>Right-pointing centered triangle</td>
                         </tr>
                         <tr>
                             <td>
                                 <literal>&lt;</literal>
                             </td>
-                            <td>Left-pointing triangle</td>
+                            <td>Left-pointing centered triangle</td>
                         </tr>
                         <tr>
                             <td>
                                 <literal>'pentagram' or 'p'</literal>
                             </td>
                             <td>Five-pointed star (pentagram)</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <literal>^.</literal>
+                            </td>
+                            <td>Upward-pointing triangle</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <literal>v.</literal>
+                            </td>
+                            <td>Downward-pointing triangle</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <literal>&gt;.</literal>
+                            </td>
+                            <td>Right-pointing triangle</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <literal>&lt;.</literal>
+                            </td>
+                            <td>Left-pointing triangle</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <literal>'minus' or 'm'</literal>
+                            </td>
+                            <td>Horizontal line (Minus sign)</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <literal>|</literal>
+                            </td>
+                            <td>Vertical line</td>
                         </tr>
                         <tr>
                             <td>

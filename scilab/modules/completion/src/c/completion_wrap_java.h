@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2007 - INRIA - Allan CORNET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -75,6 +75,14 @@ char **searchFieldsDictionary(char *lineBeforeCaret, char *pattern);
 * @param[in] somechars first characters of a word
 * @return an array of chars
 */
-char **searchHandleGraphicsPropertiesDictionary(char *somechars);
+char** searchHandleGraphicsPropertiesDictionary(char* somechars);
+
+/**
+* completion on MustBe helpers from arguments blocks
+* @param[in] somechars first characters of a word
+* @return an array of chars
+*/
+char** searchMustBeDictionary(char* somechars);
+
 /*--------------------------------------------------------------------------*/
 #endif /* __COMPLETION_WRAP_JAVA_H__ */

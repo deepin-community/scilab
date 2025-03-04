@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2012 - Scilab Enterprises - Cedric DELAMARRE
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -39,6 +39,7 @@ CPP_GATEWAY_PROTOTYPE(sci_coeff);
 CPP_GATEWAY_PROTOTYPE(sci_degree);
 CPP_GATEWAY_PROTOTYPE(sci_pppdiv);
 CPP_GATEWAY_PROTOTYPE(sci_simpMode);
+CPP_GATEWAY_PROTOTYPE(sci_polyDisplay);
 CPP_GATEWAY_PROTOTYPE(sci_simp);
 CPP_GATEWAY_PROTOTYPE(sci_sfact);
 CPP_GATEWAY_PROTOTYPE(sci_bezout);

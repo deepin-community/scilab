@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2010 - DIGITEO - Clement DAVID
  * Copyright (C) 2011-2015 - Scilab Enterprises - Clement DAVID
  *
@@ -158,7 +158,7 @@ public class PaletteTreeTransferHandler extends TransferHandler {
     @Override
     public boolean importData(final TransferSupport support) {
         if (PaletteManagerView.get() == null) {
-            PaletteManagerView.restore(null);
+            PaletteManagerView.restore();
         }
         final JTree tree = PaletteManagerView.get().getTree();
         final JTree.DropLocation location = tree.getDropLocation();

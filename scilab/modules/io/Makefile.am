@@ -1,4 +1,4 @@
-# Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+# Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 # Copyright (C) 2006 - INRIA - Sylvestre LEDRU
 #
 # This file is distributed under the same license as the Scilab package.
@@ -17,12 +17,8 @@ IO_CPP_SOURCES = \
     src/cpp/readwrite.cpp
 
 GATEWAY_C_SOURCES = \
-    sci_gateway/c/sci_read4b.c \
-    sci_gateway/c/sci_readb.c \
     sci_gateway/c/sci_getenv.c \
-    sci_gateway/c/sci_writeb.c \
-    sci_gateway/c/sci_setenv.c \
-    sci_gateway/c/sci_write4b.c
+    sci_gateway/c/sci_setenv.c
 
 GATEWAY_CPP_SOURCES = \
     sci_gateway/cpp/sci_genlib.cpp \
@@ -47,7 +43,6 @@ libsciio_la_CPPFLAGS = \
     -I$(top_srcdir)/modules/ast/includes/symbol/ \
     -I$(top_srcdir)/modules/ast/includes/system_env/ \
     -I$(top_srcdir)/modules/ast/includes/types/ \
-    -I$(top_srcdir)/modules/ast/includes/analysis/ \
     -I$(top_srcdir)/modules/core/includes/ \
     -I$(top_srcdir)/modules/api_scilab/includes/ \
     -I$(top_srcdir)/modules/functions_manager/includes/ \

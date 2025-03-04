@@ -37,8 +37,6 @@ import org.scilab.modules.commons.ScilabCommonsUtils;
     private ScilabDocument doc;
     private boolean transposable;
     private Element elem;
-    private boolean breakstring;
-    private boolean breakcomment;
     private MatchingBlockScanner matchBlock;
 
     static {
@@ -89,14 +87,11 @@ import org.scilab.modules.commons.ScilabCommonsUtils;
         start = p0;
         end = p1;
         transposable = false;
-        breakstring = false;
         yyreset(new ScilabDocumentReader(doc, p0, p1));
         int currentLine = elem.getElementIndex(start);
         if (currentLine != 0) {
            ScilabDocument.ScilabLeafElement e = (ScilabDocument.ScilabLeafElement) elem.getElement(currentLine - 1);
-           if (e.isBrokenString()) {
-              yybegin(QSTRING);
-           } else if (e.isBlockComment()) {
+           if (e.isBlockComment()) {
               yybegin(BLOCKCOMMENT);
            }
         }
@@ -109,10 +104,7 @@ import org.scilab.modules.commons.ScilabCommonsUtils;
     public int scan() throws IOException {
         int ret = yylex();
         int lastPos = start + yychar() + yylength();
-        if (lastPos == end - 1) {
-           ((ScilabDocument.ScilabLeafElement) elem.getElement(elem.getElementIndex(start))).setBrokenString(breakstring);
-           breakstring = false;
-        } else if (lastPos == end) {
+        if (lastPos == end) {
            ((ScilabDocument.ScilabLeafElement) elem.getElement(elem.getElementIndex(start))).setBlockComment(yystate() == BLOCKCOMMENT);
         }
         return ret;
@@ -151,7 +143,7 @@ import org.scilab.modules.commons.ScilabCommonsUtils;
               pos++;
            }
 
-           while (startL < pos && (s != startL || yystate() == BREAKSTRING)) {
+           while (startL < pos && s != startL && tok != EOF) {
                s = startL;
                tok = yylex();
                startL = start + yychar() + yylength();
@@ -231,23 +223,22 @@ structureKwds = "then" | "do" | "catch" | "case" | "otherwise"
 
 elseif = "elseif" | "else"
 
-openCloseStructureKwds = "if" | "for" | "while" | "try" | "select" | "switch"
+openCloseStructureKwds = "if" | "for" | "while" | "try" | "select" | "switch" | "arguments"
 
 end = "end"
 
 controlKwds = "abort" | "break" | "quit" | "return" | "resume" | "pause" | "continue" | "exit"
 
-authors = "Michael Baudin" | "Michael BAUDIN" | "Paul Bignier" | "Paul BIGNIER" | "Adeline CARNIS" | "Adeline CARNIS" | "Yann Collette" | "Yann COLLETTE" | "Allan Cornet" | "Allan CORNET" | "Vincent Couvert" | "Vincent COUVERT" | "Clement David" | "Clement DAVID" | "Calixte Denizet" | "Calixte DENIZET" | "Cedric Delamarre" | "Cedric DELAMARRE" | "Antoine Elias" | "Antoine ELIAS" | "Simon Gareste" | "Simon GARESTE" | "Claude Gomez" | "Claude GOMEZ" | "Samuel Gougeon" | "Samuel GOUGEON" | "Bernard Hugueney" | "Bernard HUGUENEY" | "Bruno Jofret" | "Bruno JOFRET" | "Manuel Juliachs" | "Manuel JULIACHS" | "Sylvestre Koumar" | "Sylvestre KOUMAR" | "Pierre Lando" | "Pierre LANDO" | "Sylvestre Ledru" | "Sylvestre LEDRU" | "Vincent Lejeune" | "Vincent LEJEUNE" | "Vincent Liard" | "Vincent LIARD" | "Zhour Madini-Zouine" | "Zhour MADINI-ZOUINE" | "Pierre Marechal" | "Pierre MARECHAL" | "Stephane Mottelet" | "Stephane MOTTELET" | "Jerome Picard" | "Jerome PICARD" | "Allan Simon" | "Allan SIMON" | "Serge Steer" | "Serge STEER" | "Inria" | "INRIA" | "DIGITEO" | "Digiteo" | "ENPC" | "ESI Group"
+authors = "Michael Baudin" | "Michael BAUDIN" | "Paul Bignier" | "Paul BIGNIER" | "Adeline Carnis" | "Adeline CARNIS" | "Yann Collette" | "Yann COLLETTE" | "Allan Cornet" | "Allan CORNET" | "Vincent Couvert" | "Vincent COUVERT" | "Clement David" | "Clement DAVID" | "Clément DAVID" | "Calixte Denizet" | "Calixte DENIZET" | "Cedric Delamarre" | "Cedric DELAMARRE" | "Cédric DELAMARRE" | "Antoine Elias" | "Antoine ELIAS" | "Simon Gareste" | "Simon GARESTE" | "Claude Gomez" | "Claude GOMEZ" | "Samuel Gougeon" | "Samuel GOUGEON" | "Bernard Hugueney" | "Bernard HUGUENEY" | "Bruno Jofret" | "Bruno JOFRET" | "Manuel Juliachs" | "Manuel JULIACHS" | "Sylvestre Koumar" | "Sylvestre KOUMAR" | "Pierre Lando" | "Pierre LANDO" | "Sylvestre Ledru" | "Sylvestre LEDRU" | "Vincent Lejeune" | "Vincent LEJEUNE" | "Vincent Liard" | "Vincent LIARD" | "Zhour Madini-Zouine" | "Zhour MADINI-ZOUINE" | "Pierre Marechal" | "Pierre MARECHAL" | "Stephane Mottelet" | "Stephane MOTTELET" | "Stéphane MOTTELET" | "Jerome Picard" | "Jerome PICARD" | "Jérôme PICARD" | "Allan Simon" | "Allan SIMON" | "Serge Steer" | "Serge STEER" | "Inria" | "INRIA" | "DIGITEO" | "Digiteo" | "ENPC" | "ESI Group" | "Dassault Systèmes" | "3DS"
 
 
 todo = ("TODO" | "todo" | "Todo")[ \t:]+[^\n]*
 
 break = ".."(".")*
-breakinstring = {break}[ \t]*{comment}?
 
 special = "$" | ":" | {break}
 
-string = (([^ \t\'\"\r\n\.]*)|([\'\"]{2}))+
+string = (([^ \t\'\"\r\n\.]+)|([\'\"]{2}))+
 
 id = ([a-zA-Z%_#!?][a-zA-Z0-9_#!$?]*)|("$"[a-zA-Z0-9_#!$?]+)
 
@@ -267,7 +258,7 @@ digit = [0-9]
 exp = [dDeE][+-]?{digit}*
 number = ({digit}+"."?{digit}*{exp}?)|("."{digit}+{exp}?)
 
-%x QSTRING, COMMENT, BLOCKCOMMENT, FIELD, COMMANDS, COMMANDSWHITE, BREAKSTRING
+%x QSTRING, COMMENT, BLOCKCOMMENT, FIELD, COMMANDS, COMMANDSWHITE
 
 %%
 
@@ -457,7 +448,7 @@ number = ({digit}+"."?{digit}*{exp}?)|("."{digit}+{exp}?)
                                    yybegin(COMMENT);
                                  }
 
-  ([^ \t,;/]*) | ("/"[^ /]*)     {
+  ([^ \t,;/]+) | ("/"[^ /]*)     {
                                    return ScilabLexerConstants.STRING;
                                  }
 
@@ -492,13 +483,6 @@ number = ({digit}+"."?{digit}*{exp}?)|("."{digit}+{exp}?)
 }
 
 <QSTRING> {
-  {breakinstring}                {
-                                   yypushback(yylength());
-                                   yybegin(BREAKSTRING);
-                                   transposable = false;
-                                   return ScilabLexerConstants.STRING;
-                                 }
-
   " "                            {
                                    return ScilabLexerConstants.WHITE_STRING;
                                  }
@@ -596,32 +580,6 @@ number = ({digit}+"."?{digit}*{exp}?)|("."{digit}+{exp}?)
   .                              |
   {eol}                          {
                                    return ScilabLexerConstants.COMMENT;
-                                 }
-}
-
-<BREAKSTRING> {
-  {break}                        {
-                                   breakstring = true;
-                                   return ScilabLexerConstants.SPECIAL;
-                                 }
-
-  " "                            {
-                                   return ScilabLexerConstants.WHITE;
-                                 }
-
-  "\t"                           {
-                                   return ScilabLexerConstants.TAB;
-                                 }
-
-  {comment}                      {
-                                   transposable = false;
-                                   yypushback(2);
-                                   yybegin(COMMENT);
-                                 }
-
-  .                              |
-  {eol}                          {
-                                   return ScilabLexerConstants.DEFAULT;
                                  }
 }
 

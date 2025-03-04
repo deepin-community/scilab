@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2017 - Samuel GOUGEON
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -7,8 +7,8 @@
 // <-- CLI SHELL MODE -->
 // <-- INTERACTIVE TEST -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/14978
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/14978
 //
 // <-- Short Description -->
 // input(message) never interpreted 'x' as an existing variable.
@@ -26,4 +26,4 @@ x
 
    20.
 
-// Sometimes we are prompted several times: http://bugzilla.scilab.org/14376
+// Sometimes we are prompted several times: https://gitlab.com/scilab/scilab/-/issues/14376

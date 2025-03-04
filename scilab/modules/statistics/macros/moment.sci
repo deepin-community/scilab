@@ -1,5 +1,5 @@
 
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 1999 - INRIA - Carlos Klimann
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -36,16 +36,14 @@ function [mom]= moment(x,ord,orien)
     //Statistics, J.Wiley & Sons, 1990.
     //
     //
-    [lhs,rhs]=argn(0)
-    if rhs==2 then
-        if x==[] then mom=%nan, return, end
-        le=length(x)
-        mom=sum(x.^ord)/le
-    elseif rhs==3 then
-        if x==[] then mom=%nan, return, end
-        le=size(x,orien)
-        mom=sum((x.^ord),orien)/le
-    else
-        error(msprintf(gettext("%s: Wrong number of input argument: %d to %d expected.\n"),"moment",2,3)),
+    arguments
+        x 
+        ord
+        orien (1, 1) {mustBeA(orien, ["double", "string"]), mustBeMember(orien, {1, 2, "r", "c", "*"})} = "*"
     end
+
+    if x==[] then mom=%nan, return, end
+
+    le=size(x,orien)
+    mom=sum((x.^ord),orien)/le
 endfunction

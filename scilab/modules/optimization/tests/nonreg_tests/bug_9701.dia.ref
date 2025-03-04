@@ -1,6 +1,6 @@
 //<-- CLI SHELL MODE -->
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Paul Bignier
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -8,8 +8,8 @@
 //
 // <-- Non-regression test for bug 9701 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=9701
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/9701
 //
 // <-- Short Description -->
 // optim gateway was failing for large problems.

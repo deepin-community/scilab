@@ -1,6 +1,6 @@
 /*--------------------------------------------------------------------------*/
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA - Allan CORNET
  * Copyright (C) 2008 - INRIA - Sylvestre LEDRU
  *
@@ -20,8 +20,6 @@ package org.scilab.modules.jvm;
 /*--------------------------------------------------------------------------*/
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Iterator;
@@ -32,10 +30,10 @@ import java.util.Vector;
  */
 public class ClassPath {
 
-    private static final Class[] parameters = new Class[] {URL.class};
+	private static final Class[] parameters = new Class[] {URL.class};
 
-    private static Vector<URL> queued = new Vector<URL>();
-
+	private static Vector<URL> queued = new Vector<URL>();
+    
     /**
      * add a filename to java classpath.
      * @param s a filename
@@ -61,31 +59,14 @@ public class ClassPath {
      * @param i the type of load: i=0 startup / i=1 background / i=2 onUse
      */
     public static void addURL(final URL u, int i) {
-
-        final URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-        Class sysclass = URLClassLoader.class;
-
-        try {
-
-            final Method method = sysclass.getDeclaredMethod("addURL", parameters);
-            method.setAccessible(true);
-            switch (i) {
-                case 0: /* Load now */
-                    method.invoke(sysloader , new Object[] { u });
-                    break;
-                case 1: /* Load later (background) */
-                    queued.add(u);
-                    break;
-            }
-
-        } catch (NoSuchMethodException e) {
-            System.err.println("Error: Cannot find the declared method: " + e.getLocalizedMessage());
-        } catch (IllegalAccessException e) {
-            System.err.println("Error: Illegal access: " + e.getLocalizedMessage());
-        } catch (InvocationTargetException e) {
-            System.err.println("Error: Could not invocate target: " + e.getLocalizedMessage());
+        switch (i) {
+            case 0: /* Load now */
+            	((ScilabClassLoader) ClassLoader.getSystemClassLoader()).addURL(u);
+                break;
+            case 1: /* Load later (background) */
+                queued.add(u);
+                break;
         }
-
     }
     /*-----------------------------------------------------------------------*/
     /**

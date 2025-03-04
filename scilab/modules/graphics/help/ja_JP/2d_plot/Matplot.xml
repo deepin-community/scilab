@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) ENPC - Jean-Philippe Chancelier
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -258,9 +258,10 @@
                 <term>rect</term>
                 <listitem>
                     <para>
-                        この引数は引数<literal>strf</literal>の2文字目のyが1, 3または5の時に
-                        使用されます.
-                        この値は大きさ4の行ベクトルで,フレームの次元を指定します:
+                        This argument is used when the second character <literal>y</literal>
+                        of argument <varname>strf</varname> is <literal>1</literal>,
+                        <literal>3</literal>, <literal>5</literal> or <literal>7</literal>. It is a row vector of
+                        size 4 and gives the dimension of the frame:
                         <literal>rect=[xmin,ymin,xmax,ymax]</literal>.
                     </para>
                 </listitem>

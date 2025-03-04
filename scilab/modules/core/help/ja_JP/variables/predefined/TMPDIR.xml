@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2010 - Digiteo - Vincent LIARD
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -29,13 +29,12 @@
             各Scilabプロセスは,
             Scilabの起動時に<literal>TMPDIR</literal>を基準に作成された
             独自のテンポラリディレクトリを有します.
-            このテンポラリディレクトリは,Scilab終了時に削除されます.
         </para>
         <para>
             テンポラリディレクトリは,システムのテンポラリディレクトリの
             サブディレクトリに作成され,その名前は
-            SCI_TMP_&lt;unique&gt; となります.
-            ただし, &lt;unique&gt; はScilabの起動時に名前がユニークとなる
+            SCI_TMP_&lt;unique> となります.
+            ただし, &lt;unique> はScilabの起動時に名前がユニークとなる
             ように生成された数です.
             GNU/Linux, UNIX および Mac OS Xでは,
             このディレクトリへのアクセス権は,Scilabユーザに限定されています.
@@ -47,14 +46,11 @@
             システム変数<literal>TMPDIR</literal>を変更することにより,
             選択することができます.
         </para>
-        <note>
-          <literal>dirname(TMPDIR)</literal> can be used as a general temporary directory,
-          without respect to any Scilab session.
-        </note>
     </refsection>
     <refsection>
         <title>例</title>
         <programlisting role="example"><![CDATA[
+TMPDIR
 ls TMPDIR
 ls(TMPDIR)
 cd(TMPDIR)

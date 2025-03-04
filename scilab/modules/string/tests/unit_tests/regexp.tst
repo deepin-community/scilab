@@ -1,9 +1,10 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2007-2008 - INRIA
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
+// <-- NO CHECK REF -->
 // <-- CLI SHELL MODE -->
 //===================================================================
 // unit tests regexp
@@ -634,8 +635,8 @@ assert_checkequal(size(d), [1, 2]);
 
 
 // get host name from URL
-myURL="http://www.scilab.org/download/";
-[a,b,c,d]=regexp(myURL,'@^(?:http://)?([^/]+)@i');
+myURL="https://www.scilab.org/download/";
+[a,b,c,d]=regexp(myURL,'@^(?:https://)?([^/]+)@i');
 assert_checkequal(d,"www.scilab.org");
 
 str='foobar: 2012';

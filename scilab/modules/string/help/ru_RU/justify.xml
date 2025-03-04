@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) INRIA -
+* Copyright (C) 2012 - 2016 - Scilab Enterprises
+* Copyright (C) 2022 - Samuel GOUGEON
 *
- * Copyright (C) 2012 - 2016 - Scilab Enterprises
- *
- * This file is hereby licensed under the terms of the GNU GPL v2.0,
- * pursuant to article 5.3.4 of the CeCILL v.2.1.
- * This file was originally licensed under the terms of the CeCILL v2.1,
- * and continues to be available under such terms.
- * For more information, see the COPYING file which you should have received
- * along with this program.
+* This file is hereby licensed under the terms of the GNU GPL v2.0,
+* pursuant to article 5.3.4 of the CeCILL v.2.1.
+* This file was originally licensed under the terms of the CeCILL v2.1,
+* and continues to be available under such terms.
+* For more information, see the COPYING file which you should have received
+* along with this program.
 *
 -->
 <refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -19,27 +19,21 @@
     <refnamediv>
         <refname>justify</refname>
         <refpurpose>
-            Выравнивает текст в столбцах по левому краю, центру или правому краю.
+            Выравнивает текст в каждой колонке, заполненной пробелами, слева, по центру или справа
         </refpurpose>
     </refnamediv>
     <refsynopsisdiv>
         <title>Синтаксис</title>
-        <synopsis>Tj = justify(T, position)</synopsis>
+        <synopsis>TJ = justify(T, position)</synopsis>
     </refsynopsisdiv>
     <refsection>
         <title>Аргументы</title>
         <variablelist>
             <varlistentry>
-                <term>T</term>
-                <listitem>
-                    <para>матрица символьных строк.</para>
-                </listitem>
-            </varlistentry>
-            <varlistentry>
-                <term>Tj</term>
+                <term>T, TJ</term>
                 <listitem>
                     <para>
-                        матрица символьных строк. Результат выравнивания.
+                        векторы, матрицы или ND-массивы строк, имеющие одинаковые размеры.
                     </para>
                 </listitem>
             </varlistentry>
@@ -47,11 +41,11 @@
                 <term>position</term>
                 <listitem>
                     <para>
-                      Возможные значения :
+                      Необязательный параметр с одним из следующих значений:
                       <table cellspacing="0" cellpadding="0">
-                        <tr><td><term>'l' или 'left'</term></td><td>: для выравнивания по левому краю</td></tr>
-                        <tr><td><term>'c' или 'center'</term></td><td>: для выравнивания по центру</td></tr>
-                        <tr><td><term>'r' или 'right'</term></td><td>: для выравнивания по правому краю</td></tr>
+                        <tr><th>'l' или 'left'</th>  <td>: краюлевое выравнивание (режим по умолчанию)</td></tr>
+                        <tr><th>'c' или 'center'</th><td>: для выравнивания по центру</td></tr>
+                        <tr><th>'r' или 'right'</th> <td>: для выравнивания по правому краю</td></tr>
                       </table>
                     </para>
                 </listitem>
@@ -60,25 +54,62 @@
     </refsection>
     <refsection>
         <title>Описание</title>
-        <para>
-            Функция <function>justify</function> выравнивает столбцы матрицы строк в соответствии
-            с заданной значением <varname>position</varname>.
-        </para>
+            <para>
+                All heading and trailing spaces of <varname>T</varname> elements are removed
+                before processing.
+            </para>
+            <para>
+                In each given column of <varname>TJ</varname>, all strings have the same length.
+                Shorter strings are padded with spaces before, after, or on both sides.
+            </para>
+            <para>
+                The width may differ from a column to other ones. Please see the examples
+            </para>
     </refsection>
     <refsection>
         <title>Примеры</title>
         <programlisting role="example"><![CDATA[
-t=['1234','x','adfdfgdfghfgj'
-   '1','354556','dgf'
-   'sdfgd','','sdfsf'];
-justify(t,'l')
-justify(t,'c')
-justify(t,'r')
+m = ["a" "bcdef" "ghi" ; "jklm" "" "n" ; "opq" "rs" "tuvwxy"]
+justify(m)
+justify(m, "r")
+justify(m, "c")
     ]]></programlisting>
+    <screen><![CDATA[
+--> m = ["a" "bcdef" "ghi" ; "jklm" "" "n" ; "opq" "rs" "tuvwxy"]
+ m  =
+  "a"     "bcdef"  "ghi"
+  "jklm"  ""       "n"
+  "opq"   "rs"     "tuvwxy"
+
+--> justify(m)
+ ans  =
+  "a   "  "bcdef"  "ghi   "
+  "jklm"  "     "  "n     "
+  "opq "  "rs   "  "tuvwxy"
+
+--> justify(m, "r")
+ ans  =
+  "   a"  "bcdef"  "   ghi"
+  "jklm"  "     "  "     n"
+  " opq"  "   rs"  "tuvwxy"
+
+--> justify(m, "c")
+ ans  =
+  " a  "  "bcdef"  " ghi  "
+  "jklm"  "     "  "  n   "
+  "opq "  " rs  "  "tuvwxy"
+]]></screen>
     </refsection>
     <refsection role="see also">
         <title>Смотрите также</title>
         <simplelist type="inline">
+        <simplelist type="inline">
+            <member>
+                <link linkend="stripblanks">stripblanks</link>
+            </member>
+            <member>
+                <link linkend="blanks">blanks</link>
+            </member>
             <member>
                 <link linkend="length">length</link>
             </member>
@@ -86,6 +117,19 @@ justify(t,'r')
                 <link linkend="part">part</link>
             </member>
         </simplelist>
+        </simplelist>
+    </refsection>
+    <refsection role="history">
+        <title>История</title>
+        <revhistory>
+            <revision>
+                <revnumber>2023.1</revnumber>
+                <revdescription>
+                    Hypermatrix accepted. The <literal>position</literal> becomes optional,
+                    with default = <literal>"left"</literal>
+                </revdescription>
+            </revision>
+        </revhistory>
     </refsection>
 </refentry>
 

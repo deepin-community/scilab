@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2010 - DIGITEO - Allan CORNET
  * Copyright (C) 2010 - DIGITEO - Allan SIMON
  * Copyright (C) 2010 - DIGITEO - Bruno JOFRET
@@ -227,18 +227,6 @@ int sci_editvar(char * fname, void* pvApiCtx)
         freeAllocatedSingleString(pStVarOne);
         return 0;
     }
-
-    /* Closing the editor
-       ------------------
-    */
-    if (strcmp(pStVarOne, "close") == 0)
-    {
-        EditVar::closeVariableEditor(getScilabJavaVM());
-        freeAllocatedSingleString(pStVarOne);
-        return 0;
-    }
-    /* Otherwise : go on editing */
-
 
     /* get address of the variable*/
     sciErr = getVarAddressFromName(pvApiCtx, pStVarOne, &piAddr);

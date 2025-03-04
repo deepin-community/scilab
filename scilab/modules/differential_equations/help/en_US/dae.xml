@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2013 - Scilab Enterprises - Paul Bignier : added "roots2" (daskr)
  * Copyright (C) 2008 - INRIA
  * ...
@@ -22,19 +22,19 @@
     </refnamediv>
     <refsynopsisdiv>
         <title>Syntax</title>
-        <synopsis> y = dae(initial, t0, t, res)
-            [y [,hd]] = dae(initial, t0, t [[,rtol], atol], res [,jac] [,hd])
-            [y, rd] = dae("root", initial, t0, t, res, ng, surface)
-            [y, rd [,hd]] = dae("root", initial, t0, t [[,rtol], atol], res [,jac], ng, surface [,hd])
-            [y, rd] = dae("root2", initial, t0, t, res, ng, surface)
-            [y, rd [,hd]] = dae("root2", initial, t0, t [[,rtol], atol], res [,jac], ng, surface [, psol, pjac] [, hd])
+        <synopsis> y = dae(y0, t0, t, res)
+            [y [,hd]] = dae(y0, t0, t [[,rtol], atol], res [,jac] [,hd])
+            [y, rd] = dae("root", y0, t0, t, res, ng, surface)
+            [y, rd [,hd]] = dae("root", y0, t0, t [[,rtol], atol], res [,jac], ng, surface [,hd])
+            [y, rd] = dae("root2", y0, t0, t, res, ng, surface)
+            [y, rd [,hd]] = dae("root2", y0, t0, t [[,rtol], atol], res [,jac], ng, surface [, psol, pjac] [, hd])
         </synopsis>
     </refsynopsisdiv>
     <refsection>
         <title>Arguments</title>
         <variablelist>
             <varlistentry>
-                <term>initial</term>
+                <term>y0</term>
                 <listitem>
                     <para>
                         a column vector. It may be equal to <literal>x0</literal> or
@@ -65,16 +65,6 @@
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term>atol</term>
-                <listitem>
-                    <para>a real scalar or a column vector of same size as
-                        <literal>x0</literal>, the absolute error
-                        tolerance of solution. If <literal>atol</literal> is a vector the
-                        tolerances are specified for each component of the state.
-                    </para>
-                </listitem>
-            </varlistentry>
-            <varlistentry>
                 <term>rtol</term>
                 <listitem>
                     <para>
@@ -86,20 +76,30 @@
                 </listitem>
             </varlistentry>
             <varlistentry>
+                <term>atol</term>
+                <listitem>
+                    <para>a real scalar or a column vector of same size as
+                        <literal>x0</literal>, the absolute error
+                        tolerance of solution. If <literal>atol</literal> is a vector the
+                        tolerances are specified for each component of the state.
+                    </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
                 <term>res</term>
                 <listitem>
                     <para>
                         an <link linkend="external" role="" version="">external</link> function, computes the value of
-                        <literal>g(t,y,ydot)</literal>. It may be
+                        <literal>g(t, y, ydot)</literal>. It may be:
                     </para>
                     <variablelist>
                         <varlistentry>
                             <term>a Scilab function</term>
                             <listitem>
                                 <para>In this case, the syntax must be
-                                    <literal>[r,ires]=res(t,x,xdot)</literal> and
+                                    <literal>[r, ires] = res(t, x, xdot)</literal> and
                                     <literal>res</literal> must return the residue
-                                    <literal>r=g(t,x,xdot)</literal> and error flag
+                                    <literal>r = g(t, x, xdot)</literal> and error flag
                                     <literal>ires</literal>.
                                 </para>
                                 <para>
@@ -109,7 +109,7 @@
                                 </para>
                                 <para>
                                     <literal>ires = -1</literal> if residue is
-                                    locally not defined for <literal>g(t,x,xdot)</literal>.
+                                    locally not defined for <literal>g(t, x, xdot)</literal>.
                                 </para>
                                 <para>
                                     <literal>ires =-2</literal> if parameters are out of admissible
@@ -124,17 +124,17 @@
                                     function. It must be as follows:
                                 </para>
                                 <screen><![CDATA[
-list(res,p1,p2,...)
+list(res, p1, p2, ...)
 ]]></screen>
                                 <para>where the syntax of the function
                                     <literal>res</literal> is now
                                 </para>
                                 <screen><![CDATA[
-r=res(t,y,ydot,p1,p2,...)
+r = res(t, y, ydot, p1, p2, ...)
 ]]></screen>
                                 <para>
                                     <literal>res</literal> still returns the residual value
-                                    as a function of <literal>(t,x,xdot,x1,x2,...)</literal>, and
+                                    as a function of <literal>(t, x, xdot, x1, x2, ...)</literal>, and
                                     <literal>p1, p2,...</literal> are function parameters.
                                 </para>
                             </listitem>
@@ -238,9 +238,9 @@ r=res(t,y,ydot,p1,p2,...)
                             <term>a Scilab function</term>
                             <listitem>
                                 <para>Its syntax must be
-                                    <literal>r=jac(t,x,xdot,cj)</literal> and the
+                                    <literal>r = jac(t, x, xdot, cj)</literal> and the
                                     <literal>jac</literal> function must return
-                                    <literal>r=dg(t,x,xdot)/dy+cj*dg(t,x,xdot)/dxdot</literal>
+                                    <literal>r = dg(t, x, xdot)/dy + cj * dg(t, x, xdot)/dxdot</literal>
                                     where <literal>cj</literal> is a real scalar.
                                 </para>
                             </listitem>
@@ -408,19 +408,114 @@ r = surface(t,x,p1,p2,...)
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term>pjac</term>
-                <listitem>
-                    <para>
-                        external (function, list or string). See <link linkend="daskr">daskr</link>
-                    </para>
-                </listitem>
-            </varlistentry>
-            <varlistentry>
                 <term>psol</term>
                 <listitem>
                     <para>
-                        external (function, list or string). See <link linkend="daskr">daskr</link>
+                        <link linkend="external">external</link> (function, list or string). Solves a linear system
+                        <literal>P*x = b</literal>, with P being the factored preconditioner that routine <literal>pjac</literal>
+                        computed beforehand and stored in <literal>wp</literal> and <literal>iwp</literal>.
                     </para>
+                    <itemizedlist>
+                        <listitem>
+                            <para>A Scilab function.</para>
+                            <para>Its syntax must be
+                                <literal>[r, ier] = psol(wp, iwp, b)</literal> and must return the solution of the system in
+                                <literal>r</literal> and an error flag <literal>ier</literal>.
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>A list.</para>
+                            <para>It must be as follows:</para>
+                            <screen><![CDATA[
+list(psol, x1, x2, ...)
+]]></screen>
+                            <para>
+                                where the syntax of <literal>psol</literal> is now
+                            </para>
+                            <screen><![CDATA[
+psol(wp, iwp, b, x1, x2, ...)
+]]></screen>
+                            <para>
+                                <literal>psol</literal> still returns the solution in <literal>r</literal>.
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>A character string.</para>
+                            <para>It must refer to the name of a C function or a Fortran subroutine linked with Scilab
+                            </para>
+                            <para>In C, the syntax must be:</para>
+                            <screen><![CDATA[
+void psol (int*neq, double*t, double*y, double*ydot, double*savr,
+  double*wk, double*cj, double*wght, double*wp, int*iwp, double*b, double*eplin, int*ier, double*rpar, int*ipar)
+]]></screen>
+                            where the arrays <literal>wp</literal> and <literal>iwp</literal> contain matrix elements of LU-factored preconditioner
+                            <literal>P</literal>, <literal>wp</literal> being the values and
+                            <literal>iwp</literal> the pivots used in the factorization.
+                            <para>In Fortran, it must be:</para>
+                            <screen><![CDATA[
+subroutine psol (neq, t, y, ydot, savr, wk, cj, wght,
+  wp, iwp, b, eplin, ier, rpar, ipar)
+double precision t,y(*), ydot(*), savr(*), wk(*), cj, wght(*), wp(*),
+  b(*), eplin, rpar(*)
+integer neq, iwp(*), ier, ipar(*)
+]]></screen>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>pjac</term>
+                <listitem>
+                    <para>
+                        <link linkend="external">external</link> (function, list or string). Computes the value of
+                        <literal>dg/dy + cj*dg/dydot</literal> for a given value of parameter
+                        <literal>cj</literal> and LU-factorizes it in two arrays, real and integer.
+                    </para>
+                    <itemizedlist>
+                        <listitem>
+                            <para>A Scilab function.</para>
+                            <para>Its syntax must be
+                                <literal>[wp, iwp, ires] = pjac(neq, t, y, ydot, h, cj, rewt, savr)</literal> and in return,
+                                the arrays <literal>wp</literal> and <literal>iwp</literal> must contain all factored preconditioner information.
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>A list.</para>
+                            <para>It must be as follows</para>
+                            <screen><![CDATA[
+list(pjac, x1, x2, ...)
+]]></screen>
+                            <para>
+                                where the syntax of <literal>pjac</literal> is
+                            </para>
+                            <screen><![CDATA[
+pjac(neq, t, y, ydot, h, cj, rewt, savr, x1, x2,...)
+]]></screen>
+                            <para>
+                                <literal>pjac</literal> still returns factorized
+                                <literal>dg/dy + cj*dg/dydot</literal> as a function of
+                                <literal>(neq, t, y, ydot, h, cj, rewt, savr, x1, x2, ...)</literal>.
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>A character string.</para>
+                            <para>It must refer to the name of a C function or a Fortran subroutine linked with Scilab
+                            </para>
+                            <para>In C, the syntax must be:</para>
+                            <screen><![CDATA[
+void pjac (double*res, int*ires, int*neq, double*t, double*y, double*ydot, double*rewt, double*savr,
+double*wk, double*h, double*cj, double*wp, int*iwp, int*ier, double*rpar, int*ipar)
+]]></screen>
+                            <para>In Fortran, it must be:</para>
+                            <screen><![CDATA[
+subroutine pjac (res, ires, neq, t, y, ydot, rewt, savr,
+  wk, h, cj, wp, iwp, ier, rpar, ipar)
+double precision res(*), t, y(*), ydot(*), rewt(*), savr(*),
+  wk(*), h, cj, wp(*), rpar(*)
+integer ires, neq, iwp(*), ier, ipar(*)
+]]></screen>
+                        </listitem>
+                    </itemizedlist>
                 </listitem>
             </varlistentry>
             <varlistentry>
@@ -453,39 +548,65 @@ r = surface(t,x,p1,p2,...)
     <refsection>
         <title>Description</title>
         <para>
-            The <literal>dae</literal> function is a gateway built above the
-            <link linkend="dassl">dassl</link>, <link linkend="dasrt">dasrt</link>
-            and <link linkend="daskr">daskr</link>
-            functions designed for implicit differential equations integration.
-        </para>
-        <para>
-            Option <literal>"root"</literal> calls the <link linkend="dasrt">dasrt</link> routine,
-            and <literal>"root2"</literal> calls <link linkend="dasrt">daskr</link>.
+            The <literal>dae</literal> function solves the differential algebraic equation and returns 
+            the evolution of y a given time points 
         </para>
         <screen><![CDATA[
 g(t, x, xdot) = 0
 x(t0) = x0 and xdot(t0) = xdot0
 ]]></screen>
         <para>
-            If <literal>xdot0</literal> is not given in the <emphasis>initial</emphasis>
+            If <literal>xdot0</literal> is not given in the <emphasis>y0</emphasis>
             argument, the <literal>dae</literal> function tries to compute it solving
             <literal>g(t,x0,xdot0)=0</literal>.
         </para>
         <para>
-            If <literal>xdot0</literal> is given in the <emphasis>initial</emphasis>
+            If <literal>xdot0</literal> is given in the <emphasis>y0</emphasis>
             argument it may be either a compatible derivative
             satisfying <literal>g(t,x0,xdot0)=0</literal> or an approximate value. In the latter case
             <link linkend="daeoptions">%DAEOPTIONS</link>(7) must be set to 1.
         </para>
-        <para>Detailed examples using Scilab and C coded externals are given in
-            <literal>modules/differential_equations/tests/unit_tests/dassldasrt.tst</literal> and
-            <literal>modules/differential_equations/tests/unit_tests/daskr.tst</literal>
-        </para>
     </refsection>
+    <refsection>
+        <title>The solvers</title>
+        <para>
+            The type of problem solved and
+            the method used depend on the value of the first optional argument
+            <varname>type</varname> which can be one of the following strings:
+        </para>
+        <variablelist>
+            <varlistentry>
+                <term>&lt;not given&gt;:</term>
+                <listitem>
+                    <para>
+                        the dassl solver.
+                    </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>root</term>
+                <listitem>
+                    <para>
+                        the dasrt solver. See help on <link linkend="dae_root">dae_root</link> for more
+                        details.
+                    </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>root2:</term>
+                <listitem>
+                    <para>
+                        the daskr solver. See help on <link linkend="dae_root">dae_root</link> for more
+                        details.
+                    </para>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+        </refsection>
     <refsection>
         <title>Examples</title>
         <para>
-            Example #1: dassl (no root finding)
+            Example #1: use dassl solver
         </para>
         <programlisting role="example"><![CDATA[
 // Example with Scilab code
@@ -514,7 +635,7 @@ y = dae([x0, xd0], 0, 4d10, chemres); // Without jacobian
 y = dae([x0, xd0], 0, 4d10, chemres, chemjac); // With jacobian
      ]]></programlisting>
         <para>
-            Example #2: dasrt ("root")
+            Example #2: use dasrt solver with "root"
         </para>
         <programlisting role="example"><![CDATA[
 // Example with C code (C compiler needed)
@@ -612,7 +733,7 @@ xstring(yy(1, 1)+0.1, yy(2, 1), string(nn(1)));
 cd(previous_dir);
  ]]></scilab:image>
         <para>
-            Example #3: daskr ("root2"), using default 'psol' and 'pjac' routines
+            Example #3: use daskr solver with "root2", using default 'psol' and 'pjac' routines
         </para>
         <programlisting role="example"><![CDATA[
 // Example with C code (C compiler needed)
@@ -716,19 +837,13 @@ cd(previous_dir);
         <title>See also</title>
         <simplelist type="inline">
             <member>
+                <link linkend="dae_root">dae_root</link>
+            </member>
+            <member>
                 <link linkend="ode">ode</link>
             </member>
             <member>
                 <link linkend="daeoptions">daeoptions</link>
-            </member>
-            <member>
-                <link linkend="dassl">dassl</link>
-            </member>
-            <member>
-                <link linkend="dasrt">dasrt</link>
-            </member>
-            <member>
-                <link linkend="daskr">daskr</link>
             </member>
             <member>
                 <link linkend="impl">impl</link>
@@ -743,5 +858,16 @@ cd(previous_dir);
                 <link linkend="external">external</link>
             </member>
         </simplelist>
+    </refsection>
+    <refsection>
+        <title>History</title>
+        <revhistory>
+            <revision>
+                <revnumber>2024.1.0</revnumber>
+                <revremark>
+                    dassl, dasrt and daskr become internal.
+                </revremark>
+            </revision>
+        </revhistory>
     </refsection>
 </refentry>

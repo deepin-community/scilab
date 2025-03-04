@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010 - DIGITEO - Pierre Lando
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,8 +9,8 @@
 
 // <-- Non-regression test for bug 5284 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=5284
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/5284
 //
 // <-- Short Description -->
 // In some case function "legend" drew line segments in its box in a reverse order.

@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Bruno JOFRET
 // Copyright (C) 2013 - Scilab Enterprises - Sylvestre LEDRU
 // Copyright (C) 2018 - Samuel GOUGEON
@@ -14,10 +14,11 @@
 // =============================================================================
 
 assert_checkerror("modulo()", msprintf(_("%s: Wrong number of input argument(s): %d expected.\n"),"modulo", 2));
-assert_checkerror("modulo(''a'',1)", msprintf(_("%s: Wrong type for input argument #%d: Real, integer or polynomial matrix expected.\n"), "modulo", 1));
-assert_checkerror("modulo(1,''a'')", msprintf(_("%s: Wrong type for input argument #%d: Real, integer or polynomial matrix expected.\n"), "modulo", 2));
-assert_checkerror("modulo(%pi+%i,1)", msprintf(_("%s: Wrong type for input argument #%d: Real, integer or polynomial matrix expected.\n"), "modulo", 1));
-assert_checkerror("modulo(1,1+%i)", msprintf(_("%s: Wrong type for input argument #%d: Real, integer or polynomial matrix expected.\n"), "modulo", 2));
+errarg = sci2exp(["double", "polynomial", "int"]);
+assert_checkerror("modulo(''a'',1)", msprintf(_("%s: Wrong type for input argument #%d: Must be in %s.\n"), "modulo", 1, errarg));
+assert_checkerror("modulo(1,''a'')", msprintf(_("%s: Wrong type for input argument #%d: Must be in %s.\n"), "modulo", 2, errarg));
+assert_checkerror("modulo(%pi+%i,1)", msprintf(_("%s: Wrong value for input argument #%d: Real numbers expected.\n"), "modulo", 1));
+assert_checkerror("modulo(1,1+%i)", msprintf(_("%s: Wrong value for input argument #%d: Real numbers expected.\n"), "modulo", 2));
 
 n=[1,2,10,15];
 m=[2,2,3,5];

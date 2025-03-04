@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2014 - Scilab Enterprises - Bruno JOFRET
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -8,11 +8,12 @@
 // <-- TEST WITH ATOMS -->
 // <-- CLI SHELL MODE -->
 // <-- LINUX ONLY -->
+// <-- NO CHECK REF -->
 //
 // <-- Non-regression test for bug 13674 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=13674
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/13674
 //
 // <-- Short Description -->
 // atomsSystemUpdate() failed if USER has it's own wgetrc config file
@@ -27,9 +28,9 @@ end
 
 fd = mopen("~/.wgetrc", "w+");
 mputl("use_proxy = on", fd);
-mputl("http_proxy = http://proxy_name:1234/", fd);
-mputl("https_proxy = http://proxy_name:1234/", fd);
-mputl("ftp_proxy = http://proxy_name:1234/", fd);
+mputl("http_proxy = https://proxy_name:1234/", fd);
+mputl("https_proxy = https://proxy_name:1234/", fd);
+mputl("ftp_proxy = https://proxy_name:1234/", fd);
 mclose(fd);
 
 status = atomsGetConfig("useProxy");

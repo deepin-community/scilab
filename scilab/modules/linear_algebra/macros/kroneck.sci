@@ -1,5 +1,5 @@
 
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ????-2008 - INRIA
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -37,7 +37,10 @@ function [Q,Z,Qd,Zd,numbeps,numbeta]=kroneck(E,A)
     //
     // interface  F.D. from Slicot-fstair
     // T. Beelen's routines
-    [LHS,RHS]=argn(0);
+    [LHS, RHS] = argn(0);
+    if RHS < 1 || RHS > 2 then
+        error(msprintf(gettext("%s: Wrong number of input arguments: %d or %d expected.\n"), "kroneck", 1, 2));
+    end
     if RHS==1 then [E,A]=pen2ea(E);end
     [Q,Z,Ec,Ac,Qd,Zd,numbeps]=quaskro(E,A);
     rows=Qd(1)+Qd(2)+1:Qd(1)+Qd(2)+Qd(3);

@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2005 - INRIA - Farid BELAHCENE
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -10,8 +10,8 @@
 
 // <-- Non-regression test for bug 1629 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=1629
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/1629
 //
 // <-- Short Description -->
 //    Scila freezes when trying to convert the following m-file:
@@ -64,7 +64,7 @@ SCIFILECONTENTSREF=[
     "function [out] = bug1629(par)"
     ""
     "// Output variables initialisation (not found in input variables)"
-    "out=[];"
+    "out = [];"
     ""
     "// Number of arguments in function call"
     "[%nargout,%nargin] = argn(0)"
@@ -83,7 +83,7 @@ SCIFILECONTENTSREF=[
     "  par.d = 1000;"
     "  par.o = 8;"
     "  par.u = 0;"
-    "end;"
+    "end"
     "endfunction"];
 
 if or(SCIFILECONTENTSREF<>SCIFILECONTENTS) then pause,end

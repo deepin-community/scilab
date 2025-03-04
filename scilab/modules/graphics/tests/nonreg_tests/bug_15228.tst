@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2017 - ESI Group - Paul Bignier
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -10,8 +10,8 @@
 
 // <-- Non-regression test for bug 15228 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/15228
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/15228
 //
 // <-- Short Description -->
 // get() returned a wrong error message

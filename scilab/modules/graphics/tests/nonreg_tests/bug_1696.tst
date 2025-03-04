@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009-2009 - Digiteo - Jean-Baptiste Silvy
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,8 +9,8 @@
 
 // <-- Non-regression test for bug 1696-->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=1696
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/1696
 //
 // <-- Short Description -->
 // zoom_box properties only applies on X and Y axis.

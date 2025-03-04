@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2016 - Scilab Enterprises - Pierre-Aime Agnel
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -8,8 +8,8 @@
 //
 // <-- Non-regression test for bug 14396 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/14396
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/14396
 //
 // <-- Short Description -->
 // Display of real number with exponent was wrong

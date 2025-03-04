@@ -1,4 +1,4 @@
-/* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+/* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) Enpc - JPC
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -111,7 +111,8 @@ void C2F(lufact1)(double *val, int *lln, int *col, int *n, int *nel,
 
         if (pelement == 0)
         {
-            removeluptr(fmat);
+            removeluptr(*fmatindex);
+            *fmatindex = 0;
             spDestroy(fmat);
             *ierr = 2;
             return;
@@ -127,24 +128,12 @@ void C2F(lufact1)(double *val, int *lln, int *col, int *n, int *nel,
 
     spGetNumRank(fmat, nrank);
 
-    switch (error)
+    *ierr = error;
+    if (error != spSINGULAR && error > spSMALL_PIVOT)
     {
-        case spZERO_DIAG:
-            Scierror(999, _("%s: A zero was encountered on the diagonal the matrix.\n"), "zero_diag");
-            removeluptr(fmat);
-            spDestroy(fmat);
-            return;
-        case spNO_MEMORY:
-            *ierr = 3;
-            removeluptr(fmat);
-            spDestroy(fmat);
-            return;
-        case spSINGULAR:
-            *ierr = -1; /*Singular matrix" */
-            return;
-        case spSMALL_PIVOT:
-            *ierr = -2; /* matrix is singular at precision level */
-            return;
+        removeluptr(*fmatindex);
+        *fmatindex = 0;
+        spDestroy(fmat);
     }
 }
 
@@ -174,13 +163,13 @@ void C2F(lusolve1)(int *fmatindex, double *b, double *x, int *ierr)
 void C2F(ludel1)(int *fmatindex, int *ierr)
 {
     char *fmat;
-    if (getluptr((int)*fmatindex, &fmat) == -1)
+    if (getluptr(*fmatindex, &fmat) == -1)
     {
         *ierr = 1;
         return;
     }
     *ierr = 0;
-    removeluptr ((int)*fmatindex);
+    removeluptr (*fmatindex);
     spDestroy(fmat);
 
 }
@@ -500,7 +489,13 @@ int removeluptr (int sel)
  */
 void resetluptr()
 {
+    for (int i = 0; i < sci_luptr_index; i++) {
+        if (sci_luptr_table[i] != NULL) {
+            spDestroy(sci_luptr_table[i]);
+        }
+    }
     FREE(sci_luptr_table);
+    sci_luptr_table = NULL;
     sci_luptr_table_size = 0;/* allocated size for pointer table*/
     sci_luptr_index = 0;/* max index used (one based)*/
 }

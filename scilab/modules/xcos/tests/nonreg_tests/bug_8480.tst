@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010 - DIGITEO - Clément DAVID
 // Copyright (C) 2010 - Scilab Enterprises - Clément DAVID
 //
@@ -12,8 +12,8 @@
 //
 // <-- Non-regression test for bug 8480 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=8480
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/8480
 //
 // <-- Short Description -->
 // The debug block did not have a valid function type.

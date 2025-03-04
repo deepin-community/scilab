@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009 - DIGITEO - Vincent COUVERT
  * Copyright (C) 2010 - DIGITEO - Clement DAVID
  * Copyright (C) 2011-2015 - Scilab Enterprises - Clement DAVID
@@ -18,13 +18,17 @@
 package org.scilab.modules.xcos.actions;
 
 import java.awt.event.ActionEvent;
+import java.util.Optional;
+import java.util.UUID;
 
 import org.scilab.modules.graph.ScilabComponent;
 import org.scilab.modules.graph.ScilabGraph;
 import org.scilab.modules.graph.actions.base.DefaultAction;
 import org.scilab.modules.gui.bridge.tab.SwingScilabDockablePanel;
 import org.scilab.modules.gui.checkboxmenuitem.CheckBoxMenuItem;
+import org.scilab.modules.gui.tabfactory.ScilabTabFactory;
 import org.scilab.modules.gui.utils.ClosingOperationsManager;
+import org.scilab.modules.gui.utils.WindowsConfigurationManager;
 import org.scilab.modules.xcos.ViewPortTab;
 import org.scilab.modules.xcos.XcosTab;
 import org.scilab.modules.xcos.graph.XcosDiagram;
@@ -85,7 +89,7 @@ public final class ViewViewportAction extends DefaultAction {
 
         final boolean status = tab.isViewportChecked();
 
-        if (status) {
+        if (status && viewport == null) {
             ViewPortTab.restore(graph);
         } else {
             ClosingOperationsManager.startClosingOperation((SwingScilabDockablePanel) viewport);

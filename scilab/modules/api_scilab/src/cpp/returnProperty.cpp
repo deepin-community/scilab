@@ -1,5 +1,5 @@
 /*
- * Scilab (http://www.scilab.org/) - This file is part of Scilab
+ * Scilab (https://www.scilab.org/) - This file is part of Scilab
  * Copyright (C) 2006 - INRIA - Jean-Baptiste SILVY
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -141,13 +141,13 @@ void* sciReturnUserData(const int * userData, int userDataSize)
     {
         //32 bits
         int* p = (int*)userData;
-        return ((types::InternalType*) * p);
+        return ((types::InternalType*)*p);
     }
     else
     {
         //64 bits
         long long* p = (long long*)userData;
-        return ((types::InternalType*) * p);
+        return ((types::InternalType*)*p);
     }
 }
 /*--------------------------------------------------------------------------*/

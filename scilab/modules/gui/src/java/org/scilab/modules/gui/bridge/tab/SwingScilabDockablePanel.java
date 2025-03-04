@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2007-2008 - INRIA - Vincent Couvert
  * Copyright (C) 2007 - INRIA - Bruno JOFRET
  * Copyright (C) 2007 - INRIA - Marouane BEN JELLOUL
@@ -370,7 +370,6 @@ public class SwingScilabDockablePanel extends View implements SimpleTab, FocusLi
 
             }
         });
-        ClosingOperationsManager.addDependencyWithRoot(this);
     }
 
     /**

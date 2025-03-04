@@ -1,5 +1,5 @@
 //
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA - Claude Gomez <claude.gomez@scilab.org>
 //
 // This file is distributed under the same license as the Scilab package.
@@ -34,13 +34,14 @@ function demo_sliding_pendulum()
     t0=0;
     T=t0:0.05:20;
 
-    //dassl parameters
-    info = list([],0,[],[],[],0,0);
+    // dassl parameters
+    %DAEOPTIONS = list([],0,[],[],[],0,0);
     atol = [0.0001;0.0001;0.0001;0.0001;0.0001;0.0001;0.001];
     rtol = atol;
 
     // dae integration
-    sol=dassl([y0,yd0],t0,T,rtol,atol,pendg,info);
+    //sol = %_dassl([y0, yd0], t0, T, rtol, atol, pendg, list([],0,[],[],[],0,0));
+    sol = dae([y0, yd0], t0, T, rtol, atol, pendg);
 
     //draw pendulum at its initial position
     H = build_sliding_pendulum ()
@@ -51,7 +52,7 @@ function demo_sliding_pendulum()
     for i=1:size(sol,2)
         realtime(i)
         if is_handle_valid(H) then
-            draw_sliding_pendulum(H,sol(2:4,i))
+            draw_sliding_pendulum(H,sol(1:3,i))
         else
             break;
         end

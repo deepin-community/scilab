@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2011 - DIGITEO - Sylvestre Ledru
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
@@ -17,7 +17,10 @@
     </refnamediv>
     <refsynopsisdiv>
         <title>呼び出し手順</title>
-        <synopsis>value = MPI_Recv(rank,tag)</synopsis>
+        <synopsis>
+            value = MPI_Recv(rank, tag)
+            value = MPI_Recv(rank, tag, comm=mpi_comm)
+        </synopsis>
     </refsynopsisdiv>
     <refsection>
         <title>引数</title>
@@ -32,6 +35,16 @@
                 <term>tag</term>
                 <listitem>
                     <para>タグ. TODO</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>comm=mpi_comm</term>
+                <listitem>
+                    <para>If the optional argument "comm" is given,
+                        this function will use the MPI communicator created by
+                        <link linkend="MPI_Create_comm">MPI_Create_comm</link>.
+                        If not, the default MPI_COMM_WORLD is used.
+                    </para>
                 </listitem>
             </varlistentry>
             <varlistentry>
@@ -62,32 +75,32 @@
         <title>例</title>
         <programlisting role="example"><![CDATA[
             MPI_Init();
-            rnk =    MPI_Comm_rank();
-            sizeNodes =    MPI_Comm_size();
-            SLV = rnk;                // 便利なショートカット, マスターはランク 0
-            Master = ~ SLV;            // その他は全てスレーブ
-            tag=0;
+            rnk = MPI_Comm_rank();
+            sizeNodes = MPI_Comm_size();
+            SLV = rnk;        // 便利なショートカット, マスターはランク 0
+            Master = ~ SLV;   // その他は全てスレーブ
+            tag = 0;
             if Master
-            // マスターノード
-            for slaveId = 1:sizeNodes-1
-            // Send data to the slaves
-            value = rand(100,100) + rand(100,100) * %i;
-            MPI_Send(value, slaveId);
-            end
-            for slaveId = 1:sizeNodes-1
-            valueBack=MPI_Recv(slaveId, tag);
-            // スレーブが期待するものを送信したか確認
-            assert_checkequal(valueBack,value + 1);
-            end
+                // マスターノード
+                for slaveId = 1:sizeNodes-1
+                    // Send data to the slaves
+                    value = rand(100,100) + rand(100,100) * %i;
+                    MPI_Send(value, slaveId);
+                end
+                for slaveId = 1:sizeNodes-1
+                    valueBack = MPI_Recv(slaveId, tag);
+                    // スレーブが期待するものを送信したか確認
+                    assert_checkequal(valueBack,value + 1);
+                end
             else
-            // スレーブ
-            rankSource=0;
-            // マスターから情報を受信
-            value=MPI_Recv(rankSource);
-            // 値を1つ増加
-            value=value+1;
-            // マスターに戻す
-            MPI_Send(value,0);
+                // スレーブ
+                rankSource = 0;
+                // マスターから情報を受信
+                value = MPI_Recv(rankSource);
+                // 値を1つ増加
+                value = value + 1;
+                // マスターに戻す
+                MPI_Send(value, 0);
             end
             MPI_Finalize();
             ]]></programlisting>

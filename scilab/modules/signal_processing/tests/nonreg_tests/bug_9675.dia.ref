@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2011 - INRIA - Serge Steer
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,8 +9,8 @@
 //
 // <-- Non-regression test for bug 9675 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=9675
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/9675
 //
 // <-- Short Description -->
 // iir returns wrong value with  Scilab-5.3.1 and Scilab-5.3.2 under Windows_64

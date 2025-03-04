@@ -1,5 +1,5 @@
 /*
-*  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+*  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 *  Copyright (C) 2008-2008 - DIGITEO - Antoine ELIAS
 *  Copyright (C) 2010-2010 - DIGITEO - Bruno JOFRET
 *
@@ -16,6 +16,7 @@
 
 #include <algorithm>
 
+#include "operations.hxx"
 #include "types_subtraction.hxx"
 #include "types_opposite.hxx"
 #include "double.hxx"
@@ -34,6 +35,7 @@ using namespace types;
 
 //define arrays on operation functions
 static sub_function pSubfunction[types::InternalType::IdLast][types::InternalType::IdLast] = {NULL};
+static std::wstring op = L"-";
 
 void fillSubtractFunction()
 {
@@ -832,21 +834,17 @@ InternalType* sub_M_M(T *_pL, U *_pR)
 
     if (iDimsL != iDimsR)
     {
+        // call overload
         return nullptr;
     }
 
-    int* piDimsL = _pL->getDimsArray();
-    int* piDimsR = _pR->getDimsArray();
-
-    for (int i = 0 ; i < iDimsL ; ++i)
+    std::wstring error = checkSameSize(_pL, _pR, op);
+    if (error.empty() == false)
     {
-        if (piDimsL[i] != piDimsR[i])
-        {
-            throw ast::InternalError(_W("Inconsistent row/column dimensions.\n"));
-        }
+        throw ast::InternalError(error);
     }
 
-    O* pOut = new O(iDimsL, piDimsL);
+    O* pOut = new O(_pL->getDims(), _pR->getDimsArray());
 
     sub(_pL->get(), (size_t)_pL->getSize(), _pR->get(), pOut->get());
     return pOut;
@@ -860,21 +858,17 @@ InternalType* sub_M_MC(T *_pL, U *_pR)
 
     if (iDimsL != iDimsR)
     {
+        // call overload
         return nullptr;
     }
 
-    int* piDimsL = _pL->getDimsArray();
-    int* piDimsR = _pR->getDimsArray();
-
-    for (int i = 0 ; i < iDimsL ; ++i)
+    std::wstring error = checkSameSize(_pL, _pR, op);
+    if (error.empty() == false)
     {
-        if (piDimsL[i] != piDimsR[i])
-        {
-            throw ast::InternalError(_W("Inconsistent row/column dimensions.\n"));
-        }
+        throw ast::InternalError(error);
     }
 
-    O* pOut = new O(iDimsL, piDimsL, true);
+    O* pOut = new O(iDimsL, _pL->getDimsArray(), true);
 
     sub(_pL->get(), (size_t)_pL->getSize(), _pR->get(), _pR->getImg(), pOut->get(), pOut->getImg());
     return pOut;
@@ -920,21 +914,17 @@ InternalType* sub_MC_M(T *_pL, U *_pR)
 
     if (iDimsL != iDimsR)
     {
+        //call overload
         return nullptr;
     }
 
-    int* piDimsL = _pL->getDimsArray();
-    int* piDimsR = _pR->getDimsArray();
-
-    for (int i = 0 ; i < iDimsL ; ++i)
+    std::wstring error = checkSameSize(_pL, _pR, op);
+    if (error.empty() == false)
     {
-        if (piDimsL[i] != piDimsR[i])
-        {
-            throw ast::InternalError(_W("Inconsistent row/column dimensions.\n"));
-        }
+        throw ast::InternalError(error);
     }
 
-    O* pOut = new O(iDimsL, piDimsL, true);
+    O* pOut = new O(iDimsL, _pL->getDimsArray(), true);
 
     sub(_pL->get(), _pL->getImg(), (size_t)_pL->getSize(), _pR->get(), pOut->get(), pOut->getImg());
     return pOut;
@@ -951,18 +941,13 @@ InternalType* sub_MC_MC(T *_pL, U *_pR)
         return nullptr;
     }
 
-    int* piDimsL = _pL->getDimsArray();
-    int* piDimsR = _pR->getDimsArray();
-
-    for (int i = 0 ; i < iDimsL ; ++i)
+    std::wstring error = checkSameSize(_pL, _pR, op);
+    if (error.empty() == false)
     {
-        if (piDimsL[i] != piDimsR[i])
-        {
-            throw ast::InternalError(_W("Inconsistent row/column dimensions.\n"));
-        }
+        throw ast::InternalError(error);
     }
 
-    O* pOut = new O(iDimsL, piDimsL, true);
+    O* pOut = new O(iDimsL, _pL->getDimsArray(), true);
 
     sub(_pL->get(), _pL->getImg(), (size_t)_pL->getSize(), _pR->get(), _pR->getImg(), pOut->get(), pOut->getImg());
     return pOut;
@@ -1758,18 +1743,14 @@ template<> InternalType* sub_M_M<Polynom, Polynom, Polynom>(Polynom* _pL, Polyno
 
     if (iDims1 != iDims2)
     {
+        // call overload
         return nullptr;
     }
 
-    int* piDims1    = _pL->getDimsArray();
-    int* piDims2    = _pR->getDimsArray();
-
-    for (int i = 0 ; i < iDims1 ; i++)
+    std::wstring error = checkSameSize(_pL, _pR, op);
+    if (error.empty() == false)
     {
-        if (piDims1[i] != piDims2[i])
-        {
-            throw ast::InternalError(_W("Inconsistent row/column dimensions.\n"));
-        }
+        throw ast::InternalError(error);
     }
 
     int *pRankOut   = new int[_pL->getSize()];
@@ -1783,7 +1764,7 @@ template<> InternalType* sub_M_M<Polynom, Polynom, Polynom>(Polynom* _pL, Polyno
         pRankOut[i] = std::max(pRank1[i], pRank2[i]);
     }
 
-    pOut = new Polynom(_pR->getVariableName(), iDims1, piDims1, pRankOut);
+    pOut = new Polynom(_pR->getVariableName(), iDims1, _pL->getDimsArray(), pRankOut);
     bool isOutComplex =  _pL->isComplex() || _pR->isComplex();
 
     //Result P1(i) - P2(i)
@@ -2016,20 +1997,14 @@ template<> InternalType* sub_M_M<Polynom, Double, Polynom>(Polynom* _pL, Double*
 
     if (iDims1 != iDims2)
     {
+        // call overload
         return nullptr;
     }
 
-    int* piDims1 = _pR->getDimsArray();
-    int* piDims2 = _pL->getDimsArray();
-
-    for (int i = 0 ; i < iDims1 ; i++)
+    std::wstring error = checkSameSize(_pL, _pR, op);
+    if (error.empty() == false)
     {
-        if (piDims1[i] != piDims2[i])
-        {
-            wchar_t pMsg[bsiz];
-            os_swprintf(pMsg, bsiz, _W("Error: operator %ls: Matrix dimensions must agree (op1 is %ls, op2 is %ls).\n").c_str(),  L"-", _pL->DimToString().c_str(), _pR->DimToString().c_str());
-            throw ast::InternalError(pMsg);
-        }
+        throw ast::InternalError(error);
     }
 
     double* pInDblR = _pR->get();
@@ -2357,20 +2332,14 @@ template<> InternalType* sub_M_M<Double, Polynom, Polynom>(Double* _pL, Polynom*
 
     if (iDims1 != iDims2)
     {
+        // call overload
         return nullptr;
     }
 
-    int* piDims1 = _pR->getDimsArray();
-    int* piDims2 = _pL->getDimsArray();
-
-    for (int i = 0 ; i < iDims1 ; i++)
+    std::wstring error = checkSameSize(_pL, _pR, op);
+    if (error.empty() == false)
     {
-        if (piDims1[i] != piDims2[i])
-        {
-            wchar_t pMsg[bsiz];
-            os_swprintf(pMsg, bsiz, _W("Error: operator %ls: Matrix dimensions must agree (op1 is %ls, op2 is %ls).\n").c_str(),  L"+", _pL->DimToString().c_str(), _pR->DimToString().c_str());
-            throw ast::InternalError(pMsg);
-        }
+        throw ast::InternalError(error);
     }
 
     if (bComplex2)
@@ -2432,10 +2401,10 @@ template<> InternalType* sub_M_M<Sparse, Sparse, Sparse>(Sparse* _pL, Sparse* _p
         return NULL;
     }
 
-    if (_pL->getRows() != _pR->getRows() || _pL->getCols() != _pR->getCols())
+    std::wstring error = checkSameSize(_pL, _pR, op);
+    if (error.empty() == false)
     {
-        //dimensions not match
-        throw ast::InternalError(_W("Inconsistent row/column dimensions.\n"));
+        throw ast::InternalError(error);
     }
 
     types::Sparse* pSPOut = _pL->substract(*_pR);
@@ -2556,49 +2525,48 @@ template<> InternalType* sub_M_M<Double, Sparse, Double>(Double* _pL, Sparse* _p
 
     if (_pL->getDims() > 2)
     {
+        // call overload
         return nullptr;
     }
-
-    if (_pL->getRows() == _pR->getRows() && _pL->getCols() == _pR->getCols())
+    std::wstring error = checkSameSize(_pL, _pR, op);
+    if (error.empty() == false)
     {
-        //D - SP
-        pOut = (Double*)_pL->clone();
-        pOut->setComplex(bComplex1 || bComplex2);
+        throw ast::InternalError(error);
+    }
 
-        int nonZeros = static_cast<int>(_pR->nonZeros());
-        int* pRows = new int[nonZeros * 2];
-        _pR->outputRowCol(pRows);
-        int* pCols = pRows + nonZeros;
+    //D - SP
+    pOut = (Double*)_pL->clone();
+    pOut->setComplex(bComplex1 || bComplex2);
 
-        if (bComplex1 || bComplex2)
+    int nonZeros = static_cast<int>(_pR->nonZeros());
+    int* pRows = new int[nonZeros * 2];
+    _pR->outputRowCol(pRows);
+    int* pCols = pRows + nonZeros;
+
+    if (bComplex1 || bComplex2)
+    {
+        for (int i = 0 ; i < nonZeros ; i++)
         {
-            for (int i = 0 ; i < nonZeros ; i++)
-            {
-                int iRow = static_cast<int>(pRows[i]) - 1;
-                int iCol = static_cast<int>(pCols[i]) - 1;
-                std::complex<double> dbl = _pR->getImg(iRow, iCol);
-                pOut->set(iRow, iCol, pOut->get(iRow, iCol) - dbl.real());
-                pOut->setImg(iRow, iCol, pOut->getImg(iRow, iCol) - dbl.imag());
-            }
+            int iRow = static_cast<int>(pRows[i]) - 1;
+            int iCol = static_cast<int>(pCols[i]) - 1;
+            std::complex<double> dbl = _pR->getImg(iRow, iCol);
+            pOut->set(iRow, iCol, pOut->get(iRow, iCol) - dbl.real());
+            pOut->setImg(iRow, iCol, pOut->getImg(iRow, iCol) - dbl.imag());
         }
-        else
-        {
-            for (int i = 0 ; i < nonZeros ; i++)
-            {
-                int iRow = static_cast<int>(pRows[i]) - 1;
-                int iCol = static_cast<int>(pCols[i]) - 1;
-                pOut->set(iRow, iCol, pOut->get(iRow, iCol) - _pR->get(iRow, iCol));
-            }
-        }
-
-        //clear
-        delete[] pRows;
-        return pOut;
     }
     else
     {
-        throw ast::InternalError(_W("Inconsistent row/column dimensions.\n"));
+        for (int i = 0 ; i < nonZeros ; i++)
+        {
+            int iRow = static_cast<int>(pRows[i]) - 1;
+            int iCol = static_cast<int>(pCols[i]) - 1;
+            pOut->set(iRow, iCol, pOut->get(iRow, iCol) - _pR->get(iRow, iCol));
+        }
     }
+
+    //clear
+    delete[] pRows;
+    return pOut;
 }
 
 //sp - d
@@ -2723,9 +2691,10 @@ template<> InternalType* sub_M_M<Sparse, Double, Double>(Sparse* _pL, Double* _p
         return nullptr;
     }
 
-    if (_pL->getRows() != _pR->getRows() || _pL->getCols() != _pR->getCols())
+    std::wstring error = checkSameSize(_pL, _pR, op);
+    if (error.empty() == false)
     {
-        throw ast::InternalError(_W("Inconsistent row/column dimensions.\n"));
+        throw ast::InternalError(error);
     }
 
     //SP - D

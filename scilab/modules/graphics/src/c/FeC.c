@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 1998 - 2001 - ENPC - Jean-Philippe Chancelier
  * Copyright (C) 2005-2008 - INRIA - Jean-Baptiste Silvy
  * Copyright (C) 2001 -  Bruno Pincon (for gain in speed and added

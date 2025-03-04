@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2011 - Bernard DUJARDIN <develop.dujardin@numericable.fr>
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -645,7 +645,7 @@
                     <emphasis role="bold">
                         Si vous rencontrez une telle situation, veuillez s'il vous plaît, nous la signaler.
                     </emphasis>
-                    <ulink url="http://bugzilla.scilab.org/">
+                    <ulink url="https://gitlab.com/scilab/scilab/-/issues">
                         Rapport de bogues et d'amélioration de <emphasis>Scilab</emphasis>
                     </ulink>
                 </para>
@@ -996,7 +996,7 @@
                 <link linkend="ode">ode</link>
             </listitem>
             <listitem>
-                <link linkend="dassl">dassl</link>
+                <link linkend="dae">dae</link>
             </listitem>
         </itemizedlist>
     </refsection>

@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2019 - Samuel GOUGEON
 //
 // This file is hereby licensed under the terms of the GNU GPL v2.0,
@@ -9,54 +9,41 @@
 // along with this program.
 
 function y = bitset(x, pos, v)
-    fname = "bitset"
-    rhs = argn(2)
 
-    // CHECKING AND FORMATTING INPUT ARGUMENTS
-    // =======================================
-    if rhs < 2 | rhs > 3 then
-        msg = _("%s: Wrong number of input arguments: %d or %d expected.\n")
-        error(msprintf(msg, fname, 2, 3))
+    arguments
+        x {mustBeA(x, ["double", "int"]), mustBeReal, mustBeInteger, mustBeNonnegative}
+        pos {mustBeA(x, ["double", "int"]), mustBeReal, mustBeInteger, mustBeNonnegative, mustBeGreaterThanOrEqual(pos, 1)}
+        v {mustBeA(v, ["double", "int"]), mustBeInteger, mustBeInRange(v, 0, 1)} = ones(pos)
     end
+    fname = "bitset"
 
-    // Check x
-    // -------
     if x==[]
         y = []
         return
     end
-    if  and(type(x)<>[1 8]) | (type(x)==1 & (~isreal(x)|or((x-floor(x))<>0))) | or(x<0)
-        msg = gettext("%s: Argument #%d: Non-negative real integers expected.\n")
-        error(msprintf(msg, fname, 1))
-    end
 
-    // Check pos
-    // ---------
-    if ~isdef("pos","l") | pos==[] then     // do nothing, keep it as is
+    // for the case: 1+0*%i
+    x = real(x);
+
+    if pos == [] then     // do nothing, keep it as is
         y = x
         return
     end
-    if  (type(pos)<>1  & type(pos)<>8) |  ..
-        (type(pos)==1  & (or((pos-floor(pos))<>0) | ~isreal(pos))) | or(pos<1)
-        msg = gettext("%s: Argument #%d: integers > 0 expected.\n")
-        error(msprintf(msg, fname, 2))
-    else
-        // max value
-        icode = inttype(x)
-        select modulo(icode,10)
-        case 0  then posmax = 1024  // log2(number_properties("huge"))
-        case 1 then posmax = 8
-        case 2 then posmax = 16
-        case 4 then posmax = 32
-        case 8 then posmax = 64
-        end
-        if icode>0 & icode<10      // Signed integers
-            posmax = posmax-1      // => sign bit reserved
-        end
-        if or(pos > posmax)
-            msg = gettext("%s: Argument #%d: Integers <= %d expected.\n")
-            error(msprintf(msg, fname, 2, posmax))
-        end
+    
+    icode = inttype(x)
+    select modulo(icode,10)
+    case 0  then posmax = 1024  // log2(number_properties("huge"))
+    case 1 then posmax = 8
+    case 2 then posmax = 16
+    case 4 then posmax = 32
+    case 8 then posmax = 64
+    end
+    if icode>0 & icode<10      // Signed integers
+        posmax = posmax-1      // => sign bit reserved
+    end
+    if or(pos > posmax)
+        msg = gettext("%s: Argument #%d: Integers <= %d expected.\n")
+        error(msprintf(msg, fname, 2, posmax))
     end
     pos = double(pos)
 
@@ -71,7 +58,7 @@ function y = bitset(x, pos, v)
             msg = gettext("%s: Arguments #%d and #%d: Incompatible sizes.\n")
             error(msprintf(msg, fname, 1, 2))
         end
-        if ~isdef("v","l") | size(v,"*")==1
+        if size(v,"*") < 2
             pos = unique(pos)
             // we can't do that if an array v is provided, because then
             // its length must match the pos one.
@@ -89,21 +76,11 @@ function y = bitset(x, pos, v)
 
     // Check v
     // -------
-    // At the end, v must be either a vector with the pos's length (sameBits case)
-    // or an array with same sizes as pos (element-wise case)
-    if ~isdef("v","l") || v==[] then
-        v = ones(pos)
-    else
-        if  (type(v)<>1  & type(v)<>8) || or(v~=0 & v~=1)
-            msg = _("%s: Argument #%d: Must be in the set {%s}.\n")
-            error(msprintf(msg, fname, 3, "0,1"))
-        end
-        if prod(size(v)(1:min(ndims(v),ndims(pos)))) == 1 // scalar or hypercolumn cases
-            v = v .*. ones(pos)
-        elseif prod(size(v)(1:ndims(pos))) ~= length(pos)
-            msg = gettext("%s: Arguments #%d and #%d: Incompatible sizes.\n")
-            error(msprintf(msg, fname, 2, 3))
-        end
+    if prod(size(v)(1:min(ndims(v),ndims(pos)))) == 1 // scalar or hypercolumn cases
+        v = v .*. ones(pos)
+    elseif prod(size(v)(1:ndims(pos))) ~= length(pos)
+        msg = gettext("%s: Arguments #%d and #%d: Incompatible sizes.\n")
+        error(msprintf(msg, fname, 2, 3))
     end
 
     // PROCESSING

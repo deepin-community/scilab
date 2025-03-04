@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) Jean-Philippe Chancelier and Bruno Pincon
  * Copyright (C) 2011 - DIGITEO - Michael Baudin
  * Copyright (C) 2013 - Samuel GOUGEON : extension aux hypermatrices
- *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ * Copyright (C) 2023 - Samuel GOUGEON
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
  * pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -44,15 +44,15 @@
             Y = grand(m, n, "uin", Low, High)
             Y = grand(m, n, "lgi")
 
-            Y = grand(m, n, o,..,"..",...)
-            Y = grand(X, ...)
+            Y = grand(m, n, o, …, PDFname, …)
+            Y = grand(X, PDFname, …)
         </synopsis>
         <para/>
         <synopsis>
             Y = grand(n, "mn", Mean, Cov)
             Y = grand(n, "markov", P, x0)
             Y = grand(n, "mul", nb, P)
-            Y = grand(n, "prm", vect)
+            Y = grand(n, "prm", array)
         </synopsis>
         <para/>
         <synopsis>
@@ -79,7 +79,8 @@
                 <term>m, n, o</term>
                 <listitem>
                     <para>
-                        entiers, dimensions de la matrice de nombres aléatoires à obtenir <literal>Y</literal>
+                        entiers : dimensions de la matrice de nombres aléatoires à obtenir
+                        <varname>Y</varname>
                     </para>
                 </listitem>
             </varlistentry>
@@ -87,7 +88,18 @@
                 <term>X </term>
                 <listitem>
                     <para>
-                        un vecteur, une matrice ou une hypermatrice dont seules les dimensions (<literal>m</literal> x <literal>n</literal> x ...) sont utilisées
+                        un vecteur, une matrice ou une hypermatrice dont seules les dimensions
+                        (<varname>m</varname> x <varname>n</varname> x ...) sont utilisées
+                    </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>PDFname</term>
+                <listitem>
+                    <para>
+                        Nom de la fonction de densité de probabilité choisie :
+                        <literal>"def", "unf", "uin", "bet", "gam","exp", "nor", "geo", "poi",
+                        "bin", "chi", "nbn", "nch", "f", "nf",  "lgi"</literal>.
                     </para>
                 </listitem>
             </varlistentry>
@@ -95,7 +107,7 @@
                 <term>Y</term>
                 <listitem>
                     <para>
-                        Vecteur, matrice ou hypermatrice des nombres aléatoires générés, de taille <literal>m</literal> x <literal>n</literal> x ... (encodage décimal)
+                        Vecteur, matrice ou hypermatrice des nombres aléatoires générés, de taille <varname>m</varname> x <varname>n</varname> x ... (encodage décimal)
                     </para>
                 </listitem>
             </varlistentry>
@@ -112,89 +124,80 @@
     <refsection>
         <title>Description</title>
         <para>
-            Cette fonction produit des nombres aléatoires selon différentes distributions.
+            Cette fonction produit des nombres aléatoires selon différentes distributions
+            de probabilité.
         </para>
         <para>
-            Les séquences d'appel :
+            Les séquences d'appel
+            <screen><![CDATA[
+Y = grand(m, n, "bet", A, B)
+Y = grand(m, n, "bin", N, p)
+Y = grand(m, n, "nbn", N, p)
+Y = grand(m, n, "chi", Df)
+Y = grand(m, n, "nch", Df, Xnon)
+Y = grand(m, n, "exp", Av)
+Y = grand(m, n, "f", Dfn, Dfd)
+Y = grand(m, n, "nf", Dfn, Dfd, Xnon)
+Y = grand(m, n, "gam", shape, rate)
+Y = grand(m, n, "nor", Av, Sd)
+Y = grand(m, n, "geom", p)
+Y = grand(m, n, "poi", mu)
+Y = grand(m, n, "def")
+Y = grand(m, n, "unf", Low, High)
+Y = grand(m, n, "uin", Low, High)
+Y = grand(m, n, "lgi")
+]]></screen>
+            produisent une matrice de nombres réels aléatoires, de taille
+            <varname>m</varname> x <varname>n</varname>.
         </para>
-        <programlisting role="no-scilab-exec"><![CDATA[
-            Y = grand(m, n, "bet", A, B)
-            Y = grand(m, n, "bin", N, p)
-            Y = grand(m, n, "nbn", N, p)
-            Y = grand(m, n, "chi",  Df)
-            Y = grand(m, n, "nch", Df, Xnon)
-            Y = grand(m, n, "exp", Av)
-            Y = grand(m, n, "f", Dfn, Dfd)
-            Y = grand(m, n, "nf", Dfn, Dfd, Xnon)
-            Y = grand(m, n, "gam", shape, rate)
-            Y = grand(m, n, "nor", Av, Sd)
-            Y = grand(m, n, "geom", p)
-            Y = grand(m, n, "poi", mu)
-            Y = grand(m, n, "def")
-            Y = grand(m, n, "unf", Low, High)
-            Y = grand(m, n, "uin", Low, High)
-            Y = grand(m, n, "lgi")
-     ]]></programlisting>
         <para>
-            produisent une matrice de taille <literal>m</literal>-par-<literal>n</literal> de nombres aléatoires.
+            La syntaxe
+            <screen><![CDATA[
+Y = grand(m, n, o, …, PDFname, …)
+]]></screen>
+            produit une hypermatrice de nombres réels aléatoires, de taille
+            <varname>m</varname> x <varname>n</varname> x <varname>o</varname> x... .
+        </para>
+        <para>
+            <screen><![CDATA[
+Y = grand(X, PDFname, …)
+]]></screen>
+            produit un scalaire, vecteur, matrice ou hypermatrice de nombres réels aléatoires,
+            de taille <literal>size(X)</literal>.
+            <varname>X</varname> est utilisé uniquement pour dimensionner <varname>Y</varname>
+            à son image.
+        </para>
+        <para>
+            Les séquences d'appel
+        <screen><![CDATA[
+Y = grand(n, "mn", Mean, Cov)
+Y = grand(n, "markov", P, x0)
+Y = grand(n, "mul", nb, P)
+Y = grand(n, "prm", array)
+]]></screen>
+            produisent un tableau aléatoire dont les dimensions dépendent de <varname>n</varname>
+            et de celles des paramètres <varname>Mean</varname>, <varname>P</varname> ou
+            <varname>array</varname> (voir les détails plus loin).
+        </para>
+        <para>
+            Les séquences d'appel
+            <screen><![CDATA[
+S = grand("getgen")
+grand("setgen", gen)
 
-            Toutes ces séquences peuvent être étendues pour créer une hypermatrice à plus de 2 dimensions, les
-            tailles (m, n, o,...) étant spécifiées avant le mot ".." indiquant le type de distribution statistique
-            souhaitée :
-        </para>
-        <para>
-            <programlisting role="no-scilab-exec"><![CDATA[
-                Y = grand(m, n, o, ..., "..", ...)
-            ]]></programlisting>
-        </para>
-        <para>
-            Le format du vecteur ou matrice ou hypermatrice aléatoire attendue peut également être spécifié par
-        </para>
-        <para>
-            <programlisting role="no-scilab-exec"><![CDATA[
-                Y = grand(X, ...)
-            ]]></programlisting>
-        </para>
-        <para>
-            où <literal>X</literal> de taille <literal>m</literal>-par-<literal>n</literal>... est une matrice
-            ou une hypermatrice dont seul le format est exploité et sert de modèle.
-        </para>
-        <para>
-            Les séquences d'appel :
-        </para>
-        <programlisting role="no-scilab-exec"><![CDATA[
-            Y = grand(n, "mn", Mean, Cov)
-            Y = grand(n, "markov", P, x0)
-            Y = grand(n, "mul", nb, P)
-            Y = grand(n, "prm", vect)
-     ]]></programlisting>
-        <para>
-            produisent une matrice de taille <literal>m</literal>-par-<literal>n</literal>
-            avec des entrées aléatoires.
-        </para>
-        <para>
-            Les séquences d'appel :
-        </para>
-        <programlisting role="no-scilab-exec"><![CDATA[
-            S = grand("getgen")
-            grand("setgen", gen)
+S = grand("getsd")
+grand("setsd", S)
 
-            S = grand("getsd")
-            grand("setsd", S)
+grand("setcgn", G)
+S = grand("getcgn")
 
-            S = grand("phr2sd", phrase)
+grand("initgn", I)
 
-            grand("setcgn", G)
-            S = grand("getcgn")
+grand("setall", s1, s2, s3, s4)
 
-            grand("initgn", I)
-
-            grand("setall", s1, s2, s3, s4)
-
-            grand("advnst", K)
-     ]]></programlisting>
-        <para>
-            configurent ou interrogent les générateurs aléatoires.
+grand("advnst", K)
+]]></screen>
+            configurent ou demandent les paramètres des générateurs aléatoires.
         </para>
     </refsection>
     <refsection>
@@ -205,7 +208,7 @@
                 <listitem>
                     <para>
                         <literal>Y = grand(m, n, "bet", A, B)</literal> génère des nombres aléatoires suivant
-                        la loi beta de paramètres <literal>A</literal> and <literal>B</literal>.
+                        la loi beta de paramètres <varname>A</varname> and <varname>B</varname>.
                         La densité de cette loi est (0 &lt; x &lt; 1) :
                     </para>
                     <para>
@@ -214,7 +217,8 @@
                         </latex>
                     </para>
                     <para>
-                        <literal>A</literal> et <literal>B</literal> devant être des réels >10<superscript>-37</superscript>.
+                        <varname>A</varname> et <varname>B</varname> devant être des réels &gt;
+                        10<superscript>-37</superscript>.
                         Fonction(s) associée(s) : <link linkend="cdfbet">cdfbet</link>.
                     </para>
                 </listitem>
@@ -223,11 +227,13 @@
                 <term>binomiale</term>
                 <listitem>
                     <para>
-                        <literal>Y = grand(m, n, "bin", N, p)</literal>	génère des nombres aléatoires suivant la loi
-                        binomiale de paramètres <literal>N</literal> (entier str. positif) et <literal>p</literal>
-                        (réel de [0,1]) : nombre de succès au cours de <literal>N</literal> épreuves de Bernouilli
-                        de probabilité de succès <literal>p</literal>.
-                        Fonctions associées : <link linkend="binomial">binomial</link>, <link linkend="cdfbin">cdfbin</link>.
+                        <literal>Y = grand(m, n, "bin", N, p)</literal> génère des nombres
+                        aléatoires suivant la loi binomiale de paramètres <varname>N</varname>
+                        (entier &gt; 0) et <varname>p</varname> (réel dans [0,1]) : nombre de succès
+                        au cours de <varname>N</varname> épreuves de Bernouilli de probabilité de
+                        succès <varname>p</varname>.
+                        Fonctions associées : <link linkend="binomial">binomial</link>,
+                        <link linkend="cdfbin">cdfbin</link>.
                     </para>
                 </listitem>
             </varlistentry>
@@ -235,10 +241,11 @@
                 <term>binomiale négative</term>
                 <listitem>
                     <para>
-                        <literal>Y = grand(m, n, "nbn", N, p)</literal> génère des nombres aléatoires suivant la loi binomiale
-                        négative de paramètres <literal>N</literal> (entier str. positif) et <literal>p</literal> (réel
-                        de ]0,1[) : nombre d'échecs avant d'obtenir <literal>N</literal> succès dans des épreuves
-                        de Bernouilli de probabilité de succès <literal>p</literal>.
+                        <literal>Y = grand(m, n, "nbn", N, p)</literal> génère des nombres aléatoires
+                        suivant la loi binomiale négative de paramètres <varname>N</varname>
+                        (entier &gt; 0) et <varname>p</varname> (réel dans ]0,1[) : nombre d'échecs
+                        avant d'obtenir <varname>N</varname> succès dans des épreuves de Bernouilli
+                        de probabilité de succès <varname>p</varname>.
                         Fonction associée : <link linkend="cdfnbn">cdfnbn</link>.
                     </para>
                 </listitem>
@@ -247,8 +254,9 @@
                 <term>chi 2</term>
                 <listitem>
                     <para>
-                        <literal>Y = grand(m, n, "chi", Df)</literal> génère des nombres aléatoires suivant la loi du chi 2
-                        à <literal>Df</literal> (réel &gt; 0.0) degrés de liberté.
+                        <literal>Y = grand(m, n, "chi", Df)</literal> génère des nombres aléatoires
+                        suivant la loi du chi 2
+                        à <varname>Df</varname> (réel &gt; 0.0) degrés de liberté.
                         Fonction associée : <link linkend="cdfchi">cdfchi</link>.
                     </para>
                 </listitem>
@@ -257,9 +265,10 @@
                 <term>chi 2 non centrée</term>
                 <listitem>
                     <para>
-                        <literal>Y = grand(m, n, "nch", Df, Xnon)</literal> génère des nombres aléatoires suivant la loi du chi 2
-                        non centrée à <literal>Df</literal> degrés de liberté (réel &gt;= 1.0)
-                        le paramètre de décentrage étant <literal>Xnonc</literal> (réel &gt;= 0.0).
+                        <literal>Y = grand(m, n, "nch", Df, Xnon)</literal> génère des nombres
+                        aléatoires suivant la loi du chi 2
+                        non centrée à <varname>Df</varname> degrés de liberté (réel &gt;= 1.0)
+                        le paramètre de décentrage étant <varname>Xnonc</varname> (réel &gt;= 0.0).
                         Fonction associée : <link linkend="cdfchn">cdfchn</link>.
                     </para>
                 </listitem>
@@ -268,8 +277,9 @@
                 <term>exponentielle</term>
                 <listitem>
                     <para>
-                        <literal>Y = grand(m, n, "exp", Av)</literal> génère des nombres aléatoires suivant la loi exponentielle
-                        de moyenne <literal>Av</literal> (réel &gt;= 0.0).
+                        <literal>Y = grand(m, n, "exp", Av)</literal> génère des nombres aléatoires
+                        suivant la loi exponentielle
+                        de moyenne <varname>Av</varname> (réel &gt;= 0.0).
                     </para>
                 </listitem>
             </varlistentry>
@@ -277,9 +287,10 @@
                 <term>F variance ratio</term>
                 <listitem>
                     <para>
-                        <literal>Y = grand(m, n, "f", Dfn, Dfd)</literal> génère des nombres aléatoires suivant la loi F
-                        (variance ratio) à <literal>Dfn</literal> (réel &gt; 0.0) degrés de liberté au numérateur et
-                        <literal>Dfd</literal> (réel &gt; 0.0) degrés de liberté au dénominateur.
+                        <literal>Y = grand(m, n, "f", Dfn, Dfd)</literal> génère des nombres
+                        aléatoires suivant la loi F (variance ratio) à <varname>Dfn</varname>
+                        (réel &gt; 0.0) degrés de liberté au numérateur et
+                        <varname>Dfd</varname> (réel &gt; 0.0) degrés de liberté au dénominateur.
                         Fonction associée : <link linkend="cdff">cdff</link>.
                     </para>
                 </listitem>
@@ -288,10 +299,11 @@
                 <term>non central F variance ratio</term>
                 <listitem>
                     <para>
-                        <literal>Y = grand(m, n, "nf", Dfn, Dfd, Xnon)</literal> génère des nombres aléatoires suivant la loi
-                        F (variance ratio) non centrée à <literal>Dfn</literal> (réel &gt;= 1) degrés de liberté
-                        au numérateur, et <literal>Dfd</literal> (réel &gt; 0) degrés de liberté au dénominateur,
-                        <literal>Xnonc</literal> (réel &gt;= 0) étant le paramètre de décentrage.
+                        <literal>Y = grand(m, n, "nf", Dfn, Dfd, Xnon)</literal> génère des nombres
+                        aléatoires suivant la loi F (variance ratio) non centrée à
+                        <varname>Dfn</varname> (réel &gt;= 1) degrés de liberté au numérateur,
+                        et <varname>Dfd</varname> (réel &gt; 0) degrés de liberté au dénominateur,
+                        <varname>Xnonc</varname> (réel &gt;= 0) étant le paramètre de décentrage.
                         Fonction associée : <link linkend="cdffnc">cdffnc</link>.
                     </para>
                 </listitem>
@@ -300,17 +312,18 @@
                 <term>gamma</term>
                 <listitem>
                     <para>
-                        <literal>Y = grand(m, n, "gam", shape, rate)</literal> génère des nombres aléatoires suivant la loi
-                        gamma de paramètres <literal>shape</literal> (réel &gt; 0) et <literal>scale</literal>
-                        (réel &gt; 0). La densité est :
+                        <literal>Y = grand(m, n, "gam", shape, rate)</literal> génère des nombres
+                        aléatoires suivant la loi gamma de paramètres <varname>shape</varname>
+                        (réel &gt; 0) et <varname>scale</varname> (réel &gt; 0). La densité est :
                     </para>
                     <para>
                         <latex>
-                            \dfrac{ \textrm{rate}^{\textrm{shape}} x^{\textrm{shape}-1} e^{-\textrm{rate} x}}{\gamma(\textrm{shape}) }
+                            \dfrac{ \textrm{rate}^{\textrm{shape}} x^{\textrm{shape}-1} e^{-x.\textrm{rate}}}{\gamma(\textrm{shape}) }
                         </latex>
                     </para>
                     <para>
-                        Fonctions associées : <link linkend="gamma">gamma</link>, <link linkend="cdfgam">cdfgam</link>.
+                        Fonctions associées : <link linkend="gamma">gamma</link>,
+                        <link linkend="cdfgam">cdfgam</link>.
                     </para>
                 </listitem>
             </varlistentry>
@@ -318,10 +331,11 @@
                 <term>Gauss Laplace (normale)</term>
                 <listitem>
                     <para>
-                        <literal>Y = grand(m, n, "nor", Av, Sd)</literal> génère des nombres aléatoires suivant la loi normale
-                        de moyenne <literal>Av</literal> (réel) et d'écart type <literal>Sd</literal>
-                        (réel &gt;= 0).
-                        Fonctions associées : <link linkend="cdfnor">cdfnor</link>, <link linkend="erf">erf</link>.
+                        <literal>Y = grand(m, n, "nor", Av, Sd)</literal> génère des nombres
+                        aléatoires suivant la loi normale, de moyenne <varname>Av</varname> (réel)
+                        et d'écart type <varname>Sd</varname> (réel &gt;= 0).
+                        Fonctions associées : <link linkend="cdfnor">cdfnor</link>,
+                        <link linkend="erf">erf</link>.
                     </para>
                 </listitem>
             </varlistentry>
@@ -329,10 +343,13 @@
                 <term>multi normale</term>
                 <listitem>
                     <para>
-                        <literal>Y = grand(n, "mn", Mean, Cov)</literal> génère <literal>n</literal> réalisations indépendantes de la
-                        loi multi-normale ; <literal>Mean</literal> doit être un vecteur <literal>m</literal>-par-<literal>1</literal> et <literal>Cov</literal>
-                        une matrice <literal>m</literal>-par-<literal>m</literal> symétrique et définie positive, (<literal>Y</literal> est alors une
-                        matrice <literal>m</literal>-par-<literal>n</literal>).
+                        <literal>Y = grand(n, "mn", Mean, Cov)</literal> génère <varname>n</varname>
+                        réalisations indépendantes de la loi multi-normale ; <varname>Mean</varname>
+                        doit être un vecteur colonne <literal>m</literal> x <literal>1</literal>, et
+                        <varname>Cov</varname> une matrice carrée
+                        <literal>m</literal> x <literal>m</literal> symétrique et définie positive.
+                        <varname>Y</varname> est alors une matrice
+                        <literal>m</literal> x <literal>n</literal>.
                     </para>
                 </listitem>
             </varlistentry>
@@ -340,17 +357,15 @@
                 <term>geometrique</term>
                 <listitem>
                     <para>
-                        <literal>Y = grand(m, n, "geom", p)</literal>
-                        génère des nombres aléatoires suivant la loi
-                        geométrique de paramètre <literal>p</literal> : nombre
+                        <literal>Y = grand(m, n, "geom", p)</literal> génère des nombres aléatoires
+                        suivant la loi geométrique de paramètre <varname>p</varname> : nombre
                         d'épreuves de Bernouilli (de probabilité de succès
-                        <literal>p</literal>) jusqu'à obtenir un succès
+                        <varname>p</varname>) jusqu'à obtenir un succès
                         (avec <varname>p</varname> dans [1.3e-307, 1]).
                     </para>
                     <para>
-                        <literal>Y</literal> contient des nombres réels
-                        positifs à valeur entière qui sont "le nombre de
-                        tentatives nécessaire pour obtenir un succès" pour
+                        <varname>Y</varname> contient des nombres réels positifs à valeur entière
+                        qui sont "le nombre de tentatives nécessaire pour obtenir un succès" pour
                         chaque tirage.
                     </para>
                 </listitem>
@@ -359,12 +374,14 @@
                 <term>markov</term>
                 <listitem>
                     <para>
-                        <literal>Y = grand(n, "markov", P, x0)</literal> génère <literal>n</literal> états successifs d'une chaîne
-                        Markov décrite par la matrice de transition <literal>P</literal>. L'état initial est donné par
-                        <literal>x0</literal>. Si <literal>x0</literal> est une matrice de taille
+                        <literal>Y = grand(n, "markov", P, x0)</literal> génère <varname>n</varname>
+                        états successifs d'une chaîne Markov décrite par la matrice de transition
+                        <varname>P</varname>. L'état initial est donné par
+                        <varname>x0</varname>. Si <varname>x0</varname> est une matrice de taille
                         <literal>m = size(x0, "*")</literal>
-                        alors <literal>Y</literal> est une matrice de taille <literal>m x n</literal>. <literal>Y(i,:)</literal> étant le
-                        chemin à partir de l'état initial <literal>x0(i)</literal>.
+                        alors <varname>Y</varname> est une matrice de taille <literal>m x n</literal>.
+                        <literal>Y(i,:)</literal> est le chemin à partir de l'état initial
+                        <literal>x0(i)</literal>.
                     </para>
                 </listitem>
             </varlistentry>
@@ -372,14 +389,20 @@
                 <term>multinomiale</term>
                 <listitem>
                     <para>
-                        <literal>Y = grand(n, "mul", nb, P)</literal> génère <literal>n</literal> réalisations indépendantes de la loi
-                        Multinomiale :  classer <literal>nb</literal> éventualités dans <literal>m</literal> catégories (mettre
-                        <literal>nb</literal> "boules" dans <literal>m</literal> "boites"). <literal>P(i)</literal>
-                        étant la probabilité qu'une éventualité soit de categorie i. <literal>P</literal> le vecteur des
-                        probabilités est de taille <literal>m-1</literal> (la probabilté de la catégorie <literal>m</literal>
-                        étant <literal>1-sum(P)</literal>). <literal>Y</literal> est alors de dimensions <literal>m x n</literal>,
-                        chaque colonne <literal>Y(:,j)</literal> étant une réalisation de cette loi : <literal>Y(i,j)</literal>
-                        est le nombre d'éventualités classées en catégorie <literal>i</literal> pour la <literal>j</literal> ème
+                        <literal>Y = grand(n, "mul", nb, P)</literal> génère <varname>n</varname>
+                        réalisations indépendantes de la loi multinomiale :
+                        classer <varname>nb</varname> éventualités dans <literal>m</literal>
+                        catégories (mettre <varname>nb</varname> "boules" dans <literal>m</literal>
+                        "boites").
+                        <literal>P(i)</literal> est la probabilité qu'une éventualité
+                        soit de categorie i.
+                        <varname>P</varname> le vecteur des probabilités est de taille
+                        <literal>m-1</literal> (la probabilté de la catégorie <literal>m</literal>
+                        étant <literal>1-sum(P)</literal>).
+                        <varname>Y</varname> est alors de dimensions <literal>m x n</literal>,
+                        chaque colonne <literal>Y(:,j)</literal> étant une réalisation de cette loi :
+                        <literal>Y(i,j)</literal> est le nombre d'éventualités classées en catégorie
+                        <literal>i</literal> pour la <literal>j</literal> ème
                         réalisation (<literal>sum(Y(:,j)) = nb</literal>).
                     </para>
                 </listitem>
@@ -388,8 +411,8 @@
                 <term>Poisson</term>
                 <listitem>
                     <para>
-                        <literal>Y = grand(m, n, "poi", mu)</literal> génère des nombres aléatoires suivant la loi de Poisson
-                        de moyenne <literal>mu</literal> (réel &gt;= 0.0).
+                        <literal>Y = grand(m, n, "poi", mu)</literal> génère des nombres aléatoires
+                        suivant la loi de Poisson de moyenne <varname>mu</varname> (réel &gt;= 0.0).
                         Fonction associée : <link linkend="cdfpoi">cdfpoi</link>.
                     </para>
                 </listitem>
@@ -398,15 +421,36 @@
                 <term>permutations aléatoires</term>
                 <listitem>
                     <para>
-                        <literal>Y = grand(n, "prm", vect)</literal> génère <literal>n</literal> permutations aléatoire du
-                        vecteur colonne (<literal>m x 1</literal>) <literal>vect</literal>.
-                        <varname>vect</varname> peut être un scalaire, vecteur, matrices ou hypermatrice de réels,
-                        complexes, entiers, booléens, polynômes ou chaînes de caractères; plein ou creux.
-                        A cause de la structure de la pile, <varname>vect</varname> ne doit pas et ne peut pas être un vecteur ligne.
-                        Cette fonctionnalité couvre la fonction Matlab <code>randperm()</code>,
-                        car <code>randperm(n)</code> est équivalent à <code>grand(1,'prm',(1:n)')</code>
-                        et <code>randperm(n, k)</code> s'obtient grâce à
-                        <code>grand(1,'prm',(1:n)'); ans(1:k)</code>.
+                        <code>Y = grand(n, "prm", array)</code> produit
+                        <varname>n</varname> permutations aléatoires des éléments de
+                        <varname>array</varname>.
+                        <varname>array</varname> peut être un vecteur, une matrice ou une
+                        hypermatrice de nombres réels ou complexes, d'entiers, booléens, polynômes
+                        ou textes ; dense ou creuse.
+                        <itemizedlist>
+                            <listitem>
+                                Si <varname>array</varname> est un vecteur ligne <literal>1 x m</literal>,
+                                <varname>Y</varname> est une matrice <literal>n x m</literal>.
+                            </listitem>
+                            <listitem>
+                                Si <varname>array</varname> est un vecteur colonne <literal>m x 1</literal>,
+                                <varname>Y</varname> est une matrice <literal>m x n</literal>.
+                            </listitem>
+                            <listitem>
+                                Si <varname>array</varname> est une matrice <literal>m x p</literal>,
+                                <varname>Y</varname> est une hypermatrice <literal>m x p x n</literal>.
+                            </listitem>
+                            <listitem>
+                                If <varname>array</varname> une hypermatrice <literal>m x p x q…</literal>,
+                                <varname>Y</varname> est une hypermatrice
+                                <literal>m x p x q… x n</literal>.
+                            </listitem>
+                        </itemizedlist>
+                    </para>
+                    <para>
+                        La fonction <literal>randperm(n)</literal> d'Octave est équivalente à
+                        <literal>grand(1,'prm', 1:n)</literal>, et <literal>randperm(n, k)</literal>
+                        est réalisé par Scilab avec <literal>grand(1,'prm', 1:n)(1:k)</literal>.
                     </para>
                 </listitem>
             </varlistentry>
@@ -414,8 +458,8 @@
                 <term>uniforme (def)</term>
                 <listitem>
                     <para>
-                        <literal>Y = grand(m, n, "def")</literal> génère des nombres aléatoires suivant la loi uniforme
-                        sur <literal>[0,1[</literal> (1 n'est jamais retourné).
+                        <literal>Y = grand(m, n, "def")</literal> génère des nombres aléatoires
+                        suivant la loi uniforme sur <literal>[0,1[</literal> (1 n'est jamais produit).
                     </para>
                 </listitem>
             </varlistentry>
@@ -424,7 +468,8 @@
                 <listitem>
                     <para>
                         <literal>Y = grand(m, n, "unf", Low, High)</literal> génère des nombres aléatoires suivant la loi
-                        uniforme sur <literal>[Low, High[</literal> (<literal>High</literal> is never return).
+                        uniforme sur <literal>[Low, High[</literal> (<varname>High</varname> n'est
+                        jamais atteint).
                     </para>
                 </listitem>
             </varlistentry>
@@ -433,8 +478,8 @@
                 <listitem>
                     <para>
                         <literal>Y = grand(m, n, "uin", Low, High)</literal> génère des entiers aléatoires suivant la loi uniforme
-                        sur <literal>[Low, High]</literal>. <literal>High</literal>
-                        et <literal>Low</literal> doivent être des entiers tels que
+                        sur <literal>[Low, High]</literal>. <varname>High</varname>
+                        et <varname>Low</varname> doivent être des entiers tels que
                         <literal>(High-Low+1)  &lt; 2147483561</literal>
                         .
                     </para>
@@ -756,7 +801,7 @@
             associés.
         </para>
         <programlisting role="example"><![CDATA[
-// Renvoie une matrice de taille 400-par-800 de doubles aléatoires,
+// Renvoie une matrice de taille 400 x 800 de doubles aléatoires,
 // avec une distribution normale de moyenne 0 et d'écart-type 1.
 R = grand(400, 800, "nor", 0, 1);
 scf();
@@ -769,7 +814,7 @@ xtitle("Nombres aléatoires (loi normale) par grand", "X", "Fréquence");
             xtitle("Nombres aléatoires (loi normale) par grand", "X", "Fréquence");
         </scilab:image>
         <programlisting role="example"><![CDATA[
-// Renvoie une matrice de taille 400-par-800 de doubles aléatoires,
+// Renvoie une matrice de taille 400 x 800 de doubles aléatoires,
 // uniformes dans [0, 1).
 R = grand(400, 800, "def");
 scf();
@@ -782,7 +827,7 @@ xtitle("Nombres aléatoires uniformes par grand", "X", "Fréquence");
             xtitle("Nombres aléatoires uniformes par grand", "X", "Fréquence");
         </scilab:image>
         <programlisting role="example"><![CDATA[
-// Renvoie une matrice de taille 400-par-800 de doubles aléatoires,
+// Renvoie une matrice de taille 400 x 800 de doubles aléatoires,
 // avec une distribution de Poisson de moyenne 5.
 R = grand(400, 800, "poi", 5);
 scf();
@@ -874,7 +919,7 @@ grand(12, "prm", (1:7)')
             Le graphes montrent les première et dernière couches de la matrice.
         </para>
         <programlisting role="example"><![CDATA[
-// Retounrne une hypermatrice 400-par-800-par-10 de nombre aléatoires,
+// Retourne une hypermatrice 400 x 800 x 10 de nombre aléatoires,
 // avec la distribution normale, une moyenne de 0 et un écart-type de 1.
 // Affichage de la première et dernière couches.
 R = grand(10,10,10,"nor",0,1);

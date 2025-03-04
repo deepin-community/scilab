@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010 - DIGITEO - Vincent COUVERT <vincent.couvert@scilab.org>
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -23,7 +23,7 @@ conversionTestsPath = "SCI/modules/m2sci/tests/unit_tests/conversion/";
 executionTestsPath = "SCI/modules/m2sci/tests/unit_tests/execution/";
 
 conversionContents = ["// =============================================================================";
-"// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab";
+"// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab";
 "// Copyright (C) 2010 - DIGITEO - Vincent COUVERT <vincent.couvert@scilab.org>";
 "//";
 "//  This file is distributed under the same license as the Scilab package.";
@@ -40,7 +40,7 @@ conversionContents = ["// ======================================================
 "if ~m2sciTestConversion(""THEFUNCTIONNAME"") then pause;end"];
 
 executionContents = ["// =============================================================================";
-"// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab";
+"// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab";
 "// Copyright (C) 2010 - DIGITEO - Vincent COUVERT <vincent.couvert@scilab.org>";
 "//";
 "//  This file is distributed under the same license as the Scilab package.";
@@ -57,7 +57,7 @@ executionContents = ["// =======================================================
 "if ~m2sciTestExecution(""THEFUNCTIONNAME"") then pause;end"];
 
 noExecutionContents = ["// =============================================================================";
-"// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab";
+"// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab";
 "// Copyright (C) 2010 - DIGITEO - Vincent COUVERT <vincent.couvert@scilab.org>";
 "//";
 "//  This file is distributed under the same license as the Scilab package.";

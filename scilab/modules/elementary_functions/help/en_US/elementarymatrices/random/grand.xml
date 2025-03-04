@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) Jean-Philippe Chancelier and Bruno Pincon
  * Copyright (C) 2010-2011 - DIGITEO - Michael Baudin
  * Copyright (C) 2013 - Samuel GOUGEON : extension to hypermatrices
- *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ * Copyright (C) 2023 - Samuel GOUGEON
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
  * pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -22,7 +22,7 @@
           xml:lang="en" xml:id="grand">
     <refnamediv>
         <refname>grand</refname>
-        <refpurpose>Random numbers</refpurpose>
+        <refpurpose>Generate random numbers</refpurpose>
     </refnamediv>
     <refsynopsisdiv>
         <title>Syntax</title>
@@ -44,15 +44,16 @@
             Y = grand(m, n, "uin", Low, High)
             Y = grand(m, n, "lgi")
 
-            Y = grand(m, n, o,..,"..",...)
-            Y = grand(X, ...)
+            Y = grand(m, n, o, …, PDFname, …)
+
+            Y = grand(X, PDFname, …)
         </synopsis>
         <para/>
         <synopsis>
             Y = grand(n, "mn", Mean, Cov)
             Y = grand(n, "markov", P, x0)
             Y = grand(n, "mul", nb, P)
-            Y = grand(n, "prm", vect)
+            Y = grand(n, "prm", array)
         </synopsis>
         <para/>
         <synopsis>
@@ -93,6 +94,16 @@
                 </listitem>
             </varlistentry>
             <varlistentry>
+                <term>PDFname</term>
+                <listitem>
+                    <para>
+                        Name of the chosen probability Density Function:
+                        <literal>"def", "unf", "uin", "bet", "gam","exp", "nor", "geo", "poi",
+                        "bin", "chi", "nbn", "nch", "f", "nf",  "lgi"</literal>.
+                    </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
                 <term>Y</term>
                 <listitem>
                     <para>
@@ -111,92 +122,76 @@
     <refsection>
         <title>Description</title>
         <para>
-            This function generates random numbers from various
-            distributions.
+            This function generates random numbers from various probability distributions.
         </para>
         <para>
-            The syntaxes:
-        </para>
-        <para>
-            <programlisting role="no-scilab-exec"><![CDATA[
-                Y = grand(m, n, "bet", A, B)
-                Y = grand(m, n, "bin", N, p)
-                Y = grand(m, n, "nbn", N, p)
-                Y = grand(m, n, "chi", Df)
-                Y = grand(m, n, "nch", Df, Xnon)
-                Y = grand(m, n, "exp", Av)
-                Y = grand(m, n, "f", Dfn, Dfd)
-                Y = grand(m, n, "nf", Dfn, Dfd, Xnon)
-                Y = grand(m, n, "gam", shape, rate)
-                Y = grand(m, n, "nor", Av, Sd)
-                Y = grand(m, n, "geom", p)
-                Y = grand(m, n, "poi", mu)
-                Y = grand(m, n, "def")
-                Y = grand(m, n, "unf", Low, High)
-                Y = grand(m, n, "uin", Low, High)
-                Y = grand(m, n, "lgi")
-             ]]></programlisting>
-        </para>
-        <para>
+            The syntaxes
+            <screen><![CDATA[
+Y = grand(m, n, "bet", A, B)
+Y = grand(m, n, "bin", N, p)
+Y = grand(m, n, "nbn", N, p)
+Y = grand(m, n, "chi", Df)
+Y = grand(m, n, "nch", Df, Xnon)
+Y = grand(m, n, "exp", Av)
+Y = grand(m, n, "f", Dfn, Dfd)
+Y = grand(m, n, "nf", Dfn, Dfd, Xnon)
+Y = grand(m, n, "gam", shape, rate)
+Y = grand(m, n, "nor", Av, Sd)
+Y = grand(m, n, "geom", p)
+Y = grand(m, n, "poi", mu)
+Y = grand(m, n, "def")
+Y = grand(m, n, "unf", Low, High)
+Y = grand(m, n, "uin", Low, High)
+Y = grand(m, n, "lgi")
+]]></screen>
             produce a <varname>m</varname>-by-<varname>n</varname> matrix with random entries.
+        </para>
+        <para>
+            The syntax
+            <screen><![CDATA[
+Y = grand(m, n, o, …, PDFname, …)
+]]></screen>
+            produces a <varname>m</varname>-by-<varname>n</varname>-by-<varname>o</varname>-by-... hypermatrix
+            with random entries.
+        </para>
+        <para>
+            <screen><![CDATA[
+Y = grand(X, PDFname, …)
+]]></screen>
+            produces a scalar, vector, matrix or hypermatrix of size <literal>size(X)</literal>,
+            with random entries. <varname>X</varname> is used only as template to size the result.
+        </para>
+        <para>
+            The syntaxes
+        <screen><![CDATA[
+Y = grand(n, "mn", Mean, Cov)
+Y = grand(n, "markov", P, x0)
+Y = grand(n, "mul", nb, P)
+Y = grand(n, "prm", array)
+]]></screen>
+            produce an array with random entries, whose sizes depend on <varname>n</varname> and on
+            the size of the parameters <varname>Mean</varname>, <varname>P</varname> or
+            <varname>array</varname> (see below for details).
+        </para>
+        <para>
+            The syntaxes
+            <screen><![CDATA[
+S = grand("getgen")
+grand("setgen", gen)
 
-            All these syntaxes can be extended to create a random hypermatrix with more than
-            2 dimensions specified as integers listed before the type of statistical distribution:
-        </para>
-        <para>
-            <programlisting role="no-scilab-exec"><![CDATA[
-                Y = grand(m, n, o, ..., "..", ...)
-            ]]></programlisting>
-        </para>
-        <para>
-            The sizes of the expected random vector, matrix or hypermatrix can alternatively be specified with
-        </para>
-        <para>
-            <programlisting role="no-scilab-exec"><![CDATA[
-                Y = grand(X, ...)
-            ]]></programlisting>
-        </para>
-        <para>
-            where <varname>X</varname> of sizes <varname>m</varname>-by-<varname>n</varname>...
-            is a matrix or an hypermatrix only used as template.
-        </para>
-        <para>
-            The syntaxes:
-        </para>
-        <programlisting role="no-scilab-exec"><![CDATA[
-            Y = grand(n, "mn", Mean, Cov)
-            Y = grand(n, "markov", P, x0)
-            Y = grand(n, "mul", nb, P)
-            Y = grand(n, "prm", vect)
-        ]]></programlisting>
-        <para>
-            produce a <varname>m</varname>-by-<varname>n</varname> matrix
-            with random entries, where <varname>m</varname> is the size of the argument <varname>Mean</varname>,
-            <varname>Cov</varname>, <varname>P</varname> or <varname>vect</varname> depending
-            on the case (see below for details).
-        </para>
-        <para>
-            The syntaxes:
-        </para>
-        <programlisting role="no-scilab-exec"><![CDATA[
-            S = grand("getgen")
-            grand("setgen", gen)
+S = grand("getsd")
+grand("setsd", S)
 
-            S = grand("getsd")
-            grand("setsd", S)
+grand("setcgn", G)
+S = grand("getcgn")
 
-            grand("setcgn", G)
-            S = grand("getcgn")
+grand("initgn", I)
 
-            grand("initgn", I)
+grand("setall", s1, s2, s3, s4)
 
-            grand("setall", s1, s2, s3, s4)
-
-            grand("advnst", K)
-        ]]></programlisting>
-        <para>
-            configure or query the state of the underlying random number
-            generators.
+grand("advnst", K)
+]]></screen>
+            configure or query the state of the underlying random number generators.
         </para>
     </refsection>
     <refsection>
@@ -218,7 +213,7 @@
                     </para>
                     <para>
                         <varname>A</varname> and <varname>B</varname> must be
-                        reals >10<superscript>-37</superscript>.
+                        reals &gt; 10<superscript>-37</superscript>.
                         Related function: <link linkend="cdfbet">cdfbet</link>.
                     </para>
                 </listitem>
@@ -304,10 +299,10 @@
                         generates random variates from the noncentral F (variance
                         ratio) distribution with <varname>Dfn</varname> (<literal>real</literal>
                         &gt;= <literal>1</literal>) degrees of freedom in the numerator, and
-                        <varname>Dfd</varname> (<literal>real</literal> &gt; <literal>0</literal>) degrees of freedom in
-                        the denominator, and noncentrality parameter
-                        <varname>Xnonc</varname> (<literal>real</literal> &gt;= <literal>0</literal>).  Related
-                        function : <link linkend="cdffnc">cdffnc</link>.
+                        <varname>Dfd</varname> (<literal>real</literal> &gt; <literal>0</literal>)
+                        degrees of freedom in the denominator, and noncentrality parameter
+                        <varname>Xnonc</varname> (<literal>real</literal> &gt;= <literal>0</literal>).
+                        Related function : <link linkend="cdffnc">cdffnc</link>.
                     </para>
                 </listitem>
             </varlistentry>
@@ -317,13 +312,13 @@
                     <para>
                         <code>Y = grand(m, n, "gam", shape, rate)</code>
                         generates random variates from the gamma distribution with
-                        parameters <varname>shape</varname> (<literal>real</literal> &gt; <literal>0</literal>) and
-                        <varname>rate</varname> (<literal>real</literal> &gt; <literal>0</literal>). The density of the
-                        gamma distribution is :
+                        parameters <varname>shape</varname> (<literal>real</literal> &gt; <literal>0</literal>)
+                        and <varname>rate</varname> (<literal>real</literal> &gt; <literal>0</literal>).
+                        The density of the gamma distribution is :
                     </para>
                     <para>
                         <latex>
-                            \dfrac{ \textrm{rate}^{\textrm{shape}} x^{\textrm{shape}-1} e^{-\textrm{rate} x}}{\gamma(\textrm{shape}) }
+                            \dfrac{ \textrm{rate}^{\textrm{shape}} x^{\textrm{shape}-1} e^{-x.\textrm{rate}}}{\gamma(\textrm{shape}) }
                         </latex>
                     </para>
                     <para>
@@ -339,8 +334,8 @@
                         <code>Y = grand(m, n, "nor", Av, Sd)</code> generates
                         random variates from the normal distribution with mean
                         <varname>Av</varname> (<literal>real</literal>) and standard deviation
-                        <varname>Sd</varname> (<literal>real</literal> &gt;= <literal>0</literal>). Related function
-                        : <link linkend="cdfnor">cdfnor</link>.
+                        <varname>Sd</varname> (<literal>real</literal> &gt;= <literal>0</literal>).
+                        Related function: <link linkend="cdfnor">cdfnor</link>.
                     </para>
                 </listitem>
             </varlistentry>
@@ -351,9 +346,10 @@
                         <code>Y = grand(n, "mn", Mean, Cov)</code>
                         generates multivariate normal random
                         variates; <varname>Mean</varname> must be a <literal>m x 1</literal>
-                        column vector and <varname>Cov</varname> a <varname>m</varname>-by-<varname>m</varname>
-                        symmetric positive definite matrix  (<varname>Y</varname> is then
-                        a <varname>m</varname>-by-<varname>n</varname> matrix).
+                        column vector, and <varname>Cov</varname> a square
+                        <varname>m</varname>-by-<varname>m</varname> symmetric positive definite matrix.
+                        <varname>Y</varname> is then a <varname>m</varname>-by-<varname>n</varname>
+                        matrix.
                     </para>
                 </listitem>
             </varlistentry>
@@ -428,15 +424,29 @@
                 <term>random permutations</term>
                 <listitem>
                     <para>
-                        <code>Y = grand(n, "prm", vect)</code> generates
-                        <varname>n</varname> random permutations of <varname>vect</varname>.
-                        <varname>vect</varname> can be a column vector of reals, or a vector, matrix or hypermatrix of
-                        complexes, integers, booleans, polynomials or strings; full or sparse.
-                        Due to the stack structure, <varname>vect</varname> should not and cannot be a row vector.
-                        This feature covers Matlab's <code>randperm()</code> function,
-                        because <code>randperm(n)</code> is equivalent to <code>grand(1,'prm',(1:n)')</code>
-                        and <code>randperm(n, k)</code> can be obtained through
-                        <code>grand(1,'prm',(1:n)'); ans(1:k)</code>.
+                        <code>Y = grand(n, "prm", array)</code> generates
+                        <varname>n</varname> random permutations of the <varname>array</varname>
+                        elements.
+                        <varname>array</varname> can be a vector, matrix or hypermatrix of real or
+                        complex numbers, of integers, booleans, polynomials or strings; full or sparse.
+                        <itemizedlist>
+                            <listitem>
+                                If <varname>array</varname> is a <literal>1 x m</literal> row vector,
+                                <varname>Y</varname> is a <literal>n x m</literal> matrix.
+                            </listitem>
+                            <listitem>
+                                If <varname>array</varname> is a <literal>m x 1</literal> column vector,
+                                <varname>Y</varname> is a <literal>m x n</literal> matrix.
+                            </listitem>
+                            <listitem>
+                                If <varname>array</varname> is a <literal>m x p</literal> matrix,
+                                <varname>Y</varname> is a <literal>m x p x n</literal> hypermatrix.
+                            </listitem>
+                            <listitem>
+                                If <varname>array</varname> is a <literal>m x p x q…</literal> hypermatrix,
+                                <varname>Y</varname> is a <literal>m x p x q… x n</literal> hypermatrix.
+                            </listitem>
+                        </itemizedlist>
                     </para>
                 </listitem>
             </varlistentry>
@@ -519,9 +529,9 @@
                 <term>mt</term>
                 <listitem>
                     <para>
-                        The Mersenne-Twister of M. Matsumoto and T. Nishimura, period about <literal>2^19937</literal>,
-                        state given by an array of <literal>624</literal> integers (plus an index onto this array); this
-                        is the default generator.
+                        The Mersenne-Twister of M. Matsumoto and T. Nishimura, period about
+                        <literal>2^19937</literal>, state given by an array of <literal>624</literal>
+                        integers (plus an index onto this array). This is the default generator.
                     </para>
                 </listitem>
             </varlistentry>
@@ -529,8 +539,8 @@
                 <term>kiss</term>
                 <listitem>
                     <para>
-                        The "Keep It Simple Stupid" of G. Marsaglia,  period about <literal>2^123</literal>,
-                        state given by four integers.
+                        The "Keep It Simple Stupid" of G. Marsaglia,  period about
+                        <literal>2^123</literal>, state given by four integers.
                     </para>
                 </listitem>
             </varlistentry>
@@ -538,8 +548,8 @@
                 <term>clcg2</term>
                 <listitem>
                     <para>
-                        A Combined 2 Linear Congruential Generator of P. L'Ecuyer,
-                        period about <literal>2^61</literal>, state given by <literal>2</literal> integers.
+                        A Combined 2 Linear Congruential Generator of P. L'Ecuyer, period about
+                        <literal>2^61</literal>, state given by <literal>2</literal> integers.
                     </para>
                 </listitem>
             </varlistentry>
@@ -559,8 +569,8 @@
                 <term>urand</term>
                 <listitem>
                     <para>
-                        The generator used by the scilab function <link linkend="rand">rand</link>, state
-                        given by <literal>1</literal> integer, period of <literal>2^31</literal>.
+                        The generator used by the scilab function <link linkend="rand">rand</link>,
+                        state given by <literal>1</literal> integer, period of <literal>2^31</literal>.
                         This generator is based on "Urand, A Universal Random Number Generator" By,
                         Michael A. Malcolm, Cleve B. Moler, Stan-Cs-73-334, January 1973, Computer
                         Science Department, School Of Humanities And Sciences, Stanford University.
@@ -589,10 +599,12 @@
                 <term>action = "setgen"</term>
                 <listitem>
                     <para>
-                        <code>grand("setgen",gen)</code> sets the current base generator to be <varname>gen</varname>
-                        a string among <literal>"mt"</literal>, <literal>"kiss"</literal>,
+                        <code>grand("setgen",gen)</code> sets the current base generator to be
+                        <varname>gen</varname> a string among <literal>"mt"</literal>,
+                        <literal>"kiss"</literal>,
                         <literal>"clcg2"</literal>, <literal>"clcg4"</literal>, <literal>"urand"</literal>.
-                        Notice that this call returns the new current generator, i.e. <varname>gen</varname>.
+                        Notice that this call returns the new current generator, i.e.
+                        <varname>gen</varname>.
                     </para>
                 </listitem>
             </varlistentry>
@@ -622,10 +634,14 @@
                             <term>for mt</term>
                             <listitem>
                                 <para>
-                                    <varname>S</varname> is a vector of integers of dim <literal>625</literal> (the first component is an index
-                                    and must be in <literal>[1,624]</literal>, the <literal>624</literal> last ones must be in
-                                    <literal>[0,2^32[</literal>) (but must not be all zeros) ; a simpler initialization may be done
-                                    with only one integer <varname>s1</varname> (<varname>s1</varname> must be in <literal>[0,2^32[</literal>) ;
+                                    <varname>S</varname> is a vector of integers of dim
+                                    <literal>625</literal> (the first component is an index
+                                    and must be in <literal>[1,624]</literal>, the
+                                    <literal>624</literal> last ones must be in
+                                    <literal>[0,2^32[</literal>) (but must not be all zeros).
+                                    A simpler initialization may be done with only one integer
+                                    <varname>s1</varname> (<varname>s1</varname> must be in
+                                    <literal>[0,2^32[</literal>) ;
                                 </para>
                             </listitem>
                         </varlistentry>
@@ -643,8 +659,9 @@
                             <term>for clcg2</term>
                             <listitem>
                                 <para>
-                                    two integers <varname>s1</varname> in <literal>[1,2^31-86]</literal> and <varname>s2</varname>
-                                    in  <literal>[1,2^31-250]</literal> must be given ;
+                                    two integers <varname>s1</varname> in <literal>[1,2^31-86]</literal>
+                                    and <varname>s2</varname> in  <literal>[1,2^31-250]</literal>
+                                    must be given.
                                 </para>
                             </listitem>
                         </varlistentry>
@@ -652,9 +669,11 @@
                             <term>for clcg4</term>
                             <listitem>
                                 <para>
-                                    four integers <varname>s1</varname> in <literal>[1,2^31-2]</literal>, <varname>s2</varname>
-                                    in <literal>[1,2^31-106]</literal>, <varname>s3</varname> in <literal>[1,2^31-226]</literal>,
-                                    <varname>s4</varname> in  <literal>[1,2^31-326]</literal> are required ;
+                                    four integers <varname>s1</varname> in <literal>[1,2^31-2]</literal>,
+                                    <varname>s2</varname>
+                                    in <literal>[1,2^31-106]</literal>, <varname>s3</varname> in
+                                    <literal>[1,2^31-226]</literal>, <varname>s4</varname> in
+                                    <literal>[1,2^31-326]</literal> are required.
                                 </para>
                                 <para>
                                     <caution>
@@ -671,7 +690,8 @@
                             <term>for urand</term>
                             <listitem>
                                 <para>
-                                    <literal>1</literal> integer <varname>s1</varname> in  <literal>[0,2^31[</literal> must be given.
+                                    <literal>1</literal> integer <varname>s1</varname> in
+                                    <literal>[0,2^31[</literal> must be given.
                                 </para>
                             </listitem>
                         </varlistentry>
@@ -682,8 +702,10 @@
                 <term>action = "phr2sd"</term>
                 <listitem>
                     <para>
-                        <literal>Sd = grand("phr2sd", phrase)</literal> given a <varname>phrase</varname> (character string) generates
-                        a <literal>1 x 2</literal> vector <literal>Sd</literal> which may be used as seeds to change the state of a
+                        <literal>Sd = grand("phr2sd", phrase)</literal> given a
+                        <varname>phrase</varname> (character string) generates
+                        a <literal>1 x 2</literal> vector <literal>Sd</literal> which may be used as
+                        seeds to change the state of a
                         base generator (initially suited for clcg2).
                     </para>
                 </listitem>
@@ -786,7 +808,7 @@
             plot the associated histograms.
         </para>
         <programlisting role="example"><![CDATA[
-// Returns a 400-by-800 matrix of random doubles,
+// Returns a 400 x 800 matrix of random doubles,
 // with normal distribution and average 0 and standard deviation 1.
 R = grand(400,800,"nor",0,1);
 scf();
@@ -800,7 +822,7 @@ xtitle("Normal random numbers from grand","X","Frequency");
         </scilab:image>
 
         <programlisting role="example"><![CDATA[
-// Returns a 400-by-800 matrix of random doubles,
+// Returns a 400 x 800 matrix of random doubles,
 // uniform in [0,1).
 R = grand(400,800,"def");
 scf();
@@ -814,7 +836,7 @@ xtitle("Uniform random numbers from grand","X","Frequency");
         </scilab:image>
 
         <programlisting role="example"><![CDATA[
-// Returns a 400-by-800 matrix of random doubles,
+// Returns a 400 x 800 matrix of random doubles,
 // with Poisson distribution and average equal to 5.
 R = grand(400,800,"poi",5);
 scf();
@@ -896,21 +918,23 @@ grand(10,1,"uin",1,365)
  ]]></programlisting>
         <para>
             In the following example, we generate 12 permutations of the [1,2,...,7] set.
-            The 12 permutations are stored column-by-column.
+            The 12 permutations are stored column by column.
         </para>
         <programlisting role="example"><![CDATA[
 grand(12,"prm",(1:7)')
  ]]></programlisting>
         <para>
-            In the following example, we generate a <varname>10</varname>-by-<varname>10</varname>-by-<varname>10</varname>
+            In the following example, we generate a
+            <literal>10</literal>-by-<literal>10</literal>-by-<literal>10</literal>
             hypermatrix of random numbers from the "normal" distribution and plot the associated histograms.
             Showing the first and last layers.
         </para>
         <programlisting role="example"><![CDATA[
-// Returns a 10-by-10-by-10 hypermatrix of random doubles,
+// Returns a 10 x 10 x 10 hypermatrix of random doubles,
 // with normal distribution, average 0 and standard deviation 1.
 // Showing the first and last layers.
 R = grand(10,10,10,"nor",0,1);
+
 subplot(1,2,1)
 bar3d(R(:,:,1));
 xtitle("Layer 1");
@@ -934,7 +958,8 @@ xtitle("Layer 10");
             The pseudo random number generators are based on deterministic sequences.
             In order to get reproducible simulations, the initial seed of the generator is constant,
             such that the sequence will remain the same from a session to the other.
-            Hence, by default, the first numbers produced by <function>grand</function> are always the same.
+            Hence, by default, the first numbers produced by <function>grand</function> are always
+            the same.
         </para>
         <para>
             In some situations, we may want to initialize the seed of the generator in

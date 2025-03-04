@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2011 - DIGITEO - Michael Baudin
 // Copyright (C) 2019 - Samuel GOUGEON
 //
@@ -11,8 +11,8 @@
 
 // <-- Non-regression test for bug 10119 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/10119
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/10119
 //
 // <-- Short Description -->
 // assert_checkequal does not support sparse complex doubles

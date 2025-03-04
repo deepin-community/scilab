@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA - Djalel Abdemouche
  * Copyright (C) INRIA - Fabrice Leray
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -545,7 +545,7 @@ a.axes_visible="off";
 //軸は隠されている a.axes_bounds=[.2 0 1 1];
 f=get("current_figure");
 //親の図のハンドルを取得
-f.color_map=hotcolormap(64);
+f.color_map=hot(64);
 //図のカラーマップを変更
 h.color_flag=1;
 //z に基づく色

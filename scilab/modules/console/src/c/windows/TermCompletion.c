@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008-2010 - DIGITEO - Allan CORNET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -28,11 +28,11 @@
 #include "scilines.h"
 #include "os_string.h"
 #include "completeLine.h"
-/*--------------------------------------------------------------------------*/
+#include "configvariable_interface.h"
+
+    /*--------------------------------------------------------------------------*/
 static void displayCompletionDictionary(char **dictionary, int sizedictionary, char *namedictionary);
-static char **concatenateStrings(int *sizearrayofstring, char *string1,
-                                 char *string2, char *string3,
-                                 char *string4, char *string5);
+static char** concatenateStrings(int* sizearrayofstring, char* string1, char* string2, char* string3, char* string4, char* string5, char* string6);
 static void TermCompletionOnFiles(char **dictionaryFiles, int sizedictionaryFiles,
                                   char *lineBeforeCaret, char *lineAfterCaret, char *filePattern, char *defaultPattern);
 static void separateFilesDirectories(char** dictionary, int size, char*** files, int* sizeFiles, char*** directories, int* sizeDirectories);
@@ -137,13 +137,13 @@ static void separateFilesDirectories(char** dictionary, int size, char*** files,
         {
             (*sizeDirectories)++;
             *directories = (char **) REALLOC(*directories, sizeof(char *) * (*sizeDirectories));
-            (*directories)[*sizeDirectories - 1] = strdup(word);
+            (*directories)[*sizeDirectories - 1] = os_strdup(word);
         }
         else
         {
             (*sizeFiles)++;
             *files = (char **) REALLOC(*files, sizeof(char *) * (*sizeFiles));
-            (*files)[*sizeFiles - 1] = strdup(word);
+            (*files)[*sizeFiles - 1] = os_strdup(word);
         }
     }
 }
@@ -168,8 +168,11 @@ static void TermCompletionOnAll(char *lineBeforeCaret, char *lineAfterCaret, cha
         char **completionDictionaryHandleGraphicsProperties = NULL;
         int sizecompletionDictionaryHandleGraphicsProperties = 0;
 
-        char **completionDictionaryFields = NULL;
+        char** completionDictionaryFields = NULL;
         int sizecompletionDictionaryFields = 0;
+
+        char** completionDictionaryMustBe = NULL;
+        int sizecompletionDictionaryMustBe = 0;
 
         completionDictionaryFields = completionOnFields(lineBeforeCaret, defaultPattern, &sizecompletionDictionaryFields);
 
@@ -180,10 +183,11 @@ static void TermCompletionOnAll(char *lineBeforeCaret, char *lineAfterCaret, cha
             completionDictionaryMacros = completionOnMacros(defaultPattern, &sizecompletionDictionaryMacros);
             completionDictionaryVariables = completionOnVariablesWithoutMacros(defaultPattern, &sizecompletionDictionaryVariables);
             completionDictionaryHandleGraphicsProperties = completionOnHandleGraphicsProperties(defaultPattern, &sizecompletionDictionaryHandleGraphicsProperties);
+            completionDictionaryMustBe = completionOnMustBe(defaultPattern, &sizecompletionDictionaryMustBe);
         }
         numberWordFound = sizecompletionDictionaryFunctions + sizecompletionDictionaryCommandWords +
                           sizecompletionDictionaryMacros + sizecompletionDictionaryVariables +
-                          sizecompletionDictionaryHandleGraphicsProperties + sizecompletionDictionaryFields;
+                          sizecompletionDictionaryHandleGraphicsProperties + sizecompletionDictionaryFields + sizecompletionDictionaryMustBe;
 
         if (numberWordFound > 0)
         {
@@ -217,6 +221,11 @@ static void TermCompletionOnAll(char *lineBeforeCaret, char *lineAfterCaret, cha
                     completionDictionary = completionDictionaryHandleGraphicsProperties;
                 }
 
+                if (completionDictionaryMustBe)
+                {
+                    completionDictionary = completionDictionaryMustBe;
+                }
+
                 new_line = completeLine(lineBeforeCaret, completionDictionary[0], NULL, defaultPattern, FALSE, lineAfterCaret);
                 if (new_line)
                 {
@@ -240,11 +249,12 @@ static void TermCompletionOnAll(char *lineBeforeCaret, char *lineAfterCaret, cha
                     char *commonCommandWords = getCommonPart(completionDictionaryCommandWords, sizecompletionDictionaryCommandWords);
                     char *commonMacros = getCommonPart(completionDictionaryMacros, sizecompletionDictionaryMacros);
                     char *commonVariables = getCommonPart(completionDictionaryVariables, sizecompletionDictionaryVariables);
-                    char *commonHandleGraphicsProperties = getCommonPart(completionDictionaryHandleGraphicsProperties, sizecompletionDictionaryHandleGraphicsProperties);
+                    char* commonHandleGraphicsProperties = getCommonPart(completionDictionaryHandleGraphicsProperties, sizecompletionDictionaryHandleGraphicsProperties);
+                    char* commonMustBe = getCommonPart(completionDictionaryMustBe, sizecompletionDictionaryMustBe);
 
                     int sizecommonsDictionary = 0;
                     char **commonsDictionary = concatenateStrings(&sizecommonsDictionary, commonFunctions,
-                                               commonMacros, commonCommandWords, commonVariables, commonHandleGraphicsProperties);
+                                                                  commonMacros, commonCommandWords, commonVariables, commonHandleGraphicsProperties, commonMustBe);
 
                     if (sizecommonsDictionary > 0)
                     {
@@ -374,7 +384,7 @@ static void displayCompletionDictionary(char **dictionary, int sizedictionary, c
 /*--------------------------------------------------------------------------*/
 static char **concatenateStrings(int *sizearrayofstring, char *string1,
                                  char *string2, char *string3,
-                                 char *string4, char *string5)
+                                 char* string4, char* string5, char* string6)
 {
     int newsize = 0;
     char **arrayOfString = NULL;
@@ -397,6 +407,10 @@ static char **concatenateStrings(int *sizearrayofstring, char *string1,
         newsize++;
     }
     if (string5)
+    {
+        newsize++;
+    }
+    if (string6)
     {
         newsize++;
     }
@@ -430,6 +444,11 @@ static char **concatenateStrings(int *sizearrayofstring, char *string1,
             if (string5)
             {
                 arrayOfString[i] = string5;
+                i++;
+            }
+            if (string6)
+            {
+                arrayOfString[i] = string6;
                 i++;
             }
             *sizearrayofstring = i;

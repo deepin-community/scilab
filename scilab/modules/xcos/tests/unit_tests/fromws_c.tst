@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2015 - Scilab Enterprises - Paul Bignier
 // Copyright (C) 2012 - Scilab Enterprises - Clément DAVID
 //
@@ -23,11 +23,10 @@ for i=1:length(scs_m.objs)
         break;
     end
 end
-
 assert_checktrue(found);
 
+// switch the GAINBLK_f parameters
 scs_m.objs(index).graphics.exprs = "[1 1 1]";
-scs_m.objs(index).model.rpar = [1 1 1];
 
 V.values = [V.values V.values V.values];
 scicos_simulate(scs_m, list());

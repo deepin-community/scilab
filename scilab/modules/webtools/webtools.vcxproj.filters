@@ -82,7 +82,19 @@
     <ClCompile Include="sci_gateway\cpp\checkCommonOpt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="sci_gateway\cpp\setPreferences.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="sci_gateway\cpp\sci_http_patch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sci_gateway\c\sci_url_split.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sci_gateway\cpp\sci_url_decode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sci_gateway\cpp\sci_url_encode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

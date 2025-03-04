@@ -268,7 +268,7 @@ end
 nb_col = 128;
 vmin = min(VF); vmax = max(VF);
 color = dsearch(VF,linspace(vmin,vmax,nb_col+1));
-gcf().color_map = jetcolormap(nb_col);
+gcf().color_map = jet(nb_col);
 clf()
 gca().hiddencolor = gca().background;
 colorbar(vmin,vmax)

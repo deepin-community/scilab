@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2005 - INRIA - Farid Belahcene
 // Copyright (C) 2012 - Michael Baudin
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -188,14 +188,13 @@ function  bar(varargin)
     // ========
     curFig = gcf()
     immediate_drawing = curFig.immediate_drawing
-    wmode = warning("query")
-    warning("off")
+
     if COLOR~=[]
         plot(X,Y, "color",COLOR)
     else
         plot(X,Y)
     end
-    warning(wmode)
+
     curFig.immediate_drawing = "off"
 
     bar_number=size(Y,2)

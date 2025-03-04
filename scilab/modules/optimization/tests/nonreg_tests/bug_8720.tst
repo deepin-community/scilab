@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010-2011 - DIGITEO - Michael Baudin
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -8,8 +8,8 @@
 //
 // <-- Non-regression test for bug 8720 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=8720
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/8720
 //
 // <-- Short Description -->
 // The karmarkar function may stop too early in the iterations.

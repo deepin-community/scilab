@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2017 - ESI-Group - Antoine ELIAS
 *
 *
@@ -40,12 +40,6 @@ bool exportJSON(scilabEnv env, scilabVar var, int indent, const std::wstring &fi
 bool export_data(scilabEnv env, scilabVar var, int indent, std::wostringstream &os);
 
 const std::string name("toJSON");
-
-//A: toJSON(x) -> return inline string
-//B: toJSON(x, y) -> return string array with y spaces increment
-//C: toJSON(x, "file") -> write JSON in file return %t/%f
-//D: toJSON(x, y, "file") -> write JSON in file with indention return %t/%f
-/* ==================================================================== */
 
 int sci_toJSON(scilabEnv env, int nin, scilabVar *in, int nopt, scilabOpt opt, int nout, scilabVar *out)
 {
@@ -95,31 +89,38 @@ int sci_toJSON(scilabEnv env, int nin, scilabVar *in, int nopt, scilabOpt opt, i
         }
         case 3:
         {
-            //must be a scalar double or single string
-            if (!scilab_isDouble(env, in[1]) || !scilab_isScalar(env, in[1]))
+            // toJSON(var, file, indent)
+            int indent_input = 2;
+            int file_input = 1;
+            if (scilab_isDouble(env, in[1])) // toJSON(var, indent, file)
             {
-                Scierror(999, "%s: Wrong type for input argument #%d: double expected.\n", name.data(), 2);
+                indent_input = 1;
+                file_input = 2;
+            }
+
+            //must be a scalar double
+            if (!scilab_isDouble(env, in[indent_input]) || !scilab_isScalar(env, in[indent_input]))
+            {
+                Scierror(999, "%s: Wrong type for input argument #%d: A real scalar expected.\n", name.data(), indent_input + 1);
                 return STATUS_ERROR;
             }
 
             double dbl = 0;
-            scilab_getDouble(env, in[1], &dbl);
+            scilab_getDouble(env, in[indent_input], &dbl);
             indent = (int)dbl;
 
-            //must be a scalar double or single string
-            if (!scilab_isString(env, in[2]) || !isScalar(env, in[2]))
+            //must be a single string
+            if (!scilab_isString(env, in[file_input]) || !scilab_isScalar(env, in[file_input]))
             {
-                Scierror(999, "%s: Wrong type for input argument #%d: string expected.\n", name.data(), 3);
+                Scierror(999, "%s: Wrong type for input argument #%d: single string expected.\n", name.data(), file_input + 1);
                 return STATUS_ERROR;
             }
 
-            //string
             wchar_t *wf = nullptr;
-            scilab_getString(env, in[2], &wf);
+            scilab_getString(env, in[file_input], &wf);
             file = wf;
             break;
         }
-
         default:
         {
             Scierror(999, "%s: bad input arguments.\n", name.data());

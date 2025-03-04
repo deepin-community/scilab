@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2020 - Samuel GOUGEON - Le Mans Université
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -12,7 +12,7 @@
 // <-- Short Description -->
 // Unit tests for setdiff() with boolean sparse or numerical sparse matrices
 
-// See also : http://bugzilla.scilab.org/15867
+// See also : https://gitlab.com/scilab/scilab/-/issues/15867
 
 eb = sparse(%t); eb(1) = [];
 
@@ -23,9 +23,9 @@ objects = list(sparse([]), sparse(0), sparse(5), sparse([2 0 -3 0 4]), ..
     eb, sparse(%t), sparse(%f), sparse([%t %f %f %t %f]), ..
     sparse([%t %f %f %t %f]'), sparse([%t %f %t ; %t %t %f]));
 for a = objects
-    typeref = 1
+    typeref = 1;
     for b = objects
-        [dref, kref] = setdiff(full(a), full(b))
+        [dref, kref] = setdiff(full(a), full(b));
         d = setdiff(a, b);
         assert_checktrue(issparse(d));
         assert_checkequal(full(d), dref);
@@ -65,7 +65,7 @@ for a = objects
         if issparse(a)
             dref = sparse(dref);
             if type(a)==6 & dref==sparse([])
-                dref = eb
+                dref = eb;
             end
         end
         assert_checkequal(d, dref);

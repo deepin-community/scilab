@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA - Serge STEER
 // Copyright (C) 1999 - Lucien.Povy@eudil.fr (to get a good table)
 // Copyright (C) 2013 - Charlotte HECQUET (new option)

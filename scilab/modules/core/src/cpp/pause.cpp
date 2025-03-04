@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2019-2019 - ESI Group - Cedric Delamarre
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
@@ -19,9 +19,13 @@ extern "C" {
 #include "pause.h"
 }
 
-void pause(void)
+void pause_interpreter(void)
 {
     ConfigVariable::IncreasePauseLevel();
+
+    // allow error when paused in a try
+    bool bSilentError = ConfigVariable::isSilentError();
+    ConfigVariable::setSilentError(false);
 
     //return to console so change mode to 2
     int iOldMode = ConfigVariable::getPromptMode();
@@ -35,7 +39,7 @@ void pause(void)
     {
         ThreadManagement::SendAwakeRunnerSignal();
         ThreadManagement::WaitForRunMeSignal();
-        if(StaticRunner::isRunnerAvailable())
+        if (StaticRunner::isRunnerAvailable())
         {
             StaticRunner::launch();
         }
@@ -43,4 +47,7 @@ void pause(void)
 
     //return from console so change mode to initial
     ConfigVariable::setPromptMode(iOldMode);
+
+    // restore try/catch flag
+    ConfigVariable::setSilentError(bSilentError);
 }

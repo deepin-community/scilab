@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2000 - INRIA - Carlos Klimann
 // Copyright (C) 2010 - DIGITEO - Yann COLLETTE
 //
@@ -29,17 +29,13 @@ function [p]=perctl(x,y)
     //
     //fixed: 2006-06-12 ( Pierre MARECHAL, Scilab Team )
 
-    [lhs,rhs]=argn(0)
-    if rhs<>2 then
-        error(msprintf(gettext("%s: Wrong number of input arguments: %d expected.\n"),"perctl",2));
+    arguments
+        x {mustBeA(x, "double")}
+        y {mustBeA(y, "double"), mustBeInteger, mustBeInRange(y, 1, 100)}
     end
+
     if x==[]|y==[] then p=[];return;end
-    if find((y-int(y)))<>[]|max(y)>100|min(y)<1 then
-        error(msprintf(gettext("%s: Wrong value for input argument #%d: Must be between %d and %d.\n"),"perctl",2,1,100))
-    end
-    if type(x)<>1 then
-        error(msprintf(gettext("%s: Wrong type for input argument #%d: Numerical expected.\n"),"perctl",1))
-    end
+
     lenx = size(x)
     lx   = prod(lenx)
     [val,pos] = gsort(x)

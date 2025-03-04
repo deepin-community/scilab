@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2014 - Scilab Enterprises - Cedric DELAMARRE
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -213,8 +213,8 @@ types::Function::ReturnValue sci_ldiv(types::typed_list &in, int _iRetCount, typ
 
     for (int i = 0; i < iSize; i++)
     {
-        int iSize1 = piRank1[i] + 1;
-        int iSize2 = piRank2[i] + 1;
+        int iSize1 = piRank1[i]; 
+        int iSize2 = piRank2[i];
         double* temp1 = new double[iSize1];
         double* temp2 = new double[iSize2];
         C2F(dcopy)(&iSize1, pdblCoef1[i], &iOne, temp1, &iOne);

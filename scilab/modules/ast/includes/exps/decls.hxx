@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2007-2008 - DIGITEO - Bruno JOFRET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -60,6 +60,7 @@ class TryCatchExp;
 class ReturnExp;
 class SelectExp;
 class CaseExp;
+class ArgumentsExp;
 
 // Single operations expressions
 class NotExp;
@@ -80,19 +81,10 @@ class CellExp;
 // Decs
 class VarDec;
 class FunctionDec;
+class ArgumentDec;
 
 // Type dedicated Exp
 class ListExp;
-
-class OptimizedExp;
-class MemfillExp;
-class DAXPYExp;
-class FastSelectExp;
-class IntSelectExp;
-class MapIntSelectExp;
-class SmallIntSelectExp;
-class StringSelectExp;
-class TableIntSelectExp;
 
 } // namespace ast
 

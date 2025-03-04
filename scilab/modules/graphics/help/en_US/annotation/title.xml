@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA - Farid Belahcene
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
  * Copyright (C) 2016, 2019 - Samuel GOUGEON
@@ -234,7 +234,7 @@
     <refsection>
         <title>Examples</title>
         <programlisting role="example"><![CDATA[
-plotframe([0 0 1 1])
+plot2d([], [], 0, "011", " ", [0 0 1 1])
 // display a title with its default properties
 title 'my title'
 
@@ -257,7 +257,7 @@ title rotation 90
 title('my title','color','blue','edgecolor','red','fontsize',3,'rotation',90,'position',[0.3 0.8]);
  ]]></programlisting>
         <scilab:image>
-            plotframe([0 0 1 1])
+            plot2d([], [], 0, "011", " ", [0 0 1 1])
             title 'my title'  color blue  edgecolor red  fontsize 3  rotation 90
             title('position', [0.3 0.8])
         </scilab:image>

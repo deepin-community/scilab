@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009 - DIGITEO - Vincent COUVERT
  * Copyright (C) 2010 - DIGITEO - Clement DAVID
  * Copyright (C) 2011-2015 - Scilab Enterprises - Clement DAVID
@@ -23,17 +23,22 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.Optional;
 
 import org.scilab.modules.action_binding.highlevel.ScilabInterpreterManagement.InterpreterException;
 import org.scilab.modules.graph.ScilabGraph;
 import org.scilab.modules.graph.actions.base.VertexSelectionDependantAction;
 import org.scilab.modules.gui.menuitem.MenuItem;
+import org.scilab.modules.gui.utils.WindowsConfigurationManager;
 import org.scilab.modules.xcos.JavaController;
 import org.scilab.modules.xcos.Kind;
 import org.scilab.modules.xcos.ObjectProperties;
 import org.scilab.modules.xcos.Xcos;
 import org.scilab.modules.xcos.XcosTab;
 import org.scilab.modules.xcos.block.BasicBlock;
+import org.scilab.modules.xcos.configuration.ConfigurationManager;
+import org.scilab.modules.xcos.configuration.model.DocumentType;
+import org.scilab.modules.xcos.graph.ScicosParameters;
 import org.scilab.modules.xcos.graph.XcosDiagram;
 import org.scilab.modules.xcos.graph.model.BlockInterFunction;
 import org.scilab.modules.xcos.graph.model.ScicosObjectOwner;
@@ -125,6 +130,15 @@ public class BlockParametersAction extends VertexSelectionDependantAction {
                     sub.setModified(false);
                     sub.setModified(Xcos.getInstance().isModified(root));
 
+                    // set window position from a previously closed tab
+                    String[] blockUID = {""};
+                    controller.getObjectProperty(cell.getUID(), cell.getKind(), ObjectProperties.UID, blockUID);
+                    Optional<DocumentType> tab = ConfigurationManager.getInstance().streamTab()
+                        .filter(d -> blockUID[0].equals(d.getPath()))
+                        .findFirst();
+                    if (tab.isPresent())
+                        sub.setGraphTab(tab.get().getUuid());
+
                     // setup graphical interface
                     sub.getUndoManager().clear();
                     sub.installListeners();
@@ -181,7 +195,8 @@ public class BlockParametersAction extends VertexSelectionDependantAction {
 
                     ScilabDirectHandler handler = ScilabDirectHandler.acquire();
                     try {
-                        handler.writeContext(graph.getContext());
+                        ScicosParameters parameters = new ScicosParameters(Xcos.findRoot(graph), new ScicosObjectOwner(controller, graph.getUID(), graph.getKind()));
+                        handler.writeContext(parameters.getAllContext(controller));
                     } finally {
                         handler.release();
                     }

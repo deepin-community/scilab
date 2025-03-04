@@ -1,5 +1,5 @@
 //
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 //
 // This file is distributed under the same license as the Scilab package.
@@ -26,7 +26,8 @@ function hole3d1()
 
     my_handle                   = scf(100001);
     clf(my_handle,"reset");
-    my_axe                      = my_handle.children;
+    my_handle.color_map = jet(128);
+    my_axe = my_handle.children;
 
     demo_viewCode("hole3d1.sce");
 

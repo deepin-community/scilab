@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2015 - Scilab Enterprises - Vincent COUVERT
 // Copyright (C) 2019 - Samuel GOUGEON
 //
@@ -12,8 +12,8 @@
 //
 // <-- Non-regression test for bug 13766 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/13766
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/13766
 //
 // <-- Short Description -->
 // Setting figure_size property lead to wrong display and figure properties values.

@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2019 - Samuel GOUGEON
 //
 // This file is released under the 3-clause BSD license. See COPYING-BSD.

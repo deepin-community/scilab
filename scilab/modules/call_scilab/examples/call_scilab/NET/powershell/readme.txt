@@ -1,5 +1,5 @@
 Call scilab from powershell 
-(http://wiki.scilab.org/Call_scilab_from_powershell)
+(https://scilab.gitlab.io/legacy_wiki/Call(20)scilab(20)from(20)powershell.html)
 
 A easy example to call scilab from powershell. 
 

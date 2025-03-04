@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) XXXX-2008 - INRIA
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
  * Copyright (C) 2018 - Samuel GOUGEON
@@ -94,8 +94,7 @@
                 </listitem>
                 <listitem>
                     <para>
-                        TCL variables defined from Scilab (with <link linkend="TCL_SetVar">TCL_SetVar</link>)
-                        can't be saved. Only their counterparts in Scilab -- if any -- can be considered.
+                        TCL variables defined from Scilab can't be saved. Only their counterparts in Scilab -- if any -- can be considered.
                     </para>
                 </listitem>
                 <listitem>
@@ -369,17 +368,6 @@ c                        double         1 by 1          16
  a  =
    2.7182818   3.1415927
 ]]></screen>
-        <para>
-            save() can't save TCL variables:
-        </para>
-        <programlisting role="example"><![CDATA[
-TCL_SetVar("myPi", 3.14);   // Creates the myPi variable in the TCL session
-myPi    // => error: the variable is a TCL one, not a Scilab one => It can't be save()d
-]]></programlisting>
-        <screen><![CDATA[
---> myPi
-Undefined variable: myPi
-]]></screen>
     </refsection>
     <refsection role="see also">
         <title>See also</title>
@@ -401,9 +389,6 @@ Undefined variable: myPi
             </member>
             <member>
                 <link linkend="write">write</link>
-            </member>
-            <member>
-                <link linkend="TCL_SetVar">TCL_SetVar</link>
             </member>
         </simplelist>
     </refsection>

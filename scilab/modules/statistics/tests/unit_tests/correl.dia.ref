@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Adeline CARNIS
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -8,19 +8,19 @@
 // unit tests for correl function
 // =============================================================================
 assert_checkfalse(execstr("correl()"   ,"errcatch") == 0);
-refMsg = msprintf(_("%s: Wrong number of input arguments: %d to %d expected.\n"),"correl",2,3);
+refMsg = msprintf(_("%s: Wrong number of input arguments: %d to %d expected.\n"),"correl", 2, 3);
 assert_checkerror("correl()", refMsg);
 assert_checkfalse(execstr("correl(1, [1 2])"   ,"errcatch") == 0);
-refMsg = msprintf(_("%s: Wrong type for input argument #%d: Vector expected.\n"),"correl",1);
+refMsg = msprintf(_("%s: Wrong type for input argument #%d: Must be a vector.\n"),"correl", 1);
 assert_checkerror("correl(1, [1 2])", refMsg);
 assert_checkfalse(execstr("correl(""e"", [1 2])"   ,"errcatch") == 0);
-refMsg = msprintf(_("%s: Wrong type for input argument #%d: Vector expected.\n"),"correl",1);
+refMsg = msprintf(_("%s: Wrong type for input argument #%d: Must be in %s.\n"),"correl", 1, sci2exp("double"));
 assert_checkerror("correl(""e"", [1 2])", refMsg);
 assert_checkfalse(execstr("correl([1 2], 1)"   ,"errcatch") == 0);
-refMsg = msprintf(_("%s: Wrong type for input argument #%d: Vector expected.\n"),"correl",2);
+refMsg = msprintf(_("%s: Wrong type for input argument #%d: Must be a vector.\n"),"correl", 2);
 assert_checkerror("correl([1 2], 1)", refMsg);
 assert_checkfalse(execstr("correl([1 2], ""e"")"   ,"errcatch") == 0);
-refMsg = msprintf(_("%s: Wrong type for input argument #%d: Vector expected.\n"),"correl",2);
+refMsg = msprintf(_("%s: Wrong type for input argument #%d: Must be in %s.\n"),"correl", 2, sci2exp("double"));
 assert_checkerror("correl([1 2], ""e"")", refMsg);
 r = correl([1 2 3], [8 9 1]);
 assert_checkalmostequal(r, -0.802955068, [], %eps);

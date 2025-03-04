@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA - Djalel Abdemouche
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -203,7 +203,7 @@ Sgrayplot(x,y,m);
 a=get("current_axes");
 f=a.children.children(1)
 f.data(:,3)=(1:size(f.data,1))';
-a.parent.color_map=hotcolormap(64);
+a.parent.color_map=hot(64);
  ]]></programlisting>
     </refsection>
     <refsection role="see also">

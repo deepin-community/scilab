@@ -1,6 +1,6 @@
 
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA - Allan CORNET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises

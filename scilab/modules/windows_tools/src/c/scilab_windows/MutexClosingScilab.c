@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) DIGITEO - 2008 - Allan CORNET
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -17,7 +17,7 @@
 #include <windows.h>
 #include "sci_malloc.h"
 #include "MutexClosingScilab.h"
-#include "version.h"
+#include "getversion.h"
 /*--------------------------------------------------------------------------*/
 static HANDLE hMutexClosingScilabID = NULL;
 /*--------------------------------------------------------------------------*/
@@ -68,13 +68,15 @@ BOOL haveMutexClosingScilab(void)
 /*--------------------------------------------------------------------------*/
 static char *getClosingScilabMutexName(void)
 {
-    int lenmutexname = (int)(strlen(CLOSING_SCILAB_MUTEX_NAME) + strlen(SCI_VERSION_STRING) + 1);
+    char *scilabVersionString = getScilabVersionAsString();
+    int lenmutexname = (int)(strlen(CLOSING_SCILAB_MUTEX_NAME) + strlen(scilabVersionString) + 1);
     char *mutexname = (char*)MALLOC(sizeof(char) * lenmutexname);
     if (mutexname)
     {
         strcpy(mutexname, CLOSING_SCILAB_MUTEX_NAME);
-        strcat(mutexname, SCI_VERSION_STRING);
+        strcat(mutexname, scilabVersionString);
     }
+    free(scilabVersionString);
     return mutexname;
 }
 /*--------------------------------------------------------------------------*/

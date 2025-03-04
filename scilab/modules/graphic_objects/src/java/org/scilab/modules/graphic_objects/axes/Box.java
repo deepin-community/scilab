@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2010 - DIGITEO - Manuel JULIACHS
  * Copyright (C) 2013 - Scilab Enterprises - Calixte DENIZET
  *
@@ -24,7 +24,7 @@ import org.scilab.modules.graphic_objects.graphicObject.GraphicObject.UpdateStat
  */
 public class Box {
     /** Box properties names */
-    public enum BoxProperty { BOX, HIDDENAXISCOLOR, XTIGHTLIMITS, YTIGHTLIMITS, ZTIGHTLIMITS, DATABOUNDS, REALDATABOUNDS, ZOOMENABLED, ZOOMBOX, AUTOSCALE, FIRSTPLOT };
+    public enum BoxProperty { BOX, HIDDENAXISCOLOR, XTIGHTLIMITS, YTIGHTLIMITS, ZTIGHTLIMITS, DATABOUNDS, REALDATABOUNDS, ZOOMENABLED, ZOOMBOX, AUTOSCALE, AUTOSTRETCH, FIRSTPLOT };
 
     /** Box type */
     public static enum BoxType { OFF, ON, HIDDEN_AXES, BACK_HALF;
@@ -74,6 +74,9 @@ public class Box {
     /** Indicates whether data bounds are updated when a new plot command is executed */
     private boolean autoScale;
 
+    /** TODO: add comment */
+    private boolean autoStretch;
+
     /**
      * Indicates whether no high-level drawing function has yet been called (true) or
      * has been called at least once (false)
@@ -90,6 +93,7 @@ public class Box {
         zoomEnabled = false;
         zoomBox = new double[6];
         autoScale = false;
+        autoStretch = true;
         firstPlot = true;
     }
 
@@ -127,6 +131,7 @@ public class Box {
         }
 
         autoScale = box.autoScale;
+        autoStretch = box.autoStretch;
         firstPlot = box.firstPlot;
     }
 
@@ -136,6 +141,13 @@ public class Box {
     public Boolean getAutoScale() {
         return autoScale;
     }
+    
+    /**
+     * @return the autoStretch
+     */
+    public Boolean getAutoStretch() {
+        return autoStretch;
+    }
 
     /**
      * @param autoScale the autoScale to set
@@ -143,6 +155,18 @@ public class Box {
     public UpdateStatus setAutoScale(Boolean autoScale) {
         if (this.autoScale != autoScale) {
             this.autoScale = autoScale;
+            return UpdateStatus.Success;
+        }
+
+        return UpdateStatus.NoChange;
+    }
+
+    /**
+     * @param autoScale the autoStretch to set
+     */
+    public UpdateStatus setAutoStretch(Boolean autoStretch) {
+        if (this.autoStretch != autoStretch) {
+            this.autoStretch = autoStretch;
             return UpdateStatus.Success;
         }
 

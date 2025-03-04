@@ -36,10 +36,7 @@
     <ClCompile Include="sci_librarieslist.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sci_testGVN.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sci_testAnalysis.cpp">
+    <ClCompile Include="sci_idempotence.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

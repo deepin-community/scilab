@@ -804,27 +804,31 @@ counter_main_fig.visible = "on";
                 <revnumber>5.5.0</revnumber>
                 <revremark>
                     <para>
-                        プロパティが追加・更新されました:
-                    </para>
                     <itemizedlist>
-                        <listitem>Borderプロパティが追加されました.</listitem>
-                        <listitem>Scrollableプロパティが追加されました.</listitem>
-                        <listitem>Groupnameプロパティが追加されました.</listitem>
-                        <listitem>Iconプロパティが追加されました.</listitem>
-                        <listitem>Marginsプロパティが追加されました.</listitem>
-                        <listitem>Layoutプロパティが追加されました.</listitem>
-                        <listitem>Layout_properties プロパティが追加されました.</listitem>
                         <listitem>
-                            Stringプロパティが
-                            <literal>listbox</literal>および
+                            プロパティが追加・更新されました: <literal>.Border</literal>,
+                            <literal>.Scrollable</literal>, <literal>.Groupname</literal>,
+                            <literal>.Icon</literal>, <literal>.Margins</literal>,
+                            <literal>.Layout</literal>, <literal>.Layout_options</literal>, for tabs:
+                            <literal>.Title_position</literal>, <literal>.Title_scroll</literal>.
+                        </listitem>
+                        <listitem>
+                            <literal>.Max</literal>-<literal>.Min</literal> sets the maximal number
+                            of items that can be selected in a <literal>.listbox</literal>, or the
+                            number of multiple lines displayed in an <literal>.edit</literal>.
+                        </listitem>
+                        <listitem>
+                            <literal>.String</literal>プロパティが <literal>listbox</literal>および
                             <literal>combobox</literal> uicontrolsで色を設定する
                             際に使用されるようになりました.
                         </listitem>
-                        <listitem>Backgroundcolor および
-                            Foregroundcolor プロパティが
+                        <listitem>
+                            <literal>.Backgroundcolor</literal> および
+                            <literal>.Foregroundcolor</literal> プロパティが
                             オペレーティングシステム固有の値を管理するようになりました.
                         </listitem>
                     </itemizedlist>
+                   </para>
                 </revremark>
             </revision>
             <revision>

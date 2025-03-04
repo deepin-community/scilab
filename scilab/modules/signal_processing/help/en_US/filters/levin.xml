@@ -153,9 +153,9 @@ t2=0:2*%pi*dt:100;
 y2=[sin(t2)+sin(2*t2)+rand(t2);sin(3*t2)+sin(4*t2)+rand(t2)];
 c2=[];
 for j=1:2, for k=1:2, c2=[c2;corr(y2(k,:),y2(j,:),nlag)];end;end;
-c2=matrix(c2,2,128);cov=[];
-for j=1:64,cov=[cov;c2(:,(j-1)*d+1:j*d)];end;//covar. columnwise
-c2=cov;
+c2=matrix(c2,2,128);cc=[];
+for j=1:64,cc=[cc;c2(:,(j-1)*d+1:j*d)];end;//covar. columnwise
+c2=cc;
 
 //in the multidimensional case, we have to compute the
 //roots of the determinant of the matrix polynomial

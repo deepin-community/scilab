@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) DIGITEO - 2010 - Clément DAVID
 // Copyright (C) - 2011 - Scilab Enterprises - Clément DAVID
 //

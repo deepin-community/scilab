@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2005 - INRIA - Allan CORNET
 // Copyright (C) DIGITEO - 2011 - Allan CORNET
 //
@@ -13,9 +13,8 @@
 
 function bOK = isscalar(VarInput)
 
-    rhs = argn(2);
-    if rhs <> 1 then
-        error(msprintf(gettext("%s: Wrong number of input argument(s): %d expected.\n"),"isscalar", 1));
+    arguments
+        VarInput
     end
 
     bOK = %F;

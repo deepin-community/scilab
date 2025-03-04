@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Antoine ELIAS
 // Copyright (C) 2013 - Test case - Luc GABRIEL
 //
@@ -12,8 +12,8 @@
 //
 // <-- Non-regression test for bug 12305 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=12305
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/12305
 //
 // <-- Short Description -->
 //  Legends could not be loaded from SOD file.

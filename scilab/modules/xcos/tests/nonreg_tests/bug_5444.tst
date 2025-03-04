@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009 - DIGITEO - Vincent COUVERT
 // Copyright (C) 2011 - DIGITEO - Clément DAVID
 //
@@ -11,8 +11,8 @@
 //
 // <-- Non-regression test for bug 5444 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=5444
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/5444
 //
 // <-- Short Description -->
 // Error report on superblock diagram is not supported.

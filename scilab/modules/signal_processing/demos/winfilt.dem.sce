@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ????-2008 - INRIA
 // Copyright (C) 2010 - DIGITEO - Allan CORNET
 //
@@ -18,12 +18,11 @@ function demo_winfilt()
         clf(my_handle,"reset");
         demo_viewCode("winfilt.dem.sce");
         plot2d(fr', log(wfm)')
-        xtitle(" ", _("frequency"), _("magnitude"));
         xtitle([_("Windowed FIR Low pass Filter"); ..
         _("Kaiser window, cut-off: 0.2"); ..
-        _("length 33")]);
+        _("length 33")], _("Normalized frequency"), _("Magnitude [dB]"));
 
-        halt(_("Press Return to continue ... \n"));
+        messagebox(_("Please click OK to go on..."), _("Window FIR filters demo"), "modal");
     end
 
     // Stop band filter (length 127, Hamming window, cut-offs .2 and .3)
@@ -32,12 +31,11 @@ function demo_winfilt()
         clf(my_handle,"reset");
         demo_viewCode("winfilt.dem.sce");
         plot2d(fr',log(wfm)')
-        xtitle(" ", _("frequency"), _("magnitude"));
         xtitle([_("Windowed FIR Low pass Filter"); ..
         _("Hamming window, cut-off: 0.2, 0.3"); ..
-        _("length 127")]);
+        _("length 127")], _("Normalized frequency"), _("Magnitude [dB]"));
 
-        halt(_("Press Return to continue ... \n"));
+        messagebox(_("Please click OK to go on..."), _("Window FIR filters demo"), "modal");
     end
 
     // Band pass filter (length 55, Chebyshev window, cut-offs .15 and .35)
@@ -46,12 +44,10 @@ function demo_winfilt()
         clf(my_handle,"reset");
         demo_viewCode("winfilt.dem.sce");
         plot2d(fr',log(wfm)')
-        xtitle(" ", _("frequency"), _("magnitude"));
         xtitle([_("Windowed FIR Band pass Filter"); ..
         _("Chebyshev window, cut-off: 0.15, 0.35"); ..
-        _("length 55")]);
+        _("length 55")], _("Normalized frequency"), _("Magnitude [dB]"));
 
-        halt(_("Press Return to continue ... \n"));
     end
 
 endfunction

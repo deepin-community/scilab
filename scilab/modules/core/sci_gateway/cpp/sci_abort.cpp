@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2011-2011 - DIGITEO - Bruno JOFRET
  *  Copyright (C) 2015 - Scilab Enterprises - Cedric Delamarre
  *
@@ -41,5 +41,4 @@ types::Function::ReturnValue sci_abort(types::typed_list &in, int _iRetCount, ty
     }
 
     throw ast::InternalAbort();
-    return types::Function::OK;
 }

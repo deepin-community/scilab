@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2010 - DIGITEO - Clement DAVID
  * Copyright (C) 2011-2015 - Scilab Enterprises - Clement DAVID
  *
@@ -58,7 +58,7 @@ public abstract class Palette extends PaletteNode {
      * @see javax.swing.tree.TreeNode#children()
      */
     @Override
-    public Enumeration<Object> children() {
+    public Enumeration<TreeNode> children() {
         return null;
     }
 

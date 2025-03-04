@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008 - Yann COLLETTE <yann.collette@renault.com>
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -14,7 +14,7 @@ function plot_potts2d(Var, Level)
     Size = size(Var,1);
     drawlater;
     f=gcf();
-    f.color_map = graycolormap(2*Level+1);
+    f.color_map = gray(2*Level+1);
     a = gca();
     a.data_bounds = [0,0;Size+1,Size+1];
     Z = zeros(Size*Size,3);

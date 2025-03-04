@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009 - DIGITEO
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -10,5 +10,5 @@
 // For more information, see the COPYING file which you should have received
 // along with this program.
 
-add_help_chapter("Differential calculus, Integration",SCI+"/modules/differential_equations/help/en_US",%T);
 
+add_help_chapter("Differential Equations",SCI+"/modules/differential_equations/help/en_US",%T);

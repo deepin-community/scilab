@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2000 - INRIA - Carlos Klimann
  * Copyright (C) 2016 - Samuel GOUGEON
  *
@@ -26,7 +26,7 @@
         <title>Syntaxe</title>
         <synopsis>
             gm = geomean(X)
-            GM = geomean(X, orien)   // orien : 'r'|1|'c'|2..ndims(X)
+            GM = geomean(X, orien)
         </synopsis>
     </refsynopsisdiv>
     <refsection>
@@ -44,7 +44,7 @@
                 <term>orien</term>
                 <listitem>
                     <para>
-                        Dimension selon laquelle la moyenne géométrique est calculée. Sa valeur doit être parmi <literal>'r', 1, 'c', 2, .. ndims(X)</literal>. Les valeurs <literal>'r'</literal> (lignes) et <literal>1</literal> sont équivalentes, comme <literal>'c'</literal> (colonnes) et <literal>2</literal>.
+                        Dimension selon laquelle la moyenne géométrique est calculée. Sa valeur doit être parmi <literal>'*' (par défaut), 'r', 1, 'c', 2, .. ndims(X)</literal>. Les valeurs <literal>'r'</literal> (lignes) et <literal>1</literal> sont équivalentes, comme <literal>'c'</literal> (colonnes) et <literal>2</literal>.
                     </para>
                 </listitem>
             </varlistentry>

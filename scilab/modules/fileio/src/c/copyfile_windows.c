@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2009 - DIGITEO - Allan CORNET
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -94,6 +94,7 @@ static int CopyDirectoryFunction_windows(wchar_t *DestinationDirectory, wchar_t 
         {
             ans = 0;
         }
+
         FindClose(find_handle);
     }
     else
@@ -101,7 +102,6 @@ static int CopyDirectoryFunction_windows(wchar_t *DestinationDirectory, wchar_t 
         /* Create the destdir */
         ans = createdirectoryW(DestinationDirectory);
     }
-    FindClose(find_handle);
 
     if (!ans)
     {

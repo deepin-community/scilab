@@ -88,8 +88,8 @@
                 </para>
                 <para>
                     The colormap is a range color linked to the window output of the scope.
-                    You can put a jetcolormap or hotcolormap or graycolormap or your own
-                    (see colormap help).
+                    You can put a <link linkend="jet">jet</link> or <link linkend="hot">hot</link> or <link linkend="gray">gray</link> or your own
+                    (see <link linkend="colormap">colormap</link> help).
                 </para>
                 <para>
                     Properties: Must be a mx3 matrix and m ≥ 3

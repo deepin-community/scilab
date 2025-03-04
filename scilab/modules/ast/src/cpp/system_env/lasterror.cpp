@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2010 - DIGITEO - Antoine ELIAS
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -31,16 +31,6 @@ wchar_t *getLastErrorMessage(void)
     return const_cast<wchar_t*>(ConfigVariable::getLastErrorMessage().c_str());
 }
 /*--------------------------------------------------------------------------*/
-int getLastErrorLine(void)
-{
-    return ConfigVariable::getLastErrorLine();
-}
-/*--------------------------------------------------------------------------*/
-wchar_t *getLastErrorFunction(void)
-{
-    return const_cast<wchar_t*>(ConfigVariable::getLastErrorFunction().c_str());
-}
-/*--------------------------------------------------------------------------*/
 void setLastErrorNumber(int _iError)
 {
     ConfigVariable::setLastErrorNumber(_iError);
@@ -52,7 +42,7 @@ void setLastErrorMessage(const wchar_t* _pwstError)
     if (_pwstError == NULL)
     {
         std::wstring wstError(L"");
-        ConfigVariable::setLastErrorFunction(wstError);
+        ConfigVariable::setLastErrorMessage(wstError);
     }
     else
     {
@@ -61,31 +51,10 @@ void setLastErrorMessage(const wchar_t* _pwstError)
     }
 }
 /*--------------------------------------------------------------------------*/
-void setLastErrorLine(int _iLine)
-{
-    ConfigVariable::setLastErrorLine(_iLine);
-}
-/*--------------------------------------------------------------------------*/
-void setLastErrorFunction(const wchar_t* _pwstFunction)
-{
-    if (_pwstFunction == NULL)
-    {
-        std::wstring wstError(L"");
-        ConfigVariable::setLastErrorFunction(wstError);
-    }
-    else
-    {
-        std::wstring wstError(_pwstFunction);
-        ConfigVariable::setLastErrorFunction(wstError);
-    }
-}
-/*--------------------------------------------------------------------------*/
-void setLastError(int _iError, const wchar_t* _pwstError, int _iLine, const wchar_t* _pwstFunction)
+void setLastError(int _iError, const wchar_t* _pwstError)
 {
     setLastErrorNumber(_iError);
     setLastErrorMessage(_pwstError);
-    setLastErrorLine(_iLine);
-    setLastErrorFunction(_pwstFunction);
 }
 
 /*--------------------------------------------------------------------------*/

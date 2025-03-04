@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2016-2016 - Scilab Enterprises - Clement DAVID
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
@@ -19,7 +19,7 @@ extern "C" {
 namespace org_scilab_modules_scicos
 {
 
-XMIResource::XMIResource(ScicosID id) : controller(), root(id), processed(), parent(NB_XCOS_NAMES), references(), constXcosNames(), xcosNamespaceUri(), xsiNamespaceUri()
+XMIResource::XMIResource(ScicosID id) : controller(), root(id), constXcosNames(), xcosNamespaceUri(), xsiNamespaceUri(), processed(), parent(NB_XCOS_NAMES), references(), unresolved()
 {
     references.insert(std::make_pair("/", id));
 

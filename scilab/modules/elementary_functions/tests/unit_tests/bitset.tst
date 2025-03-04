@@ -1,5 +1,5 @@
 // ===================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2019 - Samuel GOUGEON
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -157,26 +157,27 @@ end
 // ===============
 // Errors handling
 // ===============
-msg = "bitset: Wrong number of input arguments: 2 or 3 expected.";
+msg = "bitset: Wrong number of input arguments: 2 to 3 expected.";
 assert_checkerror("bitset()", msg);
 assert_checkerror("bitset(1)", msg);
 assert_checkerror("bitset(1,1,1,1)", "Wrong number of input arguments.");
 
-msg = "bitset: Argument #1: Non-negative real integers expected.";
+msg = msprintf(_("%s: Wrong type for input argument #%d: Must be in %s.\n"), "bitset", 1, sci2exp(["double", "int"]));
 assert_checkerror("bitset(%z, 1)", msg);
 assert_checkerror("bitset(%t, 1)", msg);
+msg = msprintf(_("%s: Wrong value for input argument #%d: Non negative numbers expected.\n"), "bitset", 1);
 assert_checkerror("bitset(-1, 1)", msg);
 assert_checkerror("bitset(int8(-30), 1)", msg);
-assert_checkerror("bitset(1+0*%i, 1)", msg);
+msg = msprintf(_("%s: Wrong value for input argument #%d: Integer numbers expected.\n"), "bitset", 1);
 assert_checkerror("bitset(1.5, 1)", msg);
 
-msg = "bitset: Argument #2: integers > 0 expected.";
+msg = msprintf(_("%s: Wrong value for input argument #%d: Integer numbers expected.\n"), "bitset", 2);
 assert_checkerror("bitset([10 20], %t)", msg);
 assert_checkerror("bitset([10 20], 1+0*%z)", msg);
-assert_checkerror("bitset([10 20], 1+0*%i)", msg);
-assert_checkerror("bitset([10 20], 0)", msg);
 assert_checkerror("bitset([10 20], 0.5)", msg);
 assert_checkerror("bitset([10 20], 1.5)", msg);
+msg = msprintf(_("%s: Wrong value for input argument #%d: Must be >= %d.\n"), "bitset", 2, 1);
+assert_checkerror("bitset([10 20], 0)", msg);
 
 msg = "bitset: Argument #2: Integers <= %d expected.\n";
 assert_checkerror("bitset([10 20], 1200)", msprintf(msg, 1024));
@@ -196,10 +197,12 @@ assert_checkerror("bitset([1 2 3 4], [1 3 ; 1 2])", msg);
 msg = "bitset: Argument #2 is longer than 7. Please check against duplicate values.";
 assert_checkerror("bitset(int8([10 20]), [1 2 2 3 4 4 5 6 6], [1 0 0 0 1 1 0 1 0])", msg);
 
-msg = "bitset: Argument #3: Must be in the set {0,1}.";
+msg = msprintf(_("%s: Wrong value for input argument #%d: Must be in range [%d, %d].\n"), "bitset", 3, 0, 1);
 assert_checkerror("bitset([10 20], 3, 2)", msg);
-assert_checkerror("bitset([10 20], 3, 0.5)", msg);
 assert_checkerror("bitset([10 20], 3, -3)", msg);
+
+msg = msprintf(_("%s: Wrong value for input argument #%d: Integer numbers expected.\n"), "bitset", 3);
+assert_checkerror("bitset([10 20], 3, 0.5)", msg);
 
 msg = "bitset: Arguments #2 and #3: Incompatible sizes.";
 assert_checkerror("bitset([10 20], 3, [1 0])", msg);

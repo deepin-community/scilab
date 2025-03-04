@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2015 - Scilab Enterprises
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -28,7 +28,7 @@
     <refsection>
         <title>Description</title>
         <para>
-            The Scilab news feed is an embedded component that displays news about the Scilab product and Scilab Enterprises company. The same news can be found on the <ulink url="http://www.scilab.org">Scilab</ulink> web site.
+            The Scilab news feed is an embedded component that displays news about the Scilab product. The same news can be found on the <ulink url="https://www.scilab.org">Scilab</ulink> web site.
         </para>
     </refsection>
 </refentry>

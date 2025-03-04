@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2020 - Samuel GOUGEON
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,8 +9,8 @@
 
 // <-- Non-regression test for bug 4171 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/4171
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/4171
 //
 // <-- Short Description -->
 // A list including some structures was wrongly displayed
@@ -20,8 +20,8 @@
 stru.field = "value";
 
 // Add this struct in a tlist
-tl1 = tlist("X", stru);
-tl2 = tlist("X", tl1, tl1)
+tl1 = tlist(["X" "st"], stru);
+tl2 = tlist(["X" "l1" "l2"], tl1, tl1)
 
 // Same beahviour with a list
 l1 = list(stru);

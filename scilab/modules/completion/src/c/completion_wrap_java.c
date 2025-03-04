@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2007 - INRIA - Allan CORNET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -87,17 +87,27 @@ char **searchFieldsDictionary(char *lineBeforeCaret, char *pattern)
     return NULL;
 }
 /*--------------------------------------------------------------------------*/
-char **searchHandleGraphicsPropertiesDictionary(char *somechars)
+char** searchHandleGraphicsPropertiesDictionary(char* somechars)
 {
     int nbrElements = 0;
-    if ( (somechars) && (strcmp(somechars, "")) )
+    if ((somechars) && (strcmp(somechars, "")))
     {
-        char *pattern = somechars;
+        char* pattern = somechars;
         while (*(pattern++) == ' ')
         {
             ;
         }
         return completionOnHandleGraphicsProperties(--pattern, &nbrElements);
+    }
+    return NULL;
+}
+/*--------------------------------------------------------------------------*/
+char** searchMustBeDictionary(char* somechars)
+{
+    int nbrElements = 0;
+    if (somechars && strcmp(somechars, ""))
+    {
+        return completionOnMustBe(somechars, &nbrElements);
     }
     return NULL;
 }

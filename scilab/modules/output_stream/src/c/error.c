@@ -1,5 +1,5 @@
 /*
- * ( http://www.scilab.org/ ) - This file is part of Scilab
+ * ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA - Allan CORNET
  * Copyright (C) DIGITEO - 2010 - Allan CORNET
  *

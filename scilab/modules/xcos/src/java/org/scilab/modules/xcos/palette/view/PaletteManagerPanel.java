@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2010 - DIGITEO - Clement DAVID
  * Copyright (C) 2011-2015 - Scilab Enterprises - Clement DAVID
  * Copyright (C) 2015 - Marcos CARDINOT
@@ -384,6 +384,7 @@ public class PaletteManagerPanel extends JSplitPane {
         // Delay-load some blocks to pre-load jars used on the rendering.
         // A timer is used to avoid busying EDT and add a small delay between blocks
         Timer timer = new Timer(LOAD_DUMMY_BLOCK_DELAY, new LoadBlock(controller, NUMBER_OF_DUMMY_BLOCKS));
+        timer.setRepeats(false);
         timer.start();
     }
 

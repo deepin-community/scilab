@@ -2,8 +2,8 @@
 // =============================================================================
 // <-- Non-regression test for bug 3022 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=3022
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/3022
 //
 // <-- Short Description -->
 //    TCL_SetVar and TCL_GetVar had some trouble

@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2009-2009 - DIGITEO - Antoine ELIAS
  *  Copyright (C) 2011-2011 - DIGITEO - Calixte DENIZET
  *
@@ -348,7 +348,7 @@ public class ScilabInteger implements ScilabType {
 
     /**
      * If the precision is not 64, all values will be converted to long
-     * (attention, the convertion can be long) if precision is 64, just return
+     * (attention, the conversion can be long) if precision is 64, just return
      * the data
      *
      * @return the values

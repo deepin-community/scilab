@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) Scilab Enterprises - 2015 - Pierre-Aime Agnel
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -38,8 +38,10 @@ int Sciwarning(const char *msg, ...)
         {
             // Configuration variable WarningStop is set to true
             // Warning becomes an error and throws the ast exception
-            // to retrieve the line the error was generated at
-            throw ast::InternalError(_("*** Execution stopped after a warning. ***\nSet warning(\"on\") to continue execution after a warning.\n"));
+            // to retrieve the line the error was generated at.
+            // Location(-1,-1,-1,-1) means the locations are unknown at the throw time,
+            // this can be use to set the locations in the first catch which know them.
+            throw ast::InternalError(_W("*** Execution stopped after a warning. ***\nSet warning(\"on\") to continue execution after a warning.\n"), 999, Location(-1,-1,-1,-1));
         }
     }
     return retval;

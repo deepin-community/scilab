@@ -323,7 +323,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "graphic_export", "modules\g
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nographic_export", "modules\graphic_export\src\nographic_export\nographic_export.vcxproj", "{3411652C-2879-48D0-B5C1-18D546E0A683}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "scicos_sundials", "modules\scicos\src\scicos_sundials\scicos_sundials.vcxproj", "{C781737A-7C97-4CF9-ACBC-F68C2BBF0FFA}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "patched_sundials", "modules\differential_equations\src\patched_sundials\patched_sundials.vcxproj", "{C781737A-7C97-4CF9-ACBC-F68C2BBF0FFA}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Modelicac", "modules\scicos\src\modelica_compiler\Modelicac.vcxproj", "{BB476641-07F4-488E-AA87-21795FFA8F4A}"
 EndProject

@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2011 - DIGITEO - Calixte DENIZET
  * Copyright (C) 2020 - ESI Group - Clement DAVID
  *
@@ -56,12 +56,13 @@ public class ScilabFileBrowserModel extends AbstractScilabTreeTableModel
     private static final FileSize MINUSONE = new FileSize(-1);
 
     /** Will trigger a model update on file creation/deletion */
-    private final class DirWatcher extends SwingWorker<Void, Object[]> {
+    private final class DirWatcher extends SwingWorker<Void, WatchEvent<Path>> {
 
         public DirWatcher(FileNode root) {
             watchDirectories(new Object[] {root});
         }
 
+        @SuppressWarnings("unchecked")
         @Override
         protected Void doInBackground() throws Exception {
             for (; ; ) {
@@ -111,26 +112,23 @@ public class ScilabFileBrowserModel extends AbstractScilabTreeTableModel
                 }
 
                 // trigger a refresh on the EDT for the full treepath
-                publish(new Object[] {key, treePath.toArray()});
-            }
-        }
-
-        @Override
-        protected void process(List<Object[]> chunks) {
-            for (Object[] o : chunks) {
-                WatchKey key = (WatchKey) o[0];
-                Object[] path = (Object[]) o[1];
-
                 List<WatchEvent<?>> events = key.pollEvents();
-                if (events.isEmpty()) {
-                    continue;
+                for (@SuppressWarnings("rawtypes") WatchEvent event : events) {
+                    publish((WatchEvent<Path>) event);
                 }
 
                 // reinstall a watch on the directory
                 key.reset();
 
+            }
+        }
+
+        @Override
+        protected void process(List<WatchEvent<Path>> chunks) {
+            for (WatchEvent<Path> event : chunks) {
+                Path path = event.context();
                 // reload part of the model
-                ScilabFileBrowserModel.this.fireTreeStructureChanged(this, path, null, null);
+                ScilabFileBrowserModel.this.fireTreeStructureChanged(this, new Path[] {path}, null, null);
             }
         }
 

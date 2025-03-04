@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2010-2010 - DIGITEO - Antoine ELIAS
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -183,35 +183,24 @@ bool TList::invoke(typed_list & in, optional_list & /*opt*/, int _iRetCount, typ
     this->IncreaseRef();
     in.push_back(this);
 
-    std::wstring stType = getShortTypeStr();
     std::wstring wstrFuncName = L"%" + getShortTypeStr() + L"_e";
 
-    try
+    ret = Overload::call(wstrFuncName, in, _iRetCount, out, false, false, e.getLocation());
+    if(ret == types::Callable::OK_NoResult)
     {
-        ret = Overload::call(wstrFuncName, in, _iRetCount, out, false, false);
-        if(ret == types::Callable::OK_NoResult)
-        {
-            // overload not defined, try with the short name.
-            // to compatibility with scilab 5 code.
-            // tlist/mlist name are truncated to 8 first character
-            wstrFuncName = L"%" + stType.substr(0, 8) + L"_e";
-            ret = Overload::call(wstrFuncName, in, _iRetCount, out, false, true, e.getLocation());
-        }
+        // overload not defined, try with the short name.
+        // to compatibility with scilab 5 code.
+        // tlist/mlist name are truncated to 8 first character
+        std::wstring stType = getShortTypeStr();
+        wstrFuncName = L"%" + stType.substr(0, 8) + L"_e";
+        ret = Overload::call(wstrFuncName, in, _iRetCount, out, false, false, e.getLocation());
     }
-    catch (const ast::InternalError& ie)
+
+    if(ret == types::Callable::OK_NoResult)
     {
-        // last error is not empty when the error have been
-        // setted by the overload itself.
-        if (ConfigVariable::getLastErrorFunction().empty())
-        {
-            wstrFuncName = L"%l_e";
-            ret = Overload::call(wstrFuncName, in, _iRetCount, out);
-        }
-        else
-        {
-            // throw the exception in case where the overload have not been defined.
-            throw ie;
-        }
+        // last try that will throw an error if it not exists
+        wstrFuncName = L"%l_e";
+        ret = Overload::call(wstrFuncName, in, _iRetCount, out, false, true, e.getLocation());
     }
 
     // Remove this from "in" for keep "in" unchanged.
@@ -227,9 +216,7 @@ bool TList::invoke(typed_list & in, optional_list & /*opt*/, int _iRetCount, typ
     if(out.empty())
     {
         wchar_t wcstrError[512];
-        char* strFuncName = wide_string_to_UTF8(wstrFuncName.c_str());
-        os_swprintf(wcstrError, 512, _W("%s: Extraction must have at least one output.\n").c_str(), strFuncName);
-        FREE(strFuncName);
+        os_swprintf(wcstrError, 512, _W("%ls: Extraction must have at least one output.\n").c_str(), wstrFuncName.c_str());
         throw ast::InternalError(wcstrError, 999, e.getLocation());
     }
 
@@ -335,12 +322,19 @@ String* TList::getFieldNames() const
 bool TList::toString(std::wostringstream& ostr)
 {
     //call overload %type_p if exists
+    //fallthrough: call overload %l_p if exists
     types::typed_list in;
     types::typed_list out;
 
     IncreaseRef();
     in.push_back(this);
-    switch (Overload::generateNameAndCall(L"p", in, 1, out, false, false)) {
+    types::Function::ReturnValue ret = Overload::generateNameAndCall(L"p", in, 0, out, false, false);
+    if (ret == types::Callable::OK_NoResult)
+    {
+        std::wstring wstrFuncName = L"%l_p";
+        ret = Overload::call(wstrFuncName, in, 1, out, false, false);
+    }
+    switch (ret) {
         case Function::OK_NoResult:
             // unresolved function, fallback to a basic display
             break;
@@ -352,31 +346,8 @@ bool TList::toString(std::wostringstream& ostr)
             DecreaseRef();
             return true;
     };
-    DecreaseRef();
 
-    // special case for lss
-    if (getSize() != 0 &&
-            (*m_plData)[0]->isString() &&
-            (*m_plData)[0]->getAs<types::String>()->getSize() > 0 &&
-            wcscmp((*m_plData)[0]->getAs<types::String>()->get(0), L"lss") == 0)
-    {
-        wchar_t* wcsVarName = os_wcsdup(ostr.str().c_str());
-        int iPosition = 1;
-        const wchar_t * wcsDesc[7] = {L"  (state-space system:)", L"= A matrix =", L"= B matrix =", L"= C matrix =", L"= D matrix =", L"= X0 (initial state) =", L"= Time domain ="};
-        for (auto val : *m_plData)
-        {
-            std::wostringstream nextVarName;
-            ostr.str(L"");
-            nextVarName << " " << wcsVarName << L"(" << iPosition << L")";
-            ostr << std::endl << nextVarName.str() << wcsDesc[iPosition - 1] << std::endl << std::endl;
-            scilabWriteW(ostr.str().c_str());
-            VariableToString(val, nextVarName.str().c_str());
-            iPosition++;
-        }
-        ostr.str(L"");
-        free(wcsVarName);
-        return true;
-    }
+    DecreaseRef();
 
     // call normal toString
     return List::toString(ostr);

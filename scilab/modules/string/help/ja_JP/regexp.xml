@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA -
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -19,7 +19,9 @@
           xml:id="regexp" xml:lang="ja">
     <refnamediv>
         <refname>regexp</refname>
-        <refpurpose>正規表現文字列に一致する部分文字列を探す</refpurpose>
+        <refpurpose>
+            文字列内で、正規表現に一致する部分文字列を検索 (および抽出) します
+        </refpurpose>
     </refnamediv>
     <refsynopsisdiv>
         <title>呼び出し手順</title>
@@ -130,7 +132,7 @@ disp(piStringSplit(2))
 [a,b,c,d]=regexp('xabyabbbz','/ab(.*)b(.*)/')
 size(d)
 // URLからホスト名を取得
-myURL="http://www.scilab.org/download/";
+myURL="https://www.scilab.org/download/";
 [a,b,c,d]=regexp(myURL,'@^(?:http://)?([^/]+)@i')
 str='foobar: 2012';
 // 名前のあるサブパターンを使用

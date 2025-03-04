@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008 - INRIA - Jean-Baptiste SILVY <jean-baptiste.silvy@inria.fr>
 // Copyright (C) 2012 - DIGITEO - Vincent COUVERT
 //
@@ -7,6 +7,7 @@
 // =============================================================================
 
 // <-- TEST WITH GRAPHIC -->
+// <-- NO CHECK REF -->
 
 // test to check that save and load are working properly
 plotExportFile = pathconvert(TMPDIR) + "savePlot.hdf5";
@@ -311,6 +312,7 @@ delete(f);
 // reload data
 load(plotExportFile);
 
-e = gce();
-e = e.children(1);
+a = gca();
+e = a.children.children;
 assert_checkequal(e.datatips.data, [0.5, 0.125, 0]);
+delete(f);

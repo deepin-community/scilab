@@ -41,9 +41,25 @@
                         </option>
                     </xsl:for-each>
                 </Select>
-                <Label gridx="1" gridy="3" weightx="0" text="_(Width: )"/>
+
+                <Label gridx="1" gridy="3" weightx="0" text="_(Polynomial display: )"/>
+                <Select gridx="3" gridy="3" listener="ActionListener">
+                    <xsl:variable name="poldisp" select="@polynomial-display"/>
+                    <actionPerformed choose="polynomial-display">
+                        <xsl:call-template name="context"/>
+                    </actionPerformed>
+                    <xsl:for-each select="polynomial-display">
+                        <option value="{@format}" key="{@code}">
+                            <xsl:if test="@code=$poldisp">
+                                <xsl:attribute name="selected">selected</xsl:attribute>
+                            </xsl:if>
+                        </option>
+                    </xsl:for-each>
+                </Select>
+
+                <Label gridx="1" gridy="4" weightx="0" text="_(Width: )"/>
                 <NumericalSpinner gridx="3"
-                          gridy="3"
+                          gridy="4"
                           weightx="0"
                           min-value="2"
                           max-value="25"
@@ -55,9 +71,9 @@
                         <xsl:call-template name="context"/>
                     </actionPerformed>
                 </NumericalSpinner>
-                <Label gridx="1" gridy="4" weightx="0" text="_(Recursion limit: )"/>
+                <Label gridx="1" gridy="5" weightx="0" text="_(Recursion limit: )"/>
                 <Panel gridx="2" gridy="1" weightx="1"/>
-                <NumericalSpinner gridx="3" gridy="4" weightx="0" length="3"
+                <NumericalSpinner gridx="3" gridy="5" weightx="0" length="3"
                     increment="1"
                     min-value="10"
                     listener="ActionListener"
@@ -66,8 +82,8 @@
                         <xsl:call-template name="context"/>
                     </actionPerformed>
                 </NumericalSpinner>
-                <Label gridx="1" gridy="5" weightx="0" text="_(Containers display depth: )"/>
-                <NumericalSpinner gridx="3" gridy="5"
+                <Label gridx="1" gridy="6" weightx="0" text="_(Containers display depth: )"/>
+                <NumericalSpinner gridx="3" gridy="6"
                           weightx="0"
                           min-value="0"
                           max-value="30"
@@ -97,9 +113,18 @@
                         <xsl:variable name="code" select="@lang"/>
                         <xsl:for-each select="language">
                             <option value="{@desc}" key="{@code}">
-                                <xsl:if test="@code=$SCILAB_LANGUAGE or @code=$code">
+                                <xsl:choose>
+                                    <xsl:when test="$code=''"> <!-- Default value in XConfiguration-general.xml -->
+                                        <xsl:if test="@code=$SCILAB_LANGUAGE"> <!-- Use Scilab default language -->
+                                            <xsl:attribute name="selected">selected</xsl:attribute>
+                                        </xsl:if>
+                                    </xsl:when>
+                                    <xsl:otherwise> <!-- Use value from preferences -->
+                                        <xsl:if test="@code=$code">
                                     <xsl:attribute name="selected">selected</xsl:attribute>
                                 </xsl:if>
+                                    </xsl:otherwise>
+                                </xsl:choose>
                             </option>
                         </xsl:for-each>
                     </Select>

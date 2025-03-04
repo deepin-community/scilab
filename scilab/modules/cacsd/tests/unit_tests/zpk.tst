@@ -58,7 +58,8 @@ assert_checkalmostequal(Ss.Z{1,1},[3;1]);
 assert_checkalmostequal(Ss.P{1,1},[2;-2]);
 assert_checkalmostequal(Ss.K(1,1),5);
 assert_checkalmostequal(Ss.Z{1,2},[]);
-assert_checkalmostequal(Ss.P{1,2},[%i;-%i]);
+assert_checkalmostequal(imag(Ss.P{1,2}), [1; -1]);
+assert_checkalmostequal(real(Ss.P{1,2}), [0; 0], [], %eps);
 assert_checkalmostequal(Ss.K(1,2),1);
 // test of function size
 //----------------------------------------------------------------

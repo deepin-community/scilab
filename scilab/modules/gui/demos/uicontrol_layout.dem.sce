@@ -1,11 +1,21 @@
 //
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2016 - Scilab Enterprises - Clement DAVID
 //
 // This file is released under the 3-clause BSD license. See COPYING-BSD.
 
 // figure without extra bars
-f = figure("menubar_visible", "off", "toolbar_visible", "off", "infobar_visible", "off", "dockable", "off", "default_axes", "off", "visible", "off", "layout", "border");
+if get("uicontrols_layout_figure") <> [] then
+    f = get("uicontrols_layout_figure");
+    delete(f.children);
+else
+    close(100002)
+    // Create a figure
+    f = figure("menubar_visible", "off", "toolbar_visible", "off", "infobar_visible", "off", "dockable", "off", "default_axes", "off", "visible", "off", "layout", "border");
+    set(f, "figure_id", 100002);
+    set(f, "figure_name", "Uicontrols layout");
+    set(f, "tag", "uicontrols_layout_figure");
+end
 
 // a tab is a frame container
 tab = uicontrol(f, "style", "tab");

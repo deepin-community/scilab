@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2007 - INRIA - Allan CORNET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -18,8 +18,9 @@
 #include "os_string.h"
 #ifdef _MSC_VER
 #include "../../../windows_tools/src/c/scilab_windows/buildMainWindowTitle_Windows.h"
+#else
+#include "getversion.h"
 #endif
-#include "version.h"
 #include "sci_malloc.h"
 /*--------------------------------------------------------------------------*/
 char *buildMainWindowTitle(void)
@@ -27,7 +28,7 @@ char *buildMainWindowTitle(void)
     char *retTitle = NULL;
 
 #ifndef _MSC_VER
-    retTitle = os_strdup(SCI_VERSION_STRING);
+    retTitle = getScilabVersionAsString();
 #else
     retTitle = buildMainWindowTitle_Windows();
 #endif

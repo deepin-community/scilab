@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2007-2008 - INRIA - Pierre MARECHAL
 // Copyright (C) 2009-2011 - DIGITEO - Michael Baudin
 // Copyright (C) 2010-2012 - DIGITEO - Antoine ELIAS
@@ -132,6 +132,9 @@ function test_run_result = test_run(varargin)
             // Doing the XML export, force the display of the error and diff
             params.show_diff = %t;
             params.show_error = %t;
+
+            // set test_run results file in the xml dir
+            params.output_dir = fileparts(params.exportFile);
         end
     end
 
@@ -236,6 +239,12 @@ function test_run_result = test_run(varargin)
 
         params.tests_mat    = varargin(2);
         params.moduleName   = varargin(1);
+
+        if size(params.tests_mat, "*") == 1 then
+            if grep(params.tests_mat, ",") <> [] then
+                params.tests_mat = stripblanks(strsplit(params.tests_mat, ","));
+            end
+        end
 
         if ((or(size(params.moduleName) <> [1,1])) & (params.tests_mat <> [])) then
             example = test_examples();
@@ -351,7 +360,7 @@ function status = test_module(_params)
     directories = [];
     for i=1:size(my_types,"*")
         if (_params.testTypes == "all_tests") | (_params.testTypes == my_types(i)) then
-            directory_path = module.path + "/tests/" + my_types(i);
+            directory_path = module.path + filesep() + "tests" + filesep() + my_types(i);
             for j=2:size(name,"*")
                 directory_path = directory_path + filesep() + name(j);
             end
@@ -380,7 +389,17 @@ function status = test_module(_params)
             bFind = %f;
             for j = 1:size(directories, "*")
                 currentDir = directories(j);
-                testFile = currentDir + filesep() + _params.tests_mat(i) + ".tst";
+                if part(_params.tests_mat(i), 1) == "#" | ~isnan(strtod(_params.tests_mat(i))) then
+                    if part(_params.tests_mat(i), 1) == "#" then
+                        bugnum = part(_params.tests_mat(i), 2:$);
+                    else
+                        bugnum = _params.tests_mat(i)
+                    end
+
+                    testFile = currentDir + [sprintf("bug_%s", bugnum);sprintf("issue_%s", bugnum)] + ".tst";
+                else
+                    testFile = currentDir + _params.tests_mat(i) + ".tst";
+                end
                 testFile = listfiles(testFile);  // allows *pattern*
                 for File = testFile'
                     if isfile(File) then
@@ -414,10 +433,13 @@ function status = test_module(_params)
     end
 
     // For the XML export
-    testsuite.name=moduleName
+    [branch info] = getversion();
+    OS = getos();
+    testsuite.name = strcat([moduleName OS info(2)], " ")
     testsuite.time=0
     testsuite.tests=0
-    testsuite.errors=0
+    testsuite.errors=0 // unexpected errors / exception on execution
+    testsuite.failures=0 // when a test failed
 
     //don't test only return list of tests.
     if _params.reference == "list" then
@@ -454,12 +476,12 @@ function status = test_module(_params)
             displayModuleName = sprintf("[%s] %s", name(1), tests(i,2));
         end
 
-        printf("%s", displayModuleName);
-        if length(displayModuleName) >= 50 then
+        printf("%s ", displayModuleName);
+        if length(displayModuleName) < 49 then
+            for j = length(displayModuleName):48
+                printf(".");
+            end
             printf(" ");
-        end
-        for j = length(displayModuleName):50
-            printf(".");
         end
 
         elapsedTimeBefore=toc();
@@ -483,8 +505,8 @@ function status = test_module(_params)
                 printf(part(" ", 1:62) + "%s \n", msg(2));
             end
 
-            if result.id < 10 then
-                //failed
+            if result.id == 5 then
+                // error : an execution error happened and crashed Scilab
                 test_failed_count = test_failed_count + 1;
                 detailled_failures = [ detailled_failures ; sprintf("   TEST : [%s] %s", _params.moduleName, tests(i,2))];
                 detailled_failures = [ detailled_failures ; sprintf("   %s", result.message) ];
@@ -492,9 +514,19 @@ function status = test_module(_params)
                 detailled_failures = [ detailled_failures ; "" ];
 
                 testsuite.errors = testsuite.errors + 1
+                testsuite.testcase(i).error.type=result.message
+                testsuite.testcase(i).error.content=result.details
+            elseif result.id < 10 then
+                // failures
+                test_failed_count = test_failed_count + 1;
+                detailled_failures = [ detailled_failures ; sprintf("   TEST : [%s] %s", _params.moduleName, tests(i,2))];
+                detailled_failures = [ detailled_failures ; sprintf("   %s", result.message) ];
+                detailled_failures = [ detailled_failures ; result.details ];
+                detailled_failures = [ detailled_failures ; "" ];
+
+                testsuite.failures = testsuite.failures + 1
                 testsuite.testcase(i).failure.type=result.message
                 testsuite.testcase(i).failure.content=result.details
-
             elseif (result.id >= 10) & (result.id < 20) then
                 // skipped
                 test_skipped_count = test_skipped_count + 1;
@@ -539,19 +571,25 @@ function status = test_single(_module, _testPath, _testName)
     execMode      = "";
     platform      = "all";
     language      = "any";
+    assert        = %t;
     //try_catch     = %T; // Scilab 5.4.0
-    try_catch     = %f; // see comment about "dia(find(dia == '')) = [];" (~line 890)
+    try_catch     = %f; // changed for 6.0.0, see comment about "try/catch is desactived"
     error_output  = "check";
     reference     = "check";
     xcosNeeded    = %F;
 
     //some paths
-    tmp_tst     = pathconvert( TMPDIR + "/" + _testName + ".tst", %F);
-    tmp_dia     = pathconvert( TMPDIR + "/" + _testName + ".dia.tmp", %F);
-    tmp_res     = pathconvert( TMPDIR + "/" + _testName + ".res", %F);
-    tmp_err     = pathconvert( TMPDIR + "/" + _testName + ".err", %F);
-    path_dia    = pathconvert( TMPDIR + "/" + _testName + ".dia", %F);
-    tmp_prof    = pathconvert( TMPDIR + "/" + _testName + ".prof", %F);
+    result_path = TMPDIR + filesep();
+    if isfield(params, "output_dir") then
+        result_path = params.output_dir;
+    end
+
+    tmp_tst     = pathconvert( result_path + _testName + ".tst", %F);
+    tmp_dia     = pathconvert( result_path + _testName + ".dia.tmp", %F);
+    tmp_res     = pathconvert( result_path + _testName + ".res", %F);
+    tmp_err     = pathconvert( result_path + _testName + ".err", %F);
+    path_dia    = pathconvert( result_path + _testName + ".dia", %F);
+    tmp_prof    = pathconvert( result_path + _testName + ".prof", %F);
 
     path_dia_ref  = _testPath + _testName + ".dia.ref";
     // Reference file management OS by OS
@@ -573,6 +611,25 @@ function status = test_single(_module, _testPath, _testName)
         end
     else
         altreffile  = [ _testPath + _testName + ".unix.dia.ref" ];
+    end
+
+    //scilab path
+    SCI_BIN = SCI
+    if (getos() <> "Windows") && ~isfile(SCI+"/bin/scilab") then
+        // match a string wich finished by /share/scilab/ or /share/scilab
+        SCI_BIN = strsubst(SCI,"|/share/scilab/?$|","","r");
+    end
+
+    //scilab build type
+    without_gui_build = getos() <> "Windows";
+    if without_gui_build then
+        for bin = ["/", "/bin/", "/.libs/"]
+            // depending on the configure options, only scilab-cli-bin may exist
+            if isfile(SCI_BIN+bin+"scilab-bin") & isfile(SCI_BIN+bin+"scilab-cli-bin") then
+                without_gui_build = %f
+                break;
+            end
+        end
     end
 
     for i=1:size(altreffile,"*")
@@ -647,7 +704,7 @@ function status = test_single(_module, _testPath, _testName)
     end
 
     if ~isempty(grep(sciFile, "<-- TEST WITH GRAPHIC -->")) then
-        if or(_module.wanted_mode == "NWNI") then
+        if or(_module.wanted_mode == "NWNI") | without_gui_build then
             status.id = 10;
             status.message = "skipped: Test with graphic";
             return;
@@ -658,16 +715,10 @@ function status = test_single(_module, _testPath, _testName)
         execMode = "NW";
     end
 
-    if or(_module.wanted_mode == "NWNI") & isempty(grep(sciFile, "<-- CLI SHELL MODE -->")) then
+    if (or(_module.wanted_mode == "NWNI") | without_gui_build) & isempty(grep(sciFile, "<-- CLI SHELL MODE -->")) then
         status.id = 10;
         status.message = "skipped: not CLI SHELL MODE test";
         return;
-    end
-
-    if ~isempty(grep(sciFile, "<-- JVM NOT MANDATORY -->")) then
-        status.warning = _("option ""JVM NOT MANDATORY"" is deprecated, please use ""CLI SHELL MODE"" instead");
-        jvm = %F;
-        execMode = "NWNI";
     end
 
     if ~isempty(grep(sciFile, "<-- CLI SHELL MODE -->")) then
@@ -689,7 +740,7 @@ function status = test_single(_module, _testPath, _testName)
     clear MPITestPos
 
     if ~isempty(grep(sciFile, "<-- XCOS TEST -->")) then
-        if or(_module.wanted_mode == "NWNI") then
+        if or(_module.wanted_mode == "NWNI") | without_gui_build then
             status.id = 10;
             status.message = "skipped: Test with xcos";
             return;
@@ -706,6 +757,11 @@ function status = test_single(_module, _testPath, _testName)
 
     if ~isempty(grep(sciFile, "<-- ENGLISH IMPOSED -->")) then
         language = "en_US";
+    end
+
+    // assert_check* functions will produce errors instead of failures
+    if ~isempty(grep(sciFile, "<-- NO ASSERT FAILURE -->")) then
+        assert = %F;
     end
 
     // Test building
@@ -737,12 +793,13 @@ function status = test_single(_module, _testPath, _testName)
     sciFile = strsubst(sciFile, "halt();", "");
 
     // Build test header
+    bugmes_def = "function []=bugmes(), printf(''error on test'');endfunction";
     head = [
     "// <-- HEADER START -->";
     "mode(3);" ;
     "lines(28,72);";
     "lines(0);" ;
-    "function []=bugmes(), printf(''error on test'');endfunction"
+    bugmes_def;
     "function %onprompt" ;
     "   [msg, num] = lasterror();" ;
     "   if (num <> 0) then" ;
@@ -751,19 +808,35 @@ function status = test_single(_module, _testPath, _testName)
     "   quit;" ;
     "endfunction"];
     if ~interactive then
-        head($+1) = "function []=messagebox(msg, msg_title, info, buttons, isModal), disp(''messagebox: '' + msg);endfunction";
+        head = [ head ;
+        "prot=funcprot(0);";
+        "function []=messagebox(msg, msg_title, info, buttons, isModal), disp(''messagebox: '' + msg);endfunction";
+        "prot=funcprot(prot);"; // Assign result to prot to avoid to create 'ans'
+        "clear prot";
+        ];
     end
     head = [ head ;
     "predef(''all'');";
-    "tmpdirToPrint = msprintf(''TMPDIR1=''''%s'''';//\n'',TMPDIR);"
+    "TMPDIR1 = msprintf(''TMPDIR1=''''%s'''';//\n'', TMPDIR);"
+    "TMPDIR2 = msprintf(''TMPDIR2=''''%s'''';//\n'', getshortpathname(TMPDIR));"
     ];
 
     if xcosNeeded then
-        head = [
-        head;
-        "prot=funcprot(); funcprot(0);";
+        head = [ head;
+        "prot=funcprot(0);";
         "loadXcosLibs(); loadScicos();";
-        "funcprot(prot);";
+        "prot=funcprot(prot);"; // Assign result to prot to avoid to create 'ans'
+        "clear prot";
+        ];
+    end
+
+    assert_generror_def = "function assert_generror(errmsg, errnb), printf(''%s\nassert failed on test\n'',errmsg);quit; endfunction";
+    if assert then
+        head = [ head ;
+        "prot=funcprot(0);";
+        assert_generror_def;
+        "prot=funcprot(prot);"; // Assign result to prot to avoid to create 'ans'
+        "clear prot";
         ];
     end
 
@@ -774,7 +847,8 @@ function status = test_single(_module, _testPath, _testName)
     head = [
     head;
     "diary(''" + tmp_dia + "'');";
-    "printf(''%s\n'',tmpdirToPrint);";
+    "printf(''%s\n'',TMPDIR1);";
+    "printf(''%s\n'',TMPDIR2);";
     "// <-- HEADER END -->"
     ];
 
@@ -790,6 +864,8 @@ function status = test_single(_module, _testPath, _testName)
         "   lasterror()";
         "end";
         ];
+    else
+        tail = [tail; "errclear();"];
     end
 
     tail = [ tail; "diary(0);" ];
@@ -803,16 +879,7 @@ function status = test_single(_module, _testPath, _testName)
     //Build final test
     sciFile = [head ; sciFile ; tail];
 
-
     //Build command to execute
-
-    //scilab path
-    if (getos() <> "Windows") & ~isfile(SCI+"/bin/scilab") then
-        // match a string wich finished by /share/scilab/ or /share/scilab
-        SCI_BIN = strsubst(SCI,"|/share/scilab/?$|","","r");
-    else
-        SCI_BIN = SCI;
-    end
 
     //mode
     valgrind_opt = "";
@@ -869,22 +936,8 @@ function status = test_single(_module, _testPath, _testName)
         end
     end
 
-    //clean previous tmp files
-    if isfile(tmp_tst) then
-        deletefile(tmp_tst);
-    end
-
-    if isfile(tmp_dia) then
-        deletefile(tmp_dia);
-    end
-
-    if isfile(tmp_res) then
-        deletefile(tmp_res);
-    end
-
-    if isfile(tmp_err) then
-        deletefile(tmp_err);
-    end
+    // cleanup previously generated files
+    deletetmpfiles(tmp_tst, tmp_dia, tmp_res, tmp_err, path_dia);
 
     //create tmp test file
     mputl(sciFile, tmp_tst);
@@ -893,52 +946,74 @@ function status = test_single(_module, _testPath, _testName)
     returnStatus = host(test_cmd);
     //Check return status
     if (returnStatus <> 0)
+        details = [ launchthecommand(testFile); ..
+        checkthefile(tmp_dia)];
         status.id = 5;
-        status.message = "failed: Slave Scilab exited with error code " + string(returnStatus);
-        if params.show_error then
-            tmp = mgetl(tmp_res)
-            tmp(tmp=="") = []
-            status.details = "   " + strsubst(..
-            [""
-            "----- " + tmp_res + ": 10 last lines: -----"
-            tmp(max(1,size(tmp,1)-9):$)
-            ], TMPDIR, "TMPDIR")
+        status.message = "failed: tested Scilab exited with error code " + string(returnStatus);
+        status.details = details;
+        if params.show_error == %T then
+            res = mgetl(tmp_res)
+            res(res=="") = []
+            if res <> [] then
+                res = [""
+                       "----- " + tmp_res + " -----"
+                       "    " + res];
+            else
+                res = ""
+            end
+            err = mgetl(tmp_err)
+            err(err=="") = []
+            if err <> [] then
+                err = [""
+                       "----- " + tmp_err + " -----"
+                       "    " + err];
+            else
+                err = ""
+            end
+            status.details = [ status.details; strsubst(strsubst([res ; err], SCI, "SCI"), TMPDIR, "TMPDIR") ];
         end
         return;
     end
 
     //Check errors
     if (error_output == "check") & (_module.error_output == "check") then
-        if getos() == "Darwin" then
-            tmp_errfile_info = fileinfo(tmp_err);
-            msg = "Picked up _JAVA_OPTIONS:"; // When -Djava.awt.headless=false is forced for example
+        tmp_errfile_info = fileinfo(tmp_err);
 
-            if ~isempty(tmp_errfile_info) then
-                txt = mgetl(tmp_err);
-                toRemove = grep(txt, msg);
+        if ~isempty(tmp_errfile_info) then
+            txt = mgetl(tmp_err);
+
+            if ~isempty(txt) then
+                // some Concurrent exception are reported on the console without stacktrace
+                toRemove = grep(txt, "java.util.ConcurrentModificationException");
                 txt(toRemove) = [];
-                if isempty(txt) then
-                    deletefile(tmp_err);
-                else // Remove messages due to JOGL2 RC8
+            end
+
+            if ~isempty(txt) then
+                // Message displayed at startup because we force the JVM to use Scilab custom class loader
+                toRemove = grep(txt, "OpenJDK 64-Bit Server VM warning: Archived non-system classes are disabled because the java.system.class.loader property is specified");
+                txt(toRemove) = [];
+            end
+
+            if getos() == "Darwin" then
+                if ~isempty(txt) then
+                    // When -Djava.awt.headless=false is forced for example
+                    toRemove = grep(txt, "Picked up _JAVA_OPTIONS:");
+                    txt(toRemove) = [];
+                end
+
+                if ~isempty(txt) then
+                    // Remove messages due to JOGL2 RC8
                     toRemove = grep(txt, "__NSAutoreleaseNoPool()");
                     txt(toRemove) = [];
-                    if isempty(txt) then
-                        deletefile(tmp_err);
-                    end
                 end
             end
-        end
 
-        if getos() == "Linux" then // Ignore JOGL2 debug message
-            tmp_errfile_info = fileinfo(tmp_err);
-            msg = "Error: unable to open display "
-
-            if ~isempty(tmp_errfile_info) then
-                txt = mgetl(tmp_err);
-                txt(txt==msg) = [];
-
-                // Remove messages due to warning message from external
-                // libraries
+            if getos() == "Linux" then
+                if ~isempty(txt) then
+                    // Ignore JOGL2 debug message
+                    toRemove = grep(txt, "Error: unable to open display ");
+                    txt(toRemove) = [];
+                end
 
                 if ~isempty(txt) then
                     // Gtk style on Ubuntu or other Gtk logging
@@ -953,38 +1028,40 @@ function status = test_single(_module, _testPath, _testName)
                 end
 
                 if ~isempty(txt) then
+                    // missing RANDR extension display some warning on stderr
                     toRemove = grep(txt, "extension ""RANDR"" missing on display");
                     txt(toRemove) = [];
                 end
 
-                // Remove SELinux context change warnings
                 if ~isempty(txt) then
+                    // Remove SELinux context change warnings
                     toRemove = grep(txt, "/usr/bin/chcon:");
                     txt(toRemove) = [];
                 end
+            end
 
-                if isempty(txt) then
-                    deletefile(tmp_err);
+            if getos() == "Windows" then
+                if ~isempty(txt) then
+                    // Ignore TCL encoding issue on Windows UTF-8 regional settings
+                    toRemove = grep(txt, "Tcl_SetSystemEncoding:");
+                    txt(toRemove) = [];
+                end
+
+                if ~isempty(txt) then
+                    // Ignore JOGL 2.2.4 debug message
+                    toRemove = grep(txt, "Info: GLReadBufferUtil.readPixels: pre-exisiting GL error 0x500");
+                    txt(toRemove) = [];
+                end
+
+                if ~isempty(txt) then
+                    // Ignore JOGL 2.1.4 debug message
+                    toRemove = grep(txt, "Info: GLDrawableHelper.reshape: pre-exisiting GL error 0x500");
+                    txt(toRemove) = [];
                 end
             end
-        end
 
-        if getos() == "Windows" then // Ignore JOGL 2.2.4 debug message
-            tmp_errfile_info = fileinfo(tmp_err);
-            msg = "Info: GLReadBufferUtil.readPixels: pre-exisiting GL error 0x500";
-
-            if ~isempty(tmp_errfile_info) then
-                txt = mgetl(tmp_err);
-                txt(txt==msg) = [];
-                if isempty(txt) then
-                    deletefile(tmp_err);
-                else // Ignore JOGL 2.1.4 debug message
-                    msg = "Info: GLDrawableHelper.reshape: pre-exisiting GL error 0x500";
-                    txt(txt==msg) = [];
-                    if isempty(txt) then
-                        deletefile(tmp_err);
-                    end
-                end
+            if isempty(txt) then
+                deletefile(tmp_err);
             end
         end
 
@@ -1005,7 +1082,7 @@ function status = test_single(_module, _testPath, _testName)
 
         if isfile(tmp_err) & tmp_errfile_info(1) <> 0 then
             status.id = 5;
-            status.message = "failed: error_output not empty\n   Use ''no_check_error_output'' option to disable this check.";
+            status.message = "failed: error_output not empty. Use ''no_check_error_output'' option to disable this check.";
             status.details = checkthefile(tmp_err);
             return;
         end
@@ -1018,19 +1095,28 @@ function status = test_single(_module, _testPath, _testName)
         dia = mgetl(tmp_dia);
     else
         status.id = 6;
-        status.message = "failed: Cannot find the dia file: " + tmp_dia + "\nCheck if the Scilab used correctly starts";
+        status.message = "failed: Cannot find the dia file: " + tmp_dia + ". Check if the Scilab used correctly starts.";
         status.details = checkthefile(tmp_dia);
         return;
     end
 
     // To get TMPDIR value
-    tmpdir1_line = grep(dia, "/^TMPDIR1=/", "r");
-    execstr(dia(tmpdir1_line));
+    try
+        tmpdir1_line = grep(dia, "/^TMPDIR1=/", "r");
+        execstr(dia(tmpdir1_line));
+        tmpdir2_line = grep(dia, "/^TMPDIR2=/", "r");
+        execstr(dia(tmpdir2_line));
+    catch
+        status.id = 6;
+        status.message = "failed: Cannot grep the dia file: " + tmp_dia + ". Check its content.";
+        status.details = "";
+        return;
+    end
 
     //Check for execution errors
     if try_catch & grep(dia,"<--Error on the test script file-->") <> [] then
-        details = [ checkthefile(tmp_dia); ..
-        launchthecommand(testFile)];
+        details = [ launchthecommand(testFile); ..
+        checkthefile(tmp_dia)];
         status.id = 3;
         status.message = "failed: premature end of the test script";
         status.details = details;
@@ -1061,18 +1147,41 @@ function status = test_single(_module, _testPath, _testName)
     dia_tmp(grep(dia_tmp, "//")) = [];
 
     if try_catch & grep(dia_tmp, "!--error") <> [] then
-        details = [ checkthefile(tmp_dia); ..
-        launchthecommand(testFile) ];
+        details = [ launchthecommand(testFile); ..
+         checkthefile(tmp_dia)];
         status.id = 1;
         status.message = "failed: the string (!--error) has been detected";
         status.details = details;
         return;
     end
 
-
-    if grep(dia_tmp,"error on test")<>[] then
+    if grep(dia_tmp,"assert failed on test")<>[] then
+        errlines = dia_tmp(grep(dia_tmp,"assert failed on test"))
+        // Remove false positives due to the display of log, res, .. files
+        errlines(grep(errlines, assert_generror_def)) = []
+        if errlines == [] then
+            return
+        end
         details = [ checkthefile(tmp_dia); ..
         launchthecommand(testFile) ];
+        status.id = 2;
+        status.message = "failed: one or several tests failed";
+        status.details = details;
+        if params.show_error == %t then
+            status.details = [ status.details; dia($-min(10, size(dia, "*")-1):$) ]
+        end
+        return;
+    end
+
+    if grep(dia_tmp,"error on test")<>[] then
+        errlines = dia_tmp(grep(dia_tmp,"error on test"))
+        // Remove false positives due to the display of log, res, .. files
+        errlines(grep(errlines, bugmes_def)) = []
+        if errlines == [] then
+            return
+        end
+        details = [ launchthecommand(testFile); ..
+        checkthefile(tmp_dia) ];
         status.id = 2;
         status.message = "failed: one or several tests failed";
         status.details = details;
@@ -1110,8 +1219,10 @@ function status = test_single(_module, _testPath, _testName)
         (reference ~= "skip" & _module.reference=="create") then
         //  Do some modification in  dia file
 
-        dia(grep(dia, "printf(''%s\n'',tmpdirToPrint);")) = [];
+        dia(grep(dia, "printf(''%s\n'',TMPDIR1);")) = [];
+        dia(grep(dia, "printf(''%s\n'',TMPDIR2);")) = [];
         dia(grep(dia, "TMPDIR1")) = [];
+        dia(grep(dia, "TMPDIR2")) = [];
         dia(grep(dia, "diary(0)")) = [];
 
         if getos() == "Darwin" then // TMPDIR is a symblic link
@@ -1120,16 +1231,18 @@ function status = test_single(_module, _testPath, _testName)
         end
         dia = strsubst(dia,TMPDIR ,"TMPDIR");
         dia = strsubst(dia,TMPDIR1, "TMPDIR");
+        dia = strsubst(dia,TMPDIR2, "TMPDIR");
 
         if getos() == "Windows" then
             dia = strsubst(dia, strsubst(TMPDIR, "\","/"), "TMPDIR");
-            dia = strsubst(dia, strsubst(TMPDIR1, "\","/"), "TMPDIR");
             dia = strsubst(dia, strsubst(TMPDIR, "/","\"), "TMPDIR");
-            dia = strsubst(dia, strsubst(TMPDIR1, "/","\"), "TMPDIR");
             dia = strsubst(dia, strsubst(getshortpathname(TMPDIR), "\","/"), "TMPDIR");
-            dia = strsubst(dia, strsubst(getshortpathname(TMPDIR1), "\","/"), "TMPDIR");
             dia = strsubst(dia, getshortpathname(TMPDIR), "TMPDIR");
-            dia = strsubst(dia, getshortpathname(TMPDIR1), "TMPDIR");
+
+            dia = strsubst(dia, strsubst(TMPDIR1, "\","/"), "TMPDIR");
+            dia = strsubst(dia, strsubst(TMPDIR2, "\","/"), "TMPDIR");
+            dia = strsubst(dia, strsubst(TMPDIR1, "/","\"), "TMPDIR");
+            dia = strsubst(dia, strsubst(TMPDIR2, "/","\"), "TMPDIR");
         end
 
         dia = strsubst(dia, SCI, "SCI");
@@ -1165,6 +1278,8 @@ function status = test_single(_module, _testPath, _testName)
             mputl(dia, path_dia_ref);
             status.id = 20;
             status.message = "passed: ref created";
+
+            deletetmpfiles(tmp_tst, tmp_dia, tmp_res, tmp_err, path_dia);
             return;
         else
             // write down the resulting dia file
@@ -1197,10 +1312,13 @@ function status = test_single(_module, _testPath, _testName)
                 end
 
             else
+                deletetmpfiles(tmp_tst, tmp_dia, tmp_res, tmp_err, path_dia);
                 error(sprintf(gettext("The ref file (%s) doesn''t exist"), path_dia_ref));
             end
         end
     end
+    
+    deletetmpfiles(tmp_tst, tmp_dia, tmp_res, tmp_err, path_dia);
 endfunction
 
 // checkthefile
@@ -1212,9 +1330,41 @@ function msg = checkthefile( filename )
     msg(1) = "   Check the following file :"
     msg(2) = "   - "+filename
     if params.show_error == %t then
-        msg=[msg; mgetl(filename)]
+        if isfile(filename) then
+            content = mgetl(filename);
+            content(content=="") = [];
+
+            msg=[msg; strsubst(strsubst([""
+            "----- " + filename + " -----"
+            "    " + content
+            ""
+            ], SCI, "SCI"), TMPDIR, "TMPDIR") ];
+        end
     end
 
+endfunction
+
+// deletetmpfiles: clean previous tmp files
+function deletetmpfiles(tmp_tst, tmp_dia, tmp_res, tmp_err, path_dia)
+    if isfile(tmp_tst) then
+        deletefile(tmp_tst);
+    end
+
+    if isfile(tmp_dia) then
+        deletefile(tmp_dia);
+    end
+
+    if isfile(tmp_res) then
+        deletefile(tmp_res);
+    end
+
+    if isfile(tmp_err) then
+        deletefile(tmp_err);
+    end
+
+    if isfile(path_dia) then
+        deletefile(path_dia);
+    end
 endfunction
 
 // launchthecommand
@@ -1223,8 +1373,8 @@ function msg = launchthecommand( filename )
     //   Or launch the following command :
     //   - exec("C:\path\scilab\modules\optimization\tests\unit_testseldermeadeldermead_configure.tst")
     // Workaround for bug #4827
-    msg(1) = "   Or launch the following command :"
-    msg(2) = "   - exec(""" + fullpath(filename) + """);"
+    msg(1) = "   Launch the following command :"
+    msg(2) = "   - exec(""" + strsubst(fullpath(filename), SCI, "SCI") + """);"
 endfunction
 
 // => remove header from the diary txt
@@ -1337,6 +1487,8 @@ endfunction
 
 
 function exportToXUnitFormat(exportToFile, testsuites)
+    // export in JUnit XML format (also specified as XUnit)
+    // see https://github.com/testmoapp/junitxml
 
     if isfile(exportToFile) then
         // File already existing. Append the results
@@ -1351,7 +1503,16 @@ function exportToXUnitFormat(exportToFile, testsuites)
 
         appendIntoFile = %f;
     end
+
+    [branch info] = getversion();
+
     root = xmlElement(doc, "testsuites");
+
+    properties = xmlElement(doc,"properties");
+    branchProperty = xmlElement(doc, "property");
+    branchProperty.attributes.name = "branch";
+    branchProperty.attributes.value = branch;
+    properties.children(1) = branchProperty;
 
     for i=1:size(testsuites, "*") // Export module by module
         module = testsuites(i);
@@ -1362,7 +1523,7 @@ function exportToXUnitFormat(exportToFile, testsuites)
 
         testsuite.attributes.tests = string(module.tests);
         testsuite.attributes.errors = string(module.errors);
-
+        testsuite.attributes.failures = string(module.failures);
 
         if isfield(module, "testcase") then
             for j=1:size(module.testcase,"*") // Export test by test
@@ -1370,8 +1531,19 @@ function exportToXUnitFormat(exportToFile, testsuites)
                 unitTest = module.testcase(j);
                 testsuite.children(j).attributes.name = unitTest.name;
                 testsuite.children(j).attributes.time = string(unitTest.time);
-                testsuite.children(j).attributes.classname = getversion()+"."+module.name;
-                if isfield(unitTest,"failure") & size(unitTest.failure,"*") >= 1 then
+                testsuite.children(j).attributes.classname = module.name;
+                if isfield(unitTest,"error") & size(unitTest.error,"*") >= 1 then
+                    testsuite.children(j).children(1) = xmlElement(doc,"error");
+                    testsuite.children(j).children(1).attributes.type = unitTest.error.type;
+                    content = unitTest.error.content;
+                    // escaping XML as described in https://www.w3.org/TR/REC-xml/#syntax
+                    // the extra spaces might not be needed but the spec is unclear on that point.
+                    content = strsubst(content, "&", "&amp;");
+                    content = strsubst(content, "<", "&lt;");
+                    content = strsubst(content, "]]>", "]]&gt;");
+
+                    testsuite.children(j).children(1).content = content;
+                elseif isfield(unitTest,"failure") & size(unitTest.failure,"*") >= 1 then
                     testsuite.children(j).children(1) = xmlElement(doc,"failure");
                     testsuite.children(j).children(1).attributes.type = unitTest.failure.type;
                     content = unitTest.failure.content;
@@ -1387,6 +1559,8 @@ function exportToXUnitFormat(exportToFile, testsuites)
                 end
             end
         end
+        
+        testsuite.children(length(testsuite.children)+1) = properties;
 
         if appendIntoFile then
             // We will add the new elements into 'testsuites'

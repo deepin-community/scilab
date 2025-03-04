@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2005 - INRIA - Farid BELAHCENE
 // Copyright (C) 2008 - INRIA - Vincent COUVERT
 //
@@ -11,8 +11,8 @@
 
 // <-- Non-regression test for bug 1812 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=1812
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/1812
 //
 // <-- Short Description -->
 //    error in converting matlab || as && and other translator doubts
@@ -64,31 +64,27 @@ SCIFILECONTENTSREF=[
     ""
     "if a==0 & b==2 then"
     "  m = 2"
-    "end;"
+    "end"
     ""
-    "%v02 = %f;if a==0 then %v02 = b==2;end;"
-    "if %v02 then"
+    "if a==0 && b==2 then"
     "  m = 2"
-    "end;"
+    "end"
     ""
-    "%v02 = %f;if a==0 then %v02 = b==2;end;%v12 = %f;if %v02 then %v12 = c==3;end;"
-    "if %v12 & d==4 then"
+    "if a==0 && b==2 && c==3 && d==4 then"
     "  m = 2"
-    "end;"
+    "end"
     ""
     "if a==0 | b==2 then"
     "  m = 2"
-    "end;"
+    "end"
     ""
-    "%v02 = %t;if ~a==0 then %v02 = b==2;end;"
-    "if %v02 then"
+    "if a==0 || b==2 then"
     "  m = 2"
-    "end;"
+    "end"
     ""
-    "%v02 = %t;if ~a==0 then %v02 = b==2;end;%v12 = %t;if ~%v02 then %v12 = c==3;end;"
-    "if %v12 | d==4 then"
+    "if a==0 || b==2 || c==3 || d==4 then"
     "  m = 2"
-    "end;"
+    "end"
     ];
 
 if or(SCIFILECONTENTSREF<>SCIFILECONTENTS) then pause,end

@@ -126,7 +126,7 @@ msgid "Generating loader.sce...\n"
 msgstr "Génération de loader.sce...\n"
 
 msgid "Generating unloader.sce...\n"
-msgstr "unloader.sce en cours de génération...\n"
+msgstr "Génération de unloader.sce...\n"
 
 #, c-format
 msgid "%s: The module '%s' has no entry to be localized.\n"

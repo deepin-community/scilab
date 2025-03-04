@@ -1,4 +1,4 @@
-c Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+c Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 c Copyright (C) INRIA/ENPC
 c 
 c This file is released under the 3-clause BSD license. See COPYING-BSD.

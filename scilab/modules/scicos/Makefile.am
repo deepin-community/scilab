@@ -1,4 +1,4 @@
-# Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+# Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 # Copyright (C) 2008 - INRIA - Sylvestre Ledru <sylvestre.ledru@inria.fr>
 #
 # Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -118,8 +118,7 @@ sci_gateway/fortran/sci_f_tree4.f
 
 noinst_LTLIBRARIES = libsciscicos-algo.la
 if XCOS
-pkglib_LTLIBRARIES = libscisundials.la \
-                     libsciscicos-cli.la
+pkglib_LTLIBRARIES = libsciscicos-cli.la
 if GUI
 pkglib_LTLIBRARIES += libsciscicos.la
 endif
@@ -133,9 +132,11 @@ if XCOS
 libsciscicos_algo_la_CPPFLAGS= -I$(srcdir)/includes/ \
 			-I$(srcdir)/src/c/ \
 			-I$(srcdir)/src/cpp/ \
-			-I$(srcdir)/src/scicos_sundials/include/ \
-			-I$(srcdir)/src/scicos_sundials/include/sundials/ \
-			-I$(srcdir)/src/scicos_sundials/src/ida/ \
+			-I$(top_srcdir)/modules/differential_equations/src/patched_sundials/include/ \
+			-I$(top_srcdir)/modules/differential_equations/src/patched_sundials/include/sundials/ \
+			-I$(top_srcdir)/modules/differential_equations/src/patched_sundials/src/sundials/ \
+			-I$(top_srcdir)/modules/differential_equations/src/patched_sundials/src/idas/ \
+			-I$(top_srcdir)/modules/differential_equations/src/patched_sundials/src/cvodes/ \
 			-I$(top_srcdir)/modules/output_stream/includes/ \
 			-I$(top_srcdir)/modules/fileio/includes/ \
 			-I$(top_srcdir)/modules/dynamic_link/includes/ \
@@ -151,7 +152,6 @@ libsciscicos_algo_la_CPPFLAGS= -I$(srcdir)/includes/ \
 			-I$(top_srcdir)/modules/ast/includes/operations/ \
 			-I$(top_srcdir)/modules/ast/includes/system_env/ \
 			-I$(top_srcdir)/modules/ast/includes/types/ \
-			-I$(top_srcdir)/modules/ast/includes/analysis/ \
 			-I$(top_srcdir)/modules/threads/includes/ \
 			-I$(top_srcdir)/modules/console/includes/ \
 			-I$(top_srcdir)/modules/differential_equations/includes/ \
@@ -183,10 +183,10 @@ libsciscicos_algo_la_LIBADD =  \
 libsciscicos_cli_la_LIBADD = libsciscicos-algo.la $(FLIBS)
 libsciscicos_la_LIBADD = libsciscicos-algo.la $(FLIBS)
 if XCOS
-libsciscicos_cli_la_LIBADD += libscisundials.la \
+libsciscicos_cli_la_LIBADD += $(top_builddir)/modules/differential_equations/libscisundials.la \
     $(top_builddir)/modules/scicos_blocks/libsciscicos_blocks-cli.la
 if GUI
-libsciscicos_la_LIBADD += libscisundials.la \
+libsciscicos_la_LIBADD += $(top_builddir)/modules/differential_equations/libscisundials.la \
     $(top_builddir)/modules/scicos_blocks/libsciscicos_blocks.la
 endif
 endif
@@ -247,43 +247,6 @@ palettes/Threshold.cosf
 MACROSDIRSEXT= macros/scicos_auto \
 macros/scicos_scicos \
 macros/scicos_utils
-
-
-#### scicos : SUNDIALS STUFF ####
-SUNDIALS_SOURCES = src/scicos_sundials/src/cvode/cvode.c \
-src/scicos_sundials/src/cvode/cvode_dense.c \
-src/scicos_sundials/src/cvode/cvode_direct.c \
-src/scicos_sundials/src/cvode/cvode_io.c \
-src/scicos_sundials/src/ida/ida.c \
-src/scicos_sundials/src/ida/ida_dense.c \
-src/scicos_sundials/src/ida/ida_direct.c \
-src/scicos_sundials/src/ida/ida_ic.c \
-src/scicos_sundials/src/ida/ida_io.c \
-src/scicos_sundials/src/kinsol/kinsol.c \
-src/scicos_sundials/src/kinsol/kinsol_dense.c \
-src/scicos_sundials/src/kinsol/kinsol_direct.c \
-src/scicos_sundials/src/kinsol/kinsol_io.c \
-src/scicos_sundials/src/nvec_ser/nvector_serial.c \
-src/scicos_sundials/src/sundials/sundials_dense.c \
-src/scicos_sundials/src/sundials/sundials_direct.c \
-src/scicos_sundials/src/sundials/sundials_math.c \
-src/scicos_sundials/src/sundials/sundials_nvector.c \
-src/scicos_sundials/src/sundials/sundials_extension.c
-
-libscisundials_la_CFLAGS = -I$(top_srcdir)/modules/scicos/src/scicos_sundials/include \
--I$(top_srcdir)/modules/scicos/src/scicos_sundials/include/cvode \
--I$(top_srcdir)/modules/scicos/src/scicos_sundials/include/ida \
--I$(top_srcdir)/modules/scicos/src/scicos_sundials/include/kinsol \
--I$(top_srcdir)/modules/scicos/src/scicos_sundials/include/nvec_ser \
--I$(top_srcdir)/modules/scicos/src/scicos_sundials/include/sundials \
--I$(top_srcdir)/modules/scicos/src/scicos_sundials/src/cvode \
--I$(top_srcdir)/modules/scicos/src/scicos_sundials/src/ida \
--I$(top_srcdir)/modules/scicos/src/scicos_sundials/src/kinsol \
--I$(top_srcdir)/modules/scicos/src/scicos_sundials/src/nvec_ser \
--I$(top_srcdir)/modules/scicos/src/scicos_sundials/src/sundials
-
-
-libscisundials_la_SOURCES = $(SUNDIALS_SOURCES)
 
 include $(top_srcdir)/Makefile.incl.am
 

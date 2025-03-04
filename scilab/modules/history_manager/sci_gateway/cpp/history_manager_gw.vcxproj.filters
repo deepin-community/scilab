@@ -47,9 +47,6 @@
     <ClCompile Include="sci_resethistory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sci_saveafterncommands.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="sci_saveconsecutivecommands.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2014-2016 - Scilab Enterprises - Clement DAVID
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -13,6 +13,7 @@
  *
  */
 
+#include <algorithm>
 #include <cwchar>
 #include <cstdarg>
 #include <cstdio>
@@ -22,6 +23,11 @@
 #include <string>
 
 #include "scilabWrite.hxx"
+extern "C"
+{
+#include "Scierror.h"
+#include "Sciwarning.h"
+}
 
 #include "LoggerView.hxx"
 #include "Controller.hxx"
@@ -81,11 +87,11 @@ const wchar_t* LoggerView::toString(enum LogLevel level)
     return L"";
 }
 
-const char* LoggerView::toDisplay(enum LogLevel level)
+const std::string LoggerView::toDisplay(enum LogLevel level)
 {
     if (LOG_TRACE <= level && level <= LOG_FATAL)
     {
-        return displayTable[level].data();
+        return displayTable[level];
     }
     return "";
 }
@@ -97,13 +103,11 @@ void LoggerView::log(enum LogLevel level, const std::stringstream& msg)
         std::string str = msg.str();
         if (USE_SCILAB_WRITE)
         {
-            scilabForcedWrite(LoggerView::toDisplay(level));
-            scilabForcedWrite(str.data());
+            scilabForcedWrite((LoggerView::toDisplay(level) + str).data());
         }
         else
         {
-            std::cerr << LoggerView::toDisplay(level);
-            std::cerr << str;
+            std::cerr << LoggerView::toDisplay(level) << str;
         }
     }
 }
@@ -114,13 +118,11 @@ void LoggerView::log(enum LogLevel level, const std::string& msg)
     {
         if (USE_SCILAB_WRITE)
         {
-            scilabForcedWrite(LoggerView::toDisplay(level));
-            scilabForcedWrite(msg.data());
+            scilabForcedWrite((LoggerView::toDisplay(level) + msg).data());
         }
         else
         {
-            std::cerr << LoggerView::toDisplay(level);
-            std::cerr << msg;
+            std::cerr << LoggerView::toDisplay(level) << msg;
         }
     }
 }
@@ -130,7 +132,9 @@ void LoggerView::log(enum LogLevel level, const char* msg, ...)
     if (level >= this->m_level)
     {
         const int N = 1024;
-        char* str = new char[N];
+        std::vector<char> buffer(N);
+        char* str = buffer.data();
+        
         va_list opts;
         va_start(opts, msg);
         vsnprintf(str, N, msg, opts);
@@ -138,13 +142,27 @@ void LoggerView::log(enum LogLevel level, const char* msg, ...)
 
         if (USE_SCILAB_WRITE)
         {
-            scilabForcedWrite(LoggerView::toDisplay(level));
-            scilabForcedWrite(str);
+            std::string msg = LoggerView::toDisplay(level) + str;
+            if (level == LOG_WARNING)
+            {
+                // map to a Scilab warning
+                Sciwarning(msg.data());
+            }
+            else if (level >= LOG_ERROR)
+            {
+                // map to a Scilab error
+                Scierror(-1, msg.data());
+            }
+            else
+            {
+                // report to the console
+                scilabForcedWrite(msg.data());
+            }
+
         }
         else
         {
-            std::cerr << LoggerView::toDisplay(level);
-            std::cerr << str;
+            std::cerr << LoggerView::toDisplay(level) << str;
         }
     }
 }
@@ -154,7 +172,8 @@ void LoggerView::log(enum LogLevel level, const wchar_t* msg, ...)
     if (level >= this->m_level)
     {
         const int N = 1024;
-        wchar_t* str = new wchar_t[N];
+        std::vector<wchar_t> buffer(N);
+        wchar_t* str = buffer.data();
 
         va_list opts;
         va_start(opts, msg);
@@ -163,7 +182,7 @@ void LoggerView::log(enum LogLevel level, const wchar_t* msg, ...)
 
         if (USE_SCILAB_WRITE)
         {
-            scilabForcedWrite(LoggerView::toDisplay(level));
+            scilabForcedWrite(LoggerView::toDisplay(level).data());
             scilabForcedWriteW(str);
         }
         else
@@ -427,10 +446,172 @@ void LoggerView::objectCloned(const ScicosID& uid, const ScicosID& cloned, kind_
     log(LOG_INFO, ss);
 }
 
+//
+// used to debug a link connection, will be compiled out
+//
+
+/* 0-based index of id in content, -1 if not found */
+inline int indexOf(ScicosID id, const std::vector<ScicosID>& content)
+{
+    const auto& it = std::find(content.begin(), content.end(), id);
+    if (it == content.end())
+        return -1;
+    return (int) std::distance(content.begin(), it);
+};
+
+/* Scilab-like connected port  */
+static inline std::string to_string_port(Controller& controller, ScicosID uid, kind_t k, object_properties_t p)
+{
+    if (k != LINK)
+        return "";
+    if (p != SOURCE_PORT && p != DESTINATION_PORT)
+        return "";
+
+    ScicosID endID = ScicosID();
+    controller.getObjectProperty(uid, k, p, endID);
+    if (endID == ScicosID())
+    {
+        return "";
+    }
+
+    ScicosID sourceBlock = ScicosID();
+    controller.getObjectProperty(endID, PORT, SOURCE_BLOCK, sourceBlock);
+    if (sourceBlock == ScicosID())
+    {
+        return "";
+    }
+    
+    ScicosID parent = ScicosID();
+    kind_t parentKind = BLOCK;
+    controller.getObjectProperty(uid, k, PARENT_BLOCK, parent);
+    std::vector<ScicosID> children;
+    // Added to a superblock
+    if (parent == ScicosID())
+    {
+        // Added to a diagram
+        controller.getObjectProperty(uid, k, PARENT_DIAGRAM, parent);
+        parentKind = DIAGRAM;
+    }
+    if (parent == ScicosID())
+    {
+        return "";
+    }
+    controller.getObjectProperty(parent, parentKind, CHILDREN, children);
+
+    std::vector<ScicosID> sourceBlockPorts;
+    int portIndex;
+    object_properties_t port;
+    for (object_properties_t ports : { INPUTS, OUTPUTS, EVENT_INPUTS, EVENT_OUTPUTS })
+    {
+        controller.getObjectProperty(sourceBlock, BLOCK, ports, sourceBlockPorts);
+        portIndex = indexOf(endID, sourceBlockPorts) + 1;
+        port = ports;
+        if (portIndex > 0)
+            break;
+    }
+
+    int startOrEnd = 0;
+    if (port == INPUTS && p == SOURCE_PORT)
+        startOrEnd = 1;
+    else if (port == EVENT_INPUTS && p == SOURCE_PORT)
+        startOrEnd = 1;
+    else if (port == OUTPUTS && p == SOURCE_PORT)
+        startOrEnd = 0;
+    else if (port == EVENT_OUTPUTS && p == SOURCE_PORT)
+        startOrEnd = 0;
+    else if (port == INPUTS && p == DESTINATION_PORT)
+        startOrEnd = 1;
+    else if (port == EVENT_INPUTS && p == DESTINATION_PORT)
+        startOrEnd = 1;
+    else if (port == OUTPUTS && p == DESTINATION_PORT)
+        startOrEnd = 0;
+    else if (port == EVENT_OUTPUTS && p == DESTINATION_PORT)
+        startOrEnd = 0;
+
+    return "[" + std::to_string(indexOf(sourceBlock, children)+1) + " " + std::to_string(portIndex) + " " + std::to_string(startOrEnd) + "]";
+};
+
+/* Scilab-like connected link  */
+static inline std::string to_string_link(Controller& controller, ScicosID uid, kind_t k)
+{
+    if (k != LINK)
+        return "";
+
+    std::vector<ScicosID> path;
+    path.push_back(ScicosID());
+    ScicosID last = path.back();
+    controller.getObjectProperty(uid, k, PARENT_BLOCK, path.back());
+    while (path.back() != ScicosID())
+    {
+        last = path.back();
+        path.push_back(ScicosID());
+        controller.getObjectProperty(last, BLOCK, PARENT_BLOCK, path.back());
+    }
+    path.pop_back();
+
+    ScicosID diagram = ScicosID();
+    controller.getObjectProperty(last, BLOCK, PARENT_DIAGRAM, diagram);
+
+    // display path
+    std::vector<ScicosID> children;
+    controller.getObjectProperty(diagram, DIAGRAM, CHILDREN, children);
+    
+    std::stringstream ss;
+    ss << "LoggerView " << uid;
+    ss << " scs_m.objs(";
+    for (auto it = path.rbegin(); it != path.rend(); ++it)
+    {
+        ss << indexOf(*it, children) + 1 << ").model.rpar.objs(";
+        controller.getObjectProperty(*it, BLOCK, CHILDREN, children);
+    }
+    ss << indexOf(uid, children) + 1 << ") ";
+    
+    // display connection
+    ss << " = scicos_link(";
+    ss << "from=" << to_string_port(controller, uid, k, SOURCE_PORT);
+    ss << ",";
+    ss << "to=" << to_string_port(controller, uid, k, DESTINATION_PORT);
+    ss << ")";
+
+    return ss.str();
+};
+
+
 void LoggerView::propertyUpdated(const ScicosID& uid, kind_t k, object_properties_t p, update_status_t u)
 {
     std::stringstream ss;
-    ss << "propertyUpdated" << "( " << uid << " , " << k << " , " << p << " ) : " << u << '\n';
+    ss << "propertyUpdated" << "( " << uid << " , " << k << " , " << p << " ) : " << u;
+
+    // DEBUG Controller controller;
+    // DEBUG
+    // DEBUG if (p == CHILDREN || p == INPUTS || p == OUTPUTS || p == EVENT_INPUTS || p == EVENT_OUTPUTS || p == CONNECTED_SIGNALS)
+    // DEBUG {
+    // DEBUG     std::vector<ScicosID> end;
+    // DEBUG     controller.getObjectProperty(uid, k, p, end);
+    // DEBUG     if (end.size() > 0)
+    // DEBUG     {
+    // DEBUG         ss << " [ " << end[0];
+    // DEBUG         for (auto it = end.begin() + 1; it != end.end(); ++it)
+    // DEBUG             ss << " , " << *it;
+// DEBUG 
+    // DEBUG         ss << " ]";
+    // DEBUG     }
+    // DEBUG     else
+    // DEBUG     {
+    // DEBUG         ss << " []";
+    // DEBUG     }
+    // DEBUG }
+// DEBUG 
+    // DEBUG if (p == SOURCE_PORT || p == DESTINATION_PORT || p == SOURCE_BLOCK)
+    // DEBUG {
+    // DEBUG     ScicosID end;
+    // DEBUG     controller.getObjectProperty(uid, k, p, end);
+    // DEBUG     ss << " " << end;
+    // DEBUG }
+
+    ss << '\n';
+    
+
     if (u == NO_CHANGES)
     {
         log(LOG_TRACE, ss);

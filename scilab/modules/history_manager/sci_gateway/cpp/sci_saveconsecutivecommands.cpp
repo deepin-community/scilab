@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2011 - DIGITEO - Cedric DELAMARRE
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -47,7 +47,7 @@ types::Function::ReturnValue sci_saveconsecutivecommands(types::typed_list &in, 
     }
     else
     {
-        Scierror(77, _("%s: Wrong number of input argument(s): %d to %d expected.\n"), "saveafterncommands", 0, 1);
+        Scierror(77, _("%s: Wrong number of input argument(s): %d to %d expected.\n"), "saveconsecutivecommands", 0, 1);
         return types::Function::Error;
     }
     return types::Function::OK;

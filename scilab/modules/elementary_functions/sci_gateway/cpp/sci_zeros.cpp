@@ -1,10 +1,10 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2006 - INRIA - Allan CORNET
  * Copyright (C) 2011 - DIGITEO - Antoine ELIAS
  * Copyright (C) 2014 - Scilab Enterprises - Sylvain GENIN
  * Copyright (C) 2014 - Scilab Enterprises - Anais Aubert
- * Copyright (C) 2018 - Stéphane Mottelet
+ * Copyright (C) 2018 - UTC - Stéphane MOTTELET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
  *

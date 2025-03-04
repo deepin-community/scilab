@@ -1,5 +1,5 @@
 /*
-*  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+*  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 *  Copyright (C) 2017 - ESI - Antoine ELIAS
 *
 * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -77,10 +77,11 @@ types::Function::ReturnValue sci_checkNamedArguments(types::typed_list &in, int 
     std::list<lst_entry_t> lst;
     int count = ctx->getCurrentScope(lst, true);
 
-    // remove nargin/nargout//varargin
+    // remove variables created by call process.
     lst.remove_if([](const lst_entry_t& p) -> bool { return p.first == L"nargin"; });
     lst.remove_if([](const lst_entry_t& p) -> bool { return p.first == L"nargout"; });
     lst.remove_if([](const lst_entry_t& p) -> bool { return p.first == L"varargin"; });
+    lst.remove_if([](const lst_entry_t& p) -> bool { return p.first == L"varargout"; });
 
     for (int i = 0; i < size; ++i)
     {

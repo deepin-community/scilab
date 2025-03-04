@@ -1,5 +1,5 @@
 
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 1999 - INRIA - Carlos Klimann
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -31,26 +31,26 @@ function [hm]=harmean(x,orien)
     //Statistics, J.Wiley & Sons, 1990.
     //
     //
-    [lhs, rhs] = argn(0)
-    if rhs == 0 then
-        error(msprintf(gettext("%s: Wrong number of input arguments: %d to %d expected.\n"),"harmean",1,2))
+
+    arguments
+        x
+        orien (1, 1) {mustBeA(orien, ["double", "string"]), mustBeMember(orien, {1, 2, "r", "c", "*"})} = "*"
     end
+
     if x == [] then
         hm = %nan
         return
     end
-    if rhs == 1 then
+
+    if orien == "*"
         hm = 1/(sum(1 ./x(x<>0))/sum(x<>0))
-        return
-    elseif rhs == 2 then
+    else
         if orien == "r" | orien == 1 then
             le = ones(1,size(x,1))*bool2s(x<>0)
         elseif orien == "c" | orien == 2 then
             le = bool2s(x<>0)*ones(size(x,2),1)
-        else error(msprintf(gettext("%s: Wrong value for input argument #%d: ''%s'', ''%s'', %d or %d expected.\n"),"harmean",2,"r","c",1,2)), end
+        end
         x(x==0) = %inf
         hm = 1 ./(sum(1 ./x,orien) ./le)
-    else
-        error(msprintf(gettext("%s: Wrong number of input arguments: %d to %d expected.\n"),"harmean",1,2)),
     end
 endfunction

@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008 - INRIA - Michael Baudin
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -34,3 +34,20 @@ computed=1:step:10
 expected = [1 3 5 7 9]
 assert_checkalmostequal(computed, expected);
 
+// new or empty variable
+clear x;x(:)=42;
+assert_checkequal(x, 42);
+x=[]; x(:)=42;
+assert_checkequal(x, 42);
+
+clear x; for i=1:3, x(i,:) = 1:2;, end
+assert_checkequal(x, [1;1;1] * (1:2));
+
+x=[];x(2,:)=1:2;
+assert_checkequal(x, [0, 0; 1, 2]);
+x=[];x(:,2)=1:2;
+assert_checkequal(x, [0, 1; 0, 2]);
+x=[];x(:)=1:2;
+assert_checkequal(x, 1:2);
+x=[];x(:)=(1:2)';
+assert_checkequal(x, (1:2)');

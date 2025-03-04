@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) Scilab Enterprises - 2012 - Simon MARCHETTO
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,8 +9,8 @@
 //
 // <-- CLI SHELL MODE -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=10278
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/10278
 //
 // <-- Short Description -->
 // clear(["A","B"]) returned a non standard error message

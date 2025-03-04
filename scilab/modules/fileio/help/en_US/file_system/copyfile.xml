@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA - Allan CORNET
  * ...
  *
@@ -59,7 +59,7 @@
             </warning>
         </para>
         <para>
-            <code>[status, message] = copyfile(source, destination)</code>
+            <code>[status, msg] = copyfile(source, destination)</code>
             copies <varname>source</varname> to <varname>destination</varname>, returning the <varname>status</varname> and a <varname>message</varname>.
         </para>
         <para>
@@ -76,7 +76,7 @@
         <title>Examples</title>
         <programlisting role="example">
             copyfile(SCI+"/etc/scilab.start",TMPDIR+"/scilab.start")
-            [status,message] = copyfile(SCI+"/etc/scilab.start",TMPDIR);
+            [status, msg] = copyfile(SCI+"/etc/scilab.start",TMPDIR);
         </programlisting>
     </refsection>
     <refsection role="see also">

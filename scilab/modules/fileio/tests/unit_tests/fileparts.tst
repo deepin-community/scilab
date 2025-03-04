@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008 - INRIA
 // Copyright (C) 2019 - Samuel GOUGEON
 //
@@ -38,7 +38,7 @@ assert_checkerror("fileparts(SCI+''/etc/scilab.start'', [""extension"", ""extens
 
 // On the root directory
 // ---------------------
-// fileparts("c:") => "": WRONG. "c:/" expected : http://bugzilla.scilab.org/16063
+// fileparts("c:") => "": WRONG. "c:/" expected : https://gitlab.com/scilab/scilab/-/issues/16063
 pathfiles = ["c:/", "c:/abc" "c:/.abc" "/" "/abc" "/.abc"];
 [path, fname, ext] = fileparts(pathfiles);
 pathref = ['c:/','c:/','c:/','/','/','/'];
@@ -93,7 +93,7 @@ end
 assert_checkequal(path, pathref);
 //assert_checkequal(fname, ["."  "." "efg" "." "." "efg"]); // WRONG
 //assert_checkequal(ext, ["." "." "" "." "." ""]);          // WRONG
-// => http://bugzilla.scilab.org/16063
+// => https://gitlab.com/scilab/scilab/-/issues/16063
 
 // With relative paths
 pathfiles = ["abc/..", "./..", "./../", "abc/../def", "abc/../.."];
@@ -103,7 +103,7 @@ pathref = pathconvert(['abc/','./','./../','abc/../','abc/../'],%t,%t);
 assert_checkequal(path, pathref);
 //assert_checkequal(fname, ["."  "."  ""  "def"  "."]); // WRONG
 //assert_checkequal(ext,   ["."  "."  ""  ""     "."]); // WRONG
-// => http://bugzilla.scilab.org/16063
+// => https://gitlab.com/scilab/scilab/-/issues/16063
 
 // For SCI+'/etc/scilab.start'
 // --------------------------

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA
  * Copyright (C) 2010 - DIGITEO - Allan CORNET
  *
@@ -42,7 +42,7 @@
             elements are fully documented in <ulink url="http://tdg.docbook.org/tdg/5.1/docbook.html">"DocBook 5.1: The Definitive Guide"</ulink>
         </para>
         <para>
-            Scilab is able to understand a large subset of Docbook tags. However, if any are missing, a bug report can be reported on the <ulink url="http://bugzilla.scilab.org/">Scilab bug tracker</ulink>.
+            Scilab is able to understand a large subset of Docbook tags. However, if any are missing, a bug report can be reported on the <ulink url="https://gitlab.com/scilab/scilab/-/issues">Scilab bug tracker</ulink>.
         </para>
     </refsection>
     <refsection>

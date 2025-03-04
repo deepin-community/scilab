@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2011 - DIGITEO - Cedric DELAMARRE
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -23,6 +23,9 @@ extern "C"
 }
 
 CPP_GATEWAY_PROTOTYPE_EXPORT(sci_percent_cov, EXTERN_STATISTICS_GW);
+CPP_GATEWAY_PROTOTYPE_EXPORT(sci_nansum, EXTERN_STATISTICS_GW);
+CPP_GATEWAY_PROTOTYPE_EXPORT(sci_mean, EXTERN_STATISTICS_GW);
+CPP_GATEWAY_PROTOTYPE_EXPORT(sci_nanmean, EXTERN_STATISTICS_GW);
 
 class StatisticsModule
 {

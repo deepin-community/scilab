@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA
- * Copyright (C) 2018 - Samuel GOUGEON
- *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
- *
+ * Copyright (C) 2018, 2022 - Samuel GOUGEON
+  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
  * pursuant to article 5.3.4 of the CeCILL v.2.1.
  * This file was originally licensed under the terms of the CeCILL v2.1,
@@ -32,7 +31,7 @@
     </refnamediv>
     <refnamediv xml:id="int64">
         <refname>int64</refname>
-        <refpurpose>conversion to 8 bytes integer representation</refpurpose>
+        <refpurpose>преобразование в восьмибайтное представление целого числа</refpurpose>
     </refnamediv>
     <refnamediv xml:id="uint8">
         <refname>uint8</refname>
@@ -48,7 +47,7 @@
     </refnamediv>
     <refnamediv xml:id="uint64">
         <refname>uint64</refname>
-        <refpurpose> conversion to 8 bytes unsigned integer representation</refpurpose>
+        <refpurpose>преобразование в восьмибайтное представление беззнакового целого числа</refpurpose>
     </refnamediv>
     <refsynopsisdiv>
         <title>Синтаксис</title>
@@ -72,6 +71,8 @@
                     <para>
                         матрица логических чисел, закодированных целых чисел или десятичных
                         вещественных или комплексных чисел.
+                        Матрица строк, представляющая литеральные большие целые числа для <literal>int64</literal>
+                        и <literal>uint64</literal>.
                     </para>
                 </listitem>
             </varlistentry>
@@ -80,7 +81,7 @@
                 <listitem>
                     <para>
                         матрица целых чисел, закодированная по 1, 2, 4 или 8 байтам.
-                        Его размеры - размеры X.
+                        Её размеры - это размеры X.
                     </para>
                 </listitem>
             </varlistentry>
@@ -89,20 +90,20 @@
     <refsection>
         <title>Описание</title>
         <para>
-            Эти функции преобразуют и хранят данные в виде одно-, двух- или четырёхбайтных целых чисел.
+            Эти функции преобразуют и хранят данные в виде одно-, двух-, четырёх- или восьмибайтных целых чисел.
             Эти типы данных особо полезны для хранения больших объектов таких, как изображения,
             длинные сигналы,...
         </para>
         <warning>
             <para>
-                If some <varname>X</varname> decimal components have a fractional part, it is
-                always trimmed to 0.<table></table>
+                Если какие-то десятичные элементы <varname>X</varname> имеют дробную часть, то
+                она всегда обрезается до 0.<table></table>
                 Example:
                 <literal>int8([-3.6, -2.5, -1.4, 1.3, 3.5, 6.7]) // = [-3, -2, -1, 1, 3, 6]</literal>.
             </para>
             <para>
-                Values of <varname>X</varname> components that are out of the targeted interval are
-                wrapped (not saturated). Examples:
+                Значения элемнтов <varname>X</varname>, которые вне целевого интервала, заворачиваются
+                (не ограничиваются). Например:
                 <itemizedlist>
                     <listitem>
                         <literal>int8([127 128 129 130])  // = [127 -128 -127 -126]</literal>.
@@ -112,26 +113,34 @@
                     </listitem>
                 </itemizedlist>
             </para>
-            <para>-%inf is always converted into the lower bound of the interval (see below).</para>
-            <para>%inf is always converted into the upper bound of the interval (see below).</para>
-            <para>%nan is always converted into 0.</para>
-            <para>If <varname>X</varname> is complex encoded, imaginary parts are ignored.
-                Only the real parts are converted and returned.
+            <para>-%inf всегда преобразуется в нижний предел интервала (см. ниже).</para>
+            <para>%inf всегда преобразуется в верхний предел интервала (см. ниже)..</para>
+            <para>%nan всегда преобразуется в 0.</para>
+            <para>Если <varname>X</varname> комплексная, то мнимые части игнорируются.
+                Преобразуются и возвращаются только вещественные части.
             </para>
-            <para>[%f %t] is always converted into [0 1].</para>
+            <para>[%f %t] всегда преобразуются в [0 1].</para>
+        </warning>
+        <warning>
             <para>
-            Converting big int64 or uint64 integers into decimal numbers may change them
-            and downgrade their relative accuracy. Indeed, int64|uint64 integers are encoded over
-            63|64 bits, while the mantissa of decimal numbers is encoded over 53 bits only.
-            For more details, please refer to the <link linkend="double">double()</link> page.
+            <emphasis role="bold">Чтение больших литеральных целых числе с помощью int64 или uint64</emphasis>:
+            Любой ввод, например <literal>int64(1000000000000000000)</literal> безоговорочно считает
+            <literal>1000000000000000000</literal>, как десятичное число, чья мантисса закодирована
+            только 53 битами &lt; 64 битами. Следовательно, эта мантисса чаще всего обрезается, а
+            закодированное целое число, которое мы получим после обрезания плавающей точки, не равно
+            введённому числу. Во избежание этого эффекта, целое число может быть указано в виде строки:
+            <literal>int64("1000000000000000000")</literal> возвращает ожидаемое целое число, без
+            потери точности.
+            Для более детального пояснения эфекта обрезания больших целых чисел, обарщайтесь к странице
+            <link linkend="double">double()</link>.
             </para>
         </warning>
         <warning>
-            Converting <literal>[]</literal> always keeps it as is, of type 1 (decimal type).
+            Преобразование <literal>[]</literal> всегда сохраняет в исходном виде, тип 1 (десятичный тип).
         </warning>
         <para>
             <table>
-                <tr><th>Function</th><th>y in</th><th align="left">=</th></tr>
+                <tr><th>Функция</th><th>y в</th><th align="left">=</th></tr>
                 <tr><th>int8(X)</th>
                     <td>[- 2<superscript>7</superscript>,  2<superscript>7</superscript>-1]</td>
                     <td>[-128, 127]</td>
@@ -170,7 +179,7 @@
     <refsection role="examples">
         <title>Примеры</title>
         <para>
-            Rounding to 0 and wrapping, and special values:
+            Округление до 0 и завороты, и особые значения:
         </para>
         <programlisting role="example"><![CDATA[
 int8([-11.7 -8.5 -6.4  6.4 8.5 11.7])
@@ -201,7 +210,7 @@ int8([-%inf %inf %nan])
  -128  127  0
 ]]></screen>
     <para>
-        About wrapping and upper bounds of unsigned integers:
+        О заворотах и верхних пределах беззнаковых целых чисел:
     </para>
     <programlisting role="example"><![CDATA[
 uint8([-1 %inf])
@@ -227,7 +236,7 @@ uint64([-1 %inf])
   18446744073709551615  18446744073709551615
 ]]></screen>
     <para>
-        Converting 64-bits integers into decimal numbers downgrades their accuracy:
+        Преобразование 64-битных целых чисел в десятичные числа со снижением их точности:
     </para>
         <programlisting role="example"><![CDATA[
 i = uint64(2)^63 - 600
@@ -243,7 +252,7 @@ i - uint64(double(i))
   424
 ]]></screen>
     <para>
-        Converting booleans and complex numbers:
+        Преобразование логических и комплексных чисел:
     </para>
     <programlisting role="example"><![CDATA[
 int8([%f %t])
@@ -265,7 +274,37 @@ uint8(-10.2 + 3.4*%i)
   246
 ]]></screen>
     <para>
-        [] is not convertible:
+        Чтение литеральных int64 или uint64 целых чисел, больше, чем 2^53,
+        без эффекта обрезания плавающей точки:
+    </para>
+    <programlisting role="example"><![CDATA[
+a = [uint64(1000000000000001000) ; uint64("1000000000000001000")]
+typeof(a)
+
+a = [int64(-1000000000000001000) ; int64("-1000000000000001000")]
+typeof(a)
+ ]]></programlisting>
+    <screen><![CDATA[
+--> a = [uint64(1000000000000001000) ; uint64("1000000000000001000")]
+ a  =
+  1000000000000001024
+  1000000000000001000
+
+--> typeof(a)
+ ans  =
+  "uint64"
+
+--> a = [int64(-1000000000000001000) ; int64("-1000000000000001000")]
+ a  =
+ -1000000000000001024
+ -1000000000000001000
+
+--> typeof(a)
+ ans  =
+  "int64"
+]]></screen>
+    <para>
+        [] не преобразуется:
     </para>
     <programlisting role="example"><![CDATA[
 i = uint16(3);
@@ -328,14 +367,14 @@ typeof(i)
                 <revdescription>
                     <itemizedlist>
                         <listitem>
-                            int64() and uint64() added to Scilab.
+                            int64() и uint64() добавлены в Scilab.
                         </listitem>
                         <listitem>
-                            Complex input numbers are now accepted.
+                            Теперь принимаются комплексные входные числа.
                         </listitem>
                         <listitem>
                             <table>
-                                <tr><th>This</th>               <th>is now</th>     <th>instead of</th></tr>
+                                <tr><th>Это</th>               <th>теперь</th>     <th>вместо</th></tr>
                                 <tr><td>int8([-%inf, %inf])</td><td>[-128, 127]</td><td>[0, 0]</td></tr>
                                 <tr><td>int16([-%inf, %inf])</td><td>[-32768, 32767]</td><td>[0, 0]</td></tr>
                                 <tr><td>int32(%inf)</td>        <td>2147483647</td> <td>-2147483648</td></tr>
@@ -345,6 +384,13 @@ typeof(i)
                             </table>
                         </listitem>
                     </itemizedlist>
+                </revdescription>
+            </revision>
+            <revision>
+                <revnumber>6.1.2</revnumber>
+                <revdescription>
+                    <literal>int64</literal> и <literal>uint64</literal> расширены до строк, чтобы
+                    читать большие целые числа > 2<superscript>53</superscript> без обрезания.
                 </revdescription>
             </revision>
         </revhistory>

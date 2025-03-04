@@ -2,9 +2,9 @@ Description: force java detection in the main script
 Author: Julien Puydt
 Forwarded: not needed
 
---- scilab.orig/scilab/bin/scilab
-+++ scilab/scilab/bin/scilab
-@@ -455,6 +455,10 @@
+--- a/scilab/bin/scilab
++++ b/scilab/bin/scilab
+@@ -433,6 +433,10 @@
  # uname -s Power Macintosh
  # uname -m Darwin
  

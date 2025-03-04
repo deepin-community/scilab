@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2010 - DIGITEO - Allan CORNET
  * Copyright (C) 2012-2015 - Scilab Enterprises - Clement DAVID
  * Copyright (C) 2015 - Scilab Enterprises - Paul Bignier
@@ -42,7 +42,7 @@ extern "C" {
 using namespace org_scilab_modules_xcos;
 using namespace org_scilab_modules_scicos;
 
-static int callXcos(char* fname, char* file, long diagramId);
+static int callXcos(char* fname, char* file, ScicosID diagramId);
 
 /*--------------------------------------------------------------------------*/
 static char funname[] = "xcos";
@@ -114,7 +114,7 @@ types::Function::ReturnValue sci_Xcos(types::typed_list &in, int _iRetCount, typ
             return types::Function::Error;
         }
 
-        if (callXcos(funname, nullptr, static_cast<long>(o->id())))
+        if (callXcos(funname, nullptr, o->id()))
         {
             return types::Function::Error;
         }
@@ -174,7 +174,7 @@ types::Function::ReturnValue sci_Xcos(types::typed_list &in, int _iRetCount, typ
 }
 /*--------------------------------------------------------------------------*/
 
-static int callXcos(char *fname, char* file, long diagramId)
+static int callXcos(char *fname, char* file, ScicosID diagramId)
 {
     set_loaded_status(XCOS_CALLED);
 

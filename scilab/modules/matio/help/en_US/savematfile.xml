@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2004-2007 - INRIA - Serge STEER
  * Copyright (C) 2004-2007 - INRIA - Vincent COUVERT
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -47,7 +47,7 @@
                 <term>varnames</term>
                 <listitem>
                     <para>
-                        vector of the names (text) of variables to save, like
+                        vector of the names (character string) of variables to save, like
                         <literal>["var1" "var2"..]</literal>.
                     </para>
                 </listitem>
@@ -72,19 +72,19 @@
                             </tr>
                             <tr valign="top">
                                 <td align="right"><emphasis role="bold">"-v4"</emphasis></td>
-                                <td>: A format that MATLAB Version 4 can open</td>
+                                <td>: A format that MATLAB Version 4 and later can open</td>
                             </tr>
                             <tr valign="top">
                                 <td align="right"><emphasis role="bold">"-v6"</emphasis></td>
-                                <td>: A format that MATLAB Version 6 and earlier can open</td>
+                                <td>: A format that MATLAB Version 6 and later can open</td>
                             </tr>
                             <tr valign="top">
                                 <td align="right"><emphasis role="bold">"-v7"</emphasis></td>
-                                <td>: A format that MATLAB Version 7 and earlier can open (default)</td>
+                                <td>: A format that MATLAB Version 7 and later can open (default)</td>
                             </tr>
                             <tr valign="top">
                                 <td align="right"><emphasis role="bold">"-v7.3"</emphasis></td>
-                                <td>: A format that MATLAB Version 7.3 and earlier can open</td>
+                                <td>: A format that MATLAB Version 7.3 and later can open</td>
                             </tr>
                             <tr valign="top">
                                 <td align="right"><emphasis role="bold">"-ascii"</emphasis></td>
@@ -176,12 +176,11 @@
             <th>Data type</th>  <th>v4</th><th>v6</th><th>v7</th><th>v7.3</th><th>ASCII</th>
                 <th>Comments</th></tr>
             <tr valign="top">
-                <td>boolean</td><td>x</td><td>bug</td><td>bug</td><td>bug</td><td>x</td>
-                <td><ulink url="http://bugzilla.scilab.org/15568">Bug 15568</ulink>
-                </td>
+                <td>boolean</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td>
+                <td></td>
             </tr>
             <tr valign="top">
-                <td>integer</td><td>x</td><td>X</td><td>X</td><td>X</td><td>no</td>
+                <td>integer</td><td>X</td><td>X</td><td>X</td><td>X</td><td>no</td>
                 <td>int8 are stored as uint8 if they are all > 0, or as int16 otherwise.<table/>
                     uint32 are stored as int32 if they are all &lt; 2<superscript>31</superscript>-1,
                     or as decimal numbers otherwise.<table/>
@@ -189,34 +188,34 @@
                 </td>
             </tr>
             <tr valign="top">
-                <td>real</td><td>x</td><td>X</td><td>X</td><td>X</td><td>x</td>
+                <td>real</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td>
                 <td></td>
             </tr>
             <tr valign="top">
-                <td>complex</td><td>x</td><td>X</td><td>X</td><td>X</td><td>x</td>
+                <td>complex</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td>
                 <td>ASCII: imaginary part ignored.</td>
             </tr>
             <tr valign="top">
                 <td>sparse</td>
-                    <td>x</td><td>x</td> <td>x</td> <td>x</td> <td>x</td>
+                    <td>X</td><td>X</td> <td>X</td> <td>X</td> <td>X</td>
                 <td>Octave 4.4 loads correctly any real or complex sparse array saved from Scilab 6.0.<table/>
                     But loadmatfile()
-                    <ulink url="http://bugzilla.scilab.org/15731">crashes Scilab</ulink> for
+                    <ulink url="https://gitlab.com/scilab/scilab/-/issues/15731">crashes Scilab</ulink> for
                     any sparse saved with -v4, and any complex sparse saved with -v6 -v7 or -v7.3.
                 </td>
             </tr>
             <tr valign="top">
-                <td>boolean sparse</td><td>x</td><td>no</td><td>no</td><td>no</td><td>x</td>
+                <td>boolean sparse</td><td>X</td><td>no</td><td>no</td><td>no</td><td>X</td>
                 <td>v4: Saved as sparse decimal 0|1. Well read from Octave 4.4</td>
             </tr>
             <tr valign="top">
-                <td>Text</td><td>x</td><td></td><td></td><td></td><td>?</td>
-                <td>v4: Any array is saved as a column of texts right-padded with spaces to all
+                <td>character string</td><td>X</td><td></td><td></td><td></td><td>?</td>
+                <td>v4: Any array is saved as a column of character strings right-padded with spaces to all
                     have the same lengths.
                 </td>
             </tr>
             <tr valign="top">
-                <td>struct</td><td>no</td><td></td><td>x</td><td>X</td><td>no</td>
+                <td>struct</td><td>no</td><td></td><td>X</td><td>X</td><td>no</td>
                 <td></td>
             </tr>
             <tr valign="top">
@@ -233,7 +232,7 @@ H = rand(2,4,2);
 N = complex(rand(2,3), rand(2,3));
 I = int8(grand(4,10,"uin",-100,100));
 T = ["foo" "bar"]';
-S = struct("num",H, "imag",N, "text",T, "int",I);
+S = struct("num",H, "imag",N, "str",T, "int",I);
 C = {"Scilab", rand(2,3); H, S};
 
 // Saving them in v7.3 format:
@@ -281,7 +280,7 @@ for v = varnames, execstr("mprintf(""\n %s ="",v); disp("+v+")"), end
  S =
   num: [2x4x2 constant]
   imag: [2x3 constant]
-  text: [2x1 string]
+  str: [2x1 string]
   int: [4x10 int8]
 
  C =

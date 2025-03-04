@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2020 - Samuel GOUGEON
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,8 +9,8 @@
 //
 // <-- Non-regression test for bug 14916 -->
 //
-// <-- Bugzilla URL -->
-// https://bugzilla.scilab.org/14916
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/14916
 //
 // <-- Short Description -->
 // read(%io(1), 1, 1, '(a)') + keyboard input + enter crashed Scilab

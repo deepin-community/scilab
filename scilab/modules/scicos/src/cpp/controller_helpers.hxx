@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2014-2015 - Scilab Enterprises - Clement DAVID
  *  Copyright (C) 2017 - Scilab Enterprises - Clement DAVID
  *
@@ -18,7 +18,6 @@
 #define CONTROLLER_HELPERS_HXX_
 
 #include "LoggerView.hxx"
-
 
 namespace org_scilab_modules_scicos
 {

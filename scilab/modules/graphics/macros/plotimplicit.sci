@@ -1,5 +1,5 @@
 // ===================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 // Copyright (C) 2011 - DIGITEO - Michael Baudin
 // Copyright (C) 2012 - SCILAB ENTERPRISES - Claude Gomez
@@ -10,7 +10,7 @@
 // This source file is licensed as described in the file COPYING, which
 // you should have received as part of this distribution.  The terms
 // are also available at
-// http://www.cecill.info/licences/Licence_CeCILL_V2.1-en.txt
+// https://www.cecill.info/licences/Licence_CeCILL_V2.1-en.txt
 // ===================================================================
 
 function plotimplicit(fun, x_grid, y_grid, varargin)
@@ -177,8 +177,7 @@ function plotimplicit(fun, x_grid, y_grid, varargin)
     cnt = 0
     if size(xc, "*") == 0
         warning(msprintf(gettext("%s: Function evaluation in selected range does not cross any zeros.\n"), fname));
-        plotframe([min(x_grid) min(y_grid) max(x_grid) max(y_grid)])
-
+        plot2d([], [], 0, "011", " ", [min(x_grid) min(y_grid) max(x_grid) max(y_grid)])
     else
         // Cleaning results of contour2di
         // The function might return several times the same contour

@@ -1,5 +1,5 @@
 ;
-; Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+; Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 ; Copyright (C) INRIA - Allan CORNET
 ; Copyright (C) DIGITEO - 2010 - Allan CORNET
 ;
@@ -50,6 +50,7 @@ Source: thirdparty\batik-all.jar;DestDir: {app}\thirdparty; Components: {#COMPN_
 Source: thirdparty\lucene-analyzers-common-8.4.0.jar;DestDir: {app}\thirdparty; Components: {#COMPN_SCILAB} and {#COMPN_JVM_MODULE}
 Source: thirdparty\lucene-core-8.4.0.jar;DestDir: {app}\thirdparty; Components: {#COMPN_SCILAB} and {#COMPN_JVM_MODULE}
 Source: thirdparty\lucene-queryparser-8.4.0.jar;DestDir: {app}\thirdparty; Components: {#COMPN_SCILAB} and {#COMPN_JVM_MODULE}
+Source: thirdparty\jakarta.activation-2.0.1.jar;DestDir: {app}\thirdparty; Components: {#COMPN_SCILAB} and {#COMPN_JVM_MODULE}
 ;
 Source: modules\{#HELPTOOLS}\license.txt; DestDir: {app}\modules\{#HELPTOOLS}; Components: {#COMPN_SCILAB} and {#COMPN_JVM_MODULE}
 ;

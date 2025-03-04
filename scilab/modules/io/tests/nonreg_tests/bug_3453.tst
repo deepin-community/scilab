@@ -1,6 +1,6 @@
 //<-- CLI SHELL MODE -->
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008 - INRIA - Allan CORNET
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -11,8 +11,8 @@
 // <-- Short Description -->
 //    write(6,1) or write(6,[1 2;4 5]) crashs scilab
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=3453
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/3453
 //
 
 write(%io(2),'toto');

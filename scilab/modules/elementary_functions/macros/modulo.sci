@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 // Copyright (C) DIGITEO - 2011 - Allan CORNET
 // Copyright (C) 2012 - Scilab Enterprises - Adeline CARNIS
@@ -15,46 +15,31 @@
 
 function i = modulo(n, m)
 
-    [lhs, rhs] = argn(0);
-    if rhs <> 2 then
-        msg = _("%s: Wrong number of input argument(s): %d expected.\n")
-        error(msprintf(msg, "modulo", 2))
+    arguments
+        n {mustBeA(n, ["double", "polynomial", "int"]), mustBeReal}
+        m {mustBeA(m, ["double", "polynomial", "int"]), mustBeReal, mustBeEqualDimsOrScalar(m, n)}
     end
 
-    mt = type(m)
-    nt = type(n)
-    // -----------------------  Checking arguments --------------------------
-
-    if ~or(nt==[1 2 8]) | (nt==1 & ~isreal(n))
-        msg = _("%s: Wrong type for input argument #%d: Real, integer or polynomial matrix expected.\n")
-        error(msprintf(msg, "modulo", 1))
-    end
-
-    if ~or(mt==[1 2 8]) | (mt==1 & ~isreal(m))
-        msg = _("%s: Wrong type for input argument #%d: Real, integer or polynomial matrix expected.\n")
-        error(msprintf(msg, "modulo", 2))
-    end
-
-    if (nt==8 | mt==8)  & nt~=mt
+    nt = type(n);
+    mt = type(m);
+    if (nt == 8 | mt == 8) & nt ~= mt then
         msg = _("%s: Incompatible input arguments #%d and #%d: Same types expected.\n")
         error(msprintf(msg, "modulo", 1, 2))
     end
 
     // --------------------------  Processing ----------------------------
 
-    if m==[]
+    if m == [] then
         i = n;
         return
     end
-    if or(mt==[1 8]) & mt==nt then
-        if length(n)>1 & length(m)>1 & or(size(n) <> size(m)) then
-            msg = _("%s: Wrong size for input arguments: Same size expected.\n")
-            error(msprintf(msg, "modulo"))
-        end
+    if or(nt == [1 8]) then
         i = n - int(n ./ m) .* m
-        i = iconvert(i, inttype(n))
+        if nt == 8 then
+            i = iconvert(i, inttype(n))
+        end
     else
-        [i,?] = pdiv(n, m)
+        [i,_] = pdiv(n, m)
     end
 
 endfunction

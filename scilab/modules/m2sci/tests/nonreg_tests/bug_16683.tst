@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2021 - Samuel GOUGEON
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -11,8 +11,8 @@
 //
 // <-- Non-regression test for bug 16683 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/16683
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/16683
 
 // <-- Short Description -->
 // m2sci: series of fix and improvements
@@ -134,7 +134,7 @@ Ref = [
   "g = 2*3*4*5"
   "h = 2*3/4"
   "k = 2/3+4/5-3"
-  "m = 1; n = 2"
+  "m = 1;n = 2"
   "for i = 1:2"
   "  disp(i)"
   "end"
@@ -157,7 +157,7 @@ Ref = [
   ""
   "type(sin)==9"
   ""
-  "%v0 = rand(1,2,3); a = ndims(%v0)==2 & min(size(%v0))==1"
+  "%v0 = rand(1,2,3);a = ndims(%v0)==2 & min(size(%v0))==1"
   ""
   "// !! L.65: Matlab function complex not yet converted, original calling sequence used."
   "isreal(complex(1,0))"

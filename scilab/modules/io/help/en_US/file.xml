@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) XXXX-2008 - INRIA
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
  * Copyright (C) 2018 - Samuel GOUGEON
@@ -92,7 +92,10 @@
                         <varlistentry>
                             <term>"direct"</term>
                             <listitem>
-                                <para>direct access.</para>
+                                <para>
+                                   direct access. The next input argument <varname>recl</varname>
+                                   is then mandatory.
+                                </para>
                             </listitem>
                         </varlistentry>
                     </variablelist>
@@ -236,8 +239,7 @@
                         properties and to get the associated unit number <varname>unit</varname>.
                         This unit number may be used for further actions on this file or as file
                         descriptor in <function>read</function>, <function>write</function>,
-                        <function>readb</function>,
-                        <function>writb</function>,<function>save</function>, <function>load</function>
+                        <function>save</function>, <function>load</function>
                         function calls.
                     </para>
                 </listitem>
@@ -329,13 +331,7 @@ mclose(u2);
                 <link linkend="read">read</link>
             </member>
             <member>
-                <link linkend="readb">readb</link>
-            </member>
-            <member>
                 <link linkend="write">write</link>
-            </member>
-            <member>
-                <link linkend="writb">writb</link>
             </member>
             <member>
                 <link linkend="mopen">mopen</link>

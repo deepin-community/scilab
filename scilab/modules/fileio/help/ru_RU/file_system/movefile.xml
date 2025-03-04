@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009 - DIGITEO - Allan CORNET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -77,7 +77,7 @@
             </warning>
         </para>
         <para>
-            Инструкция <code>[status, message] = movefile(source, destination)</code> перемещает источник <varname>source</varname> в
+            Инструкция <code>[status, msg] = movefile(source, destination)</code> перемещает источник <varname>source</varname> в
             назначение <varname>destination</varname>, возвращая статус
             <varname>status</varname> и сообщение <varname>message</varname>.
         </para>
@@ -90,7 +90,7 @@
         <title>Примеры</title>
         <programlisting role="example"><![CDATA[
       copyfile(SCI+"/etc/scilab.start",TMPDIR+"/scilab.start")
-      [status,message] = movefile(TMPDIR+"/scilab.start",TMPDIR+"/renamed_scilab.start")
+      [status, msg] = movefile(TMPDIR+"/scilab.start",TMPDIR+"/renamed_scilab.start")
     ]]></programlisting>
     </refsection>
     <refsection role="see also">

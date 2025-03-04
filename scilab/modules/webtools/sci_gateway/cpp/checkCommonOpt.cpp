@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2017 - ESI-Group - Cedric DELAMARRE
 *
 * This file is hereby licensed under the terms of the GNU GPL v2.0,
@@ -12,11 +12,9 @@
 */
 /*--------------------------------------------------------------------------*/
 
-#include <curl/curl.h>
 #include "webtools_gw.hxx"
 #include "function.hxx"
 #include "string.hxx"
-#include "sciCurl.hxx"
 
 extern "C"
 {
@@ -26,10 +24,8 @@ extern "C"
 }
 
 /*--------------------------------------------------------------------------*/
-int checkCommonOpt(void* _curl, types::optional_list &opt, const char* fname)
+int checkCommonOpt(SciCurl& query, types::optional_list& opt, const char* fname)
 {
-    CURL* curl = (CURL*)_curl;
-
     // get optional argument if necessary
     for (const auto& o : opt)
     {
@@ -37,47 +33,94 @@ int checkCommonOpt(void* _curl, types::optional_list &opt, const char* fname)
         {
             if(o.second->isString() == false || o.second->getAs<types::String>()->isScalar() == false)
             {
-                Scierror(999, _("%s: Wrong type for input argument #%s: A scalar string expected.\n"), fname, o.first.data());
+                Scierror(999, _("%s: Wrong type for input argument #%s: A scalar string expected.\n"), fname, "cert");
                 return 1;
             }
 
             wchar_t* pCert = o.second->getAs<types::String>()->get(0);
             if(wcscmp(pCert, L"none") == 0)
             {
-                curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false);
-                return 0;
+                query.ssl(false);
+                continue;
             }
             // TODO management of cert file
             // else if cert is file
 
-            Scierror(999, _("%s: Wrong value for input argument #%s: 'none' expected.\n"), fname, o.first.data());
+            Scierror(999, _("%s: Wrong value for input argument #%s: 'none' expected.\n"), fname, "cert");
             return 1;
         }
         else if(o.first == L"follow")
         {
             if(o.second->isBool() == false || o.second->getAs<types::Bool>()->isScalar() == false)
             {
-                Scierror(999, _("%s: Wrong type for input argument #%s: A scalar boolean expected.\n"), fname, o.first.data());
+                Scierror(999, _("%s: Wrong type for input argument #%s: A scalar boolean expected.\n"), fname, "follow");
                 return 1;
             }
 
             if(o.second->getAs<types::Bool>()->get(0) == 1)
             {
-                curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1);
+                query.follow(1);
             }
         }
         else if(o.first == L"auth")
         {
             if(o.second->isString() == false || o.second->getAs<types::String>()->isScalar() == false)
             {
-                Scierror(999, _("%s: Wrong type for input argument #%s: A scalar string expected.\n"), fname, o.first.data());
+                Scierror(999, _("%s: Wrong type for input argument #%s: A scalar string expected.\n"), fname, "auth");
                 return 1;
             }
 
             char* pAuth = wide_string_to_UTF8(o.second->getAs<types::String>()->get(0));
-            curl_easy_setopt(curl, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
-            curl_easy_setopt(curl, CURLOPT_USERPWD, pAuth);
+            query.auth(pAuth);
             FREE(pAuth);
+        }
+        else if(o.first == L"verbose")
+        {
+            if(o.second->isBool() == false || o.second->getAs<types::Bool>()->isScalar() == false)
+            {
+                Scierror(999, _("%s: Wrong type for input argument #%s: A scalar boolean expected.\n"), fname, "verbose");
+                return 1;
+            }
+
+            if(o.second->getAs<types::Bool>()->get(0) == 1)
+            {
+                query.verbose(true, fname);
+            }
+        }
+        else if(o.first == L"headers")
+        {
+            if(o.second->isString() == false)
+            {
+                Scierror(999, _("%s: Wrong type for input argument #%s: String expected.\n"), fname, "headers");
+                return 1;
+            }
+
+            types::String* pStr = o.second->getAs<types::String>();
+            for(int i = 0; i < pStr->getSize(); ++i)
+            {
+                char* pcHeader = wide_string_to_UTF8(pStr->get(i));
+                query.addHTTPHeader(pcHeader);
+                FREE(pcHeader);
+            }
+        }
+        else if(o.first == L"cookies")
+        {
+            if(o.second->isString() == false)
+            {
+                Scierror(999, _("%s: Wrong type for input argument #%s: String expected.\n"), fname, "cookies");
+                return 1;
+            }
+
+            types::String* pStr = o.second->getAs<types::String>();
+            std::stringstream cookies;
+            for(int i = 0; i < pStr->getSize(); ++i)
+            {
+                char* pcCookies = wide_string_to_UTF8(pStr->get(i));
+                cookies << pcCookies << ";";
+                FREE(pcCookies);
+            }
+
+            query.setCustomCookies(cookies.str().data());
         }
     }
 

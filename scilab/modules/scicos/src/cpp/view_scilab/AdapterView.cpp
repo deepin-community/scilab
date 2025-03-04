@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2017-2018 - ESI Group - Clement DAVID
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
@@ -34,13 +34,13 @@ AdapterView::~AdapterView()
     Controller::unregister_view(this);
 }
 
-void AdapterView::objectCreated(const ScicosID& uid, kind_t kind)
-{
-};
-void AdapterView::objectReferenced(const ScicosID& uid, kind_t kind, unsigned refCount) {};
-void AdapterView::objectUnreferenced(const ScicosID& uid, kind_t kind, unsigned refCount) {};
+void AdapterView::objectCreated(const ScicosID&, kind_t) {};
+void AdapterView::objectReferenced(const ScicosID&, kind_t, unsigned) {};
+void AdapterView::objectUnreferenced(const ScicosID&, kind_t, unsigned) {};
 void AdapterView::objectDeleted(const ScicosID& uid, kind_t kind)
 {
+    Controller controller;
+
     switch (kind)
     {
         case BLOCK:
@@ -70,7 +70,35 @@ void AdapterView::objectCloned(const ScicosID& uid, const ScicosID& cloned, kind
     }
 };
 
-void AdapterView::propertyUpdated(const ScicosID& uid, kind_t kind, object_properties_t property, update_status_t status) {};
+void AdapterView::propertyUpdated(const ScicosID& uid, kind_t kind, object_properties_t property, update_status_t status)
+{
+    if (status == SUCCESS && property == CHILDREN)
+    {
+        Controller controller;
+        
+        std::vector<ScicosID> children;
+        controller.getObjectProperty(uid, kind, CHILDREN, children);
+
+        // cleanup partial information
+        for (size_t index = 0; index < children.size(); ++index)
+        {
+            model::BaseObject* object = controller.getBaseObject(children[index]);
+            if (object == nullptr)
+                continue;
+
+            if (object->kind() == BLOCK)
+            {
+                model::Block* adaptee = (model::Block*) object;
+                GraphicsAdapter::cleanup_relink(controller, adaptee, children);
+            }
+            else if (object->kind() == LINK)
+            {
+                model::Link* adaptee = (model::Link*) object;
+                LinkAdapter::cleanup_relink(controller, adaptee, children);    
+            }
+        }
+    }
+};
 
 } /* namespace view_scilab */
 } /* namespace org_scilab_modules_scicos */

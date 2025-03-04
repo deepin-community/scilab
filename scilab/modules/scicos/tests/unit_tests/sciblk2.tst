@@ -1,216 +1,287 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
-// Copyright (C) 2015 - Scilab Enterprises - Paul Bignier
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
+// Copyright (C) 2023 - Dassault Systèmes - Clément DAVID
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
 //
-// <-- XCOS TEST -->
+// <-- CLI SHELL MODE -->
+// <-- NO CHECK REF -->
 // <-- ENGLISH IMPOSED -->
 //
-// Load and run a diagram that calls a Scilab macro (tkscaleblk.sci)
-exec("SCI/modules/scicos/tests/unit_tests/bug_8348.cosf", -1);
-// Call sciblk2 instead of sciblk4
-scs_m.objs(1).model.sim = list("tkscaleblk", 3);
-scs_m.props.tf = 100;
+// This is a unit test for sciblk2 API to keep in sync with sciblk4.tst
+//
 
-// Rewrite tkscaleblk so it minds sciblk2's syntax
-wMode = warning("query");
-warning("off")
-function [xd, tvec, z, x, outptr] = tkscaleblk(flag, nevprt, t, x, z, rpar, ipar, inptr)
+loadXcosLibs
+
+//
+// Write a simulation function that output current time on event.
+// This function does not have states.
+//
+
+function [xd, tvec, z, x, outptr] = sciblk2_tst(flag, nevprt, t, x, z, rpar, ipar, inptr)
+    xd = 0;
+    tvec = [];
     outptr = list();
+
+    if and(flag <> 0:6) then pause, end
+    if and(nevprt <> [0 1]) then pause, end
+    if t <> scicos_time() then pause, end
+    if x <> [] then pause, end
+    if z <> [] then pause, end
+
+    if or(size(rpar) <> [2 1]) then pause, end
+    if ipar <> [] then pause, end
+    if inptr <> list() then pause, end
+
     if flag == 1 then
         // Output update
-        slider = get("-38f07e57:12bd41b596e:-7f2b#slider");
-
-        if slider <> [] then
-            // Calculate real value
-            value = get(slider,"value") / rpar(3);
-
-            w = get("-38f07e57:12bd41b596e:-7f2b");
-            if w <> [] then
-                set(w, "info_message", string(value));
-            end
-
-            outptr = list(value);
-        end
+        outptr = list(t);
     elseif flag == 4 then
         // Initialization
-
-        // If already exists (stopped) then reuse
-        f = get("-38f07e57:12bd41b596e:-7f2b");
-        if f <> [] then
-            return;
-        end
-
-        f = figure("Figure_name", "TK Source: " + "", ...
-        "dockable", "off", ...
-        "infobar_visible" , "on", ...
-        "toolbar", "none", ...
-        "menubar_visible", "off", ...
-        "menubar", "none", ...
-        "backgroundcolor", [1 1 1], ...
-        "default_axes", "off", ...
-        "figure_size", [180 350], ...
-        "layout", "border", ...
-        "figure_position", [40 40], ...
-        "Tag", "-38f07e57:12bd41b596e:-7f2b");
-
-        frame_slider = uicontrol(f, ...
-        "style", "frame", ...
-        "constraints", createConstraints("border", "left", [180, 0]), ...
-        "border", createBorder("line", "lightGray", 1), ...
-        "backgroundcolor", [1 1 1], ...
-        "layout", "gridbag");
-
-        // Slider
-        bounds = rpar(1:2);
-        initial = mean(bounds);
-        uicontrol(frame_slider, ...
-        "Style", "slider", ...
-        "Tag", "-38f07e57:12bd41b596e:-7f2b#slider", ...
-        "Min", bounds(1), ...
-        "Max", bounds(2), ...
-        "Value", initial, ...
-        "Position", [0 0 10 20], ...
-        "SliderStep", [rpar(3) 2*rpar(3)]);
-
-        frame_label = uicontrol(frame_slider, ...
-        "style", "frame", ...
-        "constraints", createConstraints("border", "right"), ...
-        "backgroundcolor", [1 1 1], ...
-        "layout", "gridbag");
-
-        // Labels
-        labels = string([bounds(2) ; ...
-        mean([bounds(2) initial])  ; ...
-        initial                    ; ...
-        mean([bounds(1) initial])  ; ...
-        bounds(1)]);
-        labels = "<html>" + strcat(labels, "<br /><br /><br />") + "</html>";
-
-        uicontrol(frame_label, ...
-        "Style", "text", ...
-        "String", labels(1), ...
-        "FontWeight", "bold", ...
-        "backgroundcolor", [1 1 1]);
-
-        // Update default value
-        outptr = list(initial / rpar(3));
+        outptr = list(rpar(1));
     elseif flag == 5 then
         // Ending
-        f = get("-38f07e57:12bd41b596e:-7f2b");
-        if f <> [] then
-            close(f);
-        end
+        outptr = list(rpar(2));
     end
-    xd = 0;
-    tvec = [];
 endfunction
-warning(wMode);
 
-cpr = scicos_simulate(scs_m);
+function [x,y,typ] = SCIBLK2_TST(job, arg1, arg2)
+    x=[];
+    y=[];
+    typ=[];
+    select job
+    case "set" then
+        x=arg1;
+    case "define" then
+        start_end=[10;20]
+        model=scicos_model()
+        model.sim=list("sciblk2_tst", 3)
+        model.out=1
+        model.evtin=1
+        model.rpar=start_end
+        model.blocktype="d"
 
-cpr229 = [ ...
-1;
-5.5;
-5.5;
-5.5];
-
-// Check the sensitive value of the continuous state
-assert_checkalmostequal(list2vec(cpr(2)(2)(9)), cpr229);
-close(gcf());
-
-// Load and run a diagram that calls a Scilab macro (anim_pen.sci)
-exec("SCI/modules/scicos/tests/unit_tests/pendulum_anim5.cosf", -1);
-// Call sciblk2 instead of sciblk4
-scs_m.objs(8).model.sim = list("anim_pen", 3);
-
-// Rewrite anim_pen so it minds sciblk2's syntax
-wMode = warning("query");
-warning("off")
-function [xd, tvec, z, x, outptr] = anim_pen(flag, nevprt, t, x, z, rpar, ipar, inptr)
-    win=20000+curblock()
-    if flag<>4 then
-        H=scf(win)
+        exprs=sci2exp(start_end)
+        gr_i=[]
+        x=standard_define([2 3], model, exprs,gr_i)
     end
-    xold=z
-    plen=rpar(1)*1.6;
-    csiz=rpar(2)/4;
-    phi=rpar(3);
-    rcirc=csiz/3;
-    if flag==4 then
-        //** INIT
-        scf(win);
-        set("figure_style","new")
-        H=scf(win)
-        clf(H)
-        Axe=H.children
-        Axe.data_bounds=rpar(4:7)
-        Axe.isoview="on"
+endfunction
 
-        S=[cos(phi),-sin(phi);sin(phi),cos(phi)]
-        XY=S*[rpar(4),rpar(5);-csiz,-csiz]
-        gca().foreground = 3;
-        xsegs(XY(1,:),XY(2,:)-rcirc)
+blk = SCIBLK2_TST("define");
+clk = CLOCK_f("define");
+l = scicos_link(from=[2 1 0], to=[1 1 1], ct=[1 -1]);
+scs_m = scicos_diagram(objs = list(blk, clk, l));
 
-        xTemp=0;
-        theta=0;
-        x1=xTemp-csiz;
-        x2=xTemp+csiz;
-        y1=-csiz;
-        y2=csiz
-        XY=S*[x1 x2 x2 x1 x1;y1,y1,y2,y2,y1]
-        gca().foreground = 5;
-        xfpoly(XY(1,:),XY(2,:))// cart
-        gca().foreground = 2;
-        xfarc(XY(1,1),XY(2,1),rcirc,rcirc,0,360*64) //wheel
-        xfarc(XY(1,2),XY(2,2),rcirc,rcirc,0,360*64) //wheel
+scs_m.props.tf = 0;
+Info = scicos_simulate(scs_m);
+[tcur, cpr, alreadyran, needstart, needcompile, state0] = Info(:);
+assert_checkalmostequal(state0.tevts, 0.1);
+assert_checkalmostequal(cpr.state.x,               state0.x,               scs_m.props.tol(2), scs_m.props.tol(1));
+assert_checkalmostequal(cpr.state.z,               state0.z,               scs_m.props.tol(2), scs_m.props.tol(1));
+assert_checkalmostequal(list2vec(cpr.state.oz),    list2vec(state0.oz),    scs_m.props.tol(2), scs_m.props.tol(1));
+assert_checkalmostequal(cpr.state.iz,              state0.iz,              scs_m.props.tol(2), scs_m.props.tol(1));
+assert_checkalmostequal(cpr.state.tevts,           state0.tevts,           scs_m.props.tol(2), scs_m.props.tol(1));
+assert_checkalmostequal(cpr.state.evtspt,          state0.evtspt,          scs_m.props.tol(2), scs_m.props.tol(1));
+assert_checkalmostequal(cpr.state.pointi,          state0.pointi,          scs_m.props.tol(2), scs_m.props.tol(1));
+assert_checkalmostequal(list2vec(cpr.state.outtb), 20, scs_m.props.tol(2), scs_m.props.tol(1));
 
-        XY=S*[xTemp,xTemp+plen*sin(theta);0,0+plen*cos(theta)]//pendulum
-        xsegs(XY(1,:),XY(2,:))
+scs_m.props.tf = 1;
+Info = scicos_simulate(scs_m);
+[tcur, cpr, alreadyran, needstart, needcompile, state0] = Info(:);
+assert_checkalmostequal(cpr.state.tevts, 1.1);
+assert_checkalmostequal(cpr.state.outtb(1), 20);
 
-    elseif flag==2 then
-        //** UPDATE
-        Axe=H.children
-        xTemp=inptr(1)(1)
-        theta=inptr(2)(1)
-        drawlater();
-        XY=Axe.children(4).data'+ [cos(phi)*(xTemp-xold);sin(phi)*(xTemp-xold)]*ones(1,5)
-        Axe.children(4).data=XY'
+scs_m.props.tf = 2;
+Info = scicos_simulate(scs_m);
+[tcur, cpr, alreadyran, needstart, needcompile, state0] = Info(:);
+assert_checkalmostequal(cpr.state.tevts, 2);
+assert_checkalmostequal(cpr.state.outtb(1), 20);
 
-        Axe.children(3).data(1)=XY(1,1)
-        Axe.children(3).data(2)=XY(2,1)
-        XY=Axe.children(4).data'+ [cos(phi)*(xTemp-xold-rcirc);sin(phi)*(xTemp-xold-rcirc)]*ones(1,5)
-        Axe.children(2).data(1)=XY(1,2)
-        Axe.children(2).data(2)=XY(2,2)
-        x1=xTemp*cos(phi);
-        y1=xTemp*sin(phi)
-        XY=[x1,x1+plen*sin(theta);y1,y1+plen*cos(theta)]
-        Axe.children(1).data=XY'
-        drawnow();
-        z=xTemp
+scs_m.props.tf = 3;
+Info = scicos_simulate(scs_m);
+[tcur, cpr, alreadyran, needstart, needcompile, state0] = Info(:);
+assert_checkalmostequal(cpr.state.tevts, 3);
+assert_checkalmostequal(cpr.state.outtb(1), 20);
+
+//
+// Write a simulation function that have a continuous state
+//
+
+function [xd, tvec, z, x, outptr] = sciblk2_tst_x(flag, nevprt, t, x, z, rpar, ipar, inptr)
+    xd = 1 ./ x;
+    tvec = [];
+    outptr = list();
+
+    if and(flag <> 0:6) then pause, end
+    if and(nevprt <> [0 1]) then pause, end
+    if t <> scicos_time() then pause, end
+    if z <> [] then pause, end
+
+    if or(size(rpar) <> [2 1]) then pause, end
+    if ipar <> [] then pause, end
+    if inptr <> list() then pause, end
+
+    if flag == 0 then
+        // Continuous state update
+        xd = 1 ./ x;
+    elseif flag == 1 then
+        // Output update
+        outptr = list(t);
+    elseif flag == 4 then
+        // Initialization
+        outptr = list(rpar(1));
+    elseif flag == 5 then
+        // Ending
+        outptr = list(rpar(2));
     end
+endfunction
+
+function [x,y,typ] = SCIBLK2_TST_X(job, arg1, arg2)
+    x=[];
+    y=[];
+    typ=[];
+    select job
+    case "set" then
+        x=arg1;
+    case "define" then
+        start_end=[10;20]
+        model=scicos_model()
+        model.sim=list("sciblk2_tst_x", 3)
+        model.out=1
+        model.rpar=start_end
+        model.state=[0.1 ; 0.5 ; 1]
+        model.dep_ut=[%f %t]
+        model.blocktype="c"
+
+        exprs=sci2exp(start_end)
+        gr_i=[]
+        x=standard_define([2 3], model, exprs,gr_i)
+    end
+endfunction
+
+blk = SCIBLK2_TST_X("define");
+scs_m = scicos_diagram(objs = list(blk));
+
+scs_m.props.tf = 0;
+Info = scicos_simulate(scs_m);
+[tcur, cpr, alreadyran, needstart, needcompile, state0] = Info(:);
+assert_checkalmostequal(cpr.state.x,               state0.x,               scs_m.props.tol(2), scs_m.props.tol(1));
+assert_checkalmostequal(cpr.state.z,               state0.z,               scs_m.props.tol(2), scs_m.props.tol(1));
+assert_checkalmostequal(list2vec(cpr.state.oz),    list2vec(state0.oz),    scs_m.props.tol(2), scs_m.props.tol(1));
+assert_checkalmostequal(cpr.state.iz,              state0.iz,              scs_m.props.tol(2), scs_m.props.tol(1));
+assert_checkalmostequal(cpr.state.tevts,           state0.tevts,           scs_m.props.tol(2), scs_m.props.tol(1));
+assert_checkalmostequal(cpr.state.evtspt,          state0.evtspt,          scs_m.props.tol(2), scs_m.props.tol(1));
+assert_checkalmostequal(cpr.state.pointi,          state0.pointi,          scs_m.props.tol(2), scs_m.props.tol(1));
+assert_checkalmostequal(list2vec(cpr.state.outtb), 20, scs_m.props.tol(2), scs_m.props.tol(1));
+
+scs_m.props.tf = 1;
+Info = scicos_simulate(scs_m);
+[tcur, cpr, alreadyran, needstart, needcompile, state0] = Info(:);
+assert_checkalmostequal(cpr.state.tevts, []);
+assert_checkalmostequal(cpr.state.outtb(1), 20);
+assert_checkalmostequal(cpr.state.x, [ 1.4177416 ; 1.5000008 ; 1.7320511], scs_m.props.tol(2), scs_m.props.tol(1));
+
+scs_m.props.tf = 2;
+Info = scicos_simulate(scs_m);
+[tcur, cpr, alreadyran, needstart, needcompile, state0] = Info(:);
+assert_checkalmostequal(cpr.state.tevts, []);
+assert_checkalmostequal(cpr.state.outtb(1), 20);
+assert_checkalmostequal(cpr.state.x, [ 2.0024962 ; 2.0615540 ; 2.2360680], scs_m.props.tol(2), scs_m.props.tol(1));
+
+scs_m.props.tf = 3;
+Info = scicos_simulate(scs_m);
+[tcur, cpr, alreadyran, needstart, needcompile, state0] = Info(:);
+assert_checkalmostequal(cpr.state.tevts, []);
+assert_checkalmostequal(cpr.state.outtb(1), 20);
+assert_checkalmostequal(cpr.state.x, [ 2.4515306 ; 2.5000012 ; 2.6457512], scs_m.props.tol(2), scs_m.props.tol(1));
+
+//
+// Write a simulation function that have a discrete state
+//
+
+function [xd, tvec, z, x, outptr] = sciblk2_tst_z(flag, nevprt, t, x, z, rpar, ipar, inptr)
     xd = 0;
     tvec = [];
     outptr = list();
+
+    if and(flag <> 0:6) then pause, end
+    if and(nevprt <> [0 1]) then pause, end
+    if t <> scicos_time() then pause, end
+    if x <> [] then pause, end
+    
+    if or(flag == [1, 2]) then
+        assert_checkalmostequal(t - z, 0.1);
+    end
+
+    if or(size(rpar) <> [2 1]) then pause, end
+    if ipar <> [] then pause, end
+    if inptr <> list() then pause, end
+
+    if flag == 1 then
+        // Output update
+        outptr = list(t);
+    elseif flag == 2 then
+        // State update
+        z = t
+    elseif flag == 4 then
+        // Initialization
+        outptr = list(rpar(1));
+    elseif flag == 5 then
+        // Ending
+        outptr = list(rpar(2));
+    end
 endfunction
-warning(wMode);
 
-cpr = scicos_simulate(scs_m);
+function [x,y,typ] = SCIBLK2_TST_Z(job, arg1, arg2)
+    x=[];
+    y=[];
+    typ=[];
+    select job
+    case "set" then
+        x=arg1;
+    case "define" then
+        start_end=[10;20]
+        model=scicos_model()
+        model.sim=list("sciblk2_tst_z", 3)
+        model.out=1
+        model.evtin=1
+        model.rpar=start_end
+        model.dstate=0
+        model.blocktype="d"
 
-cpr229 = [ ...
--0.00000010072892435; ...
--0.0000000093251865; ...
-12.731754622278423; ...
-0.00000000775393652; ...
--0.00000007274473145; ...
-0.00000008598899216; ...
--0.00000000636625628; ...
--0.00000010072892435;
--0.0000000093251865; ...
--0.00000100269157242; ...
-12.7317556249699955; ];
+        exprs=sci2exp(start_end)
+        gr_i=[]
+        x=standard_define([2 3], model, exprs,gr_i)
+    end
+endfunction
 
-// Check the sensitive value of the continuous state
-assert_checkalmostequal(list2vec(cpr(2)(2)(9)), cpr229, [], 1e9);
+blk = SCIBLK2_TST_Z("define");
+clk = CLOCK_f("define");
+l = scicos_link(from=[2 1 0], to=[1 1 1], ct=[1 -1]);
+scs_m = scicos_diagram(objs = list(blk, clk, l));
+
+scs_m.props.tf = 0;
+Info = scicos_simulate(scs_m);
+[tcur, cpr, alreadyran, needstart, needcompile, state0] = Info(:);
+assert_checkalmostequal(state0.tevts, 0.1);
+state0("outtb") = list(20);
+for f=fieldnames(cpr.state)', assert_checkalmostequal(list2vec(cpr.state(f)), list2vec(state0(f)), scs_m.props.tol(2), scs_m.props.tol(1)); end
+
+scs_m.props.tf = 1;
+Info = scicos_simulate(scs_m);
+[tcur, cpr, alreadyran, needstart, needcompile, state0] = Info(:);
+assert_checkalmostequal(cpr.state.tevts, 1.1);
+assert_checkalmostequal(cpr.state.outtb(1), 20);
+
+scs_m.props.tf = 2;
+Info = scicos_simulate(scs_m);
+[tcur, cpr, alreadyran, needstart, needcompile, state0] = Info(:);
+assert_checkalmostequal(cpr.state.tevts, 2);
+assert_checkalmostequal(cpr.state.outtb(1), 20);
+
+scs_m.props.tf = 3;
+Info = scicos_simulate(scs_m);
+[tcur, cpr, alreadyran, needstart, needcompile, state0] = Info(:);
+assert_checkalmostequal(cpr.state.tevts, 3);
+assert_checkalmostequal(cpr.state.outtb(1), 20);

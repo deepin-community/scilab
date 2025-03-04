@@ -8,13 +8,21 @@ freehep-graphicsio.jar=${thirdparty.dir}/freehep-graphicsio.jar
 
 commons-logging.jar=${thirdparty.dir}/commons-logging-1.1.jar
 
-flexdock.jar=${thirdparty.dir}/flexdock-1.2.4.jar
+flexdock.jar=${thirdparty.dir}/flexdock-1.2.5.jar
+
+jakarta.activation-api.jar=${thirdparty.dir}/jakarta.activation-api-2.1.2.jar
+
+javax.annotation-api.jar=${thirdparty.dir}/javax.annotation-api-1.3.2.jar
+
+jaxb-api.jar=${thirdparty.dir}/jaxb-api-2.3.1.jar
 
 jgraphx.jar=${thirdparty.dir}/jgraphx.jar
 
-scirenderer.jar=${modules.dir}/scirenderer/jar/scirenderer.jar
+jogl2.jar=${thirdparty.dir}/jogl-all.jar
 
-jogl2.jar=${thirdparty.dir}/jogl2.jar
+javafx.base.jar=${thirdparty.dir}/javafx.base.jar
+javafx.swing.jar=${thirdparty.dir}/javafx.swing.jar
+javafx.graphics.jar=${thirdparty.dir}/javafx.graphics.jar
 
 jhall.jar=${thirdparty.dir}/jhall.jar
 
@@ -24,7 +32,7 @@ lucene-analyzers-common.jar=${thirdparty.dir}/lucene-analyzers-common-8.4.0.jar
 
 lucene-queryparser.jar=${thirdparty.dir}/lucene-queryparser-8.4.0.jar
 
-gluegen2.jar=${thirdparty.dir}/gluegen2-rt.jar
+gluegen2.jar=${thirdparty.dir}/gluegen-rt.jar
 
 jrosetta-API.jar=${thirdparty.dir}/jrosetta-API.jar
 
@@ -46,6 +54,10 @@ asm3.jar=${thirdparty.dir}/asm3.jar
 
 ; To build the export through the Java
 avalon-framework.jar=${thirdparty.dir}/avalon-framework.jar
+
+library.scirenderer.dir=${modules.dir}/scirenderer/${build.jar.dir}/
+library.scirenderer.src.dir=${modules.dir}/scirenderer/${library.src.path}
+library.scirenderer.name=scirenderer.jar
 
 library.jvm.dir=${modules.dir}/jvm/${build.jar.dir}/
 library.jvm.src.dir=${modules.dir}/jvm/${library.src.path}

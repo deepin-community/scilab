@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2009 - DIGITEO - Bernard HUGUENEY
 * Copyright (C) 2011 - DIGITEO - Cedric DELAMARRE
 *
@@ -204,6 +204,10 @@ types::Function::ReturnValue sci_qr(types::typed_list &in, int _iRetCount, types
     if (_iRetCount >= 2)
     {
         out.push_back(pDblR);
+    }
+    else
+    {
+        pDblR->killMe();
     }
 
     if (_iRetCount == 3)

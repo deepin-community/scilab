@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2011 - DIGITEO - Sylvestre Ledru
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -21,26 +21,43 @@
     </refnamediv>
     <refsection>
         <title>Description</title>
-        <para>A MPI interface is provided to Scilab. This interface allows high-performance Message Passing computations.</para>
+        <warning>
+            On Windows, the Scilab MPI module is optional: its installation is done on request in the Scilab's installer.
+        </warning>
+        <warning>
+            The Microsoft HPC Pack 2012 R2 must be downloaded and installed before using this module on Windows.
+        </warning>
         <para>
-            Like any other MPI applications, Scilab/MPI as be started through the <literal>mpirun</literal> command usually with the argument <literal>-c</literal> to specify the number of nodes started.
+            A MPI interface is provided to Scilab. This interface allows high-performance
+            Message Passing computations.
+        </para>
+        <para>
+            Like any other MPI applications, Scilab/MPI as be started through the
+            <literal>mpirun</literal> command usually with the argument <literal>-c</literal>
+            to specify the number of nodes started.
         </para>
     </refsection>
     <refsection>
         <title>Supported datatype</title>
         <para>
-            The Scilab MPI implementation supports the following Scilab datatypes (under the matrix or scalar form):
+            The Scilab MPI implementation supports the following Scilab datatypes (under the matrix
+            or scalar form):
             <simplelist type="inline">
-                <member>Double</member><member>Boolean</member><member>int (all)</member><member>String</member><member>Sparse</member><member>Boolean Sparse</member>
+                <member>Double</member>
+                <member>Boolean</member>
+                <member>int (all)</member>
+                <member>String</member>
+                <member>Sparse</member>
+                <member>Boolean Sparse</member>
             </simplelist>
-            For now, advanced data structures like list, tlist or mlist are not supported. Opening a new bug report to see them supported is a good way.
+            For now, advanced data structures like list, tlist or mlist are not supported.
+            Opening a new bug report to see them supported is a good way.
         </para>
     </refsection>
     <refsection>
         <title>Example of Scilab MPI</title>
         <programlisting role="scilab"><![CDATA[
 // TODO. Add an example (PI ?)
-
 ]]></programlisting>
     </refsection>
     <refsection role="see also">

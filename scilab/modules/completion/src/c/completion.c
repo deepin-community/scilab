@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2007 - INRIA - Allan CORNET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -54,12 +54,16 @@ char **completion(const char *somechars, int *sizeArrayReturned)
     char **completionhandlegraphicsproperties = completionOnHandleGraphicsProperties(somechars, &sizecompletionhandlegraphicsproperties);
 
     int sizecompletionfiles = 0;
-    char **completionfiles = completionOnFiles(somechars, &sizecompletionfiles);
+    char** completionfiles = completionOnFiles(somechars, &sizecompletionfiles);
+
+    int sizecompletionmustBe = 0;
+    char** completionmustBe = completionOnMustBe(somechars, &sizecompletionmustBe);
 
     *sizeArrayReturned = 0;
 
     sizedictionary = sizecompletionfunctions + sizecompletioncommandwords + sizecompletionmacros
-                     + sizecompletionvariables + sizecompletionhandlegraphicsproperties + sizecompletionfiles;
+        + sizecompletionvariables + sizecompletionhandlegraphicsproperties + sizecompletionfiles
+        + sizecompletionmustBe;
 
 
     if ( (completionfiles) && (sizedictionary == sizecompletionfiles) )
@@ -83,6 +87,7 @@ char **completion(const char *somechars, int *sizeArrayReturned)
             appendDictionary(&dictionary, &i, &completionvariables, &sizecompletionvariables);
             appendDictionary(&dictionary, &i, &completionhandlegraphicsproperties, &sizecompletionhandlegraphicsproperties);
             appendDictionary(&dictionary, &i, &completionfiles, &sizecompletionfiles);
+            appendDictionary(&dictionary, &i, &completionmustBe, &sizecompletionmustBe);
 
             dictionary = SortDictionary(dictionary, i);
             dictionary = RemoveDuplicateDictionary(dictionary, &i);
@@ -96,6 +101,7 @@ char **completion(const char *somechars, int *sizeArrayReturned)
     freePointerDictionary(completionmacros, sizecompletionmacros);
     freePointerDictionary(completionhandlegraphicsproperties, sizecompletionhandlegraphicsproperties);
     freePointerDictionary(completionfunctions, sizecompletionfunctions);
+    freePointerDictionary(completionmustBe, sizecompletionmustBe);
 
     return ListWords;
 }
@@ -403,6 +409,27 @@ char **completionOnDictionary(char **dictionary, int sizedictionary, const char 
     else
     {
         *sizearrayreturned = 0;
+    }
+    return ListWords;
+}
+
+char** completionOnMustBe(const char* somechars, int* sizeArrayReturned)
+{
+    char** ListWords = NULL;
+    char** dictionary = NULL;
+    int sizedictionary = 0;
+
+    dictionary = getmustbekeywords(&sizedictionary);
+
+    if (dictionary)
+    {
+        dictionary = SortDictionary(dictionary, sizedictionary);
+        ListWords = completionOnDictionary(dictionary, sizedictionary, somechars, sizeArrayReturned);
+        freePointerDictionary(dictionary, sizedictionary);
+    }
+    else
+    {
+        *sizeArrayReturned = 0;
     }
     return ListWords;
 }

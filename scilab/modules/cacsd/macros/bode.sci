@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 1985 - 2016 - INRIA - Serge Steer
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
 // Copyright (C) 2018 - Samuel GOUGEON
@@ -212,7 +212,8 @@ function bode(varargin)
     if rad == %t then
         // This function modifies the Bode diagrams for a rad/s display instead of Hz.
         // h is a hanlde of a figure containing Bode diagrams.
-        // Ref: http://forge.scilab.org/index.php/p/cpge/source/tree/HEAD/macros/bode_Hz2rad_2.sci
+        // Ref: https://gitlab.com/scilab/forge/cpge/-/tree/master/macros/bode_Hz2rad_2.sci
+
         labels = [_("Phase (degree)"); _("Magnitude (dB)")];
         pos_h = [9, 5];
         for k=1:2

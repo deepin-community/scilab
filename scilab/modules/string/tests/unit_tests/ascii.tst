@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2007-2008 - INRIA
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -37,7 +37,7 @@ mclose( fd );
 ASCII_TXT           = ascii(txt);
 TXT_FROM_ASCII_CODE = ascii(ASCII_TXT);
 
-if (length(TXT_FROM_ASCII_CODE) <> 27453) then pause,end
+if (length(TXT_FROM_ASCII_CODE) <> 27397) then pause,end
 
 // == TEST 5 ===================================================================
 

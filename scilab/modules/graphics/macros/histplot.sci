@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 // Copyright (C) Bruno Pincon
 // Copyright (C) 2010 - Samuel Gougeon
@@ -116,11 +116,16 @@ function [y, ind] = histplot(n,data,style,strf,leg,rect,nax,logflag,frameflag,ax
     //    X = [x1 x1 x2 x2 x2 x3 x3 x3  x4 ...   xn xn+1 xn+1]'
     //    Y = [0  y1 y1 0  y2 y2 0  y3  y3 ... 0 yn yn   0 ]'
     X = [x(1);x(1);matrix([1;1;1]*x(2:n),-1,1);x(n+1);x(n+1)]
+
+    // Prevent degenerate/flat polygon when category is void
+    y_for_poly = y;
+    y_for_poly(y==0) = max(y)*%eps*65536;
+
     // BUG#1885
     // We start the histplot line to %eps rather than 0
     // So when switching to logarithmic mode we do not fall
     // in log(0) special behaviour.
-    Y = [matrix([%eps;1;1]*y,-1,1);%eps]
+    Y = [matrix([%eps;1;1]*y_for_poly,-1,1);%eps]
 
     if opt_arg_seq == [] then
         plot2d(X,Y)

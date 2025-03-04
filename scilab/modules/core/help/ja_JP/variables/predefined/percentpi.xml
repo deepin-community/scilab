@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2012 - DIGITEO - Allan CORNET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -21,6 +21,7 @@
         <refname>%pi</refname>
         <refpurpose>円の円周と直径の比</refpurpose>
     </refnamediv>
+    <refnamediv xml:id="pi"/>
     <refsynopsisdiv>
         <title>呼び出し手順</title>
         <synopsis>%pi</synopsis>

@@ -1,6 +1,6 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
-// Copyright (C) 2018 - Stéphane Mottelet
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
+// Copyright (C) 2018 - UTC - Stéphane MOTTELET
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
@@ -9,8 +9,8 @@
 //
 // <-- Non-regression test for bug 15512 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/15512
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/15512
 //
 // <-- Short Description -->
 // after aborting a running script or macro (with abort or other), console print not working

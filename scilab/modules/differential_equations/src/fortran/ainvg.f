@@ -8,6 +8,8 @@ clll. optimize
       integer i, lenpw, mlp1, nrowpw
       double precision t, y, ydot, pw
       dimension y(*), ydot(*), pw(*), ipvt(*)
+cDEC$ ATTRIBUTES DLLIMPORT:: /ierode/
+      COMMON /ierode/ierror
 c-----------------------------------------------------------------------
 c%purpose
 c this subroutine computes the initial value

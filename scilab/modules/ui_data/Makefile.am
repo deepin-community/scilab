@@ -1,5 +1,5 @@
 #
-# Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+# Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 # Copyright (C) DIGITEO - 2010 - Allan CORNET
 #
 # Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -67,9 +67,7 @@ GATEWAY_CXX_SOURCES = \
     sci_gateway/cpp/sci_editvar.cpp \
     sci_gateway/cpp/sci_browsevar.cpp \
     sci_gateway/cpp/sci_filebrowser.cpp \
-    sci_gateway/cpp/sci_updatebrowsevar.cpp \
-    sci_gateway/cpp/sci_closeEditvar.cpp
-
+    sci_gateway/cpp/sci_updatebrowsevar.cpp
 
 libsciui_data_la_CPPFLAGS = \
     $(JAVA_JNI_INCLUDE) \
@@ -84,7 +82,6 @@ libsciui_data_la_CPPFLAGS = \
     -I$(top_srcdir)/modules/ast/includes/symbol/ \
     -I$(top_srcdir)/modules/ast/includes/system_env/ \
     -I$(top_srcdir)/modules/ast/includes/types/ \
-    -I$(top_srcdir)/modules/ast/includes/analysis/ \
     -I$(top_srcdir)/modules/jvm/includes/ \
     -I$(top_srcdir)/modules/output_stream/includes/ \
     -I$(top_srcdir)/modules/commons/src/jni/ \
@@ -107,7 +104,6 @@ libsciui_data_disable_la_CPPFLAGS = \
     -I$(top_srcdir)/modules/ast/includes/symbol/ \
     -I$(top_srcdir)/modules/ast/includes/system_env/ \
     -I$(top_srcdir)/modules/ast/includes/types/ \
-    -I$(top_srcdir)/modules/ast/includes/analysis/ \
     -I$(top_srcdir)/modules/localization/includes/ \
     -I$(top_srcdir)/modules/output_stream/includes \
     $(AM_CPPFLAGS)

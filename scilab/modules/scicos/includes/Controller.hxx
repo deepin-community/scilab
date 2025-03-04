@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2014-2016 - Scilab Enterprises - Clement DAVID
  * Copyright (C) 2017 - ESI Group - Clement DAVID
  *
@@ -21,6 +21,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <map>
 
 #include "utilities.hxx"
 #include "Model.hxx"
@@ -116,9 +117,17 @@ public:
 
         cloned_pair_t(model::BaseObject* i, model::BaseObject* c) : initial(i), cloned(c) {};
     };
-    typedef std::unordered_map<ScicosID, cloned_pair_t> cloned_t;
+    typedef std::map<ScicosID, cloned_pair_t> cloned_t;
 
     model::BaseObject* cloneBaseObject(cloned_t& mapped, model::BaseObject* initial, bool cloneChildren, bool clonePorts);
+    void updateChildrenRelatedPropertiesAfterClone(cloned_t& mapped);
+    inline model::BaseObject* cloneBaseObject(model::BaseObject* initial, bool cloneChildren, bool clonePorts)
+    {
+        cloned_t mapped;
+        model::BaseObject* cloned =  cloneBaseObject(mapped, initial, cloneChildren, clonePorts);
+        updateChildrenRelatedPropertiesAfterClone(mapped);
+        return cloned;
+    };
 #endif /* !defined SWIG */
 
     /*
@@ -239,9 +248,12 @@ private:
     template<typename T> bool getObjectProperty(ScicosID uid, kind_t k, object_properties_t p, T& v) const;
     template<typename T> update_status_t setObjectProperty(ScicosID uid, kind_t k, object_properties_t p, T v);
 
-    void deepClone(cloned_t& mapped, model::BaseObject* initial, model::BaseObject* clone, object_properties_t p, bool cloneIfNotFound);
-    void deepCloneVector(cloned_t& mapped, model::BaseObject* initial, model::BaseObject* clone, object_properties_t p, bool cloneIfNotFound);
-    void updateChildrenRelatedPropertiesAfterClone(cloned_t& mapped);
+    void mapProperty(cloned_t& mapped, model::BaseObject* initial, model::BaseObject* clone, object_properties_t p, bool cloneIfNotFound);
+    inline update_status_t mapVectorProperty(cloned_t& mapped, model::BaseObject* initial, model::BaseObject* clone, object_properties_t p, bool cloneIfNotFound)
+    {
+        return setObjectProperty(clone, p, mappedVector(mapped, initial, p, cloneIfNotFound));
+    };
+    std::vector<ScicosID> mappedVector(cloned_t& mapped, model::BaseObject* initial, object_properties_t p, bool cloneIfNotFound);
     void unlinkVector(model::BaseObject* o, object_properties_t uid_prop, object_properties_t ref_prop);
     void unlink(model::BaseObject* o, object_properties_t uid_prop, object_properties_t ref_prop);
     void deleteVector(model::BaseObject* o, object_properties_t uid_prop);

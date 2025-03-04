@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2004-2006 - INRIA - Fabrice Leray
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
 //
@@ -28,7 +28,7 @@ function surf(varargin)
   0.0000   0.0012   0.0183   0.1099   0.2684   0.2683   0.1107   0.0190   0.0014   0.0000];
         f = gcf();
         if size(f.children)==1
-            f.color_map = jetcolormap(64);
+            f.color_map = jet(64);
          end
         s = gca().axes_bounds; delete(gca()); xsetech(s)  // clears the current axes
         surf(Z,"edgeco","b","marker","d","markersiz",9,"markeredg","red","markerfac","k");
@@ -312,7 +312,7 @@ function surf(varargin)
     end
 
     if isempty(XX) | isempty(YY) | isempty(ZZ) then
-        // Nothing will be drawn so return (see http://bugzilla.scilab.org/13180 )
+        // Nothing will be drawn so return (see https://gitlab.com/scilab/scilab/-/issues/13180 )
         return
     end
 

@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2010 - Calixte DENIZET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -71,12 +71,12 @@ public abstract class ExternalXMLHandler {
 
     protected static final Boolean getLocalized(final String URI, final Attributes attributes) {
         String v = URI == null ? attributes.getValue("localized") : attributes.getValue(URI, "localized");
-        if (v == null || v.isEmpty()) {
-            return Boolean.FALSE;
-        } else if ("true".equalsIgnoreCase(v)) {
-            return Boolean.TRUE;
-        } else if ("false".equalsIgnoreCase(v)) {
+        if (v == null || v.isEmpty()) { // No information found
             return null;
+        } else if ("true".equalsIgnoreCase(v)) { // Activate localization
+            return Boolean.TRUE;
+        } else if ("false".equalsIgnoreCase(v)) { // Force localization to be ignored for code (even if special cyrillic characters are found, ...)
+            return Boolean.FALSE;
         } else {
             return Boolean.FALSE;
         }

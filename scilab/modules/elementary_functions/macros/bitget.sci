@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ???? - INRIA - Farid BELAHCENE
 // Copyright (C) 2008 - INRIA - Pierre MARECHAL
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -22,35 +22,16 @@ function z = bitget(x, pos)
     - decimal numbers x > 2^52 with pos < log2(x)-52 returned 0 instead of %nan
     - Several bits from each component of an array
 */
-    fname = "bitget"
 
-    // CHECKING ARGUMENTS
-    // ==================
-    rhs = argn(2)
-    if rhs~=2 then
-        msg = _("%s: Wrong number of input argument(s): %d expected.\n");
-        error(msprintf(msg, fname, 2));
+    arguments
+        x {mustBeA(x, ["double", "int"]), mustBeReal, mustBeInteger, mustBeNonnegative}
+        pos {mustBeA(pos, ["double", "int"]), mustBeReal, mustBeInteger, mustBeNonnegative}
     end
 
     // case empty matrix
     if x==[] | pos==[]
         z = [];
         return
-    end
-
-    // check for positive integers
-    msg = gettext("%s: Argument #%d: Non-negative integers expected.\n")
-    if  (type(x)<>1  & type(x)<>8) || or(x<0) || ..
-        (type(x)==1  & (or((x-floor(x))<>0) | or(imag(x)~=0)))
-        error(msprintf(msg, fname, 1));
-    elseif type(x)==1
-        x = real(x);
-    end
-    if  (type(pos)<>1  & type(pos)<>8) || or(pos<0) || ..
-        (type(pos)==1  & (or((pos - floor(pos))<>0) | or(imag(pos)~=0)))
-        error(msprintf(msg, fname, 2));
-    elseif type(pos)==1
-        pos = real(pos);
     end
 
     // check sizes
@@ -76,7 +57,7 @@ function z = bitget(x, pos)
     end
     if or(pos>posmax) | or(pos<1) then
         msg = _("%s: Wrong value for input argument #%d: Must be between %d and %d.\n")
-        error(msprintf(msg, fname, 2, 1, posmax));
+        error(msprintf(msg, "bitget", 2, 1, posmax));
     end
 
     // PROCESSING

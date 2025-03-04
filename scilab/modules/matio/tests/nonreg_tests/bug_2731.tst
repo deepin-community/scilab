@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008-2008 - DIGITEO - Simon LIPP <simon.lipp@inria.fr>
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -7,8 +7,8 @@
 
 // <-- Non-regression test for bug 2731 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=2731
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/2731
 //
 // <-- Short Description -->
 //    On 64bit linux, the loadmatfile function does not work with v4 MAT files,

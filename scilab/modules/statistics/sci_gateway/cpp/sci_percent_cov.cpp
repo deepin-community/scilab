@@ -1,6 +1,6 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
- * Copyright (C) 2019 - Stéphane MOTTELET
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
+ * Copyright (C) 2019 - UTC - Stéphane MOTTELET
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
  * For more information, see the COPYING file which you should have received
@@ -47,7 +47,7 @@ types::Function::ReturnValue sci_percent_cov(types::typed_list& in, int _iRetCou
 
     if (in[in.size() - 1]->getAs<types::Double>()->getSize() != 1)
     {
-        Scierror(999, _("%s: Wrong dimensions for input argument #%d: A scalar expected.\n"), "cov", in.size());
+        Scierror(999, _("%s: Wrong dimensions for input argument #%d: A scalar expected.\n"), "cov", (int) in.size());
         return types::Function::Error;
     }
 

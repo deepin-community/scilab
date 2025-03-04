@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) ENPC - Jean-Philippe Chancelier
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -52,17 +52,51 @@
     <refsection>
         <title>Examples</title>
         <programlisting role="example"><![CDATA[
-t=[0:0.1:2*%pi]';
-y=[sin(t) cos(t)]; x=[t t];
-plot2d(x,y)
-errbar(x,y,0.05*ones(x),0.03*ones(x))
- ]]></programlisting>
-        <scilab:image>
-            t=[0:0.1:2*%pi]';
-            y=[sin(t) cos(t)]; x=[t t];
-            plot2d(x,y)
-            errbar(x,y,0.05*ones(x),0.03*ones(x))
-        </scilab:image>
+        // low resolution sinus
+        x1 = linspace(0, 2*%pi, 10);
+        y1 = sin(x1);
+        plot(x1, y1, 'b');
+        
+        // high resolution sinus
+        x2 = linspace(0, 2*%pi, 100);
+        y2 = sin(x2);
+        plot(x2, y2, 'g');
+        
+        // display the error between a linear interpolation and x2
+        x_err = x1(2:$-1);
+        y_err = y1(2:$-1);
+        err = y2 - linear_interpn(x2, x1, y1, "periodic");
+        err_m = zeros(y_err);
+        err_p = zeros(y_err);
+        for i = 2:size(x1,'c')-1
+            err_m(i-1) = sum(abs(err(x1(i-1) <= x2 & x2 < x1(i)  )));
+            err_p(i-1) = sum(abs(err(x1(i)   <= x2 & x2 < x1(i+1))));
+        end
+        errbar(x_err, y_err, err_m, err_p);
+        ]]></programlisting>
+        <scilab:image><![CDATA[
+        // low resolution sinus
+        x1 = linspace(0, 2*%pi, 10);
+        y1 = sin(x1);
+        plot(x1, y1, 'b');
+        
+        // high resolution sinus
+        x2 = linspace(0, 2*%pi, 100);
+        y2 = sin(x2);
+        plot(x2, y2, 'g');
+        
+        // display the error between a linear interpolation and x2
+        x_err = x1(2:$-1);
+        y_err = y1(2:$-1);
+        err = y2 - linear_interpn(x2, x1, y1, "periodic");
+        err_m = zeros(y_err);
+        err_p = zeros(y_err);
+        for i = 2:size(x1,'c')-1
+            err_m(i-1) = sum(abs(err(x1(i-1) <= x2 & x2 < x1(i)  )));
+            err_p(i-1) = sum(abs(err(x1(i)   <= x2 & x2 < x1(i+1))));
+        end
+        errbar(x_err, y_err, err_m, err_p);
+        ]]></scilab:image>
     </refsection>
     <refsection role="see also">
         <title>See also</title>

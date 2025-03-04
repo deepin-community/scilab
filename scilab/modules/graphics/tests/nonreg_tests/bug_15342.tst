@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2017 - Samuel GOUGEON
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -10,8 +10,8 @@
 
 // <-- Non-regression test for bug 15342 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/15342
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/15342
 //
 // <-- Short Description -->
 // replot() and hence "Reframe to contents" action did not take into account
@@ -35,7 +35,7 @@ replot()
 replot()
 replot()
 // => See the result. It should look like the bottom left plot of
-// http://bugzilla.scilab.org/attachment.cgi?id=4608
+// https://gitlab.com/scilab/scilab/uploads/3761f05a377ae06316ee8832033a5c3c/replot_with_xstrings.png
 // Several replot() or "Reframe to contents" actions may be needed to converge
 // to this optimal reframing. This is because Text objects are not zoomable.
 // Their data sizes depend on data bounds.

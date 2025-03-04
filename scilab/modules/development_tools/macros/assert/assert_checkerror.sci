@@ -94,7 +94,7 @@ function [flag,errmsg] = assert_checkerror ( varargin )
     //
     // Check that an error is produced
     if ( compierr == 0 ) then
-        localstr = gettext ( "%s: No error was produced while evaluating ""%s"".")
+        localstr = gettext ( "%s: No error was produced while evaluating:\n""%s"".")
         errmsg = sprintf ( localstr , "assert_checkerror" , instr )
         error(errmsg)
     end

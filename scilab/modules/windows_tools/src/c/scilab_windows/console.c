@@ -1,5 +1,5 @@
 /*
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) INRIA - Allan CORNET
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -24,7 +24,7 @@
 #include "WinConsole.h"
 #include "WndThread.h"
 #include "console.h"
-#include "version.h"
+#include "getversion.h"
 #include "os_string.h"
 /*--------------------------------------------------------------------------*/
 #define NameConsole "Console"
@@ -102,7 +102,9 @@ void RenameConsole(void)
 
     if ( strcmp(CurrentConsoleNameTmp, NameConsole) != 0)
     {
-        wsprintf(ScilexConsoleName, "%s %s", NameConsole, SCI_VERSION_STRING);
+        char *scilabVersionString = getScilabVersionAsString();
+        wsprintf(ScilexConsoleName, "%s %s", NameConsole, scilabVersionString);
+        free(scilabVersionString);
         SetConsoleTitle(ScilexConsoleName);
     }
 
@@ -132,11 +134,12 @@ void RestoreExitButton(void)
 void CreateScilabConsole(int ShowBanner)
 {
     HWND hScilex = NULL;
+    char *scilabVersionString = getScilabVersionAsString();
 
     SetConsoleState(0);  /* Console DOS Cachée par défaut */
     AllocConsole();
 
-    wsprintf(ScilexConsoleName, "%s %s (%d)", NameConsole, SCI_VERSION_STRING, getCurrentScilabId());
+    wsprintf(ScilexConsoleName, "%s %s (%d)", NameConsole, scilabVersionString, getCurrentScilabId());
     SetConsoleTitle(ScilexConsoleName);
 
     CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
@@ -149,11 +152,13 @@ void CreateScilabConsole(int ShowBanner)
 
         strcpy(line, "        ___________________________________________\n");
         printf(line);
-        wsprintf(line, "                         %s\n\n", SCI_VERSION_STRING);
+        wsprintf(line, "                         %s\n\n", scilabVersionString);
         printf(line);
-        strcpy(line, "                     ESI Group\n");
+        strcpy(line, "                     Dassault SystÃ¨mes\n");
         printf(line);
-        strcpy(line, "         Copyright (c) 2017-2021 (ESI Group)\n");
+        strcpy(line, "         Copyright (c) 2022-2024 (Dassault SystÃ¨mes)\n");
+        printf(line);
+        strcpy(line, "             Copyright (c) 2017-2022 (ESI Group)\n");
         printf(line);
         strcpy(line, "         Copyright (c) 2011-2017 (Scilab Enterprises)\n");
         printf(line);
@@ -164,6 +169,8 @@ void CreateScilabConsole(int ShowBanner)
         strcpy(line, "        ___________________________________________\n\n");
         printf(line);
     }
+
+    free(scilabVersionString);
 
     hScilex = GetConsoleWindow();
     if (hScilex)

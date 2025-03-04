@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008 - INRIA - Allan CORNET
 // Copyright (C) 2014 - Scilab Enterprises - Clement DAVID
 //
@@ -12,8 +12,8 @@
 
 // <-- Non-regression test for bug 2802 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=2802
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/2802
 //
 // <-- Short Description -->
 //    convstr() doesn't work if the string contains accented characters.

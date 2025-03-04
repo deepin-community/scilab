@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009 - DIGITEO - Pierre MARECHAL <pierre.marechal@scilab.org>
 // Copyright (C) 2011-2012 - DIGITEO - Allan CORNET
 // Copyright (C) 2012 - Samuel GOUGEON
@@ -48,8 +48,8 @@ function [packages,categories_flat,categories] = atomsDESCRIPTIONget(update)
         mclose(id);
         mdelete(atoms_path_all_users + filename_test_rw);
 
-        packages_path = atoms_path_all_users + "packages";
-        packages_path_user = atoms_path_user + "packages";
+        packages_path = atoms_path_all_users + "packages.json";
+        packages_path_user = atoms_path_user + "packages.json";
 
         // Then, we must test if there is also a user defined packages file
         if isfile(packages_path_user) then  // We use it if it is newer
@@ -59,12 +59,11 @@ function [packages,categories_flat,categories] = atomsDESCRIPTIONget(update)
             end
         end
     else  // The user is not a Scilab admin => default user profile used
-        packages_path = atoms_path_user + "packages";
+        packages_path = atoms_path_user + "packages.json";
     end
 
     categories_path  = atoms_path_user + "categories";
     packages_path_info = fileinfo(packages_path);
-
 
     // in offline mode we use only DESCRIPTION file of the module
     if (atomsGetConfig("offLine") == "True" | atomsGetConfig("offline") == "True") then
@@ -110,8 +109,11 @@ function [packages,categories_flat,categories] = atomsDESCRIPTIONget(update)
             %_atoms_cache(3) = categories_flat;
 
         else
-            load(packages_path, "packages", "categories", "categories_flat");
-
+            st = fromJSON(packages_path, "file");
+            // Initialize output variables
+            packages = st.packages;
+            categories = st.categories;
+            categories_flat = st.categories_flat;
         end
 
         return
@@ -124,6 +126,7 @@ function [packages,categories_flat,categories] = atomsDESCRIPTIONget(update)
     if isnan(TIME_BEFORE_NEW_UPDATE) then // Value not found in config file, give the default one
         TIME_BEFORE_NEW_UPDATE = 86400*30; // One month, in seconds
     end
+
     if (packages_path_info == []) ..
         | (getdate("s") - packages_path_info(6) > TIME_BEFORE_NEW_UPDATE) ..
         | (rhs == 1 & update) then
@@ -165,7 +168,7 @@ function [packages,categories_flat,categories] = atomsDESCRIPTIONget(update)
         for i=1:size(repositories,"*")
             // Building url & file_out
             // ----------------------------------------
-            url      = repositories(i)+"/TOOLBOXES/"+ARCH+"/"+OSNAME+".gz";
+            url      = repositories(i)+"/"+OSNAME+".gz";
             file_out     = pathconvert(getshortpathname(fullpath(atoms_tmp_directory))+string(i)+"_TOOLBOXES.gz",%f);
 
             // Remove the existing file
@@ -264,7 +267,6 @@ function [packages,categories_flat,categories] = atomsDESCRIPTIONget(update)
             if regexp( file_out , "/TOOLBOXES$/" , "o" ) <> [] then
                 mdelete(file_out);
             end
-
         end
 
         // Save the "packages" variable in a file
@@ -278,11 +280,17 @@ function [packages,categories_flat,categories] = atomsDESCRIPTIONget(update)
         categories     = description("categories");
         categories_flat  = description("categories_flat");
 
-        commandToExec = "save(packages_path, ""packages"", ""categories"", ""categories_flat"")";
-        ierr = execstr(commandToExec, "errcatch");
-        if ierr <> 0 then
-            error(msprintf(gettext("%s: save (''%s'') has failed.\n"),"atomsDESCRIPTIONget", packages_path));
+        try
+            st = struct(...
+                "packages", packages, ...
+                "categories", categories, ...
+                "categories_flat", categories_flat);
+
+            toJSON(st, 4, packages_path);
+        catch
+            error(msprintf(gettext("%s: toJSON (''%s'') has failed.\n"),"atomsDESCRIPTIONget", packages_path));
         end
+
         clearglobal %_atoms_cache;
 
         // Just load from file
@@ -291,7 +299,11 @@ function [packages,categories_flat,categories] = atomsDESCRIPTIONget(update)
     else
         global %_atoms_cache; // /!\ Do not rename this variable. Name is tracked/ignored by Variable Browser
         if isempty(%_atoms_cache) then
-            load(packages_path,"packages","categories","categories_flat");
+            st = fromJSON(packages_path, "file");
+            // Initialize output variables
+            packages = st.packages;
+            categories = st.categories;
+            categories_flat = st.categories_flat;
             %_atoms_cache = list(packages, categories, categories_flat);
         else
             packages = %_atoms_cache(1);

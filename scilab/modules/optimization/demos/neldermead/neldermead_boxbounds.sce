@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2010 - DIGITEO - Michael Baudin
 // Copyright (C) 2010 - DIGITEO - Allan CORNET
 // Copyright (C) 2011 - DIGITEO - Michael Baudin
@@ -98,9 +98,8 @@ function demo_boxbounds()
     xdata=linspace(xmin,xmax,nx);
     ydata=linspace(ymin,ymax,ny);
     scf();
-    xset("fpf"," ")
     drawlater();
-    contour ( xdata , ydata , myquadC , 10 )
+    contour ( xdata , ydata , myquadC , 10 , fpf=" ")
     nmplot_simplexhistory ( nm );
     drawnow();
     demo_viewCode(filename);

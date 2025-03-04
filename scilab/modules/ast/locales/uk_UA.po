@@ -85,7 +85,7 @@ msgstr "Некоректний індекс.\n"
 # File: modules/ast/src/cpp/types/mlist.cpp, line: 154
 # File: modules/ast/src/cpp/types/tlist.cpp, line: 231
 #, c-format
-msgid "%s: Extraction must have at least one output.\n"
+msgid "%ls: Extraction must have at least one output.\n"
 msgstr ""
 
 msgid "Redefining permanent variable.\n"

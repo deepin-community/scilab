@@ -1,5 +1,5 @@
 /*
-*  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+*  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 *  Copyright (C) 2009-2009 - DIGITEO - Bruno JOFRET
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -12,6 +12,11 @@
  * along with this program.
 *
 */
+
+#ifdef _WIN32
+    #include <fcntl.h>
+    #include <io.h>
+#endif
 
 //#include "AnalysisVisitor.hxx"
 #include "tasks.hxx"
@@ -123,8 +128,14 @@ void printAstTask(ast::Exp *tree, bool timed)
 
     if (tree)
     {
+#ifdef _WIN32
+        int iOldMode = _setmode(_fileno(stdout), _O_U8TEXT);
+#endif
         ast::PrintVisitor printMe (std::wcout);
         tree->accept(printMe);
+#ifdef _WIN32
+        _setmode(_fileno(stdout), iOldMode);
+#endif
     }
 
     if (timed)
@@ -192,7 +203,7 @@ void execAstTask(ast::Exp* tree, bool serialize, bool timed, bool ASTtimed, bool
         exec = (ast::RunVisitor*)ConfigVariable::getDefaultVisitor();
     }
 
-    StaticRunner::execAndWait(newTree, exec, isInterruptibleThread, isPrioritaryThread, iCommandOrigin);
+    StaticRunner::execAndWait(newTree, exec, isPrioritaryThread, isInterruptibleThread, iCommandOrigin);
     //DO NOT DELETE tree or newTree, they was deleted by Runner or previously;
 
     if (timed)

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) XXXX-2008 - INRIA
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
  * Copyright (C) 2018 - Samuel GOUGEON
@@ -93,7 +93,7 @@
                         <varlistentry>
                             <term>"direct"</term>
                             <listitem>
-                                <para>прямой доступ.</para>
+                                <para>прямой доступ. Тогда обязателен следующий аргумент <varname>recl</varname>.</para>
                             </listitem>
                         </varlistentry>
                     </variablelist>
@@ -242,7 +242,6 @@
                         модуля <varname>unit</varname>. Этот номер модуля можно использовать для
                         дальнейших действий с этим файлом или в качестве дескриптора файла при
                         вызове функций <function>read</function>, <function>write</function>,
-                        <function>readb</function>, <function>writb</function>,
                         <function>save</function>, <function>load</function>.
                     </para>
                 </listitem>
@@ -336,13 +335,7 @@ mclose(u2);
                 <link linkend="read">read</link>
             </member>
             <member>
-                <link linkend="readb">readb</link>
-            </member>
-            <member>
                 <link linkend="write">write</link>
-            </member>
-            <member>
-                <link linkend="writb">writb</link>
             </member>
             <member>
                 <link linkend="mopen">mopen</link>

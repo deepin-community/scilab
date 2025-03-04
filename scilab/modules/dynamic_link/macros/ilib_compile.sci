@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 // Copyright (C) ENPC
 // Copyright (C) DIGITEO - 2009
@@ -94,7 +94,7 @@ function libn = ilib_compile(lib_name, ..
         // Headers are dispatched in the source tree
         if isdir(SCI+"/modules/core/includes/") then
             defaultModulesCHeader=[ "core", "mexlib","api_scilab","output_stream","localization",  "dynamic_link",  "threads",  "string",  "console"];
-            defaultKernelCHeader=[ "analysis" "ast" "exps" "operations" "parse" "symbol" "system_env" "types"];
+            defaultKernelCHeader=[ "ast" "exps" "operations" "parse" "symbol" "system_env" "types"];
             defaultModulesFHeader=[ "core" ];
             ScilabTreeFound=%t
 
@@ -137,12 +137,12 @@ function libn = ilib_compile(lib_name, ..
 
         global cppCompilation;
         if cppCompilation then
-            cflags = cflags + " -std=c++11";
+            cflags = " -std=c++11 " + cflags;
         end
         clearglobal cppCompilation;
 
         if ( ilib_verbose() <> 0 & ScilabTreeFound <> %t) then
-            mprintf(gettext("%s: Warning: Scilab has not been able to find where the Scilab sources are. Please submit a bug report on http://bugzilla.scilab.org/\n"),"ilib_compile");
+            mprintf(gettext("%s: Warning: Scilab has not been able to find where the Scilab sources are. Please submit a bug report on https://gitlab.com/scilab/scilab/-/issues\n"),"ilib_compile");
         end
 
         oldPath = pwd();

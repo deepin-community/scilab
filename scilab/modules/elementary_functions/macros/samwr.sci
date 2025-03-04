@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2003 - INRIA - Carlos Klimann
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -18,10 +18,14 @@ function s = samwr(sizam, numsamp, X)
     //sizam  ( < size(X, '*'))  extractions,  without  replacement,
     //from the  vector X.
     //
-    if argn(2) <> 3 then
-        error(msprintf(gettext("%s: Wrong number of input argument: %d expected.\n"), "samwr", 3)),
+    arguments
+        sizam (1,1)
+        numsamp (1,1) {mustBeNonnegative}
+        X
     end
+
     if X == []|sizam == 0|numsamp == 0 then s = []; return; end
+
     sizx = size(X, "*")
     if sizam > sizx then
         error(msprintf(gettext("%s: Wrong value of input argument #%d: Lower than or equal to size of input argument #%d expected.\n"), "samwr", 1, 3)),

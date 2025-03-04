@@ -1,5 +1,5 @@
 dnl
-dnl Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+dnl Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 dnl Copyright (C) INRIA - 2006/2008 - Sylvestre Ledru
 dnl
 dnl Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -23,22 +23,10 @@ AC_DEFUN([AC_CHECK_PROG_OCAML],[
 	if test "$OCAMLC" = no; then
 		AC_MSG_ERROR([ocamlc not found. Mandatory to build the Scicos modelica compiler (Use --without-modelica to disable the Modelica compiler).])
 	fi
-	# since ocaml 4.06, unsafe string is no more the default parameter ; enforce it
-        "$OCAMLC" -unsafe-string
-	if test "$?" -ne "0"; then
-		AC_MSG_WARN([ocamlc does not support "-unsafe-string". Needed to build the Scicos modelica compiler (Use --without-modelica to disable the Modelica compiler).])
-	fi
-        OCAMLCFLAGS="$OCAMLCFLAGS -unsafe-string"
 	AC_CHECK_PROG(OCAMLOPT,ocamlopt,ocamlopt,no)
 	if test "$OCAMLOPT" = no; then
 		AC_MSG_ERROR([ocamlopt not found. Mandatory to build the Scicos modelica compiler.])
 	fi
-	# since ocaml 4.06, unsafe string is no more the default parameter ; enforce it
-        "$OCAMLOPT" -unsafe-string
-	if test "$?" -ne "0"; then
-		AC_MSG_WARN([ocamlc does not support "-unsafe-string". Needed to build the Scicos modelica compiler (Use --without-modelica to disable the Modelica compiler).])
-	fi
-        OCAMLOPTFLAGS="$OCAMLOPTFLAGS -unsafe-string"
 	AC_CHECK_PROG(OCAMLDEP,ocamldep,ocamldep,no)
 	if test "$OCAMLDEP" = no; then
 		AC_MSG_ERROR([ocamldep not found. Mandatory to build the Scicos modelica compiler.])

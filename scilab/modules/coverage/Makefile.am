@@ -1,5 +1,5 @@
 ##
-##  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+##  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 ##  Copyright (C) 2007-2008 - DIGITEO - Bruno JOFRET
 ##  Copyright (C) 2007-2008 - DIGITEO - Antoine ELIAS
 ##
@@ -50,7 +50,6 @@ libscicoverage_la_CPPFLAGS = \
     -I$(srcdir)/src/cpp/ \
     -I$(top_srcdir)/modules/ast/includes/ast/ \
     -I$(top_srcdir)/modules/ast/includes/exps/ \
-    -I$(top_srcdir)/modules/ast/includes/analysis/ \
     -I$(top_srcdir)/modules/ast/includes/operations/ \
     -I$(top_srcdir)/modules/ast/includes/parse/ \
     -I$(top_srcdir)/modules/ast/includes/symbol/ \

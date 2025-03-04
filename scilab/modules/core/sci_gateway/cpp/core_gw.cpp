@@ -1,5 +1,5 @@
 /*
-*  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+*  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 *  Copyright (C) 2008-2008 - DIGITEO - Antoine ELIAS
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -32,6 +32,7 @@ int CoreModule::Load()
     symbol::Context::getInstance()->addFunction(types::Function::createFunction(L"banner", &sci_banner, MODULE_NAME));
     symbol::Context::getInstance()->addFunction(types::Function::createFunction(L"quit", &sci_quit, MODULE_NAME));
     symbol::Context::getInstance()->addFunction(types::Function::createFunction(L"exit", &sci_exit, MODULE_NAME));
+    symbol::Context::getInstance()->addFunction(types::Function::createFunction(L"isatty", &sci_isatty, MODULE_NAME));
     symbol::Context::getInstance()->addFunction(types::Function::createFunction(L"exists", &sci_exists, MODULE_NAME));
     symbol::Context::getInstance()->addFunction(types::Function::createFunction(L"isdef", &sci_isdef, MODULE_NAME));
     symbol::Context::getInstance()->addFunction(types::Function::createFunction(L"argn", &sci_argn, MODULE_NAME));
@@ -81,6 +82,7 @@ int CoreModule::Load()
     symbol::Context::getInstance()->addFunction(types::Function::createFunction(L"fieldnames", &sci_fieldnames, MODULE_NAME));
     symbol::Context::getInstance()->addFunction(types::Function::createFunction(L"oldEmptyBehaviour", &sci_oldEmptyBehaviour, MODULE_NAME));
     symbol::Context::getInstance()->addFunction(types::Function::createFunction(L"checkNamedArguments", &sci_checkNamedArguments, MODULE_NAME));
+    symbol::Context::getInstance()->addFunction(types::Function::createFunction(L"skipArguments", &sci_skipArguments, MODULE_NAME));
 
 #ifndef NDEBUG
     symbol::Context::getInstance()->addFunction(types::Function::createFunction(L"inspectorGetItemCount", &sci_inspectorGetItemCount, MODULE_NAME));

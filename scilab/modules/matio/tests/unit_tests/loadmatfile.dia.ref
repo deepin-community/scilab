@@ -1,10 +1,11 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008 - INRIA - Vincent Couvert <vincent.couvert@inria.fr>
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
 // <-- CLI SHELL MODE -->
+// <-- ENGLISH IMPOSED --> // For warnings
 // This Scilab script loads MAT-files to test the MATIO module
 clear all
 //
@@ -98,7 +99,18 @@ for formatIndex = 1:size(binFormats, "*")
     //
     // TESTS FOR SINGLE PRECISION ARRAYS
     //
-    // TODO
+    if binFormats(formatIndex) <> "-v4" then
+        %epssingle = 5.96E-08 * 2;
+        assert_checkalmostequal(realsinglescalar , 1.23, %epssingle);
+        assert_checkalmostequal(cplxsinglescalar , 1.23 + 4.56*%i, %epssingle);
+        assert_checkalmostequal(realsinglerowvector , [1.23 -4.56 7.89], %epssingle);
+        assert_checkalmostequal(cplxsinglerowvector , [1.23+7.89*%i 4.56-1.23*%i 7.89+4.56*%i], %epssingle);
+        assert_checkalmostequal(realsinglecolvector , [1.23;-4.56;7.89], %epssingle);
+        assert_checkalmostequal(cplxsinglecolvector , [1.23+7.89*%i;4.56-1.23*%i;7.89+4.56*%i], %epssingle);
+        assert_checkalmostequal(realsinglematrix , [1.23 -4.56 7.89;9.87 6.54 -3.21], %epssingle);
+        assert_checkalmostequal(cplxsinglematrix , [1.23+7.89*%i 4.56-1.23*%i 7.89+4.56*%i;9.87+3.21*%i 6.54+9.87*%i 3.21-6.54*%i], %epssingle);
+        clear realsinglescalar cplxsinglescalar realsinglerowvector cplxsinglerowvector realsinglecolvector cplxsinglecolvector realsinglematrix cplxsinglematrix
+    end
     //
     // TESTS FOR SPARSE MATRICES
     //
@@ -216,6 +228,14 @@ end
   "cplxdoublematrix-v6.mat"
   "cplxdoublerowvector-v6.mat"
   "cplxdoublescalar-v6.mat"
+  "cplxsinglecolvector-v6.mat"
+loadmatfile: single-precision variable named 'cplxsinglecolvector' will be loaded as double-precision.
+  "cplxsinglematrix-v6.mat"
+loadmatfile: single-precision variable named 'cplxsinglematrix' will be loaded as double-precision.
+  "cplxsinglerowvector-v6.mat"
+loadmatfile: single-precision variable named 'cplxsinglerowvector' will be loaded as double-precision.
+  "cplxsinglescalar-v6.mat"
+loadmatfile: single-precision variable named 'cplxsinglescalar' will be loaded as double-precision.
   "emptyNDarray-v6.mat"
   "emptycell-v6.mat"
   "emptydoublematrix-v6.mat"
@@ -256,6 +276,14 @@ end
   "realmatrixsparse-v6.mat"
   "realrowvectorsparse-v6.mat"
   "realscalarsparse-v6.mat"
+  "realsinglecolvector-v6.mat"
+loadmatfile: single-precision variable named 'realsinglecolvector' will be loaded as double-precision.
+  "realsinglematrix-v6.mat"
+loadmatfile: single-precision variable named 'realsinglematrix' will be loaded as double-precision.
+  "realsinglerowvector-v6.mat"
+loadmatfile: single-precision variable named 'realsinglerowvector' will be loaded as double-precision.
+  "realsinglescalar-v6.mat"
+loadmatfile: single-precision variable named 'realsinglescalar' will be loaded as double-precision.
   "rowcell-v6.mat"
   "rowstruct-v6.mat"
   "scalarcell-v6.mat"
@@ -290,6 +318,14 @@ end
   "cplxdoublematrix-v7.mat"
   "cplxdoublerowvector-v7.mat"
   "cplxdoublescalar-v7.mat"
+  "cplxsinglecolvector-v7.mat"
+loadmatfile: single-precision variable named 'cplxsinglecolvector' will be loaded as double-precision.
+  "cplxsinglematrix-v7.mat"
+loadmatfile: single-precision variable named 'cplxsinglematrix' will be loaded as double-precision.
+  "cplxsinglerowvector-v7.mat"
+loadmatfile: single-precision variable named 'cplxsinglerowvector' will be loaded as double-precision.
+  "cplxsinglescalar-v7.mat"
+loadmatfile: single-precision variable named 'cplxsinglescalar' will be loaded as double-precision.
   "emptyNDarray-v7.mat"
   "emptycell-v7.mat"
   "emptydoublematrix-v7.mat"
@@ -330,6 +366,14 @@ end
   "realmatrixsparse-v7.mat"
   "realrowvectorsparse-v7.mat"
   "realscalarsparse-v7.mat"
+  "realsinglecolvector-v7.mat"
+loadmatfile: single-precision variable named 'realsinglecolvector' will be loaded as double-precision.
+  "realsinglematrix-v7.mat"
+loadmatfile: single-precision variable named 'realsinglematrix' will be loaded as double-precision.
+  "realsinglerowvector-v7.mat"
+loadmatfile: single-precision variable named 'realsinglerowvector' will be loaded as double-precision.
+  "realsinglescalar-v7.mat"
+loadmatfile: single-precision variable named 'realsinglescalar' will be loaded as double-precision.
   "rowcell-v7.mat"
   "rowstruct-v7.mat"
   "scalarcell-v7.mat"
@@ -356,4 +400,3 @@ end
   "uint8matrix-v7.mat"
   "uint8rowvector-v7.mat"
   "uint8scalar-v7.mat"
-// TODO: read all variables from a single file ?

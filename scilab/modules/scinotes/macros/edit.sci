@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ????-2008 - INRIA
 // Copyright (C) 2008 - INRIA - Allan CORNET
 // Copyright (C) 2010 - DIGITEO - Allan CORNET
@@ -68,9 +68,9 @@ function edit(macroname, linenumber)
                             fname = pathconvert(path) + macroname + ".sci"
                         else
                             // txt = tree2code(tree, %t);
-                            // http://bugzilla.scilab.org/16565 : no actual workaround
-                            // http://bugzilla.scilab.org/16576 : workaround
-                            // http://bugzilla.scilab.org/16595 : no workaround
+                            // https://gitlab.com/scilab/scilab/-/issues/16565 : no actual workaround
+                            // https://gitlab.com/scilab/scilab/-/issues/16576 : workaround
+                            // https://gitlab.com/scilab/scilab/-/issues/16595 : no workaround
                             [o,i,txt] = string(object)
                             if size(o,"*")==1
                                 o = o + " = "

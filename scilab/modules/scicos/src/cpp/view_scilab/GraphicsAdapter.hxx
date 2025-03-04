@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2014-2016 - Scilab Enterprises - Clement DAVID
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -49,9 +49,13 @@ public:
     types::InternalType* getGrIContent() const;
     void setGrIContent(types::InternalType* v);
 
-    // move (if possible) the partial information to the model
+    // move (if possible) the Block partial informations to the model
     static void relink(Controller& controller, model::Block* adaptee, const std::vector<ScicosID>& children);
+    // move (if possible) the Link partial informations to the model
     static void reverse_relink(Controller& controller, model::Link* adaptee, int index, const std::vector<ScicosID>& children);
+    // remove (if possible) the Block partial information
+    static void cleanup_relink(Controller& controller, model::Block* adaptee, const std::vector<ScicosID>& children);
+
     // manage partial information after a model clone
     static void add_partial_links_information(Controller& controller, ScicosID original, ScicosID cloned);
     // manage partial information before a model delete

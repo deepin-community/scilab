@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2020 - Samuel GOUGEON
 //
 // This file is hereby licensed under the terms of the GNU GPL v2.0,
@@ -84,7 +84,7 @@ function demo_mapsound()
     [y, fs] = wavread('SCI/modules/sound/demos/chimes.wav');
     fig = scf(idfig);
     clf reset
-    mapsound(y,,2500,fs,parulacolormap)
+    mapsound(y,,2500,fs,parula)
     title chimes.wav fontsize 3.5
     demo_viewCode("mapsound.dem.sce");
     playsnd(y)
@@ -92,7 +92,7 @@ function demo_mapsound()
           "" ;
           "[y, fs] = wavread(""SCI/modules/sound/demos/chimes.wav"")";
           "playsnd(y)" ;
-          "<b>mapsound(y, , 2500, fs, parulacolormap)</b>" ;
+          "<b>mapsound(y, , 2500, fs, parula)</b>" ;
           ]);
      b = messagebox(msg, "mapsound","scilab", _(["End" ; "End & Keep the map"]), "modal");
      if b==1, close(fig), end

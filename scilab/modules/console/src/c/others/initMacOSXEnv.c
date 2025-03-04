@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2007 - DIGITEO - Sylvestre LEDRU
  * Copyright (C) 2010 - DIGITEO - Bruno JOFRET
  *
@@ -83,7 +83,7 @@ static void setAppName(const char * name)
 
 /**
  * Actually launch Scilab under Mac OS X. Need to be in a specific thread.
- * See http://wiki.scilab.org/Compiling_Scilab_5.x_under_MacOSX
+ * See https://scilab.gitlab.io/legacy_wiki/Compiling(20)Scilab(20)under(20)MacOSX.html
  * @param param The structure containing the missing argument mandatory for realmain
  * @return the result of the operation (0 if OK ...)
  */
@@ -248,7 +248,7 @@ int initMacOSXEnv(ScilabEngineInfo* _pSEI)
     }
 
     /* Start the thread that we will start the JVM on. */
-    pthread_create(&vmthread, &thread_attr,  launchMacOSXEnv, _pSEI);
+    pthread_create(&vmthread, &thread_attr, (void * (*)(void *)) launchMacOSXEnv, _pSEI);
     pthread_attr_destroy(&thread_attr);
 
     /* Create a a sourceContext to be used by our source that makes */

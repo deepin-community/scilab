@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2007 - INRIA - Vincent COUVERT
  * Copyright (C) 2008 - DIGITEO - Sylvestre KOUMAR
  *
@@ -34,6 +34,12 @@ public interface SimpleFileChooser {
      * @param path the default path
      */
     void setInitialDirectory(String path);
+
+    /**
+     * Set the initial file name
+     * @param path the file name
+     */
+    void setInitialFileName(String path);
 
     /**
      * Display this chooser and wait for user selection
@@ -80,4 +86,22 @@ public interface SimpleFileChooser {
      * @param dialogType the dialog type
      */
     void setUiDialogType(int dialogType);
+    
+    /**
+     * Add a file type extension mask to select files of given type
+     * @param theMask the mask strings
+     * @param theFileMaskDescription the description strings for each mask
+     */
+    void addMask(String[] mask, String[] fileMaskDescription);
+
+    /**
+     * Set accept all file types filter
+     * @param flag enable  all file type
+     */
+    void setAcceptAllFileFilterUsed(boolean flag);
+    
+    /**
+     * Invalidate filechooser
+     */
+    void invalidate();
 }

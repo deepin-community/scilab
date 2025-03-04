@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2012 - DIGITEO - Adeline CARNIS
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -18,10 +18,10 @@ assert_checkfalse(execstr("nthroot(1)",         "errcatch") == 0);
 refMsg = msprintf(_("%s: Wrong number of input argument(s): %d expected.\n"), "nthroot", 2);
 assert_checkerror("nthroot(1)", refMsg);
 assert_checkfalse(execstr("nthroot(%i, 1)",    "errcatch") == 0);
-refMsg = msprintf(_("%s: Wrong type for input argument #%d: Real scalar or matrix expected.\n"), "nthroot", 1);
+refMsg = msprintf(_("%s: Wrong value for input argument #%d: Real numbers expected.\n"), "nthroot", 1);
 assert_checkerror("nthroot(%i, 1)", refMsg);
 assert_checkfalse(execstr("nthroot(%t, 1)",    "errcatch") == 0);
-refMsg = msprintf(_("%s: Wrong type for input argument #%d: Real scalar or matrix expected.\n"), "nthroot", 1);
+refMsg = msprintf(_("%s: Wrong type for input argument #%d: Must be in %s.\n"), "nthroot", 1, sci2exp("double"));
 assert_checkerror("nthroot(%t, 1)", refMsg);
 assert_checkfalse(execstr("nthroot(-2, %nan)", "errcatch") == 0);
 refMsg = msprintf(_("%s: If x is negative, then n must contain odd integers only.\n"), "nthroot");

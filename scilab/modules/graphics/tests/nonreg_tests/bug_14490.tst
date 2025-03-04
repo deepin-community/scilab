@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2017 - ESI Group - Adeline CARNIS
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -10,8 +10,8 @@
 //
 // <-- Non-regression test for bug 14490 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/14490
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/14490
 //
 // <-- Short Description -->
 // plot2d crashed when leg parameter was a vector. 

@@ -1,4 +1,4 @@
-// Scilabel ( http://www.scilabel.org/ ) - This file is part of Scilabel
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2019 - Samuel GOUGEON
 //
 // This file is hereby licensed under the terms of the GNU GPL v2.0,
@@ -15,7 +15,7 @@ function label = expr2LaTeX(exprs)
 
     label = exprs
     if label~=[]
-        // Protecting "<" : http://bugzilla.scilabel.org/14680
+        // Protecting "<" : https://gitlab.com/scilab/scilab/-/issues/14680
         // "<" can't be replaced with "&lt;" because ";" is
         //  used as subfield separator in the graphics.style field...
         // => using a LaTeX expression instead
@@ -28,10 +28,10 @@ function label = expr2LaTeX(exprs)
         // Protecting ^{.} groups for LaTeX:
         // Bracing exponents (after .^ and ^): the exponent is
         //  assumed to end with the first encountered space or EOL
-        //  http://bugzilla.scilab.org/14551
-        //  http://bugzilla.scilab.org/15979
+        //  https://gitlab.com/scilab/scilab/-/issues/14551
+        //  https://gitlab.com/scilab/scilab/-/issues/15979
         // Groups replacement impossible with strsubst():
-        // http://bugzilla.scilabel.org/9123
+        // https://gitlab.com/scilab/scilab/-/issues/9123
           regexpon = "/\^((\s*[\-+]?\s*[0-9]+\.?[0-9]*)|[^\s]+)/"
         // label = "s^ab +s^ 10+s^-12.4-s^20"
         //--> [b,e,m] = regexp(label, regExpon)

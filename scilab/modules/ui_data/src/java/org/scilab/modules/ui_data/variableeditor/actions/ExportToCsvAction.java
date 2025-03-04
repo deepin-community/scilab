@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2013 - S/E - Sylvestre Ledru
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -23,6 +23,8 @@ import org.scilab.modules.gui.bridge.tab.SwingScilabDockablePanel;
 import org.scilab.modules.gui.events.callback.CommonCallBack;
 import org.scilab.modules.gui.menuitem.MenuItem;
 import org.scilab.modules.gui.menuitem.ScilabMenuItem;
+import org.scilab.modules.gui.messagebox.MessageBox;
+import org.scilab.modules.gui.messagebox.ScilabMessageBox;
 import org.scilab.modules.localization.Messages;
 import org.scilab.modules.ui_data.datatable.SwingEditvarTableModel;
 import org.scilab.modules.ui_data.variableeditor.SwingScilabVariableEditor;
@@ -70,7 +72,7 @@ public final class ExportToCsvAction extends CommonCallBack {
      */
     @Override
     public void callBack() {
-        String scilabCommand = "__export__csv__=uiputfile();if __export__csv__<>'' then csvWrite(%s, __export__csv__);clear __export__csv__; end;";
+        String scilabCommand = "__export__csv__=uiputfile('*.csv');if __export__csv__<>'' then csvWrite(%s, __export__csv__); end; clear __export__csv__";
         if (editor instanceof SwingScilabVariableEditor) {
             JTable table = ((SwingScilabVariableEditor)editor).getCurrentTable();
             SwingEditvarTableModel model = (SwingEditvarTableModel) table.getModel();
@@ -83,14 +85,19 @@ public final class ExportToCsvAction extends CommonCallBack {
             // Does nothing if no variable selected
             if (clickedRow != -1) {
                 variableName = ((SwingScilabVariableBrowser)editor).getTable().getValueAt(clickedRow, BrowseVar.NAME_COLUMN_INDEX).toString();
-                int varType = Integer.parseInt(((SwingScilabVariableBrowser)editor).getTable().getModel().getValueAt(clickedRow, BrowseVar.TYPE_COLUMN_INDEX).toString());
+                int modelRow = ((SwingScilabVariableBrowser)editor).getTable().convertRowIndexToModel(clickedRow);
+                int varType = Integer.parseInt(((SwingScilabVariableBrowser)editor).getTable().getModel().getValueAt(modelRow, BrowseVar.TYPE_COLUMN_INDEX).toString());
 
                 try {
                     // The export is only available for double (complex or not) and strings
                     if (varType == ScilabTypeEnum.sci_matrix.swigValue() || varType == ScilabTypeEnum.sci_strings.swigValue()) {
                         asynchronousScilabExec(null, String.format(scilabCommand, variableName));
                     } else {
-                        asynchronousScilabExec(null, "messagebox('" + Messages.gettext("Type not supported for this operation") + "')");
+                        MessageBox errorMsg = ScilabMessageBox.createMessageBox();
+                        errorMsg.setTitle(Messages.gettext("Error"));
+                        errorMsg.setMessage(Messages.gettext("Type not supported for this operation"));
+                        errorMsg.setIcon("error");
+                        errorMsg.displayAndWait();
                     }
                 } catch (InterpreterException e1) {
                     System.err.println("An error in the interpreter has been catched: " + e1.getLocalizedMessage());

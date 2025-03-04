@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA -
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -96,5 +96,23 @@ datenum(Years,Months,Days,Hours,Minutes,Seconds)
                 <link linkend="calendar">calendar</link>
             </member>
         </simplelist>
+    </refsection>
+    <refsection role="history">
+        <title>History</title>
+        <revhistory>
+            <revision>
+                <revnumber>2024.1</revnumber>
+                <revdescription>
+                    <itemizedlist>
+                        <listitem>
+                            Values out of <literal>1:12</literal> for <literal>M</literal> (month) and out of <literal>1:31</literal> for <literal>D</literal> (day) are now managed.
+                        </listitem>
+                        <listitem>
+                            <literal>datenum()</literal> contains milliseconds information.
+                        </listitem>
+                    </itemizedlist>
+                </revdescription>
+            </revision>
+        </revhistory>
     </refsection>
 </refentry>

@@ -21,6 +21,9 @@
     <Filter Include="Resource File">
       <UniqueIdentifier>{0cfb7319-513b-44f1-ae7a-392d3d071983}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\ColPack">
+      <UniqueIdentifier>{f090b45d-eda3-4b0d-a56b-fd796b87e872}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DllmainSparse.c">
@@ -49,6 +52,105 @@
     </ClCompile>
     <ClCompile Include="spUtils.c">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cpp\spCompGeneric.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cpp\spCompHessian.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cpp\spCompJacobian.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ColPack\src\BipartiteGraphBicoloring\BipartiteGraphBicoloring.cpp">
+      <Filter>Source Files\ColPack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ColPack\src\BipartiteGraphBicoloring\BipartiteGraphBicoloringInterface.cpp">
+      <Filter>Source Files\ColPack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ColPack\src\BipartiteGraphBicoloring\BipartiteGraphCore.cpp">
+      <Filter>Source Files\ColPack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ColPack\src\BipartiteGraphBicoloring\BipartiteGraphInputOutput.cpp">
+      <Filter>Source Files\ColPack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ColPack\src\BipartiteGraphBicoloring\BipartiteGraphOrdering.cpp">
+      <Filter>Source Files\ColPack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ColPack\src\BipartiteGraphBicoloring\BipartiteGraphVertexCover.cpp">
+      <Filter>Source Files\ColPack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ColPack\src\BipartiteGraphPartialColoring\BipartiteGraphPartialColoring.cpp">
+      <Filter>Source Files\ColPack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ColPack\src\BipartiteGraphPartialColoring\BipartiteGraphPartialColoringInterface.cpp">
+      <Filter>Source Files\ColPack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ColPack\src\BipartiteGraphPartialColoring\BipartiteGraphPartialOrdering.cpp">
+      <Filter>Source Files\ColPack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ColPack\src\GeneralGraphColoring\GraphColoring.cpp">
+      <Filter>Source Files\ColPack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ColPack\src\GeneralGraphColoring\GraphColoringInterface.cpp">
+      <Filter>Source Files\ColPack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ColPack\src\GeneralGraphColoring\GraphCore.cpp">
+      <Filter>Source Files\ColPack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ColPack\src\GeneralGraphColoring\GraphInputOutput.cpp">
+      <Filter>Source Files\ColPack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ColPack\src\GeneralGraphColoring\GraphOrdering.cpp">
+      <Filter>Source Files\ColPack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ColPack\src\Recovery\HessianRecovery.cpp">
+      <Filter>Source Files\ColPack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ColPack\src\Recovery\JacobianRecovery1D.cpp">
+      <Filter>Source Files\ColPack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ColPack\src\Recovery\JacobianRecovery2D.cpp">
+      <Filter>Source Files\ColPack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ColPack\src\Recovery\RecoveryCore.cpp">
+      <Filter>Source Files\ColPack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ColPack\src\Utilities\command_line_parameter_processor.cpp">
+      <Filter>Source Files\ColPack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ColPack\src\Utilities\CoutLock.cpp">
+      <Filter>Source Files\ColPack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ColPack\src\Utilities\current_time.cpp">
+      <Filter>Source Files\ColPack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ColPack\src\Utilities\DisjointSets.cpp">
+      <Filter>Source Files\ColPack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ColPack\src\Utilities\extra.cpp">
+      <Filter>Source Files\ColPack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ColPack\src\Utilities\File.cpp">
+      <Filter>Source Files\ColPack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ColPack\src\Utilities\MatrixDeallocation.cpp">
+      <Filter>Source Files\ColPack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ColPack\src\Utilities\mmio.cpp">
+      <Filter>Source Files\ColPack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ColPack\src\Utilities\Pause.cpp">
+      <Filter>Source Files\ColPack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ColPack\src\Utilities\stat.cpp">
+      <Filter>Source Files\ColPack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ColPack\src\Utilities\StringTokenizer.cpp">
+      <Filter>Source Files\ColPack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ColPack\src\Utilities\Timer.cpp">
+      <Filter>Source Files\ColPack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -87,6 +189,102 @@
     </ClInclude>
     <ClInclude Include="spUtils.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ColPack\include\ColPackHeaders.h">
+      <Filter>Source Files\ColPack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ColPack\include\Definitions.h">
+      <Filter>Source Files\ColPack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ColPack\src\BipartiteGraphBicoloring\BipartiteGraphBicoloring.h">
+      <Filter>Source Files\ColPack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ColPack\src\BipartiteGraphBicoloring\BipartiteGraphBicoloringInterface.h">
+      <Filter>Source Files\ColPack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ColPack\src\BipartiteGraphBicoloring\BipartiteGraphCore.h">
+      <Filter>Source Files\ColPack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ColPack\src\BipartiteGraphBicoloring\BipartiteGraphInputOutput.h">
+      <Filter>Source Files\ColPack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ColPack\src\BipartiteGraphBicoloring\BipartiteGraphOrdering.h">
+      <Filter>Source Files\ColPack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ColPack\src\BipartiteGraphBicoloring\BipartiteGraphVertexCover.h">
+      <Filter>Source Files\ColPack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ColPack\src\BipartiteGraphPartialColoring\BipartiteGraphPartialColoring.h">
+      <Filter>Source Files\ColPack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ColPack\src\BipartiteGraphPartialColoring\BipartiteGraphPartialColoringInterface.h">
+      <Filter>Source Files\ColPack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ColPack\src\BipartiteGraphPartialColoring\BipartiteGraphPartialOrdering.h">
+      <Filter>Source Files\ColPack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ColPack\src\GeneralGraphColoring\GraphColoring.h">
+      <Filter>Source Files\ColPack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ColPack\src\GeneralGraphColoring\GraphColoringInterface.h">
+      <Filter>Source Files\ColPack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ColPack\src\GeneralGraphColoring\GraphCore.h">
+      <Filter>Source Files\ColPack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ColPack\src\GeneralGraphColoring\GraphInputOutput.h">
+      <Filter>Source Files\ColPack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ColPack\src\GeneralGraphColoring\GraphOrdering.h">
+      <Filter>Source Files\ColPack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ColPack\src\Recovery\HessianRecovery.h">
+      <Filter>Source Files\ColPack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ColPack\src\Recovery\JacobianRecovery1D.h">
+      <Filter>Source Files\ColPack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ColPack\src\Recovery\JacobianRecovery2D.h">
+      <Filter>Source Files\ColPack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ColPack\src\Recovery\RecoveryCore.h">
+      <Filter>Source Files\ColPack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ColPack\src\Utilities\command_line_parameter_processor.h">
+      <Filter>Source Files\ColPack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ColPack\src\Utilities\CoutLock.h">
+      <Filter>Source Files\ColPack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ColPack\src\Utilities\current_time.h">
+      <Filter>Source Files\ColPack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ColPack\src\Utilities\DisjointSets.h">
+      <Filter>Source Files\ColPack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ColPack\src\Utilities\extra.h">
+      <Filter>Source Files\ColPack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ColPack\src\Utilities\File.h">
+      <Filter>Source Files\ColPack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ColPack\src\Utilities\MatrixDeallocation.h">
+      <Filter>Source Files\ColPack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ColPack\src\Utilities\mmio.h">
+      <Filter>Source Files\ColPack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ColPack\src\Utilities\Pause.h">
+      <Filter>Source Files\ColPack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ColPack\src\Utilities\stat.h">
+      <Filter>Source Files\ColPack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ColPack\src\Utilities\StringTokenizer.h">
+      <Filter>Source Files\ColPack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ColPack\src\Utilities\Timer.h">
+      <Filter>Source Files\ColPack</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

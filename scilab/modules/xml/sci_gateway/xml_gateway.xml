@@ -2,7 +2,7 @@
 <!DOCTYPE module SYSTEM "../../functions/xml/gateway.dtd">
 <!--
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2012 - Scilab Enterprises - Cedric DELAMARRE
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -33,10 +33,7 @@
     <gateway name="sci_percent_XMLAttr_e"           function="%XMLAttr_e"           type="0" />
     <gateway name="sci_percent_XMLList_e"           function="%XMLList_e"           type="0" />
     <gateway name="sci_percent_XMLList_e"           function="%XMLSet_e"            type="0" />
-    <gateway name="sci_percent_XMLDoc_p"            function="%XMLDoc_p"            type="0" />
-    <gateway name="sci_percent_XMLElem_p"           function="%XMLElem_p"           type="0" />
     <gateway name="sci_percent_XMLNs_p"             function="%XMLNs_p"             type="0" />
-    <gateway name="sci_percent_XMLList_p"           function="%XMLList_p"           type="0" />
     <gateway name="sci_percent_XMLAttr_p"           function="%XMLAttr_p"           type="0" />
     <gateway name="sci_percent_XMLSet_p"            function="%XMLSet_p"            type="0" />
     <gateway name="sci_percent_XMLList_size"        function="%XMLList_size"        type="0" />
@@ -58,7 +55,6 @@
     <gateway name="sci_percent_foo_i_XMLList"       function="%b_i_XMLList"         type="0" />
     <gateway name="sci_percent_foo_i_XMLList"       function="%sp_i_XMLList"        type="0" />
     <gateway name="sci_percent_foo_i_XMLList"       function="%spb_i_XMLList"       type="0" />
-    <gateway name="sci_percent_foo_i_XMLList"       function="%msp_i_XMLList"       type="0" />
     <gateway name="sci_percent_foo_i_XMLList"       function="%i_i_XMLList"         type="0" />
     <gateway name="sci_percent_foo_i_XMLList"       function="%h_i_XMLList"         type="0" />
     <gateway name="sci_percent_foo_i_XMLList"       function="%fptr_i_XMLList"      type="0" />

@@ -236,8 +236,8 @@ msgid "API_ERROR_GET_POLY_IN_LIST"
 msgstr "API_ERROR_GET_POLY_IN_LIST"
 
 #, c-format
-msgid "%ls: Unrecognized optional arguments %ls.\n"
-msgstr "%ls：无法识别的可选参数%ls。\n"
+msgid "%s: Unrecognized optional arguments %s.\n"
+msgstr "%s：无法识别的可选参数%s。\n"
 
 msgid "Optional argument list is empty.\n"
 msgstr "可选参数列表为空。\n"

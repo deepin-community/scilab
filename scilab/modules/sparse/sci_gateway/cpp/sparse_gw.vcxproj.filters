@@ -16,6 +16,9 @@
     <Filter Include="Libraries Dependencies">
       <UniqueIdentifier>{709e71f6-1cad-4c48-a342-fc27c2e3dc61}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Libraries Dependencies\Imports">
+      <UniqueIdentifier>{6ace48bc-a618-49ee-ac78-8c2fa643d2ad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sci_adj2sp.cpp">
@@ -63,8 +66,6 @@
     <ClCompile Include="sci_ludel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sci_spchol.cpp">
-    </ClCompile>
     <ClCompile Include="sci_sfinit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -83,6 +84,21 @@
     <ClCompile Include="sci_blkslvi.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="sci_percent_spCompGeneric_clear.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sci_percent_spCompGeneric_e.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sci_spCompHessian.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sci_spCompJacobian.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sci_spchol.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\includes\sparse_gw.hxx">
@@ -96,7 +112,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="sparse_f_Import.def">
-      <Filter>Libraries Dependencies</Filter>
+      <Filter>Libraries Dependencies\Imports</Filter>
     </None>
   </ItemGroup>
 </Project>

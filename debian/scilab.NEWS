@@ -1,0 +1,11 @@
+scilab (2024.0.0+dfsg-5) unstable; urgency=medium
+
+  The version of scilab in Debian has undergone an important update. If you
+  were a Scilab user previously, it is possible you encounter problems while
+  starting new Scilab. Specifically, you may see a window with an error message
+  instead of the expected Scilab home window.
+
+  If so, please remove the .Scilab folder in your home directory and restart
+  Scilab afterwards, so that your .Scilab gets properly populated.
+
+ -- Pierre Gruet <pgt@debian.org>  Mon, 27 Nov 2023 21:38:19 +0100

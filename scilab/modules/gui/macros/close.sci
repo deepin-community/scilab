@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2008 - INRIA - Vincent COUVERT
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
 // Copyright (C) 2020 - Samuel GOUGEON
@@ -30,11 +30,18 @@ function close(h)
             delete(h);
 
         elseif type(h) == 1 then
+            fig_ids = winsid();
+            if fig_ids == [] then
+                return
+            end
+            current_fig = gcf();
             for i = 1:length(h)
-                tmp = findobj("figure_id",h(i));
-                if tmp <> [] then
-                    delete(tmp);
+                if or(fig_ids == h(i)) then
+                    delete(scf(h(i)))
                 end
+            end
+            if is_handle_valid(current_fig) then
+                scf(current_fig.figure_id)
             end
 
         elseif type(h)==10

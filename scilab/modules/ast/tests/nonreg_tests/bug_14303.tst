@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2016 - Scilab Enterprises - Pierre-Aime AGNEL
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,8 +9,8 @@
 //
 // <-- Non-regression test for bug 14303 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/14303
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/14303
 //
 // <-- Short Description -->
 // Display of matrices with scientific notation and lots of digits
@@ -26,11 +26,11 @@ A = [1,0,0,0,0,0,0,0;
 0,-7,0,56,0,-112,0,64]
 //display is ok
 
-disp(nearfloat("succ", expm(A)));
+disp(expm(A));
 // now display is ok
 
 format(19);
-disp(nearfloat("succ", expm(A)));
+disp(expm(A));
 
 A =  matrix(linspace(-1E10,1E20,64), 8, 8);
 disp(A);

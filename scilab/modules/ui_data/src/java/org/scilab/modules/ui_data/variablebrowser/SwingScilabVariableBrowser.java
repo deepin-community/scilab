@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2010 - DIGITEO - Bruno JOFRET
  * Copyright (C) 2010 - DIGITEO - Vincent COUVERT
  * Copyright (C) 2011 - Calixte DENIZET
@@ -69,7 +69,6 @@ import org.scilab.modules.ui_data.actions.IntegerFilteringAction;
 import org.scilab.modules.ui_data.actions.IntrinsicFunctionFilteringAction;
 import org.scilab.modules.ui_data.actions.ListFilteringAction;
 import org.scilab.modules.ui_data.actions.MListFilteringAction;
-import org.scilab.modules.ui_data.actions.MatlabSparseFilteringAction;
 import org.scilab.modules.ui_data.actions.PointerFilteringAction;
 import org.scilab.modules.ui_data.actions.PolynomialFilteringAction;
 import org.scilab.modules.ui_data.actions.ScilabVarFilteringAction;
@@ -122,7 +121,6 @@ public final class SwingScilabVariableBrowser extends SwingScilabDockablePanel i
     private CheckBoxMenuItem filterMListCheckBox;
     private CheckBoxMenuItem filterPointerCheckBox;
     private CheckBoxMenuItem filterIntrinsicFunctionCheckBox;
-    private CheckBoxMenuItem filterMatlabSparseCheckBox;
     private CheckBoxMenuItem filterImplicitPolynomialCheckBox;
     private JButton filteringButton;
 
@@ -407,7 +405,7 @@ public final class SwingScilabVariableBrowser extends SwingScilabDockablePanel i
             menuPlot.add(PlotAction.createMenuItem((SwingScilabDockablePanel)SwingScilabVariableBrowser.this, "histplot", false));
             menuPlot.add(PlotAction.createMenuItem((SwingScilabDockablePanel)SwingScilabVariableBrowser.this, "mesh", false));
             menuPlot.add(PlotAction.createMenuItem((SwingScilabDockablePanel)SwingScilabVariableBrowser.this, "surf", false));
-            menuPlot.add(PlotAction.createMenuItem((SwingScilabDockablePanel)SwingScilabVariableBrowser.this, "hist3d", false));
+            menuPlot.add(PlotAction.createMenuItem((SwingScilabDockablePanel)SwingScilabVariableBrowser.this, "bar3d", false));
             menuPlot.add(PlotAction.createMenuItem((SwingScilabDockablePanel)SwingScilabVariableBrowser.this, "contour2d", false));
             menuPlot.add(PlotAction.createMenuItem((SwingScilabDockablePanel)SwingScilabVariableBrowser.this, "pie", false));
             menu.add(menuPlot);
@@ -505,9 +503,6 @@ public final class SwingScilabVariableBrowser extends SwingScilabDockablePanel i
         filterIntrinsicFunctionCheckBox = IntrinsicFunctionFilteringAction.createCheckBoxMenu();
         filterMenu.add(filterIntrinsicFunctionCheckBox);
 
-        filterMatlabSparseCheckBox = MatlabSparseFilteringAction.createCheckBoxMenu();
-        filterMenu.add(filterMatlabSparseCheckBox);
-
         filterImplicitPolynomialCheckBox = ImplicitPolynomialFilteringAction.createCheckBoxMenu();
         filterMenu.add(filterImplicitPolynomialCheckBox);
 
@@ -595,10 +590,6 @@ public final class SwingScilabVariableBrowser extends SwingScilabDockablePanel i
 
         if (!filterIntrinsicFunctionCheckBox.isChecked()) {
             filteredValues.add(ScilabTypeEnum.sci_intrinsic_function);
-        }
-
-        if (!filterMatlabSparseCheckBox.isChecked()) {
-            filteredValues.add(ScilabTypeEnum.sci_matlab_sparse);
         }
 
         if (!filterImplicitPolynomialCheckBox.isChecked()) {

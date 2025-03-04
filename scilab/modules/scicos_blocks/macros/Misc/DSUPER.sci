@@ -79,6 +79,7 @@ function [x,y,typ] = DSUPER(job,arg1,arg2)
         // used only on save / load
         x=SUPER_f("define");
         x.gui="DSUPER";
+        x.model.sim="csuper";
         x.graphics.exprs=list("", list([], []));
     end
 endfunction

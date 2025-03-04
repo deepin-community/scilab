@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2010 - Paul Griffiths
  * Copyright (C) 2010 - Calixte DENIZET
  *
@@ -18,7 +18,6 @@ package org.scilab.modules.scinotes.actions;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -26,7 +25,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
@@ -37,15 +35,11 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.Vector;
 
-import javax.swing.AbstractAction;
 import javax.swing.AbstractCellEditor;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -62,9 +56,9 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import org.scilab.modules.commons.gui.FindIconHelper;
-import org.scilab.modules.gui.checkboxmenuitem.CheckBoxMenuItem;
 import org.scilab.modules.gui.bridge.menubar.SwingScilabMenuBar;
 import org.scilab.modules.gui.bridge.toolbar.SwingScilabToolBar;
+import org.scilab.modules.gui.checkboxmenuitem.CheckBoxMenuItem;
 import org.scilab.modules.scinotes.SciNotes;
 import org.scilab.modules.scinotes.ScilabEditorPane;
 import org.scilab.modules.scinotes.utils.ConfigSciNotesManager;
@@ -160,6 +154,32 @@ public class RestoreOpenedFilesAction extends DefaultCheckAction {
                 listOfComponents = null;
             }
         }
+    }
+
+    public static void forceRestore(final SciNotes ed, final String uuid) {
+        // Get list of files to be re-opened
+        List<File> list = RestoreOpenedFilesAction.removeAlreadyOpenFiles(uuid);
+
+        // Open them (see getTab() method)
+        boolean select = ed.getTabPane().getTabCount()==1;
+        if (list != null && list.size() != 0) {
+            for (File f : list) {
+                ed.openFile(f.getPath(), 0, null);
+            }
+            // Bug #15115: if scinotes has been launched with one file to open,
+            // select the file's tab after restoration of previous files
+            if (select) {
+                ed.getTabPane().setSelectedIndex(0);
+            }
+        } else if (ed.getTabPane().getTabCount() == 0) {
+            ed.addEmptyTab();
+        }
+
+        if (ed.getNavigator() != null) {
+            ed.getNavigator().updateTree();
+        }
+
+        RestoreOpenedFilesAction.restoreEnabledComponents(ed);
     }
 
     public static JPanel getTab(final SciNotes ed, final String uuid) {

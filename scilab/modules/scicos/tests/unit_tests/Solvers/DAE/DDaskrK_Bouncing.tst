@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Paul Bignier
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -8,24 +8,24 @@
 // <-- ENGLISH IMPOSED -->
 // <-- NO CHECK REF -->
 //
-// <-- XCOS TEST -->
+// <-- CLI SHELL MODE -->
 //
 
+loadXcosLibs();
 ilib_verbose(0); //to remove ilib_* traces
 
-// Import diagram
-assert_checktrue(importXcosDiagram("SCI/modules/xcos/tests/unit_tests/Solvers/DAE/Bouncing.zcos"));
+// Define diagram
+exec("SCI/modules/scicos/tests/unit_tests/Solvers/DAE/Bouncing.sce");
 
-Info = scicos_simulate(scs_m, list());
+Info = scicos_simulate(scs_m, list(), 'nw');
 
 // Modify solver + run DDaskr + save results
 scs_m.props.tol(6) = 102;       // Solver
-scicos_simulate(scs_m, Info);   // DDaskr
+scicos_simulate(scs_m, Info, 'nw');   // DDaskr
 ddaskrval = res.values;         // Results
 
 // Modify solver + run IDA + save results
 scs_m.props.tol(6) = 100;      // Solver
-scicos_simulate(scs_m, Info);  // IDA
 idaval = res.values;           // Results
 
 // Compare results

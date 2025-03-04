@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2020 - Samuel GOUGEON
 //
 // This file is hereby licensed under the terms of the GNU GPL v2.0,
@@ -96,7 +96,7 @@ assert_checkalmostequal([t(2) t($)], [0.031746032 1.968253968]);
 // With Colormap
 // -------------
 clf
-mapsound(y, 0.04, , , parulacolormap)
+mapsound(y, 0.04, , , parula)
 ref = [1       1       1
        0.99052 0.99324 0.62152
        0.9763  0.9831  0.0538

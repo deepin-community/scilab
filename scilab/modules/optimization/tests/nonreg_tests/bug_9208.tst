@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Paul Bignier
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -11,8 +11,8 @@
 //
 // <-- Non-regression test for bug 9208 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=9208
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/9208
 //
 // <-- Short Description -->
 // Added three optional output arguments to optim(), to retrieve #iterations,
@@ -52,16 +52,15 @@ function [f, g, ind] = rosenbrockCost2FixedStep(x, ind)
     g = numderivative ( rosenbrock , x.' , %eps^(1/4) , order = 4 );
 endfunction
 
-[fopt, xopt, w, g, iters, evals, err] = optim ( rosenbrockCost2FixedStep , x0 );
-
+[fopt, xopt, g, w, iters, evals, err] = optim ( rosenbrockCost2FixedStep , x0 );
 assert_checkalmostequal(xopt,[1,1])
 assert_checktrue([iters, evals] <= [38, 51]);
 assert_checkequal(err,9);
 
-[fopt, xopt, w, g, iters, evals, err] = optim ( rosenbrockCost2FixedStep , x0 , "ar",nap=10 );
+[fopt, xopt, g, w, iters, evals, err] = optim ( rosenbrockCost2FixedStep , x0 , "ar",nap=10 );
 assert_checkequal([iters evals err], [8 10 4]);
 
-[fopt, xopt, w, g, iters, evals, err] = optim ( rosenbrockCost2FixedStep , x0 , "ar",nap=100,iter=10 );
+[fopt, xopt, g, w, iters, evals, err] = optim ( rosenbrockCost2FixedStep , x0 , "ar",nap=100,iter=10 );
 assert_checkequal([iters evals err], [11 14 5]);
 
 // Example 2 (based on new 'numderivative' function using variable step)
@@ -74,11 +73,11 @@ function [f, g, ind] = rosenbrockCost2VariableStep(x, ind)
     g = numderivative ( rosenbrock , x.' , order = 4 );
 endfunction
 
-[fopt, xopt, w, g, iters, evals, err] = optim ( rosenbrockCost2VariableStep , x0 );
+[fopt, xopt, g, w, iters, evals, err] = optim ( rosenbrockCost2VariableStep , x0 );
 assert_checkequal([iters evals err], [4 100 4]);
 
-[fopt, xopt, w, g, iters, evals, err] = optim ( rosenbrockCost2VariableStep , x0 , "ar",nap=10 );
+[fopt, xopt, g, w, iters, evals, err] = optim ( rosenbrockCost2VariableStep , x0 , "ar",nap=10 );
 assert_checkequal([iters evals err], [1 10 4]);
 
-[fopt, xopt, w, g, iters, evals, err] = optim ( rosenbrockCost2VariableStep , x0 , "ar",nap=100,iter=10 );
+[fopt, xopt, g, w, iters, evals, err] = optim ( rosenbrockCost2VariableStep , x0 , "ar",nap=100,iter=10 );
 assert_checkequal([iters evals err], [4 100 4]);

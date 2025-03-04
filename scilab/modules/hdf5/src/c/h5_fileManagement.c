@@ -1,5 +1,5 @@
 /*
-*  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+*  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 *  Copyright (C) 2010 - DIGITEO - Allan CORNET
 *  Copyright (C) 2012 - Scilab Enterprises - Antoine ELIAS
 *  Copyright (C) 2013 - Scilab Enterprises - Calixte DENIZET
@@ -42,7 +42,7 @@ void HDF5cleanup(void)
     */
 
     H5_term_library();
-}
+ }
 /*--------------------------------------------------------------------------*/
 void HDF5ErrorCleanup()
 {

@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2011 - Calixte DENIZET
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -10,8 +10,8 @@
 //
 // <-- Non-regression test for bug 8714 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/8714
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/8714
 //
 // <-- Short Description -->
 // Problem with Incremental Search bar when Code Navigator is docked

@@ -156,6 +156,8 @@ function [X,U,Y,XP] = steadycos(scs_m,X,U,Y,Indx,Indu,Indy,Indxp,param)
         end
 
         // compile and post-process the diagram end
+    else // first argument is a %cpr
+        %cpr = scs_m;
     end
 
     sim=%cpr.sim;state=%cpr.state;

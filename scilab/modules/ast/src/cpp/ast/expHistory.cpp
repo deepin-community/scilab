@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2014 - Scilab Enterprises - Cedric Delamarre
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -14,9 +14,10 @@
  */
 
 #include "expHistory.hxx"
-#include "types_tools.hxx"
-#include "types.hxx"
 #include "context.hxx"
+#include "types.hxx"
+#include "types_tools.hxx"
+#include "simplevar.hxx"
 
 /**
 ** Constructor & Destructor (public)
@@ -27,7 +28,7 @@ ExpHistory::ExpHistory() : m_pArgs(NULL), m_piArgsDimsArray(NULL), m_pExp(NULL),
 }
 
 
-ExpHistory::ExpHistory(ExpHistory* _pEH, ast::SimpleVar* _pExp) : m_pArgs(NULL), m_piArgsDimsArray(NULL), m_pExp(_pExp), m_pParent(_pEH), m_pITCurrent(NULL), m_bReinsertMe(false), m_bCellExp(false), m_iArgsDims(0), m_iWhere(-1), m_iLevel(0), m_pArgsOwner(false), m_pExpOwner(false), m_bDeleteCurrent(false)
+ExpHistory::ExpHistory(ExpHistory* _pEH, ast::Exp* _pExp) : m_pArgs(NULL), m_piArgsDimsArray(NULL), m_pExp(_pExp), m_pParent(_pEH), m_pITCurrent(NULL), m_bReinsertMe(false), m_bCellExp(false), m_iArgsDims(0), m_iWhere(-1), m_iLevel(0), m_pArgsOwner(false), m_pExpOwner(false), m_bDeleteCurrent(false)
 {
 }
 
@@ -35,7 +36,7 @@ ExpHistory::ExpHistory(ExpHistory* _pParent, types::typed_list* _pArgs) : m_pArg
 {
 }
 
-ExpHistory::ExpHistory(ExpHistory* _pParent, ast::SimpleVar* _pExp, types::typed_list* _pArgs, int _iLevel,  bool _bCellExp, types::InternalType* _pITCurrent) :
+ExpHistory::ExpHistory(ExpHistory* _pParent, ast::Exp* _pExp, types::typed_list* _pArgs, int _iLevel,  bool _bCellExp, types::InternalType* _pITCurrent) :
     m_pArgs(_pArgs),
     m_piArgsDimsArray(NULL),
     m_pExp(_pExp),
@@ -85,12 +86,12 @@ ExpHistory::~ExpHistory()
 ** Accessor (public)
 */
 
-void ExpHistory::setExp(ast::SimpleVar* _pExp)
+void ExpHistory::setExp(ast::Exp* _pExp)
 {
     m_pExp = _pExp;
 }
 
-ast::SimpleVar* ExpHistory::getExp()
+ast::Exp* ExpHistory::getExp()
 {
     return m_pExp;
 }
@@ -98,9 +99,9 @@ ast::SimpleVar* ExpHistory::getExp()
 std::wstring ExpHistory::getExpAsString()
 {
     std::wstring wcsExp = L"";
-    if (m_pExp)
+    if (m_pExp && m_pExp->isSimpleVar())
     {
-        wcsExp = m_pExp->getSymbol().getName();
+        wcsExp = m_pExp->getAs<ast::SimpleVar>()->getSymbol().getName();
     }
 
     return wcsExp;

@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2014 - Scilab Enterprises - Paul Bignier
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,7 +9,7 @@
 loadXcosLibs();
 scicos_log("TRACE");
 // Creating a Diagram containing a Link connected to a Block
-scs = scicos_diagram( objs=list(BIGSOM_f("define"),scicos_link(from=[1,1,0])) );
+scs = scicos_diagram( objs=list(BIGSOM_f("define"), scicos_link(from=[1,1,0], to=[1,1,1])) );
 Xcos info:    objectCreated( 1 , BLOCK )
 Xcos trace:   objectReferenced( 1 , BLOCK ) : 1
 Xcos trace:   propertyUpdated( 1 , BLOCK , GEOMETRY ) : NO_CHANGES
@@ -83,12 +83,12 @@ Xcos trace:   propertyUpdated( 1 , BLOCK , PARENT_BLOCK ) : NO_CHANGES
 Xcos trace:   objectReferenced( 5 , LINK ) : 1
 Xcos debug:   propertyUpdated( 5 , LINK , PARENT_DIAGRAM ) : SUCCESS
 Xcos trace:   propertyUpdated( 5 , LINK , PARENT_BLOCK ) : NO_CHANGES
-Xcos trace:   propertyUpdated( 4 , PORT , CONNECTED_SIGNALS ) : NO_CHANGES
 Xcos debug:   propertyUpdated( 4 , PORT , CONNECTED_SIGNALS ) : SUCCESS
 Xcos debug:   propertyUpdated( 5 , LINK , SOURCE_PORT ) : SUCCESS
-Xcos trace:   propertyUpdated( 5 , LINK , DESTINATION_PORT ) : NO_CHANGES
+Xcos debug:   propertyUpdated( 2 , PORT , CONNECTED_SIGNALS ) : SUCCESS
+Xcos debug:   propertyUpdated( 5 , LINK , DESTINATION_PORT ) : SUCCESS
 Xcos debug:   propertyUpdated( 6 , DIAGRAM , CHILDREN ) : SUCCESS
-Xcos debug:   propertyUpdated( 6 , DIAGRAM , VERSION_NUMBER ) : SUCCESS
+Xcos trace:   propertyUpdated( 6 , DIAGRAM , VERSION_NUMBER ) : NO_CHANGES
 Xcos trace:   objectUnreferenced( 1 , BLOCK ) : 0
 Xcos trace:   objectUnreferenced( 5 , LINK ) : 0
 // Extracting and modifying the Link should not modify the original Diagram
@@ -108,6 +108,8 @@ Xcos trace:   propertyUpdated( 7 , LINK , CONTROL_POINTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 7 , LINK , THICK ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 7 , LINK , PARENT_DIAGRAM ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 7 , LINK , PARENT_BLOCK ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 7 , LINK , SOURCE_PORT ) : NO_CHANGES
+Xcos trace:   propertyUpdated( 7 , LINK , DESTINATION_PORT ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 7 , LINK , SOURCE_PORT ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 7 , LINK , DESTINATION_PORT ) : NO_CHANGES
 Xcos trace:   objectUnreferenced( 5 , LINK ) : 0
@@ -133,6 +135,7 @@ Xcos debug:   propertyUpdated( 1 , BLOCK , INPUTS ) : SUCCESS
 Xcos trace:   propertyUpdated( 1 , BLOCK , OUTPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 1 , BLOCK , EVENT_INPUTS ) : NO_CHANGES
 Xcos trace:   propertyUpdated( 1 , BLOCK , EVENT_OUTPUTS ) : NO_CHANGES
+Xcos debug:   propertyUpdated( 5 , LINK , DESTINATION_PORT ) : SUCCESS
 Xcos info:    objectDeleted( 2 , PORT )
 Xcos debug:   propertyUpdated( 1 , BLOCK , INPUTS ) : SUCCESS
 Xcos trace:   propertyUpdated( 1 , BLOCK , OUTPUTS ) : NO_CHANGES

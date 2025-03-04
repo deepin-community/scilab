@@ -1,5 +1,5 @@
 // ============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2012 - DIGITEO - Antoine ELIAS
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -89,6 +89,7 @@ assert_checkequal(C * R, [ 7+%i*14, 10+%i*20; 15+%i*30, 22+%i*44]);
 // C * C
 assert_checkequal(C * C, [-21+%i*28,-30+%i*40;-45+%i*60,-66+%i*88]);
 
-errmsg = "Inconsistent row/column dimensions.";
+errmsg = msprintf(_("Operator %ls: Wrong dimensions for operation [%ls] %ls [%ls].\n"), "*", "2x1", "*", "2x1");
 assert_checkerror("[1;1]*[1;1]", errmsg);
+errmsg = msprintf(_("Operator %ls: Wrong dimensions for operation [%ls] %ls [%ls].\n"), "*", "1x2", "*", "1x2");
 assert_checkerror("[1 1]*[1 1]", errmsg);

@@ -1,0 +1,679 @@
+From: Bastian Germann <bage@debian.org>
+Date: Fri, 13 Sep 2024 08:29:34 +0200
+Forwarded: not-needed
+Subject: Drop macOS-only JFXScilabFileChooser
+---
+--- a/scilab/configure.ac
++++ b/scilab/configure.ac
+@@ -1111,23 +1111,6 @@
+                 JEUCLID_CORE=$PACKAGE_JAR_FILE
+                 AC_SUBST(JEUCLID_CORE)
+ 
+-                # JavaFX base
+-                # Used in native file chooser
+-                AC_JAVA_CHECK_JAR([javafx.base],[javafx.collections.ObservableList],[JavaFX base])
+-                JAVAFX_BASE=$PACKAGE_JAR_FILE
+-                AC_SUBST(JAVAFX_BASE)
+-
+-                # JavaFX Swing
+-                # Used in native file chooser
+-                AC_JAVA_CHECK_JAR([javafx.swing],[javafx.embed.swing.JFXPanel],[JavaFX Swing])
+-                JAVAFX_SWING=$PACKAGE_JAR_FILE
+-                AC_SUBST(JAVAFX_SWING)
+-
+-                # JavaFX graphics
+-                # Used in native file chooser
+-                AC_JAVA_CHECK_JAR([javafx.graphics],[javafx.stage.Stage],[JavaFX graphics])
+-                JAVAFX_GRAPHICS=$PACKAGE_JAR_FILE
+-                AC_SUBST(JAVAFX_GRAPHICS)
+ 
+                 ################ Mandatory for graphic_export features #####
+                 # XML to PDF/other Translator
+--- a/scilab/modules/gui/src/java/org/scilab/modules/gui/bridge/filechooser/JFXScilabExportFileChooser.java
++++ /dev/null
+@@ -1,192 +0,0 @@
+-/*
+- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+- * Copyright (C) 2008 - INRIA - Sylvestre Koumar
+- * Copyright (C) 2011 - Calixte DENIZET
+- *
+- * Copyright (C) 2012 - 2016 - Scilab Enterprises
+- *
+- * This file is hereby licensed under the terms of the GNU GPL v2.0,
+- * pursuant to article 5.3.4 of the CeCILL v.2.1.
+- * This file was originally licensed under the terms of the CeCILL v2.1,
+- * and continues to be available under such terms.
+- * For more information, see the COPYING file which you should have received
+- * along with this program.
+- *
+- */
+-package org.scilab.modules.gui.bridge.filechooser;
+-
+-import java.awt.Component;
+-import java.awt.Cursor;
+-import java.awt.Window;
+-import java.io.File;
+-import java.util.ArrayList;
+-
+-import javax.swing.BorderFactory;
+-import javax.swing.JComponent;
+-import javax.swing.JFileChooser;
+-import javax.swing.JFrame;
+-import javax.swing.JOptionPane;
+-import javax.swing.JPanel;
+-import javax.swing.SwingUtilities;
+-import javax.swing.border.TitledBorder;
+-import javax.swing.filechooser.FileNameExtensionFilter;
+-
+-import org.scilab.modules.graphic_export.FileExporter;
+-import org.scilab.modules.graphic_objects.graphicController.GraphicController;
+-import org.scilab.modules.graphic_objects.figure.Figure;
+-import org.scilab.modules.gui.SwingView;
+-import org.scilab.modules.gui.SwingViewObject;
+-import org.scilab.modules.gui.bridge.tab.SwingScilabDockablePanel;
+-import org.scilab.modules.gui.bridge.window.SwingScilabWindow;
+-import org.scilab.modules.gui.tab.SimpleTab;
+-import org.scilab.modules.gui.utils.ConfigManager;
+-import org.scilab.modules.localization.Messages;
+-import org.scilab.modules.renderer.JoGLView.DrawerVisitor;
+-import org.scilab.modules.gui.bridge.filechooser.JFXScilabFileChooser;
+-
+-/**
+- * This is the son of the usual Scilab file chooser,
+- * it have been customized for the graphic export
+- * @author Sylvestre Koumar
+- *
+- */
+-@SuppressWarnings(value = { "serial" })
+-public class JFXScilabExportFileChooser extends JFXScilabFileChooser {
+-
+-    private static final int NB_FILE_MASKS = 10;
+-
+-    private final String[] description = {
+-        Messages.gettext("Windows BMP image"),
+-        Messages.gettext("GIF image"),
+-        Messages.gettext("JPEG image"),
+-        Messages.gettext("PNG image"),
+-        Messages.gettext("PPM image"),
+-        Messages.gettext("Enhanced Metafile image (EMF)"),
+-        Messages.gettext("Encapsulated PostScript image (EPS)"),
+-        Messages.gettext("PostScript image (PS)"),
+-        Messages.gettext("PDF image"),
+-        Messages.gettext("SVG image")
+-    };
+-
+-    private final String[] extensions = {
+-        "*.bmp",
+-        "*.gif",
+-        "*.jpg|*.jpeg",
+-        "*.png",
+-        "*.ppm",
+-        "*.emf",
+-        "*.eps",
+-        "*.ps",
+-        "*.pdf",
+-        "*.svg"
+-    };
+-
+-    private String exportName;
+-    private String extensionSelected;
+-    private Integer figureUID;
+-
+-    /**
+-     * Default constructor
+-     * @param figureId id of the exported figure
+-     */
+-
+-    public JFXScilabExportFileChooser(Integer figureUID) {
+-        this.figureUID = figureUID;
+-        exportCustomFileChooser(figureUID);
+-    }
+-
+-    /**
+-     * We customize the file chooser for the graphic export
+-     * by adding format selection
+-     * @param figureId exported figure number
+-     */
+-    public void exportCustomFileChooser(Integer figureUID) {
+-        Figure figure = (Figure) GraphicController.getController().getObjectFromId(figureUID);
+-        String defaultName = figure.getName();
+-        int figureId = figure.getId();
+-        if (defaultName != null && !defaultName.isEmpty()) {
+-            defaultName = defaultName.replaceFirst("%d", Integer.toString(figureId));
+-        } else {
+-            defaultName = Messages.gettext("Untitled-export");
+-        }
+-
+-        setTitle(Messages.gettext("Export"));
+-        File exportFile = new File(defaultName);
+-        setInitialFileName(exportFile.getName());
+-        setAcceptAllFileFilterUsed(false);
+-
+-        this.figureUID = figureUID;
+-
+-        addMask(extensions, description);
+-
+-        setUiDialogType(JFXScilabFileChooser.SAVE_DIALOG);
+-        displayAndWait();
+-        String[] selection = getSelection();
+-        if (selection.length!=0 && selection[0] != "") {
+-            exportName = selection[0];
+-            /* Bug 3849 fix */
+-            ConfigManager.saveLastOpenedDirectory(new File(exportName).getParentFile().getPath());
+-            String extensionCombo = getExtension(exportName);
+-            if (extensionCombo.equals("emf") || extensionCombo.equals("eps") || extensionCombo.equals("ps") || extensionCombo.equals("pdf") || extensionCombo.equals("svg")) {
+-                vectorialExport(extensionCombo);
+-            } else {
+-                bitmapExport(extensionCombo);
+-            }
+-        
+-        }
+-    }
+-
+-    /**
+-     * Return the file extension
+-     * @param fileName Name of the file
+-     * @return the extension
+-     */
+-    public String getExtension(String fileName) {
+-        if (fileName != null) {
+-            int i = fileName.lastIndexOf('.');
+-            if (i > 0 && i < fileName.length() - 1) {
+-                return fileName.substring(i + 1).toLowerCase();
+-            }
+-        }
+-        return null;
+-    }
+-
+-    /**
+-     * Manage the export (bitmap/vectorial format) and export errors
+-     */
+-    /**
+-     * Export an bitmap file
+-     * @param userExtension extension caught by the user
+-     */
+-    public void bitmapExport(String userExtension) {
+-        //Cursor old = getCursor();
+-        //setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+-
+-        ExportData exportData = new ExportData(figureUID, this.exportName, userExtension, null);
+-        FileExporter.fileExport(figureUID, this.exportName, exportData.getExportExtension(), -1, 0);
+-
+-        //setCursor(old);
+-    }
+-
+-    /**
+-     * Export a vectorial file
+-     * @param userExtension extension caught by the user
+-     */
+-    public void vectorialExport(String userExtension) {
+-        SwingViewObject view = SwingView.getFromId(figureUID);
+-        SimpleTab tab;
+-        if (view instanceof SimpleTab)
+-        {
+-            tab = (SimpleTab) SwingView.getFromId(figureUID);
+-        }
+-        else
+-        {
+-            tab = null;
+-        }
+-        ExportData exportData = new ExportData(figureUID, this.exportName, userExtension, null);
+-
+-        ExportOptionWindow exportOptionWindow = new ExportOptionWindow(exportData);
+-        exportOptionWindow.displayOptionWindow(tab);
+-        exportOptionWindow.landscapePortraitOption();
+-    }
+-}
+--- a/scilab/modules/gui/src/java/org/scilab/modules/gui/bridge/filechooser/JFXScilabFileChooser.java
++++ /dev/null
+@@ -1,397 +0,0 @@
+-/*
+- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+- * Copyright (C) 2021-2022 - Stéphane MOTTELET
+- *
+- * This file is hereby licensed under the terms of the GNU GPL v3.0,
+- * For more information, see the COPYING file which you should have received
+- * along with this program.
+- *
+- */
+-
+-package org.scilab.modules.gui.bridge.filechooser;
+-
+-import java.io.File;
+-import java.util.StringTokenizer;
+-import java.util.concurrent.*;
+-import java.util.List;
+-import java.util.ArrayList;
+-import java.util.Arrays;
+-import java.util.Optional;
+-
+-import java.awt.Toolkit;
+-import java.awt.Dimension;
+-import java.awt.Robot;
+-
+-
+-import javafx.collections.ObservableList;
+-import javafx.application.Platform;
+-import javafx.embed.swing.JFXPanel;
+-import javafx.stage.Stage;
+-import javafx.stage.Modality;
+-import javafx.stage.StageStyle;
+-import javafx.stage.FileChooser;
+-import javafx.stage.FileChooser.ExtensionFilter;
+-import javafx.stage.DirectoryChooser;
+-import javafx.stage.StageStyle;
+-
+-import javax.swing.JFrame;
+-import javax.swing.SwingUtilities;
+-import javax.swing.filechooser.FileFilter;
+-import javax.swing.filechooser.FileNameExtensionFilter;
+-
+-import org.scilab.modules.gui.filechooser.FileChooserInfos;
+-import org.scilab.modules.gui.filechooser.SimpleFileChooser;
+-import org.scilab.modules.gui.utils.ConfigManager;
+-import org.scilab.modules.gui.utils.SciFileFilter;
+-import org.scilab.modules.gui.utils.ScilabSwingUtilities;
+-import org.scilab.modules.localization.Messages;
+-
+-/**
+- * JavaFX implementation of a Scilab File Chooser
+- * @author Stéphane Mottelet
+- */
+-
+-public class JFXScilabFileChooser implements SimpleFileChooser {
+-    private static final long serialVersionUID = 1L;
+-    public static final int OPEN_DIALOG = 0;
+-    public static final int SAVE_DIALOG = 1;
+-    private String[] selection; // Path + filenames
+-    private String selectionPath; // Path
+-    private String title;
+-    private static Double xPos = Double.NaN;
+-    private static Double yPos = Double.NaN;
+-    private String[] selectionFileNames; // Filenames
+-    private int selectionSize;
+-    private int filterIndex;
+-    private int maskSize = 0;
+-    private boolean acceptAllFileFilterUsed = false;
+-    private int dialogType = 0;
+-    private boolean directorySelectionOnly = false;
+-    private boolean multipleSelection = false;
+-    private JFXPanel jfxpanel = new JFXPanel();
+-    private DirectoryChooser directoryChooser;
+-    private FileChooser fileChooser;
+-    private Stage stage;
+-
+-
+-    public JFXScilabFileChooser() {
+-        directoryChooser = new DirectoryChooser();
+-        fileChooser = new FileChooser();
+-    }
+-
+-    class getChosenFile implements Callable<ArrayList<File>> {
+-        @Override public ArrayList<File> call() throws Exception {
+-            // This method is invoked on the JavaFX thread
+-            ArrayList<File> theResult = new ArrayList<File>();
+-            
+-            if (!(stage instanceof Stage)) {
+-                stage = new Stage();
+-                stage.setMaxHeight(0);
+-                stage.setWidth(0);
+-                stage.setResizable(false);
+-                stage.setAlwaysOnTop(true);
+-                stage.initStyle(StageStyle.UNIFIED);
+-                if (xPos.isNaN()) {
+-                    Dimension d = Toolkit.getDefaultToolkit().getScreenSize(); // get screen size
+-                    xPos = d.width/2-stage.getWidth()/2;
+-                    yPos = (double)d.height/3;
+-                }
+-                stage.setX(xPos);
+-                stage.setY(yPos);                    
+-            }
+-            stage.setTitle(title);
+-            stage.initModality(Modality.APPLICATION_MODAL); 
+-            stage.show(); //show stage because you wouldn't be able to get Height & width of the stage
+-                
+-            if (dialogType == JFXScilabFileChooser.OPEN_DIALOG) {
+-                if (multipleSelection == false) {
+-                    if (directorySelectionOnly == false)  {
+-                        File aFile = fileChooser.showOpenDialog(stage);
+-                        if (aFile != null) {
+-                            theResult.add(aFile);
+-                        }
+-                    } else {
+-                        File aFile = directoryChooser.showDialog(stage);
+-                        if (aFile != null) {
+-                            theResult.add(aFile);
+-                        }
+-                    }
+-                } else {
+-                    List<File> files = fileChooser.showOpenMultipleDialog(stage);
+-                    if (files != null) {
+-                        for (int i=0; i<files.size(); i++) {
+-                            theResult.add(files.get(i));
+-                        }
+-                    }
+-                }
+-            } else if (dialogType == JFXScilabFileChooser.SAVE_DIALOG) {
+-                String fileName = fileChooser.getInitialFileName();
+-                if (fileName != null && fileName != "")
+-                {
+-                    Boolean found = false;
+-                    int index = fileName.lastIndexOf('.');
+-                    ExtensionFilter filter = null;
+-                    if(index > 0) {
+-                        String extension = "*"+fileName.substring(index);
+-                        filter = getFileFilterFromExtension(extension);
+-                        if (filter != null) {
+-                            fileChooser.setSelectedExtensionFilter(filter);
+-                        }
+-                    }
+-                    if (filter == null) {
+-                         if (acceptAllFileFilterUsed) {
+-                             filter = getFileFilterFromExtension("*.*");
+-                             if (filter != null) {
+-                                 fileChooser.setSelectedExtensionFilter(filter);
+-                             }
+-                         }
+-                     } 
+-                }
+-                
+-                File aFile  = fileChooser.showSaveDialog(stage);
+-                if (aFile != null) {
+-                    theResult.add(aFile);
+-                }
+-            }
+-            xPos = stage.getX();
+-            yPos = stage.getY();
+-            stage.close();
+-            
+-            return theResult;
+-        }
+-    }
+-
+-    /**
+-     * Set the parent frame
+-     * @param parent the parent frame
+-     */
+-    public void setParentFrame(JFrame parent) {
+-    }
+-
+-    /**
+-     * Display this chooser and wait for user selection
+-     */
+-    public void displayAndWait() {
+-        FutureTask<ArrayList<File>> futureTask = new FutureTask<ArrayList<File>>(
+-          new getChosenFile()
+-        );
+-        Platform.setImplicitExit(false);
+-        Platform.runLater(futureTask);
+-        try {
+-            ArrayList<File> result = futureTask.get();
+-            selectionSize = result.size();
+-            if (selectionSize > 0) {
+-                selection = new String[selectionSize];
+-                selectionFileNames = new String[selectionSize];
+-                for (int i=0; i<result.size(); i++) {
+-                    selection[i] = result.get(i).getAbsolutePath();
+-                    selectionPath = result.get(i).getParentFile().getPath();
+-                    selectionFileNames[i] = result.get(i).getName();
+-                }
+-                filterIndex = getSelectedFilterIndex()+1;
+-            } else {
+-                // Cancel case
+-                selection = new String[1];
+-                selection[0] = "";
+-                selectionPath = "";
+-                selectionFileNames = new String[1];
+-                selectionFileNames[0] = "";
+-                filterIndex = 0;
+-            }
+-            
+-            //return the filechooser's information
+-            //they are stocked into FileChooserInfos
+-            FileChooserInfos.getInstance().setSelection(selection);
+-            FileChooserInfos.getInstance().setSelectionPathName(selectionPath);
+-            FileChooserInfos.getInstance().setSelectionFileNames(selectionFileNames);
+-            FileChooserInfos.getInstance().setSelectionSize(selectionSize);
+-            FileChooserInfos.getInstance().setFilterIndex(filterIndex);
+-        }
+-        catch (Exception e) {
+-            e.printStackTrace();
+-        }
+-    }
+-
+-    public void setAcceptAllFileFilterUsed(boolean flag) {
+-        acceptAllFileFilterUsed = flag;
+-        if (flag == true)  {
+-            SciFileFilter filter = new SciFileFilter("*.*",null, 0);        
+-            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(filter.getDescription(),"*.*"));
+-        }
+-    }
+-
+-    /**
+-     * Set the mask & the mask description for the filechooser
+-     * @param mask the mask to set
+-     * @param fileMaskDescription the maskDescription to set
+-     */
+-    public void addMask(String[] theMask, String[] theFileMaskDescription) {
+-
+-        if (theFileMaskDescription == null || theFileMaskDescription.length == 0) {
+-            for (int i=0; i<theMask.length; i++) {
+-                SciFileFilter filter = new SciFileFilter(theMask[i], null, i);
+-                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(filter.getDescription(),Arrays.asList(theMask[i].split("\\|"))));
+-                if (theMask[i].equals("*.*"))
+-                {
+-                     acceptAllFileFilterUsed = true;
+-                }
+-            }
+-        } else {
+-            for (int i=0; i<theMask.length; i++) {
+-                SciFileFilter filter = new SciFileFilter(theMask[i], theFileMaskDescription[i], i);
+-                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(filter.getDescription(),Arrays.asList(theMask[i].split("\\|"))));
+-                if (theMask[i].equals("*.*"))
+-                {
+-                     acceptAllFileFilterUsed = true;
+-                }
+-            }
+-        }
+-    }
+-
+-    public void setFileFilter(FileChooser.ExtensionFilter filter) {
+-        fileChooser.setSelectedExtensionFilter(filter);
+-    }
+-
+-     public void setFileFilter(FileFilter filter) {
+-         String[] ext = ((FileNameExtensionFilter) filter).getExtensions();
+-         for (int i=0; i<ext.length; i++) {
+-             ext[i]="*."+ext[i];
+-         }
+-         fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter(((FileNameExtensionFilter)filter).getDescription(),ext));
+-     }
+-
+-     public ExtensionFilter getFileFilterFromExtension(String extension) {
+-        for (ExtensionFilter filter : fileChooser.getExtensionFilters())   
+-        {
+-            for (String filtext : filter.getExtensions())
+-            {
+-                if (filtext.equals(extension))
+-                {                                    
+-                    return filter;
+-                }
+-            }
+-        }
+-        return null;
+-    }
+-
+-    public int getSelectedFilterIndex() {
+-       int k = 0;
+-       for (ExtensionFilter filter : fileChooser.getExtensionFilters()) {
+-           if (fileChooser.getSelectedExtensionFilter() == filter) {
+-               return k;
+-           }
+-           k = k+1;
+-       }
+-       return -1;
+-   }
+-
+-    public void setTitle(String string) {
+-        title = string;
+-    }
+-
+-    public void setCurrentDirectory(File file) {
+-        File dir;
+-        if (file.isDirectory()) {
+-            dir = file;
+-        } else if (file.exists()) {
+-            dir = file.getParentFile();       
+-        } else
+-        {
+-            dir = new File(System.getProperty("user.dir"));
+-        }
+-        if (directorySelectionOnly == true)  {
+-             directoryChooser.setInitialDirectory(dir);
+-        } else {
+-             fileChooser.setInitialDirectory(dir);
+-        }
+-    }
+-
+-    public void setInitialDirectory(String path) {
+-        // When empty string given
+-        if (path == null || path.length() == 0) {
+-            return;
+-        }
+-        // Replace beginning of the path if is an environment variable
+-        String newPath = path;
+-        StringTokenizer tok = new StringTokenizer(path, File.separator);
+-        if (tok.hasMoreTokens()) {
+-            /* It is possible that we don't have any more token here when
+-                                          Scilab is started from / for example */
+-            String firstToken = tok.nextToken();
+-            if (firstToken != null && System.getenv(firstToken) != null)  {
+-                newPath = newPath.replaceFirst(firstToken, System.getenv(firstToken));
+-            }
+-        }
+-        setCurrentDirectory(new File(newPath));
+-    }
+-
+-    public void setInitialFileName(String path) {
+-        if (path == null || path.length() == 0) {
+-            return;
+-        }
+-        File file = new File(path);
+-        fileChooser.setInitialFileName(file.getName());
+-     }
+-
+-    /**
+-     * Get the number of files selected
+-     * @return the number of files selected
+-     */
+-    public int getSelectionSize() {
+-        return selectionSize;
+-    }
+-
+-    /**
+-     * Get the names of selected files
+-     * @return the names of selected files
+-     */
+-    public String[] getSelection() {
+-        return selection;
+-    }
+-
+-    /**
+-     * Set the flag indicating that we want only select directories
+-     */
+-    public void setDirectorySelectionOnly() {
+-        directorySelectionOnly = true;
+-    }
+-
+-    /**
+-     * Set the flag indicating that we can select multiple files
+-     * @param multipleSelection enable multiple selection
+-     */
+-    public void setMultipleSelection(boolean flag)
+-    {
+-        multipleSelection = flag;
+-    }
+-
+-    /**
+-     * Get the path of selected files
+-     * @return the path of selected files
+-     */
+-    public String getSelectionPathName() {
+-        return selectionPath;
+-    }
+-
+-    /**
+-     * Get the names of selected files
+-     * @return the names of selected files
+-     */
+-    public String[] getSelectionFileNames(){
+-        return selectionFileNames;
+-    }
+-
+-    public void invalidate() {
+-    }
+-
+-    /**
+-     * Set the dialog type (save or open a file ?)
+-     * @param dialogType the dialog type
+-     */
+-    public void setUiDialogType(int type)
+-    {
+-        // LOAD = 0, SAVE = 1
+-        dialogType = type;
+-    }
+-
+-}
+--- a/scilab/modules/gui/src/java/org/scilab/modules/gui/filechooser/ScilabFileChooserBridge.java
++++ b/scilab/modules/gui/src/java/org/scilab/modules/gui/filechooser/ScilabFileChooserBridge.java
+@@ -18,8 +18,6 @@
+ 
+ import org.scilab.modules.gui.bridge.filechooser.SwingScilabExportFileChooser;
+ import org.scilab.modules.gui.bridge.filechooser.SwingScilabFileChooser;
+-import org.scilab.modules.gui.bridge.filechooser.JFXScilabFileChooser;
+-import org.scilab.modules.gui.bridge.filechooser.JFXScilabExportFileChooser;
+ 
+ /**
+  * Bridge dedicated to Scilab file chooser GUIs
+@@ -42,7 +40,7 @@
+     public static SimpleFileChooser createFileChooser() {
+         boolean ismacOS = System.getProperty("os.name").toLowerCase().contains("mac");
+         if (ismacOS == true) {
+-            return new JFXScilabFileChooser();
++            return null;
+         } else {
+             return new SwingScilabFileChooser();
+         }
+@@ -56,7 +54,7 @@
+     public static SimpleFileChooser createExportFileChooser(Integer figureUID) {
+         boolean ismacOS = System.getProperty("os.name").toLowerCase().contains("mac");
+         if (ismacOS == true) {
+-            return new JFXScilabExportFileChooser(figureUID);
++            return null;
+         } else {
+             return new SwingScilabExportFileChooser(figureUID);
+         }
+--- a/scilab/etc/classpath.xml.in
++++ b/scilab/etc/classpath.xml.in
+@@ -36,9 +36,6 @@
+ <path value="@LUCENE@"/>
+ <path value="@LUCENE_ANALYZER@"/>
+ <path value="@LUCENE_PARSER@"/>
+-<path value="@JAVAFX_BASE@"/>
+-<path value="@JAVAFX_SWING@"/>
+-<path value="@JAVAFX_GRAPHICS@"/>
+ <!-- Load when needed -->
+ 
+ <path value="@FREEHEP_UTIL@" load="onUse">
+--- a/scilab/scilab-lib.properties.in
++++ b/scilab/scilab-lib.properties.in
+@@ -211,9 +211,6 @@
+ 
+ jlatexmath.jar=@JLATEXMATH@
+ 
+-javafx.base.jar=@JAVAFX_BASE@
+-javafx.swing.jar=@JAVAFX_SWING@
+-javafx.graphics.jar=@JAVAFX_GRAPHICS@
+ 
+ ; To build the export through the Java
+ avalon-framework.jar=@AVALON_FRAMEWORK@

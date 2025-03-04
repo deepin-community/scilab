@@ -13,6 +13,9 @@ c     ====================================
       double precision y, t, tout, rtol, atol, rwork
       integer nok,nbad
       dimension neq(*), y(*), rtol(*), atol(*), rwork(lrw), iwork(liw)
+cDEC$ ATTRIBUTES DLLIMPORT:: /ierode/
+      COMMON /ierode/ierror
+      
       ierror=0
       call odeint(y, neq, t,tout,rtol(1),itask,0.0d0,nok,nbad,f,
      $     rkqc,rwork)

@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009 - DIGITEO - Michael Baudin
 // Copyright (C) 2010 - DIGITEO - Allan CORNET
 // Copyright (C) 2012 - Scilab Enterprises - Adeline CARNIS

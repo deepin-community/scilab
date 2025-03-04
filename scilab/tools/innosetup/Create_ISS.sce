@@ -1,5 +1,5 @@
 //
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) DIGITEO - 2010-2012 - Allan CORNET
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -236,5 +236,5 @@ else
     printf("Error: name of this file isn""t ""Create_ISS.sce"" but %s\n",(filename+extension));
     printf("Please rename this file\n");
 end
-exit
+exit(0)
 //------------------------------------------------------------------------------

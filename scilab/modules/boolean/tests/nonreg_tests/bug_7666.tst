@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) DIGITEO - 2014 - Scilab Enterprises - Calixte DENIZET
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,8 +9,8 @@
 
 // <-- Non-regression test for bug 7666 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/7666
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/7666
 //
 // <-- Short Description -->
 // Inconstencies between and/or and &/|

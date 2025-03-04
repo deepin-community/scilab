@@ -1,6 +1,6 @@
 //<-- CLI SHELL MODE -->
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2007-2009 - INRIA - Serge STEER <serge.steer@inria.fr>
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,8 +9,8 @@
 // <-- Non-regression test for bug 4069 -->
 // 
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=4069
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/4069
 //
 // <-- Short Description -->
 // problem in dassl dasrt when the jacobian is given by a list
@@ -34,8 +34,8 @@ yd0=[-0.04;0.04;0];
 t=[1.d-5:0.02:.4,0.41:.1:4,40,400,4000,40000,4d5,4d6,4d7,4d8,4d9,4d10];
 
 
-y1=dassl([y0,yd0],0,t,chemres,chemjac);
-y2=dassl([y0,yd0],0,t,list(chemres),list(chemjac));
-y3=dassl([y0,yd0],0,t,list(chemres,a,b,c),list(chemjac,a,b,c));
+y1=%_dassl([y0,yd0],0,t,chemres,chemjac);
+y2=%_dassl([y0,yd0],0,t,list(chemres),list(chemjac));
+y3=%_dassl([y0,yd0],0,t,list(chemres,a,b,c),list(chemjac,a,b,c));
 
 if or(y1<>y2)|or(y1<>y3) then pause,end

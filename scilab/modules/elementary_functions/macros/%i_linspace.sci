@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 // Copyright (C) DIGITEO - 2011 - Allan CORNET
 // Copyright (C) CNES - 2011 - Guillaume AZEMA
@@ -20,26 +20,31 @@ function y = %i_linspace(d1, d2, n)
 
     // CHECKING ARGUMENTS
     // ------------------
-    rhs = argn(2);
-    if rhs < 2 then
-        msg = gettext("%s: Wrong number of input argument(s): %d to %d expected.\n")
-        error(msprintf(msg, "linspace", 2, 3));
+    arguments
+        d1 (:, 1) {mustBeA(d1, ["double", "sparse", "int"])}
+        d2 {mustBeA(d2, ["double", "sparse", "int"]), mustBeEqualDims(d2, d1)}
+        n double {mustBeA(n, ["double", "int"]), mustBeInteger} = 100
     end
-    if size(d1,2)<>1 then
-        msg = gettext("%s: Argument #%d: Column expected.\n")
-        error(msprintf(msg, "linspace", 1));
-    end
-    if ~and(size(d1) == size(d2)) then
-        msg = gettext("%s: Arguments #%d and #%d: Same sizes expected.\n")
-        error(msprintf(msg, "linspace", 1, 2));
-    end
-    msg = gettext("%s: Argument #%d: Number(s) expected.\n")
-    if ~or(type(d1)==[1 5 8]) then
-        error(msprintf(msg, "linspace", 1));
-    end
-    if ~or(type(d2)==[1 5 8]) then
-        error(msprintf(msg, "linspace", 2));
-    end
+    // rhs = argn(2);
+    // if rhs < 2 then
+    //     msg = gettext("%s: Wrong number of input argument(s): %d to %d expected.\n")
+    //     error(msprintf(msg, "linspace", 2, 3));
+    // end
+    // if size(d1,2)<>1 then
+    //     msg = gettext("%s: Argument #%d: Column expected.\n")
+    //     error(msprintf(msg, "linspace", 1));
+    // end
+    // if ~and(size(d1) == size(d2)) then
+    //     msg = gettext("%s: Arguments #%d and #%d: Same sizes expected.\n")
+    //     error(msprintf(msg, "linspace", 1, 2));
+    // end
+    // msg = gettext("%s: Argument #%d: Number(s) expected.\n")
+    // if ~or(type(d1)==[1 5 8]) then
+    //     error(msprintf(msg, "linspace", 1));
+    // end
+    // if ~or(type(d2)==[1 5 8]) then
+    //     error(msprintf(msg, "linspace", 2));
+    // end
     if type(d1)==8 & type(d2)==8 & inttype(d1)~=inttype(d2) then
         msg = gettext("%s: Arguments #%d and #%d: Same integer types expected.\n")
         error(msprintf(msg, "linspace", 2));
@@ -52,15 +57,15 @@ function y = %i_linspace(d1, d2, n)
         error(msprintf(msg, "linspace", 2));
     end
 
-    if rhs == 2 then
-        n = 100;
-    else
-        if and(type(n)<>[1 8]) | size(n,"*")<>1 | int(n)<>n then
-            msg = gettext("%s: Argument #%d: An integer value expected.\n")
-            error(msprintf(msg, "linspace",3));
-        end
-        n = double(n); // Convert for the operations to come
-    end
+    // if rhs == 2 then
+    //     n = 100;
+    // else
+        // if and(type(n)<>[1 8]) | size(n,"*")<>1 | int(n)<>n then
+        //     msg = gettext("%s: Argument #%d: An int value expected.\n")
+        //     error(msprintf(msg, "linspace",3));
+        // end
+        // n = double(n); // Convert for the operations to come
+    // end
 
     // PROCESSING
     // ----------
@@ -80,7 +85,7 @@ function y = %i_linspace(d1, d2, n)
             y = (span * (0:n-1)) / (n-1) + d1 * ones(1,n);
         end
         // Forces the last value to be exactly the given d2:
-        // http://bugzilla.scilab.org/10966
+        // https://gitlab.com/scilab/scilab/-/issues/10966
         y(:,$) = d2;
     else
         y = []

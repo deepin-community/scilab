@@ -1,5 +1,5 @@
 //
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2016 - Scilab Enterprises - Clement DAVID
 //
 // This file is released under the 3-clause BSD license. See COPYING-BSD.
@@ -9,8 +9,24 @@
 // the variable data is used to store some output values
 data = grand(4,3,"uin",0,1)
 btn = %nan;
-
-f = figure("figure_name", gettext("Please fill the table"), "closerequestfcn", "btn=-1; close();", "callback_type", 10, "menubar_visible", "off", "toolbar_visible", "off", "infobar_visible", "off", "dockable", "off", "default_axes", "off", "visible", "off", "layout", "border");
+if get("uicontrol_messagebox_figure") <> [] then
+    f = get("uicontrol_messagebox_figure");
+    delete(f.children);
+else
+    close(100002)
+    // Create a figure
+    f = figure("figure_name", gettext("Please fill the table"), ...
+        "closerequestfcn", "btn=-1; close();", ...
+        "menubar_visible", "off", ...
+        "toolbar_visible", "off", ...
+        "infobar_visible", "off", ...
+        "dockable", "off", ...
+        "default_axes", "off", ...
+        "visible", "off", ...
+        "layout", "border", ...
+        "figure_id", 100002, ...
+        "tag", "uicontrol_messagebox_figure");
+end
 
 middle_frame = uicontrol(f, "style", "frame", "constraints", createConstraints("border", "center"));
 bottom_frame = uicontrol(f, "style", "frame", "constraints", createConstraints("border", "bottom"), "layout" , "gridbag");

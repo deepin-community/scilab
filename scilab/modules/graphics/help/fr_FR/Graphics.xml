@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -611,14 +611,6 @@
                     <para>graduations simplifiées</para>
                 </listitem>
             </varlistentry>
-            <varlistentry>
-                <term>
-                    <link linkend="plotframe">plotframe</link>
-                </term>
-                <listitem>
-                    <para>dessine un cadre avec axes et mise à l'échelle</para>
-                </listitem>
-            </varlistentry>
         </variablelist>
     </refsection>
     <refsection>
@@ -703,7 +695,7 @@
             </varlistentry>
             <varlistentry>
                 <term>
-                    <link linkend="graycolormap">graycolormap</link>
+                    <link linkend="gray">gray</link>
                 </term>
                 <listitem>
                     <para>table de couleurs du noir au blanc</para>
@@ -711,7 +703,7 @@
             </varlistentry>
             <varlistentry>
                 <term>
-                    <link linkend="hotcolormap">hotcolormap</link>
+                    <link linkend="hot">hot</link>
                 </term>
                 <listitem>
                     <para>table de couleurs "chaude" du rouge au jaune</para>

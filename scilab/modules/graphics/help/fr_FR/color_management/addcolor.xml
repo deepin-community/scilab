@@ -48,13 +48,13 @@
         <programlisting role="example"><![CDATA[
 plot3d();
 h = gcf();
-h.color_map = jetcolormap(16);
+h.color_map = jet(16);
 addcolor(name2rgb('grey')/255);
   ]]></programlisting>
         <scilab:image>
             plot3d();
             h = gcf();
-            h.color_map = jetcolormap(16);
+            h.color_map = jet(16);
             addcolor(name2rgb('grey')/255);
         </scilab:image>
 

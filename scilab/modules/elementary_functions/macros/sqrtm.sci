@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 // Copyright (C) DIGITEO - 2011 - Allan CORNET
 //
@@ -20,15 +20,8 @@ function x = sqrtm(a)
     //   x   : square matrix
     //!
 
-    rhs = argn(2);
-    if rhs <> 1 then
-        error(msprintf(_("%s: Wrong number of input argument(s): %d expected.\n"),"sqrtm", 1));
-    end
-    if type(a) <> 1 then
-        error(msprintf(_("%s: Wrong type for input argument #%d: A real or complex matrix expected.\n"),"sqrtm", 1));
-    end
-    if ~issquare(a) then
-        error(msprintf(_("%s: Wrong size for input argument #%d: A square matrix expected.\n"),"sqrtm", 1));
+    arguments
+        a {mustBeA(a, "double"), mustBeSquare}
     end
 
     x = %s_pow(a, 0.5);

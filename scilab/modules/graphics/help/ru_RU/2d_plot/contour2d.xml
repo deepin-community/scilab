@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) ENPC - Jean-Philippe Chancelier
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -23,7 +23,7 @@
     <refsynopsisdiv>
         <title>Синтаксис</title>
         <synopsis>
-            contour2d(x, y, z, nz, [style, strf, leg, rect, nax])
+            contour2d(x, y, z, nz, [style, strf, leg, rect, nax, fpf])
             contour2d(x, y, z, nz, &lt;opt_args&gt;)
         </synopsis>
     </refsynopsisdiv>
@@ -125,6 +125,18 @@ plot2d(x(im)',y(jm)',-9,"000")
                     </para>
                 </listitem>
             </varlistentry>
+            <varlistentry>
+                <term>fpf</term>
+                <listitem>
+                    <para>
+                        You can change the format of the floating point number printed on
+                        the levels where <varname>fpf</varname> is the format in C format syntax 
+                        (for example <code>fpf="%.3f"</code>).
+                        Set <varname>fpf</varname> to " " implies that the level are not drawn on the level curves.
+                        If not given, the default format is <literal>"%.3g"</literal>.
+                    </para>
+                </listitem>
+            </varlistentry>
         </variablelist>
     </refsection>
     <refsection>
@@ -135,18 +147,6 @@ plot2d(x(im)',y(jm)',-9,"000")
             <literal>f(x,y)</literal> указываются в матрице
             <varname>z</varname> в точках сетки, определённой через
             <varname>x</varname> и <varname>y</varname>.
-        </para>
-        <para>
-            Вы можете изменить формат чисел с плавающей запятой, печатаемых на
-            уровнях, с помощью <code>xset("fpf",string)</code>, где
-            <varname>string</varname> указывает формат в формате C-синтаксиса
-            (например, <code>string="%.3f"</code>). Используйте
-            <code>string=""</code> для переключения обратно в формат по
-            умолчанию и используйте <code>string=" "</code> для подавления
-            печати. Это последняя возможность очень полезна в сочетании с <link
-            linkend="legends">legends</link> для отображения номеров уровней в
-            легенде, а не прямо на кривых уровней, как обычно (см. раздел
-            "Примеры").
         </para>
         <para>
             Необязательные аргументы <varname>style</varname>,
@@ -175,12 +175,10 @@ contour2d(1:10,1:10,rand(10,10),5,rect=[0,0,11,11])
         <programlisting role="example"><![CDATA[
 clf()
 // Изменение формата печати уровней
-xset("fpf","%.2f")
-contour2d(1:10,1:10,rand(10,10),5,rect=[0,0,11,11])
+contour2d(1:10,1:10,rand(10,10),5,rect=[0,0,11,11],fpf="%.2f")
   ]]></programlisting>
         <scilab:image>
-            xset("fpf","%.2f")
-            contour2d(1:10,1:10,rand(10,10),5,rect=[0,0,11,11])
+            contour2d(1:10,1:10,rand(10,10),5,rect=[0,0,11,11],fpf="%.2f")
         </scilab:image>
         <programlisting role="example"><![CDATA[
 // Пример с номерами уровней, печатаемых в легенде.
@@ -188,16 +186,15 @@ contour2d(1:10,1:10,rand(10,10),5,rect=[0,0,11,11])
 x = linspace(0,4*%pi,80);
 z = cos(x')*cos(x);
 clf(); f=gcf();
-xset("fpf"," ")
 
-// уловка 1: подразумевается, что номера уровней
+// уловка 1: fpf=" " подразумевается, что номера уровней
 //           не рисуются на кривых уровней
-f.color_map=jetcolormap(7);
+f.color_map=jet(7);
 
 // уловка 2: чтобы иметь возможность поместить легенду справа без
 //          наложения на кривые уровней, используйте rect с достаточно
 //          большим значением xmax
-contour2d(x,x,z,-0.75:0.25:0.75,frameflag=3,rect=[0,0,5*%pi,4*%pi])
+contour2d(x,x,z,-0.75:0.25:0.75,frameflag=3,rect=[0,0,5*%pi,4*%pi],fpf=" ")
 
 // уловка 3: используйте legends (заметьте, что наиболее практичная функция
 //          легенды не будет работать, когда один из уровней формируется
@@ -210,11 +207,10 @@ xtitle("Некоторые уровни кривых функции cos(x)cos(y)
             z = cos(x')*cos(x);
 
             clf(); f=gcf();
-            xset("fpf"," ")
 
-            f.color_map=jetcolormap(7);
+            f.color_map=jet(7);
 
-            contour2d(x,x,z,-0.75:0.25:0.75,frameflag=3,rect=[0,0,5*%pi,4*%pi])
+            contour2d(x,x,z,-0.75:0.25:0.75,frameflag=3,rect=[0,0,5*%pi,4*%pi],fpf=" ")
 
             legends(string(-0.75:0.25:0.75),1:7,"lr");
             xtitle("Некоторые уровни кривых функции cos(x)cos(y)")

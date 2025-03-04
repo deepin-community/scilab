@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) DIGITEO - 2009-2009 - Antoine ELIAS <antoine.elias@scilab.org>
  * Copyright (C) DIGITEO - 2009-2010 - Clément DAVID <clement.david@scilab.org>
  * Copyright (C) Scilab Enterprises - 2016-2017 - Clement DAVID

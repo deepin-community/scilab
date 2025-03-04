@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2012 - DIGITEO - Cedric DELAMARRE
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -94,14 +94,14 @@ types::Function::ReturnValue log_or_log10(types::typed_list &in, int _iRetCount,
             {
                 if (ConfigVariable::getIeee() == 0)
                 {
-                    Scierror(999, _("%s: Wrong value for input argument #%d : Singularity of the function.\n"), fname, 1);
+                    Scierror(999, _("%s: Wrong value for input argument #%d: Singularity of the function.\n"), fname, 1);
                     return types::Function::Error;
                 }
                 else if (ConfigVariable::getIeee() == 1)
                 {
                     if (ConfigVariable::getWarningMode())
                     {
-                        sciprint(_("%ls: Warning: Wrong value for input argument #%d : Singularity of the function.\n"), fname, 1);
+                        sciprint(_("%s: Warning: Wrong value for input argument #%d: Singularity of the function.\n"), fname, 1);
                     }
                 }
 
@@ -127,14 +127,14 @@ types::Function::ReturnValue log_or_log10(types::typed_list &in, int _iRetCount,
             {
                 if (ConfigVariable::getIeee() == 0)
                 {
-                    Scierror(999, _("%s: Wrong value for input argument #%d : Singularity of the function.\n"), fname, 1);
+                    Scierror(999, _("%s: Wrong value for input argument #%d: Singularity of the function.\n"), fname, 1);
                     return types::Function::Error;
                 }
                 else if (ConfigVariable::getIeee() == 1)
                 {
                     if (ConfigVariable::getWarningMode())
                     {
-                        sciprint(_("%ls: Warning: Wrong value for input argument #%d : Singularity of the function.\n"), fname, 1);
+                        sciprint(_("%s: Warning: Wrong value for input argument #%d: Singularity of the function.\n"), fname, 1);
                     }
                 }
 

@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) ENPC
 // Copyright (C) 2007-2008 - INRIA - Sylvestre LEDRU (rewrite to use autotools)
 // Copyright (C) 2009-2010 - DIGITEO - Sylvestre LEDRU
@@ -162,10 +162,10 @@ function ilib_gen_Make_unix(names,   ..
 
     hash = getmd5(stringToHash,"string");
     md5file = fullfile(usercommandpath,libname+".md5");
-    if stringToHash == libname || (isfile(md5file) && ...
-        mgetl(md5file) == hash && ...
+    if (stringToHash == libname || (isfile(md5file) && ...
+        mgetl(md5file) == hash)) && ...
         isfile(usercommandpath+"/Makefile.orig") && ...
-        isfile(usercommandpath+"/libtool"))
+        isfile(usercommandpath+"/libtool")
         // Reuse existing Makefile.orig because compilation flags are all empty or unchanged since last call
         [status,msg]=copyfile(usercommandpath+"/Makefile.orig",linkBuildDir);
 

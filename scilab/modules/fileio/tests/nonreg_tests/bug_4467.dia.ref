@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) DIGITEO - 2009 - Allan CORNET
 // Copyright (C) Scilab Enterprises - 2013 - Antoine ELIAS
 //
@@ -12,8 +12,8 @@
 //
 // <-- Non-regression test for bug 4467 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=4467
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/4467
 //
 // <-- Short Description -->
 // getshortpathname , getlongpathname do not manage matrix of strings

@@ -1,5 +1,5 @@
 //
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009 - DIGITEO - Jean-Baptiste Silvy
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -26,5 +26,5 @@ function [] = %_grayplot()
     my_plot_desc  = "grayplot";
     f.figure_name = my_plot_desc;
     xtitle(my_plot_desc," "," "," ");
-    f.color_map = hotcolormap(128);
+    f.color_map = hot(128);
 endfunction

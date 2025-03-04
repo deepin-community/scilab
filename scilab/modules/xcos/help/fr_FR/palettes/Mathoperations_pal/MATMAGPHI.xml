@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
  * Copyright (C) 2018 - Samuel GOUGEON
@@ -19,7 +19,9 @@
           xmlns:scilab="http://www.scilab.org" xml:id="MATMAGPHI" xml:lang="fr_FR">
     <refnamediv>
         <refname>MATMAGPHI</refname>
-        <refpurpose>Complexe à partir de/vers module et phase</refpurpose>
+        <refpurpose>
+            Conversions Z &lt;=> (module,argument) de nombres complexes
+        </refpurpose>
     </refnamediv>
     <refsection>
         <title>Aperçu</title>
@@ -55,10 +57,12 @@
     <refsection id="Description_MATMAGPHI">
         <title>Description</title>
         <para>
-            Ce bloc calcule le module et l'argument d'une matrice de nombres complexes ou
+            Selon la valeur du paramètre <emphasis role="bold">decomposition type</emphasis>,
+            ce bloc calcule le module et l'argument d'une matrice de nombres complexes, ou
             construit une matrice de nombres complexes à partir d'une matrice de modules et d'une
-            matrice d'arguments en fonction de la valeur du paramètre
-            <emphasis role="bold">decomposition type</emphasis>.
+            matrice d'arguments.
+        </para>
+        <para>
             Le tableau suivant résume le comportement du bloc :
         </para>
         <para/>

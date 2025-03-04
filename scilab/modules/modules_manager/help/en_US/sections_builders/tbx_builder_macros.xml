@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA
  * Copyright (C) 2016 - Scilab Enterprises - Pierre-Aime AGNEL
- * Copyright (C) 2016 - Samuel GOUGEON
- *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ * Copyright (C) 2016 - Samuel GOUGEON
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
  * pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -21,7 +20,7 @@
           xmlns:scilab="http://www.scilab.org" xml:id="tbx_builder_macros" xml:lang="en">
     <refnamediv>
         <refname>tbx_builder_macros</refname>
-        <refpurpose>Create library(es) of a toolbox for its functions in Scilab language</refpurpose>
+        <refpurpose>Creates the library(es) of a toolbox for its functions in Scilab language</refpurpose>
     </refnamediv>
 
     <refsynopsisdiv>
@@ -102,6 +101,9 @@ tbx_builder_macros(get_absolute_file_path('builder.sce'))
         <title>See Also</title>
         <simplelist type="inline">
             <member>
+                <link linkend="genlib">genlib</link>
+            </member>
+            <member>
                 <link linkend="tbx_make">tbx_make</link>
             </member>
         </simplelist>
@@ -127,5 +129,4 @@ tbx_builder_macros(get_absolute_file_path('builder.sce'))
             </revision>
         </revhistory>
     </refsection>
-
 </refentry>

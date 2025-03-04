@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 // Copyright (C) DIGITEO - 2009-2010 - Allan CORNET
 // Copyright (C) 2013 - Scilab Enterprises - Adeline CARNIS
@@ -30,13 +30,15 @@ function path = get_function_path(name)
     end
 
     libname = whereis(name);
-
-    if libname <> [] & libname <> "script" & type(evstr(name))==13 then
-        for i = 1:size(libname,"*")
+    for i = 1:size(libname,"*")
+        try 
+            evstr(libname(i));
             [funcnames, pathlib] = libraryinfo(libname(i));
             path = [path ; fullfile(pathlib, name + ".sci")];
+        catch
+            path = [path; "<" + libname(i) + ">"];
         end
-        path = pathconvert(path,%F);
     end
+    path = pathconvert(path,%F);
 
 endfunction

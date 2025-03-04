@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) DIGITEO - Pierre MARECHAL <pierre.marechal@scilab.org>
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -207,7 +207,7 @@
     <refsection>
         <title>Description</title>
         <para>
-            <literal>atomsInstall</literal> install one or more external modules.
+            <literal>atomsInstall</literal> installs one or several external modules.
         </para>
     </refsection>
     <!-- ===================================================================== -->
@@ -223,7 +223,7 @@
 atomsSetConfig("Verbose","True");
 
 // Load the test repository
-atomsRepositoryAdd("http://scene1.test.atoms.scilab.org");
+atomsRepositoryAdd("https://scene1.test.atoms.scilab.org");
 
 // Install a module
 atomsInstall("toolbox_1");
@@ -289,6 +289,19 @@ atomsRemove("toolbox_7");
                 <link linkend="atomsRemove">atomsRemove</link>
             </member>
         </simplelist>
+    </refsection>
+    <refsection role="history">
+        <title>History</title>
+        <revhistory>
+            <revision>
+                <revnumber>2023.0.0</revnumber>
+                <revdescription>
+                    When a <literal>module</literal> has no binary compiled for the running Scilab
+                    M.m version but has published (former) sources, <function>atomsInstall</function>
+                    automatically tries to compile them.
+                </revdescription>
+            </revision>
+        </revhistory>
     </refsection>
     <!-- ===================================================================== -->
     <!-- Authors -->

@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2014 - Scilab Enterprises - Antoine ELIAS
  *  Copyright (C) 2014 - Scilab Enterprises - Sylvain GENIN
  *
@@ -19,6 +19,7 @@
 #include "int.hxx"
 #include "sparse.hxx"
 #include "polynom.hxx"
+#include "operations.hxx"
 
 
 extern "C"
@@ -30,6 +31,7 @@ extern "C"
 using namespace types;
 //define arrays on operation functions
 static dotdiv_function pDotDivfunction[types::InternalType::IdLast][types::InternalType::IdLast] = {NULL};
+static std::wstring op = L"./";
 
 void fillDotDivFunction()
 {
@@ -854,21 +856,17 @@ InternalType* dotdiv_M_M(T *_pL, U *_pR)
 
     if (iDimsL != iDimsR)
     {
+        // call overload
         return nullptr;
     }
 
-    int* piDimsL = _pL->getDimsArray();
-    int* piDimsR = _pR->getDimsArray();
-
-    for (int i = 0 ; i < iDimsL ; ++i)
+    std::wstring error = checkSameSize(_pL, _pR, op);
+    if (error.empty() == false)
     {
-        if (piDimsL[i] != piDimsR[i])
-        {
-            throw ast::InternalError(_W("Inconsistent row/column dimensions.\n"));
-        }
+        throw ast::InternalError(error);
     }
 
-    O* pOut = new O(iDimsL, piDimsL);
+    O* pOut = new O(iDimsL, _pL->getDimsArray());
     int iSize = pOut->getSize();
 
     dotdiv(_pL->get(), iSize, _pR->get(), pOut->get());
@@ -884,21 +882,17 @@ InternalType* dotdiv_M_MC(T *_pL, U *_pR)
 
     if (iDimsL != iDimsR)
     {
+        // call overload
         return nullptr;
     }
 
-    int* piDimsL = _pL->getDimsArray();
-    int* piDimsR = _pR->getDimsArray();
-
-    for (int i = 0 ; i < iDimsL ; ++i)
+    std::wstring error = checkSameSize(_pL, _pR, op);
+    if (error.empty() == false)
     {
-        if (piDimsL[i] != piDimsR[i])
-        {
-            throw ast::InternalError(_W("Inconsistent row/column dimensions.\n"));
-        }
+        throw ast::InternalError(error);
     }
 
-    O* pOut = new O(iDimsL, piDimsL, true);
+    O* pOut = new O(iDimsL, _pL->getDimsArray(), true);
     int iSize = pOut->getSize();
 
     dotdiv(_pL->get(), iSize, _pR->get(), _pR->getImg(), pOut->get(), pOut->getImg());
@@ -955,21 +949,17 @@ InternalType* dotdiv_MC_M(T *_pL, U *_pR)
 
     if (iDimsL != iDimsR)
     {
+        // call overload
         return nullptr;
     }
 
-    int* piDimsL = _pL->getDimsArray();
-    int* piDimsR = _pR->getDimsArray();
-
-    for (int i = 0 ; i < iDimsL ; ++i)
+    std::wstring error = checkSameSize(_pL, _pR, op);
+    if (error.empty() == false)
     {
-        if (piDimsL[i] != piDimsR[i])
-        {
-            throw ast::InternalError(_W("Inconsistent row/column dimensions.\n"));
-        }
+        throw ast::InternalError(error);
     }
 
-    O* pOut = new O(iDimsL, piDimsL, true);
+    O* pOut = new O(iDimsL, _pL->getDimsArray(), true);
     int iSize = pOut->getSize();
 
     dotdiv(_pL->get(), _pL->getImg(), iSize, _pR->get(), pOut->get(), pOut->getImg());
@@ -985,21 +975,17 @@ InternalType* dotdiv_MC_MC(T *_pL, U *_pR)
 
     if (iDimsL != iDimsR)
     {
+        // call overload
         return nullptr;
     }
 
-    int* piDimsL = _pL->getDimsArray();
-    int* piDimsR = _pR->getDimsArray();
-
-    for (int i = 0 ; i < iDimsL ; ++i)
+    std::wstring error = checkSameSize(_pL, _pR, op);
+    if (error.empty() == false)
     {
-        if (piDimsL[i] != piDimsR[i])
-        {
-            throw ast::InternalError(_W("Inconsistent row/column dimensions.\n"));
-        }
+        throw ast::InternalError(error);
     }
 
-    O* pOut = new O(iDimsL, piDimsL, true);
+    O* pOut = new O(iDimsL, _pL->getDimsArray(), true);
     int iSize = pOut->getSize();
 
     dotdiv(_pL->get(), _pL->getImg(), iSize, _pR->get(), _pR->getImg(), pOut->get(), pOut->getImg());
@@ -1262,9 +1248,10 @@ InternalType* dotdiv_M_M<Sparse, Sparse, Sparse>(Sparse* _pL, Sparse* _pR)
     }
 
     //check dimensions
-    if (_pL->getRows() != _pR->getRows() || _pL->getCols() != _pR->getCols())
+    std::wstring error = checkSameSize(_pL, _pR, op);
+    if (error.empty() == false)
     {
-        throw ast::InternalError(_W("Inconsistent row/column dimensions.\n"));
+        throw ast::InternalError(error);
     }
 
     Sparse* pSparseOut = _pL->dotDivide(*_pR);
@@ -1799,20 +1786,15 @@ InternalType* dotdiv_M_M<Polynom, Double, Polynom>(Polynom* _pL, Double* _pR)
 
     if (iDimsL != iDimsR)
     {
+        // call avoerload
         return nullptr;
     }
 
-    int* piDimsL = _pR->getDimsArray();
-    int* piDimsR = _pL->getDimsArray();
-
-    for (int i = 0 ; i < iDimsL ; ++i)
+    std::wstring error = checkSameSize(_pL, _pR, op);
+    if (error.empty() == false)
     {
-        if (piDimsL[i] != piDimsR[i])
-        {
-            throw ast::InternalError(_W("Inconsistent row/column dimensions.\n"));
-        }
+        throw ast::InternalError(error);
     }
-
 
     pOut = (Polynom*)_pL->clone();
     pOut->setComplex(isComplexOut);

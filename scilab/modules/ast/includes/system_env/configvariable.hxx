@@ -1,5 +1,5 @@
 /*
-*  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+*  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 *  Copyright (C) 2008-2008 - DIGITEO - Antoine ELIAS
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -114,6 +114,13 @@ public :
     static void setFormatMode(int _iFormatMode);
     static int getFormatMode(void);
 
+    // Polynomial exponent display (0 -> ASCII, 1 -> Unicode)
+private :
+    static int m_iPolynomialDisplay;
+
+public :
+    static void setPolynomialDisplay(int _iVal);
+    static int getPolynomialDisplay(void);
 
     // Screen console width
 private :
@@ -536,10 +543,12 @@ public :
     static void decreaseRecursion();
 private:
     static bool webMode;
+    static bool m_isatty;
 public:
     static bool getWebMode();
     static void setWebMode(bool);
-
+    static bool isatty();
+    static void setisatty(bool);
 };
 
 #endif /* !__CONFIGVARIABLE_HXX__ */

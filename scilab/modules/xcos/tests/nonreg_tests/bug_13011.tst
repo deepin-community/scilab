@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Sylvestre Ledru
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -11,8 +11,8 @@
 
 // <-- Non-regression test for bug 13011 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=13011
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/13011
 //
 // <-- Short Description -->
 // Fails under Mac OS X 10.9

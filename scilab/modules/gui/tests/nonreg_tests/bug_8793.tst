@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2011 - DIGITEO - Vincent COUVERT
 //
 //  This file is distributed under the same license as the Scilab package.
@@ -9,8 +9,8 @@
 //
 // <-- TEST WITH GRAPHIC -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=8793
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/8793
 //
 // <-- Short Description -->
 // 'waitbar' function crashes when the handle is not initialized.

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) - INRIA
- * Copyright (C) 2018 - Samuel GOUGEON
- *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ * Copyright (C) 2018 - 2023 - Samuel GOUGEON
  *
  * This file is hereby licensed under the terms of the GNU GPL v2.0,
  * pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -22,29 +21,42 @@
         <refname>for</refname>
         <refpurpose>Ouverture d'une boucle itérative non conditionnelle</refpurpose>
     </refnamediv>
+    <refsynopsisdiv>
+        <title>Syntaxe</title>
+        <synopsis>
+            for variable = expression, instruction ; .. ; instruction; end
+
+            for variable = expression
+                instruction
+                ..
+                instruction
+            end
+
+            for variable = expression do
+                instruction,
+                ..
+                instruction
+            end
+        </synopsis>
+    </refsynopsisdiv>
     <refsection>
         <title>Description</title>
         <para>
-            Utilisé pour spécifier une boucle. La syntaxe est la suivante :
+            Si <literal>expression</literal> est un tableau (homogène ou non),
+            <literal>variable</literal> prend les valeurs successives de chaque colonne du
+            tableau (ou de <literal>matrix(expression, size(expression,1), -1))</literal>).
         </para>
         <para>
-            <literal>for variable=expression ,instruction,   ,instruction,end</literal>
+            Un exemple utile : <literal>for variable = n1:pas:n2,  ...,end</literal>
         </para>
         <para>
-            <literal>for variable=expression do instruction,   ,instruction,end</literal>
+            Si <literal>expression</literal> est une liste, <function>for</function> itère
+            sur les éléments de la liste : <literal>variable</literal> prend chaque
+            élément de la liste comme valeurs successives.
         </para>
         <para>
-            Si <literal>expression</literal> est une matrice ou un vecteur ligne, <literal>variable</literal>
-            prend successivement les valeurs de chaque colonne de la matrice.
-        </para>
-        <para>
-            Un exemple utile : <literal>for variable=n1:pas:n2,  ...,end</literal>
-        </para>
-        <para>
-            Si <literal>expression</literal> est une liste, <literal>variable</literal> prend comme valeurs successives les termes de la liste.
-        </para>
-        <para>
-            En accord avec les conventions de codage pour le langage de programmation Scilab, il est recommandé de :
+            En accord avec les conventions de codage pour le langage de programmation Scilab,
+            il est recommandé de :
         </para>
         <itemizedlist>
             <listitem>
@@ -64,44 +76,32 @@
             </listitem>
         </itemizedlist>
         <para>
-            Par exemple, utiliser :
+            Par exemple, préférer:
         </para>
-        <screen><![CDATA[
+        <programlisting><![CDATA[
 for i = 1:5
     disp(i);
 end
-]]></screen>
-        au lieu de
-        <screen><![CDATA[
+]]></programlisting>
+        <para>à :</para>
+        <programlisting><![CDATA[
 for i = 1:5, disp(i); end
-]]></screen>
-        <warning>
-            Le nombre de caractères constituant le corps d'une instruction conditionnelle
-            (if while for ou select/case) est limité à 16 ko.
-        </warning>
+]]></programlisting>
     </refsection>
     <refsection>
         <title>Exemples</title>
-        <para>Itérations communes (imbriquées ou non) :</para>
+        <para>Itérations triviales :</para>
         <programlisting role="example"><![CDATA[
-n=5;
-for i = 1:n
-    for j = 1:n
-        a(i,j) = 1/(i+j-1);
-    end;
+for i = 1:4
+    factorial(i)
 end
-for j = 2:n-1
-    a(j,j) = j;
-end;
-a
- ]]></programlisting>
-        <para>Itérations par valeurs décroissantes :</para>
-        <programlisting role="example"><![CDATA[
+
+// Par valeurs décroissantes
 for j = 4:-1:1
     j
 end
  ]]></programlisting>
-        <para>Itérations implicites sur les colonnes d'un vecteur-ligne ou d'une matrice :</para>
+        <para>Itérations implicites sur les colonnes d'un tableau :</para>
         <programlisting role="example"><![CDATA[
 M = [1 2 ; 3 4 ; 5 6]'
 for  c = M, c, end
@@ -125,10 +125,27 @@ for  c = M, c, end
    5.
    6.
 ]]></screen>
+        <para>Colonnes d'un tableau de cells :</para>
         <programlisting role="example"><![CDATA[
-for v = a, write(%io(2),v), end
-for j = 1:n, v = a(:,j), write(%io(2),v), end
+C = {%pi, "This is πι" ; %z^2, %t}
+for  c = C, c, end
  ]]></programlisting>
+    <screen><![CDATA[
+--> C = {%pi, "This is πι" ; %z^2, %t}
+ C  = 
+  [1x1 constant  ]  [1x1 string ]
+  [1x1 polynomial]  [1x1 boolean]
+
+
+--> for  c = C, c, end
+ c  = 
+  [1x1 constant  ]
+  [1x1 polynomial]
+
+ c  = 
+  [1x1 string ]
+  [1x1 boolean]
+]]></screen>
         <para>Itérations sur les éléments d'une liste :</para>
         <programlisting role="example"><![CDATA[
 for l = list([1 2;3 4], (1+%z)^3, 'example', [%F %T]); l, end
@@ -149,6 +166,22 @@ for l = list([1 2;3 4], (1+%z)^3, 'example', [%F %T]); l, end
  l  =
   F T
 ]]></screen>
+        <para>Itérations communes (imbriquées ou non) :</para>
+        <programlisting role="example"><![CDATA[
+n = 5;
+for i = 1:n
+    for j = 1:n
+        a(i,j) = 1/(i+j-1);
+    end;
+end
+for j = 2:n-1
+    a(j,j) = j;
+end;
+a
+
+for v = a, write(%io(2),v), end
+for j = 1:n, v = a(:,j), write(%io(2),v), end
+ ]]></programlisting>
     </refsection>
     <refsection role="see also">
         <title>Voir aussi</title>
@@ -170,10 +203,24 @@ for l = list([1 2;3 4], (1+%z)^3, 'example', [%F %T]); l, end
             <revision>
                 <revnumber>6.0.0</revnumber>
                 <revdescription>
-                    L'<literal>expression</literal> alimentant les itérations peut maintenant être
-                    un vecteur d'identifiants graphiques.
-                    <literal>for</literal> est désormais protégé. Les affectations telles que
-                    <literal>for=1</literal> ne sont plus possibles.
+                    <itemizedlist>
+                        <listitem>
+                            L'<literal>expression</literal> alimentant les itérations peut maintenant être
+                            un vecteur d'identifiants graphiques.
+                            <literal>for</literal> est désormais protégé. Les affectations telles que
+                            <literal>for=1</literal> ne sont plus possibles.
+                        </listitem>
+                        <listitem>
+                            Le nombre de caractères constituant le corps d'une instruction conditionnelle (<literal>if</literal>, <literal>while</literal>, <literal>for</literal>, ou <literal>select/case</literal>) n'est plus limité à 16k.
+                        </listitem>
+                   </itemizedlist>
+                </revdescription>
+            </revision>
+            <revision>
+                <revnumber>2023.0.0</revnumber>
+                <revdescription>
+                    <literal>expression</literal> peut être une hypermatrice. Il est alors traité
+                    par colonne comme <literal>matrix(expression, size(expression,1), -1)</literal>.
                 </revdescription>
             </revision>
         </revhistory>

@@ -427,7 +427,7 @@ msgstr "É exigido um copilador C ou Fortran."
 #, c-format
 msgid ""
 "%s: Warning: Scilab has not been able to find where the Scilab sources are. "
-"Please submit a bug report on http://bugzilla.scilab.org/\n"
+"Please submit a bug report on https://gitlab.com/scilab/scilab/-/issues\n"
 msgstr ""
 "%s: Alerta: Scilab não foi capaz de encontrar onde os fontes do Scilab se "
 "encontram. Por favor envie um relato de erro através de http://bugzilla."

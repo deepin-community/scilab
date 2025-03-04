@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) ENPC - Jean-Philippe Chancelier
  * Copyright (C) 2009 - DIGITEO - Pierre Lando
  *
@@ -117,7 +117,7 @@ clf();
 a=gca();
 a.view="3d";
 f=gcf();
-f.color_map=rainbowcolormap(120);
+f.color_map=rainbow(120);
 alpha=2*%pi*(0:119)/40;
 xv=[sin(alpha)/2;sin(alpha)/3];
 yv=[cos(alpha)/2;cos(alpha)/3];
@@ -135,7 +135,7 @@ e.arrow_size = 0.4;
             a=gca();
             a.view="3d";
             f=gcf();
-            f.color_map=rainbowcolormap(120);
+            f.color_map=rainbow(120);
             alpha=2*%pi*(0:119)/40;
             xv=[sin(alpha)/2;sin(alpha)/3];
             yv=[cos(alpha)/2;cos(alpha)/3];

@@ -140,7 +140,7 @@ msgid ""
 "bugzilla.scilab.org/.\n"
 msgstr ""
 "Якщо ви користуєтеся бінарною версією Scilab, будь ласка, повідомте про ваду "
-"за адресою http://bugzilla.scilab.org/.\n"
+"за адресою https://gitlab.com/scilab/scilab/-/issues.\n"
 
 #, c-format
 msgid ""

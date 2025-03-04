@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2000 - INRIA - Carlos Klimann
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -20,9 +20,9 @@
     </refnamediv>
     <refsynopsisdiv>
         <title>Syntax</title>
-        <synopsis>q=iqr(x)
-            q=iqr(x,'r') (or, equivalently, q=iqr(x,1))
-            q=iqr(x,'c') (or, equivalently, q=iqr(x,2))
+        <synopsis>
+            q = iqr(x)
+            q = iqr(x, orientation)
         </synopsis>
     </refsynopsisdiv>
     <refsection>
@@ -34,6 +34,32 @@
                     <para>real or complex vector or matrix</para>
                 </listitem>
             </varlistentry>
+            <varlistentry>
+                <term>orientation</term>
+                <listitem>
+                    <para>
+                    index of the dimension along which the iqr is computed.
+                    It can be either
+                    </para>
+                    <itemizedlist>
+                        <listitem>
+                            a character <literal>"*"</literal> (default), <literal>"r"</literal>,
+                          <literal>"c"</literal> or <literal>"m"</literal>. "m" is equivalent
+                          to <literal>find(size(x)>1,1)</literal>.
+                        </listitem>
+                        <listitem>
+                            a positive integer. 1 is equivalent to "r" and 2 is equivalent to "c".
+                        </listitem>
+                    </itemizedlist>
+                    <para/>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>q</term>
+                <listitem>
+                    <para>real or complex scalar or vector</para>
+                </listitem>
+            </varlistentry>
         </variablelist>
     </refsection>
     <refsection>
@@ -43,7 +69,7 @@
             quartile - lower  quartile of a  vector or a  matrix <literal> x </literal>.
         </para>
         <para>
-            For a vector  or  a matrix <literal>  x</literal>  , <literal>  q=iqr(x)</literal>
+            For a vector  or  a matrix <literal>  x</literal>  , <literal>  q=iqr(x)</literal> or <literal>  q=iqr(x, "*")</literal>
             returns in the scalar <literal> q</literal> the interquartile range of
             all the entries of <literal> x</literal>.
         </para>

@@ -140,7 +140,7 @@ y = fft(x,-1);
 
 //表示
 clf();
-gcf().color_map = hotcolormap(256);
+gcf().color_map = hot(256);
 subplot(2,1,1); Matplot(abs(y))
 subplot(2,1,2); Matplot(fftshift(abs(y)))
  ]]></programlisting>
@@ -149,7 +149,7 @@ subplot(2,1,2); Matplot(fftshift(abs(y)))
             x=3*sin(t')*cos(2*t)+8*sin(3*t')*sin(5*t)+..
             0.5*sin(5*t')*sin(5*t)+3*rand(t')*rand(t);
             y=fft(x,-1);
-            gcf().color_map = hotcolormap(256);
+            gcf().color_map = hot(256);
             subplot(2,1,1);
             Matplot(abs(y))
             subplot(2,1,2);

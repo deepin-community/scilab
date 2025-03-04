@@ -2,7 +2,7 @@
 // Copyright (C) 2009-2010 - DIGITEO - Michael Baudin
 // Copyright (C) 2012-2013 - Michael Baudin
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
-// Copyright (C) 2019 - Stéphane MOTTELET
+// Copyright (C) 2019 - UTC - Stéphane MOTTELET
 //
 // This file is hereby licensed under the terms of the GNU GPL v2.0,
 // pursuant to article 5.3.4 of the CeCILL v.2.1.
@@ -93,26 +93,14 @@ function C = cov(x,y,nrmlztn)
     // [2] "Introduction to probability and statistics for engineers and scientists.", Sheldon Ross
     // [3] NIST/SEMATECH e-Handbook of Statistical Methods, 6.5.4.1. Mean Vector and Covariance Matrix, http://www.itl.nist.gov/div898/handbook/pmc/section5/pmc541.htm
 
-
-    [lhs, rhs]=argn()
-    //
-    if rhs ==0
-        error(msprintf(gettext("%s: Wrong number of input argument(s): %d, %d or %d expected.\n"),"cov", 1, 2, 3));
-    elseif rhs == 1
-        y = 0
-    end
-    //
-    // Check type
-    if (typeof(x) <> "constant")
-        error(msprintf(gettext("%s: Wrong type for input argument #%d: a real matrix expected.\n"),"cov", 1));
+    arguments
+        x {mustBeA(x, "double")}
+        y {mustBeA(y, "double")} = 0
+        nrmlztn (1,1) {mustBeA(nrmlztn, "double"), mustBeMember(nrmlztn, [0, 1])} = 0
     end
 
-    if (rhs <= 2) then
-        //
-        if (typeof(y) <> "constant")
-            error(msprintf(gettext("%s: Wrong type for input argument #%d: an integer or a real matrix expected.\n"),"cov", 2));
-        end
-        //
+
+    if (nargin <= 2) then
         // Check size
         if isscalar(x) & isscalar(y)
             if y == 0 || y == 1
@@ -136,19 +124,6 @@ function C = cov(x,y,nrmlztn)
                 C = %_cov(x,r);
             end
             return
-        end
-        nrmlztn = 0;
-    end
-
-    if (rhs == 3)
-        if (typeof(y) <> "constant")
-            error(msprintf(gettext("%s: Wrong type for input argument #%d: a real matrix expected.\n"),"cov", 2));
-        end
-        if (typeof(nrmlztn) <> "constant")
-            error(msprintf(gettext("%s: Wrong type for input argument #%d: an integer expected.\n"),"cov", 3));
-        end
-        if ( ~isscalar(nrmlztn) || (nrmlztn <> 0 & nrmlztn <> 1))
-            error(msprintf(gettext("%s: Wrong value for input argument #%d: %d or %d expected.\n"),"cov", 3, 0, 1));
         end
     end
 

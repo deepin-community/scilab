@@ -1,5 +1,5 @@
 /*
-*  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+*  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 *  Copyright (C) 2010 - DIGITEO - Antoine ELIAS
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -1349,7 +1349,7 @@ GenericType* ArrayOf<T>::extract(typed_list* _pArgs)
         else
         {
             int *i_piDims = pArg[0]->getAs<GenericType>()->getDimsArray();
-            if (!isScalar() && isVector() && (i_piDims[0] == 1 || i_piDims[1] == 1))
+            if (!isScalar() && isVector() && pArg[0]->getAs<GenericType>()->isVector())
             {
                 //vector with vector subscript
                 int piRealDim[2] = { 1, 1 };
@@ -1575,10 +1575,6 @@ ArrayOf<T>* ArrayOf<T>::resize(int* _piDims, int _iDims)
             //copy values into new one
             int* piIndexes = new int[std::max(m_iDims, _iDims)];
             memset(piIndexes, 0x00, sizeof(int) * std::max(m_iDims, _iDims));
-            for (int i = 0; i < _iDims; i++)
-            {
-                piIndexes[i] = 0;
-            }
 
             int iPreviousNewIdx = 0;
             for (int i = 0; i < m_iSize; i++)
@@ -1601,23 +1597,17 @@ ArrayOf<T>* ArrayOf<T>::resize(int* _piDims, int _iDims)
                 iPreviousNewIdx = iNewIdx + 1;
             }
 
-            // if it's not the first resize,
-            // fill new data with element of last allocation
-            if (iPreviousNewIdx < iOldSizeMax)
+            //clean section between m_iSize and iOldSizeMax
+            for (int i = m_iSize; i < iOldSizeMax; ++i)
             {
-                for (int i = iPreviousNewIdx; i < iOldSizeMax; ++i)
-                {
-                    pRealData[i] = m_pRealData[i];
-                    pImgData[i] = m_pImgData[i];
-                }
-            }
-            else
-            {
-                // first resize, iOldSizeMax don't contain the 10%
-                iOldSizeMax = iPreviousNewIdx;
+                deleteData(m_pRealData[i]);
+                deleteData(m_pImgData[i]);
+                m_pRealData[i] = T();
+                m_pImgData[i] = T();
             }
 
-            for (int i = iOldSizeMax; i < m_iSizeMax; ++i)
+            //fill exceeded with NullValue
+            for (int i = iPreviousNewIdx; i < m_iSizeMax; ++i)
             {
                 T pTemp = getNullValue();
                 pRealData[i] = copyValue(pTemp);
@@ -1687,10 +1677,6 @@ ArrayOf<T>* ArrayOf<T>::resize(int* _piDims, int _iDims)
             //copy values into new one
             int* piIndexes = new int[std::max(m_iDims, _iDims)];
             memset(piIndexes, 0x00, sizeof(int) * std::max(m_iDims, _iDims));
-            for (int i = 0; i < _iDims; i++)
-            {
-                piIndexes[i] = 0;
-            }
 
             int iPreviousNewIdx = 0;
             for (int i = 0; i < m_iSize; i++)
@@ -1720,19 +1706,6 @@ ArrayOf<T>* ArrayOf<T>::resize(int* _piDims, int _iDims)
                 deleteData(m_pRealData[i]);
                 m_pRealData[i] = T();
             }
-
-            //if (iPreviousNewIdx < iOldSizeMax)
-            //{
-            //    for (int i = iPreviousNewIdx; i < iOldSizeMax; ++i)
-            //    {
-            //        pRealData[i] = m_pRealData[i];
-            //        m_pRealData[i] = T();
-            //    }
-            //}
-            //else
-            //{
-            //    iOldSizeMax = iPreviousNewIdx;
-            //}
 
             //fill exceeded with NullValue
             for (int i = iPreviousNewIdx; i < m_iSizeMax; ++i)

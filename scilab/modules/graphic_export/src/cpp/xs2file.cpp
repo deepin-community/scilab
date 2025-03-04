@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2006 - INRIA - Fabrice Leray
  * Copyright (C) 2006 - INRIA - Jean-Baptiste Silvy
  * Copyright (C) 2009 - DIGITEO - Allan CORNET
@@ -149,13 +149,19 @@ int xs2file(char * fname, ExportFileType fileType, void* pvApiCtx)
 
             if (iHandleType != __GO_FIGURE__)
             {
-                Scierror(999, _("%s: Wrong type for input argument #%d: A ''%s'' handle expected.\n"), fname, 1, "Figure");
-                return 1;
+	            int iHandleStyle = -1;
+	            int* piHandleStyle = &iHandleStyle;
+                getGraphicObjectProperty(figureUID, __GO_STYLE__, jni_int, (void **)&piHandleStyle);
+				if (iHandleType != __GO_UICONTROL__ || iHandleStyle != __GO_UI_FRAME__)
+				{
+	                Scierror(999, _("%s: Wrong type for input argument #%d: A %s or %s handle expected.\n"), fname, 1, "Figure","Frame");
+	                return 1;
+				}
             }
         }
         else
         {
-            Scierror(999, _("%s: Wrong type for input argument #%d: A scalar or figure handle expected.\n"), fname, 1);
+            Scierror(999, _("%s: Wrong type for input argument #%d: A %s or a %s or %s handle expected.\n"), fname, 1, "scalar","Figure","Frame");
             return 1;
         }
 

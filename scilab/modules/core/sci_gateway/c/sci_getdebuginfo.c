@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA - Sylvestre LEDRU
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -16,7 +16,6 @@
 #include <stdio.h>
 #include "gw_core.h"
 #include "api_scilab.h"
-#include "version.h"
 #include "sci_malloc.h"
 #include "freeArrayOfString.h"
 #ifdef _MSC_VER

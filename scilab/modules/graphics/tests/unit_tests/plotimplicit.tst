@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2014 - Scilab Enterprises - Pierre-Aime Agnel
 // Copyright (C) 2020 - Scilab Enterprises - Samuel GOUGEON
 //
@@ -9,6 +9,7 @@
 // <-- Unit test for function plotimplicit -->
 //
 // <-- TEST WITH GRAPHIC -->
+// <-- NO CHECK REF -->
 // <-- ENGLISH IMPOSED -->
 
 // Error checking
@@ -25,7 +26,7 @@ assert_checkerror("plotimplicit(list($))", msg);
 // Function in input argument #1 must cross a zero
 plotimplicit("10")  // Warning displayed
 
-// x_grid: 
+// x_grid:
 msg = msprintf("%s: Argument #%d: Real vector or colon : expected.\n", fname, 2);
 assert_checkerror("plotimplicit(""x^2+y^2=1"", ""not_a_real_vector"")", msg);
 msg = msprintf("%s: Argument #%d: Real value expected.\n", fname, 2);
@@ -74,13 +75,13 @@ end
 clf
 assert_checkequal(execstr("plotimplicit(""x^2+y^2=1"")", "errcatch"), 0);
 ax = gca();
-h = [ax.title ax.x_label ax.y_label]
-assert_checkequal(h.text, ["$x^2+y^2=1$", "$x$", "$y$"]');
-assert_checkequal(h.font_size, [4 4 4]');
+h = [ax.title ax.x_label ax.y_label];
+assert_checkequal(h.text, ["$x^2+y^2=1$", "$x$", "$y$"]);
+assert_checkequal(h.font_size, [4 4 4]);
 xlabel("x");
 
 assert_checkequal(execstr("plotimplicit(""x^2+y^2-2"")", "errcatch"), 0);
-assert_checkequal(h.text, ["$x^2+y^2=1$", "x", "$y$"]');
+assert_checkequal(h.text, ["$x^2+y^2=1$", "x", "$y$"]);
 
 clear fun
 function result = fun(x, y, a, b, c)

@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------------------------------------------
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA - Pierre MARECHAL
 //
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -15,32 +15,15 @@
 // Returns the last day of the year and month by corresponding element of Matrix Y and M
 //------------------------------------------------------------------------------------------------------------
 
-function E=eomday(Y,M)
+function E = eomday(Y, M)
 
-    rhs=argn(2);
-
-    if rhs <> 2 then
-        error(msprintf(gettext("%s: Wrong number of input argument(s): %d expected.\n"),"eomday", 2));
+    arguments
+        Y {mustBeA(Y, "double"), mustBeReal, mustBeInteger}
+        M {mustBeA(M, "double"), mustBeReal, mustBeInteger, mustBeEqualDims(M, Y), mustBeInRange(M, 1, 12)}
     end
 
     common_year = [31,28,31,30,31,30,31,31,30,31,30,31];
     leap_year   = [31,29,31,30,31,30,31,31,30,31,30,31];
-
-    if type(Y) <> 1 | ~isreal(Y) | int(Y) <> Y then
-        error(msprintf(gettext("%s: Wrong value for input argument #%d: An integer value expected.\n"), "eomday", 1));
-    end
-
-    if type(M) <> 1 | ~isreal(M) | int(M) <> M then
-        error(msprintf(gettext("%s: Wrong value for input argument #%d: An integer value expected.\n"), "eomday", 2))
-    end
-
-    if or(size(Y) <> size(M)) then
-        error(msprintf(gettext("%s: Wrong size for input arguments #%d and #%d: Same sizes expected.\n"),"eomday", 1, 2));
-    end
-
-    if (min(M) < 1) | (max(M) > 12) then
-        error(msprintf(gettext("%s: Wrong value for input argument #%d: Must be between %d and %d.\n"),"eomday",2,1,12));
-    end
 
     [nr,nc] = size(M);
     E = zeros(1, nr*nc);

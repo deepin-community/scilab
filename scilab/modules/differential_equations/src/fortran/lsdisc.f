@@ -1,4 +1,4 @@
-c Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+c Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 c Copyright (C) INRIA
 c ...
 c
@@ -38,6 +38,8 @@ C
 c-----------------------------------------------------------------------
       integer  it,itout
       double precision tt
+cDEC$ ATTRIBUTES DLLIMPORT:: /ierode/
+      COMMON /ierode/ierror
 c
       it=int(t)
       itout=int(tout)

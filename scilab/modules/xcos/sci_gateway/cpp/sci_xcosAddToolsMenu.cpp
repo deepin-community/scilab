@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) Scilab Enterprises - 2011 - Clément DAVID <clement.david@scilab-enterprises.com>
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises

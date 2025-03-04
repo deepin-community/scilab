@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2017 - 2020 - Samuel GOUGEON
 //
 // This file is hereby licensed under the terms of the GNU GPL v2.0,
@@ -73,15 +73,13 @@ function [heights, jokers, binsOut, ind] = histc(data, bins, options)
     if ~isdef("from_histplot") & isdef("data","l") & isdef("bins", "l") & ..
         type(bins)>0 & size(data,"*")< size(bins,"*") & ..
         or(type(data)==[1 8]) & type(bins)~=10
-        msg = _("%s: data are now expected in argument #1 => arguments #1 and #2 switched\n")
+        msg = _("%s: data are now expected in argument #1 => arguments #1 and #2 switched.\n")
         warning(msprintf(msg, fname))
         mode55 = %t
         [data, bins] = (bins, data)
         tmp = isdef("options","l") && type(options)==4
-        normarg = %f
         norma = %f
         if isdef("normalization","l")
-            normarg = %t
             if type(normalization)==4 then
                 norma = normalization(1)
             end
@@ -90,7 +88,6 @@ function [heights, jokers, binsOut, ind] = histc(data, bins, options)
                 norma = %t
             else
                 if isdef("options","l") & type(options)==4
-                    normarg = %t
                     norma = options(1)
                 end
             end
@@ -100,15 +97,12 @@ function [heights, jokers, binsOut, ind] = histc(data, bins, options)
         else
             options = "counts"
         end
-        if normarg
-            msg = _("%s: ""normalization"" boolean argument #3 is obsolete. ""%s"" option used.\n")
-            warning(msprintf(msg, fname, options(1)))
-        end
     end
+
     // -----------------------
     if ~isdef("data","l") | type(data)==0 then
-        msg = _("%s: Argument #%d: %s\n")
-        error(msprintf(msg, fname, 1, "data array missing"))
+        msg = _("%s: Wrong type for input argument #%d: a double, polynomial or string expected.\n")
+        error(msprintf(msg, fname, 1))
     end
     if ~isdef("bins","l") | type(bins)==0 then
         bins = []
@@ -124,7 +118,7 @@ function [heights, jokers, binsOut, ind] = histc(data, bins, options)
     // -------
     if options~=[]
         if type(options)~=10 then
-            msg = _("%s: Argument #%d: Text expected.\n")
+            msg = _("%s: Wrong type for input argument #%d: a string expected.\n")
             error(msprintf(msg, fname, 3))
         end
         options = tokens(strcat(convstr(options),","),",")
@@ -137,7 +131,7 @@ function [heights, jokers, binsOut, ind] = histc(data, bins, options)
         return
     end
     if ~or(type(data)==[1 2 5 8 10]) then
-        msg = _("%s: Data in argument #%d: Numbers or polynomials or texts expected.\n")
+        msg = _("%s: Wrong type for input argument #%d: a double, polynomial or string expected.\n")
         error(msprintf(msg, fname, 1))
     end
     data0 = data    // Saving
@@ -233,8 +227,9 @@ function [heights, jokers, binsOut, ind] = histc(data, bins, options)
             // binsAlgo
             // --------
             if ~or(convstr(bins)==["sqrt" "sturges" "freediac"])
-                msg = _("%s: Argument #%d: wrong value for binning algo")
-                error(msprintf(msg, fname, 2))
+                args = sci2exp(["sqrt" "sturges" "freediac"]);
+                msg = _("%s: Wrong value for input argument #%d: Must be in the set %s.\n")
+                error(msprintf(msg, fname, 2, args))
             end
             // We set the number of bins. Their edges are set later.
             Nvalid = size(data,"*") - Nnan - Ninf
@@ -257,16 +252,16 @@ function [heights, jokers, binsOut, ind] = histc(data, bins, options)
         if length(bins)==1 & type(bins)==1  then
             // The number of bins or their width is provided
             if type(data)==10   // texts
-                msg = _("%s: Argument #2: Please provide bins edges or values or leave choosing default bins.\n")
-                error(msprintf(msg, fname))
+                msg = _("%s: Wrong value for input argument #%d: Please provide bins edges or values or leave choosing default bins.\n")
+                error(msprintf(msg, fname, 2))
             end
             // Case polynomials: not possible here <= discrete previously set to %t
             // Cases: Encoded integers, decimal or complex numbers
             if bins>=0 & (bins~=floor(bins) | bins==0) | isnan(bins) | bins==%inf
-                msg = _("%s: Argument #%d: non-zero decimal integer expected.\n")
-                error(msprintf(msg, fname, 2))
+                msg = _("%s: Wrong value for input argument #%d: Must be in the interval %s.\n")
+                error(msprintf(msg, fname, 2, "[1, oo)"))
             elseif bins==-%inf
-                msg = _("%s: Argument #%d: decimal number > -Inf expected.\n")
+                msg = _("%s: Wrong value for input argument #%d: decimal number > -Inf expected.\n")
                 error(msprintf(msg, fname, 2))
             end
 
@@ -318,11 +313,11 @@ function [heights, jokers, binsOut, ind] = histc(data, bins, options)
             // -----
             if type(data0)==10
                 if type(bins)~=10
-                    msg = _("%s: Arguments #%d and #%d: Same types expected.\n")
+                    msg = _("%s: Wrong type for input arguments #%d and #%d: Same types expected.\n")
                     error(msprintf(msg, fname, 1, 2))
                 end
                 if ~and(bins==unique(bins))
-                    msg = _("%s: Argument #%d: Elements must be sorted in increasing order.\n")
+                    msg = _("%s: Wrong value for input argument #%d: Elements must be sorted in increasing order.\n")
                     error(msprintf(msg, fname, 1))
                 end
 
@@ -330,12 +325,12 @@ function [heights, jokers, binsOut, ind] = histc(data, bins, options)
             // -------
             else
                 if ~or(type(bins)==[1 8])
-                    msg = _("%s: Arguments #%d and #%d: Same types expected.\n")
+                    msg = _("%s: Wrong type for input arguments #%d and #%d: Same types expected.\n")
                     error(msprintf(msg, fname, 1, 2))
                 end
                 bins = bins(~isnan(bins))
                 if min(diff(bins)) <= 0 then
-                    msg = _("%s: Argument #%d: Elements must be in increasing order.\n")
+                    msg = _("%s: Wrong value for input argument #%d: Elements must be in increasing order.\n")
                     error(msprintf(msg, fname, 1))
                 end
                 // We manage -%inf open left bin
@@ -363,14 +358,14 @@ function [heights, jokers, binsOut, ind] = histc(data, bins, options)
     else    // if discrete
         if type(data0)==10
             if type(bins)~=10
-                msg = _("%s: Arguments #%d and #%d: Same types expected.\n")
+                msg = _("%s: Wrong type for input arguments #%d and #%d: Same types expected.\n")
                 error(msprintf(msg, fname, 1, 2))
             end
             [bins, dataOrder] = unique(bins)
 
         elseif or(type(data)==[1 8])
             if ~or(type(bins)==[1 8])
-                msg = _("%s: Arguments #%d and #%d: Same types expected.\n")
+                msg = _("%s: Wrong type for input arguments #%d and #%d: Same types expected.\n")
                 error(msprintf(msg, fname, 1, 2))
             end
             bins = real(double(bins))

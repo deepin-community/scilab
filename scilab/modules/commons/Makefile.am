@@ -1,5 +1,5 @@
 #
-# Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+# Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 # Copyright (C) DIGITEO - 2010 - Allan CORNET
 # 
 # Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -34,6 +34,9 @@ COMMONS_C_SOURCES =  \
     src/jni/CommonFileUtils_wrap.c \
     src/c/fileutils.c
 
+COMMONS_DISABLE_C_SOURCES = \
+    src/c/fileutils.c
+
 COMMONS_CPP_SOURCES = 
 if NEED_JAVA
 COMMONS_CPP_SOURCES +=  src/jni/GiwsException.cpp
@@ -50,7 +53,6 @@ libscicommons_la_CPPFLAGS= \
     -I$(top_srcdir)/modules/ast/includes/symbol/ \
     -I$(top_srcdir)/modules/ast/includes/system_env/ \
     -I$(top_srcdir)/modules/ast/includes/types/ \
-    -I$(top_srcdir)/modules/ast/includes/analysis/ \
     -I$(top_srcdir)/modules/localization/includes/ \
     -I$(top_srcdir)/modules/fileio/includes/ \
     -I$(top_srcdir)/modules/string/includes/ \
@@ -58,6 +60,13 @@ libscicommons_la_CPPFLAGS= \
 
 
 libscicommons_disable_la_SOURCES = $(COMMONS_DISABLE_C_SOURCES)
+
+libscicommons_disable_la_CPPFLAGS =  \
+    -I$(srcdir)/includes/ \
+    -I$(top_srcdir)/modules/core/includes/ \
+    -I$(top_srcdir)/modules/fileio/includes/ \
+    -I$(top_srcdir)/modules/string/includes/ \
+    $(AM_CPPFLAGS)
 
 pkglib_LTLIBRARIES = libscicommons-disable.la
 
@@ -90,6 +99,10 @@ endif
 #### commons : gateway declaration ####
 libscicommons_la_sci_gatewaydir = $(mydatadir)/sci_gateway
 libscicommons_la_sci_gateway_DATA = 
+
+#### commons : include files ####
+libscicommons_la_includedir=$(pkgincludedir)
+libscicommons_la_include_HEADERS = includes/fileutils.h
 
 if GUI
 USEANT=1

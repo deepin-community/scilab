@@ -4,7 +4,7 @@ package org.scilab.modules.gui.utils;
 public class SwingScilabTextItem {
     /**
      * Class created as a workaround for bug:
-     * http://bugzilla.scilab.org/show_bug.cgi?id=7898 This bug is a Java bug:
+     * https://gitlab.com/scilab/scilab/-/issues/7898 This bug is a Java bug:
      * http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4133743
      *
      * This workaround has been proposed by a user on Java bug tracker.

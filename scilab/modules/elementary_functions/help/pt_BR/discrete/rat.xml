@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -58,7 +58,7 @@
         <para>
             <literal>[N,D] = rat(x,tol)</literal> retorna duas matrizes de
             inteiros tais que <literal>N./D</literal> é próxima a <literal>x</literal>
-            no sentido de que <literal>abs(N./D - X) &lt;= tol*abs(x)</literal>. As
+            no sentido de que <literal>abs(N./D - X) &lt;= tol * norm(X, 1)</literal>. As
             aproximações racionais são geradas truncando-se expansões de frações
             contínuas. <literal>tol = 1.e-6*norm(X,1)</literal> é o padrão. <literal>y
                 = rat(x,tol)

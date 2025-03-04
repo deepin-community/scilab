@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) ENPC - Jean-Philippe Chancelier
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -23,7 +23,7 @@
     <refsynopsisdiv>
         <title>Синтаксис</title>
         <synopsis>
-            contourf(x, y, z, nz, [style, strf, leg, rect, nax])
+            contourf(x, y, z, nz, [style, strf, leg, rect, nax, fpf])
         </synopsis>
     </refsynopsisdiv>
     <refsection>
@@ -104,6 +104,18 @@ plot2d(x(im)',y(jm)',-9,"000")
                     </para>
                 </listitem>
             </varlistentry>
+            <varlistentry>
+                <term>fpf</term>
+                <listitem>
+                    <para>
+                        You can change the format of the floating point number printed on
+                        the levels where <varname>fpf</varname> is the format in C format syntax 
+                        (for example <code>fpf="%.3f"</code>).
+                        Set <varname>fpf</varname> to " " implies that the level are not drawn on the level curves.
+                        If not given, the default format of <link linkend="contour2d">contour2d</link> is used.
+                    </para>
+                </listitem>
+            </varlistentry>
         </variablelist>
     </refsection>
     <refsection>
@@ -115,14 +127,6 @@ plot2d(x(im)',y(jm)',-9,"000")
             Значения <literal>f(x,y)</literal> указываются с помощью матрицы
             <varname>z</varname> в точках сетки, определённых через
             <varname>x</varname> и <varname>y</varname>.
-        </para>
-        <para>
-            Вы можете изменить формат чисел с плавающей запятой, печатаемых на
-            уровнях, с помощью <code>xset("fpf",string)</code>, где
-            <varname>string</varname> указывает форма в формате C-синтаксиса
-            (например, <code>string="%.3f"</code>). Используйте
-            <code>string=""</code> для переключения обратно в формат по
-            умолчанию.
         </para>
         <para>
             Введите команду <code>contourf()</code>, чтобы посмотреть демонстрацию.
@@ -159,12 +163,6 @@ g = [zeros(n,1); (1:n)'/n; ones(m-2*n,1)];
 b = [zeros(2*n,1); (1:m-2*n)'/(m-2*n)];
 h = [r g b];
 gcf().color_map = h;
-
-xset('fpf',' ');
-clf();
-contourf([],[],z,[-6:-1,-logspace(-5,0,10),logspace(-5,0,10),1:8],0*ones(1,m))
-
-xset('fpf','');
 clf();
 contourf([],[],z,[-6:-1,-logspace(-5,0,10),logspace(-5,0,10),1:8]);
  ]]></programlisting>
@@ -191,7 +189,6 @@ contourf([],[],z,[-6:-1,-logspace(-5,0,10),logspace(-5,0,10),1:8]);
             b = [zeros(2*n,1); (1:m-2*n)'/(m-2*n)];
             h = [r g b];
             gcf().color_map = h;
-            xset('fpf',' ');
             clf();
             contourf([],[],z,[-6:-1,-logspace(-5,0,10),logspace(-5,0,10),1:8],0*ones(1,m))
 

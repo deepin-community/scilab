@@ -1,0 +1,22 @@
+Description: initiating _JAVA_OPTIONS so that we can start scilab with
+ OpenJDK 17 on Debian, and also we provide the necessary java.library.path.
+Author: Pierre Gruet <pgt@debian.org>
+Bug-Debian: https://bugs.debian.org/1012099
+Forwarded: not-needed
+Last-Update: 2023-03-11
+
+--- a/scilab/bin/scilab
++++ b/scilab/bin/scilab
+@@ -43,6 +43,12 @@
+ #
+ ###
+ 
++# We initialize _JAVA_OPTIONS so that the right paths are looked into and we
++# add the needed --add-opens to work with OpenJDK 17.
++if ! echo "${_JAVA_OPTIONS}" | grep -q "java\.library\.path" ; then
++    _JAVA_OPTIONS="${_JAVA_OPTIONS} -Djava.library.path=/usr/lib/jni:/usr/lib/scilab --add-opens=java.desktop/sun.awt.X11=ALL-UNNAMED --add-opens=java.desktop/sun.java2d.opengl=ALL-UNNAMED --add-opens=java.desktop/javax.swing.plaf.basic=ALL-UNNAMED"
++fi
++
+ if test ! -z "$SCIVERBOSE"; then
+     SCIVERBOSE=1
+ else

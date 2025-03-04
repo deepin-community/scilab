@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2018 - ESI Group - Clement DAVID
 //
 // <-- NO CHECK REF -->
@@ -49,6 +49,7 @@ counter = b.counter
 
 clear b
 System.gc();
+System.runFinalization();
 sleep(1,"s"); // to let the GC do the job
 
 assert_checkequal(a.counter, counter);
@@ -64,6 +65,7 @@ for i=1:100
 end
 
 System.gc();
+System.runFinalization();
 sleep(1,"s"); // to let the GC do the job
 
 allocated = klass.new();
@@ -71,12 +73,14 @@ assert_checkequal(allocated.counter, 100+1);
 
 clear l
 System.gc();
+System.runFinalization();
 sleep(1,"s"); // to let the GC do the job
 
 assert_checkequal(allocated.counter, 1);
 
 clear allocated
 System.gc();
+System.runFinalization();
 sleep(1,"s"); // to let the GC do the job
 
 assert_checkequal(klass.getClassCounter(), 0);

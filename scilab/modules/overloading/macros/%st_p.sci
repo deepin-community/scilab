@@ -1,8 +1,8 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) INRIA
 // Copyright (C) 2010 - DIGITEO - Vincent COUVERT <vincent.couvert@scilab.org>
 // Copyright (C) 2012 - 2016 - Scilab Enterprises
-// Copyright (C) 2018 - Stéphane MOTTELET
+// Copyright (C) 2018 - UTC - Stéphane MOTTELET
 // Copyright (C) 2019 - 2020 - Samuel GOUGEON
 //
 // This file is hereby licensed under the terms of the GNU GPL v2.0,
@@ -13,5 +13,8 @@
 // along with this program.
 
 function %st_p(s)
-    %l_p(s, "st")
+    str = %st_string(s);
+    if ~isempty(str)
+        mprintf("  %s\n", str);
+    end
 endfunction

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2011 - DIGITEO - Sylvestre Ledru
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -21,6 +21,12 @@
     </refnamediv>
     <refsection>
         <title>説明</title>
+        <warning>
+            On Windows, the Scilab MPI module is optional: its installation is done on request in the Scilab's installer.
+        </warning>
+        <warning>
+            The Microsoft HPC Pack 2012 R2 must be downloaded and installed before using this module on Windows.
+        </warning>
         <para>
             MPIインターフェイスがScilabに提供されています.
             このインターフェイスにより高性能なメッセージ指定
@@ -39,7 +45,12 @@
             Scilab MPI実装は以下の
             (行列またはスカラー形式の)Scilabデータ型をサポートします:
             <simplelist type="inline">
-                <member>Double</member><member>Boolean</member><member>int (全て)</member><member>String</member><member>Sparse</member><member>Boolean Sparse</member>
+                <member>Double</member>
+                <member>Boolean</member>
+                <member>int (全て)</member>
+                <member>String</member>
+                <member>Sparse</member>
+                <member>Boolean Sparse</member>
             </simplelist>
             現時点では,list, tlistまたは mlistのような高位の
             データ型構造はサポートされていません.

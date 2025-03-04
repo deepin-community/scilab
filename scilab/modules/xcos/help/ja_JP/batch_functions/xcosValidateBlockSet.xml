@@ -40,9 +40,9 @@
         <para>
             <programlisting role="example"><![CDATA[
       loadXcosLibs();
-      [status, message] = xcosValidateBlockSet("SPLIT_f")
-      [status, message] = xcosValidateBlockSet("CONST_m")
-      [status, message] = xcosValidateBlockSet("foo")
+      [status, msg] = xcosValidateBlockSet("SPLIT_f")
+      [status, msg] = xcosValidateBlockSet("CONST_m")
+      [status, msg] = xcosValidateBlockSet("foo")
       ]]></programlisting>
         </para>
     </refsection>

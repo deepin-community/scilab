@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA - Sylvestre Koumar
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -22,7 +22,7 @@
         <title>Syntax</title>
         <synopsis>
             xs2pdf(win_num, file_name [,orientation])
-            xs2pdf(fig, file_name [,orientation])
+            xs2pdf(hdl, file_name [,orientation])
         </synopsis>
     </refsynopsisdiv>
     <refsection>
@@ -31,13 +31,13 @@
             <varlistentry>
                 <term>win_num</term>
                 <listitem>
-                    <para>an integer, ID of the figure to export.</para>
+                    <para>an integer, ID of the Figure to export.</para>
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term>fig</term>
+                <term>hdl</term>
                 <listitem>
-                    <para>handle of the figure to export.</para>
+                    <para>handle of the Figure or Frame to export.</para>
                 </listitem>
             </varlistentry>
             <varlistentry>
@@ -63,7 +63,7 @@
     <refsection>
         <title>Description</title>
         <para>
-            <function>xs2pdf</function> exports the display of a graphic window into an PDF file.
+            <function>xs2pdf</function> exports the display of a Figure or a Frame into an PDF file.
         </para>
     </refsection>
     <refsection>

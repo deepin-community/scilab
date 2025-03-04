@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2020 - Samuel GOUGEON
 //
 // This file is hereby licensed under the terms of the GNU GPL v2.0,
@@ -93,6 +93,21 @@ function varargout = mapsound(w, dt, frange, rate, Colormap)
             case springcolormap, e = -10
             case summercolormap, e = -10
             case wintercolormap, e = -20
+            case autumn, e = -15
+            case bone, e = -1
+            case cool, e = 20
+            case copper, e = -15
+            case gray, e = -1
+            case hot, e = -1
+            case hsv, e = 15
+            case jet, e = -20
+            case ocean, e = -1
+            case parula, e = -10,
+            case pink, e = -1
+            case rainbow, e = 20
+            case spring, e = -10
+            case summer, e = -10
+            case winter, e = -20
             else
                 if type(Colormap)<>13
                     msg = _("%s: Argument #%d: Function expected.\n")
@@ -113,7 +128,7 @@ function varargout = mapsound(w, dt, frange, rate, Colormap)
             [?,k] = gsort(sum((ones(tmp)*0.5 - tmp).^2,"c"),"g","i")
             gridColor = k(find(k>e,1))
         else
-            tmp = hotcolormap(118)($:-1:$*0.15,:);
+            tmp = hot(118)($:-1:$*0.15,:);
             gridColor = 43
         end
         gcf().color_map = tmp;

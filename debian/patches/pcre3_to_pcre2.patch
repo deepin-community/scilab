@@ -1,0 +1,1421 @@
+Description: switching from pcre3 to pcre2
+ This consists in:
+ 1. making changes in the following files:
+  - scilab/modules/spreadsheet/src/c/csvRead.c
+  - scilab/modules/string/src/c/strsubst.c
+  - scilab/modules/string/sci_gateway/cpp/sci_strsubst.cpp
+  - scilab/modules/string/sci_gateway/cpp/sci_grep.cpp
+  - scilab/modules/string/sci_gateway/cpp/sci_strindex.cpp
+  - scilab/modules/string/sci_gateway/cpp/sci_regexp.cpp
+  - scilab/modules/slint/includes/PCREException.hxx
+  - scilab/modules/slint/includes/PCREMatcher.hxx
+  - scilab/modules/slint/src/cpp/PCREException.cpp
+  - scilab/modules/slint/src/cpp/PCREMatcher.cpp
+ in which one needs to use the pcre2 functions. This is somewhat difficult
+ because the upstream codes contains files like
+ scilab/modules/string/src/c/pcre_(internal|private).c which perform the regex
+ matches and are highly dependent on the contents of the pcre library. To
+ avoid rewriting them, I skipped them and put all the pattern compiling and
+ matching stuff in the above .(c|cpp|hxx) files.
+ .
+ 2. creating the files
+  - scilab/modules/string/includes/handle_pcre2_pattern.h
+  - scilab/modules/string/src/c/handle_pcre2_pattern.c
+ which removes the delimiters of the regex patterns and stores the pattern
+ modifiers so that they are turned into options to be provided to
+ pcre2_compile.
+ .
+ 3. updating the following files:
+  - scilab/m4/pcre.m4
+  - scilab/configure.ac
+  - scilab/modules/string/Makefile.am
+  - scilab/modules/slint/Makefile.am
+ so that the flags and libraries of pcre2 are used, not the ones of pcre3.
+Author: Pierre Gruet <pgt@debian.org>
+Bug-Debian: https://bugs.debian.org/999966
+Forwarded: https://gitlab.com/scilab/scilab/-/issues/17089
+Last-Update: 2023-07-25
+
+--- a/scilab/modules/spreadsheet/src/c/csvRead.c
++++ b/scilab/modules/spreadsheet/src/c/csvRead.c
+@@ -13,19 +13,23 @@
+  * along with this program.
+  *
+  */
++#define PCRE2_CODE_UNIT_WIDTH 8
++
+ #include "csvRead.h"
+ #include "FileExist.h"
+ #include "Sciwarning.h"
++#include "charEncoding.h"
+ #include "configvariable_interface.h"
+ #include "csvDefault.h"
+ #include "expandPathVariable.h"
+ #include "freeArrayOfString.h"
++#include "handle_pcre2_pattern.h"
+ #include "localization.h"
+ #include "mclose.h"
+ #include "mgetl.h"
+ #include "mopen.h"
+ #include "os_string.h"
+-#include "pcre_private.h"
++#include <pcre2.h>
+ #include "sci_malloc.h"
+ #include "sciprint.h"
+ #include "splitLine.h"
+@@ -128,15 +132,12 @@
+ 
+         pComments = extractComments(pwstLines, &nbLines, regexpcomments, &nbComments, &iErr);
+ 
+-        if ((iErr == CAN_NOT_COMPILE_PATTERN) || (iErr == DELIMITER_NOT_ALPHANUMERIC))
++        if (iErr > 0)
+         {
+             result = (csvResult*)(CALLOC(1, sizeof(csvResult)));
+             if (result)
+             {
+-                if ((iErr == CAN_NOT_COMPILE_PATTERN) || (iErr == DELIMITER_NOT_ALPHANUMERIC))
+-                {
+-                    iErr = CSV_READ_REGEXP_ERROR;
+-                }
++                iErr = CSV_READ_REGEXP_ERROR;
+                 result->err = (csvReadError)iErr;
+             }
+             freeArrayOfWideString(pHeader, nbHeader);
+@@ -606,12 +607,30 @@
+ 
+     for (i = 0; i < *nbLines; i++)
+     {
+-        int Output_Start = 0;
+-        int Output_End = 0;
+-        pcre_error_code answer = wide_pcre_private(lines[i], regexpcomments, &Output_Start, &Output_End, NULL, NULL);
++        pcre2_code *re;
++        PCRE2_SPTR pattern;
++        uint32_t optionsPattern = 0;
++        PCRE2_SPTR subject = (PCRE2_SPTR)(wide_string_to_UTF8(lines[i]));
++        int errornumber;
++        int rc;
++        PCRE2_SIZE erroroffset;
++        PCRE2_SIZE subject_length = (PCRE2_SIZE)(strlen((char*)(subject)));
++        pcre2_match_data *match_data;
++        char* charPattern = (char*)(malloc(sizeof(char) * strlen(wide_string_to_UTF8(regexpcomments))));
++
++        int conv = handle_pcre2_pattern(wide_string_to_UTF8(regexpcomments), charPattern, &optionsPattern);
++
++        pattern = (PCRE2_SPTR)(charPattern);
++        //Compiling the regex.
++        re = pcre2_compile(pattern, PCRE2_ZERO_TERMINATED, optionsPattern, &errornumber, &erroroffset, NULL);
++
++        if (re == NULL)
++        {
++            //Compilation failed, for whatever reason. Outputting an error message and quitting.
++            PCRE2_UCHAR buffer[256];
++            pcre2_get_error_message(errornumber, buffer, sizeof(buffer));
++            printf("PCRE2 compilation failed at offset %d: %s\n", (int)erroroffset, buffer);
+ 
+-        if ((answer == CAN_NOT_COMPILE_PATTERN) || (answer == DELIMITER_NOT_ALPHANUMERIC))
+-        {
+             if (pComments)
+             {
+                 freeArrayOfWideString(pComments, *nbcomments);
+@@ -619,12 +638,38 @@
+ 
+             *nbcomments = 0;
+ 
+-            *iErr = answer;
++            *iErr = errornumber;
++            free(charPattern);
+             return NULL;
+         }
+ 
+-        if (answer == PCRE_FINISHED_OK)
++        //Performing the match.
++        match_data = pcre2_match_data_create_from_pattern(re, NULL);
++        rc = pcre2_match(re, subject, subject_length, 0, 0, match_data, NULL);
++
++        if (rc < 0 && rc != PCRE2_ERROR_NOMATCH)
+         {
++            //An error arose during the match, printing its error code and quitting.
++            printf("Matching error %d\n", rc);
++
++            pcre2_match_data_free(match_data);
++            pcre2_code_free(re);
++
++            if (pComments)
++            {
++                freeArrayOfWideString(pComments, *nbcomments);
++            }
++
++            *nbcomments = 0;
++
++            *iErr = errornumber;
++            free(charPattern);
++            return NULL;
++        }
++        else if (rc >= 0)
++        {
++            //Match succeeded.
++
+             (*nbcomments)++;
+             if (pComments == NULL)
+             {
+@@ -638,7 +683,8 @@
+             if (pComments == NULL)
+             {
+                 *nbcomments = 0;
+-                *iErr = 1;
++                *iErr = 0;
++                free(charPattern);
+                 return NULL;
+             }
+ 
+@@ -648,6 +694,10 @@
+             (*nbLines)--;
+             i--;
+         }
++
++        pcre2_match_data_free(match_data);
++        pcre2_code_free(re);
++        free(charPattern);
+     }
+ 
+     return pComments;
+--- a/scilab/modules/string/src/c/strsubst.c
++++ b/scilab/modules/string/src/c/strsubst.c
+@@ -15,10 +15,12 @@
+  */
+ 
+ /*--------------------------------------------------------------------------*/
++#define PCRE2_CODE_UNIT_WIDTH 8
++
++#include <stdio.h>
+ #include "charEncoding.h"
+ #include "os_string.h"
+-#include "pcre_error.h"
+-#include "pcre_private.h"
++#include "handle_pcre2_pattern.h"
+ #include "sci_malloc.h"
+ #include "strsubst.h"
+ #include "sciprint.h"
+@@ -40,23 +42,6 @@
+     }
+     return replacedStrings;
+ }
+-/*--------------------------------------------------------------------------*/
+-char **strsubst_reg(const char **strings_input, int strings_dim, const char *string_to_search, const char *replacement_string, int *ierr)
+-{
+-    char **replacedStrings = NULL;
+-
+-    if ( (strings_input) && (string_to_search) && (replacement_string) )
+-    {
+-        int i = 0;
+-        replacedStrings = (char**)MALLOC(sizeof(char*) * strings_dim);
+-        for (i = 0; i < strings_dim; i++)
+-        {
+-            const char *str = strings_input[i];
+-            replacedStrings[i] = strsub_reg(str, string_to_search, replacement_string, ierr);
+-        }
+-    }
+-    return replacedStrings;
+-}
+ /*-------------------------------------------------------------------------------------*/
+ char *strsub(const char* input_string, const char* string_to_search, const char* replacement_string)
+ {
+@@ -135,125 +120,45 @@
+ 
+     return replacedString;
+ }/*-------------------------------------------------------------------------------------*/
+-char *strsub_reg(const char* input_string, const char* string_to_search, const char* replacement_string, int *ierr)
++wchar_t *wcssub_reg(const wchar_t* _pwstInput, const wchar_t* _pwstSearch, const wchar_t* _pwstReplace, int* _piErr)
+ {
+-    pcre_error_code w = PCRE_FINISHED_OK;
+-
+-    int Output_Start = 0;
+-    int Output_End = 0;
+-
+-    char *replacedString = NULL;
+-    wchar_t *wcreplacedString = NULL;
++    pcre2_code *re;
++    PCRE2_SPTR pattern;
++    uint32_t optionsPattern = 0;
++    PCRE2_SPTR subject;
++    int errornumber;
++    int rc;
++    PCRE2_SIZE erroroffset;
++    PCRE2_SIZE *ovector;
++    PCRE2_SIZE subject_length;
++    pcre2_match_data *match_data;
++    char* charPattern = (char*)(malloc(sizeof(char) * strlen(wide_string_to_UTF8(_pwstSearch))));
+ 
+-    wchar_t *wcreplacement_string = NULL;
+-    wchar_t *wcinput_string = NULL;
+-
+-    int len = 0;
+-
+-    *ierr = (int)PCRE_FINISHED_OK;
+-
+-    if (input_string == NULL)
++    int conv = handle_pcre2_pattern(wide_string_to_UTF8(_pwstSearch), charPattern, &optionsPattern);
++    if (_pwstInput == NULL)
+     {
++        free(charPattern);
+         return NULL;
+     }
+ 
+-    if (string_to_search == NULL || replacement_string == NULL)
+-    {
+-        return os_strdup(input_string);
+-    }
+-
+-    w = pcre_private((char*)input_string, (char*)string_to_search, &Output_Start, &Output_End, NULL, NULL);
+-    if (w != PCRE_FINISHED_OK)
+-    {
+-        *ierr = (int)w;
+-        return os_strdup(input_string);
+-    }
+-
+-    wcreplacement_string = to_wide_string((char*)replacement_string);
+-    wcinput_string = to_wide_string((char*)input_string);
+-
+-    if (wcreplacement_string == NULL)
+-    {
+-        FREE(wcinput_string);
+-        *ierr = (int)NOT_ENOUGH_MEMORY_FOR_VECTOR;
+-        return os_strdup(input_string);
+-    }
+-
+-    len = (int)wcslen(wcreplacement_string) + (int)wcslen(wcinput_string);
++    pattern = (PCRE2_SPTR)(charPattern);
+ 
+-    wcreplacedString = (wchar_t*)MALLOC (sizeof(wchar_t) * (len + 1));
+-    if (wcreplacedString == NULL)
+-    {
+-        FREE(wcreplacement_string);
+-        FREE(wcinput_string);
+-        return NULL;
+-    }
++    //Compiling the pattern.
++    re = pcre2_compile(pattern, PCRE2_ZERO_TERMINATED, optionsPattern, &errornumber, &erroroffset, NULL);
+ 
++    if (re == NULL)
+     {
+-        /* converts to wide characters */
+-
+-        wchar_t *wctail = NULL;
+-
+-        int wcOutput_Start = 0;
+-        int wcOutput_End = 0;
+-
+-        char *	strOutput_Start = os_strdup(input_string);
+-        char *  strOutput_End =  os_strdup(input_string);
+-
+-        wchar_t *wcstrOutput_Start = NULL;
+-        wchar_t *wcstrOutput_End = NULL;
+-
+-        /* calculates positions with wide characters */
+-        strOutput_Start[Output_Start] = '\0';
+-        strOutput_End[Output_End] = '\0';
+-
+-        wcstrOutput_Start = to_wide_string(strOutput_Start);
+-        wcstrOutput_End = to_wide_string(strOutput_End);
+-
+-        FREE(strOutput_Start);
+-        FREE(strOutput_End);
+-
+-        if (wcstrOutput_Start)
+-        {
+-            wcOutput_Start = (int)wcslen(wcstrOutput_Start);
+-            FREE(wcstrOutput_Start);
+-        }
+-        else
+-        {
+-            wcOutput_Start = 0;
+-        }
+-
+-        if (wcstrOutput_End)
+-        {
+-            wcOutput_End = (int)wcslen(wcstrOutput_End);
+-            FREE(wcstrOutput_End);
+-        }
+-        else
+-        {
+-            wcOutput_End = 0;
+-        }
+-
+-        wcsncpy(wcreplacedString, wcinput_string, wcOutput_Start);
+-        wcreplacedString[wcOutput_Start] = L'\0';
+-        wcscat(wcreplacedString, wcreplacement_string);
+-        wctail = wcinput_string + wcOutput_End;
+-        wcscat(wcreplacedString, wctail);
+-        replacedString = wide_string_to_UTF8(wcreplacedString);
+-
+-        FREE(wcreplacedString);
++        //Error while compiling.
++        PCRE2_UCHAR buffer[256];
++        pcre2_get_error_message(errornumber, buffer, sizeof(buffer));
++        printf("PCRE2 compilation failed at offset %d: %s\n", (int)erroroffset, buffer);
++        free(charPattern);
++        return os_wcsdup(_pwstInput);
+     }
+ 
+-    FREE(wcinput_string);
+-    FREE(wcreplacement_string);
+-
+-    return replacedString;
+-}
+-/*-------------------------------------------------------------------------------------*/
+-wchar_t *wcssub_reg(const wchar_t* _pwstInput, const wchar_t* _pwstSearch, const wchar_t* _pwstReplace, int* _piErr)
+-{
+-    pcre_error_code iPcreStatus = PCRE_FINISHED_OK;
+-    int iStart = 0;
+-    int iEnd = 0;
++    //Compile OK, preparing for the effective match.
++    PCRE2_SIZE iStart = 0;
++    PCRE2_SIZE iEnd = 0;
+     int len = 0;
+     int* arriStart = NULL;
+     int* arriEnd = NULL;
+@@ -262,20 +167,17 @@
+ 
+     wchar_t* result = NULL;
+ 
+-    if (_pwstInput == NULL)
+-    {
+-        return NULL;
+-    }
+-
+     // early return, NULL might be given as unspecified
+     if (_pwstSearch == NULL || _pwstReplace == NULL)
+     {
++        free(charPattern);
+         return os_wcsdup(_pwstInput);
+     }
+ 
+     // early return, empty strings will not be modified
+     if (_pwstSearch[0] == L'\0' || _pwstInput[0] == L'\0')
+     {
++        free(charPattern);
+         return os_wcsdup(_pwstInput);
+     }
+ 
+@@ -303,8 +205,9 @@
+             {
+                 FREE(arriStart);
+                 FREE(arriEnd);
++                free(charPattern);
+                 FREE(replacement);
+-                *_piErr = TOO_BIG_FOR_OFFSET_SIZE;
++                *_piErr = PCRE2_ERROR_BADOFFSET;
+                 return NULL;
+             }
+ 
+@@ -316,11 +219,21 @@
+ 
+     wchar_t*** captured = (wchar_t***)MALLOC(sizeof(wchar_t**) * len);
+     int* captured_count = (int*)CALLOC(len, sizeof(int));
++
++    match_data = pcre2_match_data_create_from_pattern(re, NULL);
++
+     do
+     {
+-        iPcreStatus = wide_pcre_private(_pwstInput + iJump, _pwstSearch, &iStart, &iEnd, &captured[iOccurs], &captured_count[iOccurs]);
+-        if (iPcreStatus == PCRE_FINISHED_OK)
++        subject = (PCRE2_SPTR)(wide_string_to_UTF8(_pwstInput + iJump));
++        subject_length = (PCRE2_SIZE)strlen((char *)subject);
++
++        rc = pcre2_match(re, subject, subject_length, 0, 0, match_data, NULL);
++
++        if (rc >= 0) //There is a match.
+         {
++            ovector = pcre2_get_ovector_pointer(match_data);
++            iStart = ovector[0];
++            iEnd = ovector[1];
+             if (iEnd != iStart)
+             {
+                 arriStart[iOccurs] = iStart + iJump;
+@@ -333,19 +246,22 @@
+                 iJump++;
+             }
+         }
+-        else if (iPcreStatus != NO_MATCH)
++        else if (rc != PCRE2_ERROR_NOMATCH) //Uncoverable error arose.
+         {
+-            pcre_error("strsubst", iPcreStatus);
++            printf("Matching error %d\n", rc);
+             FREE(arriStart);
+             FREE(arriEnd);
+             FREE(replacement);
+             FREE(captured);
+             FREE(captured_count);
+-            *_piErr = iPcreStatus;
++            pcre2_match_data_free(match_data);
++            pcre2_code_free(re);
++            *_piErr = rc;
++            free(charPattern);
+             return NULL;
+         }
+     }
+-    while (iOccurs < len && iPcreStatus == PCRE_FINISHED_OK && iStart != iEnd);
++    while (iOccurs < len && rc >= 0 && iStart != iEnd);
+ 
+     if (iOccurs)
+     {
+@@ -397,7 +313,7 @@
+                 FREE(replacement);
+                 FREE(captured);
+                 FREE(captured_count);
+-                *_piErr = TOO_BIG_FOR_OFFSET_SIZE;
++                *_piErr = PCRE2_ERROR_BADOFFSET;
+                 return NULL;
+             }
+ 
+@@ -447,12 +363,15 @@
+     }
+     else
+     {
+-        *_piErr = iPcreStatus;
++        *_piErr = rc;
+         result = os_wcsdup(_pwstInput);
+     }
+ 
+     FREE(arriStart);
+     FREE(arriEnd);
++    pcre2_match_data_free(match_data);
++    pcre2_code_free(re);
++    free(charPattern);
+     FREE(replacement);
+     FREE(captured);
+     FREE(captured_count);
+--- a/scilab/modules/string/sci_gateway/cpp/sci_strsubst.cpp
++++ b/scilab/modules/string/sci_gateway/cpp/sci_strsubst.cpp
+@@ -22,11 +22,12 @@
+ 
+ extern "C"
+ {
++#define PCRE2_CODE_UNIT_WIDTH 8
++
+ #include "strsubst.h"
+ #include "localization.h"
+ #include "Scierror.h"
+-#include "pcre_error.h"
+-#include "pcre_private.h"
++#include <pcre2.h>
+ #include "freeArrayOfString.h"
+ }
+ /*-------------------------------------------------------------------------------------*/
+@@ -99,10 +100,10 @@
+     {
+         int iErr = 0;
+         wchar_t** pwstOutput = wcssubst_reg(const_cast<const wchar_t**>(pS->get()), pS->getSize(), pwstSearch, pwstReplace, &iErr);
+-        if (iErr != NO_MATCH && iErr != PCRE_FINISHED_OK && iErr != PCRE_EXIT)
++        if (iErr != PCRE2_ERROR_NOMATCH && iErr < 0)
+         {
+             freeArrayOfWideString(pwstOutput, pOut->getSize());
+-            pcre_error("strsubst", iErr);
++            printf("strsubst error %d\n", iErr);
+             delete pOut;
+             return types::Function::Error;
+         }
+--- a/scilab/modules/string/sci_gateway/cpp/sci_grep.cpp
++++ b/scilab/modules/string/sci_gateway/cpp/sci_grep.cpp
+@@ -24,15 +24,15 @@
+ 
+ extern "C"
+ {
++#define PCRE2_CODE_UNIT_WIDTH 8
++
+ #include "os_string.h"
+ #include "Scierror.h"
++#include "handle_pcre2_pattern.h"
+ #include "localization.h"
+-#include "pcre.h"
+-#include "pcreposix.h"
++#include <pcre2.h>
+ #include "sci_malloc.h" /* MALLOC */
+ #include "charEncoding.h"
+-#include "pcre_private.h"
+-#include "pcre_error.h"
+ }
+ 
+ /*------------------------------------------------------------------------*/
+@@ -300,7 +300,7 @@
+     int x = 0, y = 0;
+     char *save = NULL;
+     int iRet = GREP_OK;
+-    pcre_error_code answer = PCRE_FINISHED_OK;
++
+     results->sizeArraysMax = mn_one * mn_two;
+ 
+     results->values = (int *)MALLOC(sizeof(int) * results->sizeArraysMax);
+@@ -326,10 +326,43 @@
+     {
+         for ( x = 0; x < mn_two; ++x)
+         {
+-            int Output_Start = 0;
+-            int Output_End = 0;
++            pcre2_code *re;
++            PCRE2_SPTR pattern;
++            uint32_t optionsPattern = 0;
++            PCRE2_SPTR subject;
++            int errornumber;
++            int rc;
++            PCRE2_SIZE erroroffset;
++            PCRE2_SIZE subject_length;
++            pcre2_match_data *match_data;
++            char* charPattern;
++
+             save = os_strdup(Inputs_param_two[x]);
+-            answer = pcre_private(Inputs_param_one[y], save, &Output_Start, &Output_End, NULL, NULL);
++            charPattern = (char*)(malloc(sizeof(char) * strlen(save)));
++
++            int conv = handle_pcre2_pattern(save, charPattern, &optionsPattern);
++
++            pattern = (PCRE2_SPTR)(charPattern);
++            subject = (PCRE2_SPTR)(Inputs_param_one[y]);
++            subject_length = (PCRE2_SIZE)strlen((char *)subject);
++
++            //Compiling the regex
++            re = pcre2_compile(pattern, PCRE2_ZERO_TERMINATED, optionsPattern, &errornumber, &erroroffset, NULL);
++
++            if (re == NULL)
++            {
++                //Compiling failed, outputting an error message and exiting.
++                PCRE2_UCHAR buffer[256];
++                pcre2_get_error_message(errornumber, buffer, sizeof(buffer));
++                printf("PCRE2 compilation failed at offset %d: %s\n", (int)erroroffset, buffer);
++                free(charPattern);
++                return GREP_ERROR;
++            }
++
++            match_data = pcre2_match_data_create_from_pattern(re, NULL);
++
++            //Now run the match
++            rc = pcre2_match(re, subject, subject_length, 0, 0, match_data, NULL);
+ 
+             if (save)
+             {
+@@ -337,17 +370,18 @@
+                 save = NULL;
+             }
+ 
+-            if ( answer == PCRE_FINISHED_OK )
++            if (rc >= 0)
+             {
+                 results->values[results->currentLength] = y + 1;
+                 results->positions[results->currentLength] = x + 1;
+                 results->currentLength++;
+             }
+-            else if (answer != NO_MATCH)
++            else if (rc != PCRE2_ERROR_NOMATCH)
+             {
+-                pcre_error("grep", answer);
++                printf("grep error %d\n", rc);
+                 return GREP_ERROR;
+             }
++            free(charPattern);
+         }
+     }
+ 
+--- a/scilab/modules/string/sci_gateway/cpp/sci_strindex.cpp
++++ b/scilab/modules/string/sci_gateway/cpp/sci_strindex.cpp
+@@ -24,13 +24,16 @@
+ 
+ extern "C"
+ {
++
++#define PCRE2_CODE_UNIT_WIDTH 8
++
+ #include <string.h>
+ #include <stdio.h>
+-#include "pcre.h"
++#include <pcre2.h>
++#include "handle_pcre2_pattern.h"
+ #include "localization.h"
+-#include "pcre_private.h"
+-#include "pcre_error.h"
+ #include "Scierror.h"
++#include "charEncoding.h"
+ }
+ /*------------------------------------------------------------------------*/
+ #define WCHAR_S L's'
+@@ -127,35 +130,82 @@
+     if (bRegExp)
+     {
+         //pcre
+-        pcre_error_code iPcreStatus = PCRE_FINISHED_OK;
+         for (int i = 0 ; i < pS->getSize() ; i++)
+         {
+             int iStart      = 0;
+-            int iEnd        = 0;
+             int iStep       = 0;
++            int iEnd        = 0;
++            int rc;
+ 
+             do
+             {
+-                iPcreStatus = wide_pcre_private(pwstData + iStep, pwstSearch[i], &iStart, &iEnd, NULL, NULL);
+-                if (iPcreStatus == PCRE_FINISHED_OK)
++                pcre2_code *re;
++                PCRE2_SPTR pattern;
++                uint32_t optionsPattern = 0;
++                PCRE2_SPTR subject = (PCRE2_SPTR)(wide_string_to_UTF8(pwstData + iStep));
++                int errornumber;
++                PCRE2_SIZE erroroffset;
++                PCRE2_SIZE *ovector;
++                PCRE2_SIZE subject_length;
++                pcre2_match_data *match_data;
++                char* charPattern = (char*)(malloc(sizeof(char) * strlen(wide_string_to_UTF8(pwstSearch[i]))));
++
++                int conv = handle_pcre2_pattern(wide_string_to_UTF8(pwstSearch[i]), charPattern, &optionsPattern);
++
++                subject_length = (PCRE2_SIZE)strlen((char *)subject);
++
++                pattern = (PCRE2_SPTR)(charPattern);
++
++                re = pcre2_compile(pattern, PCRE2_ZERO_TERMINATED, optionsPattern, &errornumber, &erroroffset, NULL);
++
++                if (re == NULL)
+                 {
++                    PCRE2_UCHAR buffer[256];
++                    pcre2_get_error_message(errornumber, buffer, sizeof(buffer));
++                    printf("PCRE2 compilation failed at offset %d: %s\n", (int)erroroffset, buffer);
++                    free(charPattern);
++                    return types::Function::Error;
++                }
++
++                match_data = pcre2_match_data_create_from_pattern(re, NULL);
++
++                rc = pcre2_match(re, subject, subject_length, 0, 0, match_data, NULL);
++
++                if (rc >= 0)
++                {
++                    ovector = pcre2_get_ovector_pointer(match_data);
++                    iStart = (int)(ovector[0]);
++                    iEnd = (int)(ovector[1]);
++
+                     pstrResult[iValues].data        = iStart + iStep + 1;
+                     pstrResult[iValues].position    = i + 1;
+                     iStep                           += iEnd;
+                     iValues++;
++
++                    pcre2_match_data_free(match_data);
++                    pcre2_code_free(re);
++                    free(charPattern);
+                 }
+                 else
+                 {
+-                    if (iPcreStatus != NO_MATCH)
++                    if (rc != PCRE2_ERROR_NOMATCH)
+                     {
+-                        pcre_error("strindex", iPcreStatus);
++                        printf("strindex error %d\n", rc);
+                         delete[] pstrResult;
++                        pcre2_match_data_free(match_data);
++                        pcre2_code_free(re);
++                        free(charPattern);
+                         return types::Function::Error;
+                     }
++
++                    pcre2_match_data_free(match_data);
++                    pcre2_code_free(re);
++                    free(charPattern);
++
+                     break;
+                 }
+             }
+-            while (iPcreStatus == PCRE_FINISHED_OK && iStart != iEnd);
++            while (rc >= 0 && iStart != iEnd);
+         }
+     }
+     else
+--- a/scilab/modules/string/sci_gateway/cpp/sci_regexp.cpp
++++ b/scilab/modules/string/sci_gateway/cpp/sci_regexp.cpp
+@@ -25,15 +25,17 @@
+ 
+ extern "C"
+ {
++#define PCRE2_CODE_UNIT_WIDTH 8
++
+ #include "sci_malloc.h"
+ #include "localization.h"
+-#include "pcre.h"
+-#include "pcre_private.h"
+-#include "pcre_error.h"
++#include <pcre2.h>
++#include <string.h>
+ #include "Scierror.h"
+ #include "charEncoding.h"
+ #include "os_string.h"
+ #include "freeArrayOfString.h"
++#include "handle_pcre2_pattern.h"
+ }
+ /*------------------------------------------------------------------------*/
+ #define WCHAR_S L's'
+@@ -46,13 +48,13 @@
+     wchar_t* pwstInput      = NULL;
+     wchar_t* pwstPattern    = NULL;
+ 
+-    int iPcreStatus         = 0;
+     int iStart              = 0;
+     int iStep               = 0;
+     int iEnd                = 0;
+     int* piStart            = NULL;
+     int* piEnd              = NULL;
+     int iOccurs             = 0;
++    int rc;
+ 
+     /*for captured sub strings*/
+     wchar_t*** pwstCapturedString = NULL;
+@@ -129,24 +131,48 @@
+ 
+     do
+     {
+-        iPcreStatus = wide_pcre_private(pwstInput + iStep, pwstPattern, &iStart, &iEnd, &pwstCapturedString[iOccurs], &piCapturedStringCount[iOccurs]);
+-        if (iPcreStatus == PCRE_FINISHED_OK)
++        pcre2_code *re;
++        PCRE2_SPTR pattern;
++        uint32_t optionsPattern = 0;
++        PCRE2_SPTR subject;
++        int errornumber;
++        PCRE2_SIZE erroroffset;
++        PCRE2_SIZE *ovector;
++        PCRE2_SIZE subject_length;
++        pcre2_match_data *match_data;
++        char* charPattern = (char*)(malloc(sizeof(char) * strlen(wide_string_to_UTF8(pwstPattern))));
++
++        int conv = handle_pcre2_pattern(wide_string_to_UTF8(pwstPattern), charPattern, &optionsPattern);
++
++        if (conv < 0)
+         {
+-            if (iEnd != iStart)
+-            {
+-                piStart[iOccurs]    = iStart + iStep;
+-                piEnd[iOccurs++]    = iEnd + iStep;
+-                iStep               += iEnd;
+-            }
+-            else if (iEnd == 0 && pwstInput[iStep] != L'\0')
+-            {
+-                //avoid infinite loop
+-                iStep++;
+-            }
++            printf("PCRE2 pattern was ill-formed: %s\n", wide_string_to_UTF8(pwstPattern));
++            free(charPattern);
++            return types::Function::Error;
+         }
+-        else if (iPcreStatus != NO_MATCH)
++
++        pattern = (PCRE2_SPTR)(charPattern);
++        subject = (PCRE2_SPTR)(wide_string_to_UTF8(pwstInput + iStep));
++        subject_length = (PCRE2_SIZE)strlen((char *)subject);
++
++        re = pcre2_compile(pattern, PCRE2_ZERO_TERMINATED, optionsPattern, &errornumber, &erroroffset, NULL);
++
++        if (re == NULL)
++        {
++            PCRE2_UCHAR buffer[256];
++            pcre2_get_error_message(errornumber, buffer, sizeof(buffer));
++            printf("PCRE2 compilation failed at offset %d: %s\n", (int)erroroffset, buffer);
++            free(charPattern);
++            return types::Function::Error;
++        }
++
++        match_data = pcre2_match_data_create_from_pattern(re, NULL);
++
++        rc = pcre2_match(re, subject, subject_length, 0, 0, match_data, NULL);
++
++        if (rc < 0 && rc != PCRE2_ERROR_NOMATCH)
+         {
+-            pcre_error("regexp", iPcreStatus);
++            printf("regexp error %d\n", rc);
+             delete[] piStart;
+             delete[] piEnd;
+             for (int i = 0; i < iOccurs; i++)
+@@ -156,10 +182,51 @@
+ 
+             FREE(pwstCapturedString);
+             FREE(piCapturedStringCount);
++            pcre2_match_data_free(match_data);
++            pcre2_code_free(re);
++            free(charPattern);
+             return types::Function::Error;
+         }
++        else if (rc >=0)
++        {
++            int i;
++            ovector = pcre2_get_ovector_pointer(match_data);
++
++            piCapturedStringCount[iOccurs] = rc - 1;
++            if (piCapturedStringCount[iOccurs] > 0)
++            {
++                pwstCapturedString[iOccurs] = (wchar_t**)malloc(sizeof(wchar_t*) * piCapturedStringCount[iOccurs]);
++                for (i = 0 ; i < piCapturedStringCount[iOccurs] ; i++)
++                {
++                    int j;
++                    char* charCapturedString = (char*)(malloc(sizeof(char) * (ovector[2 * i + 3] - ovector[2 * i + 2] + 1)));
++                    sprintf(charCapturedString, "%.*s", (int)(ovector[2 * i + 3] - ovector[2 * i + 2]), (char*)(subject + ovector[2 * i + 2]));
++                    pwstCapturedString[iOccurs][i] = to_wide_string(charCapturedString);
++                    free(charCapturedString);
++                }
++            }
++
++            iStart = (int)(ovector[0]);
++            iEnd = (int)(ovector[1]);
++
++            if (iEnd != iStart)
++            {
++                piStart[iOccurs]    = iStart + iStep;
++                piEnd[iOccurs++]    = iEnd + iStep;
++                iStep               += iEnd;
++            }
++            else if (iEnd == 0 && pwstInput[iStep] != L'\0')
++            {
++                //avoid infinite loop
++                iStep++;
++            }
++        }
++
++        pcre2_match_data_free(match_data);
++        pcre2_code_free(re);
++        free(charPattern);
+     }
+-    while (iOccurs < inputSize && iPcreStatus == PCRE_FINISHED_OK && iStart != iEnd && wcType != WSTR_ONCE);
++    while (iOccurs < inputSize && rc >= 0 && iStart != iEnd && wcType != WSTR_ONCE);
+ 
+     if (iOccurs == 0)
+     {
+@@ -179,7 +246,6 @@
+             out.push_back(new types::String(L""));
+         }
+ 
+-        freeArrayOfWideString(pwstCapturedString[0], piCapturedStringCount[0]);
+         FREE(pwstCapturedString);
+         FREE(piCapturedStringCount);
+         delete[] piStart;
+@@ -272,7 +338,10 @@
+ 
+     for (int i = 0; i < iOccurs; i++)
+     {
+-        freeArrayOfWideString(pwstCapturedString[i], piCapturedStringCount[i]);
++        if (piCapturedStringCount[i] > 0)
++        {
++            freeArrayOfWideString(pwstCapturedString[i], piCapturedStringCount[i]);
++        }
+     }
+ 
+     FREE(pwstCapturedString);
+--- a/scilab/modules/slint/includes/PCREException.hxx
++++ b/scilab/modules/slint/includes/PCREException.hxx
+@@ -16,6 +16,10 @@
+ #ifndef __PCRE_EXCEPTION_HXX__
+ #define __PCRE_EXCEPTION_HXX__
+ 
++#define PCRE2_CODE_UNIT_WIDTH 8
++
++#include <pcre2.h>
++
+ #include <exception>
+ #include <string>
+ 
+@@ -28,7 +32,7 @@
+ 
+ public:
+ 
+-    PCREException(const std::wstring & pattern, const std::string & error, const int offset);
++    PCREException(const std::wstring & pattern, const int errornumber, const PCRE2_SIZE & offset);
+ 
+ #ifdef _MSC_VER
+     virtual const char * what() const;
+--- a/scilab/modules/slint/includes/PCREMatcher.hxx
++++ b/scilab/modules/slint/includes/PCREMatcher.hxx
+@@ -16,8 +16,10 @@
+ #ifndef __PCRE_MATCHER_HXX__
+ #define __PCRE_MATCHER_HXX__
+ 
++#define PCRE2_CODE_UNIT_WIDTH 8
++
+ #include <string>
+-#include <pcre.h>
++#include <pcre2.h>
+ 
+ #include "PCREException.hxx"
+ 
+@@ -28,7 +30,9 @@
+ {
+ 
+     const std::wstring pattern;
+-    pcre * re;
++    char* charPattern;
++    pcre2_code * re;
++    pcre2_match_data *match_data;
+ 
+ public:
+ 
+--- a/scilab/modules/slint/src/cpp/PCREException.cpp
++++ b/scilab/modules/slint/src/cpp/PCREException.cpp
+@@ -25,9 +25,11 @@
+ namespace slint
+ {
+ 
+-PCREException::PCREException(const std::wstring & pattern, const std::string & error, const int offset)
++PCREException::PCREException(const std::wstring & pattern, const int errornumber, const PCRE2_SIZE & offset)
+ {
+-    msg = std::string("Error in regex pattern: ") + error + "\n" + scilab::UTF8::toUTF8(pattern) + "\n" + std::string(offset, ' ') + "^";
++    PCRE2_UCHAR buffer[256];
++    pcre2_get_error_message(errornumber, buffer, sizeof(buffer));
++    msg = std::string("Error in regex pattern: ") + (char*)(buffer) + "\n" + scilab::UTF8::toUTF8(pattern) + "\n" + std::string((int)offset, ' ') + "^";
+ }
+ 
+ 
+--- a/scilab/modules/slint/src/cpp/PCREMatcher.cpp
++++ b/scilab/modules/slint/src/cpp/PCREMatcher.cpp
+@@ -18,8 +18,10 @@
+ 
+ extern "C"
+ {
++#include "handle_pcre2_pattern.h"
+ #include "sci_malloc.h"
+ #include "charEncoding.h"
++#include <string.h>
+ }
+ 
+ namespace slint
+@@ -33,29 +35,35 @@
+     }
+     else
+     {
+-        const char * error = nullptr;
+-        int errorOffset = -1;
+-        re = pcre_compile(scilab::UTF8::toUTF8(pattern).c_str(), PCRE_UTF8, &error, &errorOffset, nullptr);
+-        if (!re)
++        int error = 0;
++        PCRE2_SIZE errorOffset = -1;
++        uint32_t optionsPattern = 0;
++        PCRE2_SPTR pat;
++        int conv = 0;
++        charPattern = (char*)(malloc(sizeof(char) * strlen(scilab::UTF8::toUTF8(pattern).c_str())));
++
++        conv = handle_pcre2_pattern(scilab::UTF8::toUTF8(pattern).c_str(), charPattern, &optionsPattern);
++        pat = (PCRE2_SPTR)(charPattern);
++        re = pcre2_compile(pat, PCRE2_ZERO_TERMINATED, optionsPattern, &error, &errorOffset, NULL);
++        if (re != NULL)
+         {
+-            if (error)
++            if (error > 100)
+             {
+                 throw PCREException(pattern, error, errorOffset);
+             }
+-            else
+-            {
+-                throw PCREException(pattern, "No error message from PCRE", 0);
+-            }
++            match_data = pcre2_match_data_create_from_pattern(re, NULL);
+         }
+     }
+ }
+ 
+ PCREMatcher::~PCREMatcher()
+ {
+-    if (re)
++    if (re != NULL)
+     {
+-        pcre_free(re);
++        pcre2_match_data_free(match_data);
++        pcre2_code_free(re);
+     }
++    free(charPattern);
+ }
+ 
+ bool PCREMatcher::match(const std::wstring & str, const bool full) const
+@@ -76,15 +84,19 @@
+ {
+     if (!pattern.empty())
+     {
++        PCRE2_SIZE *ovector;
+         int resVect[3];
+         char * _str = wide_string_to_UTF8(str);
+-        int result = pcre_exec(re, nullptr, _str, len, 0, 0, resVect, sizeof(resVect) / sizeof(int));
++        PCRE2_SPTR subject = (PCRE2_SPTR)(_str);
++        PCRE2_SIZE subject_length = (PCRE2_SIZE)(len);
++        int result = pcre2_match(re, subject, subject_length, 0, 0, match_data, NULL);
+         FREE(_str);
+         if (full)
+         {
+-            if (result == 1 && resVect[0] == 0 && resVect[1] == len)
++            if (result == 1)
+             {
+-                return true;
++                ovector = pcre2_get_ovector_pointer(match_data);
++                return ((ovector[0] == 0) && (ovector[1] == len));
+             }
+         }
+         else
+--- a/scilab/m4/pcre.m4
++++ b/scilab/m4/pcre.m4
+@@ -20,81 +20,77 @@
+ dnl * if it is available
+ dnl * what are the compilation flags 
+ dnl * what are linking flags
+-AC_DEFUN([AC_PCRE], [
++AC_DEFUN([AC_PCRE2], [
+ 
+ 
+-AC_ARG_WITH(pcre,
+-    AS_HELP_STRING([--with-pcre=DIR],[Set the path to your PCRE (Perl 5 Compatible Regular Expression Library) installation]),
+-    [with_pcre=$withval],
+-    [with_pcre='yes']
++AC_ARG_WITH(pcre2,
++    AS_HELP_STRING([--with-pcre2=DIR],[Set the path to your PCRE2 (Perl 5 Compatible Regular Expression Library) installation]),
++    [with_pcre2=$withval],
++    [with_pcre2='yes']
+     )
+ 
+-if test "$with_pcre" != 'yes' -a "$with_pcre" != 'no'; then
+-    # Look if pcre-config (which provides cflags and ldflags) is available
+-    AC_MSG_CHECKING([pcre, for pcre-config])
+-    PCRE_FOUND=0
+-    PCRE_CONFIG="$with_pcre/bin/pcre-config"
+-    if test -x "$PCRE_CONFIG"; then
+-        AC_MSG_RESULT([$PCRE_CONFIG])
+-        PCRE_FOUND=1
++if test "$with_pcre2" != 'yes' -a "$with_pcre2" != 'no'; then
++    # Look if pcre2-config (which provides cflags and ldflags) is available
++    AC_MSG_CHECKING([pcre2, for pcre2-config])
++    PCRE2_FOUND=0
++    PCRE2_CONFIG="$with_pcre2/bin/pcre2-config"
++    if test -x "$PCRE2_CONFIG"; then
++        AC_MSG_RESULT([$PCRE2_CONFIG])
++        PCRE2_FOUND=1
+     fi
+-    if test $PCRE_FOUND -eq 0; then
+-        PCRE_CONFIG="$with_pcre/pcre-config"
+-        if test -x "$PCRE_CONFIG"; then
+-            PCRE_FOUND=1
+-            AC_MSG_RESULT([$PCRE_CONFIG])
++    if test $PCRE2_FOUND -eq 0; then
++        PCRE2_CONFIG="$with_pcre2/pcre2-config"
++        if test -x "$PCRE2_CONFIG"; then
++            PCRE2_FOUND=1
++            AC_MSG_RESULT([$PCRE2_CONFIG])
+         fi
+     fi
+-    if test $PCRE_FOUND -eq 0; then
+-        AC_MSG_ERROR([Unable to find $PCRE_CONFIG. Please check the path you provided])
++    if test $PCRE2_FOUND -eq 0; then
++        AC_MSG_ERROR([Unable to find $PCRE2_CONFIG. Please check the path you provided])
+     else
+-        unset PCRE_FOUND
++        unset PCRE2_FOUND
+     fi
+ else
+     if $WITH_DEVTOOLS; then # Scilab thirdparties
+-        PCRE_CONFIG="$DEVTOOLS_BINDIR/pcre-config"
++        PCRE2_CONFIG="$DEVTOOLS_BINDIR/pcre2-config"
+     else
+-        AC_CHECK_PROGS(PCRE_CONFIG,pcre-config,no)
++        AC_CHECK_PROGS(PCRE2_CONFIG,pcre2-config,no)
+     fi
+-    if test "x$PCRE_CONFIG" = "xno"; then
+-        AC_MSG_ERROR([Unable to find pcre-config in the path. Please check your installation of pcre (example : libpcre3 & libpcre3-dev with Debian)])
++    if test "x$PCRE2_CONFIG" = "xno"; then
++        AC_MSG_ERROR([Unable to find pcre2-config in the path. Please check your installation of pcre (example : libpcre2-dev with Debian)])
+     fi
+ fi
+ saved_cflags="$CFLAGS"
+ saved_LIBS="$LIBS"
+ 
+-PCRE_CFLAGS=`$PCRE_CONFIG --cflags`
+-PCRE_LIBS=`$PCRE_CONFIG --libs-posix`
+-PCRE_VERSION=`$PCRE_CONFIG --version`
+-
+-PCRE_REQUIRED_VERSION=7.6
+-    PKG_CHECK_MODULES(PCRE,
+-                      libpcre >= $PCRE_REQUIRED_VERSION)
++PCRE2_CFLAGS=`$PCRE2_CONFIG --cflags`
++PCRE2_LIBS=`$PCRE2_CONFIG --libs-posix`
++PCRE2_VERSION=`$PCRE2_CONFIG --version`
++
++PCRE2_REQUIRED_VERSION=7.6
++    PKG_CHECK_MODULES(PCRE2,
++                      libpcre2-8 >= $PCRE2_REQUIRED_VERSION)
+ 
+-LIBS="$PCRE_LIBS $LIBS"
+-CFLAGS="$PCRE_CFLAGS $CFLAGS"
++LIBS="$PCRE2_LIBS $LIBS"
++CFLAGS="$PCRE2_CFLAGS $CFLAGS"
+ 
+-AC_CHECK_LIB([pcre], [pcre_compile],
++AC_CHECK_LIB([pcre2-8], [pcre2_compile_8],
+                [],
+-               [AC_MSG_ERROR([pcre : library missing. (Cannot find symbol pcre_compile). Check if pcre is installed and if the version is correct])]
++               [AC_MSG_ERROR([pcre2-8 : library missing. (Cannot find symbol pcre2_compile_8). Check if pcre2-8 is installed and if the version is correct])]
+                )
+ 
+-AC_CHECK_LIB([pcreposix], [regexec],
+-               [],
+-               [AC_MSG_ERROR([pcreposix : library missing. (Cannot find symbol regexec). Check if pcre is installed and if the version is correct])]
+-               )
+-AC_CHECK_HEADERS([pcre.h])
++AC_CHECK_HEADERS([pcre2.h])
+ 
+ LIBS="$saved_LIBS"
+ CFLAGS="$saved_cflags"
+ 
+-AC_SUBST(PCRE_CFLAGS)
+-AC_SUBST(PCRE_LIBS)
+-AC_SUBST(PCRE_VERSION)
+-
+-AC_DEFINE_UNQUOTED([PCRE_CFLAGS],["$PCRE_CFLAGS"],[PCRE flags])
+-AC_DEFINE_UNQUOTED([PCRE_LIBS],["$PCRE_LIBS"],[PCRE library])
+-AC_DEFINE_UNQUOTED([PCRE_VERSION],["$PCRE_VERSION"],[PCRE version])
++AC_SUBST(PCRE2_CFLAGS)
++AC_SUBST(PCRE2_LIBS)
++AC_SUBST(PCRE2_VERSION)
++
++AC_DEFINE_UNQUOTED([PCRE2_CFLAGS],["$PCRE2_CFLAGS"],[PCRE2 flags])
++AC_DEFINE_UNQUOTED([PCRE2_LIBS],["$PCRE2_LIBS"],[PCRE2 library])
++AC_DEFINE_UNQUOTED([PCRE2_VERSION],["$PCRE2_VERSION"],[PCRE2 version])
+ 
+ # Gets compilation and library flags
+ ])
+--- a/scilab/configure.ac
++++ b/scilab/configure.ac
+@@ -1735,12 +1735,7 @@
+ #######################
+ ## Test for PCRE
+ #######################
+-if $WITH_DEVTOOLS; then # Scilab thirdparties
+-    PCRE_CFLAGS="-I$DEVTOOLS_INCDIR"
+-    PCRE_LIBS="-L$DEVTOOLS_LIBDIR -lpcre -lpcreposix"
+-else
+-    AC_PCRE()
+-fi
++AC_PCRE2()
+ 
+ #######################
+ ## Test for CURL
+--- a/scilab/modules/string/Makefile.am
++++ b/scilab/modules/string/Makefile.am
+@@ -9,6 +9,7 @@
+     src/cpp/os_wtoi.cpp
+ 
+ STRING_C_SOURCES = \
++    src/c/handle_pcre2_pattern.c \
+     src/c/convstr.c \
+     src/c/men_Sutils.c \
+     src/c/tokens.c \
+@@ -16,8 +17,6 @@
+     src/c/partfunction.c \
+     src/c/cvstr.c \
+     src/c/getfastcode.c \
+-    src/c/pcre_private.c \
+-    src/c/pcre_error.c \
+     src/c/isletter.c \
+     src/c/isdigit.c \
+     src/c/strsubst.c \
+@@ -69,7 +68,7 @@
+     sci_gateway/cpp/sci_emptystr.cpp
+ 
+ libscistring_la_CFLAGS= \
+-    $(PCRE_CFLAGS) \
++    $(PCRE2_CFLAGS) \
+ 	-I$(srcdir)/src/c \
+ 	-I$(srcdir)/includes/ \
+     -I$(top_srcdir)/modules/ast/includes/ast/ \
+@@ -85,7 +84,7 @@
+ 	-I$(top_srcdir)/modules/output_stream/includes
+ 
+ libscistring_la_CPPFLAGS= \
+-    $(PCRE_CFLAGS) \
++    $(PCRE2_CFLAGS) \
+ 	-I$(srcdir)/src/c \
+ 	-I$(srcdir)/src/cpp \
+ 	-I$(srcdir)/includes/ \
+@@ -127,7 +126,7 @@
+ INCLUDE_FLAGS = $(libscistring_la_CFLAGS)
+ 
+ # commented since it is the first module to be processed
+-libscistring_la_LIBADD = libscistring-algo.la $(PCRE_LIBS)
++libscistring_la_LIBADD = libscistring-algo.la $(PCRE2_LIBS)
+ 
+ #### Target ######
+ modulename=string
+@@ -146,6 +145,7 @@
+ #### string : include files ####
+ libscistring_la_includedir=$(pkgincludedir)
+ libscistring_la_include_HEADERS = \
++includes/handle_pcre2_pattern.h \
+ includes/complex_array.h \
+ includes/convstr.h \
+ includes/cvstr.h \
+@@ -156,7 +156,6 @@
+ includes/os_string.h \
+ includes/os_wcstok.h \
+ includes/os_wcstod.h \
+-includes/pcre_private.h \
+ includes/scistrtostr.h \
+ includes/StringConvert.h \
+ includes/string_gw.hxx \
+--- a/scilab/modules/slint/Makefile.am
++++ b/scilab/modules/slint/Makefile.am
+@@ -127,7 +127,7 @@
+     -I$(top_srcdir)/modules/dynamic_link/includes \
+     -I$(top_srcdir)/modules/threads/includes/ \
+     $(XML_CFLAGS) \
+-    $(PCRE_CFLAGS) \
++    $(PCRE2_CFLAGS) \
+     $(SLINT_FLAGS) \
+     $(AM_CPPFLAGS)
+ 
+--- /dev/null
++++ b/scilab/modules/string/includes/handle_pcre2_pattern.h
+@@ -0,0 +1,24 @@
++
++/*
++ * Copyright (C) 2023 - Pierre Gruet <pgt@debian.org>
++ *
++ * This file is hereby licensed under the terms of the GNU GPL v2.0,
++ * pursuant to article 5.3.4 of the CeCILL v.2.1.
++ * For more information, see the COPYING file which you should have received
++ * along with this program.
++ *
++ */
++
++/*------------------------------------------------------------------------*/
++#ifndef __HANDLE_PCRE2_PATTERN_H__
++#define __HANDLE_PCRE2_PATTERN_H__
++
++#define PCRE2_CODE_UNIT_WIDTH 8
++
++#include <pcre2.h>
++
++int handle_pcre2_pattern(const char* origPattern, char* strippedPattern, uint32_t* options);
++void remove_escaped_delimiter_from_pattern(char* pattern, const char delimiter);
++
++#endif /* __HANDLE_PCRE2_PATTERN_H__ */
++/*------------------------------------------------------------------------*/
+--- /dev/null
++++ b/scilab/modules/string/src/c/handle_pcre2_pattern.c
+@@ -0,0 +1,124 @@
++/*
++ * Copyright (C) 2023 - Pierre Gruet <pgt@debian.org>
++ *
++ * This file is hereby licensed under the terms of the GNU GPL v2.0,
++ * pursuant to article 5.3.4 of the CeCILL v.2.1.
++ * For more information, see the COPYING file which you should have received
++ * along with this program.
++*
++*/
++
++/*-------------------------------------------------------------------------------*/
++#include "handle_pcre2_pattern.h"
++
++#define PCRE2_CODE_UNIT_WIDTH 8
++
++#include <pcre2.h>
++#include <stdio.h>
++#include <string.h>
++
++int handle_pcre2_pattern(const char* origPattern, char* strippedPattern, uint32_t* options)
++{
++    pcre2_code *re;
++    PCRE2_SPTR patternForPattern = (PCRE2_SPTR)("(\\S)(.*)\\1((?:\\w|\\d)*)");
++    PCRE2_SPTR subject = (PCRE2_SPTR)(origPattern);
++    int errornumber;
++    int rc;
++    PCRE2_SIZE erroroffset;
++    PCRE2_SIZE *ovector;
++    PCRE2_SIZE subject_length = (PCRE2_SIZE)strlen((char *)subject);
++    pcre2_match_data *match_data;
++
++    re = pcre2_compile(patternForPattern, PCRE2_ZERO_TERMINATED, 0, &errornumber, &erroroffset, NULL);
++
++    /* Compilation failed: print the error message and exit. */
++    if (re == NULL)
++    {
++        PCRE2_UCHAR buffer[256];
++        pcre2_get_error_message(errornumber, buffer, sizeof(buffer));
++        printf("Transformation of PCRE2 pattern failed at offset %d: %s\n", (int)erroroffset, buffer);
++        return -1;
++    }
++
++    match_data = pcre2_match_data_create_from_pattern(re, NULL);
++
++    /* Now run the match. */
++
++    rc = pcre2_match(re, subject, subject_length, 0, 0, match_data, NULL);
++
++    if (rc < 0)
++    {
++        switch(rc)
++        {
++            case PCRE2_ERROR_NOMATCH:
++                printf("Could not identify regular pattern from: %s\n", origPattern);
++            break;
++            default:
++                printf("Matching error %d\n", rc);
++            break;
++        }
++        pcre2_match_data_free(match_data);
++        pcre2_code_free(re);
++        return -2;
++    }
++
++    /* Match succeeded. Get a pointer to the output vector, where string offsets are stored. */
++    ovector = pcre2_get_ovector_pointer(match_data);
++
++    //Getting the pattern without the delimiters and options.
++    sprintf(strippedPattern, "%.*s", (int)(ovector[5] - ovector[4]), (char*)(subject + ovector[4]));
++    //Then, removing the backslashes if the delimiter is the sequence with a leading backslash to escape it.
++    remove_escaped_delimiter_from_pattern(strippedPattern, *((char*)(subject + ovector[2])));
++
++    //Getting the options for compiling the regex.
++    char* charOptions = (char*)(malloc(sizeof(char) * (ovector[7] - ovector[6] + 1)));
++    int i;
++    sprintf(charOptions, "%.*s", (int)(ovector[7] - ovector[6]), (char*)(subject + ovector[6]));
++    *options = PCRE2_UTF;
++    for (i = 0 ; i < strlen(charOptions) ; i++)
++    {
++        switch (charOptions[i])
++        {
++            case 'i':
++                *options |= PCRE2_CASELESS;
++            break;
++            case 'm':
++                *options |= PCRE2_MULTILINE;
++            break;
++            case 's':
++                *options |= PCRE2_DOTALL;
++            break;
++            case 'x':
++                *options |= PCRE2_EXTENDED;
++            break;
++            case 'C':
++                *options |= PCRE2_AUTO_CALLOUT;
++            break;
++            case 'J':
++                *options |= PCRE2_DUPNAMES;
++            break;
++            case 'N':
++                *options |= PCRE2_NO_AUTO_CAPTURE;
++            break;
++            case 'U':
++                *options |= PCRE2_UNGREEDY;
++            break;
++            default:
++                printf("Unhandled modifier in a regex pattern: %c\n", charOptions[i]);
++            break;
++        }
++    }
++    free(charOptions);
++    return 0;
++}
++
++void remove_escaped_delimiter_from_pattern(char* pattern, const char delimiter)
++{
++    char escapedDelim[3];
++    sprintf(escapedDelim, "\\%c", delimiter);
++    char *p = pattern;
++    while ((p = strstr(p, escapedDelim)) != NULL)
++    {
++        memmove(p, p + 1, strlen(p + 1) + 1);
++    }
++}

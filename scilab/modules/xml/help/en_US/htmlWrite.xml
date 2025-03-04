@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-* Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+* Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 * Copyright (C) 2012 - Scilab Enterprises - Calixte DENIZET
 *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -55,7 +55,7 @@
     <refsection>
         <title>Examples</title>
         <programlisting role="example"><![CDATA[
-    doc = htmlRead("http://www.scilab.org");
+    doc = htmlRead("https://www.scilab.org");
     htmlWrite(doc, TMPDIR+"/scilab.html", %f);
 
     // Now we open the previous file, modify it and save it

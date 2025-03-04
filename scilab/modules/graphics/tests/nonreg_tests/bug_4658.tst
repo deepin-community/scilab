@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2009 - DIGITEO - pierre.lando@scilab.org
 //
 //// This file is distributed under the same license as the Scilab package.
@@ -10,28 +10,28 @@
 //
 // <-- Non-regression test for bug 4658 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=4658
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/4658
 //
 // <-- Short Description -->
 //   Use the standard messages for graphics macros.
 
 // Check error messages from this macros :
-// autumncolormap
-// bonecolormap
-// coolcolormap
-// coppercolormap
-// graycolormap
-// hotcolormap
-// hsvcolormap
-// jetcolormap
-// oceancolormap
-// pinkcolormap
-// rainbowcolormap
-// springcolormap
-// summercolormap
-// whitecolormap
-// wintercolormap
+// autumn
+// bone
+// cool
+// copper
+// gray
+// hot
+// hsv
+// jet
+// ocean
+// pink
+// rainbow
+// spring
+// summer
+// white
+// winter
 // addcolor
 // colorbar
 // colordef

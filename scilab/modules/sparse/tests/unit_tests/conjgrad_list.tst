@@ -1,5 +1,5 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Scilab Enterprises - Paul Bignier: added cgs, bicg and bicgstab
 // Copyright (C) 2008 - INRIA - Michael Baudin
 //
@@ -40,37 +40,37 @@ endfunction
 Alist = list(Atimesx,mymatrix);
 [xcomputed, fail, err, iter, res]=conjgrad(Alist,b,"pcg");
 xexpected=ones(10,1);
-if norm(xcomputed-xexpected)>11**3*%eps then pause,end
-if fail<>0 then pause,end
-if iter<>10 then pause,end
-if err > 10**3*%eps then pause,end
+assert_checkalmostequal(xcomputed, xexpected);
+assert_checkequal(fail, 0);
+assert_checkequal(iter, 10);
+assert_checktrue(err < 1e-12);
 
 //------------------------------------------------------------------
 // CGS
 
 // CGS needs 11 iterations to converge
 [xcomputed, fail, err, iter, res]=conjgrad(Alist,b,"cgs",maxIter=11);
-if norm(xcomputed-xexpected)>100**3*%eps then pause,end
-if fail<>0 then pause,end
-if iter<>11 then pause,end
-if err > 100**3*%eps then pause,end
+assert_checkalmostequal(xcomputed, xexpected);
+assert_checkequal(fail, 0);
+assert_checkequal(iter, 11);
+assert_checktrue(err < 1e-11);
 
 //------------------------------------------------------------------
 // BICG
 
 // With the default 10 iterations, the algorithm performs well
 [xcomputed, fail, err, iter, res]=conjgrad(Alist,b,"bicg");
-if norm(xcomputed-xexpected)>11**3*%eps then pause,end
-if fail<>0 then pause,end
-if iter<>10 then pause,end
-if err > 10**3*%eps then pause,end
+assert_checkalmostequal(xcomputed, xexpected);
+assert_checkequal(fail, 0);
+assert_checkequal(iter, 10);
+assert_checktrue(err < 1e-12);
 
 //------------------------------------------------------------------
 // BICGSTAB
 
 // BICGSTAB only needs 8 iterations to converge to the required tol, but is less accurate on arrival.
 [xcomputed, fail, err, iter, res]=conjgrad(Alist,b,"bicgstab");
-if norm(xcomputed-xexpected)>10000**3*%eps then pause,end
-if fail<>0 then pause,end
-if iter<>8 then pause,end
-if err > 1000**3*%eps then pause,end
+assert_checkalmostequal(xcomputed, xexpected, 1e-6);
+assert_checkequal(fail, 0);
+assert_checkequal(iter, 8);
+assert_checktrue(err < 1e-8);

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) DIGITEO - Allan CORNET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -27,32 +27,9 @@
         <variablelist>
             <varlistentry>
                 <term>ifortv</term>
-                <informaltable border="1">
-                    <tr>
-                        <td>string</td>
-                        <td>Intel Fortran version</td>
-                    </tr>
-                    <tr>
-                        <td>ifort90</td>
-                        <td>Intel Fortran 9.x</td>
-                    </tr>
-                    <tr>
-                        <td>ifort10</td>
-                        <td>Intel Fortran 10.x</td>
-                    </tr>
-                    <tr>
-                        <td>ifort11</td>
-                        <td>Intel Fortran 11.x</td>
-                    </tr>
-                    <tr>
-                        <td>ifort12</td>
-                        <td>Intel Fortran 12.x (beta support)</td>
-                    </tr>
-                    <tr>
-                        <td>unknown</td>
-                        <td>not detected or unknown version.</td>
-                    </tr>
-                </informaltable>
+                <listitem>
+                    <para>returns a string to identify Intel fortran version.</para>
+                </listitem>
             </varlistentry>
         </variablelist>
     </refsection>

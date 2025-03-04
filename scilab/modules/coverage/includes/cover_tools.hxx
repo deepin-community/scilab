@@ -1,5 +1,5 @@
 /*
- *  Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ *  Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  *  Copyright (C) 2015 - Scilab Enterprises - Calixte DENIZET
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -17,7 +17,7 @@
 #define __COVER_TOOLS_HXX__
 
 #include <string>
-#include "allexp.hxx"
+#include "exp.hxx"
 
 namespace coverage
 {

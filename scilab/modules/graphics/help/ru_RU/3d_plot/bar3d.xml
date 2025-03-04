@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) INRIA - Serge Steer
  * Copyright (C) ENPC - Jean-Philippe Chancelier
  *
@@ -171,7 +171,7 @@ isoview off
             <revision>
                 <revnumber>6.1.0</revnumber>
                 <revdescription>
-                    bar3d() introduced, equal to the current hist3d() to be redefined.
+                    hist3d() renamed in bar3d().
                 </revdescription>
             </revision>
         </revhistory>

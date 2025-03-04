@@ -116,7 +116,7 @@
     ]]></programlisting>
         </para>
     </refsection>
-    <!-- This part comes from http://wiki.scilab.org/Graphical_issues_with_Scilab_5.0 -->
+    <!-- This part comes from https://scilab.gitlab.io/legacy_wiki/Graphical(20)issues(20)with(20)Scilab(20)5(2e)X.html -->
     <refsection>
         <title>Technical Aspects</title>
         <para>
@@ -208,7 +208,7 @@ EndSection
             </listitem>
             <listitem>
                 <para>
-                    <literal>Scilab</literal> bug database: <ulink url="http://bugzilla.scilab.org/show_bug.cgi?id=3525">Bug #3525</ulink>
+                    <literal>Scilab</literal> bug database: <ulink url="https://gitlab.com/scilab/scilab/-/issues/3525">Bug #3525</ulink>
                 </para>
             </listitem>
             <listitem>

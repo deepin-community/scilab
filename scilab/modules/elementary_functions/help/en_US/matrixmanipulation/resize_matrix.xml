@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2008 - INRIA - Jean-Baptiste SILVY
  * Copyright (C) 2013, 2016 - Samuel GOUGEON
  *
@@ -160,7 +160,7 @@ xmlns:scilab="http://www.scilab.org" xml:id="resize_matrix" xml:lang="en">
         <title>Examples</title>
         <programlisting role="example"><![CDATA[
 // Embedded examples, including with polynomials:
-resize_matrix
+//resize_matrix
 
 // Resizing a numerical matrix:
 M = grand(4, 3, "uin", -9, 9)
@@ -194,6 +194,7 @@ resize_matrix(M, 3, 4)
    4.  -1.   6.   0.
 ]]></screen>
         <programlisting role="example"><![CDATA[
+M = grand(4, 3, "uin", -9, 9)
 resize_matrix(M, [3 4 2])
 resize_matrix(M, [3 4 2], "", %i)
 resize_matrix(M, [3 4 2], "string", %i)

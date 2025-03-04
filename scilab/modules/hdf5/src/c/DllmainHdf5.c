@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2009 - DIGITEO  -
  *
  * Copyright (C) 2012 - 2016 - Scilab Enterprises
@@ -24,11 +24,12 @@
 #include <vld.h>
 #endif
 /*--------------------------------------------------------------------------*/
-#pragma comment(lib,"../../../../bin/libintl.lib")
-#pragma comment(lib,"../../../../bin/hdf5.lib")
-#pragma comment(lib,"../../../../bin/hdf5_cpp.lib")
-#pragma comment(lib,"../../../../bin/hdf5_hl.lib")
-#pragma comment(lib,"../../../../bin/hdf5_hl_cpp.lib")
+#pragma comment(lib, "../../../../bin/libintl.lib")
+#pragma comment(lib, "../../../../bin/hdf5.lib")
+#pragma comment(lib, "../../../../bin/hdf5_cpp.lib")
+#pragma comment(lib, "../../../../bin/hdf5_hl.lib")
+#pragma comment(lib, "../../../../bin/hdf5_hl_cpp.lib")
+#pragma comment(lib, "../../../../bin/hdf5_tools.lib")
 /*--------------------------------------------------------------------------*/
 int WINAPI DllMain(HINSTANCE hinstDLL, DWORD flag, LPVOID reserved)
 {

@@ -1,5 +1,5 @@
 /*
- * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
  * Copyright (C) 2006 - INRIA - Allan CORNET
  * Copyright (C) 2012 - Digiteo - Cedric Delamarre
  *
@@ -59,7 +59,7 @@ void vExchangeVal(  double *_pdblScale, double *_pdblVal,
                     int _iStart2, int _iEnd2,
                     int _iSize, int _iCoord1, int _iCoord2);
 
-int dexpms(int _iLeadDim, int _iSize, double *_pdblVal, double *_pdblReturn);
+ELEMENTARY_FUNCTIONS_IMPEXP int dexpms(int _iLeadDim, int _iSize, double* _pdblVal, double* _pdblReturn);
 
 int dbalancs(   int _iRows, int _iSize, double *_pdblVal,
                 int *_piLow, int *_piHigh, double *_pdblScale);

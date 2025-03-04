@@ -1,4 +1,4 @@
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2013 - Gustavo Barbosa Libotte <gustavolibotte@gmail.com>
 // Copyright (C) 2010 - INRIA - Serge Steer <serge.steer@inria.fr>
 //

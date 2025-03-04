@@ -1,16 +1,17 @@
 // =============================================================================
-// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
 // Copyright (C) 2011 - DIGITEO - Michael Baudin
 //
 //  This file is distributed under the same license as the Scilab package.
 // =============================================================================
 
 // <-- CLI SHELL MODE -->
+// <-- NO ASSERT FAILURE -->
 
 // <-- Non-regression test for bug 9635 -->
 //
-// <-- Bugzilla URL -->
-// http://bugzilla.scilab.org/show_bug.cgi?id=9635
+// <-- GitLab URL -->
+// https://gitlab.com/scilab/scilab/-/issues/9635
 //
 // <-- Short Description -->
 // The default value of comptype in assert_checkalmostequal is wrongly chosen.

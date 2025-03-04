@@ -1,3 +1,7 @@
+debian/metainfo/org.scilab.scilab.metainfo.xml /usr/share/metainfo
+debian/metainfo/org.scilab.scilab_adv_cli.metainfo.xml /usr/share/metainfo
+debian/metainfo/org.scilab.scinotes.metainfo.xml /usr/share/metainfo
+debian/metainfo/org.scilab.xcos.metainfo.xml /usr/share/metainfo
 usr/bin/scilab
 usr/share/applications/scilab.desktop
 usr/bin/scilab-adv-cli

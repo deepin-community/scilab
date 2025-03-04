@@ -1144,6 +1144,8 @@ cDEC$ ATTRIBUTES DLLIMPORT:: /lsa001/
 cDEC$ ATTRIBUTES DLLIMPORT:: /lsr001/
       common /lsr001/ rownr3(2), t0, tlast, toutc,
      1   lg0, lg1, lgx, iownr3(2), irfnd, itaskc, ngc, nge
+cDEC$ ATTRIBUTES DLLIMPORT:: /ierode/
+      COMMON /ierode/ierror
 c
       data mord(1),mord(2)/12,5/, mxstp0/500/, mxhnl0/10/
 c-----------------------------------------------------------------------
