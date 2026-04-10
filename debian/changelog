@@ -1,3 +1,56 @@
+scilab (2024.1.0+dfsg1-2) unstable; urgency=medium
+
+  * Team upload.
+
+  [ Pierre Gruet ]
+  * Passing path of gettext m4 files to autoreconf; this path is no more the
+    canonical one since gettext 0.26. Closes: #1126980.
+
+  [ Vladimir Petko ]
+  * d/p/java25-increase-entity-limit.patch: increase xml entity limit to
+    resolve Java 25 ftbfs. Closes: #1128173.
+
+ -- Santiago Vila <sanvila@debian.org>  Wed, 11 Mar 2026 15:45:00 +0100
+
+scilab (2024.1.0+dfsg1-1) unstable; urgency=medium
+
+  * New upstream version 2024.1.0+dfsg1:
+    This is the same version than 2024.1.0+dfsg, without the embedded copies
+    of ezxml, removed for security reasons. This fixes the following CVE:
+    CVE-2022-30045 CVE-2021-31598 CVE-2021-31348 CVE-2021-31347 CVE-2021-31229
+    CVE-2021-30485 CVE-2021-26222 CVE-2021-26221 CVE-2021-26220 CVE-2019-20202
+    CVE-2019-20201 CVE-2019-20200 CVE-2019-20199 CVE-2019-20198 CVE-2019-20007
+    CVE-2019-20006 CVE-2019-20005
+    (Closes: #989364, #1014391)
+  * Removing code that invokes ezxml
+  * Using the UTF-8 suffix when calling scilab to build the documentation
+    (Closes: #1106083)
+  * Raising Standards version to 4.7.3:
+    - Removing Priority: optional, which is default
+    - Removing R-R-R: no, which is now default
+  * Rewriting d/watch with version 5
+
+  [ Alexandre Detiste ]
+  * Fix team name in d/control
+
+ -- Pierre Gruet <pgt@debian.org>  Thu, 29 Jan 2026 21:02:56 +0100
+
+scilab (2024.1.0+dfsg-8) unstable; urgency=medium
+
+  * Fixing build with gcc-15 by cherry-picking upstream commit
+    (Closes: #1097854)
+
+ -- Pierre Gruet <pgt@debian.org>  Sat, 11 Oct 2025 20:16:39 +0200
+
+scilab (2024.1.0+dfsg-7) unstable; urgency=medium
+
+  * Patching code again for libxml2/2.14.5 (Closes: #1106630)
+  * Patching ocamlopt invocations to build against ocaml-nul/1.6-1
+    (Closes: #1111281)
+  * Raising Standards version to 4.7.2 (no change)
+
+ -- Pierre Gruet <pgt@debian.org>  Mon, 18 Aug 2025 14:46:07 +0200
+
 scilab (2024.1.0+dfsg-6) unstable; urgency=medium
 
   * Skipping libxml2 patch until version 2.12.7 enters Debian/unstable again

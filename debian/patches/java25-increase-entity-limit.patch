@@ -1,0 +1,21 @@
+Description: Increase xml entity size limit
+ Java 25 includes limits for the number of xml entitities
+ to prevent billion laughs attack.
+ This patch increases the limit to allow documentation
+ generation to succeed.
+Author: Vladimir Petko <vladimir.petko@canonical.com>
+Bug: https://gitlab.com/scilab/scilab/-/issues/17536
+Bug-Debian: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1128173
+Last-Update: 2026-02-25
+
+--- a/scilab/Makefile.am
++++ b/scilab/Makefile.am
+@@ -305,7 +305,7 @@
+ 				LANG=$$l.UTF-8 SCI_DISABLE_TK=1 SCI_JAVA_ENABLE_HEADLESS=1 _JAVA_OPTIONS='-Djava.awt.headless=true' HOME=/tmp $(top_builddir)/bin/scilab-adv-cli -noatomsautoload -nb -l $$l -nouserstartup -e "$$COMMAND" || exit 1;\
+ 			else \
+ 				echo "LANG=$$l.UTF-8 LC_ALL=C SCI_DISABLE_TK=1 SCI_JAVA_ENABLE_HEADLESS=1 _JAVA_OPTIONS='-Djava.awt.headless=true' HOME=/tmp $(top_builddir)/bin/scilab-adv-cli -noatomsautoload -nb -l $$l.UTF-8 -nouserstartup -e \"$$COMMAND\"";\
+-				LANG=$$l.UTF-8 LC_ALL=C SCI_DISABLE_TK=1 SCI_JAVA_ENABLE_HEADLESS=1 _JAVA_OPTIONS="-Djava.awt.headless=true -Djava.library.path=/usr/lib/jni:$$(find . -name "*.so" -a -wholename "*modules*" | sed 's/\/[^/]*$$//' | sort | uniq | tr '\n' ':' | sed 's/:$$//')" HOME=/tmp $(top_builddir)/bin/scilab-adv-cli -noatomsautoload -nb -l $$l.UTF-8 -nouserstartup -e "$$COMMAND" || exit 1;\
++				LANG=$$l.UTF-8 LC_ALL=C SCI_DISABLE_TK=1 SCI_JAVA_ENABLE_HEADLESS=1 _JAVA_OPTIONS="-Djdk.xml.totalEntitySizeLimit=0 -Djdk.xml.maxGeneralEntitySizeLimit=0 -Djdk.xml.entityReplacementLimit=0 -Djava.awt.headless=true -Djava.library.path=/usr/lib/jni:$$(find . -name "*.so" -a -wholename "*modules*" | sed 's/\/[^/]*$$//' | sort | uniq | tr '\n' ':' | sed 's/:$$//')" HOME=/tmp $(top_builddir)/bin/scilab-adv-cli -noatomsautoload -nb -l $$l.UTF-8 -nouserstartup -e "$$COMMAND" || exit 1;\
+ 			fi; \
+ 		done; \
+ 	else \

@@ -1,11 +1,12 @@
-Description: conforming to changes in libxml2/2.12.7
+Description: conforming to changes in libxml2/2.14.5
  Some symbols have changed their location, adding includes to find them.
  Also xmlSetStructuredErrorFunc in /usr/include/libxml2/libxml/xmlerror.h now
  expects a second argument with const qualifier: changing
  XMLDocument::errorXPathFunction accordingly.
+ The package should be upstreamed.
 Author: Pierre Gruet <pgt@debian.org>
 Forwarded: https://gitlab.com/scilab/scilab/-/issues/17262
-Last-Update: 2024-06-03
+Last-Update: 2025-08-18
 
 --- a/scilab/modules/preferences/src/c/getScilabPreference.c
 +++ b/scilab/modules/preferences/src/c/getScilabPreference.c
@@ -55,3 +56,19 @@ Last-Update: 2024-06-03
  
      /**
       * Reads and parses a document given in a file.
+--- a/scilab/modules/scicos/src/cpp/XMIResource_load.cpp
++++ b/scilab/modules/scicos/src/cpp/XMIResource_load.cpp
+@@ -55,11 +55,11 @@
+     LibXML2State()
+     {
+         xmlGenericErrorFunc f = &console_print;
+-        initGenericErrorDefaultFunc(&f);
++        xmlSetGenericErrorFunc(nullptr, f);
+     }
+     ~LibXML2State()
+     {
+-        initGenericErrorDefaultFunc(nullptr);
++        xmlSetGenericErrorFunc(nullptr, nullptr);
+     }
+ };
+ 

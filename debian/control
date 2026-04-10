@@ -1,13 +1,13 @@
 Source: scilab
 Section: math
-Priority: optional
-Maintainer: Debian Science Team <debian-science-maintainers@alioth-lists.debian.net>
+Maintainer: Debian Science Maintainers <debian-science-maintainers@lists.alioth.debian.org>
 Uploaders: Julien Puydt <jpuydt@debian.org>,
            Pierre Gruet <pgt@debian.org>
 Build-Depends: debhelper-compat (= 13),
                bash-completion,
                chrpath,
                fakeroot,
+               gettext,
                gfortran,
                javahelper,
                libarchive-dev,
@@ -15,6 +15,7 @@ Build-Depends: debhelper-compat (= 13),
                libnum-ocaml-dev,
                libpcre2-dev,
                libxml2-dev,
+               ocaml-findlib,
                pkgconf,
                tcl-dev,
                time,
@@ -69,8 +70,7 @@ Build-Depends: debhelper-compat (= 13),
                ant-optional <!nocheck>,
                junit4 <!nocheck>,
                libcobertura-java <!nocheck>
-Standards-Version: 4.7.0
-Rules-Requires-Root: no
+Standards-Version: 4.7.3
 Homepage: https://www.scilab.org
 Vcs-Git: https://salsa.debian.org/science-team/scilab.git
 Vcs-Browser: https://salsa.debian.org/science-team/scilab
