@@ -43,7 +43,8 @@ override_dh_autoreconf:
 	for F in $$(find . -name "Makefile.in") scilab/aclocal.m4 scilab/configure scilab/etc/Info.plist.in scilab/modules/core/includes/machine.h.in scilab/modules/core/src/cpp/banner.cpp scilab/modules/windows_tools/src/c/scilab_windows/console.c; do \
 	    cp $$F $${F}.save ;\
 	done
-	cd scilab && autoreconf
+	# Since gettext 0.26, need to add the non-canonical location of m4 files.
+	cd scilab && autoreconf -I /usr/share/gettext/m4
 
 override_dh_auto_configure:
 	cd scilab && ./configure $(CONFIGURE_ARGS)

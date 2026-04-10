@@ -1,5 +1,9 @@
-version=4
+Version: 5
 
-opts="searchmode=plain, repacksuffix=+dfsg, dversionmangle=auto, \
-      compression=xz, uversionmangle=s/-rc/~rc/" \
- https://gitlab.com/scilab/scilab/tags?sort=updated_desc -/archive/v?\d[\d.]+/@PACKAGE@-@ANY_VERSION@@ARCHIVE_EXT@
+Source: https://gitlab.com/scilab/scilab/tags?sort=updated_desc
+Matching-Pattern: -/archive/v?\d[\d.]+/@PACKAGE@-@ANY_VERSION@@ARCHIVE_EXT@
+Compression: xz
+Dversionmangle: auto
+Repacksuffix: +dfsg
+Searchmode: plain
+Uversionmangle: s/-rc/~rc/

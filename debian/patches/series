@@ -23,7 +23,12 @@ pcre3_to_pcre2.patch
 flags_for_hardening_and_debugging.patch
 spelling.patch
 arch_specific_path_for_libs.patch
-#libxml2-2.12.7.patch
+libxml2-2.14.5.patch
 no_flexdock_version_check.patch
 gcc14.patch
 JFXScilabFileChooser.patch
+ocaml-num_1.6.patch
+gcc-15.patch
+no_ezxml.patch
+locales_utf8.patch
+java25-increase-entity-limit.patch
