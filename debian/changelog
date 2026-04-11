@@ -1,3 +1,9 @@
+scilab (2024.1.0+dfsg1-2deepin1) unstable; urgency=medium
+
+  * fix build
+
+ -- lhdjply <lhdjply@126.com>  Sat, 11 Apr 2026 08:23:26 +0800
+
 scilab (2024.1.0+dfsg1-2) unstable; urgency=medium
 
   * Team upload.
