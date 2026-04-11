@@ -28,15 +28,6 @@ Last-Update: 2025-08-18
  
  extern "C"
  {
-@@ -520,7 +521,7 @@
-     errorBuffer.append(str);
- }
- 
--void XMLDocument::errorXPathFunction(void *ctx, xmlError * error)
-+void XMLDocument::errorXPathFunction(void *ctx, const xmlError * error)
- {
-     errorXPathBuffer.append(error->message);
- }
 --- a/scilab/modules/xml/src/cpp/XMLDocument.hxx
 +++ b/scilab/modules/xml/src/cpp/XMLDocument.hxx
 @@ -20,6 +20,7 @@
@@ -47,15 +38,6 @@ Last-Update: 2025-08-18
  
  #include "dynlib_xml_scilab.h"
  
-@@ -172,7 +173,7 @@
-      * Error function used when the XPath query is compiled/
-      * @see http://xmlsoft.org/html/libxml-xmlerror.html#xmlStructuredErrorFunc
-      */
--    static void errorXPathFunction(void *ctx, xmlError * error);
-+    static void errorXPathFunction(void *ctx, const xmlError * error);
- 
-     /**
-      * Reads and parses a document given in a file.
 --- a/scilab/modules/scicos/src/cpp/XMIResource_load.cpp
 +++ b/scilab/modules/scicos/src/cpp/XMIResource_load.cpp
 @@ -55,11 +55,11 @@
